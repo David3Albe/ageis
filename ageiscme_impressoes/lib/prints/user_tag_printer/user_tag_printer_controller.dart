@@ -1,12 +1,12 @@
 import 'package:ageiscme_impressoes/dto/user_tag_print/user_tag_print_dto.dart';
 import 'package:compartilhados/functions/printer/printer_helper.dart';
 import 'package:dependencias_comuns/printing_exports.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' as mat;
 import 'package:pdf/widgets.dart' as pw;
 
 class UserTagPrinterController {
   UserTagPrintDTO userTagPrintDTO;
-  BuildContext context;
+  mat.BuildContext context;
 
   UserTagPrinterController({
     required this.userTagPrintDTO,
@@ -18,11 +18,14 @@ class UserTagPrinterController {
     pw.ThemeData themeOpenSans = pw.ThemeData.withFont(
       base: font,
     );
-    final pdf = pw.Document(theme: themeOpenSans);
+    final pdf = pw.Document(
+      theme: themeOpenSans,
+    );
     pw.TextStyle style = const pw.TextStyle(fontSize: 8);
 
     pdf.addPage(
       pw.Page(
+        margin: const pw.EdgeInsets.only(top: 40, left: 30),
         build: (pw.Context context) {
           return pw.Column(
             children: [
@@ -48,14 +51,14 @@ class UserTagPrinterController {
             height: 20,
             width: 20,
           ),
-          pw.SizedBox(width: 70),
+          pw.SizedBox(width: 60),
           pw.BarcodeWidget(
             barcode: Barcode.dataMatrix(),
             data: userTagPrintDTO.tagId.toString(),
             height: 20,
             width: 20,
           ),
-          pw.SizedBox(width: 70),
+          pw.SizedBox(width: 60),
           pw.BarcodeWidget(
             barcode: Barcode.dataMatrix(),
             data: userTagPrintDTO.tagId.toString(),
