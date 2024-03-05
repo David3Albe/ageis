@@ -1,0 +1,188 @@
+import 'package:ageiscme_admin/app/module/pages/colaborador/tipo_afastamento/tipo_afastamento_page_frm/tipo_afastamento_page_frm_state.dart';
+import 'package:ageiscme_data/services/tipo_afastamento/tipo_afastamento_service.dart';
+import 'package:ageiscme_models/main.dart';
+import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
+import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
+import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
+import 'package:compartilhados/custom_text/title_widget.dart';
+import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:flutter/material.dart';
+
+class TipoAfastamentoPageFrm extends StatefulWidget {
+  const TipoAfastamentoPageFrm({
+    Key? key,
+    required this.tipoAfastamento,
+  }) : super(key: key);
+
+  final TipoAfastamentoModel tipoAfastamento;
+
+  @override
+  State<TipoAfastamentoPageFrm> createState() =>
+      _TipoAfastamentoPageFrmState(tipoAfastamento: tipoAfastamento);
+}
+
+class _TipoAfastamentoPageFrmState extends State<TipoAfastamentoPageFrm> {
+  _TipoAfastamentoPageFrmState({required this.tipoAfastamento});
+  late String titulo;
+  TipoAfastamentoModel tipoAfastamento;
+  late final TipoAfastamentoPageFrmCubit cubit = TipoAfastamentoPageFrmCubit(
+    tipoAfastamentoModel: tipoAfastamento,
+    service: TipoAfastamentoService(),
+  );
+  late final TextFieldStringWidget txtMotivo = TextFieldStringWidget(
+    placeholder: 'Motivo',
+    onChanged: (String? str) {
+      tipoAfastamento.motivo = txtMotivo.text;
+    },
+  );
+  late final TextFieldStringWidget txtDiasConcedido = TextFieldStringWidget(
+    placeholder: 'Dias Concedidos',
+    onChanged: (String? str) {
+      tipoAfastamento.diasConcedido = int.parse(txtDiasConcedido.text);
+    },
+  );
+
+  @override
+  void initState() {
+    txtMotivo.addValidator((String str) {
+      if (str.isEmpty) {
+        return 'Obrgatório';
+      } else if (str.length > 100) {
+        return 'Pode ter no máximo 100 caracteres';
+      }
+      return '';
+    });
+
+    txtDiasConcedido.addValidator((String str) {
+      if (str.isEmpty) {
+        return 'Obrigatório';
+      } else if (str.length > 10) {
+        return 'Pode ser até no máximo 9999999999';
+      }
+      return '';
+    });
+    super.initState();
+  }
+
+  void setFields() {
+    txtMotivo.text = tipoAfastamento.motivo.toString();
+    if (tipoAfastamento.diasConcedido == null) {
+      txtDiasConcedido.text = '';
+    } else {
+      txtDiasConcedido.text = tipoAfastamento.diasConcedido.toString();
+    }
+
+    titulo = 'Cadastro de Tipo de Afastamento';
+    if (tipoAfastamento.cod != 0) {
+      titulo =
+          'Edição de Tipo de Afastamento: ${tipoAfastamento.cod} - ${tipoAfastamento.motivo}';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    setFields();
+    Size size = MediaQuery.of(context).size;
+    return BlocListener<TipoAfastamentoPageFrmCubit,
+        TipoAfastamentoPageFrmState>(
+      bloc: cubit,
+      listener: (context, state) {
+        if (state.saved) {
+          Navigator.of(context).pop((state.saved, state.message));
+        }
+      },
+      child:
+          BlocBuilder<TipoAfastamentoPageFrmCubit, TipoAfastamentoPageFrmState>(
+        bloc: cubit,
+        builder: (context, state) {
+          return Container(
+            constraints: BoxConstraints(
+              minWidth: size.width * .5,
+              minHeight: size.height * .5,
+              maxHeight: size.height * .8,
+            ),
+            child: Stack(
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    Row(
+                      children: [
+                        Expanded(
+                          child: TitleWidget(
+                            text: titulo,
+                          ),
+                        ),
+                        const Spacer(),
+                        CloseButtonWidget(
+                          onPressed: () =>
+                              Navigator.of(context).pop((false, '')),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 24.0),
+                      child: txtMotivo,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 24.0),
+                      child: txtDiasConcedido,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 24.0),
+                      child: Row(
+                        children: [
+                          CustomCheckboxWidget(
+                            checked: tipoAfastamento.cat!,
+                            onClick: (value) => tipoAfastamento.cat = value,
+                            text: 'Abertura Obrigatória de CAT',
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Spacer(),
+                    Row(
+                      children: [
+                        const Spacer(),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: SaveButtonWidget(
+                            onPressed: () => {salvar()},
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: CleanButtonWidget(
+                            onPressed: () => {
+                              setState(() {
+                                tipoAfastamento = TipoAfastamentoModel.empty();
+                              }),
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 16.0),
+                          child: CancelButtonUnfilledWidget(
+                            onPressed: () =>
+                                {Navigator.of(context).pop((false, ''))},
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  void salvar() {
+    if (!txtMotivo.valid || !txtDiasConcedido.valid) return;
+    cubit.save(tipoAfastamento);
+  }
+}

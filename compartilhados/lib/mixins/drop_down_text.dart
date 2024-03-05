@@ -1,0 +1,3 @@
+mixin DropDownText {
+  String GetDropDownText();
+}

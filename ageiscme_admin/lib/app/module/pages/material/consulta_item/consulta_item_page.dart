@@ -1,0 +1,475 @@
+import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/grupo_material/grupo_material_cubit.dart';
+import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/item_descritor/item_descritor_cubit.dart';
+import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/kit/kit_cubit.dart';
+import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/proprietario/proprietario_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/material/consulta_item/consulta_item_page_state.dart';
+import 'package:ageiscme_admin/app/module/pages/material/item/item_page_frm/item_page_frm.dart';
+import 'package:ageiscme_admin/app/module/pages/material/item/item_page_frm_type.dart';
+import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
+import 'package:ageiscme_data/query_services/item/consulta_item_service.dart';
+import 'package:ageiscme_data/services/access_user/access_user_service.dart';
+import 'package:ageiscme_data/services/item/item_service.dart';
+import 'package:ageiscme_models/enums/direito_enum.dart';
+import 'package:ageiscme_models/filters/item/item_filter.dart';
+import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/query_filters/item/consulta_item_filter.dart';
+import 'package:ageiscme_models/query_models/item/consulta_item_model.dart';
+import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_number_float_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
+import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
+import 'package:compartilhados/componentes/columns/custom_data_column.dart';
+import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
+import 'package:compartilhados/componentes/loading/loading_controller.dart';
+import 'package:compartilhados/componentes/loading/loading_widget.dart';
+import 'package:compartilhados/componentes/toasts/error_dialog.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
+import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:flutter/material.dart';
+
+class ConsultaItemPage extends StatefulWidget {
+  ConsultaItemPage({
+    super.key,
+    this.filter,
+  });
+
+  final ConsultaItemFilter? filter;
+
+  @override
+  State<ConsultaItemPage> createState() => _ConsultaItemPageState();
+}
+
+class _ConsultaItemPageState extends State<ConsultaItemPage> {
+  final List<CustomDataColumn> colunas = [
+    CustomDataColumn(text: 'ID Etiqueta', field: 'idEtiqueta'),
+    CustomDataColumn(text: 'Item', field: 'item'),
+    CustomDataColumn(text: 'Descritor', field: 'descricaoCurta'),
+    CustomDataColumn(text: 'Tamanho', field: 'tamanhoSigla'),
+    CustomDataColumn(text: 'Grupo', field: 'nomeGrupo'),
+    CustomDataColumn(
+      text: 'Qtde. Processos',
+      field: 'qtdeProcessos',
+      type: CustomDataColumnType.Number,
+    ),
+    CustomDataColumn(text: 'Kit', field: 'nomeKit'),
+    CustomDataColumn(text: 'Proprietário', field: 'nomeProprietario'),
+    CustomDataColumn(
+      text: 'Validade',
+      field: 'rmsValidade',
+      type: CustomDataColumnType.Date,
+    ),
+    CustomDataColumn(text: 'Implantável', field: 'implantavel'),
+    CustomDataColumn(
+      text: 'Aquisição',
+      field: 'dataAquisicao',
+      type: CustomDataColumnType.Date,
+    ),
+    CustomDataColumn(
+      text: 'Vida Útil',
+      field: 'vidaUtil',
+      type: CustomDataColumnType.Date,
+    ),
+    CustomDataColumn(text: 'Lote Produto', field: 'loteProduto'),
+    CustomDataColumn(
+      text: 'Descarte',
+      field: 'dataDescarte',
+      type: CustomDataColumnType.Date,
+    ),
+    CustomDataColumn(text: 'Situação', field: 'situacao'),
+    CustomDataColumn(text: 'Restrição', field: 'restricao'),
+    CustomDataColumn(
+      text: 'Valor Item',
+      field: 'valorItem',
+      type: CustomDataColumnType.Number,
+    ),
+    CustomDataColumn(
+      text: 'Peso G',
+      field: 'pesoG',
+      type: CustomDataColumnType.Number,
+    ),
+    CustomDataColumn(text: 'Fabricante', field: 'fabricante'),
+    CustomDataColumn(text: 'Fornecedor', field: 'fornecedor'),
+    CustomDataColumn(text: 'Reg. Anvisa', field: 'regAnvisa'),
+    CustomDataColumn(
+      text: 'Número Patrimônio',
+      field: 'numeroPatrimonio',
+      type: CustomDataColumnType.Number,
+    ),
+    CustomDataColumn(
+      text: 'Número Nota',
+      field: 'numeroNota',
+      type: CustomDataColumnType.Number,
+    ),
+    CustomDataColumn(text: 'Entrada/Saída', field: 'entradaSaida'),
+    CustomDataColumn(text: 'Local Entrega', field: 'localEntrega'),
+    CustomDataColumn(text: 'Local Retirada', field: 'localRetirada'),
+    CustomDataColumn(text: 'Última Etapa', field: 'ultimaEtapa'),
+    CustomDataColumn(
+      text: 'Última Revisão',
+      field: 'ultimaAlteracao',
+      type: CustomDataColumnType.DateTime,
+    ),
+  ];
+
+  late final ConsultaItemPageCubit bloc;
+  late final ItemDescritorCubit itemDescritorBloc;
+  late final GrupoMaterialCubit grupoMaterialBloc;
+  late final KitCubit kitBloc;
+  late final ProprietarioCubit proprietarioBloc;
+  late final ConsultaItemFilter filter;
+  late final ItemService service;
+
+  @override
+  void initState() {
+    bloc = ConsultaItemPageCubit(
+      service: ConsultaItemService(),
+    );
+    if (widget.filter != null) {
+      filter = widget.filter!;
+      bloc.loadItem(filter);
+    } else {
+      filter = ConsultaItemFilter.empty();
+    }
+    itemDescritorBloc = ItemDescritorCubit();
+    itemDescritorBloc.loadAll();
+    grupoMaterialBloc = GrupoMaterialCubit();
+    grupoMaterialBloc.loadAll();
+    kitBloc = KitCubit();
+    kitBloc.loadAll();
+    proprietarioBloc = ProprietarioCubit();
+    proprietarioBloc.loadAll();
+    service = ItemService();
+
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        FilterButtonWidget(
+          onPressed: () => {
+            openModal(context),
+          },
+        ),
+        BlocListener<ConsultaItemPageCubit, ConsultaItemPageState>(
+          bloc: bloc,
+          listener: (context, state) {
+            if (state.error.isNotEmpty) onError(state);
+          },
+          child: BlocBuilder<ConsultaItemPageCubit, ConsultaItemPageState>(
+            bloc: bloc,
+            builder: (context, state) {
+              if (state.loading) {
+                return const Center(
+                  child: LoadingWidget(),
+                );
+              }
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 16.0, bottom: 16),
+                  child: PlutoGridWidget(
+                    smallRows: true,
+                    columns: colunas,
+                    items: state.itens,
+                    onDetail: (event, obj) async {
+                      var isUserValidConsulta =
+                          await AccessUserService.validateUserHasRight(
+                        DireitoEnum.ItensConsulta,
+                      );
+
+                      var isUserValidManutencao =
+                          await AccessUserService.validateUserHasRight(
+                        DireitoEnum.ItensManutencao,
+                      );
+
+                      if (isUserValidConsulta == false &&
+                          isUserValidManutencao == false) {
+                        return ToastUtils.showCustomToastWarning(
+                          context,
+                          'O Seu usuário não tem permissão para esta tela!',
+                        );
+                      }
+
+                      await getFilter(obj.cod!).then((doc) {
+                        if (doc != null) {
+                          openModalRedirect(context, obj.cod!);
+                        }
+                      });
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  void onError(ConsultaItemPageState state) =>
+      ErrorUtils.showErrorDialog(context, [state.error]);
+
+  void openModal(BuildContext context) {
+    showDialog<bool>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return FilterDialogWidget(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                BlocBuilder<ItemDescritorCubit, ItemDescritorState>(
+                  bloc: itemDescritorBloc,
+                  builder: (context, itensDescritorState) {
+                    if (itensDescritorState.loading) {
+                      return const LoadingWidget();
+                    }
+                    List<ItemDescritorModel> itensDescritores =
+                        itensDescritorState.itensDescritores;
+
+                    itensDescritores.sort(
+                      (a, b) => a.descricaoCurta!.compareTo(b.descricaoCurta!),
+                    );
+                    ItemDescritorModel? itemDescritor = itensDescritores
+                        .where(
+                          (element) => element.cod == filter.codItemDescritor,
+                        )
+                        .firstOrNull;
+                    return DropDownSearchWidget<ItemDescritorModel>(
+                      textFunction: (itemDescritor) =>
+                          itemDescritor.ItemDescritorText(),
+                      initialValue: itemDescritor,
+                      sourceList: itensDescritores
+                          .where((element) => element.ativo == true)
+                          .toList(),
+                      onChanged: (value) =>
+                          filter.codItemDescritor = value?.cod,
+                      placeholder: 'Item Descritor',
+                    );
+                  },
+                ),
+                const Padding(padding: EdgeInsets.only(top: 2)),
+                DropDownSearchApiWidget<ItemModel>(
+                  textFunction: (item) => item.EtiquetaDescricaoText(),
+                  initialValue: filter.item,
+                  search: (str) => ItemService().Filter(
+                    ItemFilter(numeroRegistros: 30, termoPesquisa: str),
+                  ),
+                  onChanged: (value) {
+                    filter.item = value;
+                    filter.codItem = value?.cod;
+                  },
+                  placeholder: 'Item',
+                ),
+                const Padding(padding: EdgeInsets.only(top: 2)),
+                DropDownSearchWidget<ConsultaItemStatusOption>(
+                  initialValue: ConsultaItemStatusOption.situacaoOptions
+                      .where(
+                        (element) => element.cod == filter.codSituacao,
+                      )
+                      .firstOrNull,
+                  sourceList: ConsultaItemStatusOption.situacaoOptions,
+                  onChanged: (value) => filter.codSituacao = value?.cod,
+                  placeholder: 'Situação',
+                ),
+                const Padding(padding: EdgeInsets.only(top: 2)),
+                BlocBuilder<GrupoMaterialCubit, List<GrupoMaterialModel>>(
+                  bloc: grupoMaterialBloc,
+                  builder: (context, grupos) {
+                    grupos.sort(
+                      (a, b) => a.nome!.compareTo(b.nome!),
+                    );
+                    GrupoMaterialModel? grupo = grupos
+                        .where(
+                          (element) => element.cod == filter.codGrupo,
+                        )
+                        .firstOrNull;
+                    return DropDownSearchWidget<GrupoMaterialModel>(
+                      textFunction: (grupo) => grupo.GetGrupoNomeText(),
+                      initialValue: grupo,
+                      sourceList: grupos
+                          .where((element) => element.ativo == true)
+                          .toList(),
+                      onChanged: (value) => filter.codGrupo = value?.cod,
+                      placeholder: 'Grupo',
+                    );
+                  },
+                ),
+                const Padding(padding: EdgeInsets.only(top: 2)),
+                BlocBuilder<KitCubit, List<KitModel>>(
+                  bloc: kitBloc,
+                  builder: (context, kits) {
+                    KitModel? kit = kits
+                        .where(
+                          (element) => element.cod == filter.codKit,
+                        )
+                        .firstOrNull;
+                    return DropDownSearchWidget<KitModel>(
+                      textFunction: (kit) => kit.CodBarraDescritorText(),
+                      initialValue: kit,
+                      sourceList: kits,
+                      onChanged: (value) => filter.codKit = value?.cod,
+                      placeholder: 'Kit',
+                    );
+                  },
+                ),
+                const Padding(padding: EdgeInsets.only(top: 2)),
+                BlocBuilder<ProprietarioCubit, ProprietarioState>(
+                  bloc: proprietarioBloc,
+                  builder: (context, proprietarioState) {
+                    if (proprietarioState.loading) return const LoadingWidget();
+                    List<ProprietarioModel> proprietarios =
+                        proprietarioState.proprietarios;
+                    ProprietarioModel? proprietario = proprietarios
+                        .where(
+                          (element) => element.cod == filter.codProprietario,
+                        )
+                        .firstOrNull;
+                    return DropDownSearchWidget<ProprietarioModel>(
+                      textFunction: (proprietario) =>
+                          proprietario.ProprietarioText(),
+                      initialValue: proprietario,
+                      sourceList: proprietarios,
+                      onChanged: (value) => filter.codProprietario = value?.cod,
+                      placeholder: 'Proprietário',
+                    );
+                  },
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 2.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextFieldNumberWidget(
+                          placeholder: 'Número Patrimônio',
+                          onChanged: (value) =>
+                              filter.numeroPatrimonio = int.parse(value),
+                        ),
+                      ),
+                      const SizedBox(width: 16.0),
+                      Expanded(
+                        child: TextFieldStringWidget(
+                          placeholder: 'Descrição Item',
+                          onChanged: (value) =>
+                              filter.descricaoCurtaItem = value,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 2.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextFieldNumberFloatWidget(
+                          placeholder: 'De (CM)',
+                          onChanged: (value) =>
+                              filter.cmInicio = double.parse(value),
+                        ),
+                      ),
+                      const SizedBox(width: 16.0),
+                      Expanded(
+                        child: TextFieldNumberFloatWidget(
+                          placeholder: 'Até (CM)',
+                          onChanged: (value) =>
+                              filter.cmTermino = double.parse(value),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                CustomCheckboxWidget(
+                  checked: filter.repositorio,
+                  onClick: (value) => filter.repositorio = value,
+                  text: 'Apenas Função Armazenar Itens',
+                  align: MainAxisAlignment.start,
+                ),
+                const Padding(padding: EdgeInsets.only(top: 5.0)),
+                CustomCheckboxWidget(
+                  checked: filter.considerarRepositorio,
+                  onClick: (value) => filter.considerarRepositorio = value,
+                  text: 'Considerar Função Armazenar Itens',
+                  align: MainAxisAlignment.start,
+                ),
+                const Padding(padding: EdgeInsets.only(top: 5.0)),
+                CustomCheckboxWidget(
+                  checked: filter.descarte,
+                  onClick: (value) => filter.descarte = value,
+                  text: 'Descartados',
+                  align: MainAxisAlignment.start,
+                ),
+                const Padding(padding: EdgeInsets.only(top: 5.0)),
+                CustomCheckboxWidget(
+                  checked: filter.rotulado,
+                  onClick: (value) => filter.rotulado = value,
+                  text: 'Rotulados',
+                  align: MainAxisAlignment.start,
+                ),
+                const Padding(padding: EdgeInsets.only(top: 5.0)),
+                CustomCheckboxWidget(
+                  checked: filter.implantavel,
+                  onClick: (value) => filter.implantavel = value,
+                  text: 'Apenas Implantáveis',
+                  align: MainAxisAlignment.start,
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    ).then((result) {
+      if (result == true) {
+        bloc.loadItem(filter);
+      }
+    });
+  }
+
+  Future<ItemModel?> getFilter(int cod) async {
+    return service.FilterOne(
+      ItemFilter(
+        cod: cod,
+      ),
+    );
+  }
+
+  Future<void> openModalRedirect(BuildContext context, int cod) async {
+    LoadingController loading = LoadingController(context: context);
+
+    ItemModel? item;
+    item = await getFilter(cod);
+    if (item == null) {
+      loading.close(context, mounted);
+      notFoundError();
+      return;
+    }
+    loading.close(context, mounted);
+
+    await showDialog<(bool, String)>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return ItemPageFrm(
+          itemDescritorCubit: itemDescritorBloc,
+          proprietarioCubit: proprietarioBloc,
+          item: item!,
+          frmType: ItemPageFrmtype.Items,
+        );
+      },
+    );
+  }
+
+  void notFoundError() {
+    ErrorUtils.showErrorDialog(context, [
+      'O Registro de Item que está tentando buscar não foi encontrado,' +
+          'ou foi alterado/excluído por algum usuário, re-consulte e tente novamente caso continuar entre em contato com o suporte',
+    ]);
+  }
+}

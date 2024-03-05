@@ -1,0 +1,353 @@
+// ignore_for_file: unnecessary_null_comparison
+
+import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/processo_etapa/processo_etapa_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/processo/processo_tipo/processo_tipo_page_frm/processo_tipo_page_frm_state.dart';
+import 'package:ageiscme_admin/app/module/pages/processo/processo_tipo_fluxo/presenter/processo_tipo_fluxo_page_presenter.dart';
+import 'package:ageiscme_data/services/processo_tipo/processo_tipo_service.dart';
+import 'package:ageiscme_models/filters/processo_tipo/processo_tipo_filter.dart';
+import 'package:ageiscme_models/main.dart';
+import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
+import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/custom_default_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
+import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
+import 'package:compartilhados/componentes/loading/loading_controller.dart';
+import 'package:compartilhados/componentes/loading/loading_widget.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
+import 'package:compartilhados/custom_text/title_widget.dart';
+import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:dependencias_comuns/main.dart';
+import 'package:flutter/material.dart';
+
+class ProcessoTipoPageFrm extends StatefulWidget {
+  const ProcessoTipoPageFrm({
+    Key? key,
+    required this.processoTipo,
+    required this.processoEtapaCubit,
+  }) : super(key: key);
+
+  final ProcessoTipoModel processoTipo;
+  final ProcessoEtapaCubit processoEtapaCubit;
+
+  @override
+  State<ProcessoTipoPageFrm> createState() =>
+      _ProcessoTipoPageFrmState(processoTipo: processoTipo);
+}
+
+class _ProcessoTipoPageFrmState extends State<ProcessoTipoPageFrm> {
+  _ProcessoTipoPageFrmState({required this.processoTipo});
+  late String titulo;
+  ProcessoTipoModel processoTipo;
+  late final ProcessoTipoPageFrmCubit cubit = ProcessoTipoPageFrmCubit(
+    processoTipoModel: processoTipo,
+    service: ProcessoTipoService(),
+  );
+
+  late final TextFieldStringWidget txtNome = TextFieldStringWidget(
+    placeholder: 'Nome',
+    onChanged: (String? str) {
+      processoTipo.nome = txtNome.text;
+    },
+  );
+  late final TextFieldStringWidget txtDescricao = TextFieldStringWidget(
+    placeholder: 'Descrição',
+    onChanged: (String? str) {
+      processoTipo.descricao = txtDescricao.text;
+    },
+  );
+  late final DatePickerWidget dtpLimiteVigencia = DatePickerWidget(
+    placeholder: 'Limite Vigência',
+    initialValue: processoTipo.limiteVigencia,
+    onDateSelected: (value) => processoTipo.limiteVigencia = value,
+  );
+  late final TextFieldStringWidget txtPrazovalidade = TextFieldStringWidget(
+    placeholder: 'Prazo Validade para Itens Processados (dias)',
+    onChanged: (String? str) {
+      processoTipo.prazoValidade = int.parse(txtPrazovalidade.text);
+    },
+  );
+
+  @override
+  void initState() {
+    txtNome.addValidator((String str) {
+      if (str.isEmpty) {
+        return 'Obrigatório';
+      } else if (str.length > 100) {
+        return 'Pode ter no máximo 100 caracteres';
+      }
+      return '';
+    });
+
+    txtDescricao.addValidator((String str) {
+      if (str.length > 400) {
+        return 'Pode ter no máximo 400 caracteres';
+      }
+      return '';
+    });
+
+    txtPrazovalidade.addValidator((String str) {
+      if (str.isEmpty) {
+        return 'Obrigátorio';
+      } else if (str.length > 10) {
+        return 'Pode ter no máximo 10 caracteres';
+      }
+      return '';
+    });
+    super.initState();
+  }
+
+  void setFields() {
+    txtNome.text =
+        processoTipo.nome == null ? '' : processoTipo.nome.toString();
+    txtDescricao.text =
+        processoTipo.descricao == null ? '' : processoTipo.descricao.toString();
+
+    txtPrazovalidade.text = processoTipo.prazoValidade == 0
+        ? ''
+        : processoTipo.prazoValidade.toString();
+
+    titulo = 'Cadastro de Tipos de Processos';
+    if (processoTipo.ativo == null) processoTipo.ativo = false;
+    if (processoTipo.cod != 0) {
+      titulo =
+          'Edição do Tipo de Processo: ${processoTipo.cod} - ${processoTipo.nome}';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    setFields();
+    Size size = MediaQuery.of(context).size;
+    return BlocListener<ProcessoTipoPageFrmCubit, ProcessoTipoPageFrmState>(
+      bloc: cubit,
+      listener: (context, state) {
+        if (state.saved) {
+          Navigator.of(context).pop((state.saved, state.message));
+        }
+      },
+      child: BlocBuilder<ProcessoTipoPageFrmCubit, ProcessoTipoPageFrmState>(
+        bloc: cubit,
+        builder: (context, state) {
+          return AlertDialog(
+            contentPadding: const EdgeInsets.all(8.0),
+            titlePadding: const EdgeInsets.all(8.0),
+            actionsPadding: const EdgeInsets.all(8.0),
+            insetPadding: const EdgeInsets.all(50.0),
+            title: Row(
+              children: [
+                Expanded(
+                  child: TitleWidget(
+                    text: titulo,
+                  ),
+                ),
+                const Spacer(),
+                CloseButtonWidget(
+                  onPressed: () => Navigator.of(context).pop((false, '')),
+                ),
+              ],
+            ),
+            content: Container(
+              constraints: BoxConstraints(
+                minWidth: size.width * .5,
+                minHeight: size.height * .5,
+                maxHeight: size.height * .8,
+              ),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.only(right: 14),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5),
+                      child: txtNome,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child:
+                          BlocBuilder<ProcessoEtapaCubit, ProcessoEtapaState>(
+                        bloc: widget.processoEtapaCubit,
+                        builder: (context, state) {
+                          if (state.loading) return const LoadingWidget();
+                          List<ProcessoEtapaModel> processosEtapas =
+                              state.processosEtapas;
+
+                          processosEtapas.sort(
+                            (a, b) => a.tipoProcesso!.nome
+                                .compareTo(b.tipoProcesso!.nome),
+                          );
+
+                          return DropDownSearchWidget<ProcessoEtapaModel>(
+                            initialValue: processoTipo.etapaInicial,
+                            textFunction: (processoEtapa) =>
+                                processoEtapa.GetNomeEtapaTipoText(),
+                            sourceList: processosEtapas,
+                            onChanged: (value) {
+                              processoTipo.codEtapaProcessoInicial = value?.cod;
+                              processoTipo.etapaInicial = value;
+                            },
+                            placeholder: 'Etapa Inicial',
+                          );
+                        },
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child: txtDescricao,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child: DropDownWidget<ProcessoTipoPrioriodadeOption>(
+                        initialValue:
+                            ProcessoTipoPrioriodadeOption.prioridadeOptions
+                                .where(
+                                  (element) =>
+                                      element.cod.toString() ==
+                                      processoTipo.nivelPrioridade,
+                                )
+                                .firstOrNull,
+                        sourceList:
+                            ProcessoTipoPrioriodadeOption.prioridadeOptions,
+                        onChanged: (value) =>
+                            processoTipo.nivelPrioridade = value.cod.toString(),
+                        placeholder: 'Nível Prioridade',
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: txtPrazovalidade,
+                          ),
+                          const SizedBox(width: 24.0),
+                          Expanded(
+                            child: dtpLimiteVigencia,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child: Row(
+                        children: [
+                          CustomCheckboxWidget(
+                            checked: processoTipo.ativo,
+                            onClick: (value) => processoTipo.ativo = value,
+                            text: 'Ativo',
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            actions: [
+              Row(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4.0),
+                    child: CustomDefaultButtonWidget(
+                      text: 'Fluxo',
+                      cor: Colors.grey.shade500,
+                      corHovered: Colors.grey.shade600,
+                      icon: Symbols.schema,
+                      onPressed: abrirFluxo,
+                    ),
+                  ),
+                  const Spacer(),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: SaveButtonWidget(
+                      onPressed: () => {salvar()},
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: CleanButtonWidget(
+                      onPressed: () => {
+                        setState(() {
+                          processoTipo = ProcessoTipoModel.empty();
+                        }),
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: CancelButtonUnfilledWidget(
+                      onPressed: () => {Navigator.of(context).pop((false, ''))},
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+
+  Future<bool?> _carregarFluxoEtapas(int cod) async {
+    if (processoTipo.etapas != null) return true;
+    ProcessoTipoModel? processoTipoFluxo =
+        await ProcessoTipoService().FilterOneV2(
+      ProcessoTipoFilter(
+        carregarEquipamentosEtapas: true,
+        carregarEtapas: true,
+        carregarSequenciasEtapas: true,
+        cod: cod,
+      ),
+    );
+
+    if (processoTipoFluxo == null) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'Tipo de processo não encontrado, revise seu procedimento, entre em contato com a cordenação!',
+      );
+      return false;
+    }
+
+    processoTipo.etapas = processoTipoFluxo.etapas;
+    return true;
+  }
+
+  Future abrirFluxo() async {
+    if (processoTipo.cod == 0 || processoTipo.cod == null) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'É necessário que o tipo de processo esteja criado para editar o fluxo',
+      );
+      return;
+    }
+    LoadingController loading = LoadingController(context: context);
+
+    bool? carregouEtapas = await _carregarFluxoEtapas(processoTipo.cod!);
+    if (carregouEtapas != true) {
+      loading.close(context, mounted);
+      return;
+    }
+    loading.close(context, mounted);
+
+    await showDialog<(bool, String)>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return ProcessoTipoFluxoPagePresenter(
+          processoTipo: processoTipo,
+        );
+      },
+    );
+  }
+
+  void salvar() {
+    if (!txtNome.valid || !txtDescricao.valid || !txtPrazovalidade.valid) {
+      return;
+    }
+    LoadingController loading = LoadingController(context: context);
+    cubit.save(processoTipo, loading);
+  }
+}

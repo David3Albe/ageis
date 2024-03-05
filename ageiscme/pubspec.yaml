@@ -1,0 +1,40 @@
+name: AgeisCme
+description: Projeto base do Ageis Cme que inicializa o pacote core
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: '>=3.0.6 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  dependencias_comuns:
+    path: '../dependencias_comuns'
+  ageiscme_core:
+    path: '../ageiscme_core'
+  compartilhados:
+    path: '../compartilhados'
+  material_symbols_icons: ^4.2711.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/
+    - assets/config/
+    - assets/sounds/
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: fonts/Roboto/Roboto-Medium.ttf
+    - family: SegoeUi
+      fonts:
+        - asset: fonts/Segoe-Ui/SegoeUI.ttf
+    - family: Arial
+      fonts:
+        - asset: fonts/Arial/Arial.ttf

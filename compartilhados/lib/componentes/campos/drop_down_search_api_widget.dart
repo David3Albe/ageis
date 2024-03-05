@@ -1,0 +1,296 @@
+import 'package:compartilhados/componentes/campos/drop_down_cubit/drop_down_search_cubit.dart';
+import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
+import 'package:compartilhados/componentes/loading/loading_widget.dart';
+import 'package:compartilhados/cores/cores.dart';
+import 'package:compartilhados/fontes/fontes.dart';
+import 'package:compartilhados/functions/helper_functions.dart';
+import 'package:compartilhados/mixins/drop_down_text.dart';
+import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:dependencias_comuns/main.dart';
+import 'package:flutter/material.dart';
+
+class DropDownSearchApiWidget<T> extends StatefulWidget {
+  DropDownSearchApiWidget({
+    required this.search,
+    this.initialValue,
+    this.onChanged,
+    this.placeholder,
+    this.textFunction,
+    this.key,
+    this.readOnly = false,
+  });
+  final T? initialValue;
+  final String? placeholder;
+  final void Function(T? value)? onChanged;
+  final List<String Function(T value)> validators = [];
+  final String Function(T)? textFunction;
+  final Key? key;
+  final Future<List<T>> Function(String? text) search;
+  final bool readOnly;
+
+  @override
+  DropDownSearchApiWidgetState<T> createState() =>
+      DropDownSearchApiWidgetState<T>(
+        onChanged: onChanged,
+        key: key,
+      );
+}
+
+class DropDownSearchApiWidgetState<T>
+    extends State<DropDownSearchApiWidget<T>> {
+  List<T> sourceList = [];
+  T? selectedItem;
+  late final FocusNode focus;
+  late final FocusNode focustxt;
+  set selectedValue(T value) => selectedItem = value;
+  late bool filterVisible;
+  final void Function(T? value)? onChanged;
+  late final TextFieldStringWidget txtFilter;
+  static const int MAX_ITENS = 50;
+  late final DropDownSearchCubit<T> cubit;
+  List<DateTime> lastTypedsTime = [];
+  final Key? key;
+
+  DropDownSearchApiWidgetState({this.onChanged, this.key});
+  @override
+  void initState() {
+    filterVisible = false;
+    txtFilter = TextFieldStringWidget(
+      placeholder: 'Pesquisar...',
+      onChanged: setItems,
+    );
+
+    if (widget.initialValue != null) {
+      selectedItem = widget.initialValue;
+      sourceList.add(selectedItem!);
+    }
+    cubit = DropDownSearchCubit<T>();
+    setItems(null);
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        InkWell(
+          onTap: () {
+            if (!widget.readOnly) {
+              showPicker(context);
+            }
+          },
+          child: Row(
+            children: [
+              Expanded(
+                child: Container(
+                  child: getSelectedItemText(
+                    selectedItem,
+                    context,
+                  ),
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(
+                        width: 2.0,
+                        color: Colors.black12,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  void setItem(T? item) {
+    setState(() {
+      selectedItem = item;
+      if (onChanged == null) return;
+      onChanged!(item);
+    });
+  }
+
+  void showPicker(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: txtFilter,
+        actionsPadding: const EdgeInsets.all(16),
+        contentPadding: const EdgeInsets.all(16),
+        titlePadding: const EdgeInsets.all(16),
+        content: Container(
+          width: MediaQuery.of(context).size.width / 2,
+          height: MediaQuery.of(context).size.height / 2,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Padding(padding: EdgeInsets.only(top: 8)),
+                getListItems(),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  String getItemText(T? item) {
+    String text = '';
+    if (item != null) {
+      if (widget.textFunction != null) {
+        text = widget.textFunction!(item);
+      } else if (item is DropDownText) {
+        text = item.GetDropDownText();
+      } else {
+        text = item.toString();
+      }
+    }
+    return text;
+  }
+
+  Widget getListItems() {
+    Color corSelecionado = Colors.lightBlue.shade500;
+    return BlocBuilder<DropDownSearchCubit<T>, DropDownSearchState>(
+      bloc: cubit,
+      builder: (context, state) {
+        if (state.loading) {
+          return const Center(child: LoadingWidget());
+        }
+        if (state.notFound) {
+          return const Center(
+            child: Text('Nenhum registro encontrado'),
+          );
+        }
+        return ListView.separated(
+          shrinkWrap: true,
+          itemCount: state.items.length,
+          separatorBuilder: (context, index) => const SizedBox(height: 2.0),
+          itemBuilder: (context, index) {
+            T item = state.items[index];
+            String text = getItemText(item);
+            return InkWell(
+              onTap: () => _setShowDialogItem(item),
+              child: Container(
+                alignment: Alignment.centerLeft,
+                height: 50,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Row(
+                    children: [
+                      Text(
+                        text,
+                        style: Fontes.getRoboto(
+                          cor: selectedItem == item ? corSelecionado : null,
+                        ),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      if (selectedItem == item) ...{
+                        Icon(
+                          Symbols.check_box,
+                          color: corSelecionado,
+                        ),
+                      },
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _setShowDialogItem(T item) {
+    if (onChanged != null) {
+      onChanged!(item);
+    }
+    setState(() {
+      selectedItem = item;
+    });
+    Navigator.of(context).pop();
+  }
+
+  Widget getSelectedItemText(T? item, BuildContext context) {
+    String text = getItemText(item);
+    return Container(
+      height: 60,
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            if (item != null) ...{
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  widget.placeholder ?? '',
+                  style: Fontes.getRoboto(
+                    cor: Cores.corPlaceholderTextField,
+                    fontSize: HelperFunctions.calculaFontSize(context, 12),
+                  ),
+                ),
+              ),
+            },
+            Row(
+              children: [
+                Text(
+                  item == null ? widget.placeholder ?? '' : text,
+                  style: Fontes.getRoboto(
+                    fontSize: HelperFunctions.calculaFontSize(context, 16),
+                  ),
+                  overflow: TextOverflow.ellipsis,
+                ),
+                if (item != null) ...{
+                  const Spacer(),
+                  SizedBox(
+                    child: InkWell(
+                      child: const Icon(Symbols.close),
+                      onTap: () {
+                        if (!widget.readOnly) clearItem();
+                      },
+                    ),
+                  ),
+                },
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void clearItem() {
+    setState(() {
+      selectedItem = null;
+      if (onChanged != null) {
+        onChanged!(selectedItem);
+      }
+    });
+  }
+
+  Future<List<T>> Filter(String? filter) async {
+    List<T> items = await widget.search(filter);
+    return items;
+  }
+
+  Future setItems(String? filter) async {
+    cubit.setLoading();
+    lastTypedsTime.add(DateTime.now());
+    await Future.delayed(
+      const Duration(milliseconds: 1500),
+    );
+    lastTypedsTime.removeAt(0);
+    if (lastTypedsTime.isNotEmpty) return;
+    List<T> itens = await Filter(filter);
+    if (selectedItem != null && !itens.contains(selectedItem)) {
+      itens.insert(0, selectedItem!);
+    }
+    cubit.SetItems(itens);
+    if (itens.isEmpty) cubit.setNotFound();
+  }
+}

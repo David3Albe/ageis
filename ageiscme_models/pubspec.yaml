@@ -1,0 +1,30 @@
+name: ageiscme_models
+description: Projeto contendo os modelos
+publish_to: none
+version: 0.0.1
+homepage:
+
+environment:
+  sdk: '>=3.0.6 <4.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  dependencias_comuns:
+    path: '../dependencias_comuns'
+  compartilhados:
+    path: '../compartilhados'
+  freezed_annotation: ^2.4.1
+  json_serializable: ^6.7.1
+  json_annotation: ^4.8.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+  build_runner: ^2.4.6
+  freezed: ^2.4.2
+
+flutter:
+  uses-material-design: true

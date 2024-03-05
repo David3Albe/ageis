@@ -1,0 +1,449 @@
+import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/item_descritor/item_descritor_cubit.dart';
+import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/proprietario/proprietario_cubit.dart';
+import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/processo/consulta_processos_consignado/consulta_processos_consignado_page_state.dart';
+import 'package:ageiscme_admin/app/module/pages/processo/consulta_processos_consignado/item_consignado_processado_page_state.dart';
+import 'package:ageiscme_admin/app/module/widgets/custom_dialog/custom_dialog_widget.dart';
+import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
+import 'package:ageiscme_data/query_services/processos_consignado/consulta_processos_consignado_service.dart';
+import 'package:ageiscme_data/services/item/item_service.dart';
+import 'package:ageiscme_data/services/item_consignado_processado/item_consignado_processado_service.dart';
+import 'package:ageiscme_data/stores/authentication/authentication_store.dart';
+import 'package:ageiscme_models/dto/authentication_result/authentication_result_dto.dart';
+import 'package:ageiscme_models/filters/item/item_filter.dart';
+import 'package:ageiscme_models/filters/usuario_filter/usuario_filter.dart';
+import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/query_filters/processos_consignado/consulta_processos_consignado_filter.dart';
+import 'package:ageiscme_models/query_models/processos_consignado/consulta_processos_consignado_model.dart';
+import 'package:compartilhados/componentes/botoes/print_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
+import 'package:compartilhados/componentes/columns/custom_data_column.dart';
+import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
+import 'package:compartilhados/componentes/loading/loading_widget.dart';
+import 'package:compartilhados/componentes/toasts/error_dialog.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
+import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:dependencias_comuns/modular_export.dart';
+import 'package:flutter/material.dart';
+
+class ConsultaProcessosConsignadoPage extends StatefulWidget {
+  ConsultaProcessosConsignadoPage({super.key});
+
+  @override
+  State<ConsultaProcessosConsignadoPage> createState() =>
+      _ConsultaProcessosConsignadoPageState();
+}
+
+class _ConsultaProcessosConsignadoPageState
+    extends State<ConsultaProcessosConsignadoPage> {
+  late ConsultaProcessosConsignadoModel teste;
+  late final List<CustomDataColumn> colunas;
+
+  late final ConsultaProcessosConsignadoPageCubit bloc;
+  late final ItemConsignadoProcessadoPageCubit itemConsignadoProcessadoBloc =
+      ItemConsignadoProcessadoPageCubit(
+    service: ItemConsignadoProcessadoService(),
+    itemConsignadoProcessadoModel: itemConsignadoProcessado,
+  );
+  late final ItemDescritorCubit itemDescritorBloc;
+  late final ProprietarioCubit proprietarioBloc;
+  late final UsuarioCubit usuarioCubit;
+  late final ItemConsignadoProcessadoModel itemConsignadoProcessado;
+  late final ConsultaProcessosConsignadoFilter filter;
+  int? colaboradorEntrega;
+  int? responsavelRetirada;
+  int? medico;
+  int? codUsuario;
+  Future<AuthenticationResultDTO?> recuperaUsuario() async {
+    return await Modular.get<AuthenticationStore>().GetAuthenticated();
+  }
+
+  @override
+  void initState() {
+    bloc = ConsultaProcessosConsignadoPageCubit(
+      service: ConsultaProcessosConsignadoService(),
+    );
+    filter = ConsultaProcessosConsignadoFilter.empty();
+    filter.startDate = DateTime.now().add(const Duration(days: -1));
+    filter.finalDate = DateTime.now();
+    itemDescritorBloc = ItemDescritorCubit();
+    itemDescritorBloc.loadAll();
+    proprietarioBloc = ProprietarioCubit();
+    proprietarioBloc.loadAll();
+    usuarioCubit = UsuarioCubit();
+    itemConsignadoProcessado = ItemConsignadoProcessadoModel.empty();
+
+    recuperaUsuario().then((value) {
+      if (value == null ||
+          value.usuario == null ||
+          value.usuario!.cod == null) {
+        return;
+      }
+      codUsuario = value.usuario!.cod;
+    });
+
+    colunas = [
+      CustomDataColumn(
+        text: 'S',
+        field: 'imprimir',
+        readonly: false,
+        type: CustomDataColumnType.Checkbox,
+        onClick: (value, checked) => setAllSameRegisterAsEqual(value, checked),
+      ),
+      CustomDataColumn(
+        text: 'Data',
+        field: 'dataHora',
+        type: CustomDataColumnType.DateTime,
+      ),
+      CustomDataColumn(text: 'Usuário', field: 'usuario'),
+      CustomDataColumn(text: 'Origem', field: 'origem'),
+      CustomDataColumn(text: 'Circulante', field: 'circulante'),
+      CustomDataColumn(
+        text: 'Prontuário',
+        field: 'prontuario',
+        type: CustomDataColumnType.Number,
+      ),
+      CustomDataColumn(text: 'ID Etiqueta', field: 'idEtiqueta'),
+      CustomDataColumn(
+        text: 'Material Consignado',
+        field: 'materialConsignado',
+      ),
+      CustomDataColumn(text: 'Proprietário', field: 'nomeProprietario'),
+      CustomDataColumn(
+        text: 'Cód. Item Consignado',
+        field: 'codItemConsignado',
+        type: CustomDataColumnType.Number,
+      ),
+      CustomDataColumn(
+        text: 'Item Consignado',
+        field: 'descricaoItemConsignado',
+      ),
+      CustomDataColumn(
+        text: 'Qtde. Padrão',
+        field: 'qtdePadrao',
+        type: CustomDataColumnType.Number,
+      ),
+      CustomDataColumn(
+        text: 'Recebido',
+        field: 'recebido',
+        type: CustomDataColumnType.Number,
+      ),
+      CustomDataColumn(
+        text: 'Consumido',
+        field: 'consumido',
+        type: CustomDataColumnType.Number,
+      ),
+      CustomDataColumn(
+        text: 'Cód. Reg. Processo Expurgo',
+        field: 'codRegistroProcessoExpurgo',
+        type: CustomDataColumnType.Number,
+      ),
+      CustomDataColumn(
+        text: 'Cód. Item',
+        field: 'codItem',
+        type: CustomDataColumnType.Number,
+      ),
+      CustomDataColumn(text: 'Médico', field: 'medico'),
+      CustomDataColumn(text: 'Entregue Por', field: 'entreguePor'),
+      CustomDataColumn(text: 'Retirado Por', field: 'retiradoPor'),
+    ];
+
+    super.initState();
+  }
+
+  late void Function() refreshMethod;
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            FilterButtonWidget(
+              onPressed: () => {
+                openModal(context),
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 5),
+              child: PrintButtonWidget(
+                onPressed: () => openModalImpressao(context),
+              ),
+            ),
+          ],
+        ),
+        BlocListener<ConsultaProcessosConsignadoPageCubit,
+            ConsultaProcessosConsignadoPageState>(
+          bloc: bloc,
+          listener: (context, state) {
+            if (state.error.isNotEmpty) onError(state);
+          },
+          child: BlocBuilder<ConsultaProcessosConsignadoPageCubit,
+              ConsultaProcessosConsignadoPageState>(
+            bloc: bloc,
+            builder: (context, state) {
+              if (state.loading) {
+                return const Center(
+                  child: LoadingWidget(),
+                );
+              }
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 16.0, bottom: 16),
+                  child: PlutoGridWidget(
+                    smallRows: true,
+                    columns: colunas,
+                    items: state.itensConsignados,
+                    refreshWidgetBuilder: (context, refreshWidget) =>
+                        refreshMethod = refreshWidget,
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  void loadUserCubit() {
+    if (!usuarioCubit.state.loaded) {
+      usuarioCubit.loadFilter(
+        UsuarioFilter(
+          apenasAtivos: true,
+          tipoQuery: UsuarioFilterTipoQuery.SemFoto,
+          ordenarPorNomeCrescente: true,
+          apenasColaboradores: true,
+        ),
+      );
+    }
+  }
+
+  void setAllSameRegisterAsEqual(
+    ConsultaProcessosConsignadoModel obj,
+    bool checked,
+  ) {
+    for (ConsultaProcessosConsignadoModel consignado
+        in bloc.state.itensConsignados) {
+      if (obj.codRegistroProcessoExpurgo ==
+          consignado.codRegistroProcessoExpurgo) {
+        consignado.imprimir = checked;
+      }
+    }
+    refreshMethod.call();
+  }
+
+  void openModalImpressao(BuildContext context) async {
+    loadUserCubit();
+    var result = await showDialog<bool>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return CustomDialogWidget(
+          child: Column(
+            children: [
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              BlocBuilder<UsuarioCubit, UsuarioState>(
+                bloc: usuarioCubit,
+                builder: (context, usuarioState) {
+                  if (usuarioState.loading) {
+                    return const LoadingWidget();
+                  }
+                  List<UsuarioModel> usuarios = usuarioState.usuarios;
+                  return DropDownSearchWidget<UsuarioModel>(
+                    textFunction: (usuario) => usuario.CodBarraNomeText(),
+                    sourceList: usuarios,
+                    onChanged: (value) => colaboradorEntrega = value?.cod,
+                    placeholder: 'Colaborador Entrega',
+                  );
+                },
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              BlocBuilder<UsuarioCubit, UsuarioState>(
+                bloc: usuarioCubit,
+                builder: (context, usuarioState) {
+                  if (usuarioState.loading) {
+                    return const LoadingWidget();
+                  }
+                  List<UsuarioModel> usuarios = usuarioState.usuarios;
+                  return DropDownSearchWidget<UsuarioModel>(
+                    textFunction: (usuario) => usuario.CodBarraNomeText(),
+                    sourceList: usuarios,
+                    onChanged: (value) => responsavelRetirada = value?.cod,
+                    placeholder: 'resposável Retirada',
+                  );
+                },
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              BlocBuilder<UsuarioCubit, UsuarioState>(
+                bloc: usuarioCubit,
+                builder: (context, usuarioState) {
+                  if (usuarioState.loading) {
+                    return const LoadingWidget();
+                  }
+                  List<UsuarioModel> usuarios = usuarioState.usuarios;
+                  return DropDownSearchWidget<UsuarioModel>(
+                    textFunction: (usuario) => usuario.CodBarraNomeText(),
+                    sourceList: usuarios,
+                    onChanged: (value) => medico = value?.cod,
+                    placeholder: 'Médico / Equipe',
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
+
+    if (result == true) {
+      ConsultaProcessosConsignadoModel processosMarcados =
+          bloc.state.itensConsignados.firstWhere(
+        (entrada) => entrada.imprimir == true,
+      );
+
+      salvar(processosMarcados);
+    } else {
+      return ToastUtils.showCustomToastWarning(
+        context,
+        'Impressão cancelada',
+      );
+    }
+  }
+
+  void salvar(ConsultaProcessosConsignadoModel processosMarcados) {
+    if (colaboradorEntrega == null ||
+        responsavelRetirada == null ||
+        medico == null) {
+      ErrorUtils.showErrorDialog(
+        context,
+        ['Preencha todos os campos para realizar a impressão!'],
+      );
+      return;
+    }
+
+    ItemConsignadoProcessadoModel itemConsginadoProcessado =
+        ItemConsignadoProcessadoModel(
+      DataHora: null,
+      codInstituicao: 2,
+      codRegistro: processosMarcados.codRegistroProcessoExpurgo,
+      medico: medico,
+      responsavelRetirada: responsavelRetirada,
+      responsavelEntrega: colaboradorEntrega,
+      codUsuario: codUsuario,
+    );
+    itemConsignadoProcessadoBloc.save(itemConsginadoProcessado);
+
+    bloc.loadProcessosConsignado(filter);
+  }
+
+  void onError(ConsultaProcessosConsignadoPageState state) =>
+      ErrorUtils.showErrorDialog(context, [state.error]);
+
+  void openModal(BuildContext context) {
+    showDialog<bool>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return FilterDialogWidget(
+          child: Column(
+            children: [
+              DatePickerWidget(
+                placeholder: 'Data Inicio',
+                onDateSelected: (value) => filter.startDate = value,
+                initialValue: filter.startDate,
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              DatePickerWidget(
+                placeholder: 'Data Término',
+                onDateSelected: (value) => filter.finalDate = value,
+                initialValue: filter.finalDate,
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              BlocBuilder<ItemDescritorCubit, ItemDescritorState>(
+                bloc: itemDescritorBloc,
+                builder: (context, itensDescritorState) {
+                  if (itensDescritorState.loading) {
+                    return const LoadingWidget();
+                  }
+                  List<ItemDescritorModel> itensDescritores =
+                      itensDescritorState.itensDescritores;
+
+                  itensDescritores.sort(
+                    (a, b) => a.descricaoCurta!.compareTo(b.descricaoCurta!),
+                  );
+                  ItemDescritorModel? itemDescritor = itensDescritores
+                      .where(
+                        (element) => element.cod == filter.codItemConsignado,
+                      )
+                      .firstOrNull;
+                  return DropDownSearchWidget<ItemDescritorModel>(
+                    textFunction: (itemDescritor) =>
+                        itemDescritor.ItemDescritorText(),
+                    initialValue: itemDescritor,
+                    sourceList: itensDescritores,
+                    onChanged: (value) => filter.codItemConsignado = value?.cod,
+                    placeholder: 'Item Descritor',
+                  );
+                },
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              DropDownSearchApiWidget<ItemModel>(
+                textFunction: (item) => item.EtiquetaDescricaoText(),
+                initialValue: filter.item,
+                search: (str) => ItemService().Filter(
+                  ItemFilter(
+                    apenasItensConsignados: true,
+                    numeroRegistros: 30,
+                    termoPesquisa: str,
+                  ),
+                ),
+                onChanged: (value) {
+                  filter.item = value;
+                  filter.codItemConsignado = value?.cod;
+                },
+                placeholder: 'Item Consignado',
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              BlocBuilder<ProprietarioCubit, ProprietarioState>(
+                bloc: proprietarioBloc,
+                builder: (context, proprietarioState) {
+                  if (proprietarioState.loading) return const LoadingWidget();
+                  List<ProprietarioModel> proprietarios =
+                      proprietarioState.proprietarios;
+                  proprietarios.sort(
+                    (a, b) => a.nome!.compareTo(b.nome!),
+                  );
+                  ProprietarioModel? proprietario = proprietarios
+                      .where(
+                        (element) => element.cod == filter.codProprietario,
+                      )
+                      .firstOrNull;
+                  return DropDownSearchWidget<ProprietarioModel>(
+                    textFunction: (proprietario) =>
+                        proprietario.ProprietarioText(),
+                    initialValue: proprietario,
+                    sourceList: proprietarios
+                        .where((element) => element.ativo == true)
+                        .toList(),
+                    onChanged: (value) => filter.codProprietario = value?.cod,
+                    placeholder: 'Proprietário',
+                  );
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    ).then((result) {
+      if (result == true) {
+        bloc.loadProcessosConsignado(filter);
+      }
+    });
+  }
+}

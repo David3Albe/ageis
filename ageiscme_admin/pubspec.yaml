@@ -1,0 +1,31 @@
+name: ageiscme_admin
+description: Modulo do admin
+publish_to: 'none'
+version: 0.0.1
+homepage:
+
+environment:
+  sdk: '>=3.0.6 <4.0.0'
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  dependencias_comuns:
+    path: '../dependencias_comuns'
+  ageiscme_models:
+    path: '../ageiscme_models'
+  ageiscme_data:
+    path: '../ageiscme_data'
+  compartilhados:
+    path: '../compartilhados'
+  ageiscme_impressoes:
+    path: '../ageiscme_impressoes'
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+
+flutter:
+  uses-material-design: true

@@ -1,0 +1,23 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "development",
+            "program": "ageiscme/lib/main_dev.dart",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "production",
+            "program": "ageiscme/lib//main_prod.dart",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "homologation",
+            "program": "ageiscme/lib/main_hml.dart",
+            "request": "launch",
+            "type": "dart"
+        }
+    ]
+}

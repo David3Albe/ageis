@@ -1,0 +1,4 @@
+enum ItemPageFrmtype {
+  Items,
+  Consigned,
+}

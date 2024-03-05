@@ -1,0 +1,203 @@
+import 'package:ageiscme_admin/app/module/pages/material/item_descritor/item_descritor_page_frm/item_descritor_page_frm.dart';
+import 'package:ageiscme_admin/app/module/pages/material/item_descritor/item_descritor_page_state.dart';
+import 'package:ageiscme_data/services/item_descritor/item_descritor_service.dart';
+import 'package:ageiscme_models/filters/item_descritor/item_descritor_filter.dart';
+import 'package:ageiscme_models/main.dart';
+import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/columns/custom_data_column.dart';
+import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
+import 'package:compartilhados/componentes/loading/loading_controller.dart';
+import 'package:compartilhados/componentes/loading/loading_widget.dart';
+import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
+import 'package:compartilhados/componentes/toasts/error_dialog.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
+import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:flutter/material.dart';
+
+class ItemDescritorPage extends StatefulWidget {
+  ItemDescritorPage({super.key});
+
+  @override
+  State<ItemDescritorPage> createState() => _ItemDescritorPageState();
+}
+
+class _ItemDescritorPageState extends State<ItemDescritorPage> {
+  final List<CustomDataColumn> colunas = [
+    CustomDataColumn(
+      text: 'Cód',
+      field: 'cod',
+      type: CustomDataColumnType.Number,
+    ),
+    CustomDataColumn(text: 'Descrição Curta', field: 'descricaoCurta'),
+    CustomDataColumn(
+      text: '(CM)',
+      field: 'cm',
+      type: CustomDataColumnType.Number,
+    ),
+    CustomDataColumn(
+      text: 'Peso (g)',
+      field: 'peso',
+      type: CustomDataColumnType.Number,
+    ),
+    CustomDataColumn(
+      text: 'Volume (cm3)',
+      field: 'volume',
+      type: CustomDataColumnType.Number,
+    ),
+    CustomDataColumn(
+      text: 'Grupo Item',
+      field: 'grupoMaterial',
+      valueConverter: (value) => value != null ? value['nome'] : '',
+    ),
+    CustomDataColumn(text: 'Tamanho', field: 'tamanhoSigla'),
+    CustomDataColumn(
+      text: 'Embalagem',
+      field: 'embalagem',
+      valueConverter: (value) => value != null ? value['nome'] : '',
+    ),
+    CustomDataColumn(
+      text: 'Valor Peso',
+      field: 'centroCusto',
+      valueConverter: (value) => value != null ? value['descricao'] : '',
+    ),
+    CustomDataColumn(
+      text: 'Ativo',
+      field: 'ativo',
+      type: CustomDataColumnType.Checkbox,
+    ),
+  ];
+
+  late final ItemDescritorPageCubit bloc;
+  late final ItemDescritorService service;
+
+  @override
+  void initState() {
+    service = ItemDescritorService();
+    bloc = ItemDescritorPageCubit(service: service);
+    bloc.loadItemDescritor();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AddButtonWidget(
+          onPressed: () => {
+            openModal(
+              context,
+              ItemDescritorModel.empty(),
+            ),
+          },
+        ),
+        BlocListener<ItemDescritorPageCubit, ItemDescritorPageState>(
+          bloc: bloc,
+          listener: (context, state) {
+            if (state.deleted) deleted(state);
+            if (state.error.isNotEmpty) onError(state);
+          },
+          child: BlocBuilder<ItemDescritorPageCubit, ItemDescritorPageState>(
+            bloc: bloc,
+            builder: (context, state) {
+              if (state.loading) {
+                return const Center(
+                  child: LoadingWidget(),
+                );
+              }
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 16.0, bottom: 16),
+                  child: PlutoGridWidget(
+                    filterOnlyActives: true,
+                    onEdit: (ItemDescritorModel objeto) =>
+                        {openModal(context, ItemDescritorModel.copy(objeto))},
+                    onDelete: (ItemDescritorModel objeto) =>
+                        {delete(context, objeto)},
+                    columns: colunas,
+                    items: state.itensDescritor,
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Future<ItemDescritorModel?> getFilter(
+    ItemDescritorModel itemDescritor,
+  ) async {
+    return service.FilterOne(
+      ItemDescritorFilter(
+        cod: itemDescritor.cod,
+        tStamp: itemDescritor.tstamp,
+        carregarImagem: true,
+        carregarItensConsignados: true,
+      ),
+    );
+  }
+
+  Future<void> openModal(
+    BuildContext context,
+    ItemDescritorModel itemDescritor,
+  ) async {
+    LoadingController loading = LoadingController(context: context);
+
+    ItemDescritorModel? item = itemDescritor;
+    if (itemDescritor.cod != 0) {
+      item = await getFilter(
+        itemDescritor,
+      );
+      if (item == null) {
+        loading.close(context, mounted);
+        notFoundError();
+        return;
+      }
+    }
+    loading.close(context, mounted);
+
+    (bool, String)? result = await showDialog<(bool, String)>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return ItemDescritorPageFrm(
+          itemDescritor: item!,
+        );
+      },
+    );
+    if (result == null || !result.$1) return;
+    ToastUtils.showCustomToastSucess(context, result.$2);
+    bloc.loadItemDescritor();
+  }
+
+  void delete(BuildContext context, ItemDescritorModel itemDescritor) async {
+    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
+      context,
+      'Confirma a remoção do Descritor de Item\n${itemDescritor.cod} - ${itemDescritor.descricaoCurta}',
+    );
+    if (confirmacao) bloc.delete(itemDescritor);
+  }
+
+  void deleted(ItemDescritorPageState state) {
+    ToastUtils.showCustomToastSucess(
+      context,
+      state.message,
+    );
+    bloc.loadItemDescritor();
+  }
+
+  void onError(ItemDescritorPageState state) {
+    ErrorUtils.showErrorDialog(context, [state.error]);
+  }
+
+  void notFoundError() {
+    ErrorUtils.showErrorDialog(context, [
+      'O Registro do Item Descritor que está tentando buscar não foi encontrado,' +
+          'ou foi alterado/excluído por algum usuário, re-consulte e tente novamente caso continuar entre em contato com o suporte',
+    ]);
+  }
+}
