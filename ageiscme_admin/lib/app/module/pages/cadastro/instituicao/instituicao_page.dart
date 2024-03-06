@@ -24,12 +24,28 @@ class _InstituicaoPageState extends State<InstituicaoPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 80,
     ),
-    CustomDataColumn(text: 'Nome', field: 'nome'),
-    CustomDataColumn(text: 'CNPJ', field: 'cnpj'),
-    CustomDataColumn(text: 'Fone Cme', field: 'foneCme'),
-    CustomDataColumn(text: 'Fone Responsável', field: 'foneResponsavel'),
-    CustomDataColumn(text: 'Responsavel', field: 'responsavel'),
+    CustomDataColumn(
+      text: 'Nome',
+      field: 'nome',
+    ),
+    CustomDataColumn(
+      text: 'CNPJ',
+      field: 'cnpj',
+    ),
+    CustomDataColumn(
+      text: 'Fone Cme',
+      field: 'foneCme',
+    ),
+    CustomDataColumn(
+      text: 'Fone Responsável',
+      field: 'foneResponsavel',
+    ),
+    CustomDataColumn(
+      text: 'Responsavel',
+      field: 'responsavel',
+    ),
     CustomDataColumn(
       text: 'Ativo',
       field: 'ativo',
