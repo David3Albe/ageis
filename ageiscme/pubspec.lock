@@ -37,13 +37,6 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
-  ageiscme_impressoes_dto:
-    dependency: transitive
-    description:
-      path: "../ageiscme_impressoes_dto"
-      relative: true
-    source: path
-    version: "0.0.1"
   ageiscme_login:
     dependency: transitive
     description:
