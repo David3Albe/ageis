@@ -31,6 +31,7 @@ class PlutoGridColumnHelper<T> {
 
   PlutoColumn GetColumnByCustomDataColumnType(
     CustomDataColumn baseColumn, {
+    required double fontSize,
     List<void Function()>? listeners,
   }) {
     if (baseColumn.actionColumn == true) return _getActionColumn(baseColumn);
@@ -44,6 +45,7 @@ class PlutoGridColumnHelper<T> {
       case CustomDataColumnType.Checkbox:
         return _getCheckboxColumn(
           baseColumn,
+          fontSize: fontSize,
         );
       case CustomDataColumnType.Date:
         return _getDateColumn(baseColumn);
@@ -76,6 +78,7 @@ class PlutoGridColumnHelper<T> {
     return PlutoColumn(
       title: baseColumn.text,
       backgroundColor: gridColumnColor,
+      width: baseColumn.width ?? PlutoGridSettings.columnWidth,
       type: PlutoColumnType.text(defaultValue: ''),
       field: baseColumn.calculatedField ?? baseColumn.field,
       readOnly: baseColumn.readonly,
@@ -92,6 +95,7 @@ class PlutoGridColumnHelper<T> {
     return PlutoColumn(
       title: baseColumn.text,
       backgroundColor: gridColumnColor,
+      width: baseColumn.width ?? PlutoGridSettings.columnWidth,
       type: PlutoColumnType.number(
         negative: baseColumn.negative,
         format: '#.##',
@@ -114,6 +118,7 @@ class PlutoGridColumnHelper<T> {
     return PlutoColumn(
       title: baseColumn.text,
       backgroundColor: gridColumnColor,
+      width: baseColumn.width ?? PlutoGridSettings.columnWidth,
       type: PlutoColumnType.number(
         negative: baseColumn.negative,
         format: '#',
@@ -135,6 +140,7 @@ class PlutoGridColumnHelper<T> {
   PlutoColumn _getCurrencyColumnType(CustomDataColumn baseColumn) {
     return PlutoColumn(
       title: baseColumn.text,
+      width: baseColumn.width ?? PlutoGridSettings.columnWidth,
       backgroundColor: gridColumnColor,
       type: PlutoColumnType.currency(
         format: '#.###',
@@ -153,22 +159,45 @@ class PlutoGridColumnHelper<T> {
   }
 
   PlutoColumn _getCheckboxColumn(
-    CustomDataColumn baseColumn,
-  ) {
+    CustomDataColumn baseColumn, {
+    required double fontSize,
+  }) {
     return PlutoColumn(
       backgroundColor: gridColumnColor,
       title: baseColumn.text,
       type: PlutoColumnType.text(),
       field: baseColumn.calculatedField ?? baseColumn.field,
       enableEditingMode: false,
-      width: 80,
+      width: baseColumn.onHeaderCheck != null ? 120 : 80,
       suppressedAutoSize: true,
       readOnly: baseColumn.readonly,
+      titleSpan: TextSpan(
+        children: _getCheckboxHeaderWidget(baseColumn, fontSize: fontSize),
+      ),
       renderer: (rendererContext) => _getCheckboxWidget(
         rendererContext,
         baseColumn,
       ),
     );
+  }
+
+  List<InlineSpan> _getCheckboxHeaderWidget(
+    CustomDataColumn column, {
+    required double fontSize,
+  }) {
+    if (column.onHeaderCheck == null) {
+      return [WidgetSpan(child: Text(column.text))];
+    }
+
+    return [
+      WidgetSpan(
+        child: CustomCheckboxWidget(
+          onClick: column.onHeaderCheck,
+          text: column.text,
+          fontSize: fontSize,
+        ),
+      ),
+    ];
   }
 
   Widget _getCheckboxWidget(
@@ -192,6 +221,7 @@ class PlutoGridColumnHelper<T> {
       backgroundColor: gridColumnColor,
       title: baseColumn.text,
       enableAutoEditing: baseColumn.enableAutoEditing,
+      width: baseColumn.width ?? PlutoGridSettings.columnWidth,
       textAlign: PlutoColumnTextAlign.center,
       type: PlutoColumnType.date(format: 'dd/MM/yyyy'),
       field: baseColumn.calculatedField ?? baseColumn.field,
@@ -206,6 +236,7 @@ class PlutoGridColumnHelper<T> {
       backgroundColor: gridColumnColor,
       title: baseColumn.text,
       suppressedAutoSize: true,
+      width: baseColumn.width ?? PlutoGridSettings.columnWidth,
       textAlign: PlutoColumnTextAlign.center,
       enableAutoEditing: baseColumn.enableAutoEditing,
       type: PlutoColumnType.date(format: 'dd/MM/yyyy HH:mm'),

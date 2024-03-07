@@ -11,6 +11,7 @@ class CustomDataColumn {
   final String text;
   final String field;
   final bool negative;
+  final double? width;
   final bool enableAutoEditing;
   final String? calculatedField;
   final bool actionColumn;
@@ -22,6 +23,7 @@ class CustomDataColumn {
   final CustomDataColumnFooterType? footerType;
   final Widget Function(PlutoColumnRendererContext context)? customRenderer;
   final void Function(dynamic value, bool checked)? onClick;
+  final void Function(bool value)? onHeaderCheck;
 
   CustomDataColumn({
     required this.text,
@@ -37,6 +39,8 @@ class CustomDataColumn {
     this.onClick,
     this.negative = true,
     this.enableAutoEditing = false,
+    this.onHeaderCheck,
+    this.width,
   });
 
   void setSort() {

@@ -1,16 +1,19 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/local_instituicao/local_instituicao_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/cadastro/instituicao/instituicao_page_frm/instituicao_page_frm_impressao/instituicao_page_frm_impressao.dart';
 import 'package:ageiscme_admin/app/module/pages/cadastro/instituicao/instituicao_page_frm/instituicao_page_frm_state.dart';
 import 'package:ageiscme_admin/app/module/pages/cadastro/local_instituicao/local_instituicao_page_frm/local_instituicao_page_frm.dart';
 import 'package:ageiscme_data/services/instituicao/instituicao_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/navigation_buttom_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_area_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
@@ -51,7 +54,6 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
 
   late final TextFieldStringWidget txtCnpj = TextFieldStringWidget(
     placeholder: 'CNPJ',
-    //type: TextFieldType.Cnpj,
     onChanged: (String? str) {
       instituicao.cnpj = txtCnpj.text;
     },
@@ -66,7 +68,6 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
 
   late final TextFieldStringWidget txtFoneCme = TextFieldStringWidget(
     placeholder: 'Fone CME',
-    //type: TextFieldType.Phone,
     onChanged: (String? str) {
       instituicao.foneCme = txtFoneCme.text;
     },
@@ -74,7 +75,6 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
 
   late final TextFieldStringWidget txtFoneResponsavel = TextFieldStringWidget(
     placeholder: 'Fone Resposável',
-    //type: TextFieldType.Phone,
     onChanged: (String? str) {
       instituicao.foneResponsavel = txtFoneResponsavel.text;
     },
@@ -109,7 +109,13 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
   @override
   void initState() {
     localInstituicaoCubit = LocalInstituicaoCubit();
-    localInstituicaoCubit.loadAll();
+    localInstituicaoCubit.loadFilter(
+      LocalInstituicaoFilter(
+        codInstituicao: instituicao.cod,
+        ordenarPorNomeCrescente: true,
+        apenasAtivos: true,
+      ),
+    );
 
     txtNome.addValidator((String str) {
       if (str.isEmpty) {
@@ -324,32 +330,20 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
                           LocalInstituicaoState>(
                         bloc: localInstituicaoCubit,
                         builder: (context, locaisState) {
-                          if (locaisState.loading) {
-                            return const LoadingWidget();
-                          }
-                          List<LocalInstituicaoModel> locaisInstituicoes =
+                          if (locaisState.loading) return const LoadingWidget();
+                          List<LocalInstituicaoModel> locais =
                               locaisState.locaisInstituicoes;
 
-                          final local = locaisInstituicoes
-                              .where(
-                                (element) =>
-                                    element.codInstituicao == instituicao.cod,
-                              )
-                              .toList();
-
-                          local.sort((a, b) => a.nome.compareTo(b.nome));
-
-                          final localizacoesText = local
+                          final localizacoesText = locais
                               .map((localizacao) => localizacao.nome)
                               .join('\n');
 
-                          if (local.isNotEmpty) {
+                          if (locais.isNotEmpty) {
                             txtLocais.text = localizacoesText.toString();
                             return txtLocais;
-                          } else {
-                            txtLocais.text = ' ';
-                            return txtLocais;
                           }
+                          txtLocais.text = ' ';
+                          return txtLocais;
                         },
                       ),
                     ),
@@ -360,43 +354,18 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
             actions: [
               Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 0.0),
-                    child: NavigationButtonWidget(
-                      placeholder: 'Locais',
-                      onPressed: () => {
-                        showDialog<(bool, String)>(
-                          barrierDismissible: false,
-                          context: context,
-                          builder: (BuildContext context) {
-                            return LocalInstituicaoPageFrm(
-                              localInstituicao: LocalInstituicaoModel(
-                                cod: 0,
-                                ativo: true,
-                                codBarra: '',
-                                codInstituicao: 0,
-                                centroCusto: null,
-                                codCentroCusto: 0,
-                                contato: '',
-                                exigeProntuario: false,
-                                localConferencia: false,
-                                localizacao: '',
-                                nome: '',
-                                responsavel: '',
-                                ultimaAlteracao: null,
-                                tstamp: '',
-                              ),
-                            );
-                          },
-                        ).then((result) {
-                          if (result == null || !result.$1) return;
-                          ToastUtils.showCustomToastSucess(
-                            context,
-                            result.$2,
-                          );
-                        }),
-                      },
-                    ),
+                  CustomPopupMenuWidget(
+                    items: [
+                      CustomPopupItemModel(
+                        text: 'Locais',
+                        onTap: _selectLocal,
+                      ),
+                      CustomPopupItemModel(
+                        text: 'Imprimir Locais',
+                        onTap: _imprimir,
+                      ),
+                      CustomPopupItemHistoryModel.getHistoryItem(),
+                    ],
                   ),
                   const Spacer(),
                   Padding(
@@ -418,6 +387,57 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
         },
       ),
     );
+  }
+
+  void _imprimir() async {
+    await showDialog<bool>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return BlocBuilder<LocalInstituicaoCubit, LocalInstituicaoState>(
+          bloc: localInstituicaoCubit,
+          builder: (context, state) {
+            return InstituicaoPageFrmImpressao(
+              instituicao: instituicao,
+              locais: state.locaisInstituicoes,
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void _selectLocal() {
+    showDialog<(bool, String)>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return LocalInstituicaoPageFrm(
+          localInstituicao: LocalInstituicaoModel(
+            cod: 0,
+            ativo: true,
+            codBarra: '',
+            codInstituicao: 0,
+            centroCusto: null,
+            codCentroCusto: 0,
+            contato: '',
+            exigeProntuario: false,
+            localConferencia: false,
+            localizacao: '',
+            nome: '',
+            responsavel: '',
+            ultimaAlteracao: null,
+            tstamp: '',
+          ),
+        );
+      },
+    ).then((result) {
+      if (result == null || !result.$1) return;
+      ToastUtils.showCustomToastSucess(
+        context,
+        result.$2,
+      );
+    });
   }
 
   void salvar() {

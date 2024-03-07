@@ -7,6 +7,7 @@ part 'local_instituicao_filter.g.dart';
 sealed class LocalInstituicaoFilter with _$LocalInstituicaoFilter {
   factory LocalInstituicaoFilter({
     int? cod,
+    int? codInstituicao,
     bool? apenasAtivos,
     bool? ordenarPorNomeCrescente,
     @JsonKey(name: 'tStamp') String? tStamp,

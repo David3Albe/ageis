@@ -9,6 +9,7 @@ class CustomCheckboxWidget extends StatefulWidget {
     this.readonly = false,
     this.onClick,
     this.align = MainAxisAlignment.center,
+    this.fontSize,
   }) : super(key: key);
 
   final bool? checked;
@@ -16,6 +17,7 @@ class CustomCheckboxWidget extends StatefulWidget {
   final bool readonly;
   final String text;
   final MainAxisAlignment align;
+  final double? fontSize;
 
   @override
   State<CustomCheckboxWidget> createState() =>
@@ -67,7 +69,8 @@ class _CustomCheckboxWidgetState extends State<CustomCheckboxWidget> {
           child: Text(
             widget.text,
             style: TextStyle(
-              fontSize: HelperFunctions.calculaFontSize(context, 16),
+              fontSize: widget.fontSize ??
+                  HelperFunctions.calculaFontSize(context, 16),
             ),
           ),
         ),

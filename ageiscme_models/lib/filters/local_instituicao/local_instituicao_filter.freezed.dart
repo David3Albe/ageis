@@ -23,6 +23,8 @@ LocalInstituicaoFilter _$LocalInstituicaoFilterFromJson(
 mixin _$LocalInstituicaoFilter {
   int? get cod => throw _privateConstructorUsedError;
   set cod(int? value) => throw _privateConstructorUsedError;
+  int? get codInstituicao => throw _privateConstructorUsedError;
+  set codInstituicao(int? value) => throw _privateConstructorUsedError;
   bool? get apenasAtivos => throw _privateConstructorUsedError;
   set apenasAtivos(bool? value) => throw _privateConstructorUsedError;
   bool? get ordenarPorNomeCrescente => throw _privateConstructorUsedError;
@@ -47,6 +49,7 @@ abstract class $LocalInstituicaoFilterCopyWith<$Res> {
   @useResult
   $Res call(
       {int? cod,
+      int? codInstituicao,
       bool? apenasAtivos,
       bool? ordenarPorNomeCrescente,
       @JsonKey(name: 'tStamp') String? tStamp});
@@ -67,6 +70,7 @@ class _$LocalInstituicaoFilterCopyWithImpl<$Res,
   @override
   $Res call({
     Object? cod = freezed,
+    Object? codInstituicao = freezed,
     Object? apenasAtivos = freezed,
     Object? ordenarPorNomeCrescente = freezed,
     Object? tStamp = freezed,
@@ -75,6 +79,10 @@ class _$LocalInstituicaoFilterCopyWithImpl<$Res,
       cod: freezed == cod
           ? _value.cod
           : cod // ignore: cast_nullable_to_non_nullable
+              as int?,
+      codInstituicao: freezed == codInstituicao
+          ? _value.codInstituicao
+          : codInstituicao // ignore: cast_nullable_to_non_nullable
               as int?,
       apenasAtivos: freezed == apenasAtivos
           ? _value.apenasAtivos
@@ -103,6 +111,7 @@ abstract class _$$LocalInstituicaoFilterImplCopyWith<$Res>
   @useResult
   $Res call(
       {int? cod,
+      int? codInstituicao,
       bool? apenasAtivos,
       bool? ordenarPorNomeCrescente,
       @JsonKey(name: 'tStamp') String? tStamp});
@@ -122,6 +131,7 @@ class __$$LocalInstituicaoFilterImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? cod = freezed,
+    Object? codInstituicao = freezed,
     Object? apenasAtivos = freezed,
     Object? ordenarPorNomeCrescente = freezed,
     Object? tStamp = freezed,
@@ -130,6 +140,10 @@ class __$$LocalInstituicaoFilterImplCopyWithImpl<$Res>
       cod: freezed == cod
           ? _value.cod
           : cod // ignore: cast_nullable_to_non_nullable
+              as int?,
+      codInstituicao: freezed == codInstituicao
+          ? _value.codInstituicao
+          : codInstituicao // ignore: cast_nullable_to_non_nullable
               as int?,
       apenasAtivos: freezed == apenasAtivos
           ? _value.apenasAtivos
@@ -152,6 +166,7 @@ class __$$LocalInstituicaoFilterImplCopyWithImpl<$Res>
 class _$LocalInstituicaoFilterImpl implements _LocalInstituicaoFilter {
   _$LocalInstituicaoFilterImpl(
       {this.cod,
+      this.codInstituicao,
       this.apenasAtivos,
       this.ordenarPorNomeCrescente,
       @JsonKey(name: 'tStamp') this.tStamp});
@@ -162,6 +177,8 @@ class _$LocalInstituicaoFilterImpl implements _LocalInstituicaoFilter {
   @override
   int? cod;
   @override
+  int? codInstituicao;
+  @override
   bool? apenasAtivos;
   @override
   bool? ordenarPorNomeCrescente;
@@ -171,7 +188,7 @@ class _$LocalInstituicaoFilterImpl implements _LocalInstituicaoFilter {
 
   @override
   String toString() {
-    return 'LocalInstituicaoFilter(cod: $cod, apenasAtivos: $apenasAtivos, ordenarPorNomeCrescente: $ordenarPorNomeCrescente, tStamp: $tStamp)';
+    return 'LocalInstituicaoFilter(cod: $cod, codInstituicao: $codInstituicao, apenasAtivos: $apenasAtivos, ordenarPorNomeCrescente: $ordenarPorNomeCrescente, tStamp: $tStamp)';
   }
 
   @JsonKey(ignore: true)
@@ -192,6 +209,7 @@ class _$LocalInstituicaoFilterImpl implements _LocalInstituicaoFilter {
 abstract class _LocalInstituicaoFilter implements LocalInstituicaoFilter {
   factory _LocalInstituicaoFilter(
       {int? cod,
+      int? codInstituicao,
       bool? apenasAtivos,
       bool? ordenarPorNomeCrescente,
       @JsonKey(name: 'tStamp') String? tStamp}) = _$LocalInstituicaoFilterImpl;
@@ -202,6 +220,9 @@ abstract class _LocalInstituicaoFilter implements LocalInstituicaoFilter {
   @override
   int? get cod;
   set cod(int? value);
+  @override
+  int? get codInstituicao;
+  set codInstituicao(int? value);
   @override
   bool? get apenasAtivos;
   set apenasAtivos(bool? value);

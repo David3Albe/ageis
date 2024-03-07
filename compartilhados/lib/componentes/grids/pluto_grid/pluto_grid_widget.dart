@@ -227,7 +227,7 @@ class PlutoGridWidget<T> extends StatelessWidget {
                 ? (event) => onChanged!(event, rowsObject)
                 : null,
             rowColorCallback: rowColorCallback,
-            columns: _getColumns(context, gridState.stateManager),
+            columns: _getColumns(fontSize, context, gridState.stateManager),
             noRowsWidget: const Center(child: Text('Sem registros')),
             configuration: PlutoGridConfiguration(
               scrollbar: PlutoGridScrollbarConfig(
@@ -335,6 +335,7 @@ class PlutoGridWidget<T> extends StatelessWidget {
   }
 
   List<PlutoColumn> _getColumns(
+    double fontSize,
     BuildContext? context,
     PlutoGridStateManager? stateManager,
   ) {
@@ -346,11 +347,12 @@ class PlutoGridWidget<T> extends StatelessWidget {
       onDownload: onDownload,
       rowsObject: rowsObject,
     );
-    _addActionColumns(colunas, columnHelper);
+    _addActionColumns(colunas, columnHelper, fontSize);
     listeners.clear();
     for (CustomDataColumn column in columns) {
       colunas.add(
         columnHelper.GetColumnByCustomDataColumnType(
+          fontSize: fontSize,
           column,
           listeners: listeners,
         ),
@@ -362,6 +364,7 @@ class PlutoGridWidget<T> extends StatelessWidget {
   void _addActionColumns(
     List<PlutoColumn> colunas,
     PlutoGridColumnHelper columnHelper,
+    double fontSize,
   ) {
     if (onEdit == null &&
         onDelete == null &&
@@ -369,7 +372,12 @@ class PlutoGridWidget<T> extends StatelessWidget {
         onDownload == null) return;
     CustomDataColumn? actionColumn =
         CustomDataColumn(text: '', actionColumn: true, field: '');
-    colunas.add(columnHelper.GetColumnByCustomDataColumnType(actionColumn));
+    colunas.add(
+      columnHelper.GetColumnByCustomDataColumnType(
+        actionColumn,
+        fontSize: fontSize,
+      ),
+    );
   }
 
   List<PlutoRow> _getRows(
