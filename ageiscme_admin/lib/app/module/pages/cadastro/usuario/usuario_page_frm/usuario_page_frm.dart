@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/perfil_acesso/perfil_acesso_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/cadastro/usuario/usuario_page_frm/usuario_page_frm_helper.dart';
 import 'package:ageiscme_admin/app/module/pages/cadastro/usuario/usuario_page_frm/usuario_page_frm_state.dart';
-import 'package:ageiscme_admin/app/module/pages/cadastro/usuario/usuario_page_frm/usuario_page_frm_user_printer/usuario_page_frm_user_printer.dart';
 import 'package:ageiscme_data/services/usuario/usuario_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
@@ -549,10 +548,6 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
                         text: 'Imprimir Etiqueta',
                         onTap: printTag,
                       ),
-                      CustomPopupItemModel(
-                        text: 'Imprimir Usuários',
-                        onTap: imprimirUsuarios,
-                      ),
                       CustomPopupItemHistoryModel.getHistoryItem(),
                     ],
                   ),
@@ -641,15 +636,5 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
     }
     usuario.usuariosPerfis = registrarUsuariosPerfis;
     cubit.save(usuario);
-  }
-
-  Future imprimirUsuarios() async {
-    await showDialog<bool>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return const UsuarioPageFrmUserPrinterPage();
-      },
-    );
   }
 }

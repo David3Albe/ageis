@@ -1,10 +1,13 @@
 import 'package:ageiscme_admin/app/module/pages/cadastro/usuario/usuario_page_frm/usuario_page_frm.dart';
+import 'package:ageiscme_admin/app/module/pages/cadastro/usuario/usuario_page_frm/usuario_page_frm_user_printer/usuario_page_frm_user_printer.dart';
 import 'package:ageiscme_admin/app/module/pages/cadastro/usuario/usuario_page_state.dart';
 import 'package:ageiscme_data/services/usuario/usuario_service.dart';
 import 'package:ageiscme_models/filters/usuario_filter/usuario_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -28,6 +31,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 80,
     ),
     CustomDataColumn(text: 'Nome', field: 'nome'),
     CustomDataColumn(text: 'Login', field: 'login'),
@@ -67,13 +71,26 @@ class _UsuarioPageState extends State<UsuarioPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              UsuarioModel.empty(),
+        Row(
+          children: [
+            AddButtonWidget(
+              onPressed: () => {
+                openModal(
+                  context,
+                  UsuarioModel.empty(),
+                ),
+              },
             ),
-          },
+            const Spacer(),
+            CustomPopupMenuWidget(
+              items: [
+                CustomPopupItemModel(
+                  text: 'Imprimir Usuários',
+                  onTap: imprimirUsuarios,
+                ),
+              ],
+            ),
+          ],
         ),
         BlocListener<UsuarioPageCubit, UsuarioPageState>(
           bloc: bloc,
@@ -106,6 +123,16 @@ class _UsuarioPageState extends State<UsuarioPage> {
           ),
         ),
       ],
+    );
+  }
+
+  Future imprimirUsuarios() async {
+    await showDialog<bool>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return const UsuarioPageFrmUserPrinterPage();
+      },
     );
   }
 
