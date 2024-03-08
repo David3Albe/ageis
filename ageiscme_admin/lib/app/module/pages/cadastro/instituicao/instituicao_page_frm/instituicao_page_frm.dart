@@ -302,7 +302,7 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
                                 checked: instituicao.naoAlertarKitIncompleto,
                                 onClick: (value) =>
                                     instituicao.naoAlertarKitIncompleto = value,
-                                text: 'Não Alterar Kit Incompleto (Preparo)',
+                                text: 'Não Alertar Kit Incompleto (Preparo)',
                                 align: MainAxisAlignment.start,
                               ),
                             ],
