@@ -63,45 +63,42 @@ class _ProcessoPageWarningWidgetState extends State<ProcessoPageWarningWidget> {
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Row(
-                          children: [
-                            SizedBox(
-                              child: Text(
-                                'AVISO',
-                                style: Fontes.getSegoe(
-                                  fontSize: 14 * scale,
-                                  cor: Cores.CorTitleCards,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Visibility(
-                          visible: true,
-                          child: Wrap(
-                            children: [
-                              LayoutBuilder(
-                                builder: (context, constraints) => Tooltip(
-                                  message:
-                                      state.aviso != null ? state.aviso : '',
-                                  child: Text(
-                                    maxLines: 2,
-                                    overflow: TextOverflow.ellipsis,
-                                    state.aviso != null &&
-                                            state.aviso! != '' &&
-                                            value.mostrarMensagem
-                                        ? state.aviso!
-                                        : ' ',
+                        state.aviso == null ||
+                                state.aviso == '' ||
+                                !value.mostrarMensagem
+                            ? Wrap(
+                                children: [
+                                  Text(
+                                    'AVISO',
                                     style: Fontes.getSegoe(
-                                      fontSize: 20 * scale,
-                                      cor: value.corTexto,
+                                      fontSize: 14 * scale,
+                                      cor: Cores.CorTitleCards,
                                     ),
                                   ),
-                                ),
+                                ],
+                              )
+                            : Wrap(
+                                children: [
+                                  Tooltip(
+                                    message:
+                                        state.aviso != null ? state.aviso : '',
+                                    child: Text(
+                                      textAlign: TextAlign.start,
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
+                                      state.aviso != null &&
+                                              state.aviso! != '' &&
+                                              value.mostrarMensagem
+                                          ? state.aviso!
+                                          : ' ',
+                                      style: Fontes.getRobotoBold(
+                                        fontSize: 24 * scale,
+                                        cor: value.corTexto,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
                       ],
                     ),
                   ),

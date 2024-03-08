@@ -17,40 +17,43 @@ class RouterOutletPage extends StatelessWidget {
     ToastUtils.routerOutletContext = context;
     return CustomAppBarWidget(
       onLogout: onLogout,
-      body: Row(
-        children: [
-          Expanded(
-            child: Column(
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: MultiBlocProvider(
-                      providers: [
-                        BlocProvider<ProcessoPageManualReadingWidgetCubit>(
-                          create: (BuildContext context) =>
-                              ProcessoPageManualReadingWidgetCubit(),
-                        ),
-                        BlocProvider<ProcessoLeituraCubit>(
-                          create: (BuildContext context) =>
-                              ProcessoLeituraCubit(
-                            loadingController: LoadingController(
-                              context: context,
-                              cancelShow: true,
-                              barrierColor:
-                                  const Color.fromARGB(61, 245, 245, 245),
+      body: Container(
+        color: const Color.fromARGB(255, 238, 238, 243),
+        child: Row(
+          children: [
+            Expanded(
+              child: Column(
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: MultiBlocProvider(
+                        providers: [
+                          BlocProvider<ProcessoPageManualReadingWidgetCubit>(
+                            create: (BuildContext context) =>
+                                ProcessoPageManualReadingWidgetCubit(),
+                          ),
+                          BlocProvider<ProcessoLeituraCubit>(
+                            create: (BuildContext context) =>
+                                ProcessoLeituraCubit(
+                              loadingController: LoadingController(
+                                context: context,
+                                cancelShow: true,
+                                barrierColor:
+                                    const Color.fromARGB(61, 245, 245, 245),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
-                      child: ProcessoPage(userCode: userCode),
+                        ],
+                        child: ProcessoPage(userCode: userCode),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -39,7 +39,7 @@ class ProcessoPageUserWidget extends StatelessWidget {
                   state.processo.leituraAtual.respostaEPCEPI;
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   Row(
                     children: [

@@ -8,10 +8,14 @@ import 'package:flutter/material.dart';
 
 class ProcessoPageWarningController extends ChangeNotifier
     implements Disposable {
-  static const Color COR_TEXTO_VERMELHO = const Color(0xffFF0A0A);
+  static const Color COR_PISCADA_PADRAO = const Color(0xffBFC3DA);
+  static const Color COR_TEXTO_VERMELHO = Color.fromARGB(200, 255, 0, 0);
+  static const Color COR_TEXTO_LARANJA = Color.fromARGB(200, 228, 99, 0);
+  static const Color COR_TEXTO_AMARELO = Color.fromARGB(200, 255, 255, 0);
   static const Color COR_TEXTO_PRETO = Cores.CorTextCards;
   static const Color COR_FUNDO_PRETO = Cores.CorCards;
   static const Color COR_FUNDO_VERMELHO = const Color(0xffBFC3DA);
+  static const Color COR_FUNDO_AMARELO = COR_FUNDO_PRETO;
 
   Color? corTexto;
   Color? corFundo;
@@ -31,7 +35,10 @@ class ProcessoPageWarningController extends ChangeNotifier
     timerOcultaMensagem?.cancel();
     int? tempoOcultarMensagem = buscarTempoOcultaMensagem(state);
     if (tempoOcultarMensagem == null) return;
-    timerOcultaMensagem = Timer(const Duration(seconds: 10), ocultaMensagem);
+    timerOcultaMensagem = Timer(const Duration(seconds: 10), () {
+      ocultaMensagem();
+      setDefaultColor();
+    });
   }
 
   int? buscarTempoOcultaMensagem(ProcessoLeituraState state) {
@@ -79,30 +86,33 @@ class ProcessoPageWarningController extends ChangeNotifier
     timerCor?.cancel();
     timesRunned = 0;
     setRedColor();
-    timerCor =
-        Timer.periodic(const Duration(milliseconds: 700), changeTimerColor);
+    // timerCor =
+    //     Timer.periodic(const Duration(milliseconds: 700), changeTimerColor);
   }
 
   void setRedColor() {
-    corTexto = COR_TEXTO_VERMELHO;
-    corFundo = COR_FUNDO_VERMELHO;
+    corTexto = COR_TEXTO_PRETO;
+    corFundo = COR_TEXTO_AMARELO;
     timesRunned++;
     notifyListeners();
   }
 
-  void changeTimerColor(Timer t) {
-    if (!t.isActive) return;
-    if (timesRunned > 1) {
-      timerCor?.cancel();
-      return;
-    }
-    corTexto =
-        corTexto == COR_TEXTO_VERMELHO ? COR_TEXTO_PRETO : COR_TEXTO_VERMELHO;
-    corFundo =
-        corFundo == COR_FUNDO_VERMELHO ? COR_FUNDO_PRETO : COR_FUNDO_VERMELHO;
-    timesRunned++;
+  void setDefaultColor() {
+    corFundo = COR_FUNDO_PRETO;
     notifyListeners();
   }
+
+  // void changeTimerColor(Timer t) {
+  //   if (!t.isActive) return;
+  //   if (timesRunned > 1) {
+  //     timerCor?.cancel();
+  //     return;
+  //   }
+  //   // corTexto = COR_TEXTO_LARANJA;
+  //   // corFundo = COR_FUNDO_AMARELO;
+  //   timesRunned++;
+  //   notifyListeners();
+  // }
 
   @override
   void dispose() {

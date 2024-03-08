@@ -104,7 +104,10 @@ class ProcessoPageTreeViewKitStatusWidget extends StatelessWidget {
                   ),
                 ],
               ),
-              child: ProcessoPageTreeViewKitStatusItemWidget(item),
+              child: ProcessoPageTreeViewKitStatusItemWidget(
+                item,
+                color: KitProcessoStatus.getCorTextItemFromStatus(status),
+              ),
             ),
           ],
         ),

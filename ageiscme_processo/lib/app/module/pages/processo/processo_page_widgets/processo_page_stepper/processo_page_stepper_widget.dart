@@ -31,11 +31,11 @@ class ProcessoPageStepperWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     var scale = size.width / 1920;
-    double height = getStepperHeight(size);
+    // double height = getStepperHeight(size);
     return Material(
       elevation: 10,
       child: Container(
-        constraints: BoxConstraints(maxHeight: height, minHeight: height),
+        // constraints: BoxConstraints(maxHeight: height, minHeight: height),
         decoration: const BoxDecoration(
           color: Cores.CorCards,
         ),

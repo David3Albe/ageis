@@ -25,7 +25,7 @@ class ProcessoPageOriginDestinyWidget extends StatelessWidget {
             left: 14 * scale,
           ),
           child: Column(
-            mainAxisSize: MainAxisSize.max,
+            mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(

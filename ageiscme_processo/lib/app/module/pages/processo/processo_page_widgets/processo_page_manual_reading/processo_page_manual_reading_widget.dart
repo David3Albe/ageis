@@ -55,11 +55,11 @@ class _ProcessoPageManualReadingWidgetState
   double getHeightManualReadings(Size size) {
     double height = size.height;
     if (height > 800) {
-      return 475;
+      return 485;
     } else if (height > 700) {
-      return 465;
+      return 475;
     }
-    return 450;
+    return 465;
   }
 
   @override

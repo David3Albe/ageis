@@ -37,58 +37,77 @@ class ProcessoPagePriorityWidget extends StatelessWidget {
                 left: 14 * scale,
               ),
               child: Column(
-                mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(
-                    children: [
-                      FittedBox(
-                        child: Text(
-                          'PRIORIDADE',
-                          style: Fontes.getSegoe(
-                            fontSize: 14 * scale,
-                            cor: Cores.CorPrioridadeUrgente,
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: FittedBox(
+                              fit: BoxFit.scaleDown,
+                              alignment: Alignment.topLeft,
+                              child: Text(
+                                'PRIORIDADE',
+                                style: Fontes.getSegoe(
+                                  fontSize: 14 * scale,
+                                  cor: Cores.CorPrioridadeUrgente,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Expanded(
-                        flex: 3,
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: prioridade != null
-                              ? FittedBox(
-                                  fit: BoxFit.scaleDown,
-                                  child: Text(
-                                    prioridade.descricao.toUpperCase(),
-                                    style: Fontes.getSegoe(
-                                      fontSize: 64 * scale,
-                                      cor: Cores.CorTextCards,
+                        Expanded(
+                          flex: 2,
+                          child: SizedBox(
+                            child: Center(
+                              child: Row(
+                                children: [
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: prioridade != null
+                                        ? FittedBox(
+                                            fit: BoxFit.scaleDown,
+                                            alignment: Alignment.center,
+                                            child: Text(
+                                              prioridade.descricao
+                                                  .toUpperCase(),
+                                              style: Fontes.getSegoe(
+                                                fontSize: 32 * scale,
+                                                cor: Cores.CorTextCards,
+                                              ),
+                                            ),
+                                          )
+                                        : const Text(''),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  Align(
+                                    alignment: Alignment.center,
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      alignment: Alignment.center,
+                                      child: prioridade != null &&
+                                              prioridade.urgente
+                                          ? Icon(
+                                              Symbols.warning,
+                                              size: 38 * scale,
+                                            )
+                                          : const Text(' '),
                                     ),
                                   ),
-                                )
-                              : const Text(''),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                      const Spacer(),
-                      Expanded(
-                        child: FittedBox(
-                          fit: BoxFit.scaleDown,
-                          alignment: Alignment.centerRight,
-                          child: prioridade != null && prioridade.urgente
-                              ? Icon(
-                                  Symbols.warning,
-                                  size: 92 * scale,
-                                )
-                              : const Text(' '),
-                        ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),

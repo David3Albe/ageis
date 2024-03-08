@@ -4,7 +4,12 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ProcessoPageTreeViewKitStatusItemWidget extends StatelessWidget {
-  const ProcessoPageTreeViewKitStatusItemWidget(this.item);
+  const ProcessoPageTreeViewKitStatusItemWidget(
+    this.item, {
+    required this.color,
+  });
+
+  final Color color;
 
   final ItemProcessoModel item;
   @override
@@ -18,6 +23,7 @@ class ProcessoPageTreeViewKitStatusItemWidget extends StatelessWidget {
           '${item.idEtiqueta} ${item.descricao}',
           style: TextStyle(
             fontSize: 16 * scale,
+            color: color,
           ),
         ),
       ),

@@ -67,7 +67,7 @@ class _ProcessoPageState extends State<ProcessoPage> {
       _cubit.readCode(widget.userCode);
     }
     TIMER_REFRESH_LEITURAS = Timer.periodic(TIMER_REFRESH_DURATION, (Timer t) {
-      if(!t.isActive) return;
+      if (!t.isActive) return;
       updateLastRefreshTime();
     });
     super.initState();
@@ -103,7 +103,6 @@ class _ProcessoPageState extends State<ProcessoPage> {
     _disposeCubit = BlocProvider.of<ProcessoLeituraCubit>(context);
     Size size = MediaQuery.of(context).size;
     double fontSize = getFontSize(size);
-    double scale = size.width / 1920;
     return ContextMenuOverlay(
       buttonStyle: ContextMenuButtonStyle(
         textStyle: TextStyle(
@@ -160,143 +159,241 @@ class _ProcessoPageState extends State<ProcessoPage> {
             },
           ),
         ],
-        child: RawKeyboardListener(
-          onKey: coletorHelper.handleKey,
-          autofocus: true,
-          focusNode: _textNode,
-          child: Padding(
-            padding: EdgeInsets.all(2.0 * scale),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Expanded(
-                        flex: 8,
-                        child: Column(
-                          children: [
-                            const Row(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            return RawKeyboardListener(
+              onKey: coletorHelper.handleKey,
+              autofocus: true,
+              focusNode: _textNode,
+              child: Padding(
+                padding: const EdgeInsets.all(2.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            flex: 10,
+                            child: Column(
                               children: [
-                                Expanded(
-                                  child: ProcessoPageStepperWidget(),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        constraints: const BoxConstraints(
+                                          maxHeight: 65,
+                                          minHeight: 45,
+                                        ),
+                                        height: constraints.maxHeight * 0.07,
+                                        child:
+                                            const ProcessoPageStepperWidget(),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            Padding(padding: EdgeInsets.only(top: 8 * scale)),
-                            const Row(
-                              children: [
-                                Expanded(
-                                  child: ProcessoPageObjectReaderWidget(),
+                                const Padding(
+                                  padding: EdgeInsets.only(
+                                    top: 8,
+                                  ),
                                 ),
-                              ],
-                            ),
-                            Padding(padding: EdgeInsets.only(top: 8 * scale)),
-                            const Expanded(
-                              flex: 5,
-                              child: ProcessoPageObjectPreviewWidget(),
-                            ),
-                            Padding(padding: EdgeInsets.only(top: 8 * scale)),
-                            const Row(
-                              children: [
-                                Expanded(
-                                  child: const ProcessoPageWarningWidget(),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        constraints: const BoxConstraints(
+                                          maxHeight: 70,
+                                          minHeight: 40,
+                                        ),
+                                        height: constraints.maxHeight * 0.08,
+                                        child:
+                                            const ProcessoPageObjectReaderWidget(),
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
-                            Padding(padding: EdgeInsets.only(top: 8 * scale)),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
+                                const Padding(
+                                  padding: EdgeInsets.only(
+                                    top: 8,
+                                  ),
+                                ),
+                                const Expanded(
+                                  child: Row(
                                     children: [
-                                      Row(
-                                        children: [
-                                          const Expanded(
-                                            child: ProcessoPageUserWidget(),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                              left: 8 * scale,
+                                      Expanded(
+                                        child: const Column(
+                                          children: [
+                                            Expanded(
+                                              child:
+                                                  const ProcessoPageObjectPreviewWidget(),
                                             ),
-                                          ),
-                                          const Expanded(
-                                            child: ProcessoPageLocalWidget(),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
                                     ],
                                   ),
                                 ),
-                              ],
-                            ),
-                            Padding(padding: EdgeInsets.only(top: 8 * scale)),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Column(
-                                    children: [
-                                      Row(
+                                const Padding(
+                                  padding: EdgeInsets.only(top: 8),
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Container(
+                                        constraints: const BoxConstraints(
+                                          maxHeight: 90,
+                                          minHeight: 50,
+                                        ),
+                                        child:
+                                            const ProcessoPageWarningWidget(),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.only(top: 8),
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
                                         children: [
-                                          const Expanded(
-                                            child: ProcessoPageActionWidget(),
-                                          ),
-                                          Padding(
-                                            padding: EdgeInsets.only(
-                                              left: 8 * scale,
-                                            ),
-                                          ),
-                                          const Expanded(
-                                            child:
-                                                ProcessoPageOriginDestinyWidget(),
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: Container(
+                                                  constraints:
+                                                      const BoxConstraints(
+                                                    maxHeight: 70,
+                                                    minHeight: 40,
+                                                  ),
+                                                  height:
+                                                      constraints.maxHeight *
+                                                          0.08,
+                                                  child:
+                                                      const ProcessoPageUserWidget(),
+                                                ),
+                                              ),
+                                              const Padding(
+                                                padding: EdgeInsets.only(
+                                                  left: 8,
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Container(
+                                                  constraints:
+                                                      const BoxConstraints(
+                                                    maxHeight: 70,
+                                                    minHeight: 40,
+                                                  ),
+                                                  height:
+                                                      constraints.maxHeight *
+                                                          0.08,
+                                                  child:
+                                                      const ProcessoPageLocalWidget(),
+                                                ),
+                                              ),
+                                            ],
                                           ),
                                         ],
                                       ),
-                                    ],
+                                    ),
+                                  ],
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.only(top: 8),
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Expanded(
+                                                child: Container(
+                                                  constraints:
+                                                      const BoxConstraints(
+                                                    maxHeight: 70,
+                                                    minHeight: 40,
+                                                  ),
+                                                  height:
+                                                      constraints.maxHeight *
+                                                          0.08,
+                                                  child:
+                                                      const ProcessoPageActionWidget(),
+                                                ),
+                                              ),
+                                              const Padding(
+                                                padding: EdgeInsets.only(
+                                                  left: 8,
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: Container(
+                                                  constraints:
+                                                      const BoxConstraints(
+                                                    maxHeight: 70,
+                                                    minHeight: 40,
+                                                  ),
+                                                  height:
+                                                      constraints.maxHeight *
+                                                          0.08,
+                                                  child:
+                                                      const ProcessoPageOriginDestinyWidget(),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            flex: 4,
+                            child: Column(
+                              children: [
+                                const Expanded(
+                                  flex: 10000,
+                                  child: const Padding(
+                                    padding: EdgeInsets.only(left: 8.0),
+                                    child: const ProcessoPageReadingsWidget(),
+                                  ),
+                                ),
+                                const Padding(
+                                  padding: EdgeInsets.only(top: 8),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(
+                                    left: 8.0,
+                                  ),
+                                  child: Container(
+                                    constraints: const BoxConstraints(
+                                      maxHeight: 70,
+                                      minHeight: 40,
+                                    ),
+                                    height: constraints.maxHeight * 0.08,
+                                    child: const ProcessoPagePriorityWidget(),
                                   ),
                                 ),
                               ],
                             ),
-                            Padding(padding: EdgeInsets.only(top: 8 * scale)),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
-                      Expanded(
-                        flex: 4,
-                        child: Column(
-                          children: [
-                            Expanded(
-                              flex: 31,
-                              child: Padding(
-                                padding: EdgeInsets.only(left: 8.0 * scale),
-                                child: const ProcessoPageReadingsWidget(),
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(top: 8 * scale),
-                            ),
-                            Expanded(
-                              flex: 8,
-                              child: Padding(
-                                padding: EdgeInsets.only(
-                                  left: 8.0 * scale,
-                                  bottom: 8 * scale,
-                                ),
-                                child: const ProcessoPagePriorityWidget(),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         ),
       ),
     );

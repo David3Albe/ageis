@@ -45,7 +45,14 @@ class ProcessoPageTreeViewKitWidget extends StatelessWidget {
               onTap: () => showKit(context, kit),
               child: Text(
                 '${kit.codBarra} ${kit.descritor == null ? '' : kit.descritor!.nome} ${getItensKitLidos()}',
-                style: TextStyle(fontSize: 16 * scale),
+                style: TextStyle(
+                  fontSize: 16 * scale,
+                  color: getAllItensKitLidos()
+                      ? null
+                      : KitProcessoStatus.getCorTextItemFromStatus(
+                          KitProcessoStatus.naoLidos,
+                        ),
+                ),
               ),
             ),
           ],
@@ -87,6 +94,21 @@ class ProcessoPageTreeViewKitWidget extends StatelessWidget {
 
   String getItensKitLidos() =>
       '(${kit.itens == null ? 0 : kit.itens!.length}/${kit.itensLidos == null ? 0 : kit.itensLidos!.length})';
+
+  bool getAllItensKitLidos() {
+    if (kit.itens == null ||
+        kit.itensLidos == null ||
+        processoLeitura.leituraAtual.modoConsulta == true) return true;
+    int itensParaLer = kit.itens!
+        .where(
+          (element) =>
+              element.status != '3' &&
+              element.status != '4' &&
+              element.dataMatrixDanificado?.identificadoEmLeituraAtual != true,
+        )
+        .length;
+    return itensParaLer == 0;
+  }
 
   void toogleSelected(BuildContext context, KitProcessoModel kit) {
     final ProcessoLeituraCubit cubit =

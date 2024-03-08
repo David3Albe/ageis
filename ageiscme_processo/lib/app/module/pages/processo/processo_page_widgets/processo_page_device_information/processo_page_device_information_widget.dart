@@ -20,9 +20,16 @@ class _ProcessoPageDeviceInformationWidgetState
     super.initState();
   }
 
+  double _getIconSize(Size size) {
+    double width = size.width;
+    if (width > 1600) return 20;
+    if (width > 600) return 12;
+    return 10;
+  }
+
   @override
   Widget build(BuildContext context) {
-    double scale = MediaQuery.of(context).size.height / 1080;
+    Size size = MediaQuery.of(context).size;
     return BlocBuilder<ProcessoLeituraCubit, ProcessoLeituraState>(
       buildWhen: (previous, current) =>
           current.rebuildType == ProcessoLeituraRebuildType.All,
@@ -30,13 +37,32 @@ class _ProcessoPageDeviceInformationWidgetState
         return state.processo.maquina == null
             ? const SizedBox()
             : Tooltip(
-                message: state.processo.maquina ?? '',
+                message: _getMessage(state),
                 child: Icon(
                   Symbols.help,
-                  size: 24 * scale,
+                  size: _getIconSize(size),
                 ),
               );
       },
     );
+  }
+
+  String _getMessage(ProcessoLeituraState state) {
+    String value = '';
+    value = _addParameter(value, state.processo.maquina ?? '');
+    if (state.processo.leituraAtual.dataHoraInicioProcesso != null) {
+      final f = DateFormat('yyyy-MM-dd HH:mm');
+      String dataHora =
+          f.format(state.processo.leituraAtual.dataHoraInicioProcesso!);
+
+      value = _addParameter(value, dataHora);
+    }
+    return value;
+  }
+
+  String _addParameter(String value, String? parameter) {
+    if (parameter == null) return value;
+    if (!value.isEmpty) value += '\n';
+    return value + parameter;
   }
 }
