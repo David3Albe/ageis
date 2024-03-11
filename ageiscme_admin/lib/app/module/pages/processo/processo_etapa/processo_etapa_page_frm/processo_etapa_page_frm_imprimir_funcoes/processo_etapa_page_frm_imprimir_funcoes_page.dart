@@ -61,11 +61,11 @@ class _ProcessoEtapaPageFrmImprimirFuncoesPageState
         constraints: const BoxConstraints(
           maxHeight: 600,
           minHeight: 425,
-          maxWidth: 600,
-          minWidth: 500,
+          maxWidth: 800,
+          minWidth: 600,
         ),
         height: size.height * .5,
-        width: size.width * .5,
+        width: size.width * .7,
         child: BlocConsumer<ProcessoEtapaCubit, ProcessoEtapaState>(
           listener: (context, state) =>
               _controller.etapaCubitListener(context, state),

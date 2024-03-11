@@ -18,7 +18,11 @@ class ProcessoEtapaPageFrmImprimirFuncoesController {
   late final ArsenalEstoqueCubit estoqueCubit;
 
   ProcessoEtapaPageFrmImprimirFuncoesController({required int stageCod}) {
-    dto = StageFunctionsPrintDTO(stageCod: stageCod, printTagLocal: true);
+    dto = StageFunctionsPrintDTO(
+      stageCod: stageCod,
+      printTagLocal: true,
+      finish: true,
+    );
     etapaCubit = ProcessoEtapaCubit();
     etapaCubit.loadFilter(
       ProcessoEtapaFilter(
@@ -143,7 +147,10 @@ class ProcessoEtapaPageFrmImprimirFuncoesController {
     }
     dto.instituitionName = instituicao!.nome;
     dto.instituitionCod = instituicao.cod;
-    await StageFunctionsPrinterController(context: context,stageFunctionsPrint: dto).print();
+    await StageFunctionsPrinterController(
+      context: context,
+      stageFunctionsPrint: dto,
+    ).print();
     loading.close(context, true);
     Navigator.of(context).pop();
   }
