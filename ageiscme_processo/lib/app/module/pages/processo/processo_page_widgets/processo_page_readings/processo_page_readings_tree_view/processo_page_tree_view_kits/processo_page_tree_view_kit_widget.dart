@@ -104,7 +104,9 @@ class ProcessoPageTreeViewKitWidget extends StatelessWidget {
           (element) =>
               element.status != '3' &&
               element.status != '4' &&
-              element.dataMatrixDanificado?.identificadoEmLeituraAtual != true,
+              element.dataMatrixDanificado?.identificadoEmLeituraAtual !=
+                  true &&
+              element.lido != true,
         )
         .length;
     return itensParaLer == 0;
