@@ -5,6 +5,9 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/servico_tipo/
 import 'package:ageiscme_admin/app/module/pages/processo/processo_etapa/processo_etapa_page_frm/processo_etapa_page_frm_imprimir_funcoes/processo_etapa_page_frm_imprimir_funcoes_page.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/processo_etapa/processo_etapa_page_frm/processo_etapa_page_frm_state.dart';
 import 'package:ageiscme_data/services/processo_etapa/processo_etapa_service.dart';
+import 'package:ageiscme_impressoes/dto/stage_indicator_print/stage_indicator_print_dto.dart';
+import 'package:ageiscme_impressoes/prints/stage_indicator_printer/stage_indicator_printer_controller.dart';
+import 'package:ageiscme_models/filters/equipamento/equipamento_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
@@ -16,6 +19,7 @@ import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart'
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
+import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
@@ -79,16 +83,27 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
     },
   );
 
+  late final List<CustomPopupItemModel> items;
+
   @override
   void initState() {
     processoTipoCubit = ProcessoTipoCubit();
     processoTipoCubit.loadAll();
     equipamentoCubit = EquipamentoCubit();
-    equipamentoCubit.loadAll();
+    equipamentoCubit.loadFilter(
+      EquipamentoFilter(
+        ordenarPorNomeCrescente: true,
+      ),
+    );
     arsenalEstoqueCubit = ArsenalEstoqueCubit();
-    arsenalEstoqueCubit.loadAll();
+    arsenalEstoqueCubit.loadFilter(
+      ArsenalEstoqueFilter(
+        ordenarPorNomeCrescente: true,
+      ),
+    );
     servicoTipoCubit = ServicoTipoCubit();
     servicoTipoCubit.loadAll();
+    items = _getItems();
 
     txtNome.addValidator((String str) {
       if (str.isEmpty) {
@@ -243,9 +258,7 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                 }
                                 List<EquipamentoModel> equipamentos =
                                     equipamentoState.objs;
-                                equipamentos.sort(
-                                  (a, b) => a.nome!.compareTo(b.nome!),
-                                );
+
                                 EquipamentoModel? equipamento = equipamentos
                                     .where(
                                       (element) =>
@@ -253,11 +266,22 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                           processoEtapa.codEquipamento,
                                     )
                                     .firstOrNull;
+
+                                List<EquipamentoModel> equipamentosAtivos =
+                                    equipamentos
+                                        .where(
+                                          (element) => element.ativo == true,
+                                        )
+                                        .toList();
+
+                                if (equipamento != null &&
+                                    !equipamentosAtivos.contains(equipamento)) {
+                                  equipamentosAtivos.add(equipamento);
+                                }
+
                                 return DropDownWidget<EquipamentoModel>(
                                   initialValue: equipamento,
-                                  sourceList: equipamentos
-                                      .where((element) => element.ativo == true)
-                                      .toList(),
+                                  sourceList: equipamentosAtivos,
                                   onChanged: (value) =>
                                       processoEtapa.codEquipamento = value.cod!,
                                   placeholder: 'Equipamento',
@@ -277,9 +301,6 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                 List<ArsenalEstoqueModel> arsenaisEstoques =
                                     arsenaisState.arsenaisEstoques;
 
-                                arsenaisEstoques.sort(
-                                  (a, b) => a.nome!.compareTo(b.nome!),
-                                );
                                 ArsenalEstoqueModel? arsenalEstoque =
                                     arsenaisEstoques
                                         .where(
@@ -288,11 +309,22 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                               processoEtapa.codEstoque,
                                         )
                                         .firstOrNull;
+                                List<ArsenalEstoqueModel>
+                                    arsenaisEstoquesAtivos = arsenaisEstoques
+                                        .where(
+                                          (element) => element.ativo == true,
+                                        )
+                                        .toList();
+
+                                if (arsenalEstoque != null &&
+                                    !arsenaisEstoquesAtivos
+                                        .contains(arsenalEstoque)) {
+                                  arsenaisEstoquesAtivos.add(arsenalEstoque);
+                                }
+
                                 return DropDownWidget<ArsenalEstoqueModel>(
                                   initialValue: arsenalEstoque,
-                                  sourceList: arsenaisEstoques
-                                      .where((element) => element.ativo == true)
-                                      .toList(),
+                                  sourceList: arsenaisEstoquesAtivos,
                                   onChanged: (value) =>
                                       processoEtapa.codEstoque = value.cod!,
                                   placeholder: 'Arsenal',
@@ -790,13 +822,7 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
               Row(
                 children: [
                   CustomPopupMenuWidget(
-                    items: [
-                      CustomPopupItemModel(
-                        text: 'Imprimir Funções',
-                        onTap: imprimirFuncoes,
-                      ),
-                      CustomPopupItemHistoryModel.getHistoryItem(),
-                    ],
+                    items: items,
                   ),
                   const Spacer(),
                   Padding(
@@ -830,6 +856,29 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
     );
   }
 
+  List<CustomPopupItemModel> _getItems() {
+    List<CustomPopupItemModel> items = [];
+    items.add(
+      CustomPopupItemModel(
+        text: 'Imprimir Funções',
+        onTap: imprimirFuncoes,
+      ),
+    );
+    if (processoEtapa.exigeTesteBiologico == true ||
+        processoEtapa.exigeTesteIndicador == true) {
+      items.add(
+        CustomPopupItemModel(
+          text: 'Imprimir Indicador',
+          onTap: imprimirIndicador,
+        ),
+      );
+    }
+    items.add(
+      CustomPopupItemHistoryModel.getHistoryItem(),
+    );
+    return items;
+  }
+
   Future imprimirFuncoes() async {
     if (processoEtapa.cod == null || processoEtapa.cod == 0) {
       ToastUtils.showCustomToastWarning(
@@ -847,6 +896,41 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
         );
       },
     );
+  }
+
+  Future imprimirIndicador() async {
+    if (processoEtapa.cod == null || processoEtapa.cod == 0) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'É necessário que a etapa esteja cadastrada para imprimir suas funções',
+      );
+      return;
+    }
+    if (processoEtapa.codInstituicao == null) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'É necessário que a etapa esteja com uma Instituição configurada para imprimir os indicadores',
+      );
+      return;
+    }
+    if (processoEtapa.exigeTesteIndicador != true &&
+        processoEtapa.exigeTesteBiologico != true) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'É necessário que a etapa esteja com ou Teste Indicador ou Teste Biológico para imprimir os indicadores',
+      );
+      return;
+    }
+    LoadingController loading = LoadingController(context: context);
+    StageIndicatorPrinterController controller =
+        StageIndicatorPrinterController(
+      context: context,
+      stageIndicatorPrint: StageIndicatorPrintDTO(
+        instituitionCod: processoEtapa.codInstituicao!,
+      ),
+    );
+    loading.close(context, mounted);
+    await controller.print();
   }
 
   void salvar() {

@@ -11,6 +11,11 @@ class ParametroSistemaService {
           .map((e) => ParametroSistemaModel.fromJson(e))
           .toList();
 
+  Future<ParametroSistemaModel?> findFirst() async =>
+      ParametroSistemaModel.fromJson(
+        await _client.getOne('/parametro-sistema/find-first'),
+      );
+
   Future<(String message, ParametroSistemaModel parametroSistema)?> save(
     ParametroSistemaModel obj,
   ) async {
