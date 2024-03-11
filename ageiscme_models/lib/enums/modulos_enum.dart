@@ -1,0 +1,35 @@
+class ModulosEnum {
+  static const int Usuarios = 101;
+  static const int Equipamento = 102;
+  static const int Etapa = 103;
+  static const int Kit = 104;
+  static const int Item = 110;
+  static const int Estoque = 111;
+  static const int Indicador = 121;
+  static const int Servico = 122;
+  static const int EtapaProcessoIniciarEntrada = 200;
+  static const int EtapaProcessoIniciarSaida = 201;
+  static const int EtapaProcessoFinalizarLeitura = 202;
+  static const int EtapaProcessoCancelarLeituras = 203;
+  static const int EtapaProcessoSIM = 204;
+  static const int EtapaProcessoNAO = 205;
+  static const int EtapaProcessoCancelar1Item = 206;
+  static const int EtapaProcessoPrioridadeNormal = 210;
+  static const int EtapaProcessoPrioridadeUrgente = 211;
+  static const int EtapaProcessoPrioridadeEmergencia = 212;
+  static const int EtapaProcessoMontarNovoKit = 220;
+  static const int EtapaProcessoImprimirEtiqueta = 221;
+  static const int EtapaProcessoTrocarEtiqueta = 222;
+  static const int EtapaProcessoImprimirIndicador = 223;
+  static const int EtapaProcessoTipoEmbalagem = 224;
+  static const int EtapaProcessoReporItem = 225;
+  static const int EtapaProcessoRemoverItem = 226;
+  static const int GerarEtiquetaBarra = 227;
+  static const int EtapaProcessoCadastrarItemConsignado = 228;
+  static const int EtapaProcessoTransferir = 229;
+  static const int EtapaProcessoReceber = 230;
+  static const int EtapaZoom = 231;
+  static const int Pacote = 301;
+  static const int EtapaMontarPacote = 302;
+  static const int EtapaDesmontarPacote = 303;
+}

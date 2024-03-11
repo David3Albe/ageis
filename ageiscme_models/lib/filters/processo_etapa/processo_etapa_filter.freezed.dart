@@ -27,6 +27,12 @@ mixin _$ProcessoEtapaFilter {
   bool? get ordenarPorNomeCrescente => throw _privateConstructorUsedError;
   set ordenarPorNomeCrescente(bool? value) =>
       throw _privateConstructorUsedError;
+  bool? get carregarTiposProcesso => throw _privateConstructorUsedError;
+  set carregarTiposProcesso(bool? value) => throw _privateConstructorUsedError;
+  bool? get carregarTiposProcessoEtapaInicial =>
+      throw _privateConstructorUsedError;
+  set carregarTiposProcessoEtapaInicial(bool? value) =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -40,7 +46,12 @@ abstract class $ProcessoEtapaFilterCopyWith<$Res> {
           ProcessoEtapaFilter value, $Res Function(ProcessoEtapaFilter) then) =
       _$ProcessoEtapaFilterCopyWithImpl<$Res, ProcessoEtapaFilter>;
   @useResult
-  $Res call({int? codigo, bool? apenasAtivos, bool? ordenarPorNomeCrescente});
+  $Res call(
+      {int? codigo,
+      bool? apenasAtivos,
+      bool? ordenarPorNomeCrescente,
+      bool? carregarTiposProcesso,
+      bool? carregarTiposProcessoEtapaInicial});
 }
 
 /// @nodoc
@@ -59,6 +70,8 @@ class _$ProcessoEtapaFilterCopyWithImpl<$Res, $Val extends ProcessoEtapaFilter>
     Object? codigo = freezed,
     Object? apenasAtivos = freezed,
     Object? ordenarPorNomeCrescente = freezed,
+    Object? carregarTiposProcesso = freezed,
+    Object? carregarTiposProcessoEtapaInicial = freezed,
   }) {
     return _then(_value.copyWith(
       codigo: freezed == codigo
@@ -73,6 +86,15 @@ class _$ProcessoEtapaFilterCopyWithImpl<$Res, $Val extends ProcessoEtapaFilter>
           ? _value.ordenarPorNomeCrescente
           : ordenarPorNomeCrescente // ignore: cast_nullable_to_non_nullable
               as bool?,
+      carregarTiposProcesso: freezed == carregarTiposProcesso
+          ? _value.carregarTiposProcesso
+          : carregarTiposProcesso // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      carregarTiposProcessoEtapaInicial: freezed ==
+              carregarTiposProcessoEtapaInicial
+          ? _value.carregarTiposProcessoEtapaInicial
+          : carregarTiposProcessoEtapaInicial // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 }
@@ -85,7 +107,12 @@ abstract class _$$ProcessoEtapaFilterImplCopyWith<$Res>
       __$$ProcessoEtapaFilterImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? codigo, bool? apenasAtivos, bool? ordenarPorNomeCrescente});
+  $Res call(
+      {int? codigo,
+      bool? apenasAtivos,
+      bool? ordenarPorNomeCrescente,
+      bool? carregarTiposProcesso,
+      bool? carregarTiposProcessoEtapaInicial});
 }
 
 /// @nodoc
@@ -102,6 +129,8 @@ class __$$ProcessoEtapaFilterImplCopyWithImpl<$Res>
     Object? codigo = freezed,
     Object? apenasAtivos = freezed,
     Object? ordenarPorNomeCrescente = freezed,
+    Object? carregarTiposProcesso = freezed,
+    Object? carregarTiposProcessoEtapaInicial = freezed,
   }) {
     return _then(_$ProcessoEtapaFilterImpl(
       codigo: freezed == codigo
@@ -116,6 +145,15 @@ class __$$ProcessoEtapaFilterImplCopyWithImpl<$Res>
           ? _value.ordenarPorNomeCrescente
           : ordenarPorNomeCrescente // ignore: cast_nullable_to_non_nullable
               as bool?,
+      carregarTiposProcesso: freezed == carregarTiposProcesso
+          ? _value.carregarTiposProcesso
+          : carregarTiposProcesso // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      carregarTiposProcessoEtapaInicial: freezed ==
+              carregarTiposProcessoEtapaInicial
+          ? _value.carregarTiposProcessoEtapaInicial
+          : carregarTiposProcessoEtapaInicial // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -124,7 +162,11 @@ class __$$ProcessoEtapaFilterImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ProcessoEtapaFilterImpl implements _ProcessoEtapaFilter {
   _$ProcessoEtapaFilterImpl(
-      {this.codigo, this.apenasAtivos, this.ordenarPorNomeCrescente});
+      {this.codigo,
+      this.apenasAtivos,
+      this.ordenarPorNomeCrescente,
+      this.carregarTiposProcesso,
+      this.carregarTiposProcessoEtapaInicial});
 
   factory _$ProcessoEtapaFilterImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProcessoEtapaFilterImplFromJson(json);
@@ -135,10 +177,14 @@ class _$ProcessoEtapaFilterImpl implements _ProcessoEtapaFilter {
   bool? apenasAtivos;
   @override
   bool? ordenarPorNomeCrescente;
+  @override
+  bool? carregarTiposProcesso;
+  @override
+  bool? carregarTiposProcessoEtapaInicial;
 
   @override
   String toString() {
-    return 'ProcessoEtapaFilter(codigo: $codigo, apenasAtivos: $apenasAtivos, ordenarPorNomeCrescente: $ordenarPorNomeCrescente)';
+    return 'ProcessoEtapaFilter(codigo: $codigo, apenasAtivos: $apenasAtivos, ordenarPorNomeCrescente: $ordenarPorNomeCrescente, carregarTiposProcesso: $carregarTiposProcesso, carregarTiposProcessoEtapaInicial: $carregarTiposProcessoEtapaInicial)';
   }
 
   @JsonKey(ignore: true)
@@ -160,7 +206,9 @@ abstract class _ProcessoEtapaFilter implements ProcessoEtapaFilter {
   factory _ProcessoEtapaFilter(
       {int? codigo,
       bool? apenasAtivos,
-      bool? ordenarPorNomeCrescente}) = _$ProcessoEtapaFilterImpl;
+      bool? ordenarPorNomeCrescente,
+      bool? carregarTiposProcesso,
+      bool? carregarTiposProcessoEtapaInicial}) = _$ProcessoEtapaFilterImpl;
 
   factory _ProcessoEtapaFilter.fromJson(Map<String, dynamic> json) =
       _$ProcessoEtapaFilterImpl.fromJson;
@@ -174,6 +222,12 @@ abstract class _ProcessoEtapaFilter implements ProcessoEtapaFilter {
   @override
   bool? get ordenarPorNomeCrescente;
   set ordenarPorNomeCrescente(bool? value);
+  @override
+  bool? get carregarTiposProcesso;
+  set carregarTiposProcesso(bool? value);
+  @override
+  bool? get carregarTiposProcessoEtapaInicial;
+  set carregarTiposProcessoEtapaInicial(bool? value);
   @override
   @JsonKey(ignore: true)
   _$$ProcessoEtapaFilterImplCopyWith<_$ProcessoEtapaFilterImpl> get copyWith =>

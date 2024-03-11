@@ -11,6 +11,15 @@ class InstituicaoService {
           .map((e) => InstituicaoModel.fromJson(e))
           .toList();
 
+  Future<InstituicaoModel?> findOne(int cod) async =>
+      (await _client.getOne('/instituicao/$cod'))
+          .map((e) => InstituicaoModel.fromJson(e))
+          .toList();
+
+  Future<InstituicaoModel?> findFirst() async => InstituicaoModel.fromJson(
+        await _client.getOne('/instituicao/find-first'),
+      );
+
   Future<(String message, InstituicaoModel instituicao)?> save(
     InstituicaoModel obj,
   ) async {

@@ -11,6 +11,9 @@ _$ProcessoEtapaFilterImpl _$$ProcessoEtapaFilterImplFromJson(Map json) =>
       codigo: json['codigo'] as int?,
       apenasAtivos: json['apenasAtivos'] as bool?,
       ordenarPorNomeCrescente: json['ordenarPorNomeCrescente'] as bool?,
+      carregarTiposProcesso: json['carregarTiposProcesso'] as bool?,
+      carregarTiposProcessoEtapaInicial:
+          json['carregarTiposProcessoEtapaInicial'] as bool?,
     );
 
 Map<String, dynamic> _$$ProcessoEtapaFilterImplToJson(
@@ -19,4 +22,7 @@ Map<String, dynamic> _$$ProcessoEtapaFilterImplToJson(
       'codigo': instance.codigo,
       'apenasAtivos': instance.apenasAtivos,
       'ordenarPorNomeCrescente': instance.ordenarPorNomeCrescente,
+      'carregarTiposProcesso': instance.carregarTiposProcesso,
+      'carregarTiposProcessoEtapaInicial':
+          instance.carregarTiposProcessoEtapaInicial,
     };

@@ -2,6 +2,7 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/arsenal/arsen
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/equipamento/equipamento_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/processo_tipo/processo_tipo_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/servico_tipo/servico_tipo_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/processo/processo_etapa/processo_etapa_page_frm/processo_etapa_page_frm_imprimir_funcoes/processo_etapa_page_frm_imprimir_funcoes_page.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/processo_etapa/processo_etapa_page_frm/processo_etapa_page_frm_state.dart';
 import 'package:ageiscme_data/services/processo_etapa/processo_etapa_service.dart';
 import 'package:ageiscme_models/main.dart';
@@ -12,8 +13,12 @@ import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
@@ -784,6 +789,15 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
             actions: [
               Row(
                 children: [
+                  CustomPopupMenuWidget(
+                    items: [
+                      CustomPopupItemModel(
+                        text: 'Imprimir Funções',
+                        onTap: imprimirFuncoes,
+                      ),
+                      CustomPopupItemHistoryModel.getHistoryItem(),
+                    ],
+                  ),
                   const Spacer(),
                   Padding(
                     padding: const EdgeInsets.only(left: 16.0),
@@ -813,6 +827,25 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
           );
         },
       ),
+    );
+  }
+
+  Future imprimirFuncoes() async {
+    if (processoEtapa.cod == null || processoEtapa.cod == 0) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'É necessário que a etapa esteja cadastrada para imprimir suas funções',
+      );
+      return;
+    }
+    await showDialog<bool>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return ProcessoEtapaPageFrmImprimirFuncoesPage(
+          stageCod: processoEtapa.cod!,
+        );
+      },
     );
   }
 

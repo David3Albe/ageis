@@ -9,6 +9,8 @@ sealed class ProcessoEtapaFilter with _$ProcessoEtapaFilter {
     int? codigo,
     bool? apenasAtivos,
     bool? ordenarPorNomeCrescente,
+    bool? carregarTiposProcesso,
+    bool? carregarTiposProcessoEtapaInicial,
   }) = _ProcessoEtapaFilter;
 
   factory ProcessoEtapaFilter.fromJson(Map<String, Object?> json) =>

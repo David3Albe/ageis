@@ -40,6 +40,16 @@ class CustomDio {
     return resp.data;
   }
 
+    Future<dynamic> getOne(String route) async {
+    String baseRoute = await _route;
+    Response resp = await _dio.get('$baseRoute$route');
+    if (!resp.statusCode.toString().startsWith('2')) {
+      bool throwed = throwResponseError(resp);
+      if (!throwed) throw CustomBaseException(resp.data);
+    }
+    return resp.data;
+  }
+
   Future<List<dynamic>> postList(String route, dynamic objeto) async {
     String baseRoute = await _route;
     Response resp = await _dio.post('$baseRoute$route', data: objeto.toJson());
