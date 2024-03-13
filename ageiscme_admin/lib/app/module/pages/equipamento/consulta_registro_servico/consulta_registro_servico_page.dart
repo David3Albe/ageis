@@ -8,6 +8,7 @@ import 'package:ageiscme_admin/app/module/pages/equipamento/registro_servico/reg
 import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
 import 'package:ageiscme_data/query_services/registro_servico/consulta_registro_servico_service.dart';
 import 'package:ageiscme_data/services/access_user/access_user_service.dart';
+import 'package:ageiscme_data/services/item/item_service.dart';
 import 'package:ageiscme_data/services/registro_servico/registro_servico_service.dart';
 import 'package:ageiscme_models/enums/direito_enum.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
@@ -16,6 +17,7 @@ import 'package:ageiscme_models/filters/usuario_filter/usuario_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/query_filters/registro_servico/consulta_registro_servico_filter.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
@@ -150,6 +152,7 @@ class _ConsultaRegistroServicoPageState
     registroServicoCubit = RegistroServicoCubit();
     registroServicoCubit.loadAll();
     usuarioCubit = UsuarioCubit();
+
     service = RegistroServicoService();
 
     super.initState();
@@ -268,27 +271,17 @@ class _ConsultaRegistroServicoPageState
                 },
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<ItemCubit, ItemState>(
-                bloc: itemBloc,
-                builder: (context, itemState) {
-                  if (itemState.loading) {
-                    return const LoadingWidget();
-                  }
-                  List<ItemModel> itens = itemState.itens;
-                  ItemModel? item = itens
-                      .where(
-                        (element) => element.idEtiqueta == filter.codBarraItem,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<ItemModel>(
-                    textFunction: (item) => item.EtiquetaDescricaoText(),
-                    initialValue: item,
-                    sourceList: itens,
-                    onChanged: (value) =>
-                        filter.codBarraItem = value?.idEtiqueta,
-                    placeholder: 'Item',
-                  );
+              DropDownSearchApiWidget<ItemModel>(
+                textFunction: (item) => item.EtiquetaDescricaoText(),
+                initialValue: filter.item,
+                search: (str) => ItemService().Filter(
+                  ItemFilter(numeroRegistros: 30, termoPesquisa: str),
+                ),
+                onChanged: (value) {
+                  filter.item = value;
+                  filter.codBarraItem = value?.idEtiqueta;
                 },
+                placeholder: 'Item',
               ),
               BlocBuilder<ServicoTipoCubit, ServicoTipoState>(
                 bloc: servicoTipoBloc,

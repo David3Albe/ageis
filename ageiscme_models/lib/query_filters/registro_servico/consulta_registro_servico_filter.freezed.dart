@@ -31,6 +31,8 @@ mixin _$ConsultaRegistroServicoFilter {
   set codEquipamento(int? value) => throw _privateConstructorUsedError;
   int? get codServicoTipo => throw _privateConstructorUsedError;
   set codServicoTipo(int? value) => throw _privateConstructorUsedError;
+  ItemModel? get item => throw _privateConstructorUsedError;
+  set item(ItemModel? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -51,7 +53,10 @@ abstract class $ConsultaRegistroServicoFilterCopyWith<$Res> {
       DateTime? finalDate,
       String? codBarraItem,
       int? codEquipamento,
-      int? codServicoTipo});
+      int? codServicoTipo,
+      ItemModel? item});
+
+  $ItemModelCopyWith<$Res>? get item;
 }
 
 /// @nodoc
@@ -73,6 +78,7 @@ class _$ConsultaRegistroServicoFilterCopyWithImpl<$Res,
     Object? codBarraItem = freezed,
     Object? codEquipamento = freezed,
     Object? codServicoTipo = freezed,
+    Object? item = freezed,
   }) {
     return _then(_value.copyWith(
       startDate: freezed == startDate
@@ -95,7 +101,23 @@ class _$ConsultaRegistroServicoFilterCopyWithImpl<$Res,
           ? _value.codServicoTipo
           : codServicoTipo // ignore: cast_nullable_to_non_nullable
               as int?,
+      item: freezed == item
+          ? _value.item
+          : item // ignore: cast_nullable_to_non_nullable
+              as ItemModel?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ItemModelCopyWith<$Res>? get item {
+    if (_value.item == null) {
+      return null;
+    }
+
+    return $ItemModelCopyWith<$Res>(_value.item!, (value) {
+      return _then(_value.copyWith(item: value) as $Val);
+    });
   }
 }
 
@@ -113,7 +135,11 @@ abstract class _$$ConsultaRegistroServicoFilterImplCopyWith<$Res>
       DateTime? finalDate,
       String? codBarraItem,
       int? codEquipamento,
-      int? codServicoTipo});
+      int? codServicoTipo,
+      ItemModel? item});
+
+  @override
+  $ItemModelCopyWith<$Res>? get item;
 }
 
 /// @nodoc
@@ -134,6 +160,7 @@ class __$$ConsultaRegistroServicoFilterImplCopyWithImpl<$Res>
     Object? codBarraItem = freezed,
     Object? codEquipamento = freezed,
     Object? codServicoTipo = freezed,
+    Object? item = freezed,
   }) {
     return _then(_$ConsultaRegistroServicoFilterImpl(
       startDate: freezed == startDate
@@ -156,6 +183,10 @@ class __$$ConsultaRegistroServicoFilterImplCopyWithImpl<$Res>
           ? _value.codServicoTipo
           : codServicoTipo // ignore: cast_nullable_to_non_nullable
               as int?,
+      item: freezed == item
+          ? _value.item
+          : item // ignore: cast_nullable_to_non_nullable
+              as ItemModel?,
     ));
   }
 }
@@ -169,7 +200,8 @@ class _$ConsultaRegistroServicoFilterImpl
       required this.finalDate,
       required this.codBarraItem,
       required this.codEquipamento,
-      required this.codServicoTipo})
+      required this.codServicoTipo,
+      this.item})
       : super._();
 
   factory _$ConsultaRegistroServicoFilterImpl.fromJson(
@@ -186,10 +218,12 @@ class _$ConsultaRegistroServicoFilterImpl
   int? codEquipamento;
   @override
   int? codServicoTipo;
+  @override
+  ItemModel? item;
 
   @override
   String toString() {
-    return 'ConsultaRegistroServicoFilter(startDate: $startDate, finalDate: $finalDate, codBarraItem: $codBarraItem, codEquipamento: $codEquipamento, codServicoTipo: $codServicoTipo)';
+    return 'ConsultaRegistroServicoFilter(startDate: $startDate, finalDate: $finalDate, codBarraItem: $codBarraItem, codEquipamento: $codEquipamento, codServicoTipo: $codServicoTipo, item: $item)';
   }
 
   @JsonKey(ignore: true)
@@ -215,7 +249,8 @@ abstract class _ConsultaRegistroServicoFilter
       required DateTime? finalDate,
       required String? codBarraItem,
       required int? codEquipamento,
-      required int? codServicoTipo}) = _$ConsultaRegistroServicoFilterImpl;
+      required int? codServicoTipo,
+      ItemModel? item}) = _$ConsultaRegistroServicoFilterImpl;
   _ConsultaRegistroServicoFilter._() : super._();
 
   factory _ConsultaRegistroServicoFilter.fromJson(Map<String, dynamic> json) =
@@ -236,6 +271,9 @@ abstract class _ConsultaRegistroServicoFilter
   @override
   int? get codServicoTipo;
   set codServicoTipo(int? value);
+  @override
+  ItemModel? get item;
+  set item(ItemModel? value);
   @override
   @JsonKey(ignore: true)
   _$$ConsultaRegistroServicoFilterImplCopyWith<

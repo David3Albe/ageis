@@ -18,6 +18,10 @@ _$ConsultaRegistroServicoFilterImpl
           codBarraItem: json['codBarraItem'] as String?,
           codEquipamento: json['codEquipamento'] as int?,
           codServicoTipo: json['codServicoTipo'] as int?,
+          item: json['item'] == null
+              ? null
+              : ItemModel.fromJson(
+                  Map<String, Object?>.from(json['item'] as Map)),
         );
 
 Map<String, dynamic> _$$ConsultaRegistroServicoFilterImplToJson(
@@ -28,4 +32,5 @@ Map<String, dynamic> _$$ConsultaRegistroServicoFilterImplToJson(
       'codBarraItem': instance.codBarraItem,
       'codEquipamento': instance.codEquipamento,
       'codServicoTipo': instance.codServicoTipo,
+      'item': instance.item?.toJson(),
     };

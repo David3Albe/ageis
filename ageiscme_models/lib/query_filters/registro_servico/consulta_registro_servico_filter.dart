@@ -1,3 +1,4 @@
+import 'package:ageiscme_models/models/item/item_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'consulta_registro_servico_filter.g.dart';
@@ -14,6 +15,7 @@ sealed class ConsultaRegistroServicoFilter
     required String? codBarraItem,
     required int? codEquipamento,
     required int? codServicoTipo,
+    ItemModel? item,
   }) = _ConsultaRegistroServicoFilter;
 
   factory ConsultaRegistroServicoFilter.fromJson(Map<String, Object?> json) =>
@@ -29,6 +31,7 @@ sealed class ConsultaRegistroServicoFilter
         codEquipamento: null,
         codServicoTipo: null,
         finalDate: null,
+        item: null,
         startDate: null,
       );
 }
