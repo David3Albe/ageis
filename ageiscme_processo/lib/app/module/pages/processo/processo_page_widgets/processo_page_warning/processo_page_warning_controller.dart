@@ -76,6 +76,7 @@ class ProcessoPageWarningController extends ChangeNotifier
       case DecisaoEnum.TomarDecisaoAcaoItem:
       case DecisaoEnum.TomarDecisaoAcaoKit:
       case DecisaoEnum.AutorizarAcaoOcorrencias:
+      case DecisaoEnum.EquipamentoComRestricaoContinuar:
         return null;
       default:
         return 10;
