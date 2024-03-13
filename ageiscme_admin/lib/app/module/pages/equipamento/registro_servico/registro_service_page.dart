@@ -134,7 +134,6 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
-                    filterOnlyActives: true,
                     onEdit: (RegistroServicoModel objeto) =>
                         {openModal(context, RegistroServicoModel.copy(objeto))},
                     onDelete: (RegistroServicoModel objeto) =>
