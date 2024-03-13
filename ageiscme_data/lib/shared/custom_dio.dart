@@ -28,7 +28,8 @@ class CustomDio {
 
   static const int retrys = 10;
 
-  Future<String> get _route async => (await AppConfig.forEnvironment()).apiUrl;
+  Future<String> get _route async =>
+      (await AppConfig.forEnvironment(false)).apiUrl;
 
   Future<List<dynamic>> getList(String route) async {
     String baseRoute = await _route;
@@ -40,7 +41,7 @@ class CustomDio {
     return resp.data;
   }
 
-    Future<dynamic> getOne(String route) async {
+  Future<dynamic> getOne(String route) async {
     String baseRoute = await _route;
     Response resp = await _dio.get('$baseRoute$route');
     if (!resp.statusCode.toString().startsWith('2')) {

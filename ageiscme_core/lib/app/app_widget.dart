@@ -16,6 +16,7 @@ class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     setEnviroment();
+    AppConfig.forEnvironment(true);
     Modular.setInitialRoute(initialRoute);
     CurrentRouteCubit currentRouteCubit = CurrentRouteCubit('');
     Modular.to.addListener(() {

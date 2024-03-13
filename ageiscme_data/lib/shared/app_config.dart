@@ -13,9 +13,9 @@ class AppConfig {
     required this.apiUrl,
   });
 
-  static Future<AppConfig> forEnvironment() async {
+  static Future<AppConfig> forEnvironment(bool clearCache) async {
     if (enviroment == null) throw Exception('Set the enviroment');
-    if (Config.apiUrl.isNotEmpty) return Config;
+    if (!clearCache && Config.apiUrl.isNotEmpty) return Config;
     String env = getEnviromentString(enviroment!);
     final contents = await rootBundle.loadString(
       'assets/config/$env.json',
