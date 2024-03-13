@@ -722,10 +722,6 @@ class _EquipamentoManutencaoPageFrmState
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
-                      child: txtProblema,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
                       child: Row(
                         children: [
                           Expanded(

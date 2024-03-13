@@ -1,4 +1,5 @@
 import 'package:ageiscme_data/shared/custom_dio.dart';
+import 'package:ageiscme_models/filters/insumo/insumo_filter.dart';
 import 'package:ageiscme_models/main.dart';
 
 class InsumoService {
@@ -9,6 +10,14 @@ class InsumoService {
   Future<List<InsumoModel>> GetAll() async => (await _client.getList('/insumo'))
       .map((e) => InsumoModel.fromJson(e))
       .toList();
+
+  Future<List<InsumoModel>> filter(
+    InsumoFilter obj,
+  ) async {
+    return (await _client.postList('/insumo/filter', obj))
+        .map((e) => InsumoModel.fromJson(e))
+        .toList();
+  }
 
   Future<(String message, InsumoModel insumo)?> save(
     InsumoModel obj,

@@ -3,6 +3,7 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/fabricante/fa
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/servico_tipo/servico_tipo_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento/equipamento_page_frm/equipamento_page_frm_state.dart';
+import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento_insumos/equipamento_insumo_page.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/registro_servico/registro_servico_page_frm/registro_servico_page_frm.dart';
 import 'package:ageiscme_data/services/equipamento/equipamento_service.dart';
 import 'package:ageiscme_models/filters/equipamento/equipamento_filter.dart';
@@ -14,7 +15,6 @@ import 'package:compartilhados/alert_dialog/form_alert_dialog_widget.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/open_screen_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
@@ -22,6 +22,9 @@ import 'package:compartilhados/componentes/campos/text_field_number_widget.dart'
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_list_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/functions/helper_functions.dart';
@@ -442,12 +445,18 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
             actions: [
               Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: OpenScreenButtonWidget(
-                      text: 'Serviços',
-                      onPressed: () => {abrirMonitoramento()},
-                    ),
+                  CustomPopupMenuWidget(
+                    items: [
+                      CustomPopupItemModel(
+                        text: 'Serviços',
+                        onTap: abrirMonitoramento,
+                      ),
+                      CustomPopupItemModel(
+                        text: 'Insumos',
+                        onTap: abrirInsumos,
+                      ),
+                      CustomPopupItemHistoryModel.getHistoryItem(),
+                    ],
                   ),
                   const Spacer(),
                   Padding(
@@ -514,6 +523,52 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
         ),
       );
     }
+  }
+
+  Future abrirInsumos() async {
+    if (equipamento.cod == null || equipamento.cod == 0) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'É necessário ter o equipamento cadastrado para acessar a tela de serviços.',
+      );
+      return;
+    }
+
+    Size size = MediaQuery.of(context).size;
+    await showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return FormAlertDialogWidget(
+          title: Row(
+            children: [
+              const Expanded(
+                child: TitleWidget(
+                  text: 'Cadastro de Insumos do Equipamento',
+                ),
+              ),
+              const Spacer(),
+              CloseButtonWidget(
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+          content: Container(
+            width: size.width * 0.8,
+            height: size.height * 0.7,
+            constraints: const BoxConstraints(
+              minWidth: 700,
+              minHeight: 700,
+              maxHeight: 900,
+              maxWidth: 900,
+            ),
+            child: EquipamentoInsumoPage(
+              codEquipamento: equipamento.cod,
+            ),
+          ),
+        );
+      },
+    );
   }
 
   Future abrirMonitoramento() async {

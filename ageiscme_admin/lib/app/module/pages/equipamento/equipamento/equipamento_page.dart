@@ -77,36 +77,33 @@ class _EquipamentoPageState extends State<EquipamentoPage> {
             ),
           },
         ),
-        BlocListener<EquipamentoPageCubit, EquipamentoPageState>(
+        BlocConsumer<EquipamentoPageCubit, EquipamentoPageState>(
           bloc: bloc,
           listener: (context, state) {
             if (state.deleted) deleted(state);
             if (state.error.isNotEmpty) onError(state);
           },
-          child: BlocBuilder<EquipamentoPageCubit, EquipamentoPageState>(
-            bloc: bloc,
-            builder: (context, state) {
-              if (state.loading) {
-                return const Center(
-                  child: LoadingWidget(),
-                );
-              }
-              return Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 16.0, bottom: 16),
-                  child: PlutoGridWidget(
-                    filterOnlyActives: true,
-                    onEdit: (EquipamentoModel objeto) =>
-                        {openModal(context, EquipamentoModel.copy(objeto))},
-                    onDelete: (EquipamentoModel objeto) =>
-                        {delete(context, objeto)},
-                    columns: colunas,
-                    items: state.equipamentos,
-                  ),
-                ),
+          builder: (context, state) {
+            if (state.loading) {
+              return const Center(
+                child: LoadingWidget(),
               );
-            },
-          ),
+            }
+            return Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 16.0, bottom: 16),
+                child: PlutoGridWidget(
+                  filterOnlyActives: true,
+                  onEdit: (EquipamentoModel objeto) =>
+                      {openModal(context, EquipamentoModel.copy(objeto))},
+                  onDelete: (EquipamentoModel objeto) =>
+                      {delete(context, objeto)},
+                  columns: colunas,
+                  items: state.equipamentos,
+                ),
+              ),
+            );
+          },
         ),
       ],
     );
