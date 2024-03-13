@@ -1,4 +1,5 @@
 class DecisaoEnum {
+  static const int EquipamentoComRestricaoContinuar = 2;
   static const int ProsseguirKitImcompleto = 4;
   static const int AutorizarKitImcompleto = 5;
   static const int RealizarConferenciaVisual = 6;
