@@ -255,7 +255,9 @@ class PlutoGridWidget<T> extends StatelessWidget {
                 this.filterOnlyActives,
                 event.stateManager,
               );
-              gridCubit.changeStateManager(event.stateManager);
+              event.stateManager.addListener(() {
+                gridCubit.changeStateManager(event.stateManager);
+              });
             },
             createFooter: (PlutoGridStateManager state) => _getFooter(
               state,
@@ -272,17 +274,19 @@ class PlutoGridWidget<T> extends StatelessWidget {
     bool onlyActives,
     PlutoGridStateManager state,
   ) {
-    if (onlyActives) {
-      List<PlutoRow> rowsFiltered = this
-          .rows
-          .where((row) => (rowsObject[row] as dynamic).ativo == false)
-          .toList();
-      rowsRemoved.clear();
-      rowsRemoved.addAll(rowsFiltered);
-      state.removeRows(rowsFiltered);
-    } else {
+    if (!onlyActives) {
       state.appendRows(rowsRemoved);
+      gridCubit.changeStateManager(state);
+      return;
     }
+    List<PlutoRow> rowsFiltered = this
+        .rows
+        .where((row) => (rowsObject[row] as dynamic).ativo == false)
+        .toList();
+    rowsRemoved.clear();
+    rowsRemoved.addAll(rowsFiltered);
+    state.removeRows(rowsFiltered);
+    gridCubit.changeStateManager(state);
   }
 
   Widget _getFilterActiveOnly(
@@ -315,22 +319,33 @@ class PlutoGridWidget<T> extends StatelessWidget {
     bool hasFilterActivesOnly,
     bool onlyActives,
   ) {
-    int rowsLength = stateManager.rows.length;
-    return Padding(
-      padding: const EdgeInsets.only(
-        left: 4.0,
-        top: 2.0,
-        bottom: 2.0,
-        right: 4.0,
-      ),
-      child: Row(
-        children: [
-          Text('${rowsLength.toString()} Registro${rowsLength > 1 ? 's' : ''}'),
-          const Spacer(),
-          _getButtonRowAdd(stateManager),
-          _getFilterActiveOnly(stateManager, hasFilterActivesOnly, onlyActives),
-        ],
-      ),
+    return BlocBuilder<PlutoGridCubit, PlutoGridState>(
+      bloc: gridCubit,
+      builder: (context, state) {
+        int rowsLength = stateManager.rows.length;
+        return Padding(
+          padding: const EdgeInsets.only(
+            left: 4.0,
+            top: 2.0,
+            bottom: 2.0,
+            right: 4.0,
+          ),
+          child: Row(
+            children: [
+              Text(
+                '${rowsLength.toString()} Registro${rowsLength > 1 ? 's' : ''}',
+              ),
+              const Spacer(),
+              _getButtonRowAdd(stateManager),
+              _getFilterActiveOnly(
+                stateManager,
+                hasFilterActivesOnly,
+                onlyActives,
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 

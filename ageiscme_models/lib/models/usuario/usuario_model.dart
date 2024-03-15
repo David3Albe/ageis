@@ -11,7 +11,11 @@ part 'usuario_model.g.dart';
 
 @unfreezed
 abstract class UsuarioModel
-    with _$UsuarioModel, DropDownText, DropDownFilterMixin<UsuarioModel>,UsuarioMixin {
+    with
+        _$UsuarioModel,
+        DropDownText,
+        DropDownFilterMixin<UsuarioModel>,
+        UsuarioMixin {
   const UsuarioModel._();
 
   factory UsuarioModel({
@@ -66,14 +70,15 @@ abstract class UsuarioModel
   List<DropDownFilterModel<UsuarioModel>> GetDropDownFilters(String filter) => [
         DropDownFilterModel(
           (object) =>
-              object.codBarra != null && object.codBarra.toString().endsWith(filter),
+              object.codBarra != null &&
+              object.codBarra.toString().endsWith(filter),
         ),
         DropDownFilterModel(
           (object) =>
-              object.nome == null || object.nome!.toUpperCase().contains(filter.toUpperCase()),
+              object.nome == null ||
+              object.nome!.toUpperCase().contains(filter.toUpperCase()),
         ),
       ];
 
-  String CodBarraNomeText() =>
-      '($codBarra) ${nome == null ? '' : nome!}';
+  String CodBarraNomeText() => '($codBarra) ${nome == null ? '' : nome!}';
 }

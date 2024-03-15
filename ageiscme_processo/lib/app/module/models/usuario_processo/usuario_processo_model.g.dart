@@ -22,17 +22,10 @@ _$UsuarioProcessoModelImpl _$$UsuarioProcessoModelImplFromJson(
       controleGestao: json['controleGestao'] as bool?,
       codInstituicao: json['codInstituicao'] as int?,
       ativo: json['ativo'] as bool?,
-      foto: json['foto'] as String?,
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),
       tstamp: json['tStamp'] as String?,
-      usuariosPerfis: (json['usuariosPerfis'] as List<dynamic>?)
-          ?.map((e) => UsuarioPerfilModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      codigoDireitos: (json['codigoDireitos'] as List<dynamic>?)
-          ?.map((e) => e as int)
-          .toList(),
     );
 
 Map<String, dynamic> _$$UsuarioProcessoModelImplToJson(
@@ -51,9 +44,6 @@ Map<String, dynamic> _$$UsuarioProcessoModelImplToJson(
       'controleGestao': instance.controleGestao,
       'codInstituicao': instance.codInstituicao,
       'ativo': instance.ativo,
-      'foto': instance.foto,
       'ultimaAlteracao': instance.ultimaAlteracao?.toIso8601String(),
       'tStamp': instance.tstamp,
-      'usuariosPerfis': instance.usuariosPerfis,
-      'codigoDireitos': instance.codigoDireitos,
     };

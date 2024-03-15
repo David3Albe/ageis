@@ -50,7 +50,8 @@ _$ProcessoLeituraAtualModelImpl _$$ProcessoLeituraAtualModelImplFromJson(
           .toList(),
       circulante: json['circulante'] == null
           ? null
-          : UsuarioModel.fromJson(json['circulante'] as Map<String, dynamic>),
+          : UsuarioProcessoModel.fromJson(
+              json['circulante'] as Map<String, dynamic>),
       processoTipo: json['processoTipo'] == null
           ? null
           : ProcessoTipoModel.fromJson(
@@ -128,7 +129,7 @@ _$ProcessoLeituraAtualModelImpl _$$ProcessoLeituraAtualModelImplFromJson(
               (e) => MotivoQuebraFluxoModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       usuarios: (json['usuarios'] as List<dynamic>?)
-          ?.map((e) => UsuarioModel.fromJson(e as Map<String, dynamic>))
+          ?.map((e) => UsuarioProcessoModel.fromJson(e as Map<String, dynamic>))
           .toList(),
       embalagens: (json['embalagens'] as List<dynamic>?)
           ?.map((e) => EmbalagemModel.fromJson(e as Map<String, dynamic>))

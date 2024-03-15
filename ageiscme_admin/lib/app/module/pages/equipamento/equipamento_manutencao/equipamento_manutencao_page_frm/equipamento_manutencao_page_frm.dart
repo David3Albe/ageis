@@ -2,6 +2,7 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/equipamento/e
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/peca/peca_subit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/servico_tipo/servico_tipo_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento_manutencao/equipamento_manutencao_page_frm/equipamento_manutencao_page_frm_controller.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento_manutencao/equipamento_manutencao_page_frm/equipamento_manutencao_page_frm_state.dart';
 import 'package:ageiscme_data/services/equipamento_manutencao/equipamento_manutencao_service.dart';
 import 'package:ageiscme_data/stores/authentication/authentication_store.dart';
@@ -10,10 +11,7 @@ import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/delete_image_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/open_doc/open_doc_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/upload_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/label_string_widget.dart';
@@ -23,8 +21,14 @@ import 'package:compartilhados/componentes/campos/text_field_number_widget.dart'
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_time_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_image_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_open_doc_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
+import 'package:compartilhados/functions/image_helper/image_object_model.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/modular_export.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +64,7 @@ class _EquipamentoManutencaoPageFrmState
 
   late final ServicoTipoCubit servicoTipoCubit;
   late final PecaCubit pecaCubit;
+  late final EquipamentoManutencaoPageFrmController _controller;
 
   late final EquipamentoManutencaoPageFrmCubit cubit =
       EquipamentoManutencaoPageFrmCubit(
@@ -366,6 +371,7 @@ class _EquipamentoManutencaoPageFrmState
   }
 
   void initState() {
+    _controller = EquipamentoManutencaoPageFrmController();
     servicoTipoCubit = ServicoTipoCubit();
     servicoTipoCubit.loadAll();
     pecaCubit = PecaCubit();
@@ -566,7 +572,6 @@ class _EquipamentoManutencaoPageFrmState
 
   @override
   Widget build(BuildContext context) {
-    double paddingHorizontalScale = MediaQuery.of(context).size.width / 1920;
     setFields();
     Size size = MediaQuery.of(context).size;
     return BlocListener<EquipamentoManutencaoPageFrmCubit,
@@ -646,8 +651,8 @@ class _EquipamentoManutencaoPageFrmState
                           ),
                           const SizedBox(width: 50.0),
                           Expanded(
-                            child: BlocBuilder<ServicoTipoCubit,
-                                ServicoTipoState>(
+                            child:
+                                BlocBuilder<ServicoTipoCubit, ServicoTipoState>(
                               bloc: servicoTipoCubit,
                               builder: (context, state) {
                                 List<ServicoTipoModel> servicosTipos =
@@ -1125,39 +1130,6 @@ class _EquipamentoManutencaoPageFrmState
                             'Documento Anexado: ${equipamentoManutencao.nfAnexa == null ? 'Nenhum Documento Encontrado' : equipamentoManutencao.nfAnexaNome}',
                       ),
                     ),
-                    const Padding(padding: EdgeInsets.only(top: 5)),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Wrap(
-                            runSpacing: 16 * paddingHorizontalScale,
-                            spacing: 16 * paddingHorizontalScale,
-                            children: [
-                              UploadButtonWidget(
-                                placeholder: 'Anexar NF',
-                                imageSelected: (value1, value2) {
-                                  salvarArquivo(value1, value2);
-                                },
-                              ),
-                              DeleteImageButtonWidget(
-                                placeholder: 'Excluir NF',
-                                onPressed: equipamentoManutencao.nfAnexa == null
-                                    ? null
-                                    : () => {excluirArquivo()},
-                              ),
-                              OpenDocWidget(
-                                placeholder: 'Abrir NF',
-                                documentoString: equipamentoManutencao.nfAnexa,
-                                documentName:
-                                    equipamentoManutencao.nfAnexaNome ??
-                                        'arquivo sem nome.jpg',
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Padding(padding: EdgeInsets.only(top: 24)),
                   ],
                 ),
               ),
@@ -1165,6 +1137,33 @@ class _EquipamentoManutencaoPageFrmState
             actions: [
               Row(
                 children: [
+                  CustomPopupMenuWidget(
+                    items: [
+                      CustomPopupItemImageModel.getImageItem(
+                        'Anexar NF',
+                        salvarArquivo,
+                      ),
+                      CustomPopupItemModel(
+                        text: 'Excluir NF',
+                        onTap: excluirArquivo,
+                      ),
+                      CustomPopupItemOpenDocModel.getOpenDocItem(
+                        'Abrir NF',
+                        context,
+                        equipamentoManutencao.nfAnexa,
+                        equipamentoManutencao.nfAnexaNome ??
+                            'arquivo sem nome.jpg',
+                      ),
+                      CustomPopupItemModel(
+                        text: 'Imprimir Etiqueta',
+                        onTap: () => _controller.printTag(
+                          context,
+                          equipamentoManutencao,
+                        ),
+                      ),
+                      CustomPopupItemHistoryModel.getHistoryItem(),
+                    ],
+                  ),
                   const Spacer(),
                   Padding(
                     padding: const EdgeInsets.only(left: 16.0),
@@ -1198,10 +1197,12 @@ class _EquipamentoManutencaoPageFrmState
     );
   }
 
-  void salvarArquivo(String value1, String value2) {
+  void salvarArquivo(Future<ImageObjectModel?> Function() onSelectImage) async {
+    ImageObjectModel? imageNew = await onSelectImage();
+    if (imageNew == null) return;
     setState(() {
-      equipamentoManutencao.nfAnexa = value1;
-      equipamentoManutencao.nfAnexaNome = value2;
+      equipamentoManutencao.nfAnexa = imageNew.base64;
+      equipamentoManutencao.nfAnexaNome = imageNew.fileName;
     });
   }
 

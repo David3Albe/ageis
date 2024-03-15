@@ -1,4 +1,4 @@
-import 'package:ageiscme_models/models/usuario/usuario_model.dart';
+import 'package:ageiscme_models/main.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'authentication_result_dto.g.dart';
@@ -8,6 +8,7 @@ part 'authentication_result_dto.freezed.dart';
 sealed class AuthenticationResultDTO with _$AuthenticationResultDTO {
   factory AuthenticationResultDTO({
     required UsuarioModel? usuario,
+    required InstituicaoModel? instituicao,
     required String? token,
   }) = _AuthenticationResultDTO;
 
@@ -17,6 +18,7 @@ sealed class AuthenticationResultDTO with _$AuthenticationResultDTO {
   factory AuthenticationResultDTO.empty() => AuthenticationResultDTO(
         usuario: null,
         token: null,
+        instituicao: null,
       );
 
   static String storageKey = 'authentication';

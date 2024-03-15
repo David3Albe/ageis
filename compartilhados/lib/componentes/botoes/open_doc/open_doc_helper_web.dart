@@ -13,7 +13,6 @@ class OpenDocHelperWeb implements OpenDocInterface {
     String docString,
     String docName,
   ) async {
-    print(2);
 
     final Uint8List bytes = base64.decode(docString);
     final Blob blob = Blob([bytes]);

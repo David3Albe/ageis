@@ -1,4 +1,5 @@
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/cores/cores.dart';
 import 'package:compartilhados/fontes/fontes.dart';
 import 'package:dependencias_comuns/main.dart';
@@ -6,12 +7,12 @@ import 'package:flutter/material.dart';
 
 class ErrorUtils {
   static Future<bool> showErrorDialog(
-    BuildContext context,
+    BuildContext? context,
     List<String> errors,
   ) async {
     bool? confirmacao = await showDialog<bool>(
       barrierDismissible: false,
-      context: context,
+      context: context ?? ToastUtils.routerOutletContext!,
       builder: (BuildContext context) {
         return AlertDialog(
           contentPadding: const EdgeInsets.all(0),

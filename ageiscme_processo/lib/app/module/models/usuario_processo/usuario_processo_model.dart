@@ -1,12 +1,11 @@
-import 'package:ageiscme_models/models/usuario/usuario_mixin.dart';
-import 'package:ageiscme_models/models/usuario_perfil/usuario_perfil_model.dart';
+import 'package:compartilhados/mixins/drop_down_filter/drop_down_filter_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'usuario_processo_model.freezed.dart';
 part 'usuario_processo_model.g.dart';
 
 @unfreezed
-abstract class UsuarioProcessoModel with _$UsuarioProcessoModel, UsuarioMixin {
+abstract class UsuarioProcessoModel with _$UsuarioProcessoModel {
   const UsuarioProcessoModel._();
 
   factory UsuarioProcessoModel({
@@ -23,11 +22,8 @@ abstract class UsuarioProcessoModel with _$UsuarioProcessoModel, UsuarioMixin {
     required bool? controleGestao,
     required int? codInstituicao,
     required bool? ativo,
-    required String? foto,
     required DateTime? ultimaAlteracao,
     @JsonKey(name: 'tStamp') required String? tstamp,
-    required List<UsuarioPerfilModel>? usuariosPerfis,
-    required List<int>? codigoDireitos,
   }) = _UsuarioProcessoModel;
 
   factory UsuarioProcessoModel.fromJson(Map<String, Object?> json) =>
@@ -36,4 +32,21 @@ abstract class UsuarioProcessoModel with _$UsuarioProcessoModel, UsuarioMixin {
   static UsuarioProcessoModel copy(UsuarioProcessoModel usuario) {
     return UsuarioProcessoModel.fromJson(usuario.toJson());
   }
+
+    String GetDropDownText() => nome == null ? '' : nome!;
+
+  List<DropDownFilterModel<UsuarioProcessoModel>> GetDropDownFilters(String filter) => [
+        DropDownFilterModel(
+          (object) =>
+              object.codBarra != null &&
+              object.codBarra.toString().endsWith(filter),
+        ),
+        DropDownFilterModel(
+          (object) =>
+              object.nome == null ||
+              object.nome!.toUpperCase().contains(filter.toUpperCase()),
+        ),
+      ];
+
+  String CodBarraNomeText() => '($codBarra) ${nome == null ? '' : nome!}';
 }

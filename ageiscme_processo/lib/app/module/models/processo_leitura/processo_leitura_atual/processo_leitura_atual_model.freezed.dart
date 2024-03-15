@@ -60,8 +60,9 @@ mixin _$ProcessoLeituraAtualModel {
       throw _privateConstructorUsedError;
   List<KitProcessoModel> get kits => throw _privateConstructorUsedError;
   set kits(List<KitProcessoModel> value) => throw _privateConstructorUsedError;
-  UsuarioModel? get circulante => throw _privateConstructorUsedError;
-  set circulante(UsuarioModel? value) => throw _privateConstructorUsedError;
+  UsuarioProcessoModel? get circulante => throw _privateConstructorUsedError;
+  set circulante(UsuarioProcessoModel? value) =>
+      throw _privateConstructorUsedError;
   ProcessoTipoModel? get processoTipo => throw _privateConstructorUsedError;
   set processoTipo(ProcessoTipoModel? value) =>
       throw _privateConstructorUsedError;
@@ -149,8 +150,10 @@ mixin _$ProcessoLeituraAtualModel {
       throw _privateConstructorUsedError;
   set processoMotivosQuebraFluxo(List<MotivoQuebraFluxoModel>? value) =>
       throw _privateConstructorUsedError;
-  List<UsuarioModel>? get usuarios => throw _privateConstructorUsedError;
-  set usuarios(List<UsuarioModel>? value) => throw _privateConstructorUsedError;
+  List<UsuarioProcessoModel>? get usuarios =>
+      throw _privateConstructorUsedError;
+  set usuarios(List<UsuarioProcessoModel>? value) =>
+      throw _privateConstructorUsedError;
   List<EmbalagemModel>? get embalagens => throw _privateConstructorUsedError;
   set embalagens(List<EmbalagemModel>? value) =>
       throw _privateConstructorUsedError;
@@ -233,7 +236,7 @@ abstract class $ProcessoLeituraAtualModelCopyWith<$Res> {
       List<ItemProcessoModel> itens,
       KitProcessoModel? kitEmLeitura,
       List<KitProcessoModel> kits,
-      UsuarioModel? circulante,
+      UsuarioProcessoModel? circulante,
       ProcessoTipoModel? processoTipo,
       LocalInstituicaoModel? local,
       ParametroSistemaModel? configuracao,
@@ -262,7 +265,7 @@ abstract class $ProcessoLeituraAtualModelCopyWith<$Res> {
       List<ProcessoEtapaModel>? etapas,
       List<ProcessoMotivoModel>? processoMotivos,
       List<MotivoQuebraFluxoModel>? processoMotivosQuebraFluxo,
-      List<UsuarioModel>? usuarios,
+      List<UsuarioProcessoModel>? usuarios,
       List<EmbalagemModel>? embalagens,
       List<ProprietarioModel>? proprietarios,
       List<ItemDescritorModel>? descritores,
@@ -284,7 +287,7 @@ abstract class $ProcessoLeituraAtualModelCopyWith<$Res> {
   $ProcessoRespostaEPCEPIModelCopyWith<$Res>? get respostaEPCEPI;
   $ItemProcessoModelCopyWith<$Res>? get itemEmLeitura;
   $KitProcessoModelCopyWith<$Res>? get kitEmLeitura;
-  $UsuarioModelCopyWith<$Res>? get circulante;
+  $UsuarioProcessoModelCopyWith<$Res>? get circulante;
   $ProcessoTipoModelCopyWith<$Res>? get processoTipo;
   $LocalInstituicaoModelCopyWith<$Res>? get local;
   $ParametroSistemaModelCopyWith<$Res>? get configuracao;
@@ -450,7 +453,7 @@ class _$ProcessoLeituraAtualModelCopyWithImpl<$Res,
       circulante: freezed == circulante
           ? _value.circulante
           : circulante // ignore: cast_nullable_to_non_nullable
-              as UsuarioModel?,
+              as UsuarioProcessoModel?,
       processoTipo: freezed == processoTipo
           ? _value.processoTipo
           : processoTipo // ignore: cast_nullable_to_non_nullable
@@ -566,7 +569,7 @@ class _$ProcessoLeituraAtualModelCopyWithImpl<$Res,
       usuarios: freezed == usuarios
           ? _value.usuarios
           : usuarios // ignore: cast_nullable_to_non_nullable
-              as List<UsuarioModel>?,
+              as List<UsuarioProcessoModel>?,
       embalagens: freezed == embalagens
           ? _value.embalagens
           : embalagens // ignore: cast_nullable_to_non_nullable
@@ -702,12 +705,12 @@ class _$ProcessoLeituraAtualModelCopyWithImpl<$Res,
 
   @override
   @pragma('vm:prefer-inline')
-  $UsuarioModelCopyWith<$Res>? get circulante {
+  $UsuarioProcessoModelCopyWith<$Res>? get circulante {
     if (_value.circulante == null) {
       return null;
     }
 
-    return $UsuarioModelCopyWith<$Res>(_value.circulante!, (value) {
+    return $UsuarioProcessoModelCopyWith<$Res>(_value.circulante!, (value) {
       return _then(_value.copyWith(circulante: value) as $Val);
     });
   }
@@ -997,7 +1000,7 @@ abstract class _$$ProcessoLeituraAtualModelImplCopyWith<$Res>
       List<ItemProcessoModel> itens,
       KitProcessoModel? kitEmLeitura,
       List<KitProcessoModel> kits,
-      UsuarioModel? circulante,
+      UsuarioProcessoModel? circulante,
       ProcessoTipoModel? processoTipo,
       LocalInstituicaoModel? local,
       ParametroSistemaModel? configuracao,
@@ -1026,7 +1029,7 @@ abstract class _$$ProcessoLeituraAtualModelImplCopyWith<$Res>
       List<ProcessoEtapaModel>? etapas,
       List<ProcessoMotivoModel>? processoMotivos,
       List<MotivoQuebraFluxoModel>? processoMotivosQuebraFluxo,
-      List<UsuarioModel>? usuarios,
+      List<UsuarioProcessoModel>? usuarios,
       List<EmbalagemModel>? embalagens,
       List<ProprietarioModel>? proprietarios,
       List<ItemDescritorModel>? descritores,
@@ -1055,7 +1058,7 @@ abstract class _$$ProcessoLeituraAtualModelImplCopyWith<$Res>
   @override
   $KitProcessoModelCopyWith<$Res>? get kitEmLeitura;
   @override
-  $UsuarioModelCopyWith<$Res>? get circulante;
+  $UsuarioProcessoModelCopyWith<$Res>? get circulante;
   @override
   $ProcessoTipoModelCopyWith<$Res>? get processoTipo;
   @override
@@ -1243,7 +1246,7 @@ class __$$ProcessoLeituraAtualModelImplCopyWithImpl<$Res>
       circulante: freezed == circulante
           ? _value.circulante
           : circulante // ignore: cast_nullable_to_non_nullable
-              as UsuarioModel?,
+              as UsuarioProcessoModel?,
       processoTipo: freezed == processoTipo
           ? _value.processoTipo
           : processoTipo // ignore: cast_nullable_to_non_nullable
@@ -1359,7 +1362,7 @@ class __$$ProcessoLeituraAtualModelImplCopyWithImpl<$Res>
       usuarios: freezed == usuarios
           ? _value.usuarios
           : usuarios // ignore: cast_nullable_to_non_nullable
-              as List<UsuarioModel>?,
+              as List<UsuarioProcessoModel>?,
       embalagens: freezed == embalagens
           ? _value.embalagens
           : embalagens // ignore: cast_nullable_to_non_nullable
@@ -1521,7 +1524,7 @@ class _$ProcessoLeituraAtualModelImpl extends _ProcessoLeituraAtualModel
   @override
   List<KitProcessoModel> kits;
   @override
-  UsuarioModel? circulante;
+  UsuarioProcessoModel? circulante;
   @override
   ProcessoTipoModel? processoTipo;
   @override
@@ -1579,7 +1582,7 @@ class _$ProcessoLeituraAtualModelImpl extends _ProcessoLeituraAtualModel
   @override
   List<MotivoQuebraFluxoModel>? processoMotivosQuebraFluxo;
   @override
-  List<UsuarioModel>? usuarios;
+  List<UsuarioProcessoModel>? usuarios;
   @override
   List<EmbalagemModel>? embalagens;
   @override
@@ -1728,7 +1731,7 @@ abstract class _ProcessoLeituraAtualModel extends ProcessoLeituraAtualModel {
           required List<ItemProcessoModel> itens,
           required KitProcessoModel? kitEmLeitura,
           required List<KitProcessoModel> kits,
-          required UsuarioModel? circulante,
+          required UsuarioProcessoModel? circulante,
           required ProcessoTipoModel? processoTipo,
           required LocalInstituicaoModel? local,
           required ParametroSistemaModel? configuracao,
@@ -1757,7 +1760,7 @@ abstract class _ProcessoLeituraAtualModel extends ProcessoLeituraAtualModel {
           required List<ProcessoEtapaModel>? etapas,
           required List<ProcessoMotivoModel>? processoMotivos,
           required List<MotivoQuebraFluxoModel>? processoMotivosQuebraFluxo,
-          required List<UsuarioModel>? usuarios,
+          required List<UsuarioProcessoModel>? usuarios,
           required List<EmbalagemModel>? embalagens,
           required List<ProprietarioModel>? proprietarios,
           required List<ItemDescritorModel>? descritores,
@@ -1825,8 +1828,8 @@ abstract class _ProcessoLeituraAtualModel extends ProcessoLeituraAtualModel {
   List<KitProcessoModel> get kits;
   set kits(List<KitProcessoModel> value);
   @override
-  UsuarioModel? get circulante;
-  set circulante(UsuarioModel? value);
+  UsuarioProcessoModel? get circulante;
+  set circulante(UsuarioProcessoModel? value);
   @override
   ProcessoTipoModel? get processoTipo;
   set processoTipo(ProcessoTipoModel? value);
@@ -1912,8 +1915,8 @@ abstract class _ProcessoLeituraAtualModel extends ProcessoLeituraAtualModel {
   List<MotivoQuebraFluxoModel>? get processoMotivosQuebraFluxo;
   set processoMotivosQuebraFluxo(List<MotivoQuebraFluxoModel>? value);
   @override
-  List<UsuarioModel>? get usuarios;
-  set usuarios(List<UsuarioModel>? value);
+  List<UsuarioProcessoModel>? get usuarios;
+  set usuarios(List<UsuarioProcessoModel>? value);
   @override
   List<EmbalagemModel>? get embalagens;
   set embalagens(List<EmbalagemModel>? value);

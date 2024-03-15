@@ -1,9 +1,12 @@
+import 'package:ageiscme_admin/app/module/pages/material/embalagem/emabalagem_printer/embalagem_page_frm_impressao.dart';
 import 'package:ageiscme_admin/app/module/pages/material/embalagem/embalagem_page_frm/embalagem_page_frm.dart';
 import 'package:ageiscme_admin/app/module/pages/material/embalagem/embalagem_page_state.dart';
 import 'package:ageiscme_data/services/embalagem/embalagem_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
@@ -55,46 +58,73 @@ class _EmbalagemPageState extends State<EmbalagemPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              EmbalagemModel.empty(),
+        Row(
+          children: [
+            AddButtonWidget(
+              onPressed: () => {
+                openModal(
+                  context,
+                  EmbalagemModel.empty(),
+                ),
+              },
             ),
-          },
+            const Spacer(),
+            CustomPopupMenuWidget(
+              items: [
+                CustomPopupItemModel(
+                  text: 'Imprimir Etiquetas',
+                  onTap: imprimirEtiquetas,
+                ),
+              ],
+            ),
+          ],
         ),
-        BlocListener<EmbalagemPageCubit, EmbalagemPageState>(
+        BlocConsumer<EmbalagemPageCubit, EmbalagemPageState>(
           bloc: bloc,
           listener: (context, state) {
             if (state.deleted) deleted(state);
             if (state.error.isNotEmpty) onError(state);
           },
-          child: BlocBuilder<EmbalagemPageCubit, EmbalagemPageState>(
-            bloc: bloc,
-            builder: (context, state) {
-              if (state.loading) {
-                return const Center(
-                  child: LoadingWidget(),
-                );
-              }
-              return Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 16.0, bottom: 16),
-                  child: PlutoGridWidget(
-                    filterOnlyActives: true,
-                    onEdit: (EmbalagemModel objeto) =>
-                        {openModal(context, EmbalagemModel.copy(objeto))},
-                    onDelete: (EmbalagemModel objeto) =>
-                        {delete(context, objeto)},
-                    columns: colunas,
-                    items: state.embalagens,
-                  ),
-                ),
+          builder: (context, state) {
+            if (state.loading) {
+              return const Center(
+                child: LoadingWidget(),
               );
-            },
-          ),
+            }
+            return Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 16.0, bottom: 16),
+                child: PlutoGridWidget(
+                  filterOnlyActives: true,
+                  onEdit: (EmbalagemModel objeto) =>
+                      {openModal(context, EmbalagemModel.copy(objeto))},
+                  onDelete: (EmbalagemModel objeto) =>
+                      {delete(context, objeto)},
+                  columns: colunas,
+                  items: state.embalagens,
+                ),
+              ),
+            );
+          },
         ),
       ],
+    );
+  }
+
+  Future imprimirEtiquetas() async {
+    await showDialog<bool>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return BlocBuilder<EmbalagemPageCubit, EmbalagemPageState>(
+          bloc: bloc,
+          builder: (context, state) {
+            return EmbalagemPageFrmImpressao(
+              embalagens: state.embalagens.where((element) => element.ativo==true).toList(),
+            );
+          },
+        );
+      },
     );
   }
 

@@ -23,6 +23,9 @@ AuthenticationResultDTO _$AuthenticationResultDTOFromJson(
 mixin _$AuthenticationResultDTO {
   UsuarioModel? get usuario => throw _privateConstructorUsedError;
   set usuario(UsuarioModel? value) => throw _privateConstructorUsedError;
+  InstituicaoModel? get instituicao => throw _privateConstructorUsedError;
+  set instituicao(InstituicaoModel? value) =>
+      throw _privateConstructorUsedError;
   String? get token => throw _privateConstructorUsedError;
   set token(String? value) => throw _privateConstructorUsedError;
 
@@ -38,9 +41,11 @@ abstract class $AuthenticationResultDTOCopyWith<$Res> {
           $Res Function(AuthenticationResultDTO) then) =
       _$AuthenticationResultDTOCopyWithImpl<$Res, AuthenticationResultDTO>;
   @useResult
-  $Res call({UsuarioModel? usuario, String? token});
+  $Res call(
+      {UsuarioModel? usuario, InstituicaoModel? instituicao, String? token});
 
   $UsuarioModelCopyWith<$Res>? get usuario;
+  $InstituicaoModelCopyWith<$Res>? get instituicao;
 }
 
 /// @nodoc
@@ -58,6 +63,7 @@ class _$AuthenticationResultDTOCopyWithImpl<$Res,
   @override
   $Res call({
     Object? usuario = freezed,
+    Object? instituicao = freezed,
     Object? token = freezed,
   }) {
     return _then(_value.copyWith(
@@ -65,6 +71,10 @@ class _$AuthenticationResultDTOCopyWithImpl<$Res,
           ? _value.usuario
           : usuario // ignore: cast_nullable_to_non_nullable
               as UsuarioModel?,
+      instituicao: freezed == instituicao
+          ? _value.instituicao
+          : instituicao // ignore: cast_nullable_to_non_nullable
+              as InstituicaoModel?,
       token: freezed == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
@@ -83,6 +93,18 @@ class _$AuthenticationResultDTOCopyWithImpl<$Res,
       return _then(_value.copyWith(usuario: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $InstituicaoModelCopyWith<$Res>? get instituicao {
+    if (_value.instituicao == null) {
+      return null;
+    }
+
+    return $InstituicaoModelCopyWith<$Res>(_value.instituicao!, (value) {
+      return _then(_value.copyWith(instituicao: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -94,10 +116,13 @@ abstract class _$$AuthenticationResultDTOImplCopyWith<$Res>
       __$$AuthenticationResultDTOImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({UsuarioModel? usuario, String? token});
+  $Res call(
+      {UsuarioModel? usuario, InstituicaoModel? instituicao, String? token});
 
   @override
   $UsuarioModelCopyWith<$Res>? get usuario;
+  @override
+  $InstituicaoModelCopyWith<$Res>? get instituicao;
 }
 
 /// @nodoc
@@ -114,6 +139,7 @@ class __$$AuthenticationResultDTOImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? usuario = freezed,
+    Object? instituicao = freezed,
     Object? token = freezed,
   }) {
     return _then(_$AuthenticationResultDTOImpl(
@@ -121,6 +147,10 @@ class __$$AuthenticationResultDTOImplCopyWithImpl<$Res>
           ? _value.usuario
           : usuario // ignore: cast_nullable_to_non_nullable
               as UsuarioModel?,
+      instituicao: freezed == instituicao
+          ? _value.instituicao
+          : instituicao // ignore: cast_nullable_to_non_nullable
+              as InstituicaoModel?,
       token: freezed == token
           ? _value.token
           : token // ignore: cast_nullable_to_non_nullable
@@ -132,7 +162,8 @@ class __$$AuthenticationResultDTOImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$AuthenticationResultDTOImpl implements _AuthenticationResultDTO {
-  _$AuthenticationResultDTOImpl({required this.usuario, required this.token});
+  _$AuthenticationResultDTOImpl(
+      {required this.usuario, required this.instituicao, required this.token});
 
   factory _$AuthenticationResultDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$AuthenticationResultDTOImplFromJson(json);
@@ -140,11 +171,13 @@ class _$AuthenticationResultDTOImpl implements _AuthenticationResultDTO {
   @override
   UsuarioModel? usuario;
   @override
+  InstituicaoModel? instituicao;
+  @override
   String? token;
 
   @override
   String toString() {
-    return 'AuthenticationResultDTO(usuario: $usuario, token: $token)';
+    return 'AuthenticationResultDTO(usuario: $usuario, instituicao: $instituicao, token: $token)';
   }
 
   @JsonKey(ignore: true)
@@ -165,6 +198,7 @@ class _$AuthenticationResultDTOImpl implements _AuthenticationResultDTO {
 abstract class _AuthenticationResultDTO implements AuthenticationResultDTO {
   factory _AuthenticationResultDTO(
       {required UsuarioModel? usuario,
+      required InstituicaoModel? instituicao,
       required String? token}) = _$AuthenticationResultDTOImpl;
 
   factory _AuthenticationResultDTO.fromJson(Map<String, dynamic> json) =
@@ -173,6 +207,9 @@ abstract class _AuthenticationResultDTO implements AuthenticationResultDTO {
   @override
   UsuarioModel? get usuario;
   set usuario(UsuarioModel? value);
+  @override
+  InstituicaoModel? get instituicao;
+  set instituicao(InstituicaoModel? value);
   @override
   String? get token;
   set token(String? value);

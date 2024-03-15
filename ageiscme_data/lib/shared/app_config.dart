@@ -35,12 +35,14 @@ class AppConfig {
         return 'dev';
       case AppConfigEnviroment.Homologation:
         return 'hml';
-      case AppConfigEnviroment.Production:
-        return 'prod';
+      case AppConfigEnviroment.ServidorA:
+        return 'servidora';
+      case AppConfigEnviroment.Movtech:
+        return 'movtech';
       default:
         throw Exception('Enviroment not set');
     }
   }
 }
 
-enum AppConfigEnviroment { Development, Production, Homologation }
+enum AppConfigEnviroment { Development, Movtech, ServidorA, Homologation }

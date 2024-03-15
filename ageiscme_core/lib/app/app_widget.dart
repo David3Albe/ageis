@@ -38,7 +38,7 @@ class AppWidget extends StatelessWidget {
         theme: ThemeData(
           dialogTheme: DialogTheme(
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(4.0), 
+              borderRadius: BorderRadius.circular(4.0),
             ),
           ),
           primarySwatch: Cores.materialCorPrincipal,
@@ -62,8 +62,11 @@ class AppWidget extends StatelessWidget {
       case 'dev':
         AppConfig.enviroment = AppConfigEnviroment.Development;
         return;
-      case 'prod':
-        AppConfig.enviroment = AppConfigEnviroment.Production;
+      case 'movtech':
+        AppConfig.enviroment = AppConfigEnviroment.Movtech;
+        return;
+      case 'servidora':
+        AppConfig.enviroment = AppConfigEnviroment.ServidorA;
         return;
       case 'hml':
         AppConfig.enviroment = AppConfigEnviroment.Homologation;

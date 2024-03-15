@@ -33,6 +33,7 @@ class _EquipamentoManutencaoPageState extends State<EquipamentoManutencaoPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 80,
     ),
     CustomDataColumn(
       text: 'Equipamento',
@@ -70,7 +71,7 @@ class _EquipamentoManutencaoPageState extends State<EquipamentoManutencaoPage> {
   late final EquipamentoManutencaoPageCubit bloc;
   late final EquipamentoManutencaoService service;
   late final EquipamentoCubit equipamentoCubit;
-  late final UsuarioCubit usuarioCubit; 
+  late final UsuarioCubit usuarioCubit;
 
   @override
   void initState() {

@@ -46,20 +46,12 @@ mixin _$UsuarioProcessoModel {
   set codInstituicao(int? value) => throw _privateConstructorUsedError;
   bool? get ativo => throw _privateConstructorUsedError;
   set ativo(bool? value) => throw _privateConstructorUsedError;
-  String? get foto => throw _privateConstructorUsedError;
-  set foto(String? value) => throw _privateConstructorUsedError;
   DateTime? get ultimaAlteracao => throw _privateConstructorUsedError;
   set ultimaAlteracao(DateTime? value) => throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
   String? get tstamp => throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
   set tstamp(String? value) => throw _privateConstructorUsedError;
-  List<UsuarioPerfilModel>? get usuariosPerfis =>
-      throw _privateConstructorUsedError;
-  set usuariosPerfis(List<UsuarioPerfilModel>? value) =>
-      throw _privateConstructorUsedError;
-  List<int>? get codigoDireitos => throw _privateConstructorUsedError;
-  set codigoDireitos(List<int>? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -87,11 +79,8 @@ abstract class $UsuarioProcessoModelCopyWith<$Res> {
       bool? controleGestao,
       int? codInstituicao,
       bool? ativo,
-      String? foto,
       DateTime? ultimaAlteracao,
-      @JsonKey(name: 'tStamp') String? tstamp,
-      List<UsuarioPerfilModel>? usuariosPerfis,
-      List<int>? codigoDireitos});
+      @JsonKey(name: 'tStamp') String? tstamp});
 }
 
 /// @nodoc
@@ -121,11 +110,8 @@ class _$UsuarioProcessoModelCopyWithImpl<$Res,
     Object? controleGestao = freezed,
     Object? codInstituicao = freezed,
     Object? ativo = freezed,
-    Object? foto = freezed,
     Object? ultimaAlteracao = freezed,
     Object? tstamp = freezed,
-    Object? usuariosPerfis = freezed,
-    Object? codigoDireitos = freezed,
   }) {
     return _then(_value.copyWith(
       cod: freezed == cod
@@ -180,10 +166,6 @@ class _$UsuarioProcessoModelCopyWithImpl<$Res,
           ? _value.ativo
           : ativo // ignore: cast_nullable_to_non_nullable
               as bool?,
-      foto: freezed == foto
-          ? _value.foto
-          : foto // ignore: cast_nullable_to_non_nullable
-              as String?,
       ultimaAlteracao: freezed == ultimaAlteracao
           ? _value.ultimaAlteracao
           : ultimaAlteracao // ignore: cast_nullable_to_non_nullable
@@ -192,14 +174,6 @@ class _$UsuarioProcessoModelCopyWithImpl<$Res,
           ? _value.tstamp
           : tstamp // ignore: cast_nullable_to_non_nullable
               as String?,
-      usuariosPerfis: freezed == usuariosPerfis
-          ? _value.usuariosPerfis
-          : usuariosPerfis // ignore: cast_nullable_to_non_nullable
-              as List<UsuarioPerfilModel>?,
-      codigoDireitos: freezed == codigoDireitos
-          ? _value.codigoDireitos
-          : codigoDireitos // ignore: cast_nullable_to_non_nullable
-              as List<int>?,
     ) as $Val);
   }
 }
@@ -226,11 +200,8 @@ abstract class _$$UsuarioProcessoModelImplCopyWith<$Res>
       bool? controleGestao,
       int? codInstituicao,
       bool? ativo,
-      String? foto,
       DateTime? ultimaAlteracao,
-      @JsonKey(name: 'tStamp') String? tstamp,
-      List<UsuarioPerfilModel>? usuariosPerfis,
-      List<int>? codigoDireitos});
+      @JsonKey(name: 'tStamp') String? tstamp});
 }
 
 /// @nodoc
@@ -257,11 +228,8 @@ class __$$UsuarioProcessoModelImplCopyWithImpl<$Res>
     Object? controleGestao = freezed,
     Object? codInstituicao = freezed,
     Object? ativo = freezed,
-    Object? foto = freezed,
     Object? ultimaAlteracao = freezed,
     Object? tstamp = freezed,
-    Object? usuariosPerfis = freezed,
-    Object? codigoDireitos = freezed,
   }) {
     return _then(_$UsuarioProcessoModelImpl(
       cod: freezed == cod
@@ -316,10 +284,6 @@ class __$$UsuarioProcessoModelImplCopyWithImpl<$Res>
           ? _value.ativo
           : ativo // ignore: cast_nullable_to_non_nullable
               as bool?,
-      foto: freezed == foto
-          ? _value.foto
-          : foto // ignore: cast_nullable_to_non_nullable
-              as String?,
       ultimaAlteracao: freezed == ultimaAlteracao
           ? _value.ultimaAlteracao
           : ultimaAlteracao // ignore: cast_nullable_to_non_nullable
@@ -328,14 +292,6 @@ class __$$UsuarioProcessoModelImplCopyWithImpl<$Res>
           ? _value.tstamp
           : tstamp // ignore: cast_nullable_to_non_nullable
               as String?,
-      usuariosPerfis: freezed == usuariosPerfis
-          ? _value.usuariosPerfis
-          : usuariosPerfis // ignore: cast_nullable_to_non_nullable
-              as List<UsuarioPerfilModel>?,
-      codigoDireitos: freezed == codigoDireitos
-          ? _value.codigoDireitos
-          : codigoDireitos // ignore: cast_nullable_to_non_nullable
-              as List<int>?,
     ));
   }
 }
@@ -357,11 +313,8 @@ class _$UsuarioProcessoModelImpl extends _UsuarioProcessoModel {
       required this.controleGestao,
       required this.codInstituicao,
       required this.ativo,
-      required this.foto,
       required this.ultimaAlteracao,
-      @JsonKey(name: 'tStamp') required this.tstamp,
-      required this.usuariosPerfis,
-      required this.codigoDireitos})
+      @JsonKey(name: 'tStamp') required this.tstamp})
       : super._();
 
   factory _$UsuarioProcessoModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -394,20 +347,14 @@ class _$UsuarioProcessoModelImpl extends _UsuarioProcessoModel {
   @override
   bool? ativo;
   @override
-  String? foto;
-  @override
   DateTime? ultimaAlteracao;
   @override
   @JsonKey(name: 'tStamp')
   String? tstamp;
-  @override
-  List<UsuarioPerfilModel>? usuariosPerfis;
-  @override
-  List<int>? codigoDireitos;
 
   @override
   String toString() {
-    return 'UsuarioProcessoModel(cod: $cod, login: $login, nome: $nome, rg: $rg, docClasse: $docClasse, codBarra: $codBarra, codBarraTemporario: $codBarraTemporario, senha: $senha, colaborador: $colaborador, nomeEmpresa: $nomeEmpresa, controleGestao: $controleGestao, codInstituicao: $codInstituicao, ativo: $ativo, foto: $foto, ultimaAlteracao: $ultimaAlteracao, tstamp: $tstamp, usuariosPerfis: $usuariosPerfis, codigoDireitos: $codigoDireitos)';
+    return 'UsuarioProcessoModel(cod: $cod, login: $login, nome: $nome, rg: $rg, docClasse: $docClasse, codBarra: $codBarra, codBarraTemporario: $codBarraTemporario, senha: $senha, colaborador: $colaborador, nomeEmpresa: $nomeEmpresa, controleGestao: $controleGestao, codInstituicao: $codInstituicao, ativo: $ativo, ultimaAlteracao: $ultimaAlteracao, tstamp: $tstamp)';
   }
 
   @JsonKey(ignore: true)
@@ -428,24 +375,22 @@ class _$UsuarioProcessoModelImpl extends _UsuarioProcessoModel {
 
 abstract class _UsuarioProcessoModel extends UsuarioProcessoModel {
   factory _UsuarioProcessoModel(
-      {required int? cod,
-      required String? login,
-      required String? nome,
-      required int? rg,
-      required String? docClasse,
-      required int? codBarra,
-      required int? codBarraTemporario,
-      required String? senha,
-      required bool? colaborador,
-      required String? nomeEmpresa,
-      required bool? controleGestao,
-      required int? codInstituicao,
-      required bool? ativo,
-      required String? foto,
-      required DateTime? ultimaAlteracao,
-      @JsonKey(name: 'tStamp') required String? tstamp,
-      required List<UsuarioPerfilModel>? usuariosPerfis,
-      required List<int>? codigoDireitos}) = _$UsuarioProcessoModelImpl;
+          {required int? cod,
+          required String? login,
+          required String? nome,
+          required int? rg,
+          required String? docClasse,
+          required int? codBarra,
+          required int? codBarraTemporario,
+          required String? senha,
+          required bool? colaborador,
+          required String? nomeEmpresa,
+          required bool? controleGestao,
+          required int? codInstituicao,
+          required bool? ativo,
+          required DateTime? ultimaAlteracao,
+          @JsonKey(name: 'tStamp') required String? tstamp}) =
+      _$UsuarioProcessoModelImpl;
   _UsuarioProcessoModel._() : super._();
 
   factory _UsuarioProcessoModel.fromJson(Map<String, dynamic> json) =
@@ -491,9 +436,6 @@ abstract class _UsuarioProcessoModel extends UsuarioProcessoModel {
   bool? get ativo;
   set ativo(bool? value);
   @override
-  String? get foto;
-  set foto(String? value);
-  @override
   DateTime? get ultimaAlteracao;
   set ultimaAlteracao(DateTime? value);
   @override
@@ -501,12 +443,6 @@ abstract class _UsuarioProcessoModel extends UsuarioProcessoModel {
   String? get tstamp;
   @JsonKey(name: 'tStamp')
   set tstamp(String? value);
-  @override
-  List<UsuarioPerfilModel>? get usuariosPerfis;
-  set usuariosPerfis(List<UsuarioPerfilModel>? value);
-  @override
-  List<int>? get codigoDireitos;
-  set codigoDireitos(List<int>? value);
   @override
   @JsonKey(ignore: true)
   _$$UsuarioProcessoModelImplCopyWith<_$UsuarioProcessoModelImpl>

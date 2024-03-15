@@ -13,6 +13,10 @@ _$AuthenticationResultDTOImpl _$$AuthenticationResultDTOImplFromJson(
           ? null
           : UsuarioModel.fromJson(
               Map<String, Object?>.from(json['usuario'] as Map)),
+      instituicao: json['instituicao'] == null
+          ? null
+          : InstituicaoModel.fromJson(
+              Map<String, Object?>.from(json['instituicao'] as Map)),
       token: json['token'] as String?,
     );
 
@@ -20,5 +24,6 @@ Map<String, dynamic> _$$AuthenticationResultDTOImplToJson(
         _$AuthenticationResultDTOImpl instance) =>
     <String, dynamic>{
       'usuario': instance.usuario?.toJson(),
+      'instituicao': instance.instituicao?.toJson(),
       'token': instance.token,
     };

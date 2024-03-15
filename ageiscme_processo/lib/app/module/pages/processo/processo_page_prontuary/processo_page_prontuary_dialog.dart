@@ -2,6 +2,7 @@ import 'package:ageiscme_models/enums/decisao_enum.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_processo/app/module/blocs/local_instituicao_cubit.dart';
 import 'package:ageiscme_processo/app/module/models/processo_leitura/processo_leitura_montagem_model.dart';
+import 'package:ageiscme_processo/app/module/models/usuario_processo/usuario_processo_model.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
@@ -56,7 +57,7 @@ class _ProcessoPageProntuaryDialogState
         ),
         child: Column(
           children: [
-            DropDownWidget<UsuarioModel>(
+            DropDownWidget<UsuarioProcessoModel>(
               initialValue: widget.processoLeitura.leituraAtual.circulante,
               sourceList: [widget.processoLeitura.leituraAtual.circulante!],
               placeholder: 'Circulante',

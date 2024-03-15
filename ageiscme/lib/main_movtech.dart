@@ -9,7 +9,7 @@ void main() {
       module: AppModule(),
       child: const AppWidget(
         '/module-selection/',
-        enviroment: 'prod',
+        enviroment: 'movtech',
       ),
     ),
   );

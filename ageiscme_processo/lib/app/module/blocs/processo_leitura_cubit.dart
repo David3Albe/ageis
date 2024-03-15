@@ -11,7 +11,9 @@ import 'package:ageiscme_processo/app/module/models/processo_leitura/processo_le
 import 'package:ageiscme_processo/app/module/models/processo_leitura/processo_leitura_montagem_model.dart';
 import 'package:ageiscme_processo/app/module/models/selecao_kit_item/selecao_kit_item_model.dart';
 import 'package:ageiscme_processo/app/module/services/processo_leitura/processo_leitura_service.dart';
+import 'package:ageiscme_processo/app/module/web_sockets/processo_leitura/processo_leitura_web_socket.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
+import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 
 class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
@@ -19,10 +21,14 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
   late final ProcessoLeituraService service =
       ProcessoLeituraService(loading: loadingController);
 
+  ProcessoLeituraWebSocket webSocket;
+
   final List<String> filaLeituras = [];
 
-  ProcessoLeituraCubit({required this.loadingController})
-      : super(
+  ProcessoLeituraCubit({
+    required this.loadingController,
+    required this.webSocket,
+  }) : super(
           ProcessoLeituraState(
             processo: ProcessoLeituraMontagemModel.empty(),
           ),
@@ -37,6 +43,10 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
     filaLeituras.add(codigo);
   }
 
+  void sendMessage(ProcessoLeituraMontagemModel leitura) {
+    webSocket.sendMessage(leitura);
+  }
+
   Future readCode(
     String? codigoLido, {
     bool pularAdicaoFilaLeituras = false,
@@ -48,10 +58,30 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
       }
       if (validateZoom(codigoLido)) return;
       emitLoading();
-      final (
-        String message,
-        ProcessoLeituraMontagemModel processoLeitura
-      )? result = await service.ler(
+      // final (
+      //   String message,
+      //   ProcessoLeituraMontagemModel processoLeitura
+      // )? result = await service.ler(
+      //   ProcessoLeituraMontagemModel(
+      //     cancelado: null,
+      //     maquina: null,
+      //     cod: state.processo.cod,
+      //     dataHora: state.processo.dataHora,
+      //     tstamp: state.processo.tstamp,
+      //     leituraCodigo: ProcessoLeituraCodigoModel(
+      //       codigoLido: codigoLido,
+      //       avisosSonoro: [],
+      //       alertaVermelho: null,
+      //       cancelarLeituras: null,
+      //       leituraFinalizada: null,
+      //     ),
+      //     leituraAtual: state.processo.leituraAtual,
+      //     filaLeituras: state.processo.filaLeituras,
+      //     automaticReadings: state.processo.automaticReadings,
+      //     passos: state.processo.passos,
+      //   ),
+      // );
+      sendMessage(
         ProcessoLeituraMontagemModel(
           cancelado: null,
           maquina: null,
@@ -71,30 +101,30 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
           passos: state.processo.passos,
         ),
       );
-      if (result == null) return;
+      // if (result == null) return;
 
-      bool leiturasCanceladas = cancelReadings(result.$2, result.$1);
-      if (leiturasCanceladas) return;
+      // bool leiturasCanceladas = cancelReadings(result.$2, result.$1);
+      // if (leiturasCanceladas) return;
 
-      bool leituraFinalizada = endReading(result.$2, result.$1);
-      if (leituraFinalizada) return;
+      // bool leituraFinalizada = endReading(result.$2, result.$1);
+      // if (leituraFinalizada) return;
 
-      if (result.$2.leituraAtual.decisao != null) filaLeituras.clear();
-      if (filaLeituras.isNotEmpty) {
-        String lastCode = filaLeituras.removeAt(0);
-        state.processo = result.$2;
-        state.aviso = result.$1;
-        await readCode(lastCode, pularAdicaoFilaLeituras: true);
-        return;
-      }
-      closeLoading();
+      // if (result.$2.leituraAtual.decisao != null) filaLeituras.clear();
+      // if (filaLeituras.isNotEmpty) {
+      //   String lastCode = filaLeituras.removeAt(0);
+      //   state.processo = result.$2;
+      //   state.aviso = result.$1;
+      //   await readCode(lastCode, pularAdicaoFilaLeituras: true);
+      //   return;
+      // }
+      // closeLoading();
 
-      emit(
-        ProcessoLeituraState(
-          processo: result.$2,
-          aviso: result.$1,
-        ),
-      );
+      // emit(
+      //   ProcessoLeituraState(
+      //     processo: result.$2,
+      //     aviso: result.$1,
+      //   ),
+      // );
     } on Exception catch (ex) {
       closeLoading();
       emit(
@@ -104,6 +134,40 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
         ),
       );
     }
+  }
+
+  void setException(String error) {
+    closeLoading();
+    ErrorUtils.showErrorDialog(null, [
+      error,
+    ]);
+  }
+
+  Future onMessage((String, ProcessoLeituraMontagemModel)? result) async {
+    if (result == null) return;
+
+    bool leiturasCanceladas = cancelReadings(result.$2, result.$1);
+    if (leiturasCanceladas) return;
+
+    bool leituraFinalizada = endReading(result.$2, result.$1);
+    if (leituraFinalizada) return;
+
+    if (result.$2.leituraAtual.decisao != null) filaLeituras.clear();
+    if (filaLeituras.isNotEmpty) {
+      String lastCode = filaLeituras.removeAt(0);
+      state.processo = result.$2;
+      state.aviso = result.$1;
+      await readCode(lastCode, pularAdicaoFilaLeituras: true);
+      return;
+    }
+    closeLoading();
+
+    emit(
+      ProcessoLeituraState(
+        processo: result.$2,
+        aviso: result.$1,
+      ),
+    );
   }
 
   Future removeReadingInProcess(
@@ -121,7 +185,7 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
         processoLeitura.tstamp == null) return;
     ProcessoLeituraAndamentoService andamentoService =
         ProcessoLeituraAndamentoService();
-        andamentoService.disableThrowException();
+    andamentoService.disableThrowException();
     ProcessoLeituraAndamentoModel andamento =
         ProcessoLeituraAndamentoModel.atualizarRefreshTimeDTO(
       cod: processoLeitura.cod!,

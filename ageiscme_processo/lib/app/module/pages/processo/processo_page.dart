@@ -62,19 +62,30 @@ class _ProcessoPageState extends State<ProcessoPage> {
   void initState() {
     final ProcessoLeituraCubit _cubit =
         BlocProvider.of<ProcessoLeituraCubit>(context);
-    _cubit.setHandleKey(handleKey);
-    if (widget.userCode != null) {
-      _cubit.readCode(widget.userCode);
-    }
-    TIMER_REFRESH_LEITURAS = Timer.periodic(TIMER_REFRESH_DURATION, (Timer t) {
-      if (!t.isActive) return;
-      updateLastRefreshTime();
+    _cubit.webSocket.connect().then((value) {
+      _cubit.setHandleKey(handleKey);
+      if (widget.userCode != null) {
+        _cubit.readCode(widget.userCode);
+      }
+      TIMER_REFRESH_LEITURAS =
+          Timer.periodic(TIMER_REFRESH_DURATION, (Timer t) {
+        if (!t.isActive) return;
+        updateLastRefreshTime();
+      });
+      _cubit.webSocket.webSocket!.stream.listen((event) {
+        _cubit.webSocket.onMessage(
+          event,
+          onMessagePar: _cubit.onMessage,
+          onError: _cubit.setException,
+        );
+      });
     });
     super.initState();
   }
 
   @override
   void dispose() {
+    _disposeCubit.webSocket.webSocket?.sink.close();
     TIMER_REFRESH_LEITURAS?.cancel();
     _disposeCubit.removeReadingInProcess(_disposeCubit.state.processo);
     super.dispose();
