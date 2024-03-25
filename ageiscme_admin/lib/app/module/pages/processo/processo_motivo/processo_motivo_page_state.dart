@@ -1,6 +1,8 @@
 import 'package:ageiscme_data/services/processo_motivo/processo_motivo_service.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:flutter/material.dart';
 
 class ProcessoMotivoPageCubit extends Cubit<ProcessoMotivoPageState> {
   final ProcessoMotivoService service;
@@ -33,10 +35,15 @@ class ProcessoMotivoPageCubit extends Cubit<ProcessoMotivoPageState> {
     }
   }
 
-  void delete(ProcessoMotivoModel processoMotivo) async {
+  void delete(
+    ProcessoMotivoModel processoMotivo,
+    BuildContext context,
+  ) async {
     try {
+      LoadingController controller = LoadingController(context: context);
       (String, ProcessoMotivoModel)? result =
           await service.delete(processoMotivo);
+      controller.close(context, true);
       if (result == null) return;
 
       emit(

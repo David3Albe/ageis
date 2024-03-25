@@ -22,6 +22,8 @@ PackagingsPrintDTO _$PackagingsPrintDTOFromJson(Map<String, dynamic> json) {
 mixin _$PackagingsPrintDTO {
   String get companyName => throw _privateConstructorUsedError;
   set companyName(String value) => throw _privateConstructorUsedError;
+  int get companyCod => throw _privateConstructorUsedError;
+  set companyCod(int value) => throw _privateConstructorUsedError;
   List<PackagingsPackagingPrintDTO> get packagings =>
       throw _privateConstructorUsedError;
   set packagings(List<PackagingsPackagingPrintDTO> value) =>
@@ -39,7 +41,10 @@ abstract class $PackagingsPrintDTOCopyWith<$Res> {
           PackagingsPrintDTO value, $Res Function(PackagingsPrintDTO) then) =
       _$PackagingsPrintDTOCopyWithImpl<$Res, PackagingsPrintDTO>;
   @useResult
-  $Res call({String companyName, List<PackagingsPackagingPrintDTO> packagings});
+  $Res call(
+      {String companyName,
+      int companyCod,
+      List<PackagingsPackagingPrintDTO> packagings});
 }
 
 /// @nodoc
@@ -56,6 +61,7 @@ class _$PackagingsPrintDTOCopyWithImpl<$Res, $Val extends PackagingsPrintDTO>
   @override
   $Res call({
     Object? companyName = null,
+    Object? companyCod = null,
     Object? packagings = null,
   }) {
     return _then(_value.copyWith(
@@ -63,6 +69,10 @@ class _$PackagingsPrintDTOCopyWithImpl<$Res, $Val extends PackagingsPrintDTO>
           ? _value.companyName
           : companyName // ignore: cast_nullable_to_non_nullable
               as String,
+      companyCod: null == companyCod
+          ? _value.companyCod
+          : companyCod // ignore: cast_nullable_to_non_nullable
+              as int,
       packagings: null == packagings
           ? _value.packagings
           : packagings // ignore: cast_nullable_to_non_nullable
@@ -79,7 +89,10 @@ abstract class _$$PackagingsPrintDTOImplCopyWith<$Res>
       __$$PackagingsPrintDTOImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String companyName, List<PackagingsPackagingPrintDTO> packagings});
+  $Res call(
+      {String companyName,
+      int companyCod,
+      List<PackagingsPackagingPrintDTO> packagings});
 }
 
 /// @nodoc
@@ -94,6 +107,7 @@ class __$$PackagingsPrintDTOImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? companyName = null,
+    Object? companyCod = null,
     Object? packagings = null,
   }) {
     return _then(_$PackagingsPrintDTOImpl(
@@ -101,6 +115,10 @@ class __$$PackagingsPrintDTOImplCopyWithImpl<$Res>
           ? _value.companyName
           : companyName // ignore: cast_nullable_to_non_nullable
               as String,
+      companyCod: null == companyCod
+          ? _value.companyCod
+          : companyCod // ignore: cast_nullable_to_non_nullable
+              as int,
       packagings: null == packagings
           ? _value.packagings
           : packagings // ignore: cast_nullable_to_non_nullable
@@ -115,7 +133,9 @@ class _$PackagingsPrintDTOImpl
     with DiagnosticableTreeMixin
     implements _PackagingsPrintDTO {
   _$PackagingsPrintDTOImpl(
-      {required this.companyName, required this.packagings});
+      {required this.companyName,
+      required this.companyCod,
+      required this.packagings});
 
   factory _$PackagingsPrintDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$PackagingsPrintDTOImplFromJson(json);
@@ -123,11 +143,13 @@ class _$PackagingsPrintDTOImpl
   @override
   String companyName;
   @override
+  int companyCod;
+  @override
   List<PackagingsPackagingPrintDTO> packagings;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'PackagingsPrintDTO(companyName: $companyName, packagings: $packagings)';
+    return 'PackagingsPrintDTO(companyName: $companyName, companyCod: $companyCod, packagings: $packagings)';
   }
 
   @override
@@ -136,6 +158,7 @@ class _$PackagingsPrintDTOImpl
     properties
       ..add(DiagnosticsProperty('type', 'PackagingsPrintDTO'))
       ..add(DiagnosticsProperty('companyName', companyName))
+      ..add(DiagnosticsProperty('companyCod', companyCod))
       ..add(DiagnosticsProperty('packagings', packagings));
   }
 
@@ -157,6 +180,7 @@ class _$PackagingsPrintDTOImpl
 abstract class _PackagingsPrintDTO implements PackagingsPrintDTO {
   factory _PackagingsPrintDTO(
           {required String companyName,
+          required int companyCod,
           required List<PackagingsPackagingPrintDTO> packagings}) =
       _$PackagingsPrintDTOImpl;
 
@@ -166,6 +190,9 @@ abstract class _PackagingsPrintDTO implements PackagingsPrintDTO {
   @override
   String get companyName;
   set companyName(String value);
+  @override
+  int get companyCod;
+  set companyCod(int value);
   @override
   List<PackagingsPackagingPrintDTO> get packagings;
   set packagings(List<PackagingsPackagingPrintDTO> value);

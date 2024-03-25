@@ -457,7 +457,6 @@ class _ConsultaItemPageState extends State<ConsultaItemPage> {
       context: context,
       builder: (BuildContext context) {
         return ItemPageFrm(
-          itemDescritorCubit: itemDescritorBloc,
           proprietarioCubit: proprietarioBloc,
           item: item!,
           frmType: ItemPageFrmtype.Items,

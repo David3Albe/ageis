@@ -19,6 +19,8 @@ dependencies:
     path: '../ageiscme_data'
   compartilhados:
     path: '../compartilhados'
+  ageiscme_impressoes:
+    path: '../ageiscme_impressoes'
   freezed_annotation: ^2.4.1
   json_serializable: ^6.7.1
   json_annotation: ^4.8.1

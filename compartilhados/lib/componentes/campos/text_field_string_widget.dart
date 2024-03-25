@@ -19,6 +19,9 @@ class TextFieldStringWidget extends StatefulWidget {
     this.focus,
     this.setReadonlyBuilder,
     this.setValueBuilder,
+    this.onEditComplete,
+    this.onTapOutside,
+    this.autoFocus = false,
   });
 
   final String placeholder;
@@ -33,6 +36,9 @@ class TextFieldStringWidget extends StatefulWidget {
   final FocusNode? focus;
   final SetReadonlyBuilder? setReadonlyBuilder;
   final SetValueBuilder? setValueBuilder;
+  final Function()? onEditComplete;
+  final Function(PointerDownEvent)? onTapOutside;
+  final bool autoFocus;
 
   set text(String value) => _controller.text = value;
 
@@ -114,6 +120,9 @@ class _TextFieldStringWidgetState extends State<TextFieldStringWidget> {
       mainAxisSize: MainAxisSize.min,
       children: [
         TextFormField(
+          autofocus: widget.autoFocus,
+          onTapOutside: widget.onTapOutside,
+          onEditingComplete: widget.onEditComplete,
           focusNode: widget.focus,
           controller: widget._controller,
           onChanged: change,

@@ -36,6 +36,10 @@ mixin _$ItemDescritorFilter {
   set apenasNaoConsignados(bool? value) => throw _privateConstructorUsedError;
   bool? get carregarImagem => throw _privateConstructorUsedError;
   set carregarImagem(bool? value) => throw _privateConstructorUsedError;
+  int? get numeroMaximoRegistros => throw _privateConstructorUsedError;
+  set numeroMaximoRegistros(int? value) => throw _privateConstructorUsedError;
+  String? get termoPesquisa => throw _privateConstructorUsedError;
+  set termoPesquisa(String? value) => throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
   String? get tStamp => throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
@@ -61,6 +65,8 @@ abstract class $ItemDescritorFilterCopyWith<$Res> {
       bool? apenasConsignados,
       bool? apenasNaoConsignados,
       bool? carregarImagem,
+      int? numeroMaximoRegistros,
+      String? termoPesquisa,
       @JsonKey(name: 'tStamp') String? tStamp});
 }
 
@@ -84,6 +90,8 @@ class _$ItemDescritorFilterCopyWithImpl<$Res, $Val extends ItemDescritorFilter>
     Object? apenasConsignados = freezed,
     Object? apenasNaoConsignados = freezed,
     Object? carregarImagem = freezed,
+    Object? numeroMaximoRegistros = freezed,
+    Object? termoPesquisa = freezed,
     Object? tStamp = freezed,
   }) {
     return _then(_value.copyWith(
@@ -115,6 +123,14 @@ class _$ItemDescritorFilterCopyWithImpl<$Res, $Val extends ItemDescritorFilter>
           ? _value.carregarImagem
           : carregarImagem // ignore: cast_nullable_to_non_nullable
               as bool?,
+      numeroMaximoRegistros: freezed == numeroMaximoRegistros
+          ? _value.numeroMaximoRegistros
+          : numeroMaximoRegistros // ignore: cast_nullable_to_non_nullable
+              as int?,
+      termoPesquisa: freezed == termoPesquisa
+          ? _value.termoPesquisa
+          : termoPesquisa // ignore: cast_nullable_to_non_nullable
+              as String?,
       tStamp: freezed == tStamp
           ? _value.tStamp
           : tStamp // ignore: cast_nullable_to_non_nullable
@@ -139,6 +155,8 @@ abstract class _$$ItemDescritorFilterImplCopyWith<$Res>
       bool? apenasConsignados,
       bool? apenasNaoConsignados,
       bool? carregarImagem,
+      int? numeroMaximoRegistros,
+      String? termoPesquisa,
       @JsonKey(name: 'tStamp') String? tStamp});
 }
 
@@ -160,6 +178,8 @@ class __$$ItemDescritorFilterImplCopyWithImpl<$Res>
     Object? apenasConsignados = freezed,
     Object? apenasNaoConsignados = freezed,
     Object? carregarImagem = freezed,
+    Object? numeroMaximoRegistros = freezed,
+    Object? termoPesquisa = freezed,
     Object? tStamp = freezed,
   }) {
     return _then(_$ItemDescritorFilterImpl(
@@ -191,6 +211,14 @@ class __$$ItemDescritorFilterImplCopyWithImpl<$Res>
           ? _value.carregarImagem
           : carregarImagem // ignore: cast_nullable_to_non_nullable
               as bool?,
+      numeroMaximoRegistros: freezed == numeroMaximoRegistros
+          ? _value.numeroMaximoRegistros
+          : numeroMaximoRegistros // ignore: cast_nullable_to_non_nullable
+              as int?,
+      termoPesquisa: freezed == termoPesquisa
+          ? _value.termoPesquisa
+          : termoPesquisa // ignore: cast_nullable_to_non_nullable
+              as String?,
       tStamp: freezed == tStamp
           ? _value.tStamp
           : tStamp // ignore: cast_nullable_to_non_nullable
@@ -210,6 +238,8 @@ class _$ItemDescritorFilterImpl implements _ItemDescritorFilter {
       this.apenasConsignados,
       this.apenasNaoConsignados,
       this.carregarImagem,
+      this.numeroMaximoRegistros,
+      this.termoPesquisa,
       @JsonKey(name: 'tStamp') this.tStamp});
 
   factory _$ItemDescritorFilterImpl.fromJson(Map<String, dynamic> json) =>
@@ -230,12 +260,16 @@ class _$ItemDescritorFilterImpl implements _ItemDescritorFilter {
   @override
   bool? carregarImagem;
   @override
+  int? numeroMaximoRegistros;
+  @override
+  String? termoPesquisa;
+  @override
   @JsonKey(name: 'tStamp')
   String? tStamp;
 
   @override
   String toString() {
-    return 'ItemDescritorFilter(cod: $cod, apenasAtivos: $apenasAtivos, ordenarPorNomeCrescente: $ordenarPorNomeCrescente, carregarItensConsignados: $carregarItensConsignados, apenasConsignados: $apenasConsignados, apenasNaoConsignados: $apenasNaoConsignados, carregarImagem: $carregarImagem, tStamp: $tStamp)';
+    return 'ItemDescritorFilter(cod: $cod, apenasAtivos: $apenasAtivos, ordenarPorNomeCrescente: $ordenarPorNomeCrescente, carregarItensConsignados: $carregarItensConsignados, apenasConsignados: $apenasConsignados, apenasNaoConsignados: $apenasNaoConsignados, carregarImagem: $carregarImagem, numeroMaximoRegistros: $numeroMaximoRegistros, termoPesquisa: $termoPesquisa, tStamp: $tStamp)';
   }
 
   @JsonKey(ignore: true)
@@ -262,6 +296,8 @@ abstract class _ItemDescritorFilter implements ItemDescritorFilter {
       bool? apenasConsignados,
       bool? apenasNaoConsignados,
       bool? carregarImagem,
+      int? numeroMaximoRegistros,
+      String? termoPesquisa,
       @JsonKey(name: 'tStamp') String? tStamp}) = _$ItemDescritorFilterImpl;
 
   factory _ItemDescritorFilter.fromJson(Map<String, dynamic> json) =
@@ -288,6 +324,12 @@ abstract class _ItemDescritorFilter implements ItemDescritorFilter {
   @override
   bool? get carregarImagem;
   set carregarImagem(bool? value);
+  @override
+  int? get numeroMaximoRegistros;
+  set numeroMaximoRegistros(int? value);
+  @override
+  String? get termoPesquisa;
+  set termoPesquisa(String? value);
   @override
   @JsonKey(name: 'tStamp')
   String? get tStamp;

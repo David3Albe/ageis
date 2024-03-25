@@ -55,6 +55,8 @@ abstract class KitProcessoModel with _$KitProcessoModel {
     required bool? impressaoRelatorioRetiradaRealizada,
     required int? codUsuarioAcaoOcorrencia,
     required int? codAcaoOcorrencia,
+            required int? itensLidosCalculado,
+        required int? itensTotalKitCalculado,
   }) = _KitProcessoModel;
 
   factory KitProcessoModel.fromJson(Map<String, Object?> json) =>

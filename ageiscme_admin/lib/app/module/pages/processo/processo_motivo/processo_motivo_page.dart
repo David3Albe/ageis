@@ -136,7 +136,7 @@ class _ProcessoMotivoPageState extends State<ProcessoMotivoPage> {
       context,
       'Confirma a remoção do Motivo de Processo\n${processoMotivo.cod} - ${processoMotivo.descricao}',
     );
-    if (confirmacao) bloc.delete(processoMotivo);
+    if (confirmacao) bloc.delete(processoMotivo, context);
   }
 
   void deleted(ProcessoMotivoPageState state) {

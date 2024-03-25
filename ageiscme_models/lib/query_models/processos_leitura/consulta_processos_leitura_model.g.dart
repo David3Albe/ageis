@@ -12,6 +12,10 @@ _$ConsultaProcessosLeituraModelImpl
           dataHora: json['dataHora'] == null
               ? null
               : DateTime.parse(json['dataHora'] as String),
+          data: json['data'] == null
+              ? null
+              : DateTime.parse(json['data'] as String),
+          hora: json['hora'] as String?,
           codBarraKit: json['codBarraKit'] as String?,
           nomeKit: json['nomeKit'] as String?,
           nroItensFaltante: json['nroItensFaltante'] as int?,
@@ -57,6 +61,8 @@ Map<String, dynamic> _$$ConsultaProcessosLeituraModelImplToJson(
         _$ConsultaProcessosLeituraModelImpl instance) =>
     <String, dynamic>{
       'dataHora': instance.dataHora?.toIso8601String(),
+      'data': instance.data?.toIso8601String(),
+      'hora': instance.hora,
       'codBarraKit': instance.codBarraKit,
       'nomeKit': instance.nomeKit,
       'nroItensFaltante': instance.nroItensFaltante,

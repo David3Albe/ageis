@@ -32,6 +32,7 @@ class DropDownSearchWidget<T> extends StatefulWidget {
     this.setSelectedItemBuilder,
     this.readOnly = false,
     this.validateChange,
+    this.expandOnStart,
   });
   final List<T> sourceList;
   final T? initialValue;
@@ -44,6 +45,7 @@ class DropDownSearchWidget<T> extends StatefulWidget {
   late final RefreshSourceListBuilder? refreshSourceListBuilder;
   late final SetSelectedItemBuilder<T>? setSelectedItemBuilder;
   final Future<bool> Function(T? itemSelecionado)? validateChange;
+  final bool? expandOnStart;
 
   @override
   DropDownSearchWidgetState<T> createState() => DropDownSearchWidgetState<T>(
@@ -71,20 +73,26 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
     filterVisible = false;
     txtFilter = TextFieldStringWidget(
       placeholder: 'Pesquisar...',
-      onChanged: setItems,
+      onChanged: (search) => setItems(search, false),
     );
 
     if (widget.sourceList.isNotEmpty && selectedItem == null) {
       selectedItem = widget.initialValue;
     }
     cubit = DropDownSearchCubit<T>();
-    setItems(null);
+    setItems(
+      null,
+      true,
+    );
 
     super.initState();
+    if (widget.expandOnStart == true) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => showPicker(context));
+    }
   }
 
   void reload() {
-    setItems(txtFilter.text);
+    setItems(txtFilter.text, false);
   }
 
   void setSelected(T? item) {
@@ -344,12 +352,14 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
     return items;
   }
 
-  void setItems(String? filter) async {
+  void setItems(String? filter, bool ignoreTimer) async {
     lastTypedTime = DateTime.now();
     DateTime lastTimeValidation = lastTypedTime!;
-    await Future.delayed(
-      const Duration(milliseconds: 1500),
-    );
+    if (!ignoreTimer) {
+      await Future.delayed(
+        const Duration(milliseconds: 1500),
+      );
+    }
     List<T> itens = Filter(filter);
     if (selectedItem != null && !itens.contains(selectedItem)) {
       itens.insert(0, selectedItem!);

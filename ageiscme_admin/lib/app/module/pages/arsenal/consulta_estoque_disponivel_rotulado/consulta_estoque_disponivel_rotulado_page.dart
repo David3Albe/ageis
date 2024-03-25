@@ -331,6 +331,8 @@ class _ConsultaEstoqueDisponivelRotuladoPageState
               finalDate: DateTime.now(),
               codKit: codKit,
               codItem: codItem,
+              finalTime: null,
+              startTime: null,
               biologico: null,
               codEtapaProcesso: null,
               implantavel: null,

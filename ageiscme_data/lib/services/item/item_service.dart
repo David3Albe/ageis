@@ -2,6 +2,7 @@ import 'package:ageiscme_data/shared/custom_dio.dart';
 import 'package:ageiscme_models/dto/item_save_result/item_save_result_dto.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/response_dto/item_rotulado_response/item_rotulado_response_dto.dart';
 
 class ItemService {
   final CustomDio _client = CustomDio();
@@ -11,6 +12,13 @@ class ItemService {
   Future<List<ItemModel>> GetAll() async => (await _client.getList('/item'))
       .map((e) => ItemModel.fromJson(e))
       .toList();
+
+  Future<ItemRotuladoResponseDTO> getItensImpressaoRotulado() async =>
+      ItemRotuladoResponseDTO.fromJson(
+        await _client.getOne(
+          '/item/rotulados-impressao',
+        ),
+      );
 
   Future<List<ItemModel>> Filter(
     ItemFilter filter,

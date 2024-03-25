@@ -55,7 +55,7 @@ class _WarningWidget extends StatelessWidget {
                           child: Container(
                             alignment: Alignment.topRight,
                             child: CloseButtonWidget(
-                              backgroundColor: Cores.corFundoIconeErro,
+                              backgroundColor: const Color.fromARGB(118, 225, 157, 0),
                               onPressed: () => Navigator.of(context).pop(false),
                             ),
                           ),
@@ -87,9 +87,11 @@ class _WarningWidget extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Erro',
-                  style:
-                      Fontes.getRoboto(fontSize: 32, cor: Cores.corFonteErro),
+                  'Aviso',
+                  style: Fontes.getRoboto(
+                    fontSize: 32,
+                    cor: Cores.corIconeToastWarning,
+                  ),
                 ),
               ],
             ),

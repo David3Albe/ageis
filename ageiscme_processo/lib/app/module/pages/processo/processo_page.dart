@@ -1,6 +1,19 @@
 import 'dart:async';
 
+import 'package:ageiscme_impressoes/dto/estoque_print/estoque_item_print/estoque_item_consignado_print/estoque_item_consignado_print_dto.dart';
+import 'package:ageiscme_impressoes/dto/estoque_print/estoque_item_print/estoque_item_print_dto.dart';
+import 'package:ageiscme_impressoes/dto/estoque_print/estoque_kit_print/estoque_kit_item_print/estoque_kit_item_print_dto.dart';
+import 'package:ageiscme_impressoes/dto/estoque_print/estoque_kit_print/estoque_kit_print_dto.dart';
+import 'package:ageiscme_impressoes/dto/estoque_print/estoque_print_dto.dart';
+import 'package:ageiscme_impressoes/dto/etiqueta_lote_print/etiqueta_lote_print_dto.dart';
+import 'package:ageiscme_impressoes/dto/processo_preparation_print/processo_preparation_item_print/processo_preparation_item_print_dto.dart';
+import 'package:ageiscme_impressoes/dto/processo_preparation_print/processo_preparation_kit_print/processo_preparation_kit_print_dto.dart';
+import 'package:ageiscme_impressoes/dto/processo_preparation_print/processo_preparation_print_dto.dart';
+import 'package:ageiscme_impressoes/prints/estoque_printer/estoque_printer_controller.dart';
+import 'package:ageiscme_impressoes/prints/etiqueta_lote_printer/etiqueta_lote_printer_controller.dart';
+import 'package:ageiscme_impressoes/prints/processo_preparation_printer/processo_preparation_printer_controller.dart';
 import 'package:ageiscme_models/enums/decisao_enum.dart';
+import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_processo/app/module/blocs/processo_leitura_cubit.dart';
 import 'package:ageiscme_processo/app/module/enums/custom_audio.dart';
 import 'package:ageiscme_processo/app/module/models/item_processo/item_processo_model.dart';
@@ -34,8 +47,8 @@ import 'package:ageiscme_processo/app/module/pages/processo/processo_page_widget
 import 'package:ageiscme_processo/app/module/pages/processo/processo_page_widgets/processo_page_warning/processo_page_warning_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
+import 'package:compartilhados/componentes/toasts/warning_dialog.dart';
 import 'package:compartilhados/functions/custom_audio_player.dart';
-import 'package:compartilhados/functions/printer/printer_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
@@ -154,7 +167,7 @@ class _ProcessoPageState extends State<ProcessoPage> {
                   _showReasonRemoveKitItemArsenalDialog(state.processo);
                   _showReasonRemoveItemArsenalDialog(state.processo);
                   await _showDialogActionCompliance(state.processo);
-                  await _showCalculator(state.processo);
+                  await _showCalculator(state.processo, state.aviso);
                   await _showConsigned(state.processo);
                   await _printPreparoPdf(state.processo);
                   await _printEtiquetaLotePdf(state.processo);
@@ -656,13 +669,24 @@ class _ProcessoPageState extends State<ProcessoPage> {
 
   Future _showCalculator(
     ProcessoLeituraMontagemModel processoLeitura,
+    String? aviso,
   ) async {
     if (processoLeitura.leituraAtual.decisao !=
-        DecisaoEnum.DefinirValorCalculadora) {
+            DecisaoEnum.DefinirValorCalculadora &&
+        processoLeitura.leituraAtual.decisao !=
+            DecisaoEnum.RetentativaDefinirValorCalculadora) {
       return;
     }
     final ProcessoLeituraCubit processoCubit =
         BlocProvider.of<ProcessoLeituraCubit>(context);
+    if (processoLeitura.leituraAtual.decisao ==
+            DecisaoEnum.RetentativaDefinirValorCalculadora &&
+        aviso != null) {
+      await WarningUtils.showWarningDialog(
+        context,
+        aviso,
+      );
+    }
     await showDialog<bool>(
       barrierDismissible: false,
       context: context,
@@ -728,18 +752,100 @@ class _ProcessoPageState extends State<ProcessoPage> {
             DecisaoEnum.ImprimirMaisEtiquetasPreparo) {
       return;
     }
-    String? impressao = processoLeitura.leituraAtual.impressaoPreparo;
-    if (impressao == null) return;
 
-    bool? sucess = await PrinterHelper.PrintBase64DocumentDefaultPrinter(
-      context,
-      impressao,
-    );
+    ProcessoPreparationPrintDTO dto =
+        createPrintPreparationDTO(processoLeitura);
+    bool sucess =
+        await ProcessoPreparationPrinterController(context: context, dto: dto)
+            .print();
+
     if (sucess == false) {
       await ErrorUtils.showErrorDialog(context, [
         'Houve um erro ao realizar a impressão de preparo, entre em contato com o T.I.',
       ]);
     }
+  }
+
+  ProcessoPreparationPrintDTO createPrintPreparationDTO(
+    ProcessoLeituraMontagemModel processoLeitura,
+  ) {
+    List<ProcessoPreparationItemPrintDTO> itens = [];
+    for (ItemProcessoModel item in processoLeitura.leituraAtual.itens) {
+      ItemDescritorModel itemDescritor = item.getDescritor(processoLeitura)!;
+      int prioridade =
+          item.prioridade ?? processoLeitura.leituraAtual.prioridade!;
+      ProcessoTipoModel processoTipo = getTipoProcessoPrioridade(
+        prioridade: prioridade,
+        tipoProcessoEmergencia: itemDescritor.tipoProcessoEmergencia,
+        tipoProcessoNormal: itemDescritor.tipoProcesso,
+        tipoProcessoUrgente: itemDescritor.tipoProcessoUrgencia,
+      );
+      EmbalagemModel embalagem = processoLeitura.leituraAtual.embalagens!
+          .firstWhere((element) => element.cod == item.codEmbalagem);
+      itens.add(
+        ProcessoPreparationItemPrintDTO(
+          nome: item.descricao!,
+          nomeProprietario: item.getProprietario(processoLeitura)!.nome!,
+          nomeProcesso: processoTipo.nome,
+          validadeEmbalagem: embalagem.validadeProcessosDias ?? 0,
+          tagId: item.idEtiqueta!,
+          urgency: prioridade == 2,
+          ordemLeitura: item.ordemLeitura ?? 0,
+        ),
+      );
+    }
+
+    List<ProcessoPreparationKitPrintDTO> kits = [];
+    for (KitProcessoModel kit in processoLeitura.leituraAtual.kits) {
+      KitDescritorModel kitDescritor = kit.descritor!;
+      int prioridade =
+          kit.prioridade ?? processoLeitura.leituraAtual.prioridade!;
+      ProcessoTipoModel processoTipo = getTipoProcessoPrioridade(
+        prioridade: prioridade,
+        tipoProcessoEmergencia: kitDescritor.tipoProcessoEmergencia,
+        tipoProcessoNormal: kitDescritor.tipoProcesso,
+        tipoProcessoUrgente: kitDescritor.tipoProcessoUrgencia,
+      );
+      EmbalagemModel embalagem = processoLeitura.leituraAtual.embalagens!
+          .firstWhere((element) => element.cod == kit.codEmbalagem);
+      kits.add(
+        ProcessoPreparationKitPrintDTO(
+          itensLidos: kit.itensLidosCalculado!,
+          itensTotalKit: kit.itensTotalKitCalculado!,
+          nomeDescritor: kitDescritor.nome!,
+          nomeProprietario: kit.itens!
+              .where(
+                (element) =>
+                    element.getProprietario(processoLeitura)?.nome != null,
+              )
+              .first
+              .getProprietario(processoLeitura)!
+              .nome!,
+          nomeProcesso: processoTipo.nome,
+          validadeEmbalagem: embalagem.validadeProcessosDias ?? 0,
+          tagId: kit.codBarra!,
+          urgency: prioridade == 2,
+        ),
+      );
+    }
+    return ProcessoPreparationPrintDTO(
+      companyName: processoLeitura.leituraAtual.instituicao!.nome!,
+      actualTime: DateTime.now(),
+      userName: processoLeitura.leituraAtual.usuario!.nome!,
+      kits: kits,
+      itens: itens,
+    );
+  }
+
+  ProcessoTipoModel getTipoProcessoPrioridade({
+    required ProcessoTipoModel? tipoProcessoNormal,
+    required ProcessoTipoModel? tipoProcessoUrgente,
+    required ProcessoTipoModel? tipoProcessoEmergencia,
+    required int prioridade,
+  }) {
+    if (prioridade == 1) return tipoProcessoNormal!;
+    if (prioridade == 2) return tipoProcessoUrgente!;
+    return tipoProcessoEmergencia!;
   }
 
   Future _printEtiquetaLotePdf(
@@ -749,18 +855,51 @@ class _ProcessoPageState extends State<ProcessoPage> {
         DecisaoEnum.ImprimirMaisEtiquetasLote) {
       return;
     }
-    String? impressao = processoLeitura.leituraAtual.impressaoEtiquetaLote;
-    if (impressao == null) return;
 
-    bool? sucess = await PrinterHelper.PrintBase64DocumentDefaultPrinter(
-      context,
-      impressao,
-    );
+    EtiquetaLotePrintDTO lote = _criarDTOetiquetaLote(processoLeitura);
+    bool? sucess =
+        await EtiquetaLotePrinterController(context: context, dto: lote)
+            .print();
+
     if (sucess == false) {
       await ErrorUtils.showErrorDialog(context, [
         'Houve um erro ao realizar a impressão de etiqueta de lote, entre em contato com o T.I.',
       ]);
     }
+  }
+
+  EtiquetaLotePrintDTO _criarDTOetiquetaLote(
+    ProcessoLeituraMontagemModel processoLeitura,
+  ) {
+    int quantidadePaginas = 0;
+    int contador = 3;
+    for (int i = 0; i < processoLeitura.leituraAtual.kits.length; i++) {
+      if (contador == 3) {
+        quantidadePaginas++;
+      }
+      contador--;
+      if (contador == 0) {
+        contador = 3;
+      }
+    }
+
+    for (int i = 0; i < processoLeitura.leituraAtual.itens.length; i++) {
+      if (contador == 3) {
+        quantidadePaginas++;
+      }
+      contador--;
+      if (contador == 0) {
+        contador = 3;
+      }
+    }
+
+    return EtiquetaLotePrintDTO(
+      codRegistroProcesso: processoLeitura.leituraAtual.processoRegistro!.cod!,
+      dataAtual: DateTime.now(),
+      nomeEquipamento: processoLeitura.leituraAtual.equipamento!.nome!,
+      nomeUsuario: processoLeitura.leituraAtual.usuario!.nome!,
+      quantidadePadinas: quantidadePaginas,
+    );
   }
 
   Future _printRelatorioRetirada(
@@ -770,18 +909,76 @@ class _ProcessoPageState extends State<ProcessoPage> {
         DecisaoEnum.ImprimirRelatorioRetirada) {
       return;
     }
-    String? impressao = processoLeitura.leituraAtual.impressaoRelatorioRetirada;
-    if (impressao == null) return;
-
-    bool? sucess = await PrinterHelper.PrintBase64DocumentDefaultPrinter(
-      context,
-      impressao,
-    );
+    bool? sucess = await EstoquePrinterController(
+      dto: _getEstoquePrintDTO(processoLeitura),
+      context: context,
+    ).print();
     if (sucess == false) {
       await ErrorUtils.showErrorDialog(context, [
         'Houve um erro ao realizar a impressão de relatório de retirada, entre em contato com o T.I.',
       ]);
     }
+  }
+
+  EstoquePrintDTO _getEstoquePrintDTO(
+    ProcessoLeituraMontagemModel processoLeitura,
+  ) {
+    List<EstoqueKitPrintDTO> kits = [];
+    for (KitProcessoModel kit in processoLeitura.leituraAtual.kits) {
+      kits.add(
+        EstoqueKitPrintDTO(
+          codBarra: kit.codBarra!,
+          nome: kit.descritor!.nome!,
+          itens: kit.itens!
+              .map(
+                (item) => EstoqueKitItemPrintDTO(
+                  codBarra: item.idEtiqueta!,
+                  nome: item.descricao!,
+                  riscado: item.status == '3' || item.status == '4',
+                ),
+              )
+              .toList(),
+        ),
+      );
+    }
+
+    List<EstoqueItemPrintDTO> itens = [];
+    for (ItemProcessoModel item in processoLeitura.leituraAtual.itens) {
+      List<EstoqueItemConsignadoPrintDTO> consignados = [];
+      if (item.getDescritor(processoLeitura)?.consignado == true &&
+          item.itensConsignados != null) {
+        consignados = item.itensConsignados!
+            .map(
+              (e) => EstoqueItemConsignadoPrintDTO(
+                cod: e.cod.toString(),
+                nome: e.descricao!,
+                quantidade: e.conferenciaPreparo ?? e.quantidade ?? 0,
+              ),
+            )
+            .toList();
+      }
+      itens.add(
+        EstoqueItemPrintDTO(
+          codBarra: item.idEtiqueta!,
+          nome: item.descricao!,
+          consignados: consignados,
+        ),
+      );
+    }
+
+    return EstoquePrintDTO(
+      actualTime: DateTime.now(),
+      circulante: processoLeitura.leituraAtual.circulante!.nome!,
+      companyName: processoLeitura.leituraAtual.instituicao!.nome!,
+      nomeLocal: processoLeitura.leituraAtual.estoque!.nome!,
+      userName: processoLeitura.leituraAtual.usuario!.nome!,
+      circulanteDoc: processoLeitura.leituraAtual.circulante?.docClasse,
+      userDoc: processoLeitura.leituraAtual.usuario?.docClasse,
+      prontuario: processoLeitura
+          .leituraAtual.processoDetalheRegistro?.prontuarioRetirada,
+      kits: kits,
+      itens: itens,
+    );
   }
 
   void _endReading(ProcessoLeituraState processoLeitura) {

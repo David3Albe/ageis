@@ -11,6 +11,10 @@ class CustomNavigationBarCubit extends Cubit<CustomNavigationBarState> {
   void turnExpandedOff() {
     emit(CustomNavigationBarState(expanded: false));
   }
+
+    void expand() {
+    emit(CustomNavigationBarState(expanded: true));
+  }
 }
 
 class CustomNavigationBarState {

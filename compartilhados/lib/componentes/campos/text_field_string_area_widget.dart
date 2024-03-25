@@ -10,6 +10,9 @@ class TextFieldStringAreaWidget extends StatefulWidget {
     this.password = false,
     this.onChanged,
     this.readOnly = false,
+    this.onEditComplete,
+    this.onTapOutside,
+    this.focus,
   });
 
   final String placeholder;
@@ -20,6 +23,9 @@ class TextFieldStringAreaWidget extends StatefulWidget {
   final GlobalKey<_TextFieldStringAreaWidgetState> key =
       GlobalKey<_TextFieldStringAreaWidgetState>();
   final void Function(String str)? onChanged;
+  final Function()? onEditComplete;
+  final Function(PointerDownEvent)? onTapOutside;
+  final FocusNode? focus;
 
   set text(String value) => _controller.text = value;
 
@@ -52,6 +58,9 @@ class _TextFieldStringAreaWidgetState extends State<TextFieldStringAreaWidget> {
     return Column(
       children: [
         TextFormField(
+          focusNode: widget.focus,
+          onTapOutside: widget.onTapOutside,
+          onEditingComplete: widget.onEditComplete,
           keyboardType: TextInputType.multiline,
           maxLines: 7,
           controller: widget._controller,

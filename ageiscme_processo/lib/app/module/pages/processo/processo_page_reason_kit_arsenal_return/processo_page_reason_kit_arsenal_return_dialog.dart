@@ -63,6 +63,7 @@ class _ProcessoPageReasonKitArsenalReturnDialogState
                     .where((element) => element.arsenal == true)
                     .toList();
                 return DropDownSearchWidget<ProcessoMotivoModel>(
+                  expandOnStart: true,
                   textFunction: (item) => item.DescricaoText(),
                   initialValue: motivo,
                   sourceList: motivos,

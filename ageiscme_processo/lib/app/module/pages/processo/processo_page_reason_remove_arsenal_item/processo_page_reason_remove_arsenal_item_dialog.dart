@@ -81,6 +81,7 @@ class _ProcessoPageReasonRemoveArsenalItemDialogState
                       .firstOrNull;
                 }
                 return DropDownSearchWidget<ProcessoMotivoModel>(
+                  expandOnStart: true,
                   textFunction: (item) => item.DescricaoText(),
                   initialValue: motivoInicial,
                   sourceList: motivos,

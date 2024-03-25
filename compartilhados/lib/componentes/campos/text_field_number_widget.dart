@@ -11,6 +11,7 @@ class TextFieldNumberWidget extends StatefulWidget {
     this.password = false,
     this.onChanged,
     this.readOnly = false,
+    this.startValue,
   });
 
   final String placeholder;
@@ -21,6 +22,7 @@ class TextFieldNumberWidget extends StatefulWidget {
   final GlobalKey<_TextFieldNumberWidgetState> key =
       GlobalKey<_TextFieldNumberWidgetState>();
   final void Function(String str)? onChanged;
+  final int? startValue;
 
   set text(String value) => _controller.text = value;
 
@@ -50,6 +52,9 @@ class _TextFieldNumberWidgetState extends State<TextFieldNumberWidget> {
   @override
   void initState() {
     controller = TextEditingController();
+    if (widget.startValue != null) {
+      controller.text = widget.startValue.toString();
+    }
     super.initState();
   }
 

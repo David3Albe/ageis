@@ -1,9 +1,12 @@
 import 'package:ageiscme_admin/app/module/pages/arsenal/arsenal_estoque/arsenal_estoque_page_frm/arsenal_estoque_page_frm.dart';
 import 'package:ageiscme_admin/app/module/pages/arsenal/arsenal_estoque/arsenal_estoque_page_state.dart';
+import 'package:ageiscme_admin/app/module/pages/arsenal/arsenal_estoque/arsenal_estoque_printer/arsenal_page_frm_impressao.dart';
 import 'package:ageiscme_data/services/arsenal/arsenal_estoque_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
@@ -54,7 +57,7 @@ class _ArsenalEstoquePageState extends State<ArsenalEstoquePage> {
       ArsenalEstoquePageCubit(service: ArsenalEstoqueService());
 
   @override
-  void initState() { 
+  void initState() {
     bloc.loadArsenalEstoque();
     super.initState();
   }
@@ -65,13 +68,26 @@ class _ArsenalEstoquePageState extends State<ArsenalEstoquePage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              ArsenalEstoqueModel.empty(),
+        Row(
+          children: [
+            AddButtonWidget(
+              onPressed: () => {
+                openModal(
+                  context,
+                  ArsenalEstoqueModel.empty(),
+                ),
+              },
             ),
-          },
+            const Spacer(),
+            CustomPopupMenuWidget(
+              items: [
+                CustomPopupItemModel(
+                  text: 'Imprimir Arsenais',
+                  onTap: imprimirArsenais,
+                ),
+              ],
+            ),
+          ],
         ),
         BlocListener<ArsenalEstoquePageCubit, ArsenalEstoquePageState>(
           bloc: bloc,
@@ -148,5 +164,24 @@ class _ArsenalEstoquePageState extends State<ArsenalEstoquePage> {
 
   void onError(ArsenalEstoquePageState state) {
     ErrorUtils.showErrorDialog(context, [state.error]);
+  }
+
+  Future imprimirArsenais() async {
+    await showDialog<bool>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return BlocBuilder<ArsenalEstoquePageCubit, ArsenalEstoquePageState>(
+          bloc: bloc,
+          builder: (context, state) {
+            return ArsenalPageFrmImpressao(
+              arsenais: state.arsenaisEstoques
+                  .where((element) => element.ativo == true)
+                  .toList(),
+            );
+          },
+        );
+      },
+    );
   }
 }

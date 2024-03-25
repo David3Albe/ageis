@@ -13,6 +13,8 @@ sealed class ItemDescritorFilter with _$ItemDescritorFilter {
     bool? apenasConsignados,
     bool? apenasNaoConsignados,
     bool? carregarImagem,
+    int? numeroMaximoRegistros,
+    String? termoPesquisa,
     @JsonKey(name: 'tStamp') String? tStamp,
   }) = _ItemDescritorFilter;
 

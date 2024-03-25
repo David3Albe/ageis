@@ -68,6 +68,9 @@ class AppWidget extends StatelessWidget {
       case 'servidora':
         AppConfig.enviroment = AppConfigEnviroment.ServidorA;
         return;
+      case 'servidorb':
+        AppConfig.enviroment = AppConfigEnviroment.ServidorB;
+        return;
       case 'hml':
         AppConfig.enviroment = AppConfigEnviroment.Homologation;
         return;

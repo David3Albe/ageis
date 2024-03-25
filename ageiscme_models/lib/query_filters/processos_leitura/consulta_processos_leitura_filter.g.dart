@@ -15,6 +15,12 @@ _$ConsultaProcessosLeituraFilterImpl
           finalDate: json['finalDate'] == null
               ? null
               : DateTime.parse(json['finalDate'] as String),
+          startTime: json['startTime'] == null
+              ? null
+              : DateTime.parse(json['startTime'] as String),
+          finalTime: json['finalTime'] == null
+              ? null
+              : DateTime.parse(json['finalTime'] as String),
           codKit: json['codKit'] as int?,
           codItem: json['codItem'] as int?,
           codEtapaProcesso: json['codEtapaProcesso'] as int?,
@@ -34,6 +40,8 @@ Map<String, dynamic> _$$ConsultaProcessosLeituraFilterImplToJson(
     <String, dynamic>{
       'startDate': instance.startDate?.toIso8601String(),
       'finalDate': instance.finalDate?.toIso8601String(),
+      'startTime': instance.startTime?.toIso8601String(),
+      'finalTime': instance.finalTime?.toIso8601String(),
       'codKit': instance.codKit,
       'codItem': instance.codItem,
       'codEtapaProcesso': instance.codEtapaProcesso,

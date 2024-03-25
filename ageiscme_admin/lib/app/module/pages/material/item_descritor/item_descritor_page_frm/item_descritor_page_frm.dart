@@ -461,39 +461,39 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                         },
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: BlocBuilder<ProcessoTipoCubit, ProcessoTipoState>(
-                        bloc: processoTipoCubit,
-                        builder: (context, processosTiposState) {
-                          if (processosTiposState.loading) {
-                            return const LoadingWidget();
-                          }
-                          List<ProcessoTipoModel> processosTipos =
-                              processosTiposState.processosTipos;
-                          processosTipos.sort(
-                            (a, b) => a.nome.compareTo(b.nome),
-                          );
-                          ProcessoTipoModel? processoTipo = processosTipos
-                              .where(
-                                (element) =>
-                                    element.cod ==
-                                    itemDescritor.codTipoProcessoEmergencia,
-                              )
-                              .firstOrNull;
-                          return DropDownWidget(
-                            initialValue: processoTipo,
-                            sourceList: processosTipos
-                                .where((element) => element.ativo == true)
-                                .toList(),
-                            onChanged: (value) => itemDescritor
-                                .codTipoProcessoEmergencia = value.cod!,
-                            placeholder:
-                                'Tipo do Processo para prioridade Emergência',
-                          );
-                        },
-                      ),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(top: 5.0),
+                    //   child: BlocBuilder<ProcessoTipoCubit, ProcessoTipoState>(
+                    //     bloc: processoTipoCubit,
+                    //     builder: (context, processosTiposState) {
+                    //       if (processosTiposState.loading) {
+                    //         return const LoadingWidget();
+                    //       }
+                    //       List<ProcessoTipoModel> processosTipos =
+                    //           processosTiposState.processosTipos;
+                    //       processosTipos.sort(
+                    //         (a, b) => a.nome.compareTo(b.nome),
+                    //       );
+                    //       ProcessoTipoModel? processoTipo = processosTipos
+                    //           .where(
+                    //             (element) =>
+                    //                 element.cod ==
+                    //                 itemDescritor.codTipoProcessoEmergencia,
+                    //           )
+                    //           .firstOrNull;
+                    //       return DropDownWidget(
+                    //         initialValue: processoTipo,
+                    //         sourceList: processosTipos
+                    //             .where((element) => element.ativo == true)
+                    //             .toList(),
+                    //         onChanged: (value) => itemDescritor
+                    //             .codTipoProcessoEmergencia = value.cod!,
+                    //         placeholder:
+                    //             'Tipo do Processo para prioridade Emergência',
+                    //       );
+                    //     },
+                    //   ),
+                    // ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
                       child: Row(

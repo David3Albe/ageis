@@ -11,6 +11,7 @@ part of 'packagings_print_dto.dart';
 _$PackagingsPrintDTOImpl _$$PackagingsPrintDTOImplFromJson(Map json) =>
     _$PackagingsPrintDTOImpl(
       companyName: json['companyName'] as String,
+      companyCod: json['companyCod'] as int,
       packagings: (json['packagings'] as List<dynamic>)
           .map((e) => PackagingsPackagingPrintDTO.fromJson(
               Map<String, Object?>.from(e as Map)))
@@ -21,5 +22,6 @@ Map<String, dynamic> _$$PackagingsPrintDTOImplToJson(
         _$PackagingsPrintDTOImpl instance) =>
     <String, dynamic>{
       'companyName': instance.companyName,
+      'companyCod': instance.companyCod,
       'packagings': instance.packagings.map((e) => e.toJson()).toList(),
     };

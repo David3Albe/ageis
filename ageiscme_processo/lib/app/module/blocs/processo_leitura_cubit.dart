@@ -181,8 +181,7 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
   ) {
     if (loadingController.isOpen) return;
     if (processoLeitura.cod == null ||
-        processoLeitura.leituraAtual.usuario?.cod == null ||
-        processoLeitura.tstamp == null) return;
+        processoLeitura.leituraAtual.usuario?.cod == null) return;
     ProcessoLeituraAndamentoService andamentoService =
         ProcessoLeituraAndamentoService();
     andamentoService.disableThrowException();

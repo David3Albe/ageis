@@ -10,6 +10,8 @@ sealed class ConsultaProcessosLeituraModel
 
   factory ConsultaProcessosLeituraModel({
     required DateTime? dataHora,
+    required DateTime? data,
+    required String? hora,
     required String? codBarraKit,
     required String? nomeKit,
     required int? nroItensFaltante,

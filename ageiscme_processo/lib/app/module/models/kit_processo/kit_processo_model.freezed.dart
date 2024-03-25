@@ -123,6 +123,10 @@ mixin _$KitProcessoModel {
       throw _privateConstructorUsedError;
   int? get codAcaoOcorrencia => throw _privateConstructorUsedError;
   set codAcaoOcorrencia(int? value) => throw _privateConstructorUsedError;
+  int? get itensLidosCalculado => throw _privateConstructorUsedError;
+  set itensLidosCalculado(int? value) => throw _privateConstructorUsedError;
+  int? get itensTotalKitCalculado => throw _privateConstructorUsedError;
+  set itensTotalKitCalculado(int? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -181,7 +185,9 @@ abstract class $KitProcessoModelCopyWith<$Res> {
       bool? impressaoEtiquetaLoteRealizada,
       bool? impressaoRelatorioRetiradaRealizada,
       int? codUsuarioAcaoOcorrencia,
-      int? codAcaoOcorrencia});
+      int? codAcaoOcorrencia,
+      int? itensLidosCalculado,
+      int? itensTotalKitCalculado});
 
   $EmbalagemModelCopyWith<$Res>? get embalagem;
   $KitDescritorModelCopyWith<$Res>? get descritor;
@@ -250,6 +256,8 @@ class _$KitProcessoModelCopyWithImpl<$Res, $Val extends KitProcessoModel>
     Object? impressaoRelatorioRetiradaRealizada = freezed,
     Object? codUsuarioAcaoOcorrencia = freezed,
     Object? codAcaoOcorrencia = freezed,
+    Object? itensLidosCalculado = freezed,
+    Object? itensTotalKitCalculado = freezed,
   }) {
     return _then(_value.copyWith(
       cod: freezed == cod
@@ -433,6 +441,14 @@ class _$KitProcessoModelCopyWithImpl<$Res, $Val extends KitProcessoModel>
           ? _value.codAcaoOcorrencia
           : codAcaoOcorrencia // ignore: cast_nullable_to_non_nullable
               as int?,
+      itensLidosCalculado: freezed == itensLidosCalculado
+          ? _value.itensLidosCalculado
+          : itensLidosCalculado // ignore: cast_nullable_to_non_nullable
+              as int?,
+      itensTotalKitCalculado: freezed == itensTotalKitCalculado
+          ? _value.itensTotalKitCalculado
+          : itensTotalKitCalculado // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 
@@ -574,7 +590,9 @@ abstract class _$$KitProcessoModelImplCopyWith<$Res>
       bool? impressaoEtiquetaLoteRealizada,
       bool? impressaoRelatorioRetiradaRealizada,
       int? codUsuarioAcaoOcorrencia,
-      int? codAcaoOcorrencia});
+      int? codAcaoOcorrencia,
+      int? itensLidosCalculado,
+      int? itensTotalKitCalculado});
 
   @override
   $EmbalagemModelCopyWith<$Res>? get embalagem;
@@ -648,6 +666,8 @@ class __$$KitProcessoModelImplCopyWithImpl<$Res>
     Object? impressaoRelatorioRetiradaRealizada = freezed,
     Object? codUsuarioAcaoOcorrencia = freezed,
     Object? codAcaoOcorrencia = freezed,
+    Object? itensLidosCalculado = freezed,
+    Object? itensTotalKitCalculado = freezed,
   }) {
     return _then(_$KitProcessoModelImpl(
       cod: freezed == cod
@@ -831,6 +851,14 @@ class __$$KitProcessoModelImplCopyWithImpl<$Res>
           ? _value.codAcaoOcorrencia
           : codAcaoOcorrencia // ignore: cast_nullable_to_non_nullable
               as int?,
+      itensLidosCalculado: freezed == itensLidosCalculado
+          ? _value.itensLidosCalculado
+          : itensLidosCalculado // ignore: cast_nullable_to_non_nullable
+              as int?,
+      itensTotalKitCalculado: freezed == itensTotalKitCalculado
+          ? _value.itensTotalKitCalculado
+          : itensTotalKitCalculado // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -883,7 +911,9 @@ class _$KitProcessoModelImpl extends _KitProcessoModel {
       required this.impressaoEtiquetaLoteRealizada,
       required this.impressaoRelatorioRetiradaRealizada,
       required this.codUsuarioAcaoOcorrencia,
-      required this.codAcaoOcorrencia})
+      required this.codAcaoOcorrencia,
+      required this.itensLidosCalculado,
+      required this.itensTotalKitCalculado})
       : super._();
 
   factory _$KitProcessoModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -980,10 +1010,14 @@ class _$KitProcessoModelImpl extends _KitProcessoModel {
   int? codUsuarioAcaoOcorrencia;
   @override
   int? codAcaoOcorrencia;
+  @override
+  int? itensLidosCalculado;
+  @override
+  int? itensTotalKitCalculado;
 
   @override
   String toString() {
-    return 'KitProcessoModel(cod: $cod, codBarra: $codBarra, codCor1: $codCor1, codCor2: $codCor2, codCor3: $codCor3, codCor4: $codCor4, status: $status, restricao: $restricao, codDescritorKit: $codDescritorKit, codConjunto: $codConjunto, codInstituicao: $codInstituicao, preparo: $preparo, codProcessoLeitura: $codProcessoLeitura, codEmbalagem: $codEmbalagem, embalagem: $embalagem, imagem: $imagem, ultimaAlteracao: $ultimaAlteracao, tStamp: $tStamp, descritor: $descritor, itens: $itens, cor1: $cor1, cor2: $cor2, cor3: $cor3, cor4: $cor4, selecionado: $selecionado, statusExpandidos: $statusExpandidos, codMotivoNaoConforme: $codMotivoNaoConforme, codEtapa: $codEtapa, validacoesCompletas: $validacoesCompletas, codMotivoRetornoArsenal: $codMotivoRetornoArsenal, codUsuarioQuebraFluxo: $codUsuarioQuebraFluxo, usuarioQuebraFluxo: $usuarioQuebraFluxo, codMotivoQuebraFluxo: $codMotivoQuebraFluxo, prioridade: $prioridade, dataValidadeRetornoArsenal: $dataValidadeRetornoArsenal, preparoInicioLeitura: $preparoInicioLeitura, codUsuarioLiberacao: $codUsuarioLiberacao, conferidoVisualmente: $conferidoVisualmente, liberadoIncompleto: $liberadoIncompleto, impressaoPreparoRealizada: $impressaoPreparoRealizada, sequenciaValida: $sequenciaValida, impressaoEtiquetaLoteRealizada: $impressaoEtiquetaLoteRealizada, impressaoRelatorioRetiradaRealizada: $impressaoRelatorioRetiradaRealizada, codUsuarioAcaoOcorrencia: $codUsuarioAcaoOcorrencia, codAcaoOcorrencia: $codAcaoOcorrencia)';
+    return 'KitProcessoModel(cod: $cod, codBarra: $codBarra, codCor1: $codCor1, codCor2: $codCor2, codCor3: $codCor3, codCor4: $codCor4, status: $status, restricao: $restricao, codDescritorKit: $codDescritorKit, codConjunto: $codConjunto, codInstituicao: $codInstituicao, preparo: $preparo, codProcessoLeitura: $codProcessoLeitura, codEmbalagem: $codEmbalagem, embalagem: $embalagem, imagem: $imagem, ultimaAlteracao: $ultimaAlteracao, tStamp: $tStamp, descritor: $descritor, itens: $itens, cor1: $cor1, cor2: $cor2, cor3: $cor3, cor4: $cor4, selecionado: $selecionado, statusExpandidos: $statusExpandidos, codMotivoNaoConforme: $codMotivoNaoConforme, codEtapa: $codEtapa, validacoesCompletas: $validacoesCompletas, codMotivoRetornoArsenal: $codMotivoRetornoArsenal, codUsuarioQuebraFluxo: $codUsuarioQuebraFluxo, usuarioQuebraFluxo: $usuarioQuebraFluxo, codMotivoQuebraFluxo: $codMotivoQuebraFluxo, prioridade: $prioridade, dataValidadeRetornoArsenal: $dataValidadeRetornoArsenal, preparoInicioLeitura: $preparoInicioLeitura, codUsuarioLiberacao: $codUsuarioLiberacao, conferidoVisualmente: $conferidoVisualmente, liberadoIncompleto: $liberadoIncompleto, impressaoPreparoRealizada: $impressaoPreparoRealizada, sequenciaValida: $sequenciaValida, impressaoEtiquetaLoteRealizada: $impressaoEtiquetaLoteRealizada, impressaoRelatorioRetiradaRealizada: $impressaoRelatorioRetiradaRealizada, codUsuarioAcaoOcorrencia: $codUsuarioAcaoOcorrencia, codAcaoOcorrencia: $codAcaoOcorrencia, itensLidosCalculado: $itensLidosCalculado, itensTotalKitCalculado: $itensTotalKitCalculado)';
   }
 
   @JsonKey(ignore: true)
@@ -1047,7 +1081,9 @@ abstract class _KitProcessoModel extends KitProcessoModel {
       required bool? impressaoEtiquetaLoteRealizada,
       required bool? impressaoRelatorioRetiradaRealizada,
       required int? codUsuarioAcaoOcorrencia,
-      required int? codAcaoOcorrencia}) = _$KitProcessoModelImpl;
+      required int? codAcaoOcorrencia,
+      required int? itensLidosCalculado,
+      required int? itensTotalKitCalculado}) = _$KitProcessoModelImpl;
   _KitProcessoModel._() : super._();
 
   factory _KitProcessoModel.fromJson(Map<String, dynamic> json) =
@@ -1190,6 +1226,12 @@ abstract class _KitProcessoModel extends KitProcessoModel {
   @override
   int? get codAcaoOcorrencia;
   set codAcaoOcorrencia(int? value);
+  @override
+  int? get itensLidosCalculado;
+  set itensLidosCalculado(int? value);
+  @override
+  int? get itensTotalKitCalculado;
+  set itensTotalKitCalculado(int? value);
   @override
   @JsonKey(ignore: true)
   _$$KitProcessoModelImplCopyWith<_$KitProcessoModelImpl> get copyWith =>

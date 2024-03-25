@@ -14,7 +14,6 @@ class ColetoresHelper {
       String _barSendCode = barCode;
       barCode = '';
       lastTimeRead = DateTime.now();
-      print(_barSendCode);
       onEnter!(_barSendCode);
     } else if (key.character != null) {
       if (lastTimeRead == null) lastTimeRead = DateTime.now();

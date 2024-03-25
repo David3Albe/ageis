@@ -55,7 +55,7 @@ class _CustomNavigationBarWidgetState extends State<CustomNavigationBarWidget>
       vsync: this,
       duration: const Duration(milliseconds: 100),
     );
-
+    
     itens = ItemMenuService().getItems();
     super.initState();
   }

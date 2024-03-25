@@ -1,6 +1,7 @@
 import 'package:ageiscme_data/stores/authentication/authentication_store.dart';
 import 'package:ageiscme_impressoes/dto/packagings_print/packaging_print/packagings_packaging_print_dto.dart';
 import 'package:ageiscme_impressoes/dto/packagings_print/packagings_print_dto.dart';
+import 'package:ageiscme_impressoes/prints/packagings_printer/packagings_controller.dart';
 import 'package:ageiscme_models/dto/authentication_result/authentication_result_dto.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
@@ -17,12 +18,13 @@ class EmbalagemPageFrmImpressaoController {
     printPackagings = packagings
         .map(
           (local) => PackagingsPackagingPrintDTO(
-            name: local.nome??'',
-            tagId: local.cod??0,
+            name: local.nome ?? '',
+            tagId: local.cod ?? 0,
             selected: false,
           ),
         )
         .toList();
+    printPackagings.sort((a, b) => a.name.compareTo(b.name));
   }
 
   void refreshSelecteds(bool selecteds) {
@@ -37,19 +39,18 @@ class EmbalagemPageFrmImpressaoController {
         printPackagings.where((package) => package.selected == true).toList();
 
     LoadingController loading = LoadingController(context: context);
-    
+
     AuthenticationResultDTO? auth =
         await Modular.get<AuthenticationStore>().GetAuthenticated();
 
     PackagingsPrintDTO print = PackagingsPrintDTO(
-      companyName: auth?.instituicao?.nome??'',
-      packagings: printPackagingsSelected
+      companyCod: auth?.instituicao?.cod ?? 0,
+      companyName: auth?.instituicao?.nome ?? '',
+      packagings: printPackagingsSelected,
     );
-    // CompanyLocalsPrinterController controller = CompanyLocalsPrinterController(
-    //   companyLocalsPrint: print,
-    //   context: context,
-    // );
-    // await controller.print();
+
+    await PackagingsController(context: context, packagingsPrint: print)
+        .print();
     loading.close(context, true);
     Navigator.of(context).pop();
   }

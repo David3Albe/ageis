@@ -16,6 +16,7 @@ class HeaderRowWidget extends StatelessWidget {
             Expanded(
               child: Text(
                 dto.companyName,
+                  style: const TextStyle(fontSize: 18),
               ),
             ),
           ],
@@ -23,7 +24,7 @@ class HeaderRowWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(
             top: 5,
-            left: 4,
+            left: 10,
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -31,13 +32,14 @@ class HeaderRowWidget extends StatelessWidget {
               Expanded(
                 child: Text(
                   'Preparo - Tipos de Emabalagem',
+                  style: const TextStyle(fontSize: 12),
                 ),
               ),
             ],
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(top: 10),
+          padding: const EdgeInsets.only(top: 5),
         ),
       ],
     );

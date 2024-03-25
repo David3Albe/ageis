@@ -1,12 +1,15 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/etiqueta/etiqueta_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/item_descritor/item_descritor_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/proprietario/proprietario_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/material/item/item_page_frm/item_page_frm_state.dart';
 import 'package:ageiscme_admin/app/module/pages/material/item/item_page_frm_type.dart';
 import 'package:ageiscme_data/services/item/item_service.dart';
+import 'package:ageiscme_data/services/item_descritor/item_descritor_service.dart';
 import 'package:ageiscme_data/services/processo_leitura/processo_leitura_service.dart';
 import 'package:ageiscme_data/stores/authentication/authentication_store.dart';
+import 'package:ageiscme_impressoes/dto/item_consignado_etiqueta_print/item_consignado_etiqueta_print_dto.dart';
+import 'package:ageiscme_impressoes/prints/item_consignado_printer/item_consignado_printer_controller.dart';
 import 'package:ageiscme_models/dto/authentication_result/authentication_result_dto.dart';
+import 'package:ageiscme_models/filters/item_descritor/item_descritor_filter.dart';
 import 'package:ageiscme_models/filters/processo_leitura/processo_leitura_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/models/item_consignado/item_consignado_model.dart';
@@ -15,6 +18,7 @@ import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
@@ -27,9 +31,9 @@ import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.da
 import 'package:compartilhados/componentes/images/image_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
-import 'package:compartilhados/functions/printer/printer_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:dependencias_comuns/modular_export.dart';
@@ -39,13 +43,11 @@ class ItemPageFrm extends StatefulWidget {
   const ItemPageFrm({
     Key? key,
     required this.item,
-    required this.itemDescritorCubit,
     required this.proprietarioCubit,
     required this.frmType,
   }) : super(key: key);
 
   final ItemModel item;
-  final ItemDescritorCubit itemDescritorCubit;
   final ProprietarioCubit proprietarioCubit;
   final ItemPageFrmtype frmType;
 
@@ -223,6 +225,9 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
     });
 
     txtIdEtiqueta.addValidator((String str) {
+      if (widget.frmType == ItemPageFrmtype.Items && str.isEmpty) {
+        return 'Campo obrigatório';
+      }
       if (str.length > 100) return 'Pode ter no máximo 100 caracteres';
       return '';
     });
@@ -403,7 +408,7 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
       bloc: cubit,
       listener: (context, state) async {
         if (state.saved) {
-          await _printConsignado(state.impressaoConsignado);
+          if (state.novo) await _printConsignado(state.item);
           Navigator.of(context).pop((state.saved, state.message));
         }
       },
@@ -439,52 +444,31 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
-                      child:
-                          BlocBuilder<ItemDescritorCubit, ItemDescritorState>(
-                        bloc: widget.itemDescritorCubit,
-                        builder: (context, itensDescritorState) {
-                          if (itensDescritorState.loading) {
-                            return const LoadingWidget();
-                          }
-                          List<ItemDescritorModel> itensDescritores =
-                              itensDescritorState.itensDescritores;
-
-                          itensDescritores.sort(
-                            (a, b) =>
-                                a.descricaoCurta!.compareTo(b.descricaoCurta!),
-                          );
-                          ItemDescritorModel? itemDescritor = itensDescritores
-                              .where(
-                                (element) => element.cod == item.codDescritor,
-                              )
-                              .firstOrNull;
-
-                          return DropDownSearchWidget<ItemDescritorModel>(
-                            validateChange: validateDescritorChange,
-                            setSelectedItemBuilder: (context, method) =>
-                                setSelectedItemDescritorMethod = method,
-                            textFunction: (itemDescritor) =>
-                                itemDescritor.ItemDescritorText(),
-                            initialValue: itemDescritor,
-                            sourceList: itensDescritores
-                                .where((element) => element.ativo == true)
-                                .toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                item.codDescritor = value?.cod;
-                                item.descritor = value;
-                                setDescription
-                                    ?.call(value?.descricaoCompleta ?? '');
-                                if (item.cod != 0) return;
-                                item.itensConsignados =
-                                    buscaItensConsignadosDescritor(
-                                  value,
-                                );
-                              });
-                            },
-                            placeholder: 'Descritor do Item',
-                          );
+                      child: DropDownSearchApiWidget<ItemDescritorModel>(
+                        initialValue: item.descritor,
+                        textFunction: (item) => item.ItemDescritorText(),
+                        search: (str) => ItemDescritorService().Filter(
+                          ItemDescritorFilter(
+                            numeroMaximoRegistros: 30,
+                            termoPesquisa: str,
+                            carregarImagem: false,
+                          ),
+                        ),
+                        onChanged: (value) {
+                          setState(() {
+                            item.codDescritor = value?.cod;
+                            item.descritor = value;
+                            setDescription
+                                ?.call(value?.descricaoCompleta ?? '');
+                            setarImagemDescritor();
+                            if (item.cod != 0) return;
+                            item.itensConsignados =
+                                buscaItensConsignadosDescritor(
+                              value,
+                            );
+                          });
                         },
+                        placeholder: 'Item',
                       ),
                     ),
                     Padding(
@@ -837,9 +821,37 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
     return itensConsignado;
   }
 
+  Future setarImagemDescritor() async {
+    if (item.codDescritor == null) {
+      item.descritor = null;
+    }
+
+    ItemDescritorModel? descritor = await ItemDescritorService().FilterOne(
+      ItemDescritorFilter(
+        cod: item.codDescritor,
+        carregarImagem: true,
+      ),
+    );
+    setState(() {
+      item.descritor = descritor;
+    });
+  }
+
   Future salvar() async {
     if (widget.frmType == ItemPageFrmtype.Consigned) {
       await submitMethod.call();
+    }
+    if (item.codDescritor == null) {
+      ToastUtils.showCustomToastWarning(context, 'Selecione um descritor');
+      return;
+    }
+    if (item.codProprietario == null) {
+      ToastUtils.showCustomToastWarning(context, 'Selecione um proprietário');
+      return;
+    }
+    if (item.status == null) {
+      ToastUtils.showCustomToastWarning(context, 'Selecione a situação');
+      return;
     }
     if (!txtDescricao.valid ||
         !txtIdEtiqueta.valid ||
@@ -853,13 +865,14 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
     cubit.save(item);
   }
 
-  Future _printConsignado(String? impressaoConsignado) async {
-    if (impressaoConsignado == null) return;
-
-    bool? sucess = await PrinterHelper.PrintBase64DocumentDefaultPrinter(
-      context,
-      impressaoConsignado,
-    );
+  Future _printConsignado(ItemModel item) async {
+    if (item.descritor?.consignado != true) return;
+    bool? sucess = await ItemConsignadoPrinterController(
+      context: context,
+      dto: ItemConsignadoEtiquetaPrintDTO(
+        idEtiqueta: item.idEtiqueta!,
+      ),
+    ).print();
     if (sucess == false) {
       await ErrorUtils.showErrorDialog(context, [
         'Houve um erro ao realizar a impressão de consignado, entre em contato com o T.I.',

@@ -15,6 +15,8 @@ _$ItemDescritorFilterImpl _$$ItemDescritorFilterImplFromJson(Map json) =>
       apenasConsignados: json['apenasConsignados'] as bool?,
       apenasNaoConsignados: json['apenasNaoConsignados'] as bool?,
       carregarImagem: json['carregarImagem'] as bool?,
+      numeroMaximoRegistros: json['numeroMaximoRegistros'] as int?,
+      termoPesquisa: json['termoPesquisa'] as String?,
       tStamp: json['tStamp'] as String?,
     );
 
@@ -28,5 +30,7 @@ Map<String, dynamic> _$$ItemDescritorFilterImplToJson(
       'apenasConsignados': instance.apenasConsignados,
       'apenasNaoConsignados': instance.apenasNaoConsignados,
       'carregarImagem': instance.carregarImagem,
+      'numeroMaximoRegistros': instance.numeroMaximoRegistros,
+      'termoPesquisa': instance.termoPesquisa,
       'tStamp': instance.tStamp,
     };

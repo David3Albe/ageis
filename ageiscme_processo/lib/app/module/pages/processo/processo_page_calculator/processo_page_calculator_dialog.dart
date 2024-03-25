@@ -7,6 +7,7 @@ import 'package:ageiscme_processo/app/module/pages/processo/processo_page_calcul
 import 'package:ageiscme_processo/app/module/pages/processo/processo_page_calculator/widgets/processo_page_calculator_button_widget.dart';
 import 'package:ageiscme_processo/app/module/pages/processo/processo_page_calculator/widgets/processo_page_calculator_result_widget.dart';
 import 'package:compartilhados/coletores/coletores_helper.dart';
+import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/componentes/toasts/warning_dialog.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
@@ -263,6 +264,7 @@ class _ProcessoPageCalculatorDialogState
   }
 
   void confirm(ProcessoPageCalculatorState state) async {
+    LoadingController loading = LoadingController(context: context);
     final ProcessoLeituraCubit processoCubit =
         BlocProvider.of<ProcessoLeituraCubit>(context);
     ProcessoLeituraMontagemModel processoState = processoCubit.state.processo;
@@ -270,6 +272,7 @@ class _ProcessoPageCalculatorDialogState
     ItemProcessoModel item = processoState.leituraAtual.itemEmLeitura!;
     if (state.value == null || state.value == 0) {
       if (processoCubit.state.processo.leituraAtual.local == null) {
+        loading.closeDefault();
         ToastUtils.showCustomToastWarning(context, 'Informe a quantidade');
         return;
       }
@@ -281,6 +284,7 @@ class _ProcessoPageCalculatorDialogState
 
     String lastCode = processoCubit.state.processo.filaLeituras!.last;
     await processoCubit.readCode(lastCode);
+    loading.closeDefault();
     ProcessoLeituraState processoLeituraState = processoCubit.state;
     if (processoLeituraState.processo.leituraAtual.decisao !=
         DecisaoEnum.RetentativaDefinirValorCalculadora) {

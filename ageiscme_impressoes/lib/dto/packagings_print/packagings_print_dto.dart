@@ -9,6 +9,7 @@ part 'packagings_print_dto.freezed.dart';
 sealed class PackagingsPrintDTO with _$PackagingsPrintDTO {
   factory PackagingsPrintDTO({
     required String companyName,
+    required int companyCod,
     required List<PackagingsPackagingPrintDTO> packagings,
   }) = _PackagingsPrintDTO;
 

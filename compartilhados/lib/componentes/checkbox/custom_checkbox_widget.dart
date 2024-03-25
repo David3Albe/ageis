@@ -1,6 +1,11 @@
 import 'package:compartilhados/functions/helper_functions.dart';
 import 'package:flutter/material.dart';
 
+typedef SetValueBuilder = void Function(
+  BuildContext context,
+  void Function(bool) setValueWidget,
+);
+
 class CustomCheckboxWidget extends StatefulWidget {
   const CustomCheckboxWidget({
     Key? key,
@@ -10,6 +15,7 @@ class CustomCheckboxWidget extends StatefulWidget {
     this.onClick,
     this.align = MainAxisAlignment.center,
     this.fontSize,
+    this.setValue,
   }) : super(key: key);
 
   final bool? checked;
@@ -18,6 +24,7 @@ class CustomCheckboxWidget extends StatefulWidget {
   final String text;
   final MainAxisAlignment align;
   final double? fontSize;
+  final SetValueBuilder? setValue;
 
   @override
   State<CustomCheckboxWidget> createState() =>
@@ -29,8 +36,18 @@ class _CustomCheckboxWidgetState extends State<CustomCheckboxWidget> {
   bool? checked;
   void Function(bool value)? onClick;
 
+  void setValueFunction(bool? value) {
+    setState(() {
+      checked = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    widget.setValue?.call(
+      context,
+      setValueFunction,
+    );
     if (checked == null) {
       checked = false;
     }

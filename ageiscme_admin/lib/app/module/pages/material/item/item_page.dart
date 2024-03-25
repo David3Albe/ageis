@@ -1,21 +1,24 @@
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/item_descritor/item_descritor_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/kit/kit_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/proprietario/proprietario_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/material/item/item_page_frm/item_page_frm.dart';
+import 'package:ageiscme_admin/app/module/pages/material/item/item_page_frm_impressao_rotulados/item_page_frm_impressao_rotulados.dart';
 import 'package:ageiscme_admin/app/module/pages/material/item/item_page_frm_type.dart';
 import 'package:ageiscme_admin/app/module/pages/material/item/item_page_state.dart';
 import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
 import 'package:ageiscme_data/services/item/item_service.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
-import 'package:ageiscme_models/filters/item_descritor/item_descritor_filter.dart';
 import 'package:ageiscme_models/filters/proprietario/proprietario_filter.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/response_dto/item_rotulado_response/item_rotulado_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -37,11 +40,11 @@ class ItemPage extends StatefulWidget {
 
 class _ItemPageState extends State<ItemPage> {
   final List<CustomDataColumn> colunas = [
-    CustomDataColumn(
-      text: 'Cód',
-      field: 'cod',
-      type: CustomDataColumnType.Number,
-    ),
+    // CustomDataColumn(
+    //   text: 'Cód',
+    //   field: 'cod',
+    //   type: CustomDataColumnType.Number,
+    // ),
     CustomDataColumn(text: 'Id Etiqueta', field: 'idEtiqueta'),
     CustomDataColumn(text: 'Descrição', field: 'descricao'),
     CustomDataColumn(
@@ -66,7 +69,6 @@ class _ItemPageState extends State<ItemPage> {
 
   late final ItemPageCubit bloc;
   late final ItemService service;
-  late final ItemDescritorCubit itemDescritorCubit;
   late final ProprietarioCubit proprietarioCubit;
   late final ItemFilter filter;
   late final KitCubit kitBloc;
@@ -74,11 +76,11 @@ class _ItemPageState extends State<ItemPage> {
   @override
   void initState() {
     filter = ItemFilter.empty();
-    filter.startDate = DateTime.now().add(const Duration(days: -365));
-    filter.finalDate = DateTime.now();
+    filter.startDate =
+        DateUtils.dateOnly(DateTime.now().add(const Duration(days: -31)));
+    filter.finalDate = DateUtils.dateOnly(DateTime.now());
     _defineFilter(filter);
     service = ItemService();
-    itemDescritorCubit = ItemDescritorCubit();
     proprietarioCubit = ProprietarioCubit();
     bloc = ItemPageCubit(service: service);
     kitBloc = KitCubit();
@@ -89,6 +91,7 @@ class _ItemPageState extends State<ItemPage> {
 
   void _defineFilter(ItemFilter filter) {
     filter.carregarDescritorResumido = true;
+    filter.numeroRegistros = 500;
     switch (widget.frmType) {
       case ItemPageFrmtype.Items:
         filter.apenasItensNaoConsignados = true;
@@ -120,6 +123,15 @@ class _ItemPageState extends State<ItemPage> {
                   ItemModel.empty(),
                 ),
               },
+            ),
+            const Spacer(),
+            CustomPopupMenuWidget(
+              items: [
+                CustomPopupItemModel(
+                  text: 'Imprimir Folha Rotulados',
+                  onTap: imprimirFolhaRotulados,
+                ),
+              ],
             ),
           ],
         ),
@@ -206,32 +218,51 @@ class _ItemPageState extends State<ItemPage> {
                   );
                 },
               ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              TextFieldNumberWidget(
+                startValue: filter.numeroRegistros,
+                placeholder: 'Máx Reg.',
+                onChanged: (str) => {filter.numeroRegistros = int.parse(str)},
+              ),
             ],
           ),
         );
       },
     ).then((result) {
       if (result == true) {
+        if (filter.cod != null ||
+            filter.numeroRegistros != null ||
+            filter.codKit != null) {
+          filter.startDate = null;
+          filter.finalDate = null;
+        }
+        if (filter.numeroRegistros.toString().isEmpty) {
+          ToastUtils.showCustomToastWarning(
+            context,
+            'Informe um limite de itens para buscar',
+          );
+          return;
+        }
         bloc.loadItemFilter(filter);
       }
     });
   }
 
-  void loadItemDescritorCubit() {
-    if (!itemDescritorCubit.state.loaded) {
-      itemDescritorCubit.loadFilter(
-        ItemDescritorFilter(
-          carregarItensConsignados: widget.frmType == ItemPageFrmtype.Consigned,
-          apenasAtivos: true,
-          apenasConsignados: widget.frmType == ItemPageFrmtype.Consigned,
-          apenasNaoConsignados: widget.frmType == ItemPageFrmtype.Items,
-          carregarImagem: false,
-          ordenarPorNomeCrescente: true,
-        ),
-      );
-    }
+  Future imprimirFolhaRotulados() async {
+    ItemRotuladoResponseDTO response =
+        await ItemService().getItensImpressaoRotulado();
+    await showDialog<bool>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return ItemPageFrmImpressaoRotulados(
+          rotulado: response,
+        );
+      },
+    );
   }
 
+ 
   void loadProprietarioCubit() async {
     if (!proprietarioCubit.state.loaded) {
       await proprietarioCubit.loadFilter(
@@ -269,7 +300,6 @@ class _ItemPageState extends State<ItemPage> {
 
   Future<void> openModal(BuildContext context, ItemModel item) async {
     LoadingController loading = LoadingController(context: context);
-    loadItemDescritorCubit();
     loadProprietarioCubit();
 
     ItemModel? itemModel = item;
@@ -290,7 +320,6 @@ class _ItemPageState extends State<ItemPage> {
       context: context,
       builder: (BuildContext context) {
         return ItemPageFrm(
-          itemDescritorCubit: itemDescritorCubit,
           proprietarioCubit: proprietarioCubit,
           item: itemModel!,
           frmType: widget.frmType,

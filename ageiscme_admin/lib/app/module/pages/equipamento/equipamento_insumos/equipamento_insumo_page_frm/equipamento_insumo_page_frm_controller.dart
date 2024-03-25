@@ -79,7 +79,7 @@ class EquipamentoInsumoPageFrmController {
     (String, EquipamentoInsumoSaveResponseDTO?)? result =
         await EquipamentoInsumoService().save(dto);
     if (result == null) {
-      loading.closeDefault();
+      loading.close(context, true);
       return;
     }
     loading.closeDefault();

@@ -1,6 +1,7 @@
 import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento/equipamento_page_frm/equipamento_page_frm.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento/equipamento_page_state.dart';
 import 'package:ageiscme_data/services/equipamento/equipamento_service.dart';
+import 'package:ageiscme_models/filters/equipamento/equipamento_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
@@ -59,7 +60,11 @@ class _EquipamentoPageState extends State<EquipamentoPage> {
 
   @override
   void initState() {
-    bloc.loadEquipamento();
+    bloc.loadFilter(
+      EquipamentoFilter(
+        incluirTipoServicos: true,
+      ),
+    );
     super.initState();
   }
 

@@ -82,6 +82,8 @@ class PlutoGridColumnHelper<T> {
       type: PlutoColumnType.text(defaultValue: ''),
       field: baseColumn.calculatedField ?? baseColumn.field,
       readOnly: baseColumn.readonly,
+      // textAlign: PlutoColumnTextAlign.center,
+      textAlign: PlutoColumnTextAlign.left,
       enableAutoEditing: baseColumn.enableAutoEditing,
       renderer: baseColumn.customRenderer,
       footerRenderer: baseColumn.footerType != null
@@ -104,7 +106,8 @@ class PlutoGridColumnHelper<T> {
       ),
       enableAutoEditing: baseColumn.enableAutoEditing,
       renderer: baseColumn.customRenderer,
-      textAlign: PlutoColumnTextAlign.right,
+      // textAlign: PlutoColumnTextAlign.right,
+      textAlign: PlutoColumnTextAlign.left,
       field: baseColumn.calculatedField ?? baseColumn.field,
       readOnly: baseColumn.readonly,
       footerRenderer: baseColumn.footerType != null
@@ -127,7 +130,8 @@ class PlutoGridColumnHelper<T> {
       ),
       enableAutoEditing: baseColumn.enableAutoEditing,
       renderer: baseColumn.customRenderer,
-      textAlign: PlutoColumnTextAlign.right,
+      textAlign: PlutoColumnTextAlign.left,
+      // textAlign: PlutoColumnTextAlign.right,
       field: baseColumn.calculatedField ?? baseColumn.field,
       readOnly: baseColumn.readonly,
       footerRenderer: baseColumn.footerType != null
@@ -148,7 +152,8 @@ class PlutoGridColumnHelper<T> {
         locale: 'pt-BR',
       ),
       enableAutoEditing: baseColumn.enableAutoEditing,
-      textAlign: PlutoColumnTextAlign.right,
+      textAlign: PlutoColumnTextAlign.left,
+      // textAlign: PlutoColumnTextAlign.right,
       field: baseColumn.calculatedField ?? baseColumn.field,
       readOnly: baseColumn.readonly,
       footerRenderer: (PlutoColumnFooterRendererContext renderer) =>
@@ -170,6 +175,8 @@ class PlutoGridColumnHelper<T> {
       enableEditingMode: false,
       width: baseColumn.onHeaderCheck != null ? 120 : 80,
       suppressedAutoSize: true,
+      textAlign: PlutoColumnTextAlign.left,
+      // textAlign: PlutoColumnTextAlign.center,
       readOnly: baseColumn.readonly,
       titleSpan: TextSpan(
         children: _getCheckboxHeaderWidget(baseColumn, fontSize: fontSize),
@@ -222,12 +229,13 @@ class PlutoGridColumnHelper<T> {
       title: baseColumn.text,
       enableAutoEditing: baseColumn.enableAutoEditing,
       width: baseColumn.width ?? PlutoGridSettings.columnWidth,
-      textAlign: PlutoColumnTextAlign.center,
+      textAlign: PlutoColumnTextAlign.left,
+      // textAlign: PlutoColumnTextAlign.center,
       type: PlutoColumnType.date(format: 'dd/MM/yyyy'),
       field: baseColumn.calculatedField ?? baseColumn.field,
       suppressedAutoSize: true,
       readOnly: baseColumn.readonly,
-      titleTextAlign: PlutoColumnTextAlign.center,
+      // titleTextAlign: PlutoColumnTextAlign.center,
     );
   }
 
@@ -237,7 +245,8 @@ class PlutoGridColumnHelper<T> {
       title: baseColumn.text,
       suppressedAutoSize: true,
       width: baseColumn.width ?? PlutoGridSettings.columnWidth,
-      textAlign: PlutoColumnTextAlign.center,
+      // textAlign: PlutoColumnTextAlign.center,
+      textAlign: PlutoColumnTextAlign.left,
       enableAutoEditing: baseColumn.enableAutoEditing,
       type: PlutoColumnType.date(format: 'dd/MM/yyyy HH:mm'),
       field: baseColumn.calculatedField ?? baseColumn.field,

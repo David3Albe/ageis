@@ -79,6 +79,7 @@ class _ProcessoPageReasonBreakCycleDialogState
                       .firstOrNull;
                 }
                 return DropDownSearchWidget<MotivoQuebraFluxoModel>(
+                  expandOnStart: true,
                   textFunction: (item) => item.DescricaoText(),
                   initialValue: motivo,
                   sourceList: motivos,

@@ -82,6 +82,8 @@ _$KitProcessoModelImpl _$$KitProcessoModelImplFromJson(
           json['impressaoRelatorioRetiradaRealizada'] as bool?,
       codUsuarioAcaoOcorrencia: json['codUsuarioAcaoOcorrencia'] as int?,
       codAcaoOcorrencia: json['codAcaoOcorrencia'] as int?,
+      itensLidosCalculado: json['itensLidosCalculado'] as int?,
+      itensTotalKitCalculado: json['itensTotalKitCalculado'] as int?,
     );
 
 Map<String, dynamic> _$$KitProcessoModelImplToJson(
@@ -134,4 +136,6 @@ Map<String, dynamic> _$$KitProcessoModelImplToJson(
           instance.impressaoRelatorioRetiradaRealizada,
       'codUsuarioAcaoOcorrencia': instance.codUsuarioAcaoOcorrencia,
       'codAcaoOcorrencia': instance.codAcaoOcorrencia,
+      'itensLidosCalculado': instance.itensLidosCalculado,
+      'itensTotalKitCalculado': instance.itensTotalKitCalculado,
     };

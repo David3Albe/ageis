@@ -92,13 +92,18 @@ class ProcessoPageTreeViewKitWidget extends StatelessWidget {
     return 14;
   }
 
-  String getItensKitLidos() =>
-      '(${kit.itens == null ? 0 : kit.itens!.length}/${kit.itensLidos == null ? 0 : kit.itensLidos!.length})';
+  String getItensKitLidos() {
+    if (kit.preparado) {
+      return '(${kit.itens == null ? 0 : kit.itens!.length}/${kit.itens!.where((element) => element.status != '3').length})';
+    }
+    return '(${kit.itens == null ? 0 : kit.itens!.length}/${kit.itensLidos == null ? 0 : kit.itensLidos!.length})';
+  }
 
   bool getAllItensKitLidos() {
     if (kit.itens == null ||
         kit.itensLidos == null ||
-        processoLeitura.leituraAtual.modoConsulta == true) return true;
+        processoLeitura.leituraAtual.modoConsulta == true ||
+        kit.preparado == true) return true;
     int itensParaLer = kit.itens!
         .where(
           (element) =>

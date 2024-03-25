@@ -36,7 +36,7 @@ class RegistroServicePageFrmController {
   RegistroServicePageFrmController({required this.registroServico});
 
   void setFields() {
-    txtDescricaoServico.text = registroServico.descricao.toString();
+    txtDescricaoServico.text = registroServico.descricao?.toString() ?? '';
     txtUsuarioRegistro.text = registroServico.usuario?.nome?.toString() ?? '';
     txtLote.text = registroServico.lote?.toString() ?? '';
     txtTemperatura.text = registroServico.temperatura?.toString() ?? '';
@@ -153,8 +153,8 @@ class RegistroServicePageFrmController {
           dataHoraInicioSelecionada!.year,
           dataHoraInicioSelecionada!.month,
           dataHoraInicioSelecionada!.day,
-          value.hour,
-          value.minute,
+          value?.hour ?? 00,
+          value?.minute ?? 0,
         );
         registroServico.dataInicio = dataHoraInicioSelecionada;
       },
@@ -186,8 +186,8 @@ class RegistroServicePageFrmController {
           dataHoraTerminoSelecionada!.year,
           dataHoraTerminoSelecionada!.month,
           dataHoraTerminoSelecionada!.day,
-          value.hour,
-          value.minute,
+          value?.hour ?? 0,
+          value?.minute ?? 0,
         );
         registroServico.dataTermino = dataHoraTerminoSelecionada;
       },

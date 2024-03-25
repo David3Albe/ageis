@@ -154,7 +154,7 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
     });
 
     txtAnoFabricacao.addValidator((String str) {
-      if (int.parse(str) < 1800 || int.parse(str) > 2200) {
+      if (!str.isEmpty && (int.parse(str) < 1800 || int.parse(str) > 2200)) {
         return 'Ano inválido. Verifique o valor digitado';
       }
       return '';

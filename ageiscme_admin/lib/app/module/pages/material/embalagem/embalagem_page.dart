@@ -72,7 +72,7 @@ class _EmbalagemPageState extends State<EmbalagemPage> {
             CustomPopupMenuWidget(
               items: [
                 CustomPopupItemModel(
-                  text: 'Imprimir Etiquetas',
+                  text: 'Imprimir Embalagens',
                   onTap: imprimirEtiquetas,
                 ),
               ],

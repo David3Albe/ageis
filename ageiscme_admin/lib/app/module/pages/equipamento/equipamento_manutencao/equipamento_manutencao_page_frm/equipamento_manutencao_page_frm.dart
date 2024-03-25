@@ -22,13 +22,13 @@ import 'package:compartilhados/componentes/campos/text_field_string_widget.dart'
 import 'package:compartilhados/componentes/campos/text_field_time_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_file_model.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
-import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_image_model.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_open_doc_model.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
-import 'package:compartilhados/functions/image_helper/image_object_model.dart';
+import 'package:compartilhados/functions/file_helper/file_object_model.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/modular_export.dart';
 import 'package:flutter/material.dart';
@@ -255,19 +255,17 @@ class _EquipamentoManutencaoPageFrmState
   late final DatePickerWidget dtpDataInicio = DatePickerWidget(
     placeholder: 'Data Início',
     onDateSelected: (value) {
-      setState(() {
-        if (value == null) {
-          dataHoraInicioSelecionada = null;
-          return;
-        }
-        dataHoraInicioSelecionada = DateTime(
-          value.year,
-          value.month,
-          value.day,
-          dataHoraInicioSelecionada!.hour,
-          dataHoraInicioSelecionada!.minute,
-        );
-      });
+      if (value == null) {
+        equipamentoManutencao.dataInicio = null;
+        return;
+      }
+      equipamentoManutencao.dataInicio = DateTime(
+        value.year,
+        value.month,
+        value.day,
+        equipamentoManutencao.dataInicio?.hour ?? 0,
+        equipamentoManutencao.dataInicio?.minute ?? 0,
+      );
     },
     initialValue: equipamentoManutencao.dataInicio,
   );
@@ -278,15 +276,13 @@ class _EquipamentoManutencaoPageFrmState
         ? TimeOfDay.fromDateTime(equipamentoManutencao.dataInicio!)
         : const TimeOfDay(hour: 0, minute: 0),
     onTimeSelected: (value) {
-      setState(() {
-        dataHoraInicioSelecionada = DateTime(
-          dataHoraInicioSelecionada!.year,
-          dataHoraInicioSelecionada!.month,
-          dataHoraInicioSelecionada!.day,
-          value.hour,
-          value.minute,
-        );
-      });
+      equipamentoManutencao.dataInicio = DateTime(
+        equipamentoManutencao.dataInicio!.year,
+        equipamentoManutencao.dataInicio!.month,
+        equipamentoManutencao.dataInicio!.day,
+        value?.hour ?? 0,
+        value?.minute ?? 0,
+      );
     },
   );
 
@@ -294,18 +290,16 @@ class _EquipamentoManutencaoPageFrmState
     placeholder: 'Data Término',
     onDateSelected: (value) {
       if (value == null) {
-        dataHoraTerminoSelecionada = null;
+        equipamentoManutencao.dataTermino = null;
         return;
       }
-      setState(() {
-        dataHoraTerminoSelecionada = DateTime(
-          value.year,
-          value.month,
-          value.day,
-          dataHoraTerminoSelecionada!.hour,
-          dataHoraTerminoSelecionada!.minute,
-        );
-      });
+      equipamentoManutencao.dataTermino = DateTime(
+        value.year,
+        value.month,
+        value.day,
+        equipamentoManutencao.dataTermino?.hour ?? 0,
+        equipamentoManutencao.dataTermino?.minute ?? 0,
+      );
     },
     initialValue: equipamentoManutencao.dataTermino,
   );
@@ -316,15 +310,13 @@ class _EquipamentoManutencaoPageFrmState
         ? TimeOfDay.fromDateTime(equipamentoManutencao.dataTermino!)
         : const TimeOfDay(hour: 0, minute: 0),
     onTimeSelected: (value) {
-      setState(() {
-        dataHoraTerminoSelecionada = DateTime(
-          dataHoraTerminoSelecionada!.year,
-          dataHoraTerminoSelecionada!.month,
-          dataHoraTerminoSelecionada!.day,
-          value.hour,
-          value.minute,
-        );
-      });
+      equipamentoManutencao.dataTermino = DateTime(
+        equipamentoManutencao.dataTermino!.year,
+        equipamentoManutencao.dataTermino!.month,
+        equipamentoManutencao.dataTermino!.day,
+        value?.hour ?? 0,
+        value?.minute ?? 0,
+      );
     },
   );
 
@@ -332,18 +324,16 @@ class _EquipamentoManutencaoPageFrmState
     placeholder: 'Data Parada',
     onDateSelected: (value) {
       if (value == null) {
-        dataHoraTerminoSelecionada = null;
+        equipamentoManutencao.dataParada = null;
         return;
       }
-      setState(() {
-        dataHoraTerminoSelecionada = DateTime(
-          value.year,
-          value.month,
-          value.day,
-          dataHoraParadaSelecionada!.hour,
-          dataHoraParadaSelecionada!.minute,
-        );
-      });
+      equipamentoManutencao.dataParada = DateTime(
+        value.year,
+        value.month,
+        value.day,
+        equipamentoManutencao.dataParada?.hour ?? 0,
+        equipamentoManutencao.dataParada?.minute ?? 0,
+      );
     },
     initialValue: equipamentoManutencao.dataParada,
   );
@@ -354,15 +344,14 @@ class _EquipamentoManutencaoPageFrmState
         ? TimeOfDay.fromDateTime(equipamentoManutencao.dataParada!)
         : const TimeOfDay(hour: 0, minute: 0),
     onTimeSelected: (value) {
-      setState(() {
-        dataHoraTerminoSelecionada = DateTime(
-          dataHoraParadaSelecionada!.year,
-          dataHoraParadaSelecionada!.month,
-          dataHoraParadaSelecionada!.day,
-          value.hour,
-          value.minute,
-        );
-      });
+      dataHoraParadaSelecionada = DateTime(
+        dataHoraParadaSelecionada!.year,
+        dataHoraParadaSelecionada!.month,
+        dataHoraParadaSelecionada!.day,
+        value?.hour ?? 0,
+        value?.minute ?? 0,
+      );
+      equipamentoManutencao.dataParada = dataHoraParadaSelecionada;
     },
   );
 
@@ -1139,7 +1128,7 @@ class _EquipamentoManutencaoPageFrmState
                 children: [
                   CustomPopupMenuWidget(
                     items: [
-                      CustomPopupItemImageModel.getImageItem(
+                      CustomPopupItemFileModel.getFileItem(
                         'Anexar NF',
                         salvarArquivo,
                       ),
@@ -1197,12 +1186,12 @@ class _EquipamentoManutencaoPageFrmState
     );
   }
 
-  void salvarArquivo(Future<ImageObjectModel?> Function() onSelectImage) async {
-    ImageObjectModel? imageNew = await onSelectImage();
-    if (imageNew == null) return;
+  void salvarArquivo(Future<FileObjectModel?> Function() onSelectFile) async {
+    FileObjectModel? fileNew = await onSelectFile();
+    if (fileNew == null) return;
     setState(() {
-      equipamentoManutencao.nfAnexa = imageNew.base64;
-      equipamentoManutencao.nfAnexaNome = imageNew.fileName;
+      equipamentoManutencao.nfAnexa = fileNew.base64;
+      equipamentoManutencao.nfAnexaNome = fileNew.fileName;
     });
   }
 

@@ -13,6 +13,7 @@ import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
@@ -21,8 +22,8 @@ import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_pop
 import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
-import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
+import 'package:compartilhados/componentes/toasts/warning_dialog.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
@@ -279,11 +280,11 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                   equipamentosAtivos.add(equipamento);
                                 }
 
-                                return DropDownWidget<EquipamentoModel>(
+                                return DropDownSearchWidget<EquipamentoModel>(
                                   initialValue: equipamento,
                                   sourceList: equipamentosAtivos,
-                                  onChanged: (value) =>
-                                      processoEtapa.codEquipamento = value.cod!,
+                                  onChanged: (value) => processoEtapa
+                                      .codEquipamento = value?.cod!,
                                   placeholder: 'Equipamento',
                                 );
                               },
@@ -322,11 +323,12 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                   arsenaisEstoquesAtivos.add(arsenalEstoque);
                                 }
 
-                                return DropDownWidget<ArsenalEstoqueModel>(
+                                return DropDownSearchWidget<
+                                    ArsenalEstoqueModel>(
                                   initialValue: arsenalEstoque,
                                   sourceList: arsenaisEstoquesAtivos,
                                   onChanged: (value) =>
-                                      processoEtapa.codEstoque = value.cod!,
+                                      processoEtapa.codEstoque = value?.cod,
                                   placeholder: 'Arsenal',
                                 );
                               },
@@ -765,12 +767,12 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                                           .codEstoqueAut,
                                                 )
                                                 .firstOrNull;
-                                        return DropDownWidget<
+                                        return DropDownSearchWidget<
                                             ArsenalEstoqueModel>(
                                           initialValue: arsenalEstoque,
                                           sourceList: arsenaisEstoques,
                                           onChanged: (value) => processoEtapa
-                                              .codEstoqueAut = value.cod,
+                                              .codEstoqueAut = value?.cod,
                                           placeholder: 'Arsenal',
                                         );
                                       },
@@ -941,9 +943,18 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
 
     if (processoEtapa.codEquipamento == null &&
         processoEtapa.codEstoque == null) {
-      ErrorUtils.showErrorDialog(context, [
+      WarningUtils.showWarningDialog(context, 
         'É obrigatório a seleção do Equipamento ou Arsenal vinculados a Etapa de Processo. Campo Obrigatório não preenchido',
-      ]);
+      );
+      return;
+    }
+
+    if (processoEtapa.codEquipamento != null &&
+        processoEtapa.codEstoque != null) {
+      WarningUtils.showWarningDialog(
+        context,
+        'É obrigatório a seleção de um Equipamento ou um Arsenal vinculados a Etapa de Processo. Ambos não podem ser preenchidos',
+      );
       return;
     }
 

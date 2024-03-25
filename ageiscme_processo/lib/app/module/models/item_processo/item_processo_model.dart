@@ -2,6 +2,7 @@ import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/models/item_consignado/item_consignado_model.dart';
 import 'package:ageiscme_processo/app/module/models/calculadora_item/calculadora_item_model.dart';
 import 'package:ageiscme_processo/app/module/models/data_matrix_danificado_processo/data_matrix_danificado_processo_model.dart';
+import 'package:ageiscme_processo/app/module/models/kit_processo/kit_processo_model.dart';
 import 'package:ageiscme_processo/app/module/models/processo_leitura/processo_leitura_montagem_model.dart';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
@@ -98,6 +99,14 @@ abstract class ItemProcessoModel with _$ItemProcessoModel {
     if (processoLeitura.leituraAtual.proprietarios == null) return null;
     return processoLeitura.leituraAtual.proprietarios
         ?.where((element) => element.cod == codProprietario)
+        .firstOrNull;
+  }
+
+    KitProcessoModel? getKit(
+    ProcessoLeituraMontagemModel processoLeitura,
+  ) {
+    return processoLeitura.leituraAtual.kits
+        .where((element) => element.cod == codKit)
         .firstOrNull;
   }
 }

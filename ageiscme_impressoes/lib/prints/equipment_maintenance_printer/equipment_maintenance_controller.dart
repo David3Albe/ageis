@@ -13,8 +13,8 @@ import 'package:pdf/widgets.dart' as pw;
 class EquipmentMaintenanceController {
   final EquipmentMaintenancePrintDTO equipmentMaintenance;
   BuildContext context;
-  pw.TextStyle _style = const pw.TextStyle(fontSize: 10);
-  static const double DEFAULT_PADDING_TOP = 1;
+  pw.TextStyle _style = const pw.TextStyle(fontSize: 9);
+  static const double DEFAULT_PADDING_TOP = 0;
 
   EquipmentMaintenanceController({
     required this.equipmentMaintenance,

@@ -22,6 +22,7 @@ import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_time_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
@@ -73,15 +74,29 @@ class _ConsultaProcessosLeituraPageState
   }
 
   final List<CustomDataColumn> colunas = [
+    // CustomDataColumn(
+    //   text: 'Data',
+    //   field: 'dataHora',
+    //   type: CustomDataColumnType.DateTime,
+    //   width: 140,
+    // ),
     CustomDataColumn(
       text: 'Data',
-      field: 'dataHora',
-      type: CustomDataColumnType.DateTime,
+      field: 'data',
+      type: CustomDataColumnType.Date,
+      width: 110,
     ),
     CustomDataColumn(
-      text: 'Cód. Kit',
+      text: 'Hora',
+      field: 'hora',
+      type: CustomDataColumnType.Text,
+      width: 80,
+    ),
+    CustomDataColumn(
+      text: 'Etiqueta Kit',
       field: 'codBarraKit',
       customRenderer: getCustomRenderer,
+      width: 160,
     ),
     CustomDataColumn(
       text: 'Kit',
@@ -93,26 +108,44 @@ class _ConsultaProcessosLeituraPageState
       field: 'nroItensFaltante',
       valueConverter: (value) => value == 0 ? '' : value,
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
-    CustomDataColumn(text: 'Etiqueta', field: 'idEtiqueta'),
+    CustomDataColumn(
+      text: 'Etiqueta',
+      field: 'idEtiqueta',
+      width: 120,
+    ),
     CustomDataColumn(text: 'Item', field: 'descricaoItem'),
     CustomDataColumn(text: 'Proprietário', field: 'nomeProprietario'),
-    CustomDataColumn(text: 'Entrada/Saída', field: 'entradaSaida'),
+    CustomDataColumn(
+      text: 'Entrada/Saída',
+      field: 'entradaSaida',
+      width: 130,
+    ),
     CustomDataColumn(text: 'Equipamento', field: 'nomeEquipamento'),
     CustomDataColumn(text: 'Etapa Processo', field: 'nomeEtapaProcesso'),
     CustomDataColumn(text: 'Tipo Processo', field: 'nomeTipoProcesso'),
-    CustomDataColumn(text: 'Prioridade', field: 'prioridade'),
+    CustomDataColumn(
+      text: 'Prioridade',
+      field: 'prioridade',
+      width: 130,
+    ),
     CustomDataColumn(
       text: 'Qtde. Processos',
       field: 'qtdeProcessos',
       type: CustomDataColumnType.Number,
+      width: 130,
     ),
     CustomDataColumn(text: 'Usuário', field: 'nomeUsuario'),
     CustomDataColumn(text: 'Prontuário', field: 'prontuarioRetirada'),
     CustomDataColumn(text: 'Origem', field: 'origem'),
     CustomDataColumn(text: 'Destino', field: 'destino'),
     CustomDataColumn(text: 'Circulante', field: 'circulante'),
-    CustomDataColumn(text: 'Conf. Visual', field: 'conferidoVisualmente'),
+    CustomDataColumn(
+      text: 'Conf. Visual',
+      field: 'conferidoVisualmente',
+      width: 130,
+    ),
     CustomDataColumn(
       text: 'Resp. Lib. Kit. Incompleto',
       field: 'nomeRespKitIncomp',
@@ -129,17 +162,24 @@ class _ConsultaProcessosLeituraPageState
       text: 'Indicador',
       field: 'indicador',
       type: CustomDataColumnType.Number,
+      width: 120,
     ),
     CustomDataColumn(
       text: 'Biológico',
       field: 'biologico',
       type: CustomDataColumnType.Number,
+      width: 120,
     ),
-    CustomDataColumn(text: 'Implantável', field: 'implantavel'),
+    CustomDataColumn(
+      text: 'Implantável',
+      field: 'implantavel',
+      width: 120,
+    ),
     CustomDataColumn(
       text: 'Lote',
       field: 'lote',
       type: CustomDataColumnType.Number,
+      width: 110,
     ),
     CustomDataColumn(text: 'Integrador Kit', field: 'integradorKit'),
     CustomDataColumn(text: 'Embalagem', field: 'embalagem'),
@@ -147,35 +187,45 @@ class _ConsultaProcessosLeituraPageState
       text: 'Cód. Item',
       field: 'codItem',
       type: CustomDataColumnType.Number,
+      width: 130,
     ),
     CustomDataColumn(
       text: 'Cód. Kit',
       field: 'codKit2',
       type: CustomDataColumnType.Number,
+      width: 130,
     ),
     CustomDataColumn(
       text: 'Cód. Etapa Processo',
       field: 'codEtapaProcesso',
       type: CustomDataColumnType.Number,
+      width: 160,
     ),
     CustomDataColumn(
       text: 'Cód. Leitura',
       field: 'codLeitura',
       type: CustomDataColumnType.Number,
+      width: 130,
     ),
     CustomDataColumn(text: 'Motivo', field: 'motivo'),
     CustomDataColumn(text: 'Motivo Quebra Fluxo', field: 'motivoQuebraFluxo'),
     CustomDataColumn(text: 'Observação', field: 'observacao'),
-    CustomDataColumn(text: 'Status Kit', field: 'statusKit'),
+    CustomDataColumn(
+      text: 'Status Kit',
+      field: 'statusKit',
+      width: 130,
+    ),
     CustomDataColumn(text: 'Restrição Kit', field: 'restricaoKit'),
     CustomDataColumn(
       text: 'Kit Liberado Incompleto',
       field: 'kitLiberadoIncompleto',
+      width: 160,
     ),
     CustomDataColumn(
       text: 'Cód. Registro Processo',
       field: 'codRegistroProcesso',
       type: CustomDataColumnType.Number,
+      width: 170,
     ),
   ];
 
@@ -198,8 +248,9 @@ class _ConsultaProcessosLeituraPageState
       bloc.loadProcessoLeitura(filter);
     } else {
       filter = ConsultaProcessosLeituraFilter.empty();
-      filter.startDate = DateTime.now().add(const Duration(days: -1));
-      filter.finalDate = DateTime.now();
+      filter.startDate =
+          DateUtils.dateOnly(DateTime.now().add(const Duration(days: -1)));
+      filter.finalDate = DateUtils.dateOnly(DateTime.now());
     }
 
     kitBloc = KitCubit();
@@ -366,16 +417,72 @@ class _ConsultaProcessosLeituraPageState
         return FilterDialogWidget(
           child: Column(
             children: [
-              DatePickerWidget(
-                placeholder: 'Data Inicio',
-                onDateSelected: (value) => filter.startDate = value,
-                initialValue: filter.startDate,
+              Row(
+                children: [
+                  Expanded(
+                    child: DatePickerWidget(
+                      placeholder: 'Data Inicio',
+                      onDateSelected: (value) => filter.startDate = value,
+                      initialValue: filter.startDate,
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 40),
+                  ),
+                  Expanded(
+                    child: TimePickerWidget(
+                      placeholder: 'Hora Início',
+                      initialValue: filter.startTime == null
+                          ? null
+                          : TimeOfDay(
+                              hour: filter.startTime!.hour,
+                              minute: filter.startTime!.minute,
+                            ),
+                      onTimeSelected: (selectedTime) =>
+                          filter.startTime = DateTime(
+                        DateTime.now().year,
+                        DateTime.now().month,
+                        DateTime.now().day,
+                        selectedTime?.hour ?? 0,
+                        selectedTime?.minute ?? 0,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
-              DatePickerWidget(
-                placeholder: 'Data Término',
-                onDateSelected: (value) => filter.finalDate = value,
-                initialValue: filter.finalDate,
+              Row(
+                children: [
+                  Expanded(
+                    child: DatePickerWidget(
+                      placeholder: 'Data Término',
+                      onDateSelected: (value) => filter.finalDate = value,
+                      initialValue: filter.finalDate,
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 40),
+                  ),
+                  Expanded(
+                    child: TimePickerWidget(
+                      placeholder: 'Hora Fim',
+                      initialValue: filter.finalTime == null
+                          ? null
+                          : TimeOfDay(
+                              hour: filter.finalTime!.hour,
+                              minute: filter.finalTime!.minute,
+                            ),
+                      onTimeSelected: (selectedTime) =>
+                          filter.finalTime = DateTime(
+                        DateTime.now().year,
+                        DateTime.now().month,
+                        DateTime.now().day,
+                        selectedTime?.hour ?? 0,
+                        selectedTime?.minute ?? 0,
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
               BlocBuilder<KitCubit, List<KitModel>>(

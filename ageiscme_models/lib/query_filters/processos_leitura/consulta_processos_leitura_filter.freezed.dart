@@ -25,6 +25,10 @@ mixin _$ConsultaProcessosLeituraFilter {
   set startDate(DateTime? value) => throw _privateConstructorUsedError;
   DateTime? get finalDate => throw _privateConstructorUsedError;
   set finalDate(DateTime? value) => throw _privateConstructorUsedError;
+  DateTime? get startTime => throw _privateConstructorUsedError;
+  set startTime(DateTime? value) => throw _privateConstructorUsedError;
+  DateTime? get finalTime => throw _privateConstructorUsedError;
+  set finalTime(DateTime? value) => throw _privateConstructorUsedError;
   int? get codKit => throw _privateConstructorUsedError;
   set codKit(int? value) => throw _privateConstructorUsedError;
   int? get codItem => throw _privateConstructorUsedError;
@@ -61,6 +65,8 @@ abstract class $ConsultaProcessosLeituraFilterCopyWith<$Res> {
   $Res call(
       {DateTime? startDate,
       DateTime? finalDate,
+      DateTime? startTime,
+      DateTime? finalTime,
       int? codKit,
       int? codItem,
       int? codEtapaProcesso,
@@ -90,6 +96,8 @@ class _$ConsultaProcessosLeituraFilterCopyWithImpl<$Res,
   $Res call({
     Object? startDate = freezed,
     Object? finalDate = freezed,
+    Object? startTime = freezed,
+    Object? finalTime = freezed,
     Object? codKit = freezed,
     Object? codItem = freezed,
     Object? codEtapaProcesso = freezed,
@@ -108,6 +116,14 @@ class _$ConsultaProcessosLeituraFilterCopyWithImpl<$Res,
       finalDate: freezed == finalDate
           ? _value.finalDate
           : finalDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      startTime: freezed == startTime
+          ? _value.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      finalTime: freezed == finalTime
+          ? _value.finalTime
+          : finalTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       codKit: freezed == codKit
           ? _value.codKit
@@ -173,6 +189,8 @@ abstract class _$$ConsultaProcessosLeituraFilterImplCopyWith<$Res>
   $Res call(
       {DateTime? startDate,
       DateTime? finalDate,
+      DateTime? startTime,
+      DateTime? finalTime,
       int? codKit,
       int? codItem,
       int? codEtapaProcesso,
@@ -202,6 +220,8 @@ class __$$ConsultaProcessosLeituraFilterImplCopyWithImpl<$Res>
   $Res call({
     Object? startDate = freezed,
     Object? finalDate = freezed,
+    Object? startTime = freezed,
+    Object? finalTime = freezed,
     Object? codKit = freezed,
     Object? codItem = freezed,
     Object? codEtapaProcesso = freezed,
@@ -220,6 +240,14 @@ class __$$ConsultaProcessosLeituraFilterImplCopyWithImpl<$Res>
       finalDate: freezed == finalDate
           ? _value.finalDate
           : finalDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      startTime: freezed == startTime
+          ? _value.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      finalTime: freezed == finalTime
+          ? _value.finalTime
+          : finalTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       codKit: freezed == codKit
           ? _value.codKit
@@ -268,6 +296,8 @@ class _$ConsultaProcessosLeituraFilterImpl
   _$ConsultaProcessosLeituraFilterImpl(
       {required this.startDate,
       required this.finalDate,
+      required this.startTime,
+      required this.finalTime,
       required this.codKit,
       required this.codItem,
       required this.codEtapaProcesso,
@@ -287,6 +317,10 @@ class _$ConsultaProcessosLeituraFilterImpl
   DateTime? startDate;
   @override
   DateTime? finalDate;
+  @override
+  DateTime? startTime;
+  @override
+  DateTime? finalTime;
   @override
   int? codKit;
   @override
@@ -308,7 +342,7 @@ class _$ConsultaProcessosLeituraFilterImpl
 
   @override
   String toString() {
-    return 'ConsultaProcessosLeituraFilter(startDate: $startDate, finalDate: $finalDate, codKit: $codKit, codItem: $codItem, codEtapaProcesso: $codEtapaProcesso, lote: $lote, indicador: $indicador, biologico: $biologico, implantavel: $implantavel, prontuario: $prontuario, item: $item)';
+    return 'ConsultaProcessosLeituraFilter(startDate: $startDate, finalDate: $finalDate, startTime: $startTime, finalTime: $finalTime, codKit: $codKit, codItem: $codItem, codEtapaProcesso: $codEtapaProcesso, lote: $lote, indicador: $indicador, biologico: $biologico, implantavel: $implantavel, prontuario: $prontuario, item: $item)';
   }
 
   @JsonKey(ignore: true)
@@ -332,6 +366,8 @@ abstract class _ConsultaProcessosLeituraFilter
   factory _ConsultaProcessosLeituraFilter(
       {required DateTime? startDate,
       required DateTime? finalDate,
+      required DateTime? startTime,
+      required DateTime? finalTime,
       required int? codKit,
       required int? codItem,
       required int? codEtapaProcesso,
@@ -352,6 +388,12 @@ abstract class _ConsultaProcessosLeituraFilter
   @override
   DateTime? get finalDate;
   set finalDate(DateTime? value);
+  @override
+  DateTime? get startTime;
+  set startTime(DateTime? value);
+  @override
+  DateTime? get finalTime;
+  set finalTime(DateTime? value);
   @override
   int? get codKit;
   set codKit(int? value);

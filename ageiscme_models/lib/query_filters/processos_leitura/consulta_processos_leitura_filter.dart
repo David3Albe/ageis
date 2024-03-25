@@ -12,6 +12,8 @@ sealed class ConsultaProcessosLeituraFilter
   factory ConsultaProcessosLeituraFilter({
     required DateTime? startDate,
     required DateTime? finalDate,
+    required DateTime? startTime,
+    required DateTime? finalTime,
     required int? codKit,
     required int? codItem,
     required int? codEtapaProcesso,
@@ -37,6 +39,8 @@ sealed class ConsultaProcessosLeituraFilter
         finalDate: null,
         codItem: null,
         codKit: null,
+        finalTime: null,
+        startTime: null,
         lote: null,
         codEtapaProcesso: null,
         implantavel: null,

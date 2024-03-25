@@ -12,7 +12,6 @@ import 'package:pdf/widgets.dart' as pw;
 class PackagingsController {
   final PackagingsPrintDTO packagingsPrint;
   BuildContext context;
-  pw.TextStyle _style = const pw.TextStyle(fontSize: 10);
   static const double DEFAULT_PADDING_TOP = 1;
 
   PackagingsController({
@@ -65,8 +64,8 @@ class PackagingsController {
           children: [
             pw.Padding(
               padding: const pw.EdgeInsets.only(
-                left: 8,
-                top: 5,
+                left: 40,
+                top: 20,
               ),
               child: HeaderRowWidget(
                 dto: packagingsPrint,
@@ -77,14 +76,11 @@ class PackagingsController {
             ),
             PackagingsRowsWidget(
               packagings: packagings,
+              dto: packagingsPrint,
             ),
           ],
         );
       },
     );
   }
-
-  // List<pw.Widget> getWidgets(){
-
-  // }
 }

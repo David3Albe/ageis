@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 class TimePickerWidget extends StatefulWidget {
   final String placeholder;
-  final void Function(TimeOfDay selectedTime)? onTimeSelected;
+  final void Function(TimeOfDay? selectedTime)? onTimeSelected;
   final TimeOfDay? initialValue;
   final bool readOnly;
 
@@ -21,7 +21,7 @@ class TimePickerWidget extends StatefulWidget {
 }
 
 class _TimePickerWidgetState extends State<TimePickerWidget> {
-  late TimeOfDay selectedTime;
+  late TimeOfDay? selectedTime;
   TextEditingController textController = TextEditingController();
   FocusNode focusNode = FocusNode();
 
@@ -29,9 +29,12 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
   void initState() {
     super.initState();
 
-    if (widget.initialValue != const TimeOfDay(hour: 0, minute: 0)) {
+    if (widget.initialValue == null) {
+      selectedTime = null;
+      textController.text = '';
+    } else if (widget.initialValue != const TimeOfDay(hour: 0, minute: 0)) {
       selectedTime = widget.initialValue!;
-      textController.text = formatTime(selectedTime);
+      textController.text = formatTime(selectedTime!);
     } else {
       selectedTime = TimeOfDay.now();
       textController.text = '';
@@ -96,22 +99,24 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
   Future<void> _selectTime(BuildContext context) async {
     final TimeOfDay? picked = await showTimePicker(
       context: context,
-      initialTime: selectedTime,
+      initialTime: selectedTime ?? const TimeOfDay(hour: 0, minute: 0),
     );
-    if (picked != null && picked != selectedTime) {
-      setState(() {
-        selectedTime = picked;
+    setState(() {
+      selectedTime = picked;
+      lastText = '';
+      if (picked != null) {
         lastText =
             '${picked.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}';
-        textController.text = formatTime(selectedTime);
-        if (widget.onTimeSelected != null) {
-          widget.onTimeSelected!(selectedTime);
-        }
-      });
-    }
+      }
+      textController.text = formatTime(selectedTime);
+      if (widget.onTimeSelected != null) {
+        widget.onTimeSelected!(selectedTime);
+      }
+    });
   }
 
-  String formatTime(TimeOfDay time) {
+  String formatTime(TimeOfDay? time) {
+    if (time == null) return '';
     return '${time.hour.toString().padLeft(2, '0')}:'
         '${time.minute.toString().padLeft(2, '0')}';
   }

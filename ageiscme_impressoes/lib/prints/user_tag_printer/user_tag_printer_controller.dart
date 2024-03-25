@@ -25,7 +25,7 @@ class UserTagPrinterController {
 
     pdf.addPage(
       pw.Page(
-        margin: const pw.EdgeInsets.only(top: 40, left: 30),
+        margin: const pw.EdgeInsets.only(top: 50, left: 20),
         build: (pw.Context context) {
           return pw.Column(
             children: [

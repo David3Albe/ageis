@@ -1,11 +1,17 @@
+import 'package:compartilhados/mixins/drop_down_filter/drop_down_filter_mixin.dart';
 import 'package:compartilhados/mixins/drop_down_filter/drop_down_filter_model.dart';
+import 'package:compartilhados/mixins/drop_down_text.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'usuario_processo_model.freezed.dart';
 part 'usuario_processo_model.g.dart';
 
 @unfreezed
-abstract class UsuarioProcessoModel with _$UsuarioProcessoModel {
+abstract class UsuarioProcessoModel
+    with
+        _$UsuarioProcessoModel,
+        DropDownText,
+        DropDownFilterMixin<UsuarioProcessoModel> {
   const UsuarioProcessoModel._();
 
   factory UsuarioProcessoModel({
@@ -33,9 +39,12 @@ abstract class UsuarioProcessoModel with _$UsuarioProcessoModel {
     return UsuarioProcessoModel.fromJson(usuario.toJson());
   }
 
-    String GetDropDownText() => nome == null ? '' : nome!;
+  String GetDropDownText() => nome == null ? '' : nome!;
 
-  List<DropDownFilterModel<UsuarioProcessoModel>> GetDropDownFilters(String filter) => [
+  List<DropDownFilterModel<UsuarioProcessoModel>> GetDropDownFilters(
+    String filter,
+  ) =>
+      [
         DropDownFilterModel(
           (object) =>
               object.codBarra != null &&

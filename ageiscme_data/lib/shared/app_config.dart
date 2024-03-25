@@ -37,6 +37,8 @@ class AppConfig {
         return 'hml';
       case AppConfigEnviroment.ServidorA:
         return 'servidora';
+      case AppConfigEnviroment.ServidorB:
+        return 'servidorB';
       case AppConfigEnviroment.Movtech:
         return 'movtech';
       default:
@@ -45,4 +47,4 @@ class AppConfig {
   }
 }
 
-enum AppConfigEnviroment { Development, Movtech, ServidorA, Homologation }
+enum AppConfigEnviroment { Development, Movtech, ServidorA, Homologation,ServidorB }

@@ -16,6 +16,7 @@ import 'package:compartilhados/componentes/campos/text_field_string_widget.dart'
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
+import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
@@ -240,7 +241,7 @@ class _ProcessoPageConsignedItemsDialogState
               onChanged: (value) => refForncedor = value,
             ),
             CustomCheckboxWidget(
-              readonly:  readonlyRegisterFields,
+              readonly: readonlyRegisterFields,
               align: MainAxisAlignment.start,
               text: 'Implantável',
               checked: implantavel,
@@ -287,11 +288,15 @@ class _ProcessoPageConsignedItemsDialogState
   }
 
   Future? SalvarItemDescritor() async {
+    LoadingController loading = LoadingController(context: context);
     await submitMethod.call();
     final ProcessoLeituraCubit processoCubit =
         BlocProvider.of<ProcessoLeituraCubit>(context);
     ProcessoLeituraMontagemModel processoState = processoCubit.state.processo;
-    if (!_validaCampos(processoState)) return;
+    if (!_validaCampos(processoState)) {
+      loading.closeDefault();
+      return;
+    }
 
     processoState.leituraAtual.decisao =
         DecisaoEnum.ConfirmarDefinirItemConsignado;
@@ -359,5 +364,5 @@ class _ProcessoPageConsignedItemsDialogState
     throw Exception('Tipo de acesso não definido');
   }
 
-  bool _validaValorConsignado(int? value) => value == null || value == 0;
+  bool _validaValorConsignado(int? value) => value == null;
 }

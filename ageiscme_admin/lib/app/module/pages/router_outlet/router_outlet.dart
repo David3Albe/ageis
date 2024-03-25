@@ -1,4 +1,5 @@
 import 'package:ageiscme_admin/app/module/cubits/navigation_bar/navigation_bar_cubit.dart';
+import 'package:ageiscme_admin/app/module/widgets/custom_navigation_bar/cubit/custom_navigation_bar_cubit.dart';
 import 'package:ageiscme_data/components/custom_app_bar_widget.dart';
 import 'package:ageiscme_data/stores/authentication/authentication_store.dart';
 import 'package:ageiscme_admin/app/module/widgets/custom_navigation_bar/custom_navigation_bar_widget.dart';
@@ -17,7 +18,7 @@ class RouterOutletPage extends StatelessWidget {
     bool resumeView = MediaQuery.of(context).size.width < 800;
     return CustomAppBarWidget(
       drawer: resumeView == true ? const CustomNavigationBarWidget() : null,
-      onLogout: onLogout,
+      onLogout: () => onLogout(context),
       body: BlocProvider(
         create: (context) => NavigationBarCubit(),
         child: Row(
@@ -47,7 +48,10 @@ class RouterOutletPage extends StatelessWidget {
     );
   }
 
-  void onLogout() async {
+  void onLogout(BuildContext context) async {
+    CustomNavigationBarCubit cubit =
+        BlocProvider.of<CustomNavigationBarCubit>(context);
+    cubit.expand();
     AuthenticationStore store = Modular.get<AuthenticationStore>();
     await store.ClearAuthentication();
   }

@@ -35,7 +35,7 @@ class CustomDio {
     String baseRoute = await _route;
     Response resp = await _dio.get('$baseRoute$route');
     if (!resp.statusCode.toString().startsWith('2')) {
-      bool throwed = throwResponseError(resp);
+      bool throwed = await throwResponseError(resp);
       if (!throwed) throw CustomBaseException(resp.data);
     }
     return resp.data;
@@ -45,7 +45,7 @@ class CustomDio {
     String baseRoute = await _route;
     Response resp = await _dio.get('$baseRoute$route');
     if (!resp.statusCode.toString().startsWith('2')) {
-      bool throwed = throwResponseError(resp);
+      bool throwed = await throwResponseError(resp);
       if (!throwed) throw CustomBaseException(resp.data);
     }
     return resp.data;
@@ -55,7 +55,7 @@ class CustomDio {
     String baseRoute = await _route;
     Response resp = await _dio.post('$baseRoute$route', data: objeto.toJson());
     if (!resp.statusCode.toString().startsWith('2')) {
-      bool throwed = throwResponseError(resp);
+      bool throwed = await throwResponseError(resp);
       if (!throwed) throw CustomBaseException(resp.data);
     }
     return resp.data;
@@ -65,7 +65,7 @@ class CustomDio {
     String baseRoute = await _route;
     Response resp = await _dio.post('$baseRoute$route', data: objeto.toJson());
     if (!resp.statusCode.toString().startsWith('2')) {
-      bool throwed = throwResponseError(resp);
+      bool throwed = await throwResponseError(resp);
       if (!throwed) throw CustomBaseException(resp.data);
     }
     return resp.data;
@@ -82,14 +82,14 @@ class CustomDio {
       Response resp =
           await _dio.post('$baseRoute$route', data: objeto.toJson());
       if (!resp.statusCode.toString().startsWith('2')) {
-        bool throwed = throwResponseError(resp);
+        bool throwed = await throwResponseError(resp);
         if (throwed) return null;
         if (!throwed) throw CustomBaseException(resp.data);
       }
       if (resp.statusCode == 204) return null;
       return deserializerFunction(resp.data);
     } on Exception catch (ex) {
-      (int, bool) throwed = throwDefaultException(ex, retrys);
+      (int, bool) throwed = await throwDefaultException(ex, retrys);
       if (throwed.$1 > 0) {
         await Future.delayed(const Duration(seconds: 1));
         return await postFilter(
@@ -116,7 +116,7 @@ class CustomDio {
           await _dio.post('$baseRoute$route', data: objeto.toJson());
 
       if (!resp.statusCode.toString().startsWith('2')) {
-        bool throwed = throwResponseError(resp);
+        bool throwed = await throwResponseError(resp);
         if (throwed) return null;
         if (!throwed) throw CustomBaseException(resp.data);
       }
@@ -128,7 +128,7 @@ class CustomDio {
       }
       return;
     } on Exception catch (ex) {
-      (int, bool) throwed = throwDefaultException(ex, retrys);
+      (int, bool) throwed = await throwDefaultException(ex, retrys);
       await Future.delayed(const Duration(seconds: 1));
       if (throwed.$1 > 0) {
         return await postWithoutReturn(
@@ -155,7 +155,7 @@ class CustomDio {
           await _dio.post('$baseRoute$route', data: objeto.toJson());
 
       if (!resp.statusCode.toString().startsWith('2')) {
-        bool throwed = throwResponseError(resp);
+        bool throwed = await throwResponseError(resp);
         if (throwed) return null;
         if (!throwed) throw CustomBaseException(resp.data);
       }
@@ -167,7 +167,7 @@ class CustomDio {
       }
       return (result.message, deserializerFunction(result.data));
     } on Exception catch (ex) {
-      (int, bool) throwed = throwDefaultException(ex, retrys);
+      (int, bool) throwed = await throwDefaultException(ex, retrys);
       await Future.delayed(const Duration(seconds: 1));
       if (throwed.$1 > 0) {
         return await post(
@@ -194,7 +194,7 @@ class CustomDio {
       Response resp =
           await _dio.delete('$baseRoute$route', data: objeto.toJson());
       if (!resp.statusCode.toString().startsWith('2')) {
-        bool throwed = throwResponseError(resp);
+        bool throwed = await throwResponseError(resp);
         if (throwed) return null;
         if (!throwed) throw CustomBaseException(resp.data);
       }
@@ -206,7 +206,7 @@ class CustomDio {
       }
       return (result.message, deserializerFunction(resp.data));
     } on Exception catch (ex) {
-      (int, bool) throwed = throwDefaultException(
+      (int, bool) throwed = await throwDefaultException(
         ex,
         retrys,
       );
@@ -225,7 +225,7 @@ class CustomDio {
     return null;
   }
 
-  (int, bool) throwDefaultException(Exception ex, int retrys) {
+  Future<(int, bool)> throwDefaultException(Exception ex, int retrys) async {
     if (_throwException == false) return (0, false);
     if (ex is CustomBaseException) return (0, true);
     if (ToastUtils.routerOutletContext == null) {
@@ -234,7 +234,7 @@ class CustomDio {
     (bool, String) exceptionMessage = ExceptionHelper().getExceptionMessage(ex);
     if (retrys > 0 && exceptionMessage.$1 == true) return (retrys, true);
     try {
-      ErrorUtils.showErrorDialog(
+      await ErrorUtils.showErrorDialog(
         ToastUtils.routerOutletContext!,
         [exceptionMessage.$2],
       ).then((value) {
@@ -246,14 +246,14 @@ class CustomDio {
     }
   }
 
-  bool throwResponseError(Response resp) {
+  Future<bool> throwResponseError(Response resp) async {
     if (_throwException == false) return false;
     if (ToastUtils.routerOutletContext == null) {
       throw CustomBaseException('Defina o context do ToastUtils');
     }
 
     try {
-      ErrorUtils.showErrorDialog(
+      await ErrorUtils.showErrorDialog(
         ToastUtils.routerOutletContext!,
         [resp.data],
       ).then((value) {

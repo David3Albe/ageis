@@ -1,4 +1,5 @@
 import 'package:ageiscme_data/services/equipamento/equipamento_service.dart';
+import 'package:ageiscme_models/filters/equipamento/equipamento_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 
@@ -16,6 +17,22 @@ class EquipamentoPageCubit extends Cubit<EquipamentoPageState> {
     emit(EquipamentoPageState(loading: true, equipamentos: []));
     try {
       List<EquipamentoModel> equipamentos = await service.GetAll();
+      emit(EquipamentoPageState(loading: false, equipamentos: equipamentos));
+    } on Exception catch (ex) {
+      emit(
+        EquipamentoPageState(
+          loading: false,
+          equipamentos: [],
+          error: ex.toString(),
+        ),
+      );
+    }
+  }
+
+    void loadFilter(EquipamentoFilter filter) async {
+    emit(EquipamentoPageState(loading: true, equipamentos: []));
+    try {
+      List<EquipamentoModel> equipamentos = await service.Filter(filter);
       emit(EquipamentoPageState(loading: false, equipamentos: equipamentos));
     } on Exception catch (ex) {
       emit(

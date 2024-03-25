@@ -297,7 +297,7 @@ class _AtestadoSaudeOcupacionalFrmState
                                     : () => {excluirDoc()},
                               ),
                               OpenDocWidget(
-                                placeholder: 'Abrir ASO',
+                                placeholder: 'Extrair ASO',
                                 documentoString: atestadoSaudeOcupacional.anexo,
                                 documentName:
                                     atestadoSaudeOcupacional.docNome ??

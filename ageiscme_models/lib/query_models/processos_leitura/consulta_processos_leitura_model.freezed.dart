@@ -23,6 +23,10 @@ ConsultaProcessosLeituraModel _$ConsultaProcessosLeituraModelFromJson(
 mixin _$ConsultaProcessosLeituraModel {
   DateTime? get dataHora => throw _privateConstructorUsedError;
   set dataHora(DateTime? value) => throw _privateConstructorUsedError;
+  DateTime? get data => throw _privateConstructorUsedError;
+  set data(DateTime? value) => throw _privateConstructorUsedError;
+  String? get hora => throw _privateConstructorUsedError;
+  set hora(String? value) => throw _privateConstructorUsedError;
   String? get codBarraKit => throw _privateConstructorUsedError;
   set codBarraKit(String? value) => throw _privateConstructorUsedError;
   String? get nomeKit => throw _privateConstructorUsedError;
@@ -118,6 +122,8 @@ abstract class $ConsultaProcessosLeituraModelCopyWith<$Res> {
   @useResult
   $Res call(
       {DateTime? dataHora,
+      DateTime? data,
+      String? hora,
       String? codBarraKit,
       String? nomeKit,
       int? nroItensFaltante,
@@ -173,6 +179,8 @@ class _$ConsultaProcessosLeituraModelCopyWithImpl<$Res,
   @override
   $Res call({
     Object? dataHora = freezed,
+    Object? data = freezed,
+    Object? hora = freezed,
     Object? codBarraKit = freezed,
     Object? nomeKit = freezed,
     Object? nroItensFaltante = freezed,
@@ -217,6 +225,14 @@ class _$ConsultaProcessosLeituraModelCopyWithImpl<$Res,
           ? _value.dataHora
           : dataHora // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      data: freezed == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      hora: freezed == hora
+          ? _value.hora
+          : hora // ignore: cast_nullable_to_non_nullable
+              as String?,
       codBarraKit: freezed == codBarraKit
           ? _value.codBarraKit
           : codBarraKit // ignore: cast_nullable_to_non_nullable
@@ -384,6 +400,8 @@ abstract class _$$ConsultaProcessosLeituraModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {DateTime? dataHora,
+      DateTime? data,
+      String? hora,
       String? codBarraKit,
       String? nomeKit,
       int? nroItensFaltante,
@@ -438,6 +456,8 @@ class __$$ConsultaProcessosLeituraModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? dataHora = freezed,
+    Object? data = freezed,
+    Object? hora = freezed,
     Object? codBarraKit = freezed,
     Object? nomeKit = freezed,
     Object? nroItensFaltante = freezed,
@@ -482,6 +502,14 @@ class __$$ConsultaProcessosLeituraModelImplCopyWithImpl<$Res>
           ? _value.dataHora
           : dataHora // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      data: freezed == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      hora: freezed == hora
+          ? _value.hora
+          : hora // ignore: cast_nullable_to_non_nullable
+              as String?,
       codBarraKit: freezed == codBarraKit
           ? _value.codBarraKit
           : codBarraKit // ignore: cast_nullable_to_non_nullable
@@ -644,6 +672,8 @@ class _$ConsultaProcessosLeituraModelImpl
     extends _ConsultaProcessosLeituraModel {
   _$ConsultaProcessosLeituraModelImpl(
       {required this.dataHora,
+      required this.data,
+      required this.hora,
       required this.codBarraKit,
       required this.nomeKit,
       required this.nroItensFaltante,
@@ -690,6 +720,10 @@ class _$ConsultaProcessosLeituraModelImpl
 
   @override
   DateTime? dataHora;
+  @override
+  DateTime? data;
+  @override
+  String? hora;
   @override
   String? codBarraKit;
   @override
@@ -769,7 +803,7 @@ class _$ConsultaProcessosLeituraModelImpl
 
   @override
   String toString() {
-    return 'ConsultaProcessosLeituraModel(dataHora: $dataHora, codBarraKit: $codBarraKit, nomeKit: $nomeKit, nroItensFaltante: $nroItensFaltante, idEtiqueta: $idEtiqueta, descricaoItem: $descricaoItem, nomeProprietario: $nomeProprietario, entradaSaida: $entradaSaida, nomeEquipamento: $nomeEquipamento, nomeEtapaProcesso: $nomeEtapaProcesso, nomeTipoProcesso: $nomeTipoProcesso, prioridade: $prioridade, qtdeProcessos: $qtdeProcessos, nomeUsuario: $nomeUsuario, prontuarioRetirada: $prontuarioRetirada, origem: $origem, destino: $destino, circulante: $circulante, conferidoVisualmente: $conferidoVisualmente, nomeRespKitIncomp: $nomeRespKitIncomp, nomeRespQuebFluxo: $nomeRespQuebFluxo, nomeRepDestinoNaoCompativel: $nomeRepDestinoNaoCompativel, indicador: $indicador, biologico: $biologico, implantavel: $implantavel, lote: $lote, integradorKit: $integradorKit, embalagem: $embalagem, codItem: $codItem, codKit2: $codKit2, codEtapaProcesso: $codEtapaProcesso, codLeitura: $codLeitura, motivo: $motivo, motivoQuebraFluxo: $motivoQuebraFluxo, observacao: $observacao, statusKit: $statusKit, restricaoKit: $restricaoKit, kitLiberadoIncompleto: $kitLiberadoIncompleto, codRegistroProcesso: $codRegistroProcesso)';
+    return 'ConsultaProcessosLeituraModel(dataHora: $dataHora, data: $data, hora: $hora, codBarraKit: $codBarraKit, nomeKit: $nomeKit, nroItensFaltante: $nroItensFaltante, idEtiqueta: $idEtiqueta, descricaoItem: $descricaoItem, nomeProprietario: $nomeProprietario, entradaSaida: $entradaSaida, nomeEquipamento: $nomeEquipamento, nomeEtapaProcesso: $nomeEtapaProcesso, nomeTipoProcesso: $nomeTipoProcesso, prioridade: $prioridade, qtdeProcessos: $qtdeProcessos, nomeUsuario: $nomeUsuario, prontuarioRetirada: $prontuarioRetirada, origem: $origem, destino: $destino, circulante: $circulante, conferidoVisualmente: $conferidoVisualmente, nomeRespKitIncomp: $nomeRespKitIncomp, nomeRespQuebFluxo: $nomeRespQuebFluxo, nomeRepDestinoNaoCompativel: $nomeRepDestinoNaoCompativel, indicador: $indicador, biologico: $biologico, implantavel: $implantavel, lote: $lote, integradorKit: $integradorKit, embalagem: $embalagem, codItem: $codItem, codKit2: $codKit2, codEtapaProcesso: $codEtapaProcesso, codLeitura: $codLeitura, motivo: $motivo, motivoQuebraFluxo: $motivoQuebraFluxo, observacao: $observacao, statusKit: $statusKit, restricaoKit: $restricaoKit, kitLiberadoIncompleto: $kitLiberadoIncompleto, codRegistroProcesso: $codRegistroProcesso)';
   }
 
   @JsonKey(ignore: true)
@@ -792,6 +826,8 @@ abstract class _ConsultaProcessosLeituraModel
     extends ConsultaProcessosLeituraModel {
   factory _ConsultaProcessosLeituraModel(
       {required DateTime? dataHora,
+      required DateTime? data,
+      required String? hora,
       required String? codBarraKit,
       required String? nomeKit,
       required int? nroItensFaltante,
@@ -838,6 +874,12 @@ abstract class _ConsultaProcessosLeituraModel
   @override
   DateTime? get dataHora;
   set dataHora(DateTime? value);
+  @override
+  DateTime? get data;
+  set data(DateTime? value);
+  @override
+  String? get hora;
+  set hora(String? value);
   @override
   String? get codBarraKit;
   set codBarraKit(String? value);
