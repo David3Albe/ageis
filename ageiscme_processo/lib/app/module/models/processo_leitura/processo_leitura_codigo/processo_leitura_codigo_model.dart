@@ -1,3 +1,4 @@
+import 'package:ageiscme_processo/app/module/enums/tipo_alerta.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
 
@@ -14,6 +15,8 @@ sealed class ProcessoLeituraCodigoModel with _$ProcessoLeituraCodigoModel {
     required bool? cancelarLeituras,
     required bool? leituraFinalizada,
     required bool? alertaVermelho,
+    required bool? fecharTelaExtra,
+    required TipoAlerta? tipoAlerta,
   }) = _ProcessoLeituraCodigoModel;
 
   factory ProcessoLeituraCodigoModel.fromJson(Map<String, Object?> json) =>
@@ -30,5 +33,7 @@ sealed class ProcessoLeituraCodigoModel with _$ProcessoLeituraCodigoModel {
         avisosSonoro: [],
         cancelarLeituras: null,
         leituraFinalizada: null,
+        tipoAlerta: null,
+        fecharTelaExtra: null,
       );
 }

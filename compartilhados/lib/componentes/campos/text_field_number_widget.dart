@@ -44,23 +44,21 @@ class _TextFieldNumberWidgetState extends State<TextFieldNumberWidget> {
   bool focused = false;
   String textChanged = '';
   String errorText = '';
-  late TextEditingController controller;
   final void Function(String str)? onChanged;
   DateTime? lastTypedTime;
 
   _TextFieldNumberWidgetState({required Key key, this.onChanged});
   @override
   void initState() {
-    controller = TextEditingController();
     if (widget.startValue != null) {
-      controller.text = widget.startValue.toString();
+      widget._controller.text = widget.startValue.toString();
     }
     super.initState();
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    widget._controller.dispose();
     super.dispose();
   }
 

@@ -34,6 +34,7 @@ import 'package:ageiscme_processo/app/module/pages/processo/processo_page_widget
 import 'package:ageiscme_processo/app/module/pages/processo/processo_page_widgets/processo_page_local/processo_page_local_widget.dart';
 import 'package:ageiscme_processo/app/module/pages/processo/processo_page_widgets/processo_page_manual_reading/processo_page_manual_reading_widget.dart';
 import 'package:ageiscme_processo/app/module/pages/processo/processo_page_zoom/processo_page_zoom_dialog.dart';
+import 'package:ageiscme_processo/app/module/web_sockets/processo_leitura/processo_leitura_web_socket.dart';
 import 'package:compartilhados/coletores/coletores_helper.dart';
 import 'package:compartilhados/componentes/dialogs/movable_dialog.dart';
 import 'package:ageiscme_processo/app/module/pages/processo/processo_page_widgets/processo_page_manual_reading/processo_page_manual_reading_widget_state.dart';
@@ -75,30 +76,29 @@ class _ProcessoPageState extends State<ProcessoPage> {
   void initState() {
     final ProcessoLeituraCubit _cubit =
         BlocProvider.of<ProcessoLeituraCubit>(context);
-    _cubit.webSocket.connect().then((value) {
-      _cubit.setHandleKey(handleKey);
+    TIMER_REFRESH_LEITURAS = Timer.periodic(TIMER_REFRESH_DURATION, (Timer t) {
+      if (!t.isActive) return;
+      updateLastRefreshTime();
+    });
+
+    _cubit.webSocket = ProcessoLeituraWebSocket(
+      handleKey: () => _cubit.setHandleKey(handleKey),
+      onMessageReceived: (p0) => _cubit.onMessage(p0, context),
+      onError: _cubit.setException,
+    );
+
+    _cubit.webSocket!.connect().then((value) {
       if (widget.userCode != null) {
         _cubit.readCode(widget.userCode);
       }
-      TIMER_REFRESH_LEITURAS =
-          Timer.periodic(TIMER_REFRESH_DURATION, (Timer t) {
-        if (!t.isActive) return;
-        updateLastRefreshTime();
-      });
-      _cubit.webSocket.webSocket!.stream.listen((event) {
-        _cubit.webSocket.onMessage(
-          event,
-          onMessagePar: _cubit.onMessage,
-          onError: _cubit.setException,
-        );
-      });
     });
+   
     super.initState();
   }
 
   @override
   void dispose() {
-    _disposeCubit.webSocket.webSocket?.sink.close();
+    _disposeCubit.webSocket?.webSocket?.sink.close();
     TIMER_REFRESH_LEITURAS?.cancel();
     _disposeCubit.removeReadingInProcess(_disposeCubit.state.processo);
     super.dispose();

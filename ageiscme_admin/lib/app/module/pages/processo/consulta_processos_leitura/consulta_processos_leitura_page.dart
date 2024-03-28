@@ -438,14 +438,19 @@ class _ConsultaProcessosLeituraPageState
                               hour: filter.startTime!.hour,
                               minute: filter.startTime!.minute,
                             ),
-                      onTimeSelected: (selectedTime) =>
-                          filter.startTime = DateTime(
-                        DateTime.now().year,
-                        DateTime.now().month,
-                        DateTime.now().day,
-                        selectedTime?.hour ?? 0,
-                        selectedTime?.minute ?? 0,
-                      ),
+                      onTimeSelected: (selectedTime) {
+                        if (selectedTime == null) {
+                          filter.startTime = null;
+                          return;
+                        }
+                        filter.startTime = DateTime(
+                          DateTime.now().year,
+                          DateTime.now().month,
+                          DateTime.now().day,
+                          selectedTime.hour,
+                          selectedTime.minute,
+                        );
+                      },
                     ),
                   ),
                 ],
@@ -472,14 +477,20 @@ class _ConsultaProcessosLeituraPageState
                               hour: filter.finalTime!.hour,
                               minute: filter.finalTime!.minute,
                             ),
-                      onTimeSelected: (selectedTime) =>
-                          filter.finalTime = DateTime(
-                        DateTime.now().year,
-                        DateTime.now().month,
-                        DateTime.now().day,
-                        selectedTime?.hour ?? 0,
-                        selectedTime?.minute ?? 0,
-                      ),
+                      onTimeSelected: (selectedTime) {
+                        print(selectedTime);
+                        if (selectedTime == null) {
+                          filter.finalTime = null;
+                          return;
+                        }
+                        filter.finalTime = DateTime(
+                          DateTime.now().year,
+                          DateTime.now().month,
+                          DateTime.now().day,
+                          selectedTime.hour,
+                          selectedTime.minute,
+                        );
+                      },
                     ),
                   ),
                 ],

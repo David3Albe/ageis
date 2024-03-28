@@ -452,6 +452,12 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
                             numeroMaximoRegistros: 30,
                             termoPesquisa: str,
                             carregarImagem: false,
+                            apenasConsignados:
+                                widget.frmType == ItemPageFrmtype.Consigned,
+                            apenasNaoConsignados:
+                                widget.frmType == ItemPageFrmtype.Items,
+                            carregarItensConsignados:
+                                widget.frmType == ItemPageFrmtype.Consigned,
                           ),
                         ),
                         onChanged: (value) {

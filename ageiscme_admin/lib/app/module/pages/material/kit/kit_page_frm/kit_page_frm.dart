@@ -1,7 +1,12 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/kit_cor/kit_cor_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/kit_descritor/kit_descritor_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/material/kit/kit_page_frm/kit_page_frm_adicionar_item/kit_page_frm_adicionar_item_page.dart';
+import 'package:ageiscme_admin/app/module/pages/material/kit/kit_page_frm/kit_page_frm_remover_item/kit_page_frm_remover_item_page.dart';
+import 'package:ageiscme_admin/app/module/pages/material/kit/kit_page_frm/kit_page_frm_repor_item/kit_page_frm_repor_item_page.dart';
 import 'package:ageiscme_admin/app/module/pages/material/kit/kit_page_frm/kit_page_frm_state.dart';
+import 'package:ageiscme_data/services/item/item_service.dart';
 import 'package:ageiscme_data/services/kit/kit_service.dart';
+import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
@@ -12,7 +17,11 @@ import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/list_field/list_field_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/fontes/fontes.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
@@ -103,30 +112,10 @@ class _KitPageFrmState extends State<KitPageFrm> {
   void setFields() {
     txtCodBarra.text = kit.codBarra.toString();
     txtPreparo.text = kit.preparo.toString();
-
-    if (kit.codEmbalagem == null) {
-      txtCodEmbalagem.text = '';
-    } else {
-      txtCodEmbalagem.text = kit.codEmbalagem.toString();
-    }
-
-    if (kit.codConjunto == null) {
-      txtConjuntoAtual.text = '';
-    } else {
-      txtConjuntoAtual.text = kit.codConjunto.toString();
-    }
-
-    if (kit.codProcessoLeitura == null) {
-      txtProcessoLeitura.text = '';
-    } else {
-      txtProcessoLeitura.text = kit.codProcessoLeitura.toString();
-    }
-
-    if (kit.restricao == null) {
-      txtRestricao.text = '';
-    } else {
-      txtRestricao.text = kit.restricao.toString();
-    }
+    txtCodEmbalagem.text = kit.codEmbalagem?.toString() ?? '';
+    txtConjuntoAtual.text = kit.codConjunto?.toString() ?? '';
+    txtProcessoLeitura.text = kit.codProcessoLeitura?.toString() ?? '';
+    txtRestricao.text = kit.restricao?.toString() ?? '';
 
     titulo = 'Cadastro de Kits';
     if (kit.cod != 0) {
@@ -445,6 +434,27 @@ class _KitPageFrmState extends State<KitPageFrm> {
             actions: [
               Row(
                 children: [
+                  CustomPopupMenuWidget(
+                    items: [
+                      if (kit.cod == 0 || kit.cod == null)
+                        CustomPopupItemModel(
+                          text: 'Montar Itens Kit',
+                          onTap: adicionarItemKit,
+                        ),
+                      if (kit.cod != 0 && kit.cod != null)
+                        CustomPopupItemModel(
+                          text: 'Repor Item no Kit',
+                          onTap: reporItemKit,
+                        ),
+                      if (kit.cod != 0 && kit.cod != null)
+                        CustomPopupItemModel(
+                          text: 'Remover Item do Kit',
+                          onTap: removerItemKit,
+                        ),
+                      if (kit.cod != 0 && kit.cod != null)
+                        CustomPopupItemHistoryModel.getHistoryItem(),
+                    ],
+                  ),
                   const Spacer(),
                   Padding(
                     padding: const EdgeInsets.only(left: 16.0),
@@ -475,6 +485,78 @@ class _KitPageFrmState extends State<KitPageFrm> {
         },
       ),
     );
+  }
+
+  Future removerItemKit() async {
+    if (kit.cod == 0 || kit.cod == null) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'O Kit precisa estar criado para remover itens.',
+      );
+      return;
+    }
+    bool? salvo = await showDialog<bool>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return KitPageFrmRemoverItemPage(
+          kit: kit,
+        );
+      },
+    );
+    if (salvo != true) return;
+    await _carregarItensKit();
+  }
+
+  Future _carregarItensKit() async {
+    List<ItemModel> itens = await ItemService().Filter(
+      ItemFilter(
+        codKit: kit.cod,
+      ),
+    );
+    setState(() {
+      kit.itens = itens;
+    });
+  }
+
+  Future reporItemKit() async {
+    if (kit.cod == 0 || kit.cod == null) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'O Kit precisa estar criado para repor itens.',
+      );
+      return;
+    }
+    bool? salvo = await showDialog<bool>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return KitPageFrmReporItemPage(
+          kit: kit,
+        );
+      },
+    );
+    if (salvo != true) return;
+    await _carregarItensKit();
+  }
+
+  Future adicionarItemKit() async {
+    List<ItemModel>? itensAdicionados = await showDialog<List<ItemModel>>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return const KitPageFrmAdicionarItemPage();
+      },
+    );
+    if (itensAdicionados == null || itensAdicionados.isEmpty) return;
+    _adicionarItensKit(itensAdicionados);
+  }
+
+  void _adicionarItensKit(List<ItemModel> itens) {
+    if (kit.itens == null) kit.itens = [];
+    setState(() {
+      kit.itens!.addAll(itens);
+    });
   }
 
   void salvar() {

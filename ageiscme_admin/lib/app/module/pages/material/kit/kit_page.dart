@@ -87,7 +87,7 @@ class _KitPageState extends State<KitPage> {
           onPressed: () => {
             openModal(
               context,
-              KitModel.empty(),
+              KitModel.empty().copyWith(status: '1'),
             ),
           },
         ),

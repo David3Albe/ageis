@@ -176,30 +176,13 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
   void setFields() {
     txtLogin.text = usuario.login.toString();
     txtNome.text = usuario.nome.toString();
-
-    if (usuario.codBarra == 0) {
-      txtCodBarra.text = '';
-    } else {
-      txtCodBarra.text = usuario.codBarra.toString();
-    }
-
-    if (usuario.docClasse == null) {
-      txtDocClasse.text = '';
-    } else {
-      txtDocClasse.text = usuario.docClasse.toString();
-    }
-
-    if (usuario.nomeEmpresa == null) {
-      txtNomeEmpresa.text = '';
-    } else {
-      txtNomeEmpresa.text = usuario.nomeEmpresa.toString();
-    }
-
-    if (usuario.rg == 0 || usuario.rg == null) {
-      txtRg.text = '';
-    } else {
-      txtRg.text = usuario.rg.toString();
-    }
+    txtCodBarra.text = usuario.codBarra == null || usuario.codBarra == 0
+        ? ''
+        : usuario.codBarra.toString();
+    txtDocClasse.text = usuario.docClasse?.toString() ?? '';
+    txtNomeEmpresa.text = usuario.nomeEmpresa?.toString() ?? '';
+    txtRg.text =
+        usuario.rg == 0 || usuario.rg == null ? '' : usuario.rg.toString();
 
     titulo = 'Cadastro de Usuários';
     if (usuario.cod != 0) {

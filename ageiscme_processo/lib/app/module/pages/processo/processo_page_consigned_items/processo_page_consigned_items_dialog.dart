@@ -302,8 +302,8 @@ class _ProcessoPageConsignedItemsDialogState
         DecisaoEnum.ConfirmarDefinirItemConsignado;
 
     String lastCode = processoCubit.state.processo.filaLeituras!.removeLast();
+    loading.closeDefault();
     await processoCubit.readCode(lastCode);
-    Navigator.of(context).pop();
   }
 
   Future CancelarItemDescritor() async {
@@ -313,7 +313,6 @@ class _ProcessoPageConsignedItemsDialogState
         DecisaoEnum.CancelarDefinirItemConsignado;
     String lastCode = processoCubit.state.processo.filaLeituras!.removeLast();
     await processoCubit.readCode(lastCode);
-    Navigator.of(context).pop();
   }
 
   bool _validaCampos(ProcessoLeituraMontagemModel leitura) {

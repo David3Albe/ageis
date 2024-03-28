@@ -28,6 +28,7 @@ sealed class ItemFilter with _$ItemFilter {
     ItemModel? itemFilter,
     KitModel? kitFilter,
     int? codKit,
+    String? iDEtiqueta,
   }) = _ItemFilter;
 
   factory ItemFilter.fromJson(Map<String, Object?> json) =>

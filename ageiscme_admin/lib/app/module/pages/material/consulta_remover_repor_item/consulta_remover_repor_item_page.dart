@@ -231,9 +231,13 @@ class _ConsultaRemoverReporItemPageState
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
               BlocBuilder<MotivoRemoverReporItemCubit,
-                  List<MotivoRemoverReporItemModel>>(
+                  MotivoRemoverReporItemState>(
                 bloc: motivoRemoverReporItemCubit,
-                builder: (context, motivos) {
+                builder: (context, state) {
+                  if (state.loading) {
+                    return const LoadingWidget();
+                  }
+                  List<MotivoRemoverReporItemModel> motivos = state.motivos;
                   motivos.sort(
                     (a, b) => a.descricao!.compareTo(b.descricao!),
                   );

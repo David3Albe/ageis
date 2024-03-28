@@ -2,7 +2,6 @@ import 'package:ageiscme_data/components/custom_app_bar_widget.dart';
 import 'package:ageiscme_processo/app/module/blocs/processo_leitura_cubit.dart';
 import 'package:ageiscme_processo/app/module/pages/processo/processo_page.dart';
 import 'package:ageiscme_processo/app/module/pages/processo/processo_page_widgets/processo_page_manual_reading/processo_page_manual_reading_widget_state.dart';
-import 'package:ageiscme_processo/app/module/web_sockets/processo_leitura/processo_leitura_web_socket.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
@@ -37,7 +36,6 @@ class RouterOutletPage extends StatelessWidget {
                           BlocProvider<ProcessoLeituraCubit>(
                             create: (BuildContext context) =>
                                 ProcessoLeituraCubit(
-                              webSocket: ProcessoLeituraWebSocket(),
                               loadingController: LoadingController(
                                 context: context,
                                 cancelShow: true,

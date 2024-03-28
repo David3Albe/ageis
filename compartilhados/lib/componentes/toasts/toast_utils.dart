@@ -39,14 +39,14 @@ class ToastUtils {
         ),
       );
 
-  static void insertToast(BuildContext context, OverlayEntry overlay) {
+  static void insertToast(BuildContext context, OverlayEntry? overlay) {
     OverlayState? state = Overlay.maybeOf(context);
     if (state != null) {
-      state.insert(overlay);
+      if (overlay != null) state.insert(overlay);
       Timer(
         const Duration(seconds: SECONDS_DURATION),
         () {
-          overlay.remove();
+          if (overlay != null) overlay.remove();
         },
       );
     }

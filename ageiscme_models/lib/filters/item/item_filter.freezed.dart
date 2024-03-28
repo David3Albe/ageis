@@ -66,6 +66,8 @@ mixin _$ItemFilter {
   set kitFilter(KitModel? value) => throw _privateConstructorUsedError;
   int? get codKit => throw _privateConstructorUsedError;
   set codKit(int? value) => throw _privateConstructorUsedError;
+  String? get iDEtiqueta => throw _privateConstructorUsedError;
+  set iDEtiqueta(String? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -99,7 +101,8 @@ abstract class $ItemFilterCopyWith<$Res> {
       @JsonKey(name: 'tStamp') String? tStamp,
       ItemModel? itemFilter,
       KitModel? kitFilter,
-      int? codKit});
+      int? codKit,
+      String? iDEtiqueta});
 
   $ItemModelCopyWith<$Res>? get itemFilter;
   $KitModelCopyWith<$Res>? get kitFilter;
@@ -138,6 +141,7 @@ class _$ItemFilterCopyWithImpl<$Res, $Val extends ItemFilter>
     Object? itemFilter = freezed,
     Object? kitFilter = freezed,
     Object? codKit = freezed,
+    Object? iDEtiqueta = freezed,
   }) {
     return _then(_value.copyWith(
       startDate: freezed == startDate
@@ -220,6 +224,10 @@ class _$ItemFilterCopyWithImpl<$Res, $Val extends ItemFilter>
           ? _value.codKit
           : codKit // ignore: cast_nullable_to_non_nullable
               as int?,
+      iDEtiqueta: freezed == iDEtiqueta
+          ? _value.iDEtiqueta
+          : iDEtiqueta // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 
@@ -276,7 +284,8 @@ abstract class _$$ItemFilterImplCopyWith<$Res>
       @JsonKey(name: 'tStamp') String? tStamp,
       ItemModel? itemFilter,
       KitModel? kitFilter,
-      int? codKit});
+      int? codKit,
+      String? iDEtiqueta});
 
   @override
   $ItemModelCopyWith<$Res>? get itemFilter;
@@ -315,6 +324,7 @@ class __$$ItemFilterImplCopyWithImpl<$Res>
     Object? itemFilter = freezed,
     Object? kitFilter = freezed,
     Object? codKit = freezed,
+    Object? iDEtiqueta = freezed,
   }) {
     return _then(_$ItemFilterImpl(
       startDate: freezed == startDate
@@ -397,6 +407,10 @@ class __$$ItemFilterImplCopyWithImpl<$Res>
           ? _value.codKit
           : codKit // ignore: cast_nullable_to_non_nullable
               as int?,
+      iDEtiqueta: freezed == iDEtiqueta
+          ? _value.iDEtiqueta
+          : iDEtiqueta // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -424,7 +438,8 @@ class _$ItemFilterImpl implements _ItemFilter {
       @JsonKey(name: 'tStamp') this.tStamp,
       this.itemFilter,
       this.kitFilter,
-      this.codKit});
+      this.codKit,
+      this.iDEtiqueta});
 
   factory _$ItemFilterImpl.fromJson(Map<String, dynamic> json) =>
       _$$ItemFilterImplFromJson(json);
@@ -470,10 +485,12 @@ class _$ItemFilterImpl implements _ItemFilter {
   KitModel? kitFilter;
   @override
   int? codKit;
+  @override
+  String? iDEtiqueta;
 
   @override
   String toString() {
-    return 'ItemFilter(startDate: $startDate, finalDate: $finalDate, cod: $cod, apenasAtivos: $apenasAtivos, ordenarPorNomeCrescente: $ordenarPorNomeCrescente, carregarKit: $carregarKit, carregarDescritor: $carregarDescritor, carregarDescritorResumido: $carregarDescritorResumido, carregarUsuarios: $carregarUsuarios, carregarProprietario: $carregarProprietario, apenasItensConsignados: $apenasItensConsignados, apenasItensNaoConsignados: $apenasItensNaoConsignados, carregarItensConsignado: $carregarItensConsignado, numeroRegistros: $numeroRegistros, termoPesquisa: $termoPesquisa, idEtiquetaComecaCom: $idEtiquetaComecaCom, tStamp: $tStamp, itemFilter: $itemFilter, kitFilter: $kitFilter, codKit: $codKit)';
+    return 'ItemFilter(startDate: $startDate, finalDate: $finalDate, cod: $cod, apenasAtivos: $apenasAtivos, ordenarPorNomeCrescente: $ordenarPorNomeCrescente, carregarKit: $carregarKit, carregarDescritor: $carregarDescritor, carregarDescritorResumido: $carregarDescritorResumido, carregarUsuarios: $carregarUsuarios, carregarProprietario: $carregarProprietario, apenasItensConsignados: $apenasItensConsignados, apenasItensNaoConsignados: $apenasItensNaoConsignados, carregarItensConsignado: $carregarItensConsignado, numeroRegistros: $numeroRegistros, termoPesquisa: $termoPesquisa, idEtiquetaComecaCom: $idEtiquetaComecaCom, tStamp: $tStamp, itemFilter: $itemFilter, kitFilter: $kitFilter, codKit: $codKit, iDEtiqueta: $iDEtiqueta)';
   }
 
   @JsonKey(ignore: true)
@@ -511,7 +528,8 @@ abstract class _ItemFilter implements ItemFilter {
       @JsonKey(name: 'tStamp') String? tStamp,
       ItemModel? itemFilter,
       KitModel? kitFilter,
-      int? codKit}) = _$ItemFilterImpl;
+      int? codKit,
+      String? iDEtiqueta}) = _$ItemFilterImpl;
 
   factory _ItemFilter.fromJson(Map<String, dynamic> json) =
       _$ItemFilterImpl.fromJson;
@@ -578,6 +596,9 @@ abstract class _ItemFilter implements ItemFilter {
   @override
   int? get codKit;
   set codKit(int? value);
+  @override
+  String? get iDEtiqueta;
+  set iDEtiqueta(String? value);
   @override
   @JsonKey(ignore: true)
   _$$ItemFilterImplCopyWith<_$ItemFilterImpl> get copyWith =>

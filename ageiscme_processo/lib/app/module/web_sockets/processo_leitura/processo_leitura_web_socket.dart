@@ -11,14 +11,34 @@ class ProcessoLeituraWebSocket {
 
   static const String _webSocketRoute = '/ws/processo-leitura-montagem';
 
+  Function((String, ProcessoLeituraMontagemModel)) onMessageReceived;
+  Function(String) onError;
+  Function() handleKey;
+
   WebSocketChannel? webSocket;
-  ProcessoLeituraWebSocket();
+  ProcessoLeituraWebSocket({
+    required this.onMessageReceived,
+    required this.onError,
+    required this.handleKey,
+  });
 
   Future connect() async {
     String routeBase = await _route;
     routeBase = routeBase.replaceAll('http', 'ws');
     webSocket =
         WebSocketChannel.connect(Uri.parse(routeBase + _webSocketRoute));
+
+    webSocket!.stream.listen((event) {
+      CommandResultModel result =
+          CommandResultModel.fromJson(jsonDecode(event));
+      if (!result.success) {
+        onError(result.message);
+        return;
+      }
+      (String, ProcessoLeituraMontagemModel)? leitura =
+          (result.message, ProcessoLeituraMontagemModel.fromJson(result.data));
+      onMessageReceived(leitura);
+    });
   }
 
   Future tryConnect() async {
@@ -29,20 +49,5 @@ class ProcessoLeituraWebSocket {
   void sendMessage(ProcessoLeituraMontagemModel montagem) async {
     await tryConnect();
     webSocket?.sink.add(jsonEncode(montagem.toJson()));
-  }
-
-  void onMessage(
-    dynamic value, {
-    required Function((String, ProcessoLeituraMontagemModel)) onMessagePar,
-    required Function(String) onError,
-  }) async {
-    CommandResultModel result = CommandResultModel.fromJson(jsonDecode(value));
-    if (!result.success) {
-      onError(result.message);
-      return;
-    }
-    (String, ProcessoLeituraMontagemModel)? leitura =
-        (result.message, ProcessoLeituraMontagemModel.fromJson(result.data));
-    onMessagePar(leitura);
   }
 }

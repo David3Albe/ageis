@@ -120,7 +120,7 @@ class _ItemPageState extends State<ItemPage> {
               onPressed: () => {
                 openModal(
                   context,
-                  ItemModel.empty(),
+                  ItemModel.empty().copyWith(status: '1'),
                 ),
               },
             ),
@@ -262,7 +262,6 @@ class _ItemPageState extends State<ItemPage> {
     );
   }
 
- 
   void loadProprietarioCubit() async {
     if (!proprietarioCubit.state.loaded) {
       await proprietarioCubit.loadFilter(

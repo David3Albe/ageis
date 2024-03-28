@@ -51,7 +51,7 @@ class _ProcessoPageDeviceInformationWidgetState
     String value = '';
     value = _addParameter(value, state.processo.maquina ?? '');
     if (state.processo.leituraAtual.dataHoraInicioProcesso != null) {
-      final f = DateFormat('yyyy-MM-dd HH:mm');
+      final f = DateFormat('dd/MM/yyyy HH:mm');
       String dataHora =
           f.format(state.processo.leituraAtual.dataHoraInicioProcesso!);
 

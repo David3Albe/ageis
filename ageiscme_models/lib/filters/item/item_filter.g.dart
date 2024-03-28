@@ -37,6 +37,7 @@ _$ItemFilterImpl _$$ItemFilterImplFromJson(Map json) => _$ItemFilterImpl(
           : KitModel.fromJson(
               Map<String, Object?>.from(json['kitFilter'] as Map)),
       codKit: json['codKit'] as int?,
+      iDEtiqueta: json['iDEtiqueta'] as String?,
     );
 
 Map<String, dynamic> _$$ItemFilterImplToJson(_$ItemFilterImpl instance) =>
@@ -61,4 +62,5 @@ Map<String, dynamic> _$$ItemFilterImplToJson(_$ItemFilterImpl instance) =>
       'itemFilter': instance.itemFilter?.toJson(),
       'kitFilter': instance.kitFilter?.toJson(),
       'codKit': instance.codKit,
+      'iDEtiqueta': instance.iDEtiqueta,
     };

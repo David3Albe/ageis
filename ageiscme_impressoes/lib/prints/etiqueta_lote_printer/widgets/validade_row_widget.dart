@@ -25,24 +25,18 @@ class ValidadeRowWidget extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 15),
-              child: Text(
-                dataHora,
-                style: const TextStyle(
-                  fontSize: 6,
-                ),
+            child: Text(
+              dataHora,
+              style: const TextStyle(
+                fontSize: 6,
               ),
             ),
           ),
           Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Text(
-                dataHora,
-                style: const TextStyle(
-                  fontSize: 6,
-                ),
+            child: Text(
+              dataHora,
+              style: const TextStyle(
+                fontSize: 6,
               ),
             ),
           ),

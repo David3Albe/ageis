@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:ageiscme_models/enums/decisao_enum.dart';
 import 'package:ageiscme_processo/app/module/blocs/processo_leitura_cubit.dart';
+import 'package:ageiscme_processo/app/module/enums/tipo_alerta.dart';
 import 'package:ageiscme_processo/app/module/shared/cores.dart';
 import 'package:dependencias_comuns/modular_export.dart';
 import 'package:flutter/material.dart';
@@ -20,9 +21,7 @@ class ProcessoPageWarningController extends ChangeNotifier
   Color? corTexto;
   Color? corFundo;
   bool mostrarMensagem = true;
-  int timesRunned = 4;
 
-  Timer? timerCor;
   Timer? timerOcultaMensagem;
 
   void ocultaMensagem() {
@@ -83,18 +82,36 @@ class ProcessoPageWarningController extends ChangeNotifier
     }
   }
 
-  void reiniciaTimerCor() {
-    timerCor?.cancel();
-    timesRunned = 0;
-    setRedColor();
-    // timerCor =
-    //     Timer.periodic(const Duration(milliseconds: 700), changeTimerColor);
+  void reiniciaTimerCor(ProcessoLeituraState state) {
+    setColor(state);
   }
 
-  void setRedColor() {
-    corTexto = COR_TEXTO_PRETO;
-    corFundo = COR_TEXTO_AMARELO;
-    timesRunned++;
+  void setColor(ProcessoLeituraState state) {
+    if (state.aviso == null || state.aviso!.isEmpty==true) {
+      corTexto = COR_TEXTO_PRETO;
+      corFundo = COR_FUNDO_PRETO;
+      notifyListeners();
+      return;
+    }
+    TipoAlerta? tipoAlerta = state.processo.leituraCodigo.tipoAlerta;
+    switch (tipoAlerta) {
+      case TipoAlerta.Vermelho:
+        corTexto = COR_TEXTO_PRETO;
+        corFundo = COR_TEXTO_VERMELHO;
+        break;
+      case TipoAlerta.Laranja:
+        corTexto = COR_TEXTO_PRETO;
+        corFundo = COR_TEXTO_LARANJA;
+        break;
+      case TipoAlerta.Amarelo:
+        corTexto = COR_TEXTO_PRETO;
+        corFundo = COR_TEXTO_AMARELO;
+        break;
+      default:
+        corTexto = COR_TEXTO_PRETO;
+        corFundo = COR_FUNDO_PRETO;
+    }
+
     notifyListeners();
   }
 
@@ -103,21 +120,8 @@ class ProcessoPageWarningController extends ChangeNotifier
     notifyListeners();
   }
 
-  // void changeTimerColor(Timer t) {
-  //   if (!t.isActive) return;
-  //   if (timesRunned > 1) {
-  //     timerCor?.cancel();
-  //     return;
-  //   }
-  //   // corTexto = COR_TEXTO_LARANJA;
-  //   // corFundo = COR_FUNDO_AMARELO;
-  //   timesRunned++;
-  //   notifyListeners();
-  // }
-
   @override
   void dispose() {
-    timerCor?.cancel();
     timerOcultaMensagem?.cancel();
     super.dispose();
   }

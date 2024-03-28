@@ -39,9 +39,8 @@ class _ProcessoPageWarningWidgetState extends State<ProcessoPageWarningWidget> {
         child: BlocListener<ProcessoLeituraCubit, ProcessoLeituraState>(
           listener: (context, state) {
             if (state.rebuildType != ProcessoLeituraRebuildType.All) return;
-            if (state.aviso == null || state.aviso!.isEmpty) return;
             _controller.reiniciarTimerMensagem(state);
-            _controller.reiniciaTimerCor();
+            _controller.reiniciaTimerCor(state);
           },
           child: BlocBuilder<ProcessoLeituraCubit, ProcessoLeituraState>(
             buildWhen: (previous, current) =>

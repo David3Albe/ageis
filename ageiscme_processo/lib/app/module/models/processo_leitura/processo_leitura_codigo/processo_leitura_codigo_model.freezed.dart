@@ -31,6 +31,10 @@ mixin _$ProcessoLeituraCodigoModel {
   set leituraFinalizada(bool? value) => throw _privateConstructorUsedError;
   bool? get alertaVermelho => throw _privateConstructorUsedError;
   set alertaVermelho(bool? value) => throw _privateConstructorUsedError;
+  bool? get fecharTelaExtra => throw _privateConstructorUsedError;
+  set fecharTelaExtra(bool? value) => throw _privateConstructorUsedError;
+  TipoAlerta? get tipoAlerta => throw _privateConstructorUsedError;
+  set tipoAlerta(TipoAlerta? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -50,7 +54,9 @@ abstract class $ProcessoLeituraCodigoModelCopyWith<$Res> {
       List<int> avisosSonoro,
       bool? cancelarLeituras,
       bool? leituraFinalizada,
-      bool? alertaVermelho});
+      bool? alertaVermelho,
+      bool? fecharTelaExtra,
+      TipoAlerta? tipoAlerta});
 }
 
 /// @nodoc
@@ -72,6 +78,8 @@ class _$ProcessoLeituraCodigoModelCopyWithImpl<$Res,
     Object? cancelarLeituras = freezed,
     Object? leituraFinalizada = freezed,
     Object? alertaVermelho = freezed,
+    Object? fecharTelaExtra = freezed,
+    Object? tipoAlerta = freezed,
   }) {
     return _then(_value.copyWith(
       codigoLido: freezed == codigoLido
@@ -94,6 +102,14 @@ class _$ProcessoLeituraCodigoModelCopyWithImpl<$Res,
           ? _value.alertaVermelho
           : alertaVermelho // ignore: cast_nullable_to_non_nullable
               as bool?,
+      fecharTelaExtra: freezed == fecharTelaExtra
+          ? _value.fecharTelaExtra
+          : fecharTelaExtra // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      tipoAlerta: freezed == tipoAlerta
+          ? _value.tipoAlerta
+          : tipoAlerta // ignore: cast_nullable_to_non_nullable
+              as TipoAlerta?,
     ) as $Val);
   }
 }
@@ -112,7 +128,9 @@ abstract class _$$ProcessoLeituraCodigoModelImplCopyWith<$Res>
       List<int> avisosSonoro,
       bool? cancelarLeituras,
       bool? leituraFinalizada,
-      bool? alertaVermelho});
+      bool? alertaVermelho,
+      bool? fecharTelaExtra,
+      TipoAlerta? tipoAlerta});
 }
 
 /// @nodoc
@@ -133,6 +151,8 @@ class __$$ProcessoLeituraCodigoModelImplCopyWithImpl<$Res>
     Object? cancelarLeituras = freezed,
     Object? leituraFinalizada = freezed,
     Object? alertaVermelho = freezed,
+    Object? fecharTelaExtra = freezed,
+    Object? tipoAlerta = freezed,
   }) {
     return _then(_$ProcessoLeituraCodigoModelImpl(
       codigoLido: freezed == codigoLido
@@ -155,6 +175,14 @@ class __$$ProcessoLeituraCodigoModelImplCopyWithImpl<$Res>
           ? _value.alertaVermelho
           : alertaVermelho // ignore: cast_nullable_to_non_nullable
               as bool?,
+      fecharTelaExtra: freezed == fecharTelaExtra
+          ? _value.fecharTelaExtra
+          : fecharTelaExtra // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      tipoAlerta: freezed == tipoAlerta
+          ? _value.tipoAlerta
+          : tipoAlerta // ignore: cast_nullable_to_non_nullable
+              as TipoAlerta?,
     ));
   }
 }
@@ -168,7 +196,9 @@ class _$ProcessoLeituraCodigoModelImpl extends _ProcessoLeituraCodigoModel
       required this.avisosSonoro,
       required this.cancelarLeituras,
       required this.leituraFinalizada,
-      required this.alertaVermelho})
+      required this.alertaVermelho,
+      required this.fecharTelaExtra,
+      required this.tipoAlerta})
       : super._();
 
   factory _$ProcessoLeituraCodigoModelImpl.fromJson(
@@ -185,10 +215,14 @@ class _$ProcessoLeituraCodigoModelImpl extends _ProcessoLeituraCodigoModel
   bool? leituraFinalizada;
   @override
   bool? alertaVermelho;
+  @override
+  bool? fecharTelaExtra;
+  @override
+  TipoAlerta? tipoAlerta;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ProcessoLeituraCodigoModel(codigoLido: $codigoLido, avisosSonoro: $avisosSonoro, cancelarLeituras: $cancelarLeituras, leituraFinalizada: $leituraFinalizada, alertaVermelho: $alertaVermelho)';
+    return 'ProcessoLeituraCodigoModel(codigoLido: $codigoLido, avisosSonoro: $avisosSonoro, cancelarLeituras: $cancelarLeituras, leituraFinalizada: $leituraFinalizada, alertaVermelho: $alertaVermelho, fecharTelaExtra: $fecharTelaExtra, tipoAlerta: $tipoAlerta)';
   }
 
   @override
@@ -200,7 +234,9 @@ class _$ProcessoLeituraCodigoModelImpl extends _ProcessoLeituraCodigoModel
       ..add(DiagnosticsProperty('avisosSonoro', avisosSonoro))
       ..add(DiagnosticsProperty('cancelarLeituras', cancelarLeituras))
       ..add(DiagnosticsProperty('leituraFinalizada', leituraFinalizada))
-      ..add(DiagnosticsProperty('alertaVermelho', alertaVermelho));
+      ..add(DiagnosticsProperty('alertaVermelho', alertaVermelho))
+      ..add(DiagnosticsProperty('fecharTelaExtra', fecharTelaExtra))
+      ..add(DiagnosticsProperty('tipoAlerta', tipoAlerta));
   }
 
   @JsonKey(ignore: true)
@@ -224,7 +260,9 @@ abstract class _ProcessoLeituraCodigoModel extends ProcessoLeituraCodigoModel {
       required List<int> avisosSonoro,
       required bool? cancelarLeituras,
       required bool? leituraFinalizada,
-      required bool? alertaVermelho}) = _$ProcessoLeituraCodigoModelImpl;
+      required bool? alertaVermelho,
+      required bool? fecharTelaExtra,
+      required TipoAlerta? tipoAlerta}) = _$ProcessoLeituraCodigoModelImpl;
   _ProcessoLeituraCodigoModel._() : super._();
 
   factory _ProcessoLeituraCodigoModel.fromJson(Map<String, dynamic> json) =
@@ -245,6 +283,12 @@ abstract class _ProcessoLeituraCodigoModel extends ProcessoLeituraCodigoModel {
   @override
   bool? get alertaVermelho;
   set alertaVermelho(bool? value);
+  @override
+  bool? get fecharTelaExtra;
+  set fecharTelaExtra(bool? value);
+  @override
+  TipoAlerta? get tipoAlerta;
+  set tipoAlerta(TipoAlerta? value);
   @override
   @JsonKey(ignore: true)
   _$$ProcessoLeituraCodigoModelImplCopyWith<_$ProcessoLeituraCodigoModelImpl>

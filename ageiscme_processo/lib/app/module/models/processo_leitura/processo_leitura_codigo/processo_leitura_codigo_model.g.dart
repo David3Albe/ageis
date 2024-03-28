@@ -15,6 +15,8 @@ _$ProcessoLeituraCodigoModelImpl _$$ProcessoLeituraCodigoModelImplFromJson(
       cancelarLeituras: json['cancelarLeituras'] as bool?,
       leituraFinalizada: json['leituraFinalizada'] as bool?,
       alertaVermelho: json['alertaVermelho'] as bool?,
+      fecharTelaExtra: json['fecharTelaExtra'] as bool?,
+      tipoAlerta: $enumDecodeNullable(_$TipoAlertaEnumMap, json['tipoAlerta']),
     );
 
 Map<String, dynamic> _$$ProcessoLeituraCodigoModelImplToJson(
@@ -25,4 +27,12 @@ Map<String, dynamic> _$$ProcessoLeituraCodigoModelImplToJson(
       'cancelarLeituras': instance.cancelarLeituras,
       'leituraFinalizada': instance.leituraFinalizada,
       'alertaVermelho': instance.alertaVermelho,
+      'fecharTelaExtra': instance.fecharTelaExtra,
+      'tipoAlerta': _$TipoAlertaEnumMap[instance.tipoAlerta],
     };
+
+const _$TipoAlertaEnumMap = {
+  TipoAlerta.Vermelho: 1,
+  TipoAlerta.Laranja: 2,
+  TipoAlerta.Amarelo: 3,
+};

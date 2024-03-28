@@ -89,6 +89,11 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
     }
     if (hora != null && hora > 23) hora = 23;
     if (minuto != null && minuto > 59) minuto = 59;
+    if (hora == null && minuto == null) {
+      selectedTime = null;
+      widget.onTimeSelected!(selectedTime);
+      return;
+    }
     tempo = TimeOfDay(hour: hora ?? 0, minute: minuto ?? 0);
     selectedTime = tempo;
     if (widget.onTimeSelected != null) {
@@ -120,11 +125,6 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
     return '${time.hour.toString().padLeft(2, '0')}:'
         '${time.minute.toString().padLeft(2, '0')}';
   }
-
-  // MaskTextInputFormatter maskFormatter = MaskTextInputFormatter(
-  //   mask: '##:##',
-  //   filter: {'#': RegExp(r'[0-9]')},
-  // );
 
   @override
   Widget build(BuildContext context) {
