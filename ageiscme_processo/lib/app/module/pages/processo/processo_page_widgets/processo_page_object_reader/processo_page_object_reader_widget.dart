@@ -55,11 +55,11 @@ class ProcessoPageObjectReaderWidget extends StatelessWidget {
                         ),
                         FittedBox(
                           fit: BoxFit.scaleDown,
-                          child: Text(
+                          child: SelectableText(
                             itemDescription,
                             textAlign: TextAlign.left,
                             style: Fontes.getSegoe(
-                              fontSize: 26 * scale,
+                              fontSize: 24 * scale,
                               cor: Cores.CorTextCards,
                             ),
                           ),
@@ -90,11 +90,11 @@ class ProcessoPageObjectReaderWidget extends StatelessWidget {
                         ),
                         FittedBox(
                           fit: BoxFit.scaleDown,
-                          child: Text(
+                          child: SelectableText(
                             proprietario != null ? proprietario.nome! : ' ',
                             textAlign: TextAlign.left,
                             style: Fontes.getSegoe(
-                              fontSize: 26 * scale,
+                              fontSize: 24 * scale,
                               cor: Cores.CorTextCards,
                             ),
                           ),

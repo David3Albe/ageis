@@ -11,13 +11,11 @@ class ProcessoPageTreeViewItemWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.centerLeft,
-      child: InkWell(
-        onTap: () => showItem(context),
-        child: Text(
-          '${item.idEtiqueta} ${item.descricao}',
-          style:
-              TextStyle(fontSize: HelperFunctions.calculaFontSize(context, 16)),
-        ),
+      child: SelectableText(
+      onTap: () => showItem(context),
+        '${item.idEtiqueta} ${item.descricao}',
+        style:
+            TextStyle(fontSize: HelperFunctions.calculaFontSize(context, 16)),
       ),
     );
   }

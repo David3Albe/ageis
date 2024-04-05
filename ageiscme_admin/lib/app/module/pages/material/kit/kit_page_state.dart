@@ -1,5 +1,7 @@
 import 'package:ageiscme_data/services/kit/kit_service.dart';
+import 'package:ageiscme_models/dto/kit/kit_search/kit_search_dto.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/response_dto/kit/kit_search/kit_search_response_dto.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 
 class KitPageCubit extends Cubit<KitPageState> {
@@ -7,21 +9,21 @@ class KitPageCubit extends Cubit<KitPageState> {
   KitPageCubit({required this.service})
       : super(
           KitPageState(
-            kits: [],
+            response: null,
             loading: false,
           ),
         );
 
-  void loadKit() async {
-    emit(KitPageState(loading: true, kits: []));
+  void searchKits(KitSearchDTO dto) async {
+    emit(KitPageState(loading: true, response: null));
     try {
-      List<KitModel> kits = await service.GetAll();
-      emit(KitPageState(loading: false, kits: kits));
+      (String, KitSearchResponseDTO)? result = await service.search(dto: dto);
+      emit(KitPageState(loading: false, response: result?.$2));
     } on Exception catch (ex) {
       emit(
         KitPageState(
           loading: false,
-          kits: [],
+          response: null,
           error: ex.toString(),
         ),
       );
@@ -35,7 +37,7 @@ class KitPageCubit extends Cubit<KitPageState> {
       emit(
         KitPageState(
           loading: false,
-          kits: state.kits,
+          response: state.response,
           deleted: true,
           message: result.$1,
         ),
@@ -44,7 +46,7 @@ class KitPageCubit extends Cubit<KitPageState> {
       emit(
         KitPageState(
           loading: false,
-          kits: state.kits,
+          response: state.response,
           error: ex.toString(),
         ),
       );
@@ -55,13 +57,13 @@ class KitPageCubit extends Cubit<KitPageState> {
 class KitPageState {
   final bool loading;
   final bool deleted;
-  final List<KitModel> kits;
+  final KitSearchResponseDTO? response;
   final String error;
   final String message;
 
   KitPageState({
     required this.loading,
-    required this.kits,
+    required this.response,
     this.error = '',
     this.deleted = false,
     this.message = '',

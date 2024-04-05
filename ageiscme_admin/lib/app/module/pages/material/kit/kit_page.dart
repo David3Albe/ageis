@@ -3,9 +3,12 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/kit_descritor
 import 'package:ageiscme_admin/app/module/pages/material/kit/kit_page_frm/kit_page_frm.dart';
 import 'package:ageiscme_admin/app/module/pages/material/kit/kit_page_state.dart';
 import 'package:ageiscme_data/services/kit/kit_service.dart';
+import 'package:ageiscme_models/dto/kit/kit_search/kit_search_dto.dart';
 import 'package:ageiscme_models/filters/kit/kit_filter.dart';
 import 'package:ageiscme_models/filters/kit_descritor/kit_descritor_filter.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/response_dto/kit/kit_search/kit_search_kit/kit_search_kit_response_dto.dart';
+import 'package:ageiscme_models/response_dto/kit/kit_search/kit_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
@@ -27,33 +30,41 @@ class KitPage extends StatefulWidget {
 }
 
 class _KitPageState extends State<KitPage> {
-  final List<CustomDataColumn> colunas = [
+  KitSearchResponseDTO? response;
+
+  late final List<CustomDataColumn> colunas = [
     CustomDataColumn(
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
+    ),
+    CustomDataColumn(text: 'Código Barras', field: 'codBarra'),
+    CustomDataColumn(
+      text: 'Descrição',
+      field: 'codDescritor',
+      valueConverter: (value) => response?.descritores[value]?.descricao ?? '',
     ),
     CustomDataColumn(
       text: 'Cor 1',
-      field: 'cor1',
-      valueConverter: (value) => value != null ? value['nome'] : '',
+      field: 'codCor1',
+      valueConverter: (value) => response?.cores[value]?.descricao ?? '',
     ),
     CustomDataColumn(
       text: 'Cor 2',
-      field: 'cor2',
-      valueConverter: (value) => value != null ? value['nome'] : '',
+      field: 'codCor2',
+      valueConverter: (value) => response?.cores[value]?.descricao ?? '',
     ),
     CustomDataColumn(
       text: 'Cor 3',
-      field: 'cor3',
-      valueConverter: (value) => value != null ? value['nome'] : '',
+      field: 'codCor3',
+      valueConverter: (value) => response?.cores[value]?.descricao ?? '',
     ),
     CustomDataColumn(
       text: 'Cor 4',
-      field: 'cor4',
-      valueConverter: (value) => value != null ? value['nome'] : '',
+      field: 'codCor4',
+      valueConverter: (value) => response?.cores[value]?.descricao ?? '',
     ),
-    CustomDataColumn(text: 'Código Barras', field: 'codBarra'),
     CustomDataColumn(
       text: 'Situação',
       field: 'status',
@@ -73,7 +84,7 @@ class _KitPageState extends State<KitPage> {
     kitCorCubit = KitCorCubit();
     kitDescritorCubit = KitDescritorCubit();
     bloc = KitPageCubit(service: service);
-    bloc.loadKit();
+    bloc.searchKits(KitSearchDTO());
     super.initState();
   }
 
@@ -87,7 +98,7 @@ class _KitPageState extends State<KitPage> {
           onPressed: () => {
             openModal(
               context,
-              KitModel.empty().copyWith(status: '1'),
+              null,
             ),
           },
         ),
@@ -100,6 +111,7 @@ class _KitPageState extends State<KitPage> {
           child: BlocBuilder<KitPageCubit, KitPageState>(
             bloc: bloc,
             builder: (context, state) {
+              response = state.response;
               if (state.loading) {
                 return const Center(
                   child: LoadingWidget(),
@@ -108,12 +120,17 @@ class _KitPageState extends State<KitPage> {
               return Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
-                  child: PlutoGridWidget(
-                    onEdit: (KitModel objeto) =>
-                        {openModal(context, KitModel.copy(objeto))},
-                    onDelete: (KitModel objeto) => {delete(context, objeto)},
+                  child: PlutoGridWidget<KitSearchKitResponseDTO>(
+                    onEdit: (KitSearchKitResponseDTO objeto) => {
+                      openModal(
+                        context,
+                        KitSearchKitResponseDTO.copy(objeto),
+                      ),
+                    },
+                    onDelete: (KitSearchKitResponseDTO objeto) =>
+                        {delete(context, objeto)},
                     columns: colunas,
-                    items: state.kits,
+                    items: state.response?.kits ?? [],
                   ),
                 ),
               );
@@ -146,22 +163,24 @@ class _KitPageState extends State<KitPage> {
     }
   }
 
-  Future<KitModel?> getFilter(KitModel kit) async {
+  Future<KitModel?> getFilter(KitSearchKitResponseDTO kit) async {
     return service.FilterOne(
       KitFilter(
         cod: kit.cod,
         carregarItens: true,
-        tStamp: kit.tStamp,
       ),
     );
   }
 
-  Future<void> openModal(BuildContext context, KitModel kit) async {
+  Future<void> openModal(
+    BuildContext context,
+    KitSearchKitResponseDTO? kit,
+  ) async {
     LoadingController loading = LoadingController(context: context);
     loadKitCorCubit();
 
-    KitModel? kitModel = kit;
-    if (kit.cod != 0) {
+    KitModel? kitModel = KitModel.empty().copyWith(status: '1');
+    if (kit != null && kit.cod != 0) {
       kitModel = await getFilter(
         kit,
       );
@@ -185,14 +204,17 @@ class _KitPageState extends State<KitPage> {
     );
     if (result == null || !result.$1) return;
     ToastUtils.showCustomToastSucess(context, result.$2);
-    bloc.loadKit();
+    bloc.searchKits(KitSearchDTO());
   }
 
-  void delete(BuildContext context, KitModel kit) async {
+  void delete(BuildContext context, KitSearchKitResponseDTO kitBase) async {
     bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
       context,
-      'Confirma a remoção do Kit\n${kit.cod} - ${kit.codBarra}',
+      'Confirma a remoção do Kit\n${kitBase.cod} - ${kitBase.codBarra}',
     );
+    KitModel kit = KitModel.empty();
+    kit.cod = kitBase.cod;
+    kit.tStamp = kitBase.tStamp;
     if (confirmacao) bloc.delete(kit);
   }
 
@@ -201,7 +223,7 @@ class _KitPageState extends State<KitPage> {
       context,
       state.message,
     );
-    bloc.loadKit();
+    bloc.searchKits(KitSearchDTO());
   }
 
   void onError(KitPageState state) {

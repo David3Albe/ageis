@@ -79,15 +79,15 @@ class ItemMenuChildrenWidget extends AnimatedWidget {
   double getHeightSpacer(Size size) {
     double height = size.height;
     if (height > 900) {
-      return 8;
+      return 2;
     } else if (height > 800) {
-      return 7;
+      return 2;
     } else if (height > 600) {
-      return 5;
+      return 2;
     } else if (height > 500) {
-      return 4;
+      return 2;
     } else if (height > 400) {
-      return 3;
+      return 2;
     }
     return 2;
   }
@@ -134,7 +134,8 @@ class ItemMenuChildrenWidget extends AnimatedWidget {
                     navExpanded
                         ? Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.only(left: 24.0),
+                              padding:
+                                  const EdgeInsets.only(left: 24.0, right: 3),
                               child: Text(
                                 item.text,
                                 softWrap: true,

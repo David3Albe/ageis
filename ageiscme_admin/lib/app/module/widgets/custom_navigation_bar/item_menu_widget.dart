@@ -53,17 +53,17 @@ class _ItemMenuWidgetState extends State<ItemMenuWidget>
   double getSpacer(Size size) {
     double height = size.height;
     if (height > 900) {
-      return 8;
-    } else if (height > 800) {
-      return 7;
-    } else if (height > 600) {
-      return 6;
-    } else if (height > 500) {
       return 5;
-    } else if (height > 400) {
+    } else if (height > 800) {
       return 4;
+    } else if (height > 600) {
+      return 3;
+    } else if (height > 500) {
+      return 2;
+    } else if (height > 400) {
+      return 1;
     }
-    return 3;
+    return 1;
   }
 
   double getFontSize(Size size) {
@@ -144,7 +144,7 @@ class _ItemMenuWidgetState extends State<ItemMenuWidget>
           ItemMenuChildrenWidget(
             Tween<double>(
               begin: 0,
-              end: _getChildenHeight(filho.text.runes.length, size),
+              end: _getChildenHeight(filho.text.length, size),
             ).animate(controller),
             filho,
             widget.item,
@@ -174,13 +174,18 @@ class _ItemMenuWidgetState extends State<ItemMenuWidget>
   }
 
   double _getChildenHeight(int length, Size size) {
-    if (length * 1.7 < 40) return getHeightChildrenByRes(40, size);
-    if (length * 1.7 < 45) return getHeightChildrenByRes(50, size);
-    if (length * 1.7 < 50) return getHeightChildrenByRes(55, size);
-    if (length * 1.7 < 55) return getHeightChildrenByRes(60, size);
-    if (length * 1.7 < 60) return getHeightChildrenByRes(65, size);
-    if (length * 1.7 < 65) return getHeightChildrenByRes(70, size);
-    return length * 1.7;
+    if (length < 15) return getHeightChildrenByRes(30, size);
+    if (length < 20) return getHeightChildrenByRes(35, size);
+    if (length < 25) return getHeightChildrenByRes(40, size);
+    if (length < 30) return getHeightChildrenByRes(45, size);
+    if (length < 35) return getHeightChildrenByRes(50, size);
+    if (length < 40) return getHeightChildrenByRes(60, size);
+    if (length < 45) return getHeightChildrenByRes(65, size);
+    if (length < 50) return getHeightChildrenByRes(70, size);
+    if (length < 55) return getHeightChildrenByRes(75, size);
+    if (length < 60) return getHeightChildrenByRes(80, size);
+    if (length < 65) return getHeightChildrenByRes(85, size);
+    return length * 1;
   }
 
   void itemSelected(

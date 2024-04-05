@@ -41,18 +41,16 @@ class ProcessoPageTreeViewKitWidget extends StatelessWidget {
                       size: fontSize,
                     ),
                   ),
-            InkWell(
+            SelectableText(
               onTap: () => showKit(context, kit),
-              child: Text(
-                '${kit.codBarra} ${kit.descritor == null ? '' : kit.descritor!.nome} ${getItensKitLidos()}',
-                style: TextStyle(
-                  fontSize: 16 * scale,
-                  color: getAllItensKitLidos()
-                      ? null
-                      : KitProcessoStatus.getCorTextItemFromStatus(
-                          KitProcessoStatus.naoLidos,
-                        ),
-                ),
+              '${kit.codBarra} ${kit.descritor == null ? '' : kit.descritor!.nome} ${getItensKitLidos()}',
+              style: TextStyle(
+                fontSize: 16 * scale,
+                color: getAllItensKitLidos()
+                    ? null
+                    : KitProcessoStatus.getCorTextItemFromStatus(
+                        KitProcessoStatus.naoLidos,
+                      ),
               ),
             ),
           ],

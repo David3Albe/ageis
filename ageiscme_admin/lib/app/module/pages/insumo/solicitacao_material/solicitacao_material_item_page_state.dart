@@ -5,11 +5,10 @@ import 'package:dependencias_comuns/bloc_export.dart';
 class SolicitacaoMaterialItemPageCubit
     extends Cubit<SolicitacaoMaterialItemPageState> {
   final SolicitacaoMaterialService service;
-  final List<SolicitacaoMaterialItemModel> itemsList;
 
   SolicitacaoMaterialItemPageCubit({
     required this.service,
-    required this.itemsList,
+    required List<SolicitacaoMaterialItemModel> itemsList,
   }) : super(
           SolicitacaoMaterialItemPageState(
             itemsList: itemsList,
@@ -25,9 +24,10 @@ class SolicitacaoMaterialItemPageCubit
   }
 
   void removeItem(SolicitacaoMaterialItemModel item) {
+    List<SolicitacaoMaterialItemModel> items = state.itemsList.where((e) => e != item).toList();
     emit(
       SolicitacaoMaterialItemPageState(
-        itemsList: state.itemsList.where((e) => e != item).toList(),
+        itemsList: items,
       ),
     );
   }

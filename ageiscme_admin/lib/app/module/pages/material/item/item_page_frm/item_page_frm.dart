@@ -1,5 +1,6 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/etiqueta/etiqueta_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/proprietario/proprietario_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/material/item/item_page_etiquetas_frm/item_page_etiquetas_frm.dart';
 import 'package:ageiscme_admin/app/module/pages/material/item/item_page_frm/item_page_frm_state.dart';
 import 'package:ageiscme_admin/app/module/pages/material/item/item_page_frm_type.dart';
 import 'package:ageiscme_data/services/item/item_service.dart';
@@ -7,13 +8,21 @@ import 'package:ageiscme_data/services/item_descritor/item_descritor_service.dar
 import 'package:ageiscme_data/services/processo_leitura/processo_leitura_service.dart';
 import 'package:ageiscme_data/stores/authentication/authentication_store.dart';
 import 'package:ageiscme_impressoes/dto/item_consignado_etiqueta_print/item_consignado_etiqueta_print_dto.dart';
+import 'package:ageiscme_impressoes/dto/item_tag_print/item_tag_print_dto.dart';
+import 'package:ageiscme_impressoes/dto/processo_preparation_print/processo_preparation_item_print/processo_preparation_item_print_dto.dart';
+import 'package:ageiscme_impressoes/dto/processo_preparation_print/processo_preparation_print_dto.dart';
 import 'package:ageiscme_impressoes/prints/item_consignado_printer/item_consignado_printer_controller.dart';
+import 'package:ageiscme_impressoes/prints/item_tag_printer/item_tag_printer_controller.dart';
+import 'package:ageiscme_impressoes/prints/processo_preparation_printer/processo_preparation_printer_controller.dart';
 import 'package:ageiscme_models/dto/authentication_result/authentication_result_dto.dart';
+import 'package:ageiscme_models/dto/item/item_etiqueta_preparo/item_etiqueta_preparo_dto.dart';
 import 'package:ageiscme_models/filters/item_descritor/item_descritor_filter.dart';
 import 'package:ageiscme_models/filters/processo_leitura/processo_leitura_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/models/item_consignado/item_consignado_model.dart';
 import 'package:ageiscme_models/models/item_descritor_consignado/item_descritor_consignado_model.dart';
+import 'package:ageiscme_models/response_dto/item_etiqueta_preparo_response/item_etiqueta_preparo_item_response/item_etiqueta_preparo_item_response_dto.dart';
+import 'package:ageiscme_models/response_dto/item_etiqueta_preparo_response/item_etiqueta_preparo_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
@@ -27,8 +36,12 @@ import 'package:compartilhados/componentes/campos/text_field_number_widget.dart'
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/images/image_widget.dart';
+import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
@@ -753,6 +766,26 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
             actions: [
               Row(
                 children: [
+                  CustomPopupMenuWidget(
+                    items: [
+                      if (item.cod != null && item.cod != 0)
+                        CustomPopupItemModel(
+                          text: 'Imprimir Etiqueta',
+                          onTap: _imprimirEtiqueta,
+                        ),
+                      if (item.cod != null && item.cod != 0)
+                        CustomPopupItemModel(
+                          text: 'Imprimir Etiqueta Preparo',
+                          onTap: _imprimirEtiquetaPreparo,
+                        ),
+                      if (item.cod != null && item.cod != 0)
+                        CustomPopupItemModel(
+                          text: 'Etiquetas',
+                          onTap: _telaEtiquetas,
+                        ),
+                      CustomPopupItemHistoryModel.getHistoryItem(),
+                    ],
+                  ),
                   const Spacer(),
                   Padding(
                     padding: const EdgeInsets.only(left: 16.0),
@@ -869,6 +902,65 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
       return;
     }
     cubit.save(item);
+  }
+
+  Future _telaEtiquetas() async {
+    await showDialog<bool>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return ItemPageEtiquetasFrm(
+          item: item,
+        );
+      },
+    );
+  }
+
+  Future _imprimirEtiqueta() async {
+    ItemTagPrintDTO dto = ItemTagPrintDTO(
+      descricaoItem: item.descricao ?? '',
+      descricaoProprietario: item.proprietario?.nome ?? '',
+      idEtiqueta: item.idEtiqueta ?? '',
+      restricao: item.restricao,
+    );
+    ItemTagPritnerController controller =
+        ItemTagPritnerController(context: context, dto: dto);
+    LoadingController loading = LoadingController(context: context);
+    await controller.print();
+    loading.close(context, mounted);
+  }
+
+  Future _imprimirEtiquetaPreparo() async {
+    (String, ItemEtiquetaPreparoResponseDTO)? response = await ItemService()
+        .getEtiquetaPreparo(dto: ItemEtiquetaPreparoDTO(codItem: item.cod!));
+    if (response == null) return;
+    ItemEtiquetaPreparoItemResponseDTO itemEtiqueta = response.$2.item;
+    ProcessoPreparationPrintDTO dto = ProcessoPreparationPrintDTO(
+      actualTime: response.$2.dataLeitura,
+      companyName: response.$2.instituicao.nome,
+      userName: response.$2.usuario.nome,
+      userDoc: response.$2.usuario.docClasse,
+      kits: [],
+      itens: [
+        ProcessoPreparationItemPrintDTO(
+          nome: itemEtiqueta.nome,
+          nomeProprietario: itemEtiqueta.nomeProprietario,
+          nomeProcesso: itemEtiqueta.nomeTipoProcesso,
+          validadeEmbalagem: response.$2.validadeEmbalagem,
+          tagId: itemEtiqueta.idEtiqueta,
+          urgency: itemEtiqueta.urgencia,
+          ordemLeitura: 0,
+        ),
+      ],
+    );
+    ProcessoPreparationPrinterController controller =
+        ProcessoPreparationPrinterController(
+      context: context,
+      dto: dto,
+    );
+    LoadingController loading = LoadingController(context: context);
+    await controller.print();
+    loading.closeDefault();
   }
 
   Future _printConsignado(ItemModel item) async {

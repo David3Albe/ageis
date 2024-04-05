@@ -20,7 +20,7 @@ class ItemRowWidget extends StatelessWidget {
           ),
         ),
         Text(
-          item.nome + ' (1 Item)',
+          item.nome,
           style: TextStyle(
             fontSize: 8,
             fontWeight: FontWeight.bold,

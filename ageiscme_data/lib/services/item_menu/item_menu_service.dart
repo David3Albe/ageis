@@ -315,7 +315,7 @@ class ItemMenuService {
     menuItemInsumo.addChildren(
       ItemMenuModel(
         'Solicitação de Material Expedições',
-        route: '/insumo/insumo-solicitacao-consulta',
+        route: '/insumo/solicitacao-material-expedicoes',
         rights: [
           DireitoEnum.InsumosSolicitacaoMaterialExpedicoes,
         ],

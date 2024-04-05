@@ -1,21 +1,26 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/equipamento/equipamento_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/insumo/insumo_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/insumo/solicitacao_material/solicitacao_material_confirmacao_sem_usuario/solicitacao_material_confirmacao_sem_usuario_page.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/solicitacao_material/solicitacao_material_item_page_state.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/solicitacao_material/solicitacao_material_page_frm/solicitacao_material_page_frm.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/solicitacao_material/solicitacao_material_page_state.dart';
+import 'package:ageiscme_admin/app/module/pages/insumo/solicitacao_material/solicitacao_material_usuario/solicitacao_material_usuario_page.dart';
 import 'package:ageiscme_data/services/solicitacao_material/solicitacao_material_service.dart';
 import 'package:ageiscme_data/stores/authentication/authentication_store.dart';
 import 'package:ageiscme_models/dto/authentication_result/authentication_result_dto.dart';
+import 'package:ageiscme_models/dto/solicitacao_material/add/solicitacao_material_add_dto.dart';
 import 'package:ageiscme_models/filters/equipamento/equipamento_filter.dart';
 import 'package:ageiscme_models/models/solicitacao_material/solicitacao_material_model.dart';
 import 'package:ageiscme_models/models/solicitacao_material_item/solicitacao_material_item_model.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
+import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
-import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
-import 'package:compartilhados/componentes/toasts/error_dialog.dart';
+import 'package:compartilhados/componentes/toasts/sucess_dialog.dart';
+import 'package:compartilhados/componentes/toasts/warning_dialog.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/modular_export.dart';
@@ -74,7 +79,7 @@ class _SolicitacaoMaterialPageState extends State<SolicitacaoMaterialPage> {
       codUsuario = value.usuario!.cod;
     });
 
-    bloc.loadItems(bloc.itemsList);
+    bloc.loadItems(bloc.state.itemsList);
     super.initState();
   }
 
@@ -84,31 +89,55 @@ class _SolicitacaoMaterialPageState extends State<SolicitacaoMaterialPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          children: [
-            AddButtonWidget(
-              onPressed: () => {
-                openModal(
-                  context,
-                  SolicitacaoMaterialItemModel.empty(),
+        BlocBuilder<SolicitacaoMaterialPageCubit, SolicitacaoMaterialPageState>(
+          bloc: cubit,
+          builder: (context, state) {
+            return Row(
+              children: [
+                CleanButtonWidget(
+                  onPressed: () {
+                    cubit.clear();
+                    bloc.clearItems();
+                  },
                 ),
-              },
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 5),
-              child: SaveButtonWidget(
-                onPressed: () => salvar(),
-              ),
-            ),
-          ],
+                const Padding(
+                  padding: const EdgeInsets.only(left: 5),
+                ),
+                AddButtonWidget(
+                  readonly: state.solicitacaoMaterial.cod != null &&
+                      state.solicitacaoMaterial.cod != 0,
+                  onPressed: () => {
+                    openModal(
+                      context,
+                      SolicitacaoMaterialItemModel.empty(),
+                    ),
+                  },
+                ),
+                const Padding(
+                  padding: const EdgeInsets.only(left: 5),
+                ),
+                SaveButtonWidget(
+                  readonly: state.solicitacaoMaterial.cod != null &&
+                      state.solicitacaoMaterial.cod != 0,
+                  onPressed: () => salvar(),
+                ),
+                if (state.solicitacaoMaterial.cod != null &&
+                    state.solicitacaoMaterial.cod != 0)
+                  Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: SelectableText(
+                      'Solicitação gerada, Código: ${state.solicitacaoMaterial.cod}',
+                    ),
+                  ),
+              ],
+            );
+          },
         ),
         BlocListener<SolicitacaoMaterialPageCubit,
             SolicitacaoMaterialPageState>(
           bloc: cubit,
-          listener: (context, state) {
-            if (state.saved) {
-              //Navigator.of(context).pop((state.saved, state.message));
-            }
+          listener: (context, state) async {
+            if (state.saved == true) await salvou(state);
           },
           child: BlocBuilder<SolicitacaoMaterialItemPageCubit,
               SolicitacaoMaterialItemPageState>(
@@ -123,7 +152,6 @@ class _SolicitacaoMaterialPageState extends State<SolicitacaoMaterialPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
-                    filterOnlyActives: true,
                     onEdit: (SolicitacaoMaterialItemModel objeto) => {
                       openModal(
                         context,
@@ -133,7 +161,7 @@ class _SolicitacaoMaterialPageState extends State<SolicitacaoMaterialPage> {
                     onDelete: (SolicitacaoMaterialItemModel objeto) =>
                         {delete(context, objeto)},
                     columns: colunas,
-                    items: bloc.itemsList,
+                    items: bloc.state.itemsList,
                   ),
                 ),
               );
@@ -183,37 +211,60 @@ class _SolicitacaoMaterialPageState extends State<SolicitacaoMaterialPage> {
     BuildContext context,
     SolicitacaoMaterialItemModel solicitacaoMaterialItem,
   ) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do item da Solicitacao',
-    );
-    if (confirmacao) return;
+    bloc.removeItem(solicitacaoMaterialItem);
   }
 
-  void salvar() {
+  Future<String?> _getUserBarCode() async {
+    return await showDialog<String>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return const SolicitacaoMaterialUsuarioPage();
+      },
+    );
+  }
+
+  Future<bool?> _continuarSalvamento(String? userBarCode) async {
+    if (userBarCode != null) return true;
+    return await showDialog<bool>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return const SolicitacaoMaterialConfirmacaoSemUsuarioPage();
+      },
+    );
+  }
+
+  Future salvar() async {
     if (bloc.state.itemsList.isEmpty) {
-      ErrorUtils.showErrorDialog(
+      await WarningUtils.showWarningDialog(
         context,
-        ['Não há solicitação de material para ser inserida!'],
+        'Não há solicitação de material para ser inserida!',
       );
+      return;
     }
 
-    SolicitacaoMaterialModel solicitaMaterial = SolicitacaoMaterialModel(
-      cod: 0,
-      codInstituicao: 2,
-      codUsuarioEntrega: null,
-      codUsuarioRecebimento: null,
-      codUsuarioSolicitante: codUsuario,
-      codusuarioAutorizacao: null,
-      dataHoraAutorizacao: null,
-      dataHoraEntrega: null,
-      dataHoraSolicitacao: DateTime.now(),
-      situacao: 1,
-      ultimaAlteracao: null,
-      tstamp: '',
-      solicitacoesMateriais: bloc.itemsList,
-    );
+    String? userBarCode = await _getUserBarCode();
+    bool? salvar = await _continuarSalvamento(userBarCode);
+    if (salvar != true) return;
 
-    cubit.save(solicitaMaterial);
+    SolicitacaoMaterialAddDTO solicitacaoMaterialAddDTO =
+        SolicitacaoMaterialAddDTO(
+      codUsuarioSolicitante: codUsuario!,
+      codBarraUsuarioAutorizacao: userBarCode,
+      solicitacoesMateriais: bloc.state.itemsList,
+      situacao: 1,
+    );
+    LoadingController loading = LoadingController(context: context);
+    await cubit.add(solicitacaoMaterialAddDTO);
+    loading.closeDefault();
+  }
+
+  Future salvou(SolicitacaoMaterialPageState state) async {
+    if (state.saved != true) return;
+    await SucessUtils.showSucessDialog(
+      context,
+      'Solicitação gerada com sucesso\nCódigo: ${state.solicitacaoMaterial.cod}',
+    );
   }
 }

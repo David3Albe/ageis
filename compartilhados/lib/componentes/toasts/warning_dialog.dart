@@ -102,7 +102,7 @@ class _WarningWidget extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Container(
                 alignment: Alignment.topLeft,
-                child: Text(
+                child: SelectableText(
                   warning,
                 ),
               ),

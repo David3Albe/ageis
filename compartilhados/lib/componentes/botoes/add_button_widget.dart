@@ -10,8 +10,13 @@ class _AddButtonWidgetHoveredCubit extends Cubit<bool> {
 }
 
 class AddButtonWidget extends StatelessWidget {
-  AddButtonWidget({required this.onPressed, Key? key});
+  AddButtonWidget({
+    required this.onPressed,
+    this.readonly,
+    Key? key,
+  });
   final void Function()? onPressed;
+  final bool? readonly;
   final _AddButtonWidgetHoveredCubit hoverCubit =
       _AddButtonWidgetHoveredCubit();
 
@@ -42,7 +47,7 @@ class AddButtonWidget extends StatelessWidget {
                 ),
                 backgroundColor: Cores.corBotaoVerdeSelecionado,
               ),
-        onPressed: onPressed,
+        onPressed: readonly == true ? null : onPressed,
         child: Padding(
           padding: EdgeInsets.symmetric(
             horizontal: 12.0 * scaleW,

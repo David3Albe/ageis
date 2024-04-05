@@ -17,14 +17,12 @@ class ProcessoPageTreeViewKitStatusItemWidget extends StatelessWidget {
     double scale = MediaQuery.of(context).size.width / 1920;
     return Tooltip(
       message: item.informacoesResponsavelPendenteKit ?? '',
-      child: InkWell(
-        onTap: () => showItem(context),
-        child: Text(
-          '${item.idEtiqueta} ${item.descricao}',
-          style: TextStyle(
-            fontSize: 16 * scale,
-            color: color,
-          ),
+      child: SelectableText(
+      onTap: () => showItem(context),
+        '${item.idEtiqueta} ${item.descricao}',
+        style: TextStyle(
+          fontSize: 16 * scale,
+          color: color,
         ),
       ),
     );

@@ -25,7 +25,7 @@ class _CentroCustoPageState extends State<CentroCustoPage> {
     CustomDataColumn(
       text: 'Cód',
       field: 'cod',
-      type: CustomDataColumnType.Number, 
+      type: CustomDataColumnType.Number,
     ),
     CustomDataColumn(text: 'Centro Custo', field: 'centroCusto'),
     CustomDataColumn(text: 'Descrição', field: 'descricao'),
@@ -65,36 +65,33 @@ class _CentroCustoPageState extends State<CentroCustoPage> {
             ),
           },
         ),
-        BlocListener<CentroCustoPageCubit, CentroCustoPageState>(
+        BlocConsumer<CentroCustoPageCubit, CentroCustoPageState>(
           bloc: bloc,
           listener: (context, state) {
             if (state.deleted) deleted(state);
             if (state.error.isNotEmpty) onError(state);
           },
-          child: BlocBuilder<CentroCustoPageCubit, CentroCustoPageState>(
-            bloc: bloc,
-            builder: (context, state) {
-              if (state.loading) {
-                return const Center(
-                  child: LoadingWidget(),
-                );
-              }
-              return Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 16.0, bottom: 16),
-                  child: PlutoGridWidget(
-                    filterOnlyActives: true,
-                    onEdit: (CentroCustoModel objeto) =>
-                        {openModal(context, CentroCustoModel.copy(objeto))},
-                    onDelete: (CentroCustoModel objeto) =>
-                        {delete(context, objeto)},
-                    columns: colunas,
-                    items: state.centrosCusto,
-                  ),
-                ),
+          builder: (context, state) {
+            if (state.loading) {
+              return const Center(
+                child: LoadingWidget(),
               );
-            },
-          ),
+            }
+            return Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 16.0, bottom: 16),
+                child: PlutoGridWidget(
+                  filterOnlyActives: true,
+                  onEdit: (CentroCustoModel objeto) =>
+                      {openModal(context, CentroCustoModel.copy(objeto))},
+                  onDelete: (CentroCustoModel objeto) =>
+                      {delete(context, objeto)},
+                  columns: colunas,
+                  items: state.centrosCusto,
+                ),
+              ),
+            );
+          },
         ),
       ],
     );

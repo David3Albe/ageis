@@ -6,8 +6,16 @@ import 'package:ageiscme_admin/app/module/pages/material/kit/kit_page_frm/kit_pa
 import 'package:ageiscme_admin/app/module/pages/material/kit/kit_page_frm/kit_page_frm_state.dart';
 import 'package:ageiscme_data/services/item/item_service.dart';
 import 'package:ageiscme_data/services/kit/kit_service.dart';
+import 'package:ageiscme_impressoes/dto/kit_tag_print/kit_tag_print_dto.dart';
+import 'package:ageiscme_impressoes/dto/processo_preparation_print/processo_preparation_kit_print/processo_preparation_kit_print_dto.dart';
+import 'package:ageiscme_impressoes/dto/processo_preparation_print/processo_preparation_print_dto.dart';
+import 'package:ageiscme_impressoes/prints/kit_tag_printer/kit_tag_printer_controller.dart';
+import 'package:ageiscme_impressoes/prints/processo_preparation_printer/processo_preparation_printer_controller.dart';
+import 'package:ageiscme_models/dto/kit/kit_etiqueta_preparo/kit_etiqueta_preparo_dto.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/response_dto/kit_etiqueta_preparo_response/kit_etiqueta_preparo_kit_response/kit_etiqueta_preparo_kit_response_dto.dart';
+import 'package:ageiscme_models/response_dto/kit_etiqueta_preparo_response/kit_etiqueta_preparo_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
@@ -20,6 +28,7 @@ import 'package:compartilhados/componentes/campos/text_field_string_widget.dart'
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
+import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
@@ -436,6 +445,16 @@ class _KitPageFrmState extends State<KitPageFrm> {
                 children: [
                   CustomPopupMenuWidget(
                     items: [
+                      if (kit.cod != 0 && kit.cod != null)
+                        CustomPopupItemModel(
+                          text: 'Imprimir Etiqueta Kit',
+                          onTap: _imprimirTagKit,
+                        ),
+                      if (kit.cod != 0 && kit.cod != null)
+                        CustomPopupItemModel(
+                          text: 'Imprimir Etiqueta Preparo',
+                          onTap: _imprimirEtiquetaPreparo,
+                        ),
                       if (kit.cod == 0 || kit.cod == null)
                         CustomPopupItemModel(
                           text: 'Montar Itens Kit',
@@ -562,5 +581,51 @@ class _KitPageFrmState extends State<KitPageFrm> {
   void salvar() {
     if (!txtRestricao.valid) return;
     cubit.save(kit);
+  }
+
+  Future _imprimirTagKit() async {
+    KitTagPrinterController controller = KitTagPrinterController(
+      context: context,
+      dto: KitTagPrintDTO(
+        codBarra: kit.codBarra!,
+      ),
+    );
+    LoadingController loading = LoadingController(context: context);
+    await controller.print();
+    loading.closeDefault();
+  }
+
+  Future _imprimirEtiquetaPreparo() async {
+    (String, KitEtiquetaPreparoResponseDTO)? response = await KitService()
+        .getEtiquetaPreparo(dto: KitEtiquetaPreparoDTO(codKit: kit.cod!));
+    if (response == null) return;
+    KitEtiquetaPreparoKitResponseDTO kitEtiqueta = response.$2.kit;
+    ProcessoPreparationPrintDTO dto = ProcessoPreparationPrintDTO(
+      actualTime: response.$2.dataLeitura,
+      companyName: response.$2.instituicao.nome,
+      userName: response.$2.usuario.nome,
+      userDoc: response.$2.usuario.docClasse,
+      kits: [
+        ProcessoPreparationKitPrintDTO(
+          nomeDescritor: kitEtiqueta.nome,
+          nomeProprietario: kitEtiqueta.nomeProprietario,
+          nomeProcesso: kitEtiqueta.nomeTipoProcesso,
+          validadeEmbalagem: response.$2.validadeEmbalagem,
+          tagId: kitEtiqueta.codBarra,
+          urgency: kitEtiqueta.urgencia,
+          itensLidos: kitEtiqueta.totalItensLidosKit,
+          itensTotalKit: kitEtiqueta.totalItensLidosKit,
+        ),
+      ],
+      itens: [],
+    );
+    ProcessoPreparationPrinterController controller =
+        ProcessoPreparationPrinterController(
+      context: context,
+      dto: dto,
+    );
+    LoadingController loading = LoadingController(context: context);
+    await controller.print();
+    loading.closeDefault();
   }
 }

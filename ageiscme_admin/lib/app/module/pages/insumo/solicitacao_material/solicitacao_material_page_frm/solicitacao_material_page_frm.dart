@@ -1,7 +1,10 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/equipamento/equipamento_cubit.dart';
+import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/equipamento_insumo/insumos_por_equipamento_simplificado_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/insumo/insumo_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/insumo/solicitacao_material/solicitacao_material_page_frm/cubits/insumo_selecionado_state.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/solicitacao_material/solicitacao_material_page_frm/solicitacao_material_item_page_frm_state.dart';
 import 'package:ageiscme_data/services/solicitacao_material/solicitacao_material_service.dart';
+import 'package:ageiscme_models/dto/insumos_por_equipamento_simplificado/insumos_por_equipamento_simplificado_dto.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/models/solicitacao_material_item/solicitacao_material_item_model.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
@@ -47,8 +50,11 @@ class _SolicitacaoMaterialPageFrmState
   late String titulo;
   late SolicitacaoMaterialItemModel solicitacaoMaterialItem;
 
-  late final InsumoCubit insumoCubit;
   final List<SolicitacaoMaterialItemModel> itemsList;
+  void Function()? refreshInsumoMethod;
+  void Function(InsumoModel? obj)? setSelectedItemMethodBuilder;
+  bool Function()? validateInsumoMethod;
+  bool Function()? validateEquipamentoMethod;
 
   late final SolicitacaoMaterialItemPageFrmCubit cubit =
       SolicitacaoMaterialItemPageFrmCubit(
@@ -57,7 +63,7 @@ class _SolicitacaoMaterialPageFrmState
   );
 
   late final TextFieldStringWidget txtQuantidade = TextFieldStringWidget(
-    placeholder: 'Quantidade (Unidades)',
+    placeholder: 'Quantidade',
     onChanged: (String? str) {
       solicitacaoMaterialItem.quantidadeSolicitada =
           double.tryParse(txtQuantidade.text);
@@ -65,9 +71,6 @@ class _SolicitacaoMaterialPageFrmState
   );
 
   void initState() {
-    insumoCubit = InsumoCubit();
-    insumoCubit.loadAll();
-
     txtQuantidade.addValidator((String str) {
       if (str.isEmpty) {
         return 'Obrigatório';
@@ -79,13 +82,10 @@ class _SolicitacaoMaterialPageFrmState
   }
 
   void setFields() {
-    if (solicitacaoMaterialItem.quantidadeSolicitada == 0) {
-      txtQuantidade.text = '';
-    } else {
-      txtQuantidade.text =
-          solicitacaoMaterialItem.quantidadeSolicitada.toString();
-    }
-
+    txtQuantidade.text = solicitacaoMaterialItem.quantidadeSolicitada == 0 ||
+            solicitacaoMaterialItem.quantidadeSolicitada == null
+        ? ''
+        : solicitacaoMaterialItem.quantidadeSolicitada.toString();
     titulo = 'Solicitação de Material';
   }
 
@@ -93,7 +93,7 @@ class _SolicitacaoMaterialPageFrmState
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<SolicitacaoMaterialItemPageFrmCubit,
+    return BlocConsumer<SolicitacaoMaterialItemPageFrmCubit,
         SolicitacaoMaterialItemPageFrmState>(
       bloc: cubit,
       listener: (context, state) {
@@ -101,154 +101,278 @@ class _SolicitacaoMaterialPageFrmState
           Navigator.of(context).pop((state.saved, state.message));
         }
       },
-      child: BlocBuilder<SolicitacaoMaterialItemPageFrmCubit,
-          SolicitacaoMaterialItemPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return AlertDialog(
-            contentPadding: const EdgeInsets.all(8.0),
-            titlePadding: const EdgeInsets.all(8.0),
-            actionsPadding: const EdgeInsets.all(8.0),
-            title: Row(
+      builder: (context, state) {
+        return AlertDialog(
+          contentPadding: const EdgeInsets.all(8.0),
+          titlePadding: const EdgeInsets.all(8.0),
+          actionsPadding: const EdgeInsets.all(8.0),
+          title: Row(
+            children: [
+              Expanded(
+                child: TitleWidget(
+                  text: titulo,
+                ),
+              ),
+              const Spacer(),
+              CloseButtonWidget(
+                onPressed: () => Navigator.of(context).pop((false, '')),
+              ),
+            ],
+          ),
+          content: MultiBlocProvider(
+            providers: [
+              BlocProvider(
+                create: (context) => InsumoCubit()..loadAll(),
+              ),
+              BlocProvider(
+                create: (context) => InsumoSelecionadoCubit(),
+              ),
+              BlocProvider(
+                create: (context) => InsumosPorEquipamentoSimplificadoCubit()
+                  ..load(
+                    filter: InsumosPorEquipamentoSimplificadoDTO(
+                      apenasInsumosComSaldo: true,
+                    ),
+                  ),
+              ),
+            ],
+            child: Builder(
+              builder: (context) {
+                return Container(
+                  constraints: BoxConstraints(
+                    minWidth: size.width * .5,
+                    minHeight: size.height * .5,
+                    maxHeight: size.height * .8,
+                  ),
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.only(right: 14),
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5.0),
+                          child:
+                              BlocBuilder<EquipamentoCubit, EquipamentoState>(
+                            bloc: widget.equipamentoCubit,
+                            builder: (context, equipamentoState) {
+                              if (equipamentoState.loading) {
+                                return const LoadingWidget();
+                              }
+                              List<EquipamentoModel> equipamentos =
+                                  equipamentoState.objs;
+                              EquipamentoModel? equipamento = equipamentos
+                                  .where(
+                                    (element) =>
+                                        element.cod ==
+                                        solicitacaoMaterialItem.codEquipamento,
+                                  )
+                                  .firstOrNull;
+                              return DropDownSearchWidget<EquipamentoModel>(
+                                validator: (val) {
+                                  if (val == null || val.cod == null) {
+                                    return 'Obrigatório';
+                                  }
+                                  return null;
+                                },
+                                validateBuilder: (
+                                  context,
+                                  validateMethodBuilder,
+                                ) =>
+                                    validateEquipamentoMethod =
+                                        validateMethodBuilder,
+                                textFunction: (equipamento) =>
+                                    equipamento.EquipamentoNomeText(),
+                                initialValue: equipamento,
+                                sourceList: equipamentos
+                                    .where((element) => element.ativo == true)
+                                    .toList(),
+                                onChanged: (value) {
+                                  solicitacaoMaterialItem.codEquipamento =
+                                      value?.cod;
+                                  solicitacaoMaterialItem.nomeEquipamento =
+                                      value?.nome;
+                                  context
+                                      .read<
+                                          InsumosPorEquipamentoSimplificadoCubit>()
+                                      .setEquipamento(
+                                        codEquipamento: value?.cod,
+                                      );
+                                },
+                                placeholder: 'Equipamento',
+                              );
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5.0),
+                          child: Builder(
+                            builder: (context) {
+                              InsumosPorEquipamentoSimplificadoState?
+                                  insumoSimplificadoState = context
+                                      .watch<
+                                          InsumosPorEquipamentoSimplificadoCubit>()
+                                      .state;
+
+                              InsumoState insumoState =
+                                  context.watch<InsumoCubit>().state;
+
+                              if (insumoState.loading ||
+                                  insumoSimplificadoState.loading) {
+                                return const LoadingWidget();
+                              }
+                              List<int> insumosLiberadosPorEquipamento = [];
+                              if (insumoSimplificadoState.codEquipamento !=
+                                  null) {
+                                insumosLiberadosPorEquipamento =
+                                    insumoSimplificadoState
+                                                .obj?.equipamentoInsumos[
+                                            insumoSimplificadoState
+                                                .codEquipamento] ??
+                                        [];
+                              }
+
+                              List<InsumoModel> insumos = insumoState.objs
+                                  .where(
+                                    (element) =>
+                                        insumosLiberadosPorEquipamento.contains(
+                                      element.cod,
+                                    ),
+                                  )
+                                  .toList();
+                              insumos.sort(
+                                (a, b) => a.nome!.compareTo(b.nome!),
+                              );
+                              InsumoModel? insumo = insumos
+                                  .where(
+                                    (element) =>
+                                        element.cod ==
+                                            solicitacaoMaterialItem.codInsumo &&
+                                        element.ativo == true,
+                                  )
+                                  .firstOrNull;
+
+                              DropDownSearchWidget search =
+                                  DropDownSearchWidget<InsumoModel>(
+                                validator: (val) {
+                                  if (val == null || val.cod == null) {
+                                    return 'Obrigatório';
+                                  }
+                                  return null;
+                                },
+                                validateBuilder: (
+                                  context,
+                                  validateMethodBuilder,
+                                ) =>
+                                    validateInsumoMethod =
+                                        validateMethodBuilder,
+                                refreshSourceListBuilder: (
+                                  context,
+                                  refreshSourceListMethod,
+                                ) =>
+                                    refreshInsumoMethod =
+                                        refreshSourceListMethod,
+                                setSelectedItemBuilder: (
+                                  context,
+                                  setSelectedItemMethod,
+                                ) =>
+                                    setSelectedItemMethodBuilder =
+                                        setSelectedItemMethod,
+                                textFunction: (insumo) =>
+                                    insumo.GetNomeInsumoText(),
+                                initialValue: insumo,
+                                sourceList: insumos,
+                                onChanged: (value) {
+                                  context
+                                      .read<InsumoSelecionadoCubit>()
+                                      .set(value);
+                                  solicitacaoMaterialItem.codInsumo =
+                                      value?.cod;
+                                  solicitacaoMaterialItem.nomeInsumo =
+                                      value?.nome;
+                                  solicitacaoMaterialItem.unidadeMedida =
+                                      value?.unidadeMedida;
+                                },
+                                placeholder: 'Insumo',
+                              );
+                              if (refreshInsumoMethod != null) {
+                                refreshInsumoMethod!();
+                              }
+                              if (setSelectedItemMethodBuilder != null) {
+                                setSelectedItemMethodBuilder!(insumo);
+                              }
+                              return search;
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 5.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: txtQuantidade,
+                              ),
+                              Expanded(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.only(left: 8, top: 16),
+                                  child: Text(
+                                    context.select(
+                                      (InsumoSelecionadoCubit cubit) =>
+                                          cubit.state.insumo?.unidadeMedida ??
+                                          'Unidades',
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          actions: [
+            Row(
               children: [
-                Expanded(
-                  child: TitleWidget(
-                    text: titulo,
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: SaveButtonWidget(
+                    onPressed: () => {salvar()},
                   ),
                 ),
-                const Spacer(),
-                CloseButtonWidget(
-                  onPressed: () => Navigator.of(context).pop((false, '')),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: CleanButtonWidget(
+                    onPressed: () => {
+                      setState(() {
+                        solicitacaoMaterialItem =
+                            SolicitacaoMaterialItemModel.empty();
+                      }),
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: CancelButtonUnfilledWidget(
+                    onPressed: () => {Navigator.of(context).pop((false, ''))},
+                  ),
                 ),
               ],
             ),
-            content: Container(
-              constraints: BoxConstraints(
-                minWidth: size.width * .5,
-                minHeight: size.height * .5,
-                maxHeight: size.height * .8,
-              ),
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.only(right: 14),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: BlocBuilder<EquipamentoCubit, EquipamentoState>(
-                        bloc: widget.equipamentoCubit,
-                        builder: (context, equipamentoState) {
-                          if (equipamentoState.loading) {
-                            return const LoadingWidget();
-                          }
-                          List<EquipamentoModel> equipamentos =
-                              equipamentoState.objs;
-                          EquipamentoModel? equipamento = equipamentos
-                              .where(
-                                (element) =>
-                                    element.cod ==
-                                    solicitacaoMaterialItem.codEquipamento,
-                              )
-                              .firstOrNull;
-                          return DropDownSearchWidget<EquipamentoModel>(
-                            textFunction: (equipamento) =>
-                                equipamento.EquipamentoNomeText(),
-                            initialValue: equipamento,
-                            sourceList: equipamentos
-                                .where((element) => element.ativo == true)
-                                .toList(),
-                            onChanged: (value) {
-                              solicitacaoMaterialItem.codEquipamento =
-                                  value?.cod;
-                              solicitacaoMaterialItem.nomeEquipamento =
-                                  value?.nome;
-                            },
-                            placeholder: 'Equipamento',
-                          );
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: BlocBuilder<InsumoCubit, InsumoState>(
-                        bloc: insumoCubit,
-                        builder: (context, insumoState) {
-                          if (insumoState.loading) {
-                            return const LoadingWidget();
-                          }
-                          List<InsumoModel> insumos = insumoState.objs;
-                          insumos.sort(
-                            (a, b) => a.nome!.compareTo(b.nome!),
-                          );
-                          InsumoModel? insumo = insumos
-                              .where(
-                                (element) =>
-                                    element.cod ==
-                                    solicitacaoMaterialItem.codInsumo,
-                              )
-                              .firstOrNull;
-                          return DropDownSearchWidget<InsumoModel>(
-                            textFunction: (insumo) =>
-                                insumo.GetNomeInsumoText(),
-                            initialValue: insumo,
-                            sourceList: insumos
-                                .where((element) => element.ativo == true)
-                                .toList(),
-                            onChanged: (value) {
-                              solicitacaoMaterialItem.codInsumo = value?.cod;
-                              solicitacaoMaterialItem.nomeInsumo = value?.nome;
-                              solicitacaoMaterialItem.unidadeMedida =
-                                  value?.unidadeMedida;
-                            },
-                            placeholder: 'Insumo',
-                          );
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtQuantidade,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            actions: [
-              Row(
-                children: [
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: SaveButtonWidget(
-                      onPressed: () => {salvar()},
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: CleanButtonWidget(
-                      onPressed: () => {
-                        setState(() {
-                          solicitacaoMaterialItem =
-                              SolicitacaoMaterialItemModel.empty();
-                        }),
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: CancelButtonUnfilledWidget(
-                      onPressed: () => {Navigator.of(context).pop((false, ''))},
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          );
-        },
-      ),
+          ],
+        );
+      },
     );
   }
 
   void salvar() {
+    if (validateEquipamentoMethod != null && !validateEquipamentoMethod!()) {
+      return;
+    }
+    if (validateInsumoMethod != null && !validateInsumoMethod!()) return;
     if (!txtQuantidade.valid) return;
 
     setState(() {

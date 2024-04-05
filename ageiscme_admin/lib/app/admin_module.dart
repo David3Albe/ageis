@@ -48,6 +48,7 @@ import 'package:ageiscme_admin/app/module/pages/insumo/insumo/insumo_page.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/insumo_movimento/insumo_movimento_page.dart';
 // import 'package:ageiscme_admin/app/module/pages/insumo/insumo_solicitacao_consulta/insumo_solicitacao_consulta_page.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/solicitacao_material/solicitacao_material_page.dart';
+import 'package:ageiscme_admin/app/module/pages/insumo/solicitacao_material_expedicoes/solicitacao_material_expedicoes_page.dart';
 import 'package:ageiscme_admin/app/module/pages/login/login_page.dart';
 import 'package:ageiscme_admin/app/module/pages/material/consulta_item/consulta_item_page.dart';
 import 'package:ageiscme_admin/app/module/pages/material/consulta_item_etiqueta/consulta_item_etiqueta_page.dart';
@@ -443,13 +444,13 @@ class AdminModule extends Module {
           child: (context) => SolicitacaoMaterialPage(),
         ),
         createParallelRoute(
+          '/insumo/solicitacao-material-expedicoes',
+          child: (context) => SolicitacaoMaterialExpedicoesPage(),
+        ),
+        createParallelRoute(
           '/processo/liberacao-leituras',
           child: (context) => LiberacaoLeiturasPresenterPage(),
         ),
-        // createParallelRoute(
-        //   '/insumo/insumo-solicitacao-consulta',
-        //   // child: (context) => InsumoSolicitacaoConsultaPage(),
-        // ),
       ],
     );
   }

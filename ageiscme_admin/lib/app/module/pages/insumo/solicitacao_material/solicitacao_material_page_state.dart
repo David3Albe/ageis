@@ -1,4 +1,5 @@
 import 'package:ageiscme_data/services/solicitacao_material/solicitacao_material_service.dart';
+import 'package:ageiscme_models/dto/solicitacao_material/add/solicitacao_material_add_dto.dart';
 import 'package:ageiscme_models/models/solicitacao_material/solicitacao_material_model.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 
@@ -14,10 +15,10 @@ class SolicitacaoMaterialPageCubit extends Cubit<SolicitacaoMaterialPageState> {
           ),
         );
 
-  void save(SolicitacaoMaterialModel solicitacaoMaterial) async {
+  Future add(SolicitacaoMaterialAddDTO dto) async {
     try {
       (String message, SolicitacaoMaterialModel solicitacaoMaterial)? result =
-          await service.save(solicitacaoMaterial);
+          await service.add(dto);
       if (result == null) return;
       emit(
         SolicitacaoMaterialPageState(
@@ -30,7 +31,7 @@ class SolicitacaoMaterialPageCubit extends Cubit<SolicitacaoMaterialPageState> {
       emit(
         SolicitacaoMaterialPageState(
           error: ex.toString(),
-          solicitacaoMaterial: solicitacaoMaterial,
+          solicitacaoMaterial: state.solicitacaoMaterial,
         ),
       );
     }

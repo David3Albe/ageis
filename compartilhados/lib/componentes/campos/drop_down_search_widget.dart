@@ -20,6 +20,11 @@ typedef SetSelectedItemBuilder<T> = void Function(
   void Function(T? item) setSelectedItemMethod,
 );
 
+typedef ValidateBuilder<T> = void Function(
+  BuildContext context,
+  bool Function() validateMethodBuilder,
+);
+
 class DropDownSearchWidget<T> extends StatefulWidget {
   DropDownSearchWidget({
     required this.sourceList,
@@ -33,6 +38,8 @@ class DropDownSearchWidget<T> extends StatefulWidget {
     this.readOnly = false,
     this.validateChange,
     this.expandOnStart,
+    this.validator,
+    this.validateBuilder,
   });
   final List<T> sourceList;
   final T? initialValue;
@@ -44,8 +51,10 @@ class DropDownSearchWidget<T> extends StatefulWidget {
   final bool readOnly;
   late final RefreshSourceListBuilder? refreshSourceListBuilder;
   late final SetSelectedItemBuilder<T>? setSelectedItemBuilder;
+  late final ValidateBuilder<T>? validateBuilder;
   final Future<bool> Function(T? itemSelecionado)? validateChange;
   final bool? expandOnStart;
+  final String? Function(T? val)? validator;
 
   @override
   DropDownSearchWidgetState<T> createState() => DropDownSearchWidgetState<T>(
@@ -66,8 +75,14 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
   late final DropDownSearchCubit<T> cubit;
   DateTime? lastTypedTime;
   final Key? key;
+  String? errorText;
+  final String? Function(T? val)? validator;
 
-  DropDownSearchWidgetState({this.onChanged, this.key});
+  DropDownSearchWidgetState({
+    this.validator,
+    this.onChanged,
+    this.key,
+  });
   @override
   void initState() {
     filterVisible = false;
@@ -112,6 +127,10 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
       context,
       reload,
     );
+    widget.validateBuilder?.call(
+      context,
+      valid,
+    );
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -129,17 +148,38 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
                     selectedItem,
                     context,
                   ),
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     border: Border(
                       bottom: BorderSide(
                         width: 2.0,
-                        color: Colors.black12,
+                        color: errorText != null && !errorText!.isEmpty
+                            ? Colors.red
+                            : Colors.black12,
                       ),
                     ),
                   ),
                 ),
               ),
             ],
+          ),
+        ),
+        Visibility(
+          visible: errorText != null && errorText!.isNotEmpty,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    errorText ?? '',
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -162,6 +202,17 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
       selectedItem = item;
     });
     return item;
+  }
+
+  void validate() {
+    if (widget.validator == null) return;
+    String? error = widget.validator!(selectedItem);
+    setState(() => errorText = error);
+  }
+
+  bool valid() {
+    validate();
+    return errorText == null || errorText!.isEmpty;
   }
 
   void showPicker(BuildContext context) {
@@ -261,6 +312,7 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
     setState(() {
       selectedItem = item;
     });
+    validate();
     Navigator.of(context).pop();
   }
 
@@ -279,7 +331,9 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
                 child: Text(
                   widget.placeholder ?? '',
                   style: Fontes.getRoboto(
-                    cor: Cores.corPlaceholderTextField,
+                    cor: errorText != null && !errorText!.isEmpty
+                        ? Colors.red
+                        : Cores.corPlaceholderTextField,
                     fontSize: HelperFunctions.calculaFontSize(context, 12),
                   ),
                 ),
@@ -290,6 +344,9 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
                 Text(
                   item == null ? widget.placeholder ?? '' : text,
                   style: Fontes.getRoboto(
+                    cor: errorText != null && !errorText!.isEmpty
+                        ? Colors.red
+                        : null,
                     fontSize: HelperFunctions.calculaFontSize(context, 16),
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -319,6 +376,7 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
       if (onChanged != null) {
         onChanged!(selectedItem);
       }
+      validate();
     });
   }
 
