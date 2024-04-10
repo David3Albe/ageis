@@ -13,6 +13,9 @@ _$InsumoSaldoFilterImpl _$$InsumoSaldoFilterImplFromJson(Map json) =>
       codDeposito: json['codDeposito'] as int?,
       qtdeMaiorQueZero: json['qtdeMaiorQueZero'] as bool?,
       dataVaidadeMaiorQueAtual: json['dataVaidadeMaiorQueAtual'] as bool?,
+      numeroRegistros: json['numeroRegistros'] as int?,
+      ordenarPorDataValidadeAscendente:
+          json['ordenarPorDataValidadeAscendente'] as bool?,
     );
 
 Map<String, dynamic> _$$InsumoSaldoFilterImplToJson(
@@ -23,4 +26,7 @@ Map<String, dynamic> _$$InsumoSaldoFilterImplToJson(
       'codDeposito': instance.codDeposito,
       'qtdeMaiorQueZero': instance.qtdeMaiorQueZero,
       'dataVaidadeMaiorQueAtual': instance.dataVaidadeMaiorQueAtual,
+      'numeroRegistros': instance.numeroRegistros,
+      'ordenarPorDataValidadeAscendente':
+          instance.ordenarPorDataValidadeAscendente,
     };

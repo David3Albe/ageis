@@ -50,6 +50,7 @@ sealed class ConsultaProcessosLeituraModel
     required String? restricaoKit,
     required String? kitLiberadoIncompleto,
     required int? codRegistroProcesso,
+    bool? cancelada,
   }) = _ConsultaProcessosLeituraModel;
 
   factory ConsultaProcessosLeituraModel.fromJson(Map<String, Object?> json) =>

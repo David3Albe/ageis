@@ -105,6 +105,8 @@ mixin _$ConsultaProcessosLeituraModel {
       throw _privateConstructorUsedError;
   int? get codRegistroProcesso => throw _privateConstructorUsedError;
   set codRegistroProcesso(int? value) => throw _privateConstructorUsedError;
+  bool? get cancelada => throw _privateConstructorUsedError;
+  set cancelada(bool? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -161,7 +163,8 @@ abstract class $ConsultaProcessosLeituraModelCopyWith<$Res> {
       int? statusKit,
       String? restricaoKit,
       String? kitLiberadoIncompleto,
-      int? codRegistroProcesso});
+      int? codRegistroProcesso,
+      bool? cancelada});
 }
 
 /// @nodoc
@@ -219,6 +222,7 @@ class _$ConsultaProcessosLeituraModelCopyWithImpl<$Res,
     Object? restricaoKit = freezed,
     Object? kitLiberadoIncompleto = freezed,
     Object? codRegistroProcesso = freezed,
+    Object? cancelada = freezed,
   }) {
     return _then(_value.copyWith(
       dataHora: freezed == dataHora
@@ -385,6 +389,10 @@ class _$ConsultaProcessosLeituraModelCopyWithImpl<$Res,
           ? _value.codRegistroProcesso
           : codRegistroProcesso // ignore: cast_nullable_to_non_nullable
               as int?,
+      cancelada: freezed == cancelada
+          ? _value.cancelada
+          : cancelada // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 }
@@ -439,7 +447,8 @@ abstract class _$$ConsultaProcessosLeituraModelImplCopyWith<$Res>
       int? statusKit,
       String? restricaoKit,
       String? kitLiberadoIncompleto,
-      int? codRegistroProcesso});
+      int? codRegistroProcesso,
+      bool? cancelada});
 }
 
 /// @nodoc
@@ -496,6 +505,7 @@ class __$$ConsultaProcessosLeituraModelImplCopyWithImpl<$Res>
     Object? restricaoKit = freezed,
     Object? kitLiberadoIncompleto = freezed,
     Object? codRegistroProcesso = freezed,
+    Object? cancelada = freezed,
   }) {
     return _then(_$ConsultaProcessosLeituraModelImpl(
       dataHora: freezed == dataHora
@@ -662,6 +672,10 @@ class __$$ConsultaProcessosLeituraModelImplCopyWithImpl<$Res>
           ? _value.codRegistroProcesso
           : codRegistroProcesso // ignore: cast_nullable_to_non_nullable
               as int?,
+      cancelada: freezed == cancelada
+          ? _value.cancelada
+          : cancelada // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -711,7 +725,8 @@ class _$ConsultaProcessosLeituraModelImpl
       required this.statusKit,
       required this.restricaoKit,
       required this.kitLiberadoIncompleto,
-      required this.codRegistroProcesso})
+      required this.codRegistroProcesso,
+      this.cancelada})
       : super._();
 
   factory _$ConsultaProcessosLeituraModelImpl.fromJson(
@@ -800,10 +815,12 @@ class _$ConsultaProcessosLeituraModelImpl
   String? kitLiberadoIncompleto;
   @override
   int? codRegistroProcesso;
+  @override
+  bool? cancelada;
 
   @override
   String toString() {
-    return 'ConsultaProcessosLeituraModel(dataHora: $dataHora, data: $data, hora: $hora, codBarraKit: $codBarraKit, nomeKit: $nomeKit, nroItensFaltante: $nroItensFaltante, idEtiqueta: $idEtiqueta, descricaoItem: $descricaoItem, nomeProprietario: $nomeProprietario, entradaSaida: $entradaSaida, nomeEquipamento: $nomeEquipamento, nomeEtapaProcesso: $nomeEtapaProcesso, nomeTipoProcesso: $nomeTipoProcesso, prioridade: $prioridade, qtdeProcessos: $qtdeProcessos, nomeUsuario: $nomeUsuario, prontuarioRetirada: $prontuarioRetirada, origem: $origem, destino: $destino, circulante: $circulante, conferidoVisualmente: $conferidoVisualmente, nomeRespKitIncomp: $nomeRespKitIncomp, nomeRespQuebFluxo: $nomeRespQuebFluxo, nomeRepDestinoNaoCompativel: $nomeRepDestinoNaoCompativel, indicador: $indicador, biologico: $biologico, implantavel: $implantavel, lote: $lote, integradorKit: $integradorKit, embalagem: $embalagem, codItem: $codItem, codKit2: $codKit2, codEtapaProcesso: $codEtapaProcesso, codLeitura: $codLeitura, motivo: $motivo, motivoQuebraFluxo: $motivoQuebraFluxo, observacao: $observacao, statusKit: $statusKit, restricaoKit: $restricaoKit, kitLiberadoIncompleto: $kitLiberadoIncompleto, codRegistroProcesso: $codRegistroProcesso)';
+    return 'ConsultaProcessosLeituraModel(dataHora: $dataHora, data: $data, hora: $hora, codBarraKit: $codBarraKit, nomeKit: $nomeKit, nroItensFaltante: $nroItensFaltante, idEtiqueta: $idEtiqueta, descricaoItem: $descricaoItem, nomeProprietario: $nomeProprietario, entradaSaida: $entradaSaida, nomeEquipamento: $nomeEquipamento, nomeEtapaProcesso: $nomeEtapaProcesso, nomeTipoProcesso: $nomeTipoProcesso, prioridade: $prioridade, qtdeProcessos: $qtdeProcessos, nomeUsuario: $nomeUsuario, prontuarioRetirada: $prontuarioRetirada, origem: $origem, destino: $destino, circulante: $circulante, conferidoVisualmente: $conferidoVisualmente, nomeRespKitIncomp: $nomeRespKitIncomp, nomeRespQuebFluxo: $nomeRespQuebFluxo, nomeRepDestinoNaoCompativel: $nomeRepDestinoNaoCompativel, indicador: $indicador, biologico: $biologico, implantavel: $implantavel, lote: $lote, integradorKit: $integradorKit, embalagem: $embalagem, codItem: $codItem, codKit2: $codKit2, codEtapaProcesso: $codEtapaProcesso, codLeitura: $codLeitura, motivo: $motivo, motivoQuebraFluxo: $motivoQuebraFluxo, observacao: $observacao, statusKit: $statusKit, restricaoKit: $restricaoKit, kitLiberadoIncompleto: $kitLiberadoIncompleto, codRegistroProcesso: $codRegistroProcesso, cancelada: $cancelada)';
   }
 
   @JsonKey(ignore: true)
@@ -865,7 +882,8 @@ abstract class _ConsultaProcessosLeituraModel
       required int? statusKit,
       required String? restricaoKit,
       required String? kitLiberadoIncompleto,
-      required int? codRegistroProcesso}) = _$ConsultaProcessosLeituraModelImpl;
+      required int? codRegistroProcesso,
+      bool? cancelada}) = _$ConsultaProcessosLeituraModelImpl;
   _ConsultaProcessosLeituraModel._() : super._();
 
   factory _ConsultaProcessosLeituraModel.fromJson(Map<String, dynamic> json) =
@@ -994,6 +1012,9 @@ abstract class _ConsultaProcessosLeituraModel
   @override
   int? get codRegistroProcesso;
   set codRegistroProcesso(int? value);
+  @override
+  bool? get cancelada;
+  set cancelada(bool? value);
   @override
   @JsonKey(ignore: true)
   _$$ConsultaProcessosLeituraModelImplCopyWith<

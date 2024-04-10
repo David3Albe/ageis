@@ -15,6 +15,7 @@ sealed class ConsultaEstoqueDisponivelFilter
     required int? codKit,
     required int? codItem,
     required int? codProprietario,
+    bool? ignorarRemovidos,
     ItemModel? item,
   }) = _ConsultaEstoqueDisponivelFilter;
 
@@ -33,5 +34,6 @@ sealed class ConsultaEstoqueDisponivelFilter
         codKit: null,
         codItem: null,
         codProprietario: null,
+        ignorarRemovidos: null,
       );
 }

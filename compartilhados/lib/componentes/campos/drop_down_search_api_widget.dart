@@ -9,6 +9,11 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
+typedef ValidateBuilder<T> = void Function(
+  BuildContext context,
+  bool Function() validateMethodBuilder,
+);
+
 class DropDownSearchApiWidget<T> extends StatefulWidget {
   DropDownSearchApiWidget({
     required this.search,
@@ -18,6 +23,8 @@ class DropDownSearchApiWidget<T> extends StatefulWidget {
     this.textFunction,
     this.key,
     this.readOnly = false,
+    this.validator,
+    this.validateBuilder,
   });
   final T? initialValue;
   final String? placeholder;
@@ -27,6 +34,8 @@ class DropDownSearchApiWidget<T> extends StatefulWidget {
   final Key? key;
   final Future<List<T>> Function(String? text) search;
   final bool readOnly;
+  final String? Function(T? val)? validator;
+  late final ValidateBuilder<T>? validateBuilder;
 
   @override
   DropDownSearchApiWidgetState<T> createState() =>
@@ -50,8 +59,12 @@ class DropDownSearchApiWidgetState<T>
   late final DropDownSearchCubit<T> cubit;
   List<DateTime> lastTypedsTime = [];
   final Key? key;
+  String? errorText;
 
-  DropDownSearchApiWidgetState({this.onChanged, this.key});
+  DropDownSearchApiWidgetState({
+    this.onChanged,
+    this.key,
+  });
   @override
   void initState() {
     filterVisible = false;
@@ -67,10 +80,26 @@ class DropDownSearchApiWidgetState<T>
     cubit = DropDownSearchCubit<T>();
     setItems(null);
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => validate());
+  }
+
+  void validate() {
+    if (widget.validator == null) return;
+    String? error = widget.validator!(selectedItem);
+    setState(() => errorText = error);
+  }
+
+  bool valid() {
+    validate();
+    return errorText == null || errorText!.isEmpty;
   }
 
   @override
   Widget build(BuildContext context) {
+    widget.validateBuilder?.call(
+      context,
+      valid,
+    );
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -88,17 +117,38 @@ class DropDownSearchApiWidgetState<T>
                     selectedItem,
                     context,
                   ),
-                  decoration: const BoxDecoration(
+                  decoration: BoxDecoration(
                     border: Border(
                       bottom: BorderSide(
                         width: 2.0,
-                        color: Colors.black12,
+                        color: errorText != null && !errorText!.isEmpty
+                            ? Colors.red
+                            : Colors.black12,
                       ),
                     ),
                   ),
                 ),
               ),
             ],
+          ),
+        ),
+        Visibility(
+          visible: errorText != null && errorText!.isNotEmpty,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 8.0),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    errorText ?? '',
+                    style: const TextStyle(
+                      color: Colors.red,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ],
@@ -212,6 +262,7 @@ class DropDownSearchApiWidgetState<T>
     setState(() {
       selectedItem = item;
     });
+    validate();
     Navigator.of(context).pop();
   }
 
@@ -230,7 +281,9 @@ class DropDownSearchApiWidgetState<T>
                 child: Text(
                   widget.placeholder ?? '',
                   style: Fontes.getRoboto(
-                    cor: Cores.corPlaceholderTextField,
+                    cor: errorText != null && !errorText!.isEmpty
+                        ? Colors.red
+                        : Cores.corPlaceholderTextField,
                     fontSize: HelperFunctions.calculaFontSize(context, 12),
                   ),
                 ),
@@ -241,6 +294,9 @@ class DropDownSearchApiWidgetState<T>
                 Text(
                   item == null ? widget.placeholder ?? '' : text,
                   style: Fontes.getRoboto(
+                    cor: errorText != null && !errorText!.isEmpty
+                        ? Colors.red
+                        : null,
                     fontSize: HelperFunctions.calculaFontSize(context, 16),
                   ),
                   overflow: TextOverflow.ellipsis,
@@ -270,6 +326,7 @@ class DropDownSearchApiWidgetState<T>
       if (onChanged != null) {
         onChanged!(selectedItem);
       }
+      validate();
     });
   }
 

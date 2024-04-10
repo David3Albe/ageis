@@ -19,6 +19,18 @@ _$SolicitacaoMaterialFindOneResponseDTOImpl
                 SolicitacaoMaterialFindOneUsuarioResponseDTO.fromJson(
                     Map<String, Object?>.from(e as Map))),
           ),
+          equipamentos: (json['equipamentos'] as Map).map(
+            (k, e) => MapEntry(
+                int.parse(k as String),
+                SolicitacaoMaterialFindOneEquipamentoResponseDTO.fromJson(
+                    Map<String, Object?>.from(e as Map))),
+          ),
+          insumos: (json['insumos'] as Map).map(
+            (k, e) => MapEntry(
+                int.parse(k as String),
+                SolicitacaoMaterialFindOneInsumoResponseDTO.fromJson(
+                    Map<String, Object?>.from(e as Map))),
+          ),
         );
 
 Map<String, dynamic> _$$SolicitacaoMaterialFindOneResponseDTOImplToJson(
@@ -27,4 +39,8 @@ Map<String, dynamic> _$$SolicitacaoMaterialFindOneResponseDTOImplToJson(
       'solicitacao': instance.solicitacao?.toJson(),
       'usuarios':
           instance.usuarios.map((k, e) => MapEntry(k.toString(), e.toJson())),
+      'equipamentos': instance.equipamentos
+          .map((k, e) => MapEntry(k.toString(), e.toJson())),
+      'insumos':
+          instance.insumos.map((k, e) => MapEntry(k.toString(), e.toJson())),
     };

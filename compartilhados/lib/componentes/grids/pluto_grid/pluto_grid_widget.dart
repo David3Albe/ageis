@@ -55,6 +55,11 @@ typedef SubmitBuilder = void Function(
   Future Function() refreshWidget,
 );
 
+typedef GetObjectByRowBuilder<T> = void Function(
+  BuildContext context,
+  T? Function(PlutoRow) getObjectByRowMethod,
+);
+
 class PlutoGridWidget<T> extends StatelessWidget {
   Color get headerColor => const Color(0xffE0E0E0);
   final List<T> items;
@@ -77,6 +82,7 @@ class PlutoGridWidget<T> extends StatelessWidget {
   final bool filterOnlyActives;
   late final RefreshWidgetBuilder? refreshWidgetBuilder;
   late final SubmitBuilder? submitBuilder;
+  late final GetObjectByRowBuilder<T>? getObjectByRowMethod;
   final Function(PlutoGridOnChangedEvent, Map<PlutoRow, T> rowsObject)?
       onChanged;
   final List<void Function()> listeners = [];
@@ -95,6 +101,7 @@ class PlutoGridWidget<T> extends StatelessWidget {
     this.submitBuilder,
     this.onChanged,
     this.onAddClick,
+    this.getObjectByRowMethod,
   }) {
     cellsObject = getCellObjects(items);
     this.rows = _getRows(cellsObject);
@@ -141,6 +148,12 @@ class PlutoGridWidget<T> extends StatelessWidget {
   ) async {
     if (stateManager?.isEditing == true) stateManager?.toggleEditing();
     await Future.delayed(const Duration(milliseconds: 500));
+  }
+
+  T? getObjectByRow(
+    PlutoRow? row,
+  ) {
+    return rowsObject[row];
   }
 
   static double getFontSize(BuildContext context, bool smallRows) {
@@ -215,6 +228,10 @@ class PlutoGridWidget<T> extends StatelessWidget {
           submitBuilder?.call(
             context,
             () => submitMethod(gridState.stateManager),
+          );
+          getObjectByRowMethod?.call(
+            context,
+            getObjectByRow,
           );
           return PlutoGrid(
             onRowDoubleTap: (event) {

@@ -40,7 +40,7 @@ class _SolicitacaoMaterialUsuarioPageState
       titlePadding: const EdgeInsets.all(16),
       actionsPadding: const EdgeInsets.all(16),
       contentPadding: const EdgeInsets.all(16),
-      title: const TitleWidget(text: 'Adicionar Itens no Kit'),
+      title: const TitleWidget(text: 'Identificar Usuário'),
       content: RawKeyboardListener(
         onKey: _controller.coletorHelper.handleKey,
         autofocus: true,

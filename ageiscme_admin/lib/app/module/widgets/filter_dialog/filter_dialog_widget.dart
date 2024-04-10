@@ -5,8 +5,12 @@ import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:flutter/material.dart';
 
 class FilterDialogWidget extends StatelessWidget {
-  const FilterDialogWidget({required this.child});
+  const FilterDialogWidget({
+    required this.child,
+    this.validate,
+  });
   final Widget child;
+  final bool Function()? validate;
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +35,12 @@ class FilterDialogWidget extends StatelessWidget {
       ),
       actions: [
         ConfirmButtonWidget(
-          onPressed: () => {
-            Navigator.of(context).pop(true),
+          onPressed: () {
+            if (validate != null) {
+              bool valid = validate!();
+              if (!valid) return;
+            }
+            Navigator.of(context).pop(true);
           },
         ),
         CancelButtonUnfilledWidget(

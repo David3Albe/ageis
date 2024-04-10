@@ -25,8 +25,8 @@ mixin _$SolicitacaoMaterialModel {
   set cod(int? value) => throw _privateConstructorUsedError;
   int? get codUsuarioSolicitante => throw _privateConstructorUsedError;
   set codUsuarioSolicitante(int? value) => throw _privateConstructorUsedError;
-  int? get codusuarioAutorizacao => throw _privateConstructorUsedError;
-  set codusuarioAutorizacao(int? value) => throw _privateConstructorUsedError;
+  int? get codUsuarioAutorizacao => throw _privateConstructorUsedError;
+  set codUsuarioAutorizacao(int? value) => throw _privateConstructorUsedError;
   int? get codUsuarioEntrega => throw _privateConstructorUsedError;
   set codUsuarioEntrega(int? value) => throw _privateConstructorUsedError;
   int? get codUsuarioRecebimento => throw _privateConstructorUsedError;
@@ -69,7 +69,7 @@ abstract class $SolicitacaoMaterialModelCopyWith<$Res> {
   $Res call(
       {int? cod,
       int? codUsuarioSolicitante,
-      int? codusuarioAutorizacao,
+      int? codUsuarioAutorizacao,
       int? codUsuarioEntrega,
       int? codUsuarioRecebimento,
       DateTime? dataHoraSolicitacao,
@@ -98,7 +98,7 @@ class _$SolicitacaoMaterialModelCopyWithImpl<$Res,
   $Res call({
     Object? cod = freezed,
     Object? codUsuarioSolicitante = freezed,
-    Object? codusuarioAutorizacao = freezed,
+    Object? codUsuarioAutorizacao = freezed,
     Object? codUsuarioEntrega = freezed,
     Object? codUsuarioRecebimento = freezed,
     Object? dataHoraSolicitacao = freezed,
@@ -119,9 +119,9 @@ class _$SolicitacaoMaterialModelCopyWithImpl<$Res,
           ? _value.codUsuarioSolicitante
           : codUsuarioSolicitante // ignore: cast_nullable_to_non_nullable
               as int?,
-      codusuarioAutorizacao: freezed == codusuarioAutorizacao
-          ? _value.codusuarioAutorizacao
-          : codusuarioAutorizacao // ignore: cast_nullable_to_non_nullable
+      codUsuarioAutorizacao: freezed == codUsuarioAutorizacao
+          ? _value.codUsuarioAutorizacao
+          : codUsuarioAutorizacao // ignore: cast_nullable_to_non_nullable
               as int?,
       codUsuarioEntrega: freezed == codUsuarioEntrega
           ? _value.codUsuarioEntrega
@@ -179,7 +179,7 @@ abstract class _$$SolicitacaoMaterialModelImplCopyWith<$Res>
   $Res call(
       {int? cod,
       int? codUsuarioSolicitante,
-      int? codusuarioAutorizacao,
+      int? codUsuarioAutorizacao,
       int? codUsuarioEntrega,
       int? codUsuarioRecebimento,
       DateTime? dataHoraSolicitacao,
@@ -207,7 +207,7 @@ class __$$SolicitacaoMaterialModelImplCopyWithImpl<$Res>
   $Res call({
     Object? cod = freezed,
     Object? codUsuarioSolicitante = freezed,
-    Object? codusuarioAutorizacao = freezed,
+    Object? codUsuarioAutorizacao = freezed,
     Object? codUsuarioEntrega = freezed,
     Object? codUsuarioRecebimento = freezed,
     Object? dataHoraSolicitacao = freezed,
@@ -228,9 +228,9 @@ class __$$SolicitacaoMaterialModelImplCopyWithImpl<$Res>
           ? _value.codUsuarioSolicitante
           : codUsuarioSolicitante // ignore: cast_nullable_to_non_nullable
               as int?,
-      codusuarioAutorizacao: freezed == codusuarioAutorizacao
-          ? _value.codusuarioAutorizacao
-          : codusuarioAutorizacao // ignore: cast_nullable_to_non_nullable
+      codUsuarioAutorizacao: freezed == codUsuarioAutorizacao
+          ? _value.codUsuarioAutorizacao
+          : codUsuarioAutorizacao // ignore: cast_nullable_to_non_nullable
               as int?,
       codUsuarioEntrega: freezed == codUsuarioEntrega
           ? _value.codUsuarioEntrega
@@ -283,7 +283,7 @@ class _$SolicitacaoMaterialModelImpl extends _SolicitacaoMaterialModel
   _$SolicitacaoMaterialModelImpl(
       {required this.cod,
       required this.codUsuarioSolicitante,
-      required this.codusuarioAutorizacao,
+      required this.codUsuarioAutorizacao,
       required this.codUsuarioEntrega,
       required this.codUsuarioRecebimento,
       required this.dataHoraSolicitacao,
@@ -304,7 +304,7 @@ class _$SolicitacaoMaterialModelImpl extends _SolicitacaoMaterialModel
   @override
   int? codUsuarioSolicitante;
   @override
-  int? codusuarioAutorizacao;
+  int? codUsuarioAutorizacao;
   @override
   int? codUsuarioEntrega;
   @override
@@ -329,7 +329,7 @@ class _$SolicitacaoMaterialModelImpl extends _SolicitacaoMaterialModel
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'SolicitacaoMaterialModel(cod: $cod, codUsuarioSolicitante: $codUsuarioSolicitante, codusuarioAutorizacao: $codusuarioAutorizacao, codUsuarioEntrega: $codUsuarioEntrega, codUsuarioRecebimento: $codUsuarioRecebimento, dataHoraSolicitacao: $dataHoraSolicitacao, dataHoraAutorizacao: $dataHoraAutorizacao, dataHoraEntrega: $dataHoraEntrega, situacao: $situacao, codInstituicao: $codInstituicao, ultimaAlteracao: $ultimaAlteracao, tstamp: $tstamp, solicitacoesMateriais: $solicitacoesMateriais)';
+    return 'SolicitacaoMaterialModel(cod: $cod, codUsuarioSolicitante: $codUsuarioSolicitante, codUsuarioAutorizacao: $codUsuarioAutorizacao, codUsuarioEntrega: $codUsuarioEntrega, codUsuarioRecebimento: $codUsuarioRecebimento, dataHoraSolicitacao: $dataHoraSolicitacao, dataHoraAutorizacao: $dataHoraAutorizacao, dataHoraEntrega: $dataHoraEntrega, situacao: $situacao, codInstituicao: $codInstituicao, ultimaAlteracao: $ultimaAlteracao, tstamp: $tstamp, solicitacoesMateriais: $solicitacoesMateriais)';
   }
 
   @override
@@ -339,7 +339,7 @@ class _$SolicitacaoMaterialModelImpl extends _SolicitacaoMaterialModel
       ..add(DiagnosticsProperty('type', 'SolicitacaoMaterialModel'))
       ..add(DiagnosticsProperty('cod', cod))
       ..add(DiagnosticsProperty('codUsuarioSolicitante', codUsuarioSolicitante))
-      ..add(DiagnosticsProperty('codusuarioAutorizacao', codusuarioAutorizacao))
+      ..add(DiagnosticsProperty('codUsuarioAutorizacao', codUsuarioAutorizacao))
       ..add(DiagnosticsProperty('codUsuarioEntrega', codUsuarioEntrega))
       ..add(DiagnosticsProperty('codUsuarioRecebimento', codUsuarioRecebimento))
       ..add(DiagnosticsProperty('dataHoraSolicitacao', dataHoraSolicitacao))
@@ -372,7 +372,7 @@ abstract class _SolicitacaoMaterialModel extends SolicitacaoMaterialModel {
   factory _SolicitacaoMaterialModel(
           {required int? cod,
           required int? codUsuarioSolicitante,
-          required int? codusuarioAutorizacao,
+          required int? codUsuarioAutorizacao,
           required int? codUsuarioEntrega,
           required int? codUsuarioRecebimento,
           required DateTime? dataHoraSolicitacao,
@@ -396,8 +396,8 @@ abstract class _SolicitacaoMaterialModel extends SolicitacaoMaterialModel {
   int? get codUsuarioSolicitante;
   set codUsuarioSolicitante(int? value);
   @override
-  int? get codusuarioAutorizacao;
-  set codusuarioAutorizacao(int? value);
+  int? get codUsuarioAutorizacao;
+  set codUsuarioAutorizacao(int? value);
   @override
   int? get codUsuarioEntrega;
   set codUsuarioEntrega(int? value);

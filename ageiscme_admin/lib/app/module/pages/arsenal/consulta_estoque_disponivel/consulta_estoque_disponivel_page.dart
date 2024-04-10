@@ -75,6 +75,7 @@ class _ConsultaEstoqueDisponivelPageState
       service: ConsultaEstoqueDisponivelService(),
     );
     filter = ConsultaEstoqueDisponivelFilter.empty();
+    filter.ignorarRemovidos = true;
     arsenalEstoqueBloc = ArsenalEstoqueCubit();
     arsenalEstoqueBloc.loadAll();
     localizacaoArsenalBloc = LocalizacaoArsenalCubit();

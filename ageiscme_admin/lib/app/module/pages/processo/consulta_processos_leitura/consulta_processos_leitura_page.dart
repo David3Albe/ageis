@@ -16,6 +16,7 @@ import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/query_filters/processos_leitura/consulta_processos_leitura_filter.dart';
 import 'package:ageiscme_models/query_filters/processos_leitura_detalhe/consulta_processos_leitura_detalhe_filter.dart';
 import 'package:ageiscme_models/query_filters/processos_leitura_detalhe_kit/consulta_processos_leitura_detalhe_kit_filter.dart';
+import 'package:ageiscme_models/query_models/processos_leitura/consulta_processos_leitura_model.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
@@ -47,6 +48,8 @@ class ConsultaProcessosLeituraPage extends StatefulWidget {
 
 class _ConsultaProcessosLeituraPageState
     extends State<ConsultaProcessosLeituraPage> {
+  ConsultaProcessosLeituraModel? Function(PlutoRow)? getObjByRow;
+
   static Widget getCustomRenderer(
     PlutoColumnRendererContext renderContext, {
     TextAlign? textAlign = TextAlign.start,
@@ -272,6 +275,8 @@ class _ConsultaProcessosLeituraPageState
   }
 
   Color rowColorCallback(PlutoRowColorContext row) {
+    ConsultaProcessosLeituraModel? leitura = getObjByRow!(row.row);
+    if (leitura?.cancelada == true) return Colors.red.shade400;
     int? codRegistroProcesso = row.row.cells['codRegistroProcesso']?.value;
     if (codRegistroProcesso == null) return ultimaCor;
     if (codRegistroProcessoColor.containsKey(codRegistroProcesso)) {
@@ -315,6 +320,8 @@ class _ConsultaProcessosLeituraPageState
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    getObjectByRowMethod: (context, getObjectByRowMethod) =>
+                        getObjByRow = getObjectByRowMethod,
                     rowColorCallback: rowColorCallback,
                     smallRows: true,
                     columns: colunas,

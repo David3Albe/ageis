@@ -11,7 +11,7 @@ _$SolicitacaoMaterialModelImpl _$$SolicitacaoMaterialModelImplFromJson(
     _$SolicitacaoMaterialModelImpl(
       cod: json['cod'] as int?,
       codUsuarioSolicitante: json['codUsuarioSolicitante'] as int?,
-      codusuarioAutorizacao: json['codusuarioAutorizacao'] as int?,
+      codUsuarioAutorizacao: json['codUsuarioAutorizacao'] as int?,
       codUsuarioEntrega: json['codUsuarioEntrega'] as int?,
       codUsuarioRecebimento: json['codUsuarioRecebimento'] as int?,
       dataHoraSolicitacao: json['dataHoraSolicitacao'] == null
@@ -40,7 +40,7 @@ Map<String, dynamic> _$$SolicitacaoMaterialModelImplToJson(
     <String, dynamic>{
       'cod': instance.cod,
       'codUsuarioSolicitante': instance.codUsuarioSolicitante,
-      'codusuarioAutorizacao': instance.codusuarioAutorizacao,
+      'codUsuarioAutorizacao': instance.codUsuarioAutorizacao,
       'codUsuarioEntrega': instance.codUsuarioEntrega,
       'codUsuarioRecebimento': instance.codUsuarioRecebimento,
       'dataHoraSolicitacao': instance.dataHoraSolicitacao?.toIso8601String(),

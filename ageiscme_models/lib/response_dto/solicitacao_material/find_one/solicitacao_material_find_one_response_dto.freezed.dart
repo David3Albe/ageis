@@ -29,6 +29,15 @@ mixin _$SolicitacaoMaterialFindOneResponseDTO {
       throw _privateConstructorUsedError;
   set usuarios(Map<int, SolicitacaoMaterialFindOneUsuarioResponseDTO> value) =>
       throw _privateConstructorUsedError;
+  Map<int, SolicitacaoMaterialFindOneEquipamentoResponseDTO> get equipamentos =>
+      throw _privateConstructorUsedError;
+  set equipamentos(
+          Map<int, SolicitacaoMaterialFindOneEquipamentoResponseDTO> value) =>
+      throw _privateConstructorUsedError;
+  Map<int, SolicitacaoMaterialFindOneInsumoResponseDTO> get insumos =>
+      throw _privateConstructorUsedError;
+  set insumos(Map<int, SolicitacaoMaterialFindOneInsumoResponseDTO> value) =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -47,7 +56,9 @@ abstract class $SolicitacaoMaterialFindOneResponseDTOCopyWith<$Res> {
   @useResult
   $Res call(
       {SolicitacaoMaterialModel? solicitacao,
-      Map<int, SolicitacaoMaterialFindOneUsuarioResponseDTO> usuarios});
+      Map<int, SolicitacaoMaterialFindOneUsuarioResponseDTO> usuarios,
+      Map<int, SolicitacaoMaterialFindOneEquipamentoResponseDTO> equipamentos,
+      Map<int, SolicitacaoMaterialFindOneInsumoResponseDTO> insumos});
 
   $SolicitacaoMaterialModelCopyWith<$Res>? get solicitacao;
 }
@@ -68,6 +79,8 @@ class _$SolicitacaoMaterialFindOneResponseDTOCopyWithImpl<$Res,
   $Res call({
     Object? solicitacao = freezed,
     Object? usuarios = null,
+    Object? equipamentos = null,
+    Object? insumos = null,
   }) {
     return _then(_value.copyWith(
       solicitacao: freezed == solicitacao
@@ -78,6 +91,14 @@ class _$SolicitacaoMaterialFindOneResponseDTOCopyWithImpl<$Res,
           ? _value.usuarios
           : usuarios // ignore: cast_nullable_to_non_nullable
               as Map<int, SolicitacaoMaterialFindOneUsuarioResponseDTO>,
+      equipamentos: null == equipamentos
+          ? _value.equipamentos
+          : equipamentos // ignore: cast_nullable_to_non_nullable
+              as Map<int, SolicitacaoMaterialFindOneEquipamentoResponseDTO>,
+      insumos: null == insumos
+          ? _value.insumos
+          : insumos // ignore: cast_nullable_to_non_nullable
+              as Map<int, SolicitacaoMaterialFindOneInsumoResponseDTO>,
     ) as $Val);
   }
 
@@ -106,7 +127,9 @@ abstract class _$$SolicitacaoMaterialFindOneResponseDTOImplCopyWith<$Res>
   @useResult
   $Res call(
       {SolicitacaoMaterialModel? solicitacao,
-      Map<int, SolicitacaoMaterialFindOneUsuarioResponseDTO> usuarios});
+      Map<int, SolicitacaoMaterialFindOneUsuarioResponseDTO> usuarios,
+      Map<int, SolicitacaoMaterialFindOneEquipamentoResponseDTO> equipamentos,
+      Map<int, SolicitacaoMaterialFindOneInsumoResponseDTO> insumos});
 
   @override
   $SolicitacaoMaterialModelCopyWith<$Res>? get solicitacao;
@@ -127,6 +150,8 @@ class __$$SolicitacaoMaterialFindOneResponseDTOImplCopyWithImpl<$Res>
   $Res call({
     Object? solicitacao = freezed,
     Object? usuarios = null,
+    Object? equipamentos = null,
+    Object? insumos = null,
   }) {
     return _then(_$SolicitacaoMaterialFindOneResponseDTOImpl(
       solicitacao: freezed == solicitacao
@@ -137,6 +162,14 @@ class __$$SolicitacaoMaterialFindOneResponseDTOImplCopyWithImpl<$Res>
           ? _value.usuarios
           : usuarios // ignore: cast_nullable_to_non_nullable
               as Map<int, SolicitacaoMaterialFindOneUsuarioResponseDTO>,
+      equipamentos: null == equipamentos
+          ? _value.equipamentos
+          : equipamentos // ignore: cast_nullable_to_non_nullable
+              as Map<int, SolicitacaoMaterialFindOneEquipamentoResponseDTO>,
+      insumos: null == insumos
+          ? _value.insumos
+          : insumos // ignore: cast_nullable_to_non_nullable
+              as Map<int, SolicitacaoMaterialFindOneInsumoResponseDTO>,
     ));
   }
 }
@@ -147,7 +180,10 @@ class _$SolicitacaoMaterialFindOneResponseDTOImpl
     with DiagnosticableTreeMixin
     implements _SolicitacaoMaterialFindOneResponseDTO {
   _$SolicitacaoMaterialFindOneResponseDTOImpl(
-      {this.solicitacao, required this.usuarios});
+      {this.solicitacao,
+      required this.usuarios,
+      required this.equipamentos,
+      required this.insumos});
 
   factory _$SolicitacaoMaterialFindOneResponseDTOImpl.fromJson(
           Map<String, dynamic> json) =>
@@ -157,10 +193,14 @@ class _$SolicitacaoMaterialFindOneResponseDTOImpl
   SolicitacaoMaterialModel? solicitacao;
   @override
   Map<int, SolicitacaoMaterialFindOneUsuarioResponseDTO> usuarios;
+  @override
+  Map<int, SolicitacaoMaterialFindOneEquipamentoResponseDTO> equipamentos;
+  @override
+  Map<int, SolicitacaoMaterialFindOneInsumoResponseDTO> insumos;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'SolicitacaoMaterialFindOneResponseDTO(solicitacao: $solicitacao, usuarios: $usuarios)';
+    return 'SolicitacaoMaterialFindOneResponseDTO(solicitacao: $solicitacao, usuarios: $usuarios, equipamentos: $equipamentos, insumos: $insumos)';
   }
 
   @override
@@ -170,7 +210,9 @@ class _$SolicitacaoMaterialFindOneResponseDTOImpl
       ..add(
           DiagnosticsProperty('type', 'SolicitacaoMaterialFindOneResponseDTO'))
       ..add(DiagnosticsProperty('solicitacao', solicitacao))
-      ..add(DiagnosticsProperty('usuarios', usuarios));
+      ..add(DiagnosticsProperty('usuarios', usuarios))
+      ..add(DiagnosticsProperty('equipamentos', equipamentos))
+      ..add(DiagnosticsProperty('insumos', insumos));
   }
 
   @JsonKey(ignore: true)
@@ -193,8 +235,11 @@ abstract class _SolicitacaoMaterialFindOneResponseDTO
     implements SolicitacaoMaterialFindOneResponseDTO {
   factory _SolicitacaoMaterialFindOneResponseDTO(
       {SolicitacaoMaterialModel? solicitacao,
-      required Map<int, SolicitacaoMaterialFindOneUsuarioResponseDTO>
-          usuarios}) = _$SolicitacaoMaterialFindOneResponseDTOImpl;
+      required Map<int, SolicitacaoMaterialFindOneUsuarioResponseDTO> usuarios,
+      required Map<int, SolicitacaoMaterialFindOneEquipamentoResponseDTO>
+          equipamentos,
+      required Map<int, SolicitacaoMaterialFindOneInsumoResponseDTO>
+          insumos}) = _$SolicitacaoMaterialFindOneResponseDTOImpl;
 
   factory _SolicitacaoMaterialFindOneResponseDTO.fromJson(
           Map<String, dynamic> json) =
@@ -206,6 +251,13 @@ abstract class _SolicitacaoMaterialFindOneResponseDTO
   @override
   Map<int, SolicitacaoMaterialFindOneUsuarioResponseDTO> get usuarios;
   set usuarios(Map<int, SolicitacaoMaterialFindOneUsuarioResponseDTO> value);
+  @override
+  Map<int, SolicitacaoMaterialFindOneEquipamentoResponseDTO> get equipamentos;
+  set equipamentos(
+      Map<int, SolicitacaoMaterialFindOneEquipamentoResponseDTO> value);
+  @override
+  Map<int, SolicitacaoMaterialFindOneInsumoResponseDTO> get insumos;
+  set insumos(Map<int, SolicitacaoMaterialFindOneInsumoResponseDTO> value);
   @override
   @JsonKey(ignore: true)
   _$$SolicitacaoMaterialFindOneResponseDTOImplCopyWith<

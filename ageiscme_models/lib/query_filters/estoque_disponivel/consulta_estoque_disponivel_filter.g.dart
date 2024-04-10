@@ -14,6 +14,7 @@ _$ConsultaEstoqueDisponivelFilterImpl
           codKit: json['codKit'] as int?,
           codItem: json['codItem'] as int?,
           codProprietario: json['codProprietario'] as int?,
+          ignorarRemovidos: json['ignorarRemovidos'] as bool?,
           item: json['item'] == null
               ? null
               : ItemModel.fromJson(
@@ -28,5 +29,6 @@ Map<String, dynamic> _$$ConsultaEstoqueDisponivelFilterImplToJson(
       'codKit': instance.codKit,
       'codItem': instance.codItem,
       'codProprietario': instance.codProprietario,
+      'ignorarRemovidos': instance.ignorarRemovidos,
       'item': instance.item?.toJson(),
     };

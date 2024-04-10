@@ -1,9 +1,13 @@
 import 'package:ageiscme_data/shared/custom_dio.dart';
 import 'package:ageiscme_models/dto/solicitacao_material/add/solicitacao_material_add_dto.dart';
+import 'package:ageiscme_models/dto/solicitacao_material/authorize/solicitacao_material_authorize_dto.dart';
 import 'package:ageiscme_models/dto/solicitacao_material/find_one/solicitacao_material_find_one_dto.dart';
+import 'package:ageiscme_models/dto/solicitacao_material/receive/solicitacao_material_receive_dto.dart';
 import 'package:ageiscme_models/dto/solicitacao_material/search/solicitacao_material_search_dto.dart';
 import 'package:ageiscme_models/models/solicitacao_material/solicitacao_material_model.dart';
+import 'package:ageiscme_models/response_dto/solicitacao_material/authorize/solicitacao_material_authorize_response_dto.dart';
 import 'package:ageiscme_models/response_dto/solicitacao_material/find_one/solicitacao_material_find_one_response_dto.dart';
+import 'package:ageiscme_models/response_dto/solicitacao_material/receive/solicitacao_material_receive_response_dto.dart';
 import 'package:ageiscme_models/response_dto/solicitacao_material/search/solicitacao_material_search_response_dto.dart';
 
 class SolicitacaoMaterialService {
@@ -15,7 +19,7 @@ class SolicitacaoMaterialService {
     SolicitacaoMaterialFindOneDTO obj,
   ) async =>
       await _client.post(
-        '/solicitacao-material/find-one-with-materials',
+        '/solicitacao-material/find-one',
         obj,
         (dynamic json) => SolicitacaoMaterialFindOneResponseDTO.fromJson(json),
       );
@@ -43,6 +47,28 @@ class SolicitacaoMaterialService {
       '/solicitacao-material/search',
       obj,
       (dynamic json) => SolicitacaoMaterialSearchResponseDTO.fromJson(json),
+    );
+  }
+
+  Future<(String message, SolicitacaoMaterialAuthorizeResponseDTO response)?>
+      authorize(
+    SolicitacaoMaterialAuthorizeDTO obj,
+  ) async {
+    return await _client.post(
+      '/solicitacao-material/authorize',
+      obj,
+      (dynamic json) => SolicitacaoMaterialAuthorizeResponseDTO.fromJson(json),
+    );
+  }
+
+  Future<(String message, SolicitacaoMaterialReceiveResponseDTO response)?>
+      receive(
+    SolicitacaoMaterialReceiveDTO obj,
+  ) async {
+    return await _client.post(
+      '/solicitacao-material/receive',
+      obj,
+      (dynamic json) => SolicitacaoMaterialReceiveResponseDTO.fromJson(json),
     );
   }
 

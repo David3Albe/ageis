@@ -31,6 +31,8 @@ mixin _$ConsultaEstoqueDisponivelFilter {
   set codItem(int? value) => throw _privateConstructorUsedError;
   int? get codProprietario => throw _privateConstructorUsedError;
   set codProprietario(int? value) => throw _privateConstructorUsedError;
+  bool? get ignorarRemovidos => throw _privateConstructorUsedError;
+  set ignorarRemovidos(bool? value) => throw _privateConstructorUsedError;
   ItemModel? get item => throw _privateConstructorUsedError;
   set item(ItemModel? value) => throw _privateConstructorUsedError;
 
@@ -54,6 +56,7 @@ abstract class $ConsultaEstoqueDisponivelFilterCopyWith<$Res> {
       int? codKit,
       int? codItem,
       int? codProprietario,
+      bool? ignorarRemovidos,
       ItemModel? item});
 
   $ItemModelCopyWith<$Res>? get item;
@@ -78,6 +81,7 @@ class _$ConsultaEstoqueDisponivelFilterCopyWithImpl<$Res,
     Object? codKit = freezed,
     Object? codItem = freezed,
     Object? codProprietario = freezed,
+    Object? ignorarRemovidos = freezed,
     Object? item = freezed,
   }) {
     return _then(_value.copyWith(
@@ -101,6 +105,10 @@ class _$ConsultaEstoqueDisponivelFilterCopyWithImpl<$Res,
           ? _value.codProprietario
           : codProprietario // ignore: cast_nullable_to_non_nullable
               as int?,
+      ignorarRemovidos: freezed == ignorarRemovidos
+          ? _value.ignorarRemovidos
+          : ignorarRemovidos // ignore: cast_nullable_to_non_nullable
+              as bool?,
       item: freezed == item
           ? _value.item
           : item // ignore: cast_nullable_to_non_nullable
@@ -136,6 +144,7 @@ abstract class _$$ConsultaEstoqueDisponivelFilterImplCopyWith<$Res>
       int? codKit,
       int? codItem,
       int? codProprietario,
+      bool? ignorarRemovidos,
       ItemModel? item});
 
   @override
@@ -160,6 +169,7 @@ class __$$ConsultaEstoqueDisponivelFilterImplCopyWithImpl<$Res>
     Object? codKit = freezed,
     Object? codItem = freezed,
     Object? codProprietario = freezed,
+    Object? ignorarRemovidos = freezed,
     Object? item = freezed,
   }) {
     return _then(_$ConsultaEstoqueDisponivelFilterImpl(
@@ -183,6 +193,10 @@ class __$$ConsultaEstoqueDisponivelFilterImplCopyWithImpl<$Res>
           ? _value.codProprietario
           : codProprietario // ignore: cast_nullable_to_non_nullable
               as int?,
+      ignorarRemovidos: freezed == ignorarRemovidos
+          ? _value.ignorarRemovidos
+          : ignorarRemovidos // ignore: cast_nullable_to_non_nullable
+              as bool?,
       item: freezed == item
           ? _value.item
           : item // ignore: cast_nullable_to_non_nullable
@@ -201,6 +215,7 @@ class _$ConsultaEstoqueDisponivelFilterImpl
       required this.codKit,
       required this.codItem,
       required this.codProprietario,
+      this.ignorarRemovidos,
       this.item})
       : super._();
 
@@ -219,11 +234,13 @@ class _$ConsultaEstoqueDisponivelFilterImpl
   @override
   int? codProprietario;
   @override
+  bool? ignorarRemovidos;
+  @override
   ItemModel? item;
 
   @override
   String toString() {
-    return 'ConsultaEstoqueDisponivelFilter(codEstoque: $codEstoque, codEstoqueLocal: $codEstoqueLocal, codKit: $codKit, codItem: $codItem, codProprietario: $codProprietario, item: $item)';
+    return 'ConsultaEstoqueDisponivelFilter(codEstoque: $codEstoque, codEstoqueLocal: $codEstoqueLocal, codKit: $codKit, codItem: $codItem, codProprietario: $codProprietario, ignorarRemovidos: $ignorarRemovidos, item: $item)';
   }
 
   @JsonKey(ignore: true)
@@ -250,6 +267,7 @@ abstract class _ConsultaEstoqueDisponivelFilter
       required int? codKit,
       required int? codItem,
       required int? codProprietario,
+      bool? ignorarRemovidos,
       ItemModel? item}) = _$ConsultaEstoqueDisponivelFilterImpl;
   _ConsultaEstoqueDisponivelFilter._() : super._();
 
@@ -271,6 +289,9 @@ abstract class _ConsultaEstoqueDisponivelFilter
   @override
   int? get codProprietario;
   set codProprietario(int? value);
+  @override
+  bool? get ignorarRemovidos;
+  set ignorarRemovidos(bool? value);
   @override
   ItemModel? get item;
   set item(ItemModel? value);

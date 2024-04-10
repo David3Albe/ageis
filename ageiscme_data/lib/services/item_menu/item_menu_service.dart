@@ -527,6 +527,16 @@ class ItemMenuService {
 
     menuItemProcesso.addChildren(
       ItemMenuModel(
+        'Cancelamento de Etapa de Preparo',
+        route: '/processo/cancelamento-preparo',
+        rights: [
+          DireitoEnum.ProcessoLeituraCancelamentoEtapa,
+        ],
+      ),
+    );
+
+    menuItemProcesso.addChildren(
+      ItemMenuModel(
         'Consulta Entrada Automática - Cancelamentos',
         route: '/processo/consulta-processo-leitura-entrada-automatica',
         rights: [

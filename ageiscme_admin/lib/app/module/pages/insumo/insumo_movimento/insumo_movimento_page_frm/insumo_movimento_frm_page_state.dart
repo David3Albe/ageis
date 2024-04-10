@@ -1,4 +1,5 @@
 import 'package:ageiscme_data/services/insumo_movimento/insumo_movimento_service.dart';
+import 'package:ageiscme_models/dto/insumo_movimento/save/insumo_movimento_save_dto.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 
@@ -12,10 +13,18 @@ class InsumoMovimentoPageFrmCubit extends Cubit<InsumoMovimentoPageFrmState> {
           InsumoMovimentoPageFrmState(insumoMovimento: insumoMovimentoModel),
         );
 
-  void save(InsumoMovimentoModel insumoMovimento) async {
+  void save(
+    InsumoMovimentoModel insumoMovimento,
+    int? numeroSolicitacaoItem,
+  ) async {
     try {
+      InsumoMovimentoSaveDTO saveDTO = InsumoMovimentoSaveDTO(
+        insumoMovimento: insumoMovimento,
+        numeroSolicitacaoItem: numeroSolicitacaoItem,
+      );
+      if (insumoMovimento.cod == null) insumoMovimento.cod = 0;
       (String message, InsumoMovimentoModel insumoMovimento)? result =
-          await service.save(insumoMovimento);
+          await service.save(saveDTO);
       if (result == null) return;
       emit(
         InsumoMovimentoPageFrmState(

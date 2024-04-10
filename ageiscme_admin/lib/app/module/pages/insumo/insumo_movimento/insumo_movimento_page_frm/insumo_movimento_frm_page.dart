@@ -37,17 +37,37 @@ class InsumoMovimentoPageFrm extends StatefulWidget {
   const InsumoMovimentoPageFrm({
     Key? key,
     required this.insumoMovimento,
+    this.baseSolicitacao,
+    this.numeroSolicitacao,
+    this.numeroSolicitacaoItem,
   }) : super(key: key);
 
   final InsumoMovimentoModel insumoMovimento;
+  final bool? baseSolicitacao;
+  final int? numeroSolicitacao;
+  final int? numeroSolicitacaoItem;
 
   @override
-  State<InsumoMovimentoPageFrm> createState() =>
-      _InsumoMovimentoPageFrmState(insumoMovimento: insumoMovimento);
+  State<InsumoMovimentoPageFrm> createState() => _InsumoMovimentoPageFrmState(
+        insumoMovimento: insumoMovimento,
+        baseSolicitacao: baseSolicitacao,
+        numeroSolicitacao: numeroSolicitacao,
+        numeroSolicitacaoItem: numeroSolicitacaoItem,
+      );
 }
 
 class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
-  _InsumoMovimentoPageFrmState({required this.insumoMovimento});
+  _InsumoMovimentoPageFrmState({
+    required this.insumoMovimento,
+    required this.baseSolicitacao,
+    required this.numeroSolicitacao,
+    required this.numeroSolicitacaoItem,
+  });
+
+  bool? baseSolicitacao;
+  int? numeroSolicitacao;
+  int? numeroSolicitacaoItem;
+
   late final EquipamentoCubit equipamentoCubit;
   late final InsumoCubit insumoCubit;
   late final DepositoInsumoCubit depositoInsumoCubit;
@@ -80,7 +100,8 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
         checkAndCallPopulaCampos();
       });
     },
-    readOnly: insumoMovimento.cod != 0 ? true : false,
+    readOnly:
+        insumoMovimento.cod != 0 || baseSolicitacao == true ? true : false,
   );
 
   late final TextFieldStringWidget txtLote = TextFieldStringWidget(
@@ -262,51 +283,14 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
   }
 
   void setFields(bool inInit) async {
-    if (insumoMovimento.codBarra != null) {
-      txtCodigoInsumo.text = insumoMovimento.codBarra.toString();
-    } else {
-      txtCodigoInsumo.text = '';
-    }
-
-    if (insumoMovimento.quantidade != null) {
-      txtQuantidade.text = insumoMovimento.quantidade.toString();
-    } else {
-      txtQuantidade.text = '';
-    }
-
-    if (insumoMovimento.precoNotaFiscal != null) {
-      txtPrecoNotaFiscal.text = insumoMovimento.precoNotaFiscal.toString();
-    } else {
-      txtPrecoNotaFiscal.text = '';
-    }
-
-    if (insumoMovimento.precoCusto3Albe != null) {
-      txtPrecoUnitario.text = insumoMovimento.precoCusto3Albe.toString();
-    } else {
-      txtPrecoUnitario.text = '';
-    }
-
-    if (insumoMovimento.cod != 0) {
-      txtRegistro.text = insumoMovimento.cod.toString();
-    } else {
-      txtRegistro.text = '';
-    }
-
-    if (insumoMovimento.nroTotalFiscal != null) {
-      txtNroNotaFiscal.text = insumoMovimento.nroTotalFiscal.toString();
-    } else {
-      txtNroNotaFiscal.text = '';
-    }
-
-    if (insumoMovimento.lote != null) {
-      txtLote.text = insumoMovimento.lote.toString();
-    } else {
-      txtLote.text = '';
-    }
-
-    if (!inInit) {
-      setFieldsAfterInit();
-    }
+    txtCodigoInsumo.text = insumoMovimento.codBarra?.toString() ?? '';
+    txtQuantidade.text = insumoMovimento.quantidade?.toString() ?? '';
+    txtPrecoNotaFiscal.text = insumoMovimento.precoNotaFiscal?.toString() ?? '';
+    txtPrecoUnitario.text = insumoMovimento.precoCusto3Albe?.toString() ?? '';
+    txtRegistro.text = insumoMovimento.cod?.toString() ?? '';
+    txtNroNotaFiscal.text = insumoMovimento.nroTotalFiscal?.toString() ?? '';
+    txtLote.text = insumoMovimento.lote?.toString() ?? '';
+    if (!inInit) setFieldsAfterInit();
 
     titulo = 'Cadastro de Movimentos dos Insumos';
     if (insumoMovimento.cod != 0) {
@@ -470,7 +454,8 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
                           child: Row(
                             children: [
                               InkWell(
-                                onTap: insumoMovimento.cod == 0
+                                onTap: insumoMovimento.cod == 0 &&
+                                        baseSolicitacao != true
                                     ? () {
                                         setState(() {
                                           isAjusteSelected = true;
@@ -490,7 +475,8 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
                                                   '0'
                                               ? 0
                                               : (isEntradaSelected ? 1 : null),
-                                      onChanged: insumoMovimento.cod == 0
+                                      onChanged: insumoMovimento.cod == 0 &&
+                                              baseSolicitacao != true
                                           ? (value) {
                                               setState(() {
                                                 isAjusteSelected = value == 0;
@@ -538,7 +524,10 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
                                 )
                                 .firstOrNull;
                             return DropDownSearchWidget<EquipamentoModel>(
-                              readOnly: insumoMovimento.cod != 0 ? true : false,
+                              readOnly: insumoMovimento.cod != 0 ||
+                                      baseSolicitacao == true
+                                  ? true
+                                  : false,
                               textFunction: (equipamento) =>
                                   equipamento.EquipamentoNomeText(),
                               initialValue: equipamento,
@@ -577,8 +566,10 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
                                   )
                                   .firstOrNull;
                               return DropDownSearchWidget<InsumoModel>(
-                                readOnly:
-                                    insumoMovimento.cod != 0 ? true : false,
+                                readOnly: insumoMovimento.cod != 0 ||
+                                        baseSolicitacao == true
+                                    ? true
+                                    : false,
                                 key: cbxInsumoKey,
                                 initialValue: insumo,
                                 sourceList: insumos
@@ -653,19 +644,19 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
                           child: dtpDataValidade,
                         ),
                         const SizedBox(width: 5.0),
-                        Expanded(
-                          child: txtQuantidade,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
                         if (insumoMovimento.flagEntradaSaida == '2' &&
                             insumoMovimento.cod == 0) ...{
                           Expanded(
                             child: txtValidadePosAtivaco,
                           ),
                         },
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: txtQuantidade,
+                        ),
                         const SizedBox(width: 5.0),
                         if (insumoMovimento.flagEntradaSaida != '1' &&
                             insumoMovimento.cod == 0) ...{
@@ -737,14 +728,29 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
                     },
                     Padding(
                       padding: const EdgeInsets.only(top: 50),
-                      child: txtUsuario,
+                      child: Row(
+                        children: [
+                          Expanded(child: txtUsuario),
+                          const SizedBox(width: 15.0),
+                          Expanded(
+                            child: baseSolicitacao != true
+                                ? const SizedBox()
+                                : Padding(
+                                    padding: const EdgeInsets.only(top: 24.0),
+                                    child: Text(
+                                      'Nº Solicitação: $numeroSolicitacao',
+                                    ),
+                                  ),
+                          ),
+                        ],
+                      ),
                     ),
                     Row(
                       children: [
                         Expanded(
                           child: dtpDataHora,
                         ),
-                        const SizedBox(width: 5.0),
+                        const SizedBox(width: 15.0),
                         Expanded(
                           child: txtRegistro,
                         ),
@@ -777,6 +783,9 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
                       onPressed: () {
                         setState(() {
                           insumoMovimento = InsumoMovimentoModel.empty();
+                          baseSolicitacao = null;
+                          numeroSolicitacao = null;
+                          numeroSolicitacaoItem = null;
                         });
                         txtSaldoAtual.text = '';
                         setFields(false);
@@ -805,6 +814,8 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
         codInsumo: insumoMovimento.codInsumo,
         dataVaidadeMaiorQueAtual: true,
         qtdeMaiorQueZero: true,
+        numeroRegistros: 1,
+        ordenarPorDataValidadeAscendente: true,
       ),
     );
 
@@ -974,6 +985,6 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
   }
 
   void salvar() {
-    cubit.save(insumoMovimento);
+    cubit.save(insumoMovimento, numeroSolicitacaoItem);
   }
 }

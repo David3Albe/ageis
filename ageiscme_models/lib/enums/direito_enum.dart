@@ -109,6 +109,8 @@ class DireitoEnum {
   static const int MotivosConsulta = 470;
   static const int MotivosManutencao = 471;
 
+  static const int ProcessoLeituraCancelamentoEtapa = 520;
+
   static const int EtiquetasConsulta = 530;
   static const int EtiquetasManutencao = 531;
 

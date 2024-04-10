@@ -726,7 +726,7 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
           ],
         );
         return false;
-      } else if (item.quantidade == null || item.quantidade == 0) {
+      } else if (item.quantidade == null) {
         await ErrorUtils.showErrorDialog(
           context,
           [

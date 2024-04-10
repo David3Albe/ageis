@@ -132,7 +132,7 @@ class CustomDio {
       }
       CommandResultModel result = CommandResultModel.fromJson(resp.data);
       if (!result.success) {
-        bool throwed = throwCommandResultError(result);
+        bool throwed = await throwCommandResultError(result);
         if (throwed) return null;
         if (!throwed) throw CustomBaseException(result.message);
       }
@@ -171,7 +171,7 @@ class CustomDio {
       }
       CommandResultModel result = CommandResultModel.fromJson(resp.data);
       if (!result.success) {
-        bool throwed = throwCommandResultError(result);
+        bool throwed = await throwCommandResultError(result);
         if (throwed) return null;
         if (!throwed) throw CustomBaseException(result.message);
       }
@@ -210,7 +210,7 @@ class CustomDio {
       }
       CommandResultModel result = CommandResultModel.fromJson(resp.data);
       if (!result.success) {
-        bool throwed = throwCommandResultError(result);
+        bool throwed = await throwCommandResultError(result);
         if (throwed) return null;
         if (!throwed) throw CustomBaseException(result.message);
       }
@@ -275,7 +275,7 @@ class CustomDio {
     }
   }
 
-  bool throwCommandResultError(CommandResultModel cmd) {
+  Future<bool> throwCommandResultError(CommandResultModel cmd)  async {
     if (_throwException == false) return false;
     if (ToastUtils.routerOutletContext == null) {
       throw CustomBaseException('Defina o context do ToastUtils');
@@ -294,7 +294,7 @@ class CustomDio {
       } else if (erroPadrao.message is String) {
         erros.add(erroPadrao.message ?? '');
       }
-      ErrorUtils.showErrorDialog(
+      await ErrorUtils.showErrorDialog(
         ToastUtils.routerOutletContext!,
         erros,
       ).then((value) {

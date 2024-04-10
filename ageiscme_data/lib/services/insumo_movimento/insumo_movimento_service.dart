@@ -1,4 +1,5 @@
 import 'package:ageiscme_data/shared/custom_dio.dart';
+import 'package:ageiscme_models/dto/insumo_movimento/save/insumo_movimento_save_dto.dart';
 import 'package:ageiscme_models/filters/insumo_movimento/insumo_movimento_filter.dart';
 import 'package:ageiscme_models/main.dart';
 
@@ -30,7 +31,7 @@ class InsumoMovimentoService {
           .toList();
 
   Future<(String message, InsumoMovimentoModel insumoMovimento)?> save(
-    InsumoMovimentoModel obj,
+    InsumoMovimentoSaveDTO obj,
   ) async {
     return await _client.post(
       '/insumo-movimento',

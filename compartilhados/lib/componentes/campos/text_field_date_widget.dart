@@ -19,6 +19,7 @@ class DatePickerWidget extends StatefulWidget {
   final bool readOnly;
   final GlobalKey<_DatePickerWidgetState> key = GlobalKey();
   final SetDateValueBuilder? setDateValueBuilder;
+  final DateFormat? formato;
 
   DatePickerWidget({
     required this.placeholder,
@@ -26,6 +27,7 @@ class DatePickerWidget extends StatefulWidget {
     this.initialValue,
     this.readOnly = false,
     this.setDateValueBuilder,
+    this.formato,
   });
 
   void clear() {
@@ -47,16 +49,21 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
   DateTime? selectedDate;
   late TextEditingController textController;
   late FocusNode focusNode;
+  late DateFormat format;
 
   @override
   void initState() {
     super.initState();
     textController = TextEditingController();
     focusNode = FocusNode();
+    format = DateFormat('dd/MM/yyyy');
+    if (widget.formato != null) {
+      format = widget.formato!;
+    }
 
     if (widget.initialValue != null) {
       selectedDate = widget.initialValue!;
-      textController.text = DateFormat('dd/MM/yyyy').format(selectedDate!);
+      textController.text = format.format(selectedDate!);
     } else {
       selectedDate = null;
       textController.text = '';
@@ -72,7 +79,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
         textController.text = '';
         return;
       }
-      textController.text = DateFormat('dd/MM/yyyy').format(date);
+      textController.text = format.format(date);
       if (widget.onDateSelected != null) widget.onDateSelected!(date);
     });
   }
@@ -116,7 +123,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
         textController.text = '';
         return;
       }
-      textController.text = DateFormat('dd/MM/yyyy').format(date);
+      textController.text = format.format(date);
     });
   }
 
@@ -128,9 +135,8 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
       lastDate: DateTime(2101),
     );
     selectedDate = picked;
-    textController.text = selectedDate != null
-        ? DateFormat('dd/MM/yyyy').format(selectedDate!)
-        : '';
+    textController.text =
+        selectedDate != null ? format.format(selectedDate!) : '';
     if (widget.onDateSelected != null) widget.onDateSelected!(picked);
   }
 
@@ -160,7 +166,6 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
 
     setState(() {
       DateTime? data;
-      DateFormat format = DateFormat('dd/MM/yyyy');
       data = format.parse(maskedtext);
       textController.text = format.format(data);
       textController.selection = TextSelection.fromPosition(
@@ -183,7 +188,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
       controller: textController,
       keyboardType: TextInputType.datetime,
       inputFormatters: [
-        LengthLimitingTextInputFormatter(10),
+        LengthLimitingTextInputFormatter(widget.formato?.pattern?.length ?? 10),
         maskFormatter,
       ],
       style: TextStyle(

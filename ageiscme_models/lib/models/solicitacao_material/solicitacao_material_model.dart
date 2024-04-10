@@ -11,7 +11,7 @@ abstract class SolicitacaoMaterialModel with _$SolicitacaoMaterialModel {
   factory SolicitacaoMaterialModel({
     required int? cod,
     required int? codUsuarioSolicitante,
-    required int? codusuarioAutorizacao,
+    required int? codUsuarioAutorizacao,
     required int? codUsuarioEntrega,
     required int? codUsuarioRecebimento,
     required DateTime? dataHoraSolicitacao,
@@ -37,7 +37,7 @@ abstract class SolicitacaoMaterialModel with _$SolicitacaoMaterialModel {
         codUsuarioEntrega: null,
         codUsuarioRecebimento: null,
         codUsuarioSolicitante: null,
-        codusuarioAutorizacao: null,
+        codUsuarioAutorizacao: null,
         dataHoraAutorizacao: null, 
         dataHoraEntrega: null,
         dataHoraSolicitacao: null,

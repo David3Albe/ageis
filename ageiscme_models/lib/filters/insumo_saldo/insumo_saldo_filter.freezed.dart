@@ -31,6 +31,12 @@ mixin _$InsumoSaldoFilter {
   bool? get dataVaidadeMaiorQueAtual => throw _privateConstructorUsedError;
   set dataVaidadeMaiorQueAtual(bool? value) =>
       throw _privateConstructorUsedError;
+  int? get numeroRegistros => throw _privateConstructorUsedError;
+  set numeroRegistros(int? value) => throw _privateConstructorUsedError;
+  bool? get ordenarPorDataValidadeAscendente =>
+      throw _privateConstructorUsedError;
+  set ordenarPorDataValidadeAscendente(bool? value) =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -49,7 +55,9 @@ abstract class $InsumoSaldoFilterCopyWith<$Res> {
       String? lote,
       int? codDeposito,
       bool? qtdeMaiorQueZero,
-      bool? dataVaidadeMaiorQueAtual});
+      bool? dataVaidadeMaiorQueAtual,
+      int? numeroRegistros,
+      bool? ordenarPorDataValidadeAscendente});
 }
 
 /// @nodoc
@@ -70,6 +78,8 @@ class _$InsumoSaldoFilterCopyWithImpl<$Res, $Val extends InsumoSaldoFilter>
     Object? codDeposito = freezed,
     Object? qtdeMaiorQueZero = freezed,
     Object? dataVaidadeMaiorQueAtual = freezed,
+    Object? numeroRegistros = freezed,
+    Object? ordenarPorDataValidadeAscendente = freezed,
   }) {
     return _then(_value.copyWith(
       codInsumo: freezed == codInsumo
@@ -92,6 +102,15 @@ class _$InsumoSaldoFilterCopyWithImpl<$Res, $Val extends InsumoSaldoFilter>
           ? _value.dataVaidadeMaiorQueAtual
           : dataVaidadeMaiorQueAtual // ignore: cast_nullable_to_non_nullable
               as bool?,
+      numeroRegistros: freezed == numeroRegistros
+          ? _value.numeroRegistros
+          : numeroRegistros // ignore: cast_nullable_to_non_nullable
+              as int?,
+      ordenarPorDataValidadeAscendente: freezed ==
+              ordenarPorDataValidadeAscendente
+          ? _value.ordenarPorDataValidadeAscendente
+          : ordenarPorDataValidadeAscendente // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 }
@@ -109,7 +128,9 @@ abstract class _$$InsumoSaldoFilterImplCopyWith<$Res>
       String? lote,
       int? codDeposito,
       bool? qtdeMaiorQueZero,
-      bool? dataVaidadeMaiorQueAtual});
+      bool? dataVaidadeMaiorQueAtual,
+      int? numeroRegistros,
+      bool? ordenarPorDataValidadeAscendente});
 }
 
 /// @nodoc
@@ -128,6 +149,8 @@ class __$$InsumoSaldoFilterImplCopyWithImpl<$Res>
     Object? codDeposito = freezed,
     Object? qtdeMaiorQueZero = freezed,
     Object? dataVaidadeMaiorQueAtual = freezed,
+    Object? numeroRegistros = freezed,
+    Object? ordenarPorDataValidadeAscendente = freezed,
   }) {
     return _then(_$InsumoSaldoFilterImpl(
       codInsumo: freezed == codInsumo
@@ -150,6 +173,15 @@ class __$$InsumoSaldoFilterImplCopyWithImpl<$Res>
           ? _value.dataVaidadeMaiorQueAtual
           : dataVaidadeMaiorQueAtual // ignore: cast_nullable_to_non_nullable
               as bool?,
+      numeroRegistros: freezed == numeroRegistros
+          ? _value.numeroRegistros
+          : numeroRegistros // ignore: cast_nullable_to_non_nullable
+              as int?,
+      ordenarPorDataValidadeAscendente: freezed ==
+              ordenarPorDataValidadeAscendente
+          ? _value.ordenarPorDataValidadeAscendente
+          : ordenarPorDataValidadeAscendente // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -162,7 +194,9 @@ class _$InsumoSaldoFilterImpl implements _InsumoSaldoFilter {
       this.lote,
       this.codDeposito,
       this.qtdeMaiorQueZero,
-      this.dataVaidadeMaiorQueAtual});
+      this.dataVaidadeMaiorQueAtual,
+      this.numeroRegistros,
+      this.ordenarPorDataValidadeAscendente});
 
   factory _$InsumoSaldoFilterImpl.fromJson(Map<String, dynamic> json) =>
       _$$InsumoSaldoFilterImplFromJson(json);
@@ -177,10 +211,14 @@ class _$InsumoSaldoFilterImpl implements _InsumoSaldoFilter {
   bool? qtdeMaiorQueZero;
   @override
   bool? dataVaidadeMaiorQueAtual;
+  @override
+  int? numeroRegistros;
+  @override
+  bool? ordenarPorDataValidadeAscendente;
 
   @override
   String toString() {
-    return 'InsumoSaldoFilter(codInsumo: $codInsumo, lote: $lote, codDeposito: $codDeposito, qtdeMaiorQueZero: $qtdeMaiorQueZero, dataVaidadeMaiorQueAtual: $dataVaidadeMaiorQueAtual)';
+    return 'InsumoSaldoFilter(codInsumo: $codInsumo, lote: $lote, codDeposito: $codDeposito, qtdeMaiorQueZero: $qtdeMaiorQueZero, dataVaidadeMaiorQueAtual: $dataVaidadeMaiorQueAtual, numeroRegistros: $numeroRegistros, ordenarPorDataValidadeAscendente: $ordenarPorDataValidadeAscendente)';
   }
 
   @JsonKey(ignore: true)
@@ -204,7 +242,9 @@ abstract class _InsumoSaldoFilter implements InsumoSaldoFilter {
       String? lote,
       int? codDeposito,
       bool? qtdeMaiorQueZero,
-      bool? dataVaidadeMaiorQueAtual}) = _$InsumoSaldoFilterImpl;
+      bool? dataVaidadeMaiorQueAtual,
+      int? numeroRegistros,
+      bool? ordenarPorDataValidadeAscendente}) = _$InsumoSaldoFilterImpl;
 
   factory _InsumoSaldoFilter.fromJson(Map<String, dynamic> json) =
       _$InsumoSaldoFilterImpl.fromJson;
@@ -224,6 +264,12 @@ abstract class _InsumoSaldoFilter implements InsumoSaldoFilter {
   @override
   bool? get dataVaidadeMaiorQueAtual;
   set dataVaidadeMaiorQueAtual(bool? value);
+  @override
+  int? get numeroRegistros;
+  set numeroRegistros(int? value);
+  @override
+  bool? get ordenarPorDataValidadeAscendente;
+  set ordenarPorDataValidadeAscendente(bool? value);
   @override
   @JsonKey(ignore: true)
   _$$InsumoSaldoFilterImplCopyWith<_$InsumoSaldoFilterImpl> get copyWith =>
