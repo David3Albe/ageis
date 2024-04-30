@@ -17,6 +17,8 @@ _$ItemDescritorFilterImpl _$$ItemDescritorFilterImplFromJson(Map json) =>
       carregarImagem: json['carregarImagem'] as bool?,
       numeroMaximoRegistros: json['numeroMaximoRegistros'] as int?,
       termoPesquisa: json['termoPesquisa'] as String?,
+      nomeContem: json['nomeContem'] as String?,
+      ordenarAtivosPrimeiro: json['ordenarAtivosPrimeiro'] as bool?,
       tStamp: json['tStamp'] as String?,
     );
 
@@ -32,5 +34,7 @@ Map<String, dynamic> _$$ItemDescritorFilterImplToJson(
       'carregarImagem': instance.carregarImagem,
       'numeroMaximoRegistros': instance.numeroMaximoRegistros,
       'termoPesquisa': instance.termoPesquisa,
+      'nomeContem': instance.nomeContem,
+      'ordenarAtivosPrimeiro': instance.ordenarAtivosPrimeiro,
       'tStamp': instance.tStamp,
     };

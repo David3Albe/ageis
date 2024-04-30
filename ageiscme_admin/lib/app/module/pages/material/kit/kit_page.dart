@@ -1,5 +1,7 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/kit_cor/kit_cor_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/kit_descritor/kit_descritor_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/material/kit/cubits/kit_cubit_filter.dart';
+import 'package:ageiscme_admin/app/module/pages/material/kit/filter/kit_filter_button_widget.dart';
 import 'package:ageiscme_admin/app/module/pages/material/kit/kit_page_frm/kit_page_frm.dart';
 import 'package:ageiscme_admin/app/module/pages/material/kit/kit_page_state.dart';
 import 'package:ageiscme_data/services/kit/kit_service.dart';
@@ -77,6 +79,7 @@ class _KitPageState extends State<KitPage> {
   late final KitService service;
   late final KitCorCubit kitCorCubit;
   late final KitDescritorCubit kitDescritorCubit;
+  late final KitCubitFilter kitFilterCubit;
 
   @override
   void initState() {
@@ -84,32 +87,42 @@ class _KitPageState extends State<KitPage> {
     kitCorCubit = KitCorCubit();
     kitDescritorCubit = KitDescritorCubit();
     bloc = KitPageCubit(service: service);
-    bloc.searchKits(KitSearchDTO());
+    kitFilterCubit = KitCubitFilter();
+    bloc.searchKits(kitFilterCubit.state);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              null,
-            ),
-          },
-        ),
-        BlocListener<KitPageCubit, KitPageState>(
-          bloc: bloc,
-          listener: (context, state) {
-            if (state.deleted) deleted(state);
-            if (state.error.isNotEmpty) onError(state);
-          },
-          child: BlocBuilder<KitPageCubit, KitPageState>(
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: kitFilterCubit),
+        BlocProvider.value(value: bloc),
+      ],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const KitButtonFilterWidget(),
+              const Padding(padding: EdgeInsets.only(left: 8)),
+              AddButtonWidget(
+                onPressed: () => {
+                  openModal(
+                    context,
+                    null,
+                  ),
+                },
+              ),
+            ],
+          ),
+          BlocConsumer<KitPageCubit, KitPageState>(
             bloc: bloc,
+            listener: (context, state) {
+              if (state.deleted) deleted(state);
+              if (state.error.isNotEmpty) onError(state);
+            },
             builder: (context, state) {
               response = state.response;
               if (state.loading) {
@@ -136,8 +149,8 @@ class _KitPageState extends State<KitPage> {
               );
             },
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -204,7 +217,8 @@ class _KitPageState extends State<KitPage> {
     );
     if (result == null || !result.$1) return;
     ToastUtils.showCustomToastSucess(context, result.$2);
-    bloc.searchKits(KitSearchDTO());
+    KitSearchDTO dto = context.read<KitCubitFilter>().state;
+    await bloc.searchKits(dto);
   }
 
   void delete(BuildContext context, KitSearchKitResponseDTO kitBase) async {
@@ -215,7 +229,7 @@ class _KitPageState extends State<KitPage> {
     KitModel kit = KitModel.empty();
     kit.cod = kitBase.cod;
     kit.tStamp = kitBase.tStamp;
-    if (confirmacao) bloc.delete(kit);
+    if (confirmacao) await bloc.delete(kit);
   }
 
   void deleted(KitPageState state) {

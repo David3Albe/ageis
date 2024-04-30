@@ -8,6 +8,8 @@ sealed class TreinamentoRegistroFilter with _$TreinamentoRegistroFilter {
   factory TreinamentoRegistroFilter({
     int? cod,
     bool? carregarUsuario,
+    int? numeroRegistros,
+    String? nomeContem,
     @JsonKey(name: 'tStamp') String? tStamp,
   }) = _TreinamentoRegistroFilter;
 

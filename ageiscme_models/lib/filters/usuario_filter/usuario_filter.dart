@@ -17,6 +17,9 @@ sealed class UsuarioFilter with _$UsuarioFilter {
     bool? apenasColaboradores,
     int? tipoQuery,
     bool? carregarFoto,
+    String? nomeContem,
+    int? numeroRegistros,
+    bool? ordenarPorAtivosPrimeiro,
   }) = _UsuarioFilter;
 
   factory UsuarioFilter.fromJson(Map<String, Object?> json) =>

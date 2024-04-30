@@ -6,12 +6,16 @@ class ListFieldWidget<T> extends StatefulWidget {
   final ValueChanged<T?> onItemSelected;
   final String Function(T) itemText;
   final bool removeButton;
+  final bool? disableUnselect;
+  final bool? permitReselect;
 
   ListFieldWidget({
     required this.sourceList,
     required this.onItemSelected,
     required this.itemText,
     required this.removeButton,
+    this.disableUnselect,
+    this.permitReselect,
   });
 
   @override
@@ -80,8 +84,9 @@ class _ListFieldWidgetState<T> extends State<ListFieldWidget<T>> {
                     ],
                   ),
                   onTap: () {
+                    if (widget.disableUnselect == true && isSelected) return;
                     setState(() {
-                      if (isSelected) {
+                      if (isSelected && widget.permitReselect != true) {
                         selectedItem = null;
                         widget.onItemSelected(null);
                       } else {

@@ -54,17 +54,17 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
     },
   );
   late final TextFieldStringWidget txtCodBarra = TextFieldStringWidget(
-    placeholder: 'Código de Barras',
+    placeholder: 'Cód. Insumo',
     onChanged: (String? str) {
       insumo.codBarra = int.parse(txtCodBarra.text);
     },
   );
-  late final TextFieldStringWidget txtCodErp3Albe = TextFieldStringWidget(
-    placeholder: 'Cód. ERP da 3Albe',
-    onChanged: (String? str) {
-      insumo.codErp3Albe = txtCodErp3Albe.text;
-    },
-  );
+  // late final TextFieldStringWidget txtCodErp3Albe = TextFieldStringWidget(
+  //   placeholder: 'Cód. ERP da 3Albe',
+  //   onChanged: (String? str) {
+  //     insumo.codErp3Albe = txtCodErp3Albe.text;
+  //   },
+  // );
 
   late final TextFieldStringWidget txtUnidadeMedida = TextFieldStringWidget(
     placeholder: 'Unidade Medida',
@@ -241,87 +241,45 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
 
   void setFields() {
     txtNomeitem.text = insumo.nome.toString();
+    txtQtde.text = insumo.qtdeEmbalagem == 0 || insumo.qtdeEmbalagem == null
+        ? ''
+        : insumo.qtdeEmbalagem.toString();
 
-    if (insumo.qtdeEmbalagem == 0 || insumo.qtdeEmbalagem == null) {
-      txtQtde.text = '';
-    } else {
-      txtQtde.text = insumo.qtdeEmbalagem.toString();
-    }
-    if (insumo.codBarra == 0) {
-      txtCodBarra.text = '';
-    } else {
-      txtCodBarra.text = insumo.codBarra.toString();
-    }
+    txtCodBarra.text = insumo.codBarra == 0 ? '' : insumo.codBarra.toString();
+    txtDescricaoItem.text = insumo.descricao ?? '';
+    // txtCodErp3Albe.text = insumo.codErp3Albe ?? '';
+    txtEmbalagem.text = insumo.embalagem ?? '';
+    txtRegistroAnvisa.text = insumo.registroAnvisa ?? '';
+    txtUnidadeMedida.text = insumo.unidadeMedida ?? '';
+    txtFornecedor.text = insumo.fornecedor ?? '';
+    txtFabricante.text = insumo.fabricante ?? '';
 
-    if (insumo.descricao == null) {
-      txtDescricaoItem.text = '';
-    } else {
-      txtDescricaoItem.text = insumo.descricao.toString();
-    }
-    if (insumo.codErp3Albe == null) {
-      txtCodErp3Albe.text = '';
-    } else {
-      txtCodErp3Albe.text = insumo.codErp3Albe.toString();
-    }
-    if (insumo.embalagem == null) {
-      txtEmbalagem.text = '';
-    } else {
-      txtEmbalagem.text = insumo.embalagem.toString();
-    }
-    if (insumo.registroAnvisa == null) {
-      txtRegistroAnvisa.text = '';
-    } else {
-      txtRegistroAnvisa.text = insumo.registroAnvisa.toString();
-    }
-    if (insumo.unidadeMedida == null) {
-      txtUnidadeMedida.text = '';
-    } else {
-      txtUnidadeMedida.text = insumo.unidadeMedida.toString();
-    }
-    if (insumo.fornecedor == null) {
-      txtFornecedor.text = '';
-    } else {
-      txtFornecedor.text = insumo.fornecedor.toString();
-    }
-    if (insumo.fabricante == null) {
-      txtFabricante.text = '';
-    } else {
-      txtFabricante.text = insumo.fabricante.toString();
-    }
-
-    if (insumo.controleEstoque == true) {
-      if (insumo.estoqueMinimo == 0 || insumo.estoqueMinimo == null) {
-        txtEstoqueMinimo.text = '';
-      } else {
-        txtEstoqueMinimo.text = insumo.estoqueMinimo.toString();
-      }
-      if (insumo.estoqueMaximo == 0 || insumo.estoqueMaximo == null) {
-        txtEstoqueMaximo.text = '';
-      } else {
-        txtEstoqueMaximo.text = insumo.estoqueMaximo.toString();
-      }
-      if (insumo.prazoEntregaDias == 0 || insumo.prazoEntregaDias == null) {
-        txtPrazoEntrega.text = '';
-      } else {
-        txtPrazoEntrega.text = insumo.prazoEntregaDias.toString();
-      }
-      if (insumo.pontoReposicao == 0 || insumo.pontoReposicao == null) {
-        txtPontoReposicao.text = '';
-      } else {
-        txtPontoReposicao.text = insumo.pontoReposicao.toString();
-      }
-      if (insumo.validadeAposAtivacaoDias == 0 ||
-          insumo.validadeAposAtivacaoDias == null) {
-        txtPrazoValidadeAposAtivacao.text = '';
-      } else {
-        txtPrazoValidadeAposAtivacao.text =
-            insumo.validadeAposAtivacaoDias.toString();
-      }
-    }
     titulo = 'Cadastro de Insumo';
     if (insumo.cod != 0) {
       titulo = 'Edição do Insumo: ${insumo.cod} - ${insumo.nome}';
     }
+
+    if (insumo.controleEstoque != true) return;
+    txtEstoqueMinimo.text =
+        insumo.estoqueMinimo == 0 || insumo.estoqueMinimo == null
+            ? ''
+            : insumo.estoqueMinimo.toString();
+    txtEstoqueMaximo.text =
+        insumo.estoqueMaximo == 0 || insumo.estoqueMaximo == null
+            ? ''
+            : insumo.estoqueMaximo.toString();
+    txtPrazoEntrega.text =
+        insumo.prazoEntregaDias == 0 || insumo.prazoEntregaDias == null
+            ? ''
+            : insumo.prazoEntregaDias.toString();
+    txtPontoReposicao.text =
+        insumo.pontoReposicao == 0 || insumo.pontoReposicao == null
+            ? ''
+            : insumo.pontoReposicao.toString();
+    txtPrazoValidadeAposAtivacao.text = insumo.validadeAposAtivacaoDias == 0 ||
+            insumo.validadeAposAtivacaoDias == null
+        ? ''
+        : insumo.validadeAposAtivacaoDias.toString();
   }
 
   @override
@@ -398,10 +356,10 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                           Expanded(
                             child: txtCodBarra,
                           ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: txtCodErp3Albe,
-                          ),
+                          // const SizedBox(width: 16.0),
+                          // Expanded(
+                          //   child: txtCodErp3Albe,
+                          // ),
                         ],
                       ),
                     ),

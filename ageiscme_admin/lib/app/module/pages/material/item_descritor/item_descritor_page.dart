@@ -1,3 +1,5 @@
+import 'package:ageiscme_admin/app/module/pages/material/item_descritor/cubits/item_descritor_cubit_filter.dart';
+import 'package:ageiscme_admin/app/module/pages/material/item_descritor/filter/item_descritor_filter_button_widget.dart';
 import 'package:ageiscme_admin/app/module/pages/material/item_descritor/item_descritor_page_frm/item_descritor_page_frm.dart';
 import 'package:ageiscme_admin/app/module/pages/material/item_descritor/item_descritor_page_state.dart';
 import 'package:ageiscme_data/services/item_descritor/item_descritor_service.dart';
@@ -70,37 +72,48 @@ class _ItemDescritorPageState extends State<ItemDescritorPage> {
 
   late final ItemDescritorPageCubit bloc;
   late final ItemDescritorService service;
+  late final ItemDescritorCubitFilter cubitFilter;
 
   @override
   void initState() {
     service = ItemDescritorService();
     bloc = ItemDescritorPageCubit(service: service);
-    bloc.loadItemDescritor();
+    cubitFilter = ItemDescritorCubitFilter();
+    bloc.getScreenData(cubitFilter.state);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              ItemDescritorModel.empty(),
-            ),
-          },
-        ),
-        BlocListener<ItemDescritorPageCubit, ItemDescritorPageState>(
-          bloc: bloc,
-          listener: (context, state) {
-            if (state.deleted) deleted(state);
-            if (state.error.isNotEmpty) onError(state);
-          },
-          child: BlocBuilder<ItemDescritorPageCubit, ItemDescritorPageState>(
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: cubitFilter),
+        BlocProvider.value(value: bloc),
+      ],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const ItemDescritorButtonFilterWidget(),
+              const Padding(padding: EdgeInsets.only(left: 8)),
+              AddButtonWidget(
+                onPressed: () => {
+                  openModal(
+                    context,
+                    ItemDescritorModel.empty(),
+                  ),
+                },
+              ),
+            ],
+          ),
+          BlocConsumer<ItemDescritorPageCubit, ItemDescritorPageState>(
             bloc: bloc,
+            listener: (context, state) {
+              if (state.deleted) deleted(state);
+              if (state.error.isNotEmpty) onError(state);
+            },
             builder: (context, state) {
               if (state.loading) {
                 return const Center(
@@ -123,8 +136,8 @@ class _ItemDescritorPageState extends State<ItemDescritorPage> {
               );
             },
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -171,7 +184,8 @@ class _ItemDescritorPageState extends State<ItemDescritorPage> {
     );
     if (result == null || !result.$1) return;
     ToastUtils.showCustomToastSucess(context, result.$2);
-    bloc.loadItemDescritor();
+    ItemDescritorFilter filter = context.read<ItemDescritorCubitFilter>().state;
+    await bloc.getScreenData(filter);
   }
 
   void delete(BuildContext context, ItemDescritorModel itemDescritor) async {

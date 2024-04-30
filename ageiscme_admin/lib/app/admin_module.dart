@@ -241,7 +241,7 @@ class AdminModule extends Module {
         ),
         createParallelRoute(
           '/equipamento/registro-servico',
-          child: (context) => RegistroServicoPage(),
+          child: (context) => RegistroServicoPage(cod: r.args.data),
         ),
         createParallelRoute(
           '/equipamento/equipamento-manutencao',
@@ -294,7 +294,9 @@ class AdminModule extends Module {
         ),
         createParallelRoute(
           '/colaborador/epi-entrega',
-          child: (context) => EpiEntregaPage(),
+          child: (context) => EpiEntregaPage(
+            codUsuario: r.args.data,
+          ),
         ),
         createParallelRoute(
           '/equipamento/consulta-registro-servico',
@@ -354,7 +356,9 @@ class AdminModule extends Module {
         ),
         createParallelRoute(
           '/insumo/consulta-insumo-saldo',
-          child: (context) => ConsultaInsumoSaldoPage(),
+          child: (context) => ConsultaInsumoSaldoPage(
+            codInsumo: r.args.data,
+          ),
         ),
         createParallelRoute(
           '/insumo/consulta-insumo-estoque',

@@ -1,4 +1,6 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/colaborador/treinamento_registro/cubits/treinamento_registro_cubit_filter.dart';
+import 'package:ageiscme_admin/app/module/pages/colaborador/treinamento_registro/filter/treinamento_registro_filter_button_widget.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/treinamento_registro/treinamento_registro_page_frm/treinamento_registro_page_frm.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/treinamento_registro/treinamento_registro_page_state.dart';
 import 'package:ageiscme_data/services/treinamento_registro/treinamento_registro_service.dart';
@@ -54,57 +56,80 @@ class _TreinamentoRegistroPageState extends State<TreinamentoRegistroPage> {
     service = TreinamentoRegistroService();
     usuarioCubit = UsuarioCubit();
     bloc = TreinamentoRegistroPageCubit(service: service);
-    bloc.loadTreinamentoRegistro();
+    TreinamentoRegistroFilter filter = TreinamentoRegistroFilter(
+      numeroRegistros: 500,
+      carregarUsuario: true,
+    );
+    bloc.filter(filter);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              TreinamentoRegistroModel.empty(),
-            ),
-          },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => TreinamentoRegistroCubitFilter(),
         ),
-        BlocListener<TreinamentoRegistroPageCubit,
-            TreinamentoRegistroPageState>(
-          bloc: bloc,
-          listener: (context, state) {
-            if (state.deleted) deleted(state);
-          },
-          child: BlocBuilder<TreinamentoRegistroPageCubit,
-              TreinamentoRegistroPageState>(
-            bloc: bloc,
-            builder: (context, state) {
-              if (state.loading) {
-                return const Center(
-                  child: LoadingWidget(),
-                );
-              }
-              return Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 16.0, bottom: 16),
-                  child: PlutoGridWidget(
-                    onEdit: (TreinamentoRegistroModel objeto) => {
-                      openModal(context, TreinamentoRegistroModel.copy(objeto)),
-                    },
-                    onDelete: (TreinamentoRegistroModel objeto) =>
-                        {delete(context, objeto)},
-                    columns: colunas,
-                    items: state.treinamentosRegistros,
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
+        BlocProvider.value(value: bloc),
       ],
+      child: Builder(
+        builder: (context) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const TreinamentoRegistroFilterButtonWidget(),
+                  const Padding(padding: EdgeInsets.only(left: 4)),
+                  AddButtonWidget(
+                    onPressed: () => {
+                      openModal(
+                        context,
+                        TreinamentoRegistroModel.empty(),
+                      ),
+                    },
+                  ),
+                ],
+              ),
+              BlocConsumer<TreinamentoRegistroPageCubit,
+                  TreinamentoRegistroPageState>(
+                bloc: bloc,
+                listener: (context, state) {
+                  if (state.deleted) deleted(state);
+                },
+                builder: (context, state) {
+                  if (state.loading) {
+                    return const Center(
+                      child: LoadingWidget(),
+                    );
+                  }
+                  return Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 16.0, bottom: 16),
+                      child: PlutoGridWidget(
+                        onEdit: (TreinamentoRegistroModel objeto) => {
+                          openModal(
+                            context,
+                            TreinamentoRegistroModel.copy(
+                              objeto,
+                            ),
+                          ),
+                        },
+                        onDelete: (TreinamentoRegistroModel objeto) =>
+                            {delete(context, objeto)},
+                        columns: colunas,
+                        items: state.treinamentosRegistros,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 
@@ -115,6 +140,8 @@ class _TreinamentoRegistroPageState extends State<TreinamentoRegistroPage> {
           apenasAtivos: true,
           ordenarPorNomeCrescente: true,
           apenasColaboradores: true,
+          carregarFoto: false,
+          tipoQuery: UsuarioFilterTipoQuery.SemFoto,
         ),
       );
     }

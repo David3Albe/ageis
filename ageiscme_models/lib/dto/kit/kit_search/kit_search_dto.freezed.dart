@@ -20,7 +20,19 @@ KitSearchDTO _$KitSearchDTOFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$KitSearchDTO {
+  int? get numeroRegistros => throw _privateConstructorUsedError;
+  set numeroRegistros(int? value) => throw _privateConstructorUsedError;
+  String? get codBarraContem => throw _privateConstructorUsedError;
+  set codBarraContem(String? value) => throw _privateConstructorUsedError;
+  String? get nomeContem => throw _privateConstructorUsedError;
+  set nomeContem(String? value) => throw _privateConstructorUsedError;
+  bool? get ordenarCod => throw _privateConstructorUsedError;
+  set ordenarCod(bool? value) => throw _privateConstructorUsedError;
+
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $KitSearchDTOCopyWith<KitSearchDTO> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -28,6 +40,12 @@ abstract class $KitSearchDTOCopyWith<$Res> {
   factory $KitSearchDTOCopyWith(
           KitSearchDTO value, $Res Function(KitSearchDTO) then) =
       _$KitSearchDTOCopyWithImpl<$Res, KitSearchDTO>;
+  @useResult
+  $Res call(
+      {int? numeroRegistros,
+      String? codBarraContem,
+      String? nomeContem,
+      bool? ordenarCod});
 }
 
 /// @nodoc
@@ -39,13 +57,49 @@ class _$KitSearchDTOCopyWithImpl<$Res, $Val extends KitSearchDTO>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? numeroRegistros = freezed,
+    Object? codBarraContem = freezed,
+    Object? nomeContem = freezed,
+    Object? ordenarCod = freezed,
+  }) {
+    return _then(_value.copyWith(
+      numeroRegistros: freezed == numeroRegistros
+          ? _value.numeroRegistros
+          : numeroRegistros // ignore: cast_nullable_to_non_nullable
+              as int?,
+      codBarraContem: freezed == codBarraContem
+          ? _value.codBarraContem
+          : codBarraContem // ignore: cast_nullable_to_non_nullable
+              as String?,
+      nomeContem: freezed == nomeContem
+          ? _value.nomeContem
+          : nomeContem // ignore: cast_nullable_to_non_nullable
+              as String?,
+      ordenarCod: freezed == ordenarCod
+          ? _value.ordenarCod
+          : ordenarCod // ignore: cast_nullable_to_non_nullable
+              as bool?,
+    ) as $Val);
+  }
 }
 
 /// @nodoc
-abstract class _$$KitSearchDTOImplCopyWith<$Res> {
+abstract class _$$KitSearchDTOImplCopyWith<$Res>
+    implements $KitSearchDTOCopyWith<$Res> {
   factory _$$KitSearchDTOImplCopyWith(
           _$KitSearchDTOImpl value, $Res Function(_$KitSearchDTOImpl) then) =
       __$$KitSearchDTOImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {int? numeroRegistros,
+      String? codBarraContem,
+      String? nomeContem,
+      bool? ordenarCod});
 }
 
 /// @nodoc
@@ -55,20 +109,67 @@ class __$$KitSearchDTOImplCopyWithImpl<$Res>
   __$$KitSearchDTOImplCopyWithImpl(
       _$KitSearchDTOImpl _value, $Res Function(_$KitSearchDTOImpl) _then)
       : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? numeroRegistros = freezed,
+    Object? codBarraContem = freezed,
+    Object? nomeContem = freezed,
+    Object? ordenarCod = freezed,
+  }) {
+    return _then(_$KitSearchDTOImpl(
+      numeroRegistros: freezed == numeroRegistros
+          ? _value.numeroRegistros
+          : numeroRegistros // ignore: cast_nullable_to_non_nullable
+              as int?,
+      codBarraContem: freezed == codBarraContem
+          ? _value.codBarraContem
+          : codBarraContem // ignore: cast_nullable_to_non_nullable
+              as String?,
+      nomeContem: freezed == nomeContem
+          ? _value.nomeContem
+          : nomeContem // ignore: cast_nullable_to_non_nullable
+              as String?,
+      ordenarCod: freezed == ordenarCod
+          ? _value.ordenarCod
+          : ordenarCod // ignore: cast_nullable_to_non_nullable
+              as bool?,
+    ));
+  }
 }
 
 /// @nodoc
 @JsonSerializable()
 class _$KitSearchDTOImpl implements _KitSearchDTO {
-  _$KitSearchDTOImpl();
+  _$KitSearchDTOImpl(
+      {this.numeroRegistros,
+      this.codBarraContem,
+      this.nomeContem,
+      this.ordenarCod});
 
   factory _$KitSearchDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$KitSearchDTOImplFromJson(json);
 
   @override
+  int? numeroRegistros;
+  @override
+  String? codBarraContem;
+  @override
+  String? nomeContem;
+  @override
+  bool? ordenarCod;
+
+  @override
   String toString() {
-    return 'KitSearchDTO()';
+    return 'KitSearchDTO(numeroRegistros: $numeroRegistros, codBarraContem: $codBarraContem, nomeContem: $nomeContem, ordenarCod: $ordenarCod)';
   }
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$KitSearchDTOImplCopyWith<_$KitSearchDTOImpl> get copyWith =>
+      __$$KitSearchDTOImplCopyWithImpl<_$KitSearchDTOImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -79,8 +180,29 @@ class _$KitSearchDTOImpl implements _KitSearchDTO {
 }
 
 abstract class _KitSearchDTO implements KitSearchDTO {
-  factory _KitSearchDTO() = _$KitSearchDTOImpl;
+  factory _KitSearchDTO(
+      {int? numeroRegistros,
+      String? codBarraContem,
+      String? nomeContem,
+      bool? ordenarCod}) = _$KitSearchDTOImpl;
 
   factory _KitSearchDTO.fromJson(Map<String, dynamic> json) =
       _$KitSearchDTOImpl.fromJson;
+
+  @override
+  int? get numeroRegistros;
+  set numeroRegistros(int? value);
+  @override
+  String? get codBarraContem;
+  set codBarraContem(String? value);
+  @override
+  String? get nomeContem;
+  set nomeContem(String? value);
+  @override
+  bool? get ordenarCod;
+  set ordenarCod(bool? value);
+  @override
+  @JsonKey(ignore: true)
+  _$$KitSearchDTOImplCopyWith<_$KitSearchDTOImpl> get copyWith =>
+      throw _privateConstructorUsedError;
 }

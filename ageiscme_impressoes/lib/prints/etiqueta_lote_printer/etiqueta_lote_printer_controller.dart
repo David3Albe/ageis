@@ -43,8 +43,8 @@ class EtiquetaLotePrinterController {
     const double inch = 72.0;
     const double cm = inch / 2.54;
     return pw.Page(
+      orientation: pw.PageOrientation.landscape,
       pageFormat: const PdfPageFormat(10 * cm, 3 * cm, marginAll: 0),
-      orientation: PageOrientation.landscape,
       margin: pw.EdgeInsets.zero,
       build: (pw.Context context) {
         return pw.Padding(
@@ -52,8 +52,7 @@ class EtiquetaLotePrinterController {
             children: _getPage(),
           ),
           padding: const pw.EdgeInsets.only(
-            top: 10,
-            left: 2,
+            top: 15,
           ),
         );
       },

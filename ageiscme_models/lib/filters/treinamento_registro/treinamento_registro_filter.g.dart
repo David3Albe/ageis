@@ -11,6 +11,8 @@ _$TreinamentoRegistroFilterImpl _$$TreinamentoRegistroFilterImplFromJson(
     _$TreinamentoRegistroFilterImpl(
       cod: json['cod'] as int?,
       carregarUsuario: json['carregarUsuario'] as bool?,
+      numeroRegistros: json['numeroRegistros'] as int?,
+      nomeContem: json['nomeContem'] as String?,
       tStamp: json['tStamp'] as String?,
     );
 
@@ -19,5 +21,7 @@ Map<String, dynamic> _$$TreinamentoRegistroFilterImplToJson(
     <String, dynamic>{
       'cod': instance.cod,
       'carregarUsuario': instance.carregarUsuario,
+      'numeroRegistros': instance.numeroRegistros,
+      'nomeContem': instance.nomeContem,
       'tStamp': instance.tStamp,
     };

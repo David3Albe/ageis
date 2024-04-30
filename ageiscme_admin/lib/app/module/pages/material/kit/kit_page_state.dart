@@ -14,7 +14,7 @@ class KitPageCubit extends Cubit<KitPageState> {
           ),
         );
 
-  void searchKits(KitSearchDTO dto) async {
+  Future searchKits(KitSearchDTO dto) async {
     emit(KitPageState(loading: true, response: null));
     try {
       (String, KitSearchResponseDTO)? result = await service.search(dto: dto);
@@ -30,7 +30,7 @@ class KitPageCubit extends Cubit<KitPageState> {
     }
   }
 
-  void delete(KitModel kit) async {
+  Future delete(KitModel kit) async {
     try {
       (String, KitModel?)? result = await service.delete(kit);
       if (result == null) return;

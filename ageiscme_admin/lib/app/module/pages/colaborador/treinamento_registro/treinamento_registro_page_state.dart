@@ -36,6 +36,30 @@ class TreinamentoRegistroPageCubit extends Cubit<TreinamentoRegistroPageState> {
     }
   }
 
+  Future filter(TreinamentoRegistroFilter filter) async {
+    emit(
+      TreinamentoRegistroPageState(loading: true, treinamentosRegistros: []),
+    );
+    try {
+      List<TreinamentoRegistroModel> treinamentosRegistros =
+          await service.Filter(filter);
+      emit(
+        TreinamentoRegistroPageState(
+          loading: false,
+          treinamentosRegistros: treinamentosRegistros,
+        ),
+      );
+    } on Exception catch (ex) {
+      emit(
+        TreinamentoRegistroPageState(
+          loading: false,
+          treinamentosRegistros: [],
+          error: ex.toString(),
+        ),
+      );
+    }
+  }
+
 //   void delete(TreinamentoRegistroModel treinamentoRegistro) async {
 //     try {
 //       (String, TreinamentoRegistroModel)? result =

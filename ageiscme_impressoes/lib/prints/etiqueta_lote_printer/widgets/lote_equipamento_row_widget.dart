@@ -22,18 +22,24 @@ class LoteEquipamentoRowWidget extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Text(
-              'Lote Equip.: ' + (dto.codLote ?? ''),
-              style: const TextStyle(
-                fontSize: 6,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 3),
+              child: Text(
+                'Lote Equip.: ' + (dto.codLote ?? ''),
+                style: const TextStyle(
+                  fontSize: 6,
+                ),
               ),
             ),
           ),
           Expanded(
-            child: Text(
-              'Lote Equip.: ' + (dto.codLote ?? ''),
-              style: const TextStyle(
-                fontSize: 6,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 3),
+              child: Text(
+                'Lote Equip.: ' + (dto.codLote ?? ''),
+                style: const TextStyle(
+                  fontSize: 6,
+                ),
               ),
             ),
           ),

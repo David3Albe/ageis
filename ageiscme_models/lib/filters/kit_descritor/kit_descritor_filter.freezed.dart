@@ -29,6 +29,12 @@ mixin _$KitDescritorFilter {
       throw _privateConstructorUsedError;
   bool? get carregarProcessoTipo => throw _privateConstructorUsedError;
   set carregarProcessoTipo(bool? value) => throw _privateConstructorUsedError;
+  int? get numeroRegistros => throw _privateConstructorUsedError;
+  set numeroRegistros(int? value) => throw _privateConstructorUsedError;
+  bool? get ordenarAtivosPrimeiro => throw _privateConstructorUsedError;
+  set ordenarAtivosPrimeiro(bool? value) => throw _privateConstructorUsedError;
+  String? get nomeContem => throw _privateConstructorUsedError;
+  set nomeContem(String? value) => throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
   String? get tStamp => throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
@@ -51,6 +57,9 @@ abstract class $KitDescritorFilterCopyWith<$Res> {
       bool? apenasAtivos,
       bool? ordernarPorNomeCrescente,
       bool? carregarProcessoTipo,
+      int? numeroRegistros,
+      bool? ordenarAtivosPrimeiro,
+      String? nomeContem,
       @JsonKey(name: 'tStamp') String? tStamp});
 }
 
@@ -71,6 +80,9 @@ class _$KitDescritorFilterCopyWithImpl<$Res, $Val extends KitDescritorFilter>
     Object? apenasAtivos = freezed,
     Object? ordernarPorNomeCrescente = freezed,
     Object? carregarProcessoTipo = freezed,
+    Object? numeroRegistros = freezed,
+    Object? ordenarAtivosPrimeiro = freezed,
+    Object? nomeContem = freezed,
     Object? tStamp = freezed,
   }) {
     return _then(_value.copyWith(
@@ -90,6 +102,18 @@ class _$KitDescritorFilterCopyWithImpl<$Res, $Val extends KitDescritorFilter>
           ? _value.carregarProcessoTipo
           : carregarProcessoTipo // ignore: cast_nullable_to_non_nullable
               as bool?,
+      numeroRegistros: freezed == numeroRegistros
+          ? _value.numeroRegistros
+          : numeroRegistros // ignore: cast_nullable_to_non_nullable
+              as int?,
+      ordenarAtivosPrimeiro: freezed == ordenarAtivosPrimeiro
+          ? _value.ordenarAtivosPrimeiro
+          : ordenarAtivosPrimeiro // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      nomeContem: freezed == nomeContem
+          ? _value.nomeContem
+          : nomeContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       tStamp: freezed == tStamp
           ? _value.tStamp
           : tStamp // ignore: cast_nullable_to_non_nullable
@@ -111,6 +135,9 @@ abstract class _$$KitDescritorFilterImplCopyWith<$Res>
       bool? apenasAtivos,
       bool? ordernarPorNomeCrescente,
       bool? carregarProcessoTipo,
+      int? numeroRegistros,
+      bool? ordenarAtivosPrimeiro,
+      String? nomeContem,
       @JsonKey(name: 'tStamp') String? tStamp});
 }
 
@@ -129,6 +156,9 @@ class __$$KitDescritorFilterImplCopyWithImpl<$Res>
     Object? apenasAtivos = freezed,
     Object? ordernarPorNomeCrescente = freezed,
     Object? carregarProcessoTipo = freezed,
+    Object? numeroRegistros = freezed,
+    Object? ordenarAtivosPrimeiro = freezed,
+    Object? nomeContem = freezed,
     Object? tStamp = freezed,
   }) {
     return _then(_$KitDescritorFilterImpl(
@@ -148,6 +178,18 @@ class __$$KitDescritorFilterImplCopyWithImpl<$Res>
           ? _value.carregarProcessoTipo
           : carregarProcessoTipo // ignore: cast_nullable_to_non_nullable
               as bool?,
+      numeroRegistros: freezed == numeroRegistros
+          ? _value.numeroRegistros
+          : numeroRegistros // ignore: cast_nullable_to_non_nullable
+              as int?,
+      ordenarAtivosPrimeiro: freezed == ordenarAtivosPrimeiro
+          ? _value.ordenarAtivosPrimeiro
+          : ordenarAtivosPrimeiro // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      nomeContem: freezed == nomeContem
+          ? _value.nomeContem
+          : nomeContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       tStamp: freezed == tStamp
           ? _value.tStamp
           : tStamp // ignore: cast_nullable_to_non_nullable
@@ -164,6 +206,9 @@ class _$KitDescritorFilterImpl implements _KitDescritorFilter {
       this.apenasAtivos,
       this.ordernarPorNomeCrescente,
       this.carregarProcessoTipo,
+      this.numeroRegistros,
+      this.ordenarAtivosPrimeiro,
+      this.nomeContem,
       @JsonKey(name: 'tStamp') this.tStamp});
 
   factory _$KitDescritorFilterImpl.fromJson(Map<String, dynamic> json) =>
@@ -178,12 +223,18 @@ class _$KitDescritorFilterImpl implements _KitDescritorFilter {
   @override
   bool? carregarProcessoTipo;
   @override
+  int? numeroRegistros;
+  @override
+  bool? ordenarAtivosPrimeiro;
+  @override
+  String? nomeContem;
+  @override
   @JsonKey(name: 'tStamp')
   String? tStamp;
 
   @override
   String toString() {
-    return 'KitDescritorFilter(cod: $cod, apenasAtivos: $apenasAtivos, ordernarPorNomeCrescente: $ordernarPorNomeCrescente, carregarProcessoTipo: $carregarProcessoTipo, tStamp: $tStamp)';
+    return 'KitDescritorFilter(cod: $cod, apenasAtivos: $apenasAtivos, ordernarPorNomeCrescente: $ordernarPorNomeCrescente, carregarProcessoTipo: $carregarProcessoTipo, numeroRegistros: $numeroRegistros, ordenarAtivosPrimeiro: $ordenarAtivosPrimeiro, nomeContem: $nomeContem, tStamp: $tStamp)';
   }
 
   @JsonKey(ignore: true)
@@ -207,6 +258,9 @@ abstract class _KitDescritorFilter implements KitDescritorFilter {
       bool? apenasAtivos,
       bool? ordernarPorNomeCrescente,
       bool? carregarProcessoTipo,
+      int? numeroRegistros,
+      bool? ordenarAtivosPrimeiro,
+      String? nomeContem,
       @JsonKey(name: 'tStamp') String? tStamp}) = _$KitDescritorFilterImpl;
 
   factory _KitDescritorFilter.fromJson(Map<String, dynamic> json) =
@@ -224,6 +278,15 @@ abstract class _KitDescritorFilter implements KitDescritorFilter {
   @override
   bool? get carregarProcessoTipo;
   set carregarProcessoTipo(bool? value);
+  @override
+  int? get numeroRegistros;
+  set numeroRegistros(int? value);
+  @override
+  bool? get ordenarAtivosPrimeiro;
+  set ordenarAtivosPrimeiro(bool? value);
+  @override
+  String? get nomeContem;
+  set nomeContem(String? value);
   @override
   @JsonKey(name: 'tStamp')
   String? get tStamp;

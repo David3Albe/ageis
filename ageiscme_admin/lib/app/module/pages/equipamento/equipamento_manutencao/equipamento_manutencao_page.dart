@@ -1,7 +1,9 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/equipamento/equipamento_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento_manutencao/cubits/equipamento_manutencao_filter_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento_manutencao/equipamento_manutencao_page_frm/equipamento_manutencao_page_frm.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento_manutencao/equipamento_manutencao_page_state.dart';
+import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento_manutencao/filter/equipamento_manutencao_filter_button_widget.dart';
 import 'package:ageiscme_data/services/equipamento_manutencao/equipamento_manutencao_service.dart';
 import 'package:ageiscme_models/filters/equipamento/equipamento_filter.dart';
 import 'package:ageiscme_models/filters/equipamento_manutencao/equipamento_manutencao_filter.dart';
@@ -72,6 +74,7 @@ class _EquipamentoManutencaoPageState extends State<EquipamentoManutencaoPage> {
   late final EquipamentoManutencaoService service;
   late final EquipamentoCubit equipamentoCubit;
   late final UsuarioCubit usuarioCubit;
+  late EquipamentoManutencaoFilter filter;
 
   @override
   void initState() {
@@ -79,34 +82,49 @@ class _EquipamentoManutencaoPageState extends State<EquipamentoManutencaoPage> {
     equipamentoCubit = EquipamentoCubit();
     usuarioCubit = UsuarioCubit();
     bloc = EquipamentoManutencaoPageCubit(service: service);
-    bloc.loadEquipamentoManutencao();
+    filter = EquipamentoManutencaoFilter(
+      numeroRegistros: 500,
+    );
+    bloc.getScreenData(filter);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              EquipamentoManutencaoModel.empty(),
-            ),
-          },
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => EquipamentoManutencaoFilterCubit(filter),
         ),
-        BlocListener<EquipamentoManutencaoPageCubit,
-            EquipamentoManutencaoPageState>(
-          bloc: bloc,
-          listener: (context, state) {
-            if (state.deleted) deleted(state);
-            if (state.error.isNotEmpty) onError(state);
-          },
-          child: BlocBuilder<EquipamentoManutencaoPageCubit,
+        BlocProvider.value(value: bloc),
+      ],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const EquipamentoManutencaoFilterButtonWidget(),
+              const Padding(
+                padding: EdgeInsets.only(left: 4),
+              ),
+              AddButtonWidget(
+                onPressed: () => {
+                  openModal(
+                    context,
+                    EquipamentoManutencaoModel.empty(),
+                  ),
+                },
+              ),
+            ],
+          ),
+          BlocConsumer<EquipamentoManutencaoPageCubit,
               EquipamentoManutencaoPageState>(
             bloc: bloc,
+            listener: (context, state) {
+              if (state.deleted) deleted(state);
+              if (state.error.isNotEmpty) onError(state);
+            },
             builder: (context, state) {
               if (state.loading) {
                 return const Center(
@@ -132,8 +150,8 @@ class _EquipamentoManutencaoPageState extends State<EquipamentoManutencaoPage> {
               );
             },
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

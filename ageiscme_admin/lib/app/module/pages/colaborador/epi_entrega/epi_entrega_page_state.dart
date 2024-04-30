@@ -1,4 +1,5 @@
 import 'package:ageiscme_data/services/usuario/usuario_service.dart';
+import 'package:ageiscme_models/filters/usuario_filter/usuario_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 
@@ -12,15 +13,36 @@ class EpiEntregaUsuarioPageCubit extends Cubit<EpiEntregaUsuarioPageState> {
           ),
         );
 
-  void loadUsuariosEpiEntrega() async {
+  // void loadUsuariosEpiEntrega() async {
+  //   emit(EpiEntregaUsuarioPageState(loading: true, usuarios: []));
+  //   try {
+  //     List<UsuarioModel> usuarios = await service.GetAll();
+  //     usuarios = usuarios
+  //         .where(
+  //           (usuario) => usuario.colaborador == true && usuario.ativo == true,
+  //         )
+  //         .toList();
+  //     emit(
+  //       EpiEntregaUsuarioPageState(
+  //         loading: false,
+  //         usuarios: usuarios,
+  //       ),
+  //     );
+  //   } on Exception catch (ex) {
+  //     emit(
+  //       EpiEntregaUsuarioPageState(
+  //         loading: false,
+  //         usuarios: [],
+  //         error: ex.toString(),
+  //       ),
+  //     );
+  //   }
+  // }
+
+    Future filter(UsuarioFilter filter) async {
     emit(EpiEntregaUsuarioPageState(loading: true, usuarios: []));
     try {
-      List<UsuarioModel> usuarios = await service.GetAll();
-      usuarios = usuarios
-          .where(
-            (usuario) => usuario.colaborador == true && usuario.ativo == true,
-          )
-          .toList();
+      List<UsuarioModel> usuarios = await service.Filter(filter);
       emit(
         EpiEntregaUsuarioPageState(
           loading: false,

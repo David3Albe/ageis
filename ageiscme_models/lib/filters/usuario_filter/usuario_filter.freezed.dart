@@ -43,6 +43,13 @@ mixin _$UsuarioFilter {
   set tipoQuery(int? value) => throw _privateConstructorUsedError;
   bool? get carregarFoto => throw _privateConstructorUsedError;
   set carregarFoto(bool? value) => throw _privateConstructorUsedError;
+  String? get nomeContem => throw _privateConstructorUsedError;
+  set nomeContem(String? value) => throw _privateConstructorUsedError;
+  int? get numeroRegistros => throw _privateConstructorUsedError;
+  set numeroRegistros(int? value) => throw _privateConstructorUsedError;
+  bool? get ordenarPorAtivosPrimeiro => throw _privateConstructorUsedError;
+  set ordenarPorAtivosPrimeiro(bool? value) =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -66,7 +73,10 @@ abstract class $UsuarioFilterCopyWith<$Res> {
       bool? ordenarPorNomeCrescente,
       bool? apenasColaboradores,
       int? tipoQuery,
-      bool? carregarFoto});
+      bool? carregarFoto,
+      String? nomeContem,
+      int? numeroRegistros,
+      bool? ordenarPorAtivosPrimeiro});
 }
 
 /// @nodoc
@@ -92,6 +102,9 @@ class _$UsuarioFilterCopyWithImpl<$Res, $Val extends UsuarioFilter>
     Object? apenasColaboradores = freezed,
     Object? tipoQuery = freezed,
     Object? carregarFoto = freezed,
+    Object? nomeContem = freezed,
+    Object? numeroRegistros = freezed,
+    Object? ordenarPorAtivosPrimeiro = freezed,
   }) {
     return _then(_value.copyWith(
       cod: freezed == cod
@@ -134,6 +147,18 @@ class _$UsuarioFilterCopyWithImpl<$Res, $Val extends UsuarioFilter>
           ? _value.carregarFoto
           : carregarFoto // ignore: cast_nullable_to_non_nullable
               as bool?,
+      nomeContem: freezed == nomeContem
+          ? _value.nomeContem
+          : nomeContem // ignore: cast_nullable_to_non_nullable
+              as String?,
+      numeroRegistros: freezed == numeroRegistros
+          ? _value.numeroRegistros
+          : numeroRegistros // ignore: cast_nullable_to_non_nullable
+              as int?,
+      ordenarPorAtivosPrimeiro: freezed == ordenarPorAtivosPrimeiro
+          ? _value.ordenarPorAtivosPrimeiro
+          : ordenarPorAtivosPrimeiro // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 }
@@ -156,7 +181,10 @@ abstract class _$$UsuarioFilterImplCopyWith<$Res>
       bool? ordenarPorNomeCrescente,
       bool? apenasColaboradores,
       int? tipoQuery,
-      bool? carregarFoto});
+      bool? carregarFoto,
+      String? nomeContem,
+      int? numeroRegistros,
+      bool? ordenarPorAtivosPrimeiro});
 }
 
 /// @nodoc
@@ -180,6 +208,9 @@ class __$$UsuarioFilterImplCopyWithImpl<$Res>
     Object? apenasColaboradores = freezed,
     Object? tipoQuery = freezed,
     Object? carregarFoto = freezed,
+    Object? nomeContem = freezed,
+    Object? numeroRegistros = freezed,
+    Object? ordenarPorAtivosPrimeiro = freezed,
   }) {
     return _then(_$UsuarioFilterImpl(
       cod: freezed == cod
@@ -222,6 +253,18 @@ class __$$UsuarioFilterImplCopyWithImpl<$Res>
           ? _value.carregarFoto
           : carregarFoto // ignore: cast_nullable_to_non_nullable
               as bool?,
+      nomeContem: freezed == nomeContem
+          ? _value.nomeContem
+          : nomeContem // ignore: cast_nullable_to_non_nullable
+              as String?,
+      numeroRegistros: freezed == numeroRegistros
+          ? _value.numeroRegistros
+          : numeroRegistros // ignore: cast_nullable_to_non_nullable
+              as int?,
+      ordenarPorAtivosPrimeiro: freezed == ordenarPorAtivosPrimeiro
+          ? _value.ordenarPorAtivosPrimeiro
+          : ordenarPorAtivosPrimeiro // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -241,7 +284,10 @@ class _$UsuarioFilterImpl
       this.ordenarPorNomeCrescente,
       this.apenasColaboradores,
       this.tipoQuery,
-      this.carregarFoto});
+      this.carregarFoto,
+      this.nomeContem,
+      this.numeroRegistros,
+      this.ordenarPorAtivosPrimeiro});
 
   factory _$UsuarioFilterImpl.fromJson(Map<String, dynamic> json) =>
       _$$UsuarioFilterImplFromJson(json);
@@ -267,10 +313,16 @@ class _$UsuarioFilterImpl
   int? tipoQuery;
   @override
   bool? carregarFoto;
+  @override
+  String? nomeContem;
+  @override
+  int? numeroRegistros;
+  @override
+  bool? ordenarPorAtivosPrimeiro;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UsuarioFilter(cod: $cod, codBarra: $codBarra, login: $login, tStamp: $tStamp, incluirDireitos: $incluirDireitos, apenasAtivos: $apenasAtivos, ordenarPorNomeCrescente: $ordenarPorNomeCrescente, apenasColaboradores: $apenasColaboradores, tipoQuery: $tipoQuery, carregarFoto: $carregarFoto)';
+    return 'UsuarioFilter(cod: $cod, codBarra: $codBarra, login: $login, tStamp: $tStamp, incluirDireitos: $incluirDireitos, apenasAtivos: $apenasAtivos, ordenarPorNomeCrescente: $ordenarPorNomeCrescente, apenasColaboradores: $apenasColaboradores, tipoQuery: $tipoQuery, carregarFoto: $carregarFoto, nomeContem: $nomeContem, numeroRegistros: $numeroRegistros, ordenarPorAtivosPrimeiro: $ordenarPorAtivosPrimeiro)';
   }
 
   @override
@@ -288,7 +340,11 @@ class _$UsuarioFilterImpl
           'ordenarPorNomeCrescente', ordenarPorNomeCrescente))
       ..add(DiagnosticsProperty('apenasColaboradores', apenasColaboradores))
       ..add(DiagnosticsProperty('tipoQuery', tipoQuery))
-      ..add(DiagnosticsProperty('carregarFoto', carregarFoto));
+      ..add(DiagnosticsProperty('carregarFoto', carregarFoto))
+      ..add(DiagnosticsProperty('nomeContem', nomeContem))
+      ..add(DiagnosticsProperty('numeroRegistros', numeroRegistros))
+      ..add(DiagnosticsProperty(
+          'ordenarPorAtivosPrimeiro', ordenarPorAtivosPrimeiro));
   }
 
   @JsonKey(ignore: true)
@@ -316,7 +372,10 @@ abstract class _UsuarioFilter implements UsuarioFilter {
       bool? ordenarPorNomeCrescente,
       bool? apenasColaboradores,
       int? tipoQuery,
-      bool? carregarFoto}) = _$UsuarioFilterImpl;
+      bool? carregarFoto,
+      String? nomeContem,
+      int? numeroRegistros,
+      bool? ordenarPorAtivosPrimeiro}) = _$UsuarioFilterImpl;
 
   factory _UsuarioFilter.fromJson(Map<String, dynamic> json) =
       _$UsuarioFilterImpl.fromJson;
@@ -353,6 +412,15 @@ abstract class _UsuarioFilter implements UsuarioFilter {
   @override
   bool? get carregarFoto;
   set carregarFoto(bool? value);
+  @override
+  String? get nomeContem;
+  set nomeContem(String? value);
+  @override
+  int? get numeroRegistros;
+  set numeroRegistros(int? value);
+  @override
+  bool? get ordenarPorAtivosPrimeiro;
+  set ordenarPorAtivosPrimeiro(bool? value);
   @override
   @JsonKey(ignore: true)
   _$$UsuarioFilterImplCopyWith<_$UsuarioFilterImpl> get copyWith =>

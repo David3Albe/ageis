@@ -12,7 +12,7 @@ class UsuarioCubit extends Cubit<UsuarioState> {
     emit(UsuarioState(usuarios: usuarios, loaded: true));
   }
 
-  void loadFilter(UsuarioFilter filter) async {
+  Future loadFilter(UsuarioFilter filter) async {
     emit(
       UsuarioState(
         usuarios: [],

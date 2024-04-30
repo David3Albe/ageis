@@ -1,3 +1,5 @@
+import 'package:ageiscme_admin/app/module/pages/cadastro/usuario/cubits/usuario_cubit_filter.dart';
+import 'package:ageiscme_admin/app/module/pages/cadastro/usuario/filter/usuario_filter_button_widget.dart';
 import 'package:ageiscme_admin/app/module/pages/cadastro/usuario/usuario_page_frm/usuario_page_frm.dart';
 import 'package:ageiscme_admin/app/module/pages/cadastro/usuario/usuario_page_frm/usuario_page_frm_user_printer/usuario_page_frm_user_printer.dart';
 import 'package:ageiscme_admin/app/module/pages/cadastro/usuario/usuario_page_state.dart';
@@ -55,7 +57,14 @@ class _UsuarioPageState extends State<UsuarioPage> {
   @override
   void initState() {
     bloc = UsuarioPageCubit(service: UsuarioService());
-    bloc.loadUsuario();
+    bloc.loadFilter(
+      UsuarioFilter(
+        tipoQuery: UsuarioFilterTipoQuery.SemFoto,
+        carregarFoto: false,
+        numeroRegistros: 500,
+        ordenarPorAtivosPrimeiro: true,
+      ),
+    );
     super.initState();
   }
 
@@ -67,62 +76,75 @@ class _UsuarioPageState extends State<UsuarioPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            AddButtonWidget(
-              onPressed: () => {
-                openModal(
-                  context,
-                  UsuarioModel.empty(),
-                ),
-              },
-            ),
-            const Spacer(),
-            CustomPopupMenuWidget(
-              items: [
-                CustomPopupItemModel(
-                  text: 'Imprimir Usuários',
-                  onTap: imprimirUsuarios,
-                ),
-              ],
-            ),
-          ],
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => UsuarioCubitFilter(),
         ),
-        BlocListener<UsuarioPageCubit, UsuarioPageState>(
-          bloc: bloc,
-          listener: (context, state) {
-            if (state.deleted) deleted(state);
-          },
-          child: BlocBuilder<UsuarioPageCubit, UsuarioPageState>(
-            bloc: bloc,
-            builder: (context, state) {
-              if (state.loading) {
-                return const Center(
-                  child: LoadingWidget(),
-                );
-              }
-              return Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 16.0, bottom: 16),
-                  child: PlutoGridWidget(
-                    filterOnlyActives: true,
-                    onEdit: (UsuarioModel objeto) =>
-                        {openModal(context, UsuarioModel.copy(objeto))},
-                    onDelete: (UsuarioModel objeto) =>
-                        {delete(context, objeto)},
-                    columns: colunas,
-                    items: state.usuarios,
-                  ),
-                ),
-              );
-            },
-          ),
+        BlocProvider.value(
+          value: bloc,
         ),
       ],
+      child: Builder(
+        builder: (context) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  const UsuarioButtonFilterWidget(),
+                  const Padding(padding: EdgeInsets.only(left: 8)),
+                  AddButtonWidget(
+                    onPressed: () => {
+                      openModal(
+                        context,
+                        UsuarioModel.empty(),
+                      ),
+                    },
+                  ),
+                  const Spacer(),
+                  CustomPopupMenuWidget(
+                    items: [
+                      CustomPopupItemModel(
+                        text: 'Imprimir Usuários',
+                        onTap: imprimirUsuarios,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              BlocConsumer<UsuarioPageCubit, UsuarioPageState>(
+                listener: (context, state) {
+                  if (state.deleted) deleted(state);
+                },
+                builder: (context, state) {
+                  if (state.loading) {
+                    return const Center(
+                      child: LoadingWidget(),
+                    );
+                  }
+                  state.usuarios.sort((a,b)=> a.cod!.compareTo(b.cod!));
+                  return Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 16.0, bottom: 16),
+                      child: PlutoGridWidget(
+                        filterOnlyActives: true,
+                        onEdit: (UsuarioModel objeto) =>
+                            {openModal(context, UsuarioModel.copy(objeto))},
+                        onDelete: (UsuarioModel objeto) =>
+                            {delete(context, objeto)},
+                        columns: colunas,
+                        items: state.usuarios,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 

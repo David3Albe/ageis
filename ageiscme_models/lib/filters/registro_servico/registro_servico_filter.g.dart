@@ -18,6 +18,8 @@ _$RegistroServicoFilterImpl _$$RegistroServicoFilterImplFromJson(Map json) =>
       codEquipamento: json['codEquipamento'] as int?,
       carregarImagens: json['carregarImagens'] as bool?,
       carregarUsuario: json['carregarUsuario'] as bool?,
+      carregarItem: json['carregarItem'] as bool?,
+      numeroRegistros: json['numeroRegistros'] as int?,
       tStamp: json['tStamp'] as String?,
     );
 
@@ -30,5 +32,7 @@ Map<String, dynamic> _$$RegistroServicoFilterImplToJson(
       'codEquipamento': instance.codEquipamento,
       'carregarImagens': instance.carregarImagens,
       'carregarUsuario': instance.carregarUsuario,
+      'carregarItem': instance.carregarItem,
+      'numeroRegistros': instance.numeroRegistros,
       'tStamp': instance.tStamp,
     };

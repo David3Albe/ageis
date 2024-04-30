@@ -25,6 +25,10 @@ mixin _$TreinamentoRegistroFilter {
   set cod(int? value) => throw _privateConstructorUsedError;
   bool? get carregarUsuario => throw _privateConstructorUsedError;
   set carregarUsuario(bool? value) => throw _privateConstructorUsedError;
+  int? get numeroRegistros => throw _privateConstructorUsedError;
+  set numeroRegistros(int? value) => throw _privateConstructorUsedError;
+  String? get nomeContem => throw _privateConstructorUsedError;
+  set nomeContem(String? value) => throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
   String? get tStamp => throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
@@ -45,6 +49,8 @@ abstract class $TreinamentoRegistroFilterCopyWith<$Res> {
   $Res call(
       {int? cod,
       bool? carregarUsuario,
+      int? numeroRegistros,
+      String? nomeContem,
       @JsonKey(name: 'tStamp') String? tStamp});
 }
 
@@ -64,6 +70,8 @@ class _$TreinamentoRegistroFilterCopyWithImpl<$Res,
   $Res call({
     Object? cod = freezed,
     Object? carregarUsuario = freezed,
+    Object? numeroRegistros = freezed,
+    Object? nomeContem = freezed,
     Object? tStamp = freezed,
   }) {
     return _then(_value.copyWith(
@@ -75,6 +83,14 @@ class _$TreinamentoRegistroFilterCopyWithImpl<$Res,
           ? _value.carregarUsuario
           : carregarUsuario // ignore: cast_nullable_to_non_nullable
               as bool?,
+      numeroRegistros: freezed == numeroRegistros
+          ? _value.numeroRegistros
+          : numeroRegistros // ignore: cast_nullable_to_non_nullable
+              as int?,
+      nomeContem: freezed == nomeContem
+          ? _value.nomeContem
+          : nomeContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       tStamp: freezed == tStamp
           ? _value.tStamp
           : tStamp // ignore: cast_nullable_to_non_nullable
@@ -95,6 +111,8 @@ abstract class _$$TreinamentoRegistroFilterImplCopyWith<$Res>
   $Res call(
       {int? cod,
       bool? carregarUsuario,
+      int? numeroRegistros,
+      String? nomeContem,
       @JsonKey(name: 'tStamp') String? tStamp});
 }
 
@@ -113,6 +131,8 @@ class __$$TreinamentoRegistroFilterImplCopyWithImpl<$Res>
   $Res call({
     Object? cod = freezed,
     Object? carregarUsuario = freezed,
+    Object? numeroRegistros = freezed,
+    Object? nomeContem = freezed,
     Object? tStamp = freezed,
   }) {
     return _then(_$TreinamentoRegistroFilterImpl(
@@ -124,6 +144,14 @@ class __$$TreinamentoRegistroFilterImplCopyWithImpl<$Res>
           ? _value.carregarUsuario
           : carregarUsuario // ignore: cast_nullable_to_non_nullable
               as bool?,
+      numeroRegistros: freezed == numeroRegistros
+          ? _value.numeroRegistros
+          : numeroRegistros // ignore: cast_nullable_to_non_nullable
+              as int?,
+      nomeContem: freezed == nomeContem
+          ? _value.nomeContem
+          : nomeContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       tStamp: freezed == tStamp
           ? _value.tStamp
           : tStamp // ignore: cast_nullable_to_non_nullable
@@ -136,7 +164,11 @@ class __$$TreinamentoRegistroFilterImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$TreinamentoRegistroFilterImpl implements _TreinamentoRegistroFilter {
   _$TreinamentoRegistroFilterImpl(
-      {this.cod, this.carregarUsuario, @JsonKey(name: 'tStamp') this.tStamp});
+      {this.cod,
+      this.carregarUsuario,
+      this.numeroRegistros,
+      this.nomeContem,
+      @JsonKey(name: 'tStamp') this.tStamp});
 
   factory _$TreinamentoRegistroFilterImpl.fromJson(Map<String, dynamic> json) =>
       _$$TreinamentoRegistroFilterImplFromJson(json);
@@ -146,12 +178,16 @@ class _$TreinamentoRegistroFilterImpl implements _TreinamentoRegistroFilter {
   @override
   bool? carregarUsuario;
   @override
+  int? numeroRegistros;
+  @override
+  String? nomeContem;
+  @override
   @JsonKey(name: 'tStamp')
   String? tStamp;
 
   @override
   String toString() {
-    return 'TreinamentoRegistroFilter(cod: $cod, carregarUsuario: $carregarUsuario, tStamp: $tStamp)';
+    return 'TreinamentoRegistroFilter(cod: $cod, carregarUsuario: $carregarUsuario, numeroRegistros: $numeroRegistros, nomeContem: $nomeContem, tStamp: $tStamp)';
   }
 
   @JsonKey(ignore: true)
@@ -173,6 +209,8 @@ abstract class _TreinamentoRegistroFilter implements TreinamentoRegistroFilter {
   factory _TreinamentoRegistroFilter(
           {int? cod,
           bool? carregarUsuario,
+          int? numeroRegistros,
+          String? nomeContem,
           @JsonKey(name: 'tStamp') String? tStamp}) =
       _$TreinamentoRegistroFilterImpl;
 
@@ -185,6 +223,12 @@ abstract class _TreinamentoRegistroFilter implements TreinamentoRegistroFilter {
   @override
   bool? get carregarUsuario;
   set carregarUsuario(bool? value);
+  @override
+  int? get numeroRegistros;
+  set numeroRegistros(int? value);
+  @override
+  String? get nomeContem;
+  set nomeContem(String? value);
   @override
   @JsonKey(name: 'tStamp')
   String? get tStamp;

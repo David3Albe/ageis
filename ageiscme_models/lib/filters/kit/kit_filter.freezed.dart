@@ -32,6 +32,12 @@ mixin _$KitFilter {
   set carregarCores(bool? value) => throw _privateConstructorUsedError;
   bool? get carregarItens => throw _privateConstructorUsedError;
   set carregarItens(bool? value) => throw _privateConstructorUsedError;
+  int? get numeroRegistros => throw _privateConstructorUsedError;
+  set numeroRegistros(int? value) => throw _privateConstructorUsedError;
+  int? get codBarraContem => throw _privateConstructorUsedError;
+  set codBarraContem(int? value) => throw _privateConstructorUsedError;
+  bool? get ordenarCod => throw _privateConstructorUsedError;
+  set ordenarCod(bool? value) => throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
   String? get tStamp => throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
@@ -55,6 +61,9 @@ abstract class $KitFilterCopyWith<$Res> {
       bool? carregarKit,
       bool? carregarCores,
       bool? carregarItens,
+      int? numeroRegistros,
+      int? codBarraContem,
+      bool? ordenarCod,
       @JsonKey(name: 'tStamp') String? tStamp});
 }
 
@@ -77,6 +86,9 @@ class _$KitFilterCopyWithImpl<$Res, $Val extends KitFilter>
     Object? carregarKit = freezed,
     Object? carregarCores = freezed,
     Object? carregarItens = freezed,
+    Object? numeroRegistros = freezed,
+    Object? codBarraContem = freezed,
+    Object? ordenarCod = freezed,
     Object? tStamp = freezed,
   }) {
     return _then(_value.copyWith(
@@ -104,6 +116,18 @@ class _$KitFilterCopyWithImpl<$Res, $Val extends KitFilter>
           ? _value.carregarItens
           : carregarItens // ignore: cast_nullable_to_non_nullable
               as bool?,
+      numeroRegistros: freezed == numeroRegistros
+          ? _value.numeroRegistros
+          : numeroRegistros // ignore: cast_nullable_to_non_nullable
+              as int?,
+      codBarraContem: freezed == codBarraContem
+          ? _value.codBarraContem
+          : codBarraContem // ignore: cast_nullable_to_non_nullable
+              as int?,
+      ordenarCod: freezed == ordenarCod
+          ? _value.ordenarCod
+          : ordenarCod // ignore: cast_nullable_to_non_nullable
+              as bool?,
       tStamp: freezed == tStamp
           ? _value.tStamp
           : tStamp // ignore: cast_nullable_to_non_nullable
@@ -127,6 +151,9 @@ abstract class _$$KitFilterImplCopyWith<$Res>
       bool? carregarKit,
       bool? carregarCores,
       bool? carregarItens,
+      int? numeroRegistros,
+      int? codBarraContem,
+      bool? ordenarCod,
       @JsonKey(name: 'tStamp') String? tStamp});
 }
 
@@ -147,6 +174,9 @@ class __$$KitFilterImplCopyWithImpl<$Res>
     Object? carregarKit = freezed,
     Object? carregarCores = freezed,
     Object? carregarItens = freezed,
+    Object? numeroRegistros = freezed,
+    Object? codBarraContem = freezed,
+    Object? ordenarCod = freezed,
     Object? tStamp = freezed,
   }) {
     return _then(_$KitFilterImpl(
@@ -174,6 +204,18 @@ class __$$KitFilterImplCopyWithImpl<$Res>
           ? _value.carregarItens
           : carregarItens // ignore: cast_nullable_to_non_nullable
               as bool?,
+      numeroRegistros: freezed == numeroRegistros
+          ? _value.numeroRegistros
+          : numeroRegistros // ignore: cast_nullable_to_non_nullable
+              as int?,
+      codBarraContem: freezed == codBarraContem
+          ? _value.codBarraContem
+          : codBarraContem // ignore: cast_nullable_to_non_nullable
+              as int?,
+      ordenarCod: freezed == ordenarCod
+          ? _value.ordenarCod
+          : ordenarCod // ignore: cast_nullable_to_non_nullable
+              as bool?,
       tStamp: freezed == tStamp
           ? _value.tStamp
           : tStamp // ignore: cast_nullable_to_non_nullable
@@ -192,6 +234,9 @@ class _$KitFilterImpl implements _KitFilter {
       this.carregarKit,
       this.carregarCores,
       this.carregarItens,
+      this.numeroRegistros,
+      this.codBarraContem,
+      this.ordenarCod,
       @JsonKey(name: 'tStamp') this.tStamp});
 
   factory _$KitFilterImpl.fromJson(Map<String, dynamic> json) =>
@@ -210,12 +255,18 @@ class _$KitFilterImpl implements _KitFilter {
   @override
   bool? carregarItens;
   @override
+  int? numeroRegistros;
+  @override
+  int? codBarraContem;
+  @override
+  bool? ordenarCod;
+  @override
   @JsonKey(name: 'tStamp')
   String? tStamp;
 
   @override
   String toString() {
-    return 'KitFilter(cod: $cod, codBarra: $codBarra, carregarDescritor: $carregarDescritor, carregarKit: $carregarKit, carregarCores: $carregarCores, carregarItens: $carregarItens, tStamp: $tStamp)';
+    return 'KitFilter(cod: $cod, codBarra: $codBarra, carregarDescritor: $carregarDescritor, carregarKit: $carregarKit, carregarCores: $carregarCores, carregarItens: $carregarItens, numeroRegistros: $numeroRegistros, codBarraContem: $codBarraContem, ordenarCod: $ordenarCod, tStamp: $tStamp)';
   }
 
   @JsonKey(ignore: true)
@@ -240,6 +291,9 @@ abstract class _KitFilter implements KitFilter {
       bool? carregarKit,
       bool? carregarCores,
       bool? carregarItens,
+      int? numeroRegistros,
+      int? codBarraContem,
+      bool? ordenarCod,
       @JsonKey(name: 'tStamp') String? tStamp}) = _$KitFilterImpl;
 
   factory _KitFilter.fromJson(Map<String, dynamic> json) =
@@ -263,6 +317,15 @@ abstract class _KitFilter implements KitFilter {
   @override
   bool? get carregarItens;
   set carregarItens(bool? value);
+  @override
+  int? get numeroRegistros;
+  set numeroRegistros(int? value);
+  @override
+  int? get codBarraContem;
+  set codBarraContem(int? value);
+  @override
+  bool? get ordenarCod;
+  set ordenarCod(bool? value);
   @override
   @JsonKey(name: 'tStamp')
   String? get tStamp;

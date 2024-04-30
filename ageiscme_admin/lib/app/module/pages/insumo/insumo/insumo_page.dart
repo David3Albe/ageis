@@ -29,7 +29,7 @@ class _InsumoPageState extends State<InsumoPage> {
     ),
     CustomDataColumn(text: 'Nome', field: 'nome'),
     CustomDataColumn(
-      text: 'Cod. Barra',
+      text: 'Cód. Insumo',
       field: 'codBarra',
       type: CustomDataColumnType.Number,
     ),

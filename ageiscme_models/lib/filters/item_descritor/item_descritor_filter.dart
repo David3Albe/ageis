@@ -15,6 +15,8 @@ sealed class ItemDescritorFilter with _$ItemDescritorFilter {
     bool? carregarImagem,
     int? numeroMaximoRegistros,
     String? termoPesquisa,
+    String? nomeContem,
+    bool? ordenarAtivosPrimeiro,
     @JsonKey(name: 'tStamp') String? tStamp,
   }) = _ItemDescritorFilter;
 

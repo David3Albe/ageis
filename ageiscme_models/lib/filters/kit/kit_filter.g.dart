@@ -13,6 +13,9 @@ _$KitFilterImpl _$$KitFilterImplFromJson(Map json) => _$KitFilterImpl(
       carregarKit: json['carregarKit'] as bool?,
       carregarCores: json['carregarCores'] as bool?,
       carregarItens: json['carregarItens'] as bool?,
+      numeroRegistros: json['numeroRegistros'] as int?,
+      codBarraContem: json['codBarraContem'] as int?,
+      ordenarCod: json['ordenarCod'] as bool?,
       tStamp: json['tStamp'] as String?,
     );
 
@@ -24,5 +27,8 @@ Map<String, dynamic> _$$KitFilterImplToJson(_$KitFilterImpl instance) =>
       'carregarKit': instance.carregarKit,
       'carregarCores': instance.carregarCores,
       'carregarItens': instance.carregarItens,
+      'numeroRegistros': instance.numeroRegistros,
+      'codBarraContem': instance.codBarraContem,
+      'ordenarCod': instance.ordenarCod,
       'tStamp': instance.tStamp,
     };

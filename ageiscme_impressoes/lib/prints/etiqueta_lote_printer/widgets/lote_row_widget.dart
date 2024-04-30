@@ -22,18 +22,24 @@ class LoteRowWidget extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Text(
-              'LOTE: ${dto.codRegistroProcesso}',
-              style: const TextStyle(
-                fontSize: 9,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 3),
+              child: Text(
+                'LOTE: ${dto.codRegistroProcesso}',
+                style: const TextStyle(
+                  fontSize: 9,
+                ),
               ),
             ),
           ),
           Expanded(
-            child: Text(
-              'LOTE: ${dto.codRegistroProcesso}',
-              style: const TextStyle(
-                fontSize: 9,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 3),
+              child: Text(
+                'LOTE: ${dto.codRegistroProcesso}',
+                style: const TextStyle(
+                  fontSize: 9,
+                ),
               ),
             ),
           ),

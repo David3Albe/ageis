@@ -14,8 +14,8 @@ import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
-import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
@@ -76,9 +76,9 @@ class _ItemPageState extends State<ItemPage> {
   @override
   void initState() {
     filter = ItemFilter.empty();
-    filter.startDate =
-        DateUtils.dateOnly(DateTime.now().add(const Duration(days: -31)));
-    filter.finalDate = DateUtils.dateOnly(DateTime.now());
+    // filter.startDate =
+    //     DateUtils.dateOnly(DateTime.now().add(const Duration(days: -31)));
+    // filter.finalDate = DateUtils.dateOnly(DateTime.now());
     _defineFilter(filter);
     service = ItemService();
     proprietarioCubit = ProprietarioCubit();
@@ -176,16 +176,22 @@ class _ItemPageState extends State<ItemPage> {
         return FilterDialogWidget(
           child: Column(
             children: [
-              DatePickerWidget(
-                placeholder: 'Data Inicio',
-                onDateSelected: (value) => filter.startDate = value,
-                initialValue: filter.startDate,
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              DatePickerWidget(
-                placeholder: 'Data Término',
-                onDateSelected: (value) => filter.finalDate = value,
-                initialValue: filter.finalDate,
+              // DatePickerWidget(
+              //   placeholder: 'Data Inicio',
+              //   onDateSelected: (value) => filter.startDate = value,
+              //   initialValue: filter.startDate,
+              // ),
+              // const Padding(padding: EdgeInsets.only(top: 2)),
+              // DatePickerWidget(
+              //   placeholder: 'Data Término',
+              //   onDateSelected: (value) => filter.finalDate = value,
+              //   initialValue: filter.finalDate,
+              // ),
+              // const Padding(padding: EdgeInsets.only(top: 2)),
+              TextFieldStringWidget(
+                initialValue: filter.idEtiquetaContem,
+                placeholder: 'ID Etiqueta',
+                onChanged: (str) => {filter.idEtiquetaContem = str},
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
               DropDownSearchApiWidget<ItemModel>(
@@ -232,7 +238,8 @@ class _ItemPageState extends State<ItemPage> {
       if (result == true) {
         if (filter.cod != null ||
             filter.numeroRegistros != null ||
-            filter.codKit != null) {
+            filter.codKit != null ||
+            filter.idEtiquetaContem != null) {
           filter.startDate = null;
           filter.finalDate = null;
         }

@@ -463,6 +463,7 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
                         search: (str) => ItemDescritorService().Filter(
                           ItemDescritorFilter(
                             numeroMaximoRegistros: 30,
+                            apenasAtivos: true,
                             termoPesquisa: str,
                             carregarImagem: false,
                             apenasConsignados:

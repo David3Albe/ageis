@@ -54,7 +54,7 @@ abstract class KitDescritorModel
         tamanhoSigla: '',
         codEmbalagem: null,
         codInstituicao: 0,
-        codTipoProcessoEmergencia: 0,
+        codTipoProcessoEmergencia: null,
         codTipoProcessoNormal: 0,
         codTipoProcessoUrgencia: 0,
         codCusto: null,

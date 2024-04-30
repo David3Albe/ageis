@@ -12,6 +12,9 @@ sealed class KitFilter with _$KitFilter {
     bool? carregarKit,
     bool? carregarCores,
     bool? carregarItens,
+    int? numeroRegistros,
+    int? codBarraContem,
+    bool? ordenarCod,
     @JsonKey(name: 'tStamp') String? tStamp,
   }) = _KitFilter;
 

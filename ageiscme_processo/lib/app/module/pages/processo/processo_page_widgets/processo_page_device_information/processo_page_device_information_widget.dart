@@ -1,3 +1,4 @@
+import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_processo/app/module/blocs/processo_leitura_cubit.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
@@ -57,6 +58,9 @@ class _ProcessoPageDeviceInformationWidgetState
 
       value = _addParameter(value, dataHora);
     }
+    InstituicaoModel? instituicao = state.processo.leituraAtual.instituicao;
+    value = _addParameter(value, 'Instituição: ' + (instituicao?.nome ?? ''));
+
     return value;
   }
 

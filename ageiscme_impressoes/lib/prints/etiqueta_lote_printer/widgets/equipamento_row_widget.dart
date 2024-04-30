@@ -22,18 +22,24 @@ class EquipamentoRowWidget extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Text(
-              dto.nomeEquipamento,
-              style: const TextStyle(
-                fontSize: 6,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 3),
+              child: Text(
+                dto.nomeEquipamento,
+                style: const TextStyle(
+                  fontSize: 6,
+                ),
               ),
             ),
           ),
           Expanded(
-            child: Text(
-              dto.nomeEquipamento,
-              style: const TextStyle(
-                fontSize: 6,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 3),
+              child: Text(
+                dto.nomeEquipamento,
+                style: const TextStyle(
+                  fontSize: 6,
+                ),
               ),
             ),
           ),

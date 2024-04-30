@@ -592,6 +592,14 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
     // }
 
     // kitDescritor.itensDescritorKits = registrarItemDescritorKit;
+
+    if (kitDescritor.codTipoProcessoUrgencia == null) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'Informe o tipo de processo para urgência',
+      );
+      return;
+    }
     cubit.save(kitDescritor);
   }
 }

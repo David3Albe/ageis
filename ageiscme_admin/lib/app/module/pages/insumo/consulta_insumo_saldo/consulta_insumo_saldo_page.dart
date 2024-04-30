@@ -24,7 +24,8 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ConsultaInsumoSaldoPage extends StatefulWidget {
-  ConsultaInsumoSaldoPage({super.key});
+  const ConsultaInsumoSaldoPage({this.codInsumo, super.key});
+  final int? codInsumo;
 
   @override
   State<ConsultaInsumoSaldoPage> createState() =>
@@ -38,11 +39,13 @@ class _ConsultaInsumoSaldoPageState extends State<ConsultaInsumoSaldoPage> {
       field: 'insumo',
       valueConverter: (insumo) => insumo == null ? '' : insumo['codBarra'],
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(
       text: 'Depósito',
       field: 'depositoInsumo',
       valueConverter: (depInsumo) => depInsumo == null ? '' : depInsumo['nome'],
+      width: 125,
     ),
     CustomDataColumn(
       text: 'Insumo',
@@ -55,27 +58,32 @@ class _ConsultaInsumoSaldoPageState extends State<ConsultaInsumoSaldoPage> {
       text: 'Saldo',
       field: 'qtdeDisponivel',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(
       text: 'Situação',
       field: 'status',
       valueConverter: (dynamic value) =>
           InsumoSaldoStatusOption.getOpcaoFromId(value),
+      width: 120,
     ),
     CustomDataColumn(
       text: 'Fabricação',
       field: 'dataFabricacao',
       type: CustomDataColumnType.Date,
+      width: 120,
     ),
     CustomDataColumn(
       text: 'Validade',
       field: 'dataValidade',
       type: CustomDataColumnType.Date,
+      width: 120,
     ),
     CustomDataColumn(
       text: 'Validade Pós Ativação',
       field: 'dataValidadePosAtivacao',
       type: CustomDataColumnType.Date,
+      width: 175,
     ),
   ];
 
@@ -90,12 +98,18 @@ class _ConsultaInsumoSaldoPageState extends State<ConsultaInsumoSaldoPage> {
       service: ConsultaInsumoSaldoService(),
     );
     filter = ConsultaInsumoSaldoFilter.empty();
+    filter.codInsumo = widget.codInsumo;
     depositoInsumoBloc = DepositoInsumoCubit();
     depositoInsumoBloc.loadAll();
     insumoBloc = InsumoCubit();
     insumoBloc.loadAll();
 
     super.initState();
+    if (filter.codInsumo != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        bloc.loadInsumoSaldo(filter);
+      });
+    }
   }
 
   @override
@@ -164,8 +178,8 @@ class _ConsultaInsumoSaldoPageState extends State<ConsultaInsumoSaldoPage> {
   void onError(ConsultaInsumoSaldoPageState state) =>
       ErrorUtils.showErrorDialog(context, [state.error]);
 
-  void openModal(BuildContext context) {
-    showDialog<bool>(
+  Future openModal(BuildContext context) async {
+    bool? value = await showDialog<bool>(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
@@ -242,11 +256,9 @@ class _ConsultaInsumoSaldoPageState extends State<ConsultaInsumoSaldoPage> {
           ),
         );
       },
-    ).then((result) {
-      if (result == true) {
-        bloc.loadInsumoSaldo(filter);
-      }
-    });
+    );
+    if (value != true) return;
+    bloc.loadInsumoSaldo(filter);
   }
 
   void openModalRedirect(

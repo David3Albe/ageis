@@ -1,5 +1,7 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/item_descritor/item_descritor_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/processo_tipo/processo_tipo_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/material/kit_descritor/cubits/kit_descritor_cubit_filter.dart';
+import 'package:ageiscme_admin/app/module/pages/material/kit_descritor/filter/kit_descritor_filter_button_widget.dart';
 import 'package:ageiscme_admin/app/module/pages/material/kit_descritor/kit_descritor_page_frm/kit_descritor_page_frm.dart';
 import 'package:ageiscme_admin/app/module/pages/material/kit_descritor/kit_descritor_page_state.dart';
 import 'package:ageiscme_data/services/kit_descritor/kit_descritor_service.dart';
@@ -51,6 +53,7 @@ class _KitDescritorPageState extends State<KitDescritorPage> {
   late final KitDescritorPageCubit bloc;
   late final KitDescritorService service;
   late final ProcessoTipoCubit processoTipoCubit;
+  late final KitDescritorCubitFilter cubitFilter;
   late final ItemDescritorCubit itemDescritorCubit;
 
   @override
@@ -59,32 +62,42 @@ class _KitDescritorPageState extends State<KitDescritorPage> {
     processoTipoCubit = ProcessoTipoCubit();
     itemDescritorCubit = ItemDescritorCubit();
     bloc = KitDescritorPageCubit(service: service);
-    bloc.loadKitDescritor();
+    cubitFilter = KitDescritorCubitFilter();
+    bloc.getScreenData(cubitFilter.state);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              KitDescritorModel.empty(),
-            ),
-          },
-        ),
-        BlocListener<KitDescritorPageCubit, KitDescritorPageState>(
-          bloc: bloc,
-          listener: (context, state) {
-            if (state.deleted) deleted(state);
-            if (state.error.isNotEmpty) onError(state);
-          },
-          child: BlocBuilder<KitDescritorPageCubit, KitDescritorPageState>(
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: bloc),
+        BlocProvider.value(value: cubitFilter),
+      ],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const KitDescritorButtonFilterWidget(),
+              const Padding(padding: EdgeInsets.only(left: 8)),
+              AddButtonWidget(
+                onPressed: () => {
+                  openModal(
+                    context,
+                    KitDescritorModel.empty(),
+                  ),
+                },
+              ),
+            ],
+          ),
+          BlocConsumer<KitDescritorPageCubit, KitDescritorPageState>(
             bloc: bloc,
+            listener: (context, state) {
+              if (state.deleted) deleted(state);
+              if (state.error.isNotEmpty) onError(state);
+            },
             builder: (context, state) {
               if (state.loading) {
                 return const Center(
@@ -111,8 +124,8 @@ class _KitDescritorPageState extends State<KitDescritorPage> {
               );
             },
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -180,7 +193,7 @@ class _KitDescritorPageState extends State<KitDescritorPage> {
     );
     if (result == null || !result.$1) return;
     ToastUtils.showCustomToastSucess(context, result.$2);
-    bloc.loadKitDescritor();
+    await bloc.loadKitDescritor();
   }
 
   void delete(BuildContext context, KitDescritorModel kitDescritor) async {

@@ -79,7 +79,7 @@ class ProcessoPreparationPrinterController {
     const double inch = 72.0;
     const double cm = inch / 2.54;
     return pw.Page(
-      orientation: PageOrientation.landscape,
+      orientation: pw.PageOrientation.landscape,
       margin: pw.EdgeInsets.zero,
       pageFormat: const PdfPageFormat(8.9 * cm, 4.8 * cm, marginAll: 0),
       build: (pw.Context context) {

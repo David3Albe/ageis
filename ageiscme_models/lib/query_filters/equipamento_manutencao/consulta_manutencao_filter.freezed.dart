@@ -37,6 +37,8 @@ mixin _$ConsultaManutencaoFilter {
   set numSerie(String? value) => throw _privateConstructorUsedError;
   String? get codResultado => throw _privateConstructorUsedError;
   set codResultado(String? value) => throw _privateConstructorUsedError;
+  bool? get apenasSemTermino => throw _privateConstructorUsedError;
+  set apenasSemTermino(bool? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -58,7 +60,8 @@ abstract class $ConsultaManutencaoFilterCopyWith<$Res> {
       int? codPeca,
       String? numNF,
       String? numSerie,
-      String? codResultado});
+      String? codResultado,
+      bool? apenasSemTermino});
 }
 
 /// @nodoc
@@ -83,6 +86,7 @@ class _$ConsultaManutencaoFilterCopyWithImpl<$Res,
     Object? numNF = freezed,
     Object? numSerie = freezed,
     Object? codResultado = freezed,
+    Object? apenasSemTermino = freezed,
   }) {
     return _then(_value.copyWith(
       startDate: freezed == startDate
@@ -117,6 +121,10 @@ class _$ConsultaManutencaoFilterCopyWithImpl<$Res,
           ? _value.codResultado
           : codResultado // ignore: cast_nullable_to_non_nullable
               as String?,
+      apenasSemTermino: freezed == apenasSemTermino
+          ? _value.apenasSemTermino
+          : apenasSemTermino // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 }
@@ -138,7 +146,8 @@ abstract class _$$ConsultaManutencaoFilterImplCopyWith<$Res>
       int? codPeca,
       String? numNF,
       String? numSerie,
-      String? codResultado});
+      String? codResultado,
+      bool? apenasSemTermino});
 }
 
 /// @nodoc
@@ -162,6 +171,7 @@ class __$$ConsultaManutencaoFilterImplCopyWithImpl<$Res>
     Object? numNF = freezed,
     Object? numSerie = freezed,
     Object? codResultado = freezed,
+    Object? apenasSemTermino = freezed,
   }) {
     return _then(_$ConsultaManutencaoFilterImpl(
       startDate: freezed == startDate
@@ -196,6 +206,10 @@ class __$$ConsultaManutencaoFilterImplCopyWithImpl<$Res>
           ? _value.codResultado
           : codResultado // ignore: cast_nullable_to_non_nullable
               as String?,
+      apenasSemTermino: freezed == apenasSemTermino
+          ? _value.apenasSemTermino
+          : apenasSemTermino // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -204,14 +218,15 @@ class __$$ConsultaManutencaoFilterImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ConsultaManutencaoFilterImpl extends _ConsultaManutencaoFilter {
   _$ConsultaManutencaoFilterImpl(
-      {required this.startDate,
-      required this.finalDate,
-      required this.codEquipamento,
-      required this.codServicosTipo,
-      required this.codPeca,
-      required this.numNF,
-      required this.numSerie,
-      required this.codResultado})
+      {this.startDate,
+      this.finalDate,
+      this.codEquipamento,
+      this.codServicosTipo,
+      this.codPeca,
+      this.numNF,
+      this.numSerie,
+      this.codResultado,
+      this.apenasSemTermino})
       : super._();
 
   factory _$ConsultaManutencaoFilterImpl.fromJson(Map<String, dynamic> json) =>
@@ -233,10 +248,12 @@ class _$ConsultaManutencaoFilterImpl extends _ConsultaManutencaoFilter {
   String? numSerie;
   @override
   String? codResultado;
+  @override
+  bool? apenasSemTermino;
 
   @override
   String toString() {
-    return 'ConsultaManutencaoFilter(startDate: $startDate, finalDate: $finalDate, codEquipamento: $codEquipamento, codServicosTipo: $codServicosTipo, codPeca: $codPeca, numNF: $numNF, numSerie: $numSerie, codResultado: $codResultado)';
+    return 'ConsultaManutencaoFilter(startDate: $startDate, finalDate: $finalDate, codEquipamento: $codEquipamento, codServicosTipo: $codServicosTipo, codPeca: $codPeca, numNF: $numNF, numSerie: $numSerie, codResultado: $codResultado, apenasSemTermino: $apenasSemTermino)';
   }
 
   @JsonKey(ignore: true)
@@ -256,14 +273,15 @@ class _$ConsultaManutencaoFilterImpl extends _ConsultaManutencaoFilter {
 
 abstract class _ConsultaManutencaoFilter extends ConsultaManutencaoFilter {
   factory _ConsultaManutencaoFilter(
-      {required DateTime? startDate,
-      required DateTime? finalDate,
-      required int? codEquipamento,
-      required int? codServicosTipo,
-      required int? codPeca,
-      required String? numNF,
-      required String? numSerie,
-      required String? codResultado}) = _$ConsultaManutencaoFilterImpl;
+      {DateTime? startDate,
+      DateTime? finalDate,
+      int? codEquipamento,
+      int? codServicosTipo,
+      int? codPeca,
+      String? numNF,
+      String? numSerie,
+      String? codResultado,
+      bool? apenasSemTermino}) = _$ConsultaManutencaoFilterImpl;
   _ConsultaManutencaoFilter._() : super._();
 
   factory _ConsultaManutencaoFilter.fromJson(Map<String, dynamic> json) =
@@ -293,6 +311,9 @@ abstract class _ConsultaManutencaoFilter extends ConsultaManutencaoFilter {
   @override
   String? get codResultado;
   set codResultado(String? value);
+  @override
+  bool? get apenasSemTermino;
+  set apenasSemTermino(bool? value);
   @override
   @JsonKey(ignore: true)
   _$$ConsultaManutencaoFilterImplCopyWith<_$ConsultaManutencaoFilterImpl>

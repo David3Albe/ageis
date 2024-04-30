@@ -13,6 +13,7 @@ import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
@@ -25,7 +26,8 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class RegistroServicoPage extends StatefulWidget {
-  RegistroServicoPage({super.key});
+  RegistroServicoPage({this.cod, super.key});
+  final int? cod;
 
   @override
   State<RegistroServicoPage> createState() => _RegistroServicoPageState();
@@ -84,11 +86,19 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
     filter = RegistroServicoFilter.empty();
     filter.startDate = DateTime.now().add(const Duration(days: -1));
     filter.finalDate = DateTime.now();
+    filter.numeroRegistros = 500;
     equipamentoCubit = EquipamentoCubit();
     usuarioCubit = UsuarioCubit();
     service = RegistroServicoService();
     bloc = RegistroServicoPageCubit(service: service);
     super.initState();
+    if (widget.cod == null) return;
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => openModal(
+        context,
+        RegistroServicoModel(cod: widget.cod!),
+      ),
+    );
   }
 
   @override
@@ -136,8 +146,8 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
                   child: PlutoGridWidget(
                     onEdit: (RegistroServicoModel objeto) =>
                         {openModal(context, RegistroServicoModel.copy(objeto))},
-                    onDelete: (RegistroServicoModel objeto) =>
-                        {delete(context, objeto)},
+                    // onDelete: (RegistroServicoModel objeto) =>
+                    //     {delete(context, objeto)},
                     columns: colunas,
                     items: state.registrosServicos,
                   ),
@@ -195,6 +205,14 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
                   );
                 },
               ),
+              const Padding(padding: EdgeInsets.only(top: 4)),
+              TextFieldNumberWidget(
+                startValue: filter.numeroRegistros,
+                placeholder: 'Número Registros',
+                onChanged: (str) => {
+                  filter.numeroRegistros = str.isEmpty ? null : int.parse(str),
+                },
+              ),
             ],
           ),
         );
@@ -239,6 +257,7 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
         tStamp: registroServico.tstamp,
         carregarImagens: true,
         carregarUsuario: true,
+        carregarItem: true,
       ),
     );
   }

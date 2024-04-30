@@ -8,14 +8,15 @@ sealed class ConsultaManutencaoFilter with _$ConsultaManutencaoFilter {
   const ConsultaManutencaoFilter._();
 
   factory ConsultaManutencaoFilter({
-    required DateTime? startDate,
-    required DateTime? finalDate,
-    required int? codEquipamento,
-    required int? codServicosTipo,
-    required int? codPeca,
-    required String? numNF,
-    required String? numSerie,
-    required String? codResultado,
+    DateTime? startDate,
+    DateTime? finalDate,
+    int? codEquipamento,
+    int? codServicosTipo,
+    int? codPeca,
+    String? numNF,
+    String? numSerie,
+    String? codResultado,
+    bool? apenasSemTermino,
   }) = _ConsultaManutencaoFilter;
 
   factory ConsultaManutencaoFilter.fromJson(Map<String, Object?> json) =>

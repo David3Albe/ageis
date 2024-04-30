@@ -1,4 +1,5 @@
 import 'package:ageiscme_data/services/equipamento_manutencao/equipamento_manutencao_service.dart';
+import 'package:ageiscme_models/filters/equipamento_manutencao/equipamento_manutencao_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 
@@ -23,6 +24,33 @@ class EquipamentoManutencaoPageCubit
     try {
       List<EquipamentoManutencaoModel> equipamentosManutencoes =
           await service.GetAll();
+      emit(
+        EquipamentoManutencaoPageState(
+          loading: false,
+          equipamentosManutencoes: equipamentosManutencoes,
+        ),
+      );
+    } on Exception catch (ex) {
+      emit(
+        EquipamentoManutencaoPageState(
+          loading: false,
+          equipamentosManutencoes: [],
+          error: ex.toString(),
+        ),
+      );
+    }
+  }
+
+  Future getScreenData(EquipamentoManutencaoFilter filter) async {
+    emit(
+      EquipamentoManutencaoPageState(
+        loading: true,
+        equipamentosManutencoes: [],
+      ),
+    );
+    try {
+      List<EquipamentoManutencaoModel> equipamentosManutencoes =
+          await service.GetScreenData(filter);
       emit(
         EquipamentoManutencaoPageState(
           loading: false,

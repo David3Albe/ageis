@@ -3,7 +3,7 @@ import 'package:ageiscme_models/filters/usuario_filter/usuario_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 
-class UsuarioPageCubit extends Cubit<UsuarioPageState> { 
+class UsuarioPageCubit extends Cubit<UsuarioPageState> {
   final UsuarioService service;
   UsuarioPageCubit({required this.service})
       : super(
@@ -15,11 +15,19 @@ class UsuarioPageCubit extends Cubit<UsuarioPageState> {
 
   void loadUsuario() async {
     emit(UsuarioPageState(loading: true, usuarios: []));
-    try {
-      List<UsuarioModel> usuarios = await service.Filter(UsuarioFilter(tipoQuery: UsuarioFilterTipoQuery.SemFoto));
-      emit(UsuarioPageState(loading: false, usuarios: usuarios));
-    } on Exception catch (_) {
-    }
+    List<UsuarioModel> usuarios = await service.Filter(
+      UsuarioFilter(
+        tipoQuery: UsuarioFilterTipoQuery.SemFoto,
+        carregarFoto: false,
+      ),
+    );
+    emit(UsuarioPageState(loading: false, usuarios: usuarios));
+  }
+
+  Future loadFilter(UsuarioFilter filter) async {
+    emit(UsuarioPageState(loading: true, usuarios: []));
+    List<UsuarioModel> usuarios = await service.Filter(filter);
+    emit(UsuarioPageState(loading: false, usuarios: usuarios));
   }
 
   void delete(UsuarioModel usuario) async {
@@ -34,8 +42,7 @@ class UsuarioPageCubit extends Cubit<UsuarioPageState> {
           message: result.$1,
         ),
       );
-    } on Exception catch (_) {
-    }
+    } on Exception catch (_) {}
   }
 }
 

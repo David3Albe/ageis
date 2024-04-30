@@ -23,10 +23,28 @@ EquipamentoManutencaoFilter _$EquipamentoManutencaoFilterFromJson(
 mixin _$EquipamentoManutencaoFilter {
   int? get cod => throw _privateConstructorUsedError;
   set cod(int? value) => throw _privateConstructorUsedError;
+  int? get numeroRegistros => throw _privateConstructorUsedError;
+  set numeroRegistros(int? value) => throw _privateConstructorUsedError;
+  int? get codEquipamento => throw _privateConstructorUsedError;
+  set codEquipamento(int? value) => throw _privateConstructorUsedError;
+  int? get codTipoServico => throw _privateConstructorUsedError;
+  set codTipoServico(int? value) => throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
   String? get tStamp => throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
   set tStamp(String? value) => throw _privateConstructorUsedError;
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  EquipamentoDropDownSearchResponseDTO? get equipamento =>
+      throw _privateConstructorUsedError;
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  set equipamento(EquipamentoDropDownSearchResponseDTO? value) =>
+      throw _privateConstructorUsedError;
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  ServicoTipoDropDownSearchResponseDTO? get servicoTipo =>
+      throw _privateConstructorUsedError;
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  set servicoTipo(ServicoTipoDropDownSearchResponseDTO? value) =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -42,7 +60,19 @@ abstract class $EquipamentoManutencaoFilterCopyWith<$Res> {
       _$EquipamentoManutencaoFilterCopyWithImpl<$Res,
           EquipamentoManutencaoFilter>;
   @useResult
-  $Res call({int? cod, @JsonKey(name: 'tStamp') String? tStamp});
+  $Res call(
+      {int? cod,
+      int? numeroRegistros,
+      int? codEquipamento,
+      int? codTipoServico,
+      @JsonKey(name: 'tStamp') String? tStamp,
+      @JsonKey(includeToJson: false, includeFromJson: false)
+      EquipamentoDropDownSearchResponseDTO? equipamento,
+      @JsonKey(includeToJson: false, includeFromJson: false)
+      ServicoTipoDropDownSearchResponseDTO? servicoTipo});
+
+  $EquipamentoDropDownSearchResponseDTOCopyWith<$Res>? get equipamento;
+  $ServicoTipoDropDownSearchResponseDTOCopyWith<$Res>? get servicoTipo;
 }
 
 /// @nodoc
@@ -60,18 +90,69 @@ class _$EquipamentoManutencaoFilterCopyWithImpl<$Res,
   @override
   $Res call({
     Object? cod = freezed,
+    Object? numeroRegistros = freezed,
+    Object? codEquipamento = freezed,
+    Object? codTipoServico = freezed,
     Object? tStamp = freezed,
+    Object? equipamento = freezed,
+    Object? servicoTipo = freezed,
   }) {
     return _then(_value.copyWith(
       cod: freezed == cod
           ? _value.cod
           : cod // ignore: cast_nullable_to_non_nullable
               as int?,
+      numeroRegistros: freezed == numeroRegistros
+          ? _value.numeroRegistros
+          : numeroRegistros // ignore: cast_nullable_to_non_nullable
+              as int?,
+      codEquipamento: freezed == codEquipamento
+          ? _value.codEquipamento
+          : codEquipamento // ignore: cast_nullable_to_non_nullable
+              as int?,
+      codTipoServico: freezed == codTipoServico
+          ? _value.codTipoServico
+          : codTipoServico // ignore: cast_nullable_to_non_nullable
+              as int?,
       tStamp: freezed == tStamp
           ? _value.tStamp
           : tStamp // ignore: cast_nullable_to_non_nullable
               as String?,
+      equipamento: freezed == equipamento
+          ? _value.equipamento
+          : equipamento // ignore: cast_nullable_to_non_nullable
+              as EquipamentoDropDownSearchResponseDTO?,
+      servicoTipo: freezed == servicoTipo
+          ? _value.servicoTipo
+          : servicoTipo // ignore: cast_nullable_to_non_nullable
+              as ServicoTipoDropDownSearchResponseDTO?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $EquipamentoDropDownSearchResponseDTOCopyWith<$Res>? get equipamento {
+    if (_value.equipamento == null) {
+      return null;
+    }
+
+    return $EquipamentoDropDownSearchResponseDTOCopyWith<$Res>(
+        _value.equipamento!, (value) {
+      return _then(_value.copyWith(equipamento: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ServicoTipoDropDownSearchResponseDTOCopyWith<$Res>? get servicoTipo {
+    if (_value.servicoTipo == null) {
+      return null;
+    }
+
+    return $ServicoTipoDropDownSearchResponseDTOCopyWith<$Res>(
+        _value.servicoTipo!, (value) {
+      return _then(_value.copyWith(servicoTipo: value) as $Val);
+    });
   }
 }
 
@@ -84,7 +165,21 @@ abstract class _$$EquipamentoManutencaoFilterImplCopyWith<$Res>
       __$$EquipamentoManutencaoFilterImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? cod, @JsonKey(name: 'tStamp') String? tStamp});
+  $Res call(
+      {int? cod,
+      int? numeroRegistros,
+      int? codEquipamento,
+      int? codTipoServico,
+      @JsonKey(name: 'tStamp') String? tStamp,
+      @JsonKey(includeToJson: false, includeFromJson: false)
+      EquipamentoDropDownSearchResponseDTO? equipamento,
+      @JsonKey(includeToJson: false, includeFromJson: false)
+      ServicoTipoDropDownSearchResponseDTO? servicoTipo});
+
+  @override
+  $EquipamentoDropDownSearchResponseDTOCopyWith<$Res>? get equipamento;
+  @override
+  $ServicoTipoDropDownSearchResponseDTOCopyWith<$Res>? get servicoTipo;
 }
 
 /// @nodoc
@@ -101,17 +196,42 @@ class __$$EquipamentoManutencaoFilterImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? cod = freezed,
+    Object? numeroRegistros = freezed,
+    Object? codEquipamento = freezed,
+    Object? codTipoServico = freezed,
     Object? tStamp = freezed,
+    Object? equipamento = freezed,
+    Object? servicoTipo = freezed,
   }) {
     return _then(_$EquipamentoManutencaoFilterImpl(
       cod: freezed == cod
           ? _value.cod
           : cod // ignore: cast_nullable_to_non_nullable
               as int?,
+      numeroRegistros: freezed == numeroRegistros
+          ? _value.numeroRegistros
+          : numeroRegistros // ignore: cast_nullable_to_non_nullable
+              as int?,
+      codEquipamento: freezed == codEquipamento
+          ? _value.codEquipamento
+          : codEquipamento // ignore: cast_nullable_to_non_nullable
+              as int?,
+      codTipoServico: freezed == codTipoServico
+          ? _value.codTipoServico
+          : codTipoServico // ignore: cast_nullable_to_non_nullable
+              as int?,
       tStamp: freezed == tStamp
           ? _value.tStamp
           : tStamp // ignore: cast_nullable_to_non_nullable
               as String?,
+      equipamento: freezed == equipamento
+          ? _value.equipamento
+          : equipamento // ignore: cast_nullable_to_non_nullable
+              as EquipamentoDropDownSearchResponseDTO?,
+      servicoTipo: freezed == servicoTipo
+          ? _value.servicoTipo
+          : servicoTipo // ignore: cast_nullable_to_non_nullable
+              as ServicoTipoDropDownSearchResponseDTO?,
     ));
   }
 }
@@ -121,7 +241,13 @@ class __$$EquipamentoManutencaoFilterImplCopyWithImpl<$Res>
 class _$EquipamentoManutencaoFilterImpl
     implements _EquipamentoManutencaoFilter {
   _$EquipamentoManutencaoFilterImpl(
-      {this.cod, @JsonKey(name: 'tStamp') this.tStamp});
+      {this.cod,
+      this.numeroRegistros,
+      this.codEquipamento,
+      this.codTipoServico,
+      @JsonKey(name: 'tStamp') this.tStamp,
+      @JsonKey(includeToJson: false, includeFromJson: false) this.equipamento,
+      @JsonKey(includeToJson: false, includeFromJson: false) this.servicoTipo});
 
   factory _$EquipamentoManutencaoFilterImpl.fromJson(
           Map<String, dynamic> json) =>
@@ -130,12 +256,24 @@ class _$EquipamentoManutencaoFilterImpl
   @override
   int? cod;
   @override
+  int? numeroRegistros;
+  @override
+  int? codEquipamento;
+  @override
+  int? codTipoServico;
+  @override
   @JsonKey(name: 'tStamp')
   String? tStamp;
+  @override
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  EquipamentoDropDownSearchResponseDTO? equipamento;
+  @override
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  ServicoTipoDropDownSearchResponseDTO? servicoTipo;
 
   @override
   String toString() {
-    return 'EquipamentoManutencaoFilter(cod: $cod, tStamp: $tStamp)';
+    return 'EquipamentoManutencaoFilter(cod: $cod, numeroRegistros: $numeroRegistros, codEquipamento: $codEquipamento, codTipoServico: $codTipoServico, tStamp: $tStamp, equipamento: $equipamento, servicoTipo: $servicoTipo)';
   }
 
   @JsonKey(ignore: true)
@@ -156,7 +294,15 @@ class _$EquipamentoManutencaoFilterImpl
 abstract class _EquipamentoManutencaoFilter
     implements EquipamentoManutencaoFilter {
   factory _EquipamentoManutencaoFilter(
-          {int? cod, @JsonKey(name: 'tStamp') String? tStamp}) =
+          {int? cod,
+          int? numeroRegistros,
+          int? codEquipamento,
+          int? codTipoServico,
+          @JsonKey(name: 'tStamp') String? tStamp,
+          @JsonKey(includeToJson: false, includeFromJson: false)
+          EquipamentoDropDownSearchResponseDTO? equipamento,
+          @JsonKey(includeToJson: false, includeFromJson: false)
+          ServicoTipoDropDownSearchResponseDTO? servicoTipo}) =
       _$EquipamentoManutencaoFilterImpl;
 
   factory _EquipamentoManutencaoFilter.fromJson(Map<String, dynamic> json) =
@@ -166,10 +312,29 @@ abstract class _EquipamentoManutencaoFilter
   int? get cod;
   set cod(int? value);
   @override
+  int? get numeroRegistros;
+  set numeroRegistros(int? value);
+  @override
+  int? get codEquipamento;
+  set codEquipamento(int? value);
+  @override
+  int? get codTipoServico;
+  set codTipoServico(int? value);
+  @override
   @JsonKey(name: 'tStamp')
   String? get tStamp;
   @JsonKey(name: 'tStamp')
   set tStamp(String? value);
+  @override
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  EquipamentoDropDownSearchResponseDTO? get equipamento;
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  set equipamento(EquipamentoDropDownSearchResponseDTO? value);
+  @override
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  ServicoTipoDropDownSearchResponseDTO? get servicoTipo;
+  @JsonKey(includeToJson: false, includeFromJson: false)
+  set servicoTipo(ServicoTipoDropDownSearchResponseDTO? value);
   @override
   @JsonKey(ignore: true)
   _$$EquipamentoManutencaoFilterImplCopyWith<_$EquipamentoManutencaoFilterImpl>

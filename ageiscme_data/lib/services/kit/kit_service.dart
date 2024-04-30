@@ -10,17 +10,19 @@ import 'package:ageiscme_models/response_dto/kit_etiqueta_preparo_response/kit_e
 
 class KitService {
   final CustomDio _client = CustomDio();
+  static const String _baseRoute = '/kit/';
 
   KitService();
 
-  Future<List<KitModel>> GetAll() async =>
-      (await _client.getList('/kit')).map((e) => KitModel.fromJson(e)).toList();
+  Future<List<KitModel>> GetAll() async => (await _client.getList(_baseRoute))
+      .map((e) => KitModel.fromJson(e))
+      .toList();
 
   Future<KitModel?> FilterOne(
     KitFilter filter,
   ) async =>
       await _client.postFilter(
-        '/kit/filter-one',
+        _baseRoute + 'filter-one',
         filter,
         (dynamic json) => KitModel.fromJson(json),
       );
@@ -29,7 +31,7 @@ class KitService {
     required KitSearchDTO dto,
   }) async =>
       await _client.post(
-        '/kit/search',
+        _baseRoute + 'search',
         dto,
         (dynamic json) => KitSearchResponseDTO.fromJson(json),
       );
@@ -38,7 +40,7 @@ class KitService {
     KitDropDownSearchDTO dto,
   ) async =>
       await _client.post(
-        '/kit/drop-down-search',
+        _baseRoute + 'drop-down-search',
         dto,
         (dynamic json) => (json as List<dynamic>)
             .map((e) => KitDropDownSearchResponseDTO.fromJson(e))
@@ -49,7 +51,7 @@ class KitService {
     required KitEtiquetaPreparoDTO dto,
   }) async =>
       await _client.post(
-        '/kit/etiqueta-preparo',
+        _baseRoute + 'etiqueta-preparo',
         dto,
         (dynamic json) => KitEtiquetaPreparoResponseDTO.fromJson(json),
       );
@@ -58,7 +60,7 @@ class KitService {
     KitModel obj,
   ) async {
     return await _client.post(
-      '/kit',
+      _baseRoute,
       obj,
       (dynamic json) => KitModel.fromJson(json),
     );
@@ -68,7 +70,7 @@ class KitService {
     KitModel obj,
   ) async {
     return await _client.delete(
-      '/kit/${obj.cod}',
+      _baseRoute + '${obj.cod}',
       obj,
       (dynamic json) => KitModel.fromJson(json),
     );

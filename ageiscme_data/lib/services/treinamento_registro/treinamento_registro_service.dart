@@ -20,6 +20,16 @@ class TreinamentoRegistroService {
         (dynamic json) => TreinamentoRegistroModel.fromJson(json),
       );
 
+  Future<List<TreinamentoRegistroModel>> Filter(
+    TreinamentoRegistroFilter filter,
+  ) async =>
+      (await _client.postList(
+        '/treinamento-registro/filter',
+        filter,
+      ))
+          .map((e) => TreinamentoRegistroModel.fromJson(e))
+          .toList();
+
   Future<(String message, TreinamentoRegistroModel treinamentoRegistro)?> save(
     TreinamentoRegistroModel obj,
   ) async {

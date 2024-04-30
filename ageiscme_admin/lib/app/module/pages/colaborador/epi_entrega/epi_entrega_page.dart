@@ -1,8 +1,11 @@
 import 'package:ageiscme_admin/app/module/pages/colaborador/epi_descritor/epi_descritor_page_state.dart';
+import 'package:ageiscme_admin/app/module/pages/colaborador/epi_entrega/cubits/epi_entrega_filter_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/epi_entrega/epi_entrega_page_frm/epi_entrega_page_frm.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/epi_entrega/epi_entrega_page_state.dart';
+import 'package:ageiscme_admin/app/module/pages/colaborador/epi_entrega/filter/epi_entrega_filter_button_widget.dart';
 import 'package:ageiscme_data/services/epi_descritor/epi_descritor_service.dart';
 import 'package:ageiscme_data/services/usuario/usuario_service.dart';
+import 'package:ageiscme_models/filters/usuario_filter/usuario_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
@@ -14,7 +17,8 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class EpiEntregaPage extends StatefulWidget {
-  EpiEntregaPage({super.key});
+  EpiEntregaPage({this.codUsuario, super.key});
+  final int? codUsuario;
 
   @override
   State<EpiEntregaPage> createState() => _EpiEntregaPageState();
@@ -26,6 +30,7 @@ class _EpiEntregaPageState extends State<EpiEntregaPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(text: 'Nome', field: 'nome'),
     CustomDataColumn(
@@ -48,67 +53,90 @@ class _EpiEntregaPageState extends State<EpiEntregaPage> {
 
   @override
   void initState() {
-    bloc.loadUsuariosEpiEntrega();
-    blocEpi.loadEpiDescritor();
+    UsuarioFilter usuarioFilter = UsuarioFilter(
+      numeroRegistros: 500,
+      ordenarPorAtivosPrimeiro: true,
+      carregarFoto: false,
+      tipoQuery: UsuarioFilterTipoQuery.SemFoto,
+      apenasAtivos: true,
+      apenasColaboradores: true,
+    );
+    if (widget.codUsuario != null) {
+      usuarioFilter.cod = widget.codUsuario;
+    }
+    Future.wait([
+      bloc.filter(usuarioFilter),
+      blocEpi.loadEpiDescritor(),
+    ]).then((value) {
+      if (widget.codUsuario == null) return;
+      usuarioFilter.cod = null;
+      openModal(
+        context,
+        bloc.state.usuarios.first,
+        bloc.state.usuarios,
+        blocEpi.state.episDescritor,
+      );
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // AddButtonWidget(
-        //   onPressed: () => {
-        //     openModal(
-        //       context,
-        //       EpiEntregaModel.empty(),
-        //       UsuarioModel.empty(),
-        //       [],
-        //       [],
-        //     ),
-        //   },
-        // ),
-        BlocListener<EpiEntregaUsuarioPageCubit, EpiEntregaUsuarioPageState>(
-          bloc: bloc,
-          listener: (context, state) {
-            if (state.error.isNotEmpty) onError(state);
-          },
-          child: BlocBuilder<EpiDescritorPageCubit, EpiDescritorPageState>(
-            bloc: blocEpi,
-            builder: (context, stateEpi) => BlocBuilder<
-                EpiEntregaUsuarioPageCubit, EpiEntregaUsuarioPageState>(
-              bloc: bloc,
-              builder: (context, state) {
-                if (state.loading) {
-                  return const Center(
-                    child: LoadingWidget(),
-                  );
-                }
-                return Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 16.0, bottom: 16),
-                    child: PlutoGridWidget(
-                      filterOnlyActives: true,
-                      onEdit: (UsuarioModel objeto) => {
-                        openModal(
-                          context,
-                          UsuarioModel.copy(objeto),
-                          state.usuarios,
-                          stateEpi.episDescritor,
-                        ),
-                      },
-                      columns: colunas,
-                      items: state.usuarios,
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-        ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => EpiEntregaFilterCubit()),
+        BlocProvider.value(value: bloc),
       ],
+      child: Builder(
+        builder: (context) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Row(children: [EpiEntregaFilterButtonWidget()]),
+              BlocListener<EpiEntregaUsuarioPageCubit,
+                  EpiEntregaUsuarioPageState>(
+                listener: (context, state) {
+                  if (state.error.isNotEmpty) onError(state);
+                },
+                child:
+                    BlocBuilder<EpiDescritorPageCubit, EpiDescritorPageState>(
+                  bloc: blocEpi,
+                  builder: (context, stateEpi) => BlocBuilder<
+                      EpiEntregaUsuarioPageCubit, EpiEntregaUsuarioPageState>(
+                    bloc: bloc,
+                    builder: (context, state) {
+                      if (state.loading || stateEpi.loading) {
+                        return const Center(
+                          child: LoadingWidget(),
+                        );
+                      }
+
+                      return Expanded(
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 16.0, bottom: 16),
+                          child: PlutoGridWidget(
+                            onEdit: (UsuarioModel objeto) => {
+                              openModal(
+                                context,
+                                UsuarioModel.copy(objeto),
+                                state.usuarios,
+                                stateEpi.episDescritor,
+                              ),
+                            },
+                            columns: colunas,
+                            items: state.usuarios,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 
@@ -133,6 +161,7 @@ class _EpiEntregaPageState extends State<EpiEntregaPage> {
       epiDescritor: null,
       tstamp: '',
     );
+    print('tentou2');
     showDialog<(bool, String)>(
       barrierDismissible: false,
       context: context,

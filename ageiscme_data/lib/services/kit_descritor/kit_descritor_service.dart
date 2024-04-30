@@ -4,23 +4,34 @@ import 'package:ageiscme_models/main.dart';
 
 class KitDescritorService {
   final CustomDio _client = CustomDio();
+  static const baseRoute = '/kit-descritor/';
 
   KitDescritorService();
 
   Future<List<KitDescritorModel>> GetAll() async =>
-      (await _client.getList('/kit-descritor'))
+      (await _client.getList(baseRoute))
+          .map((e) => KitDescritorModel.fromJson(e))
+          .toList();
+
+  Future<List<KitDescritorModel>> GetScreenData(
+    KitDescritorFilter filter,
+  ) async =>
+      (await _client.postList(
+        baseRoute + 'get-screen-data',
+        filter,
+      ))
           .map((e) => KitDescritorModel.fromJson(e))
           .toList();
 
   Future<KitDescritorModel?> FilterOne(KitDescritorFilter filter) async =>
       await _client.postFilter(
-        '/kit-descritor/filter-one',
+        baseRoute + 'filter-one',
         filter,
         (dynamic json) => KitDescritorModel.fromJson(json),
       );
 
   Future<List<KitDescritorModel>> Filter(KitDescritorFilter filter) async =>
-      (await _client.postList('/kit-descritor/filter', filter))
+      (await _client.postList(baseRoute + 'filter', filter))
           .map((e) => KitDescritorModel.fromJson(e))
           .toList();
 
@@ -28,7 +39,7 @@ class KitDescritorService {
     KitDescritorModel obj,
   ) async {
     return await _client.post(
-      '/kit-descritor',
+     baseRoute,
       obj,
       (dynamic json) => KitDescritorModel.fromJson(json),
     );
@@ -38,7 +49,7 @@ class KitDescritorService {
     KitDescritorModel obj,
   ) async {
     return await _client.delete(
-      '/kit-descritor/${obj.cod}',
+      baseRoute + '${obj.cod}',
       obj,
       (dynamic json) => KitDescritorModel.fromJson(json),
     );

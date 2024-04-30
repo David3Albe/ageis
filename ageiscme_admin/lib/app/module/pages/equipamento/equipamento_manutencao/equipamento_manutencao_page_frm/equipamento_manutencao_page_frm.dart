@@ -457,100 +457,53 @@ class _EquipamentoManutencaoPageFrmState
     if (equipamentoManutencao.cod != 0) {
       txtUsuarioRegistro.text = equipamentoManutencao.usuario!.nome.toString();
     }
+    txtProblema.text = equipamentoManutencao.problema ?? '';
+    txtNumSerie1.text = equipamentoManutencao.serie1 ?? '';
+    txtNumSerie2.text = equipamentoManutencao.serie2 ?? '';
+    txtNumSerie3.text = equipamentoManutencao.serie3 ?? '';
+    txtNumSerie4.text = equipamentoManutencao.serie4 ?? '';
+    txtNumSerie5.text = equipamentoManutencao.serie5 ?? '';
+    txtQtde1.text =
+        equipamentoManutencao.qtde1 == null || equipamentoManutencao.qtde1 == 0
+            ? ''
+            : equipamentoManutencao.qtde1.toString();
+    txtQtde2.text =
+        equipamentoManutencao.qtde2 == null || equipamentoManutencao.qtde2 == 0
+            ? ''
+            : equipamentoManutencao.qtde2.toString();
+    txtQtde3.text =
+        equipamentoManutencao.qtde3 == null || equipamentoManutencao.qtde3 == 0
+            ? ''
+            : equipamentoManutencao.qtde3.toString();
+    txtQtde4.text =
+        equipamentoManutencao.qtde4 == null || equipamentoManutencao.qtde4 == 0
+            ? ''
+            : equipamentoManutencao.qtde4.toString();
+    txtQtde5.text =
+        equipamentoManutencao.qtde5 == null || equipamentoManutencao.qtde5 == 0
+            ? ''
+            : equipamentoManutencao.qtde5.toString();
 
-    if (equipamentoManutencao.problema == null) {
-      txtProblema.text = '';
-    } else {
-      txtProblema.text = equipamentoManutencao.problema.toString();
-    }
-
-    if (equipamentoManutencao.serie1 == null) {
-      txtNumSerie1.text = '';
-    } else {
-      txtNumSerie1.text = equipamentoManutencao.serie1.toString();
-    }
-    if (equipamentoManutencao.serie2 == null) {
-      txtNumSerie2.text = '';
-    } else {
-      txtNumSerie2.text = equipamentoManutencao.serie2.toString();
-    }
-    if (equipamentoManutencao.serie3 == null) {
-      txtNumSerie3.text = '';
-    } else {
-      txtNumSerie3.text = equipamentoManutencao.serie3.toString();
-    }
-    if (equipamentoManutencao.serie4 == null) {
-      txtNumSerie4.text = '';
-    } else {
-      txtNumSerie4.text = equipamentoManutencao.serie4.toString();
-    }
-    if (equipamentoManutencao.serie5 == null) {
-      txtNumSerie5.text = '';
-    } else {
-      txtNumSerie5.text = equipamentoManutencao.serie5.toString();
-    }
-
-    if (equipamentoManutencao.qtde1 == null ||
-        equipamentoManutencao.qtde1 == 0) {
-      txtQtde1.text = '';
-    } else {
-      txtQtde1.text = equipamentoManutencao.qtde1.toString();
-    }
-    if (equipamentoManutencao.qtde2 == null ||
-        equipamentoManutencao.qtde2 == 0) {
-      txtQtde2.text = '';
-    } else {
-      txtQtde2.text = equipamentoManutencao.qtde2.toString();
-    }
-    if (equipamentoManutencao.qtde3 == null ||
-        equipamentoManutencao.qtde3 == 0) {
-      txtQtde3.text = '';
-    } else {
-      txtQtde3.text = equipamentoManutencao.qtde3.toString();
-    }
-    if (equipamentoManutencao.qtde4 == null ||
-        equipamentoManutencao.qtde4 == 0) {
-      txtQtde4.text = '';
-    } else {
-      txtQtde4.text = equipamentoManutencao.qtde4.toString();
-    }
-    if (equipamentoManutencao.qtde5 == null ||
-        equipamentoManutencao.qtde5 == 0) {
-      txtQtde5.text = '';
-    } else {
-      txtQtde5.text = equipamentoManutencao.qtde5.toString();
-    }
-
-    if (equipamentoManutencao.valor1 == null ||
-        equipamentoManutencao.valor1 == 0) {
-      txtValor1.text = '';
-    } else {
-      txtValor1.text = equipamentoManutencao.valor1.toString();
-    }
-    if (equipamentoManutencao.valor2 == null ||
-        equipamentoManutencao.valor2 == 0) {
-      txtValor2.text = '';
-    } else {
-      txtValor2.text = equipamentoManutencao.valor2.toString();
-    }
-    if (equipamentoManutencao.valor3 == null ||
-        equipamentoManutencao.valor3 == 0) {
-      txtValor3.text = '';
-    } else {
-      txtValor3.text = equipamentoManutencao.valor3.toString();
-    }
-    if (equipamentoManutencao.valor4 == null ||
-        equipamentoManutencao.valor4 == 0) {
-      txtValor4.text = '';
-    } else {
-      txtValor4.text = equipamentoManutencao.valor4.toString();
-    }
-    if (equipamentoManutencao.valor5 == null ||
-        equipamentoManutencao.valor5 == 0) {
-      txtValor5.text = '';
-    } else {
-      txtValor5.text = equipamentoManutencao.valor5.toString();
-    }
+    txtValor1.text = equipamentoManutencao.valor1 == null ||
+            equipamentoManutencao.valor1 == 0
+        ? ''
+        : equipamentoManutencao.valor1.toString();
+    txtValor2.text = equipamentoManutencao.valor2 == null ||
+            equipamentoManutencao.valor2 == 0
+        ? ''
+        : equipamentoManutencao.valor2.toString();
+    txtValor3.text = equipamentoManutencao.valor3 == null ||
+            equipamentoManutencao.valor3 == 0
+        ? ''
+        : equipamentoManutencao.valor3.toString();
+    txtValor4.text = equipamentoManutencao.valor4 == null ||
+            equipamentoManutencao.valor4 == 0
+        ? ''
+        : equipamentoManutencao.valor4.toString();
+    txtValor5.text = equipamentoManutencao.valor5 == null ||
+            equipamentoManutencao.valor5 == 0
+        ? ''
+        : equipamentoManutencao.valor5.toString();
 
     titulo = 'Manutenções';
 
@@ -660,7 +613,12 @@ class _EquipamentoManutencaoPageFrmState
                                 return DropDownWidget(
                                   initialValue: servicoTipo,
                                   sourceList: servicosTipos
-                                      .where((element) => element.ativo == true)
+                                      .where(
+                                        (element) =>
+                                            element.ativo == true &&
+                                            element.servicosEquipamentos ==
+                                                true,
+                                      )
                                       .toList(),
                                   onChanged: (value) => equipamentoManutencao
                                       .codServicosTipo = value.cod!,

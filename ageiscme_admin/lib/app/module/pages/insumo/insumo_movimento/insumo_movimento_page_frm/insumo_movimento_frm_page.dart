@@ -360,7 +360,8 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
                           child: Row(
                             children: [
                               InkWell(
-                                onTap: insumoMovimento.cod == 0
+                                onTap: insumoMovimento.cod == 0 &&
+                                        baseSolicitacao != true
                                     ? () {
                                         setState(() {
                                           isEntradaSelected = true;
@@ -380,7 +381,8 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
                                                   '1'
                                               ? 1
                                               : (isAjusteSelected ? 0 : null),
-                                      onChanged: insumoMovimento.cod == 0
+                                      onChanged: insumoMovimento.cod == 0 &&
+                                              baseSolicitacao != true
                                           ? (value) {
                                               setState(() {
                                                 isEntradaSelected = value == 1;
@@ -876,7 +878,8 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
       }
     }
 
-    if (insumoMovimento.dataValidade!.isBefore(DateTime.now())) {
+    if (insumoMovimento.dataValidade!.isBefore(DateTime.now()) &&
+        insumoMovimento.flagEntradaSaida != '0') {
       ToastUtils.showCustomToastError(
         context,
         'Movimentação Geral: Data da Validade Vencida',

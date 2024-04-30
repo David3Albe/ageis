@@ -62,17 +62,7 @@ class _TextFieldNumberWidgetState extends State<TextFieldNumberWidget> {
     super.dispose();
   }
 
-  Future<bool> validateDurationOnChanged() async {
-    lastTypedTime = DateTime.now();
-    DateTime lastTimeValidation = lastTypedTime!;
-    Duration duration = const Duration(milliseconds: 1500);
-    await Future.delayed(duration);
-    return (lastTypedTime == lastTimeValidation);
-  }
-
   Future changed(String? str) async {
-    bool valid = await validateDurationOnChanged();
-    if (!valid) return;
     validate();
     if (onChanged != null) onChanged!(str == null ? '' : str);
   }

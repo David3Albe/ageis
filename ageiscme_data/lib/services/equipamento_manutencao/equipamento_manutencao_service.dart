@@ -4,11 +4,12 @@ import 'package:ageiscme_models/main.dart';
 
 class EquipamentoManutencaoService {
   final CustomDio _client = CustomDio();
+  static const baseRoute = '/equipamento-manutencao/';
 
   EquipamentoManutencaoService();
 
   Future<List<EquipamentoManutencaoModel>> GetAll() async =>
-      (await _client.getList('/equipamento-manutencao'))
+      (await _client.getList(baseRoute))
           .map((e) => EquipamentoManutencaoModel.fromJson(e))
           .toList();
 
@@ -16,17 +17,37 @@ class EquipamentoManutencaoService {
     EquipamentoManutencaoFilter filter,
   ) async =>
       await _client.postFilter(
-        '/equipamento-manutencao/filter-one',
+        baseRoute + 'filter-one',
         filter,
         (dynamic json) => EquipamentoManutencaoModel.fromJson(json),
       );
+
+  Future<List<EquipamentoManutencaoModel>> GetScreenData(
+    EquipamentoManutencaoFilter filter,
+  ) async =>
+      (await _client.postList(
+        baseRoute + 'get-screen-data',
+        filter,
+      ))
+          .map((e) => EquipamentoManutencaoModel.fromJson(e))
+          .toList();
+
+  Future<List<EquipamentoManutencaoModel>> Filter(
+    EquipamentoManutencaoFilter filter,
+  ) async =>
+      (await _client.postList(
+        baseRoute + 'filter',
+        filter,
+      ))
+          .map((e) => EquipamentoManutencaoModel.fromJson(e))
+          .toList();
 
   Future<(String message, EquipamentoManutencaoModel equipamentoManutencao)?>
       save(
     EquipamentoManutencaoModel obj,
   ) async {
     return await _client.post(
-      '/equipamento-manutencao',
+      baseRoute,
       obj,
       (dynamic json) => EquipamentoManutencaoModel.fromJson(json),
     );
@@ -37,7 +58,7 @@ class EquipamentoManutencaoService {
     EquipamentoManutencaoModel obj,
   ) async {
     return await _client.delete(
-      '/equipamento-manutencao/${obj.cod}',
+      baseRoute + '${obj.cod}',
       obj,
       (dynamic json) => EquipamentoManutencaoModel.fromJson(json),
     );

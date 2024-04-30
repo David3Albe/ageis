@@ -22,6 +22,7 @@ import 'package:compartilhados/componentes/campos/text_field_string_widget.dart'
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
@@ -700,6 +701,10 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
         !txtDescricaoCompleta.valid ||
         !txtLimiteProcesso.valid) return;
     bool valido = await validaItensConsignados();
+    if(itemDescritor.codTipoProcessoUrgencia==null){
+      ToastUtils.showCustomToastWarning(context, 'Informe o tipo de processo para urgência');
+      return;
+    }
     if (!valido) return;
     cubit.save(itemDescritor);
   }

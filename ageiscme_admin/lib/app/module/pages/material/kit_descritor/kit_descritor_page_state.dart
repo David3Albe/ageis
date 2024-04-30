@@ -1,4 +1,5 @@
 import 'package:ageiscme_data/services/kit_descritor/kit_descritor_service.dart';
+import 'package:ageiscme_models/filters/kit_descritor/kit_descritor_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 
@@ -12,10 +13,31 @@ class KitDescritorPageCubit extends Cubit<KitDescritorPageState> {
           ),
         );
 
-  void loadKitDescritor() async {
+  Future loadKitDescritor() async {
     emit(KitDescritorPageState(loading: true, kitsDescritor: []));
     try {
       List<KitDescritorModel> kitsDescritor = await service.GetAll();
+      emit(
+        KitDescritorPageState(
+          loading: false,
+          kitsDescritor: kitsDescritor,
+        ),
+      );
+    } on Exception catch (ex) {
+      emit(
+        KitDescritorPageState(
+          loading: false,
+          kitsDescritor: [],
+          error: ex.toString(),
+        ),
+      );
+    }
+  }
+
+    Future getScreenData(KitDescritorFilter filter) async {
+    emit(KitDescritorPageState(loading: true, kitsDescritor: []));
+    try {
+      List<KitDescritorModel> kitsDescritor = await service.GetScreenData(filter);
       emit(
         KitDescritorPageState(
           loading: false,

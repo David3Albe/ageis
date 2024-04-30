@@ -12,7 +12,7 @@ class EpiDescritorPageCubit extends Cubit<EpiDescritorPageState> {
           ),
         );
 
-  void loadEpiDescritor() async {
+  Future loadEpiDescritor() async {
     emit(EpiDescritorPageState(loading: true, episDescritor: []));
     try {
       List<EpiDescritorModel> episDescritor = await service.GetAll();

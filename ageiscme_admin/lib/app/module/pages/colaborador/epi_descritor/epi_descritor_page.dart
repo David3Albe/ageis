@@ -159,7 +159,7 @@ class _EpiDescritorPageState extends State<EpiDescritorPage> {
     );
     if (result == null || !result.$1) return;
     ToastUtils.showCustomToastSucess(context, result.$2);
-    bloc.loadEpiDescritor();
+    await bloc.loadEpiDescritor();
   }
 
   void delete(BuildContext context, EpiDescritorModel epiDescritor) async {

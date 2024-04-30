@@ -15,8 +15,10 @@ class UserAvatarWidget extends StatelessWidget {
       builder: (context, snapshot) {
         AuthenticationResultDTO? authentication = snapshot.data;
         String userName = 'User Name';
+        String company = '';
         if (snapshot.hasData && authentication != null) {
           userName = authentication.usuario!.nome!;
+          company = authentication.instituicao!.nome!;
         }
         return InkWell(
           onTap: AdminNavigatorService.navigateToHome,
@@ -25,37 +27,66 @@ class UserAvatarWidget extends StatelessWidget {
             child: Tooltip(
               message: userName,
               waitDuration: const Duration(milliseconds: 500),
-              child: Row(
+              child: Column(
                 children: [
-                  CircleAvatar(
-                    backgroundColor: Cores.corAvatarFundo,
-                    foregroundColor: Cores.corAvatarTexto,
-                    child: AutoSizeText(
-                      HelperFunctions.GetTwoFirstLetersOfNameAndSecondName(
-                        userName,
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        backgroundColor: Cores.corAvatarFundo,
+                        foregroundColor: Cores.corAvatarTexto,
+                        child: AutoSizeText(
+                          HelperFunctions.GetTwoFirstLetersOfNameAndSecondName(
+                            userName,
+                          ),
+                          minFontSize: 8,
+                          maxFontSize: 12,
+                        ),
                       ),
-                      minFontSize: 8,
-                      maxFontSize: 12,
-                    ),
-                  ),
-                  expanded
-                      ? Expanded(
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Container(
-                              width: 180,
-                              child: Text(
-                                userName,
-                                overflow: TextOverflow.ellipsis,
-                                style: Fontes.getRoboto(
-                                  fontSize: HelperFunctions.calculaFontSize(context, 18),
-                                  cor: Cores.corNomeUsuario,
+                      expanded
+                          ? Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 8.0),
+                                child: Container(
+                                  width: 180,
+                                  child: Text(
+                                    userName,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: Fontes.getRoboto(
+                                      fontSize: HelperFunctions.calculaFontSize(
+                                        context,
+                                        18,
+                                      ),
+                                      cor: Cores.corNomeUsuario,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                            )
+                          : Container(),
+                    ],
+                  ),
+                  expanded
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 4.0),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  'Instituição: ' + company,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Fontes.getRoboto(
+                                    fontSize: HelperFunctions.calculaFontSize(
+                                      context,
+                                      12,
+                                    ),
+                                    cor: Cores.corNomeUsuario,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         )
-                      : Container(),
+                      : const SizedBox(),
                 ],
               ),
             ),

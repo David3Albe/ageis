@@ -4,16 +4,27 @@ import 'package:ageiscme_models/main.dart';
 
 class ItemDescritorService {
   final CustomDio _client = CustomDio();
+  static const String baseRoute = '/item-descritor/';
 
   ItemDescritorService();
 
   Future<List<ItemDescritorModel>> GetAll() async =>
-      (await _client.getList('/item-descritor'))
+      (await _client.getList(baseRoute))
+          .map((e) => ItemDescritorModel.fromJson(e))
+          .toList();
+
+  Future<List<ItemDescritorModel>> GetScreenData(
+    ItemDescritorFilter filter,
+  ) async =>
+      (await _client.postList(
+        baseRoute + 'get-screen-data',
+        filter,
+      ))
           .map((e) => ItemDescritorModel.fromJson(e))
           .toList();
 
   Future<List<ItemDescritorModel>> Filter(ItemDescritorFilter filter) async =>
-      (await _client.postList('/item-descritor/filter', filter))
+      (await _client.postList(baseRoute + 'filter', filter))
           .map((e) => ItemDescritorModel.fromJson(e))
           .toList();
 
@@ -21,7 +32,7 @@ class ItemDescritorService {
     ItemDescritorFilter filter,
   ) async =>
       await _client.postFilter(
-        '/item-descritor/filter-one',
+        baseRoute + 'filter-one',
         filter,
         (dynamic json) => ItemDescritorModel.fromJson(json),
       );
@@ -30,7 +41,7 @@ class ItemDescritorService {
     ItemDescritorModel obj,
   ) async {
     return await _client.post(
-      '/item-descritor',
+      baseRoute,
       obj,
       (dynamic json) => ItemDescritorModel.fromJson(json),
     );
@@ -40,7 +51,7 @@ class ItemDescritorService {
     ItemDescritorModel obj,
   ) async {
     return await _client.delete(
-      '/item-descritor/${obj.cod}',
+      baseRoute + '${obj.cod}',
       obj,
       (dynamic json) => ItemDescritorModel.fromJson(json),
     );

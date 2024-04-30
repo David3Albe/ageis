@@ -18,14 +18,17 @@ import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
+import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
+import 'package:compartilhados/cores/cores.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
 class ConsultaManutencaoPage extends StatefulWidget {
@@ -36,72 +39,123 @@ class ConsultaManutencaoPage extends StatefulWidget {
 }
 
 class _ConsultaManutencaoPageState extends State<ConsultaManutencaoPage> {
+  late Function(bool, bool) setReadonlyDataTermino;
+
+  static Widget getCustomRenderer(
+    PlutoColumnRendererContext renderContext, {
+    TextAlign? textAlign = TextAlign.start,
+  }) {
+    Color cor = Cores.corTexto;
+    if ((renderContext.row.cells['dataTermino']?.value.toString() ?? '') ==
+        '') {
+      cor = Cores.corTextoVermelho;
+    }
+
+    return Text(
+      renderContext.cell.value.toString(),
+      textAlign: textAlign,
+      style: TextStyle(
+        overflow: TextOverflow.ellipsis,
+        color: cor,
+        fontSize: renderContext.stateManager.style.cellTextStyle.fontSize,
+      ),
+    );
+  }
+
   final List<CustomDataColumn> colunas = [
     CustomDataColumn(
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      customRenderer: getCustomRenderer,
     ),
     CustomDataColumn(
       text: 'Equipamento',
       field: 'equipamento',
       valueConverter: (value) => value == null ? '' : value['nome'],
+      customRenderer: getCustomRenderer,
     ),
     CustomDataColumn(
       text: 'Tipo Serviço',
       field: 'servicoTipo',
+      customRenderer: getCustomRenderer,
       valueConverter: (value) => value == null ? '' : value['nome'],
     ),
-    CustomDataColumn(text: 'Peça', field: 'peca'),
+    CustomDataColumn(
+      text: 'Peça',
+      field: 'peca',
+      customRenderer: getCustomRenderer,
+    ),
     CustomDataColumn(
       text: 'QTDE',
       field: 'qtde',
       type: CustomDataColumnType.Number,
+      customRenderer: getCustomRenderer,
     ),
     CustomDataColumn(
       text: 'Valor',
       field: 'valor',
       type: CustomDataColumnType.Number,
+      customRenderer: getCustomRenderer,
     ),
     CustomDataColumn(
       text: 'Data Início',
       field: 'dataInicio',
       type: CustomDataColumnType.DateTime,
+      customRenderer: getCustomRenderer,
     ),
     CustomDataColumn(
       text: 'Data Término',
       field: 'dataTermino',
       type: CustomDataColumnType.DateTime,
+      customRenderer: getCustomRenderer,
     ),
     CustomDataColumn(
       text: 'Data Parada',
       field: 'dataParada',
       type: CustomDataColumnType.DateTime,
+      customRenderer: getCustomRenderer,
     ),
     CustomDataColumn(
       text: 'Num. NF',
       field: 'numNF',
       type: CustomDataColumnType.Number,
+      customRenderer: getCustomRenderer,
     ),
-    CustomDataColumn(text: 'Descricao', field: 'descricao'),
-    CustomDataColumn(text: 'Problema', field: 'problema'),
+    CustomDataColumn(
+      text: 'Descricao',
+      field: 'descricao',
+      customRenderer: getCustomRenderer,
+    ),
+    CustomDataColumn(
+      text: 'Problema',
+      field: 'problema',
+      customRenderer: getCustomRenderer,
+    ),
     CustomDataColumn(
       text: 'Resultado',
       field: 'resultado',
       valueConverter: (dynamic value) =>
           EquipamentoManutencaoResultOption.getOpcaoFromId(value),
+      customRenderer: getCustomRenderer,
     ),
     CustomDataColumn(
       text: 'Data Registro',
       field: 'dataRegistro',
       type: CustomDataColumnType.DateTime,
+      customRenderer: getCustomRenderer,
     ),
     CustomDataColumn(
       text: 'Garantia',
       field: 'garantia',
       type: CustomDataColumnType.Date,
+      customRenderer: getCustomRenderer,
     ),
-    CustomDataColumn(text: 'Serie', field: 'serie'),
+    CustomDataColumn(
+      text: 'Serie',
+      field: 'serie',
+      customRenderer: getCustomRenderer,
+    ),
   ];
 
   late final ConsultaManutencaoPageCubit bloc;
@@ -213,10 +267,31 @@ class _ConsultaManutencaoPageState extends State<ConsultaManutencaoPage> {
                 initialValue: filter.startDate,
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
-              DatePickerWidget(
-                placeholder: 'Data Término',
-                onDateSelected: (value) => filter.finalDate = value,
-                initialValue: filter.finalDate,
+              Row(
+                children: [
+                  Expanded(
+                    child: DatePickerWidget(
+                      setReadonlyBuilder: (context, setReadonlyBuilder) =>
+                          setReadonlyDataTermino = setReadonlyBuilder,
+                      placeholder: 'Data Término',
+                      onDateSelected: (value) => filter.finalDate = value,
+                      initialValue: filter.finalDate,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 16, top: 6),
+                    child: Expanded(
+                      child: CustomCheckboxWidget(
+                        checked: filter.apenasSemTermino,
+                        onClick: (value) {
+                          filter.apenasSemTermino = value;
+                          setReadonlyDataTermino(filter.apenasSemTermino==true, true);
+                        },
+                        text: 'Apenas sem término',
+                      ),
+                    ),
+                  ),
+                ],
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
               BlocBuilder<EquipamentoCubit, EquipamentoState>(

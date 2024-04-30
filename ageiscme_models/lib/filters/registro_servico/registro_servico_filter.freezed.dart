@@ -33,6 +33,10 @@ mixin _$RegistroServicoFilter {
   set carregarImagens(bool? value) => throw _privateConstructorUsedError;
   bool? get carregarUsuario => throw _privateConstructorUsedError;
   set carregarUsuario(bool? value) => throw _privateConstructorUsedError;
+  bool? get carregarItem => throw _privateConstructorUsedError;
+  set carregarItem(bool? value) => throw _privateConstructorUsedError;
+  int? get numeroRegistros => throw _privateConstructorUsedError;
+  set numeroRegistros(int? value) => throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
   String? get tStamp => throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
@@ -57,6 +61,8 @@ abstract class $RegistroServicoFilterCopyWith<$Res> {
       int? codEquipamento,
       bool? carregarImagens,
       bool? carregarUsuario,
+      bool? carregarItem,
+      int? numeroRegistros,
       @JsonKey(name: 'tStamp') String? tStamp});
 }
 
@@ -80,6 +86,8 @@ class _$RegistroServicoFilterCopyWithImpl<$Res,
     Object? codEquipamento = freezed,
     Object? carregarImagens = freezed,
     Object? carregarUsuario = freezed,
+    Object? carregarItem = freezed,
+    Object? numeroRegistros = freezed,
     Object? tStamp = freezed,
   }) {
     return _then(_value.copyWith(
@@ -107,6 +115,14 @@ class _$RegistroServicoFilterCopyWithImpl<$Res,
           ? _value.carregarUsuario
           : carregarUsuario // ignore: cast_nullable_to_non_nullable
               as bool?,
+      carregarItem: freezed == carregarItem
+          ? _value.carregarItem
+          : carregarItem // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      numeroRegistros: freezed == numeroRegistros
+          ? _value.numeroRegistros
+          : numeroRegistros // ignore: cast_nullable_to_non_nullable
+              as int?,
       tStamp: freezed == tStamp
           ? _value.tStamp
           : tStamp // ignore: cast_nullable_to_non_nullable
@@ -131,6 +147,8 @@ abstract class _$$RegistroServicoFilterImplCopyWith<$Res>
       int? codEquipamento,
       bool? carregarImagens,
       bool? carregarUsuario,
+      bool? carregarItem,
+      int? numeroRegistros,
       @JsonKey(name: 'tStamp') String? tStamp});
 }
 
@@ -152,6 +170,8 @@ class __$$RegistroServicoFilterImplCopyWithImpl<$Res>
     Object? codEquipamento = freezed,
     Object? carregarImagens = freezed,
     Object? carregarUsuario = freezed,
+    Object? carregarItem = freezed,
+    Object? numeroRegistros = freezed,
     Object? tStamp = freezed,
   }) {
     return _then(_$RegistroServicoFilterImpl(
@@ -179,6 +199,14 @@ class __$$RegistroServicoFilterImplCopyWithImpl<$Res>
           ? _value.carregarUsuario
           : carregarUsuario // ignore: cast_nullable_to_non_nullable
               as bool?,
+      carregarItem: freezed == carregarItem
+          ? _value.carregarItem
+          : carregarItem // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      numeroRegistros: freezed == numeroRegistros
+          ? _value.numeroRegistros
+          : numeroRegistros // ignore: cast_nullable_to_non_nullable
+              as int?,
       tStamp: freezed == tStamp
           ? _value.tStamp
           : tStamp // ignore: cast_nullable_to_non_nullable
@@ -197,6 +225,8 @@ class _$RegistroServicoFilterImpl implements _RegistroServicoFilter {
       this.codEquipamento,
       this.carregarImagens,
       this.carregarUsuario,
+      this.carregarItem,
+      this.numeroRegistros,
       @JsonKey(name: 'tStamp') this.tStamp});
 
   factory _$RegistroServicoFilterImpl.fromJson(Map<String, dynamic> json) =>
@@ -215,12 +245,16 @@ class _$RegistroServicoFilterImpl implements _RegistroServicoFilter {
   @override
   bool? carregarUsuario;
   @override
+  bool? carregarItem;
+  @override
+  int? numeroRegistros;
+  @override
   @JsonKey(name: 'tStamp')
   String? tStamp;
 
   @override
   String toString() {
-    return 'RegistroServicoFilter(cod: $cod, startDate: $startDate, finalDate: $finalDate, codEquipamento: $codEquipamento, carregarImagens: $carregarImagens, carregarUsuario: $carregarUsuario, tStamp: $tStamp)';
+    return 'RegistroServicoFilter(cod: $cod, startDate: $startDate, finalDate: $finalDate, codEquipamento: $codEquipamento, carregarImagens: $carregarImagens, carregarUsuario: $carregarUsuario, carregarItem: $carregarItem, numeroRegistros: $numeroRegistros, tStamp: $tStamp)';
   }
 
   @JsonKey(ignore: true)
@@ -246,6 +280,8 @@ abstract class _RegistroServicoFilter implements RegistroServicoFilter {
       int? codEquipamento,
       bool? carregarImagens,
       bool? carregarUsuario,
+      bool? carregarItem,
+      int? numeroRegistros,
       @JsonKey(name: 'tStamp') String? tStamp}) = _$RegistroServicoFilterImpl;
 
   factory _RegistroServicoFilter.fromJson(Map<String, dynamic> json) =
@@ -269,6 +305,12 @@ abstract class _RegistroServicoFilter implements RegistroServicoFilter {
   @override
   bool? get carregarUsuario;
   set carregarUsuario(bool? value);
+  @override
+  bool? get carregarItem;
+  set carregarItem(bool? value);
+  @override
+  int? get numeroRegistros;
+  set numeroRegistros(int? value);
   @override
   @JsonKey(name: 'tStamp')
   String? get tStamp;

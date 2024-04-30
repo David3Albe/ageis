@@ -12,6 +12,9 @@ _$KitDescritorFilterImpl _$$KitDescritorFilterImplFromJson(Map json) =>
       apenasAtivos: json['apenasAtivos'] as bool?,
       ordernarPorNomeCrescente: json['ordernarPorNomeCrescente'] as bool?,
       carregarProcessoTipo: json['carregarProcessoTipo'] as bool?,
+      numeroRegistros: json['numeroRegistros'] as int?,
+      ordenarAtivosPrimeiro: json['ordenarAtivosPrimeiro'] as bool?,
+      nomeContem: json['nomeContem'] as String?,
       tStamp: json['tStamp'] as String?,
     );
 
@@ -22,5 +25,8 @@ Map<String, dynamic> _$$KitDescritorFilterImplToJson(
       'apenasAtivos': instance.apenasAtivos,
       'ordernarPorNomeCrescente': instance.ordernarPorNomeCrescente,
       'carregarProcessoTipo': instance.carregarProcessoTipo,
+      'numeroRegistros': instance.numeroRegistros,
+      'ordenarAtivosPrimeiro': instance.ordenarAtivosPrimeiro,
+      'nomeContem': instance.nomeContem,
       'tStamp': instance.tStamp,
     };

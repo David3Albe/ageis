@@ -10,6 +10,9 @@ sealed class KitDescritorFilter with _$KitDescritorFilter {
     bool? apenasAtivos,
     bool? ordernarPorNomeCrescente,
     bool? carregarProcessoTipo,
+    int? numeroRegistros,
+    bool? ordenarAtivosPrimeiro,
+    String? nomeContem,
     @JsonKey(name: 'tStamp') String? tStamp,
   }) = _KitDescritorFilter;
 

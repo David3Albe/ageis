@@ -1,4 +1,5 @@
 import 'package:ageiscme_data/services/item_descritor/item_descritor_service.dart';
+import 'package:ageiscme_models/filters/item_descritor/item_descritor_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 
@@ -12,10 +13,31 @@ class ItemDescritorPageCubit extends Cubit<ItemDescritorPageState> {
           ),
         );
 
-  void loadItemDescritor() async {
+  Future loadItemDescritor() async {
     emit(ItemDescritorPageState(loading: true, itensDescritor: []));
     try {
       List<ItemDescritorModel> itensDescritor = await service.GetAll();
+      emit(
+        ItemDescritorPageState(
+          loading: false,
+          itensDescritor: itensDescritor,
+        ),
+      );
+    } on Exception catch (ex) {
+      emit(
+        ItemDescritorPageState(
+          loading: false,
+          itensDescritor: [], 
+          error: ex.toString(),
+        ),
+      );
+    }
+  }
+
+    Future getScreenData(ItemDescritorFilter filter) async {
+    emit(ItemDescritorPageState(loading: true, itensDescritor: []));
+    try {
+      List<ItemDescritorModel> itensDescritor = await service.GetScreenData(filter);
       emit(
         ItemDescritorPageState(
           loading: false,

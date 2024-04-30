@@ -12,9 +12,9 @@ class UserRowWidget extends StatelessWidget {
   Widget build(Context context) {
     int lengthNome = min(dto.nomeUsuario.length, 15);
     int lengthDoc = min(dto.userDoc?.length ?? 0, 10);
-    String user = dto.nomeUsuario.substring(lengthNome);
+    String user = dto.nomeUsuario.substring(0, lengthNome);
     if (dto.userDoc != null) {
-      user += ' - ' + dto.userDoc!.substring(lengthDoc);
+      user += ' - ' + dto.userDoc!.substring(0, lengthDoc);
     }
     return Container(
       child: Row(
@@ -30,18 +30,24 @@ class UserRowWidget extends StatelessWidget {
             ),
           ),
           Expanded(
-            child: Text(
-              'OP.: ' + user,
-              style: const TextStyle(
-                fontSize: 6,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 3),
+              child: Text(
+                'OP.: ' + user,
+                style: const TextStyle(
+                  fontSize: 6,
+                ),
               ),
             ),
           ),
           Expanded(
-            child: Text(
-              'OP.: ' + user,
-              style: const TextStyle(
-                fontSize: 6,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 3),
+              child: Text(
+                'OP.: ' + user,
+                style: const TextStyle(
+                  fontSize: 6,
+                ),
               ),
             ),
           ),

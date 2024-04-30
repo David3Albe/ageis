@@ -141,6 +141,13 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                                 equipamentos.sort(
                                   (a, b) => a.nome!.compareTo(b.nome!),
                                 );
+                                registroServico.equipamento = equipamentos
+                                    .where(
+                                      (element) =>
+                                          element.cod ==
+                                          registroServico.codEquipamento,
+                                    )
+                                    .firstOrNull;
                                 return DropDownSearchWidget(
                                   readOnly: widget.equipamentoReadOnly ?? false,
                                   textFunction: (equipamento) =>
@@ -197,14 +204,26 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                                 BlocBuilder<ServicoTipoCubit, ServicoTipoState>(
                               bloc: controller.servicoTipoCubit,
                               builder: (context, state) {
+                                if (state.loading == true) {
+                                  return const Center(
+                                    child: LoadingWidget(),
+                                  );
+                                }
                                 List<ServicoTipoModel> servicosTipos =
                                     state.tiposServico;
-
+                                registroServico.servicoTipo = servicosTipos
+                                    .where(
+                                      (element) =>
+                                          element.cod ==
+                                          registroServico.codServicosTipos,
+                                    )
+                                    .firstOrNull;
                                 servicosTipos.sort(
                                   (a, b) => a.nome!.compareTo(b.nome!),
                                 );
                                 List<ServicoTipoModel> servicos = controller
                                     .buscarServicosEquipamento(servicosTipos);
+                                print(servicos);
 
                                 return DropDownSearchWidget<ServicoTipoModel>(
                                   refreshSourceListBuilder:
@@ -213,7 +232,11 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                                               refreshTipoServicoSourceList,
                                   initialValue: registroServico.servicoTipo,
                                   sourceList: servicos
-                                      .where((element) => element.ativo == true)
+                                      .where(
+                                        (element) =>
+                                            element.ativo == true &&
+                                            element.monitoramento == true,
+                                      )
                                       .toList(),
                                   onChanged: (value) {
                                     registroServico.servicoTipo = value;
@@ -437,6 +460,8 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                 alignment: WrapAlignment.end,
                 children: [
                   SaveButtonWidget(
+                    readonly:
+                        registroServico.cod != null || registroServico.cod != 0,
                     onPressed: () => {salvar()},
                   ),
                   CleanButtonWidget(

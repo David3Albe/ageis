@@ -21,6 +21,7 @@ _$ConsultaManutencaoFilterImpl _$$ConsultaManutencaoFilterImplFromJson(
       numNF: json['numNF'] as String?,
       numSerie: json['numSerie'] as String?,
       codResultado: json['codResultado'] as String?,
+      apenasSemTermino: json['apenasSemTermino'] as bool?,
     );
 
 Map<String, dynamic> _$$ConsultaManutencaoFilterImplToJson(
@@ -34,4 +35,5 @@ Map<String, dynamic> _$$ConsultaManutencaoFilterImplToJson(
       'numNF': instance.numNF,
       'numSerie': instance.numSerie,
       'codResultado': instance.codResultado,
+      'apenasSemTermino': instance.apenasSemTermino,
     };

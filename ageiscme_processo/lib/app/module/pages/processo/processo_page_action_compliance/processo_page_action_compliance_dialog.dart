@@ -78,6 +78,7 @@ class _ProcessoPageActionComplianceDialogDialogState
                 motivos = motivos.where(query).toList();
 
                 return DropDownSearchWidget<AcaoOcorrenciaModel>(
+                  expandOnStart: true,
                   textFunction: (item) => item.AcaoOcorrenciaDescricaoText(),
                   initialValue: null,
                   sourceList: motivos,

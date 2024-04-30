@@ -12,6 +12,11 @@ typedef SetDateValueBuilder = void Function(
   void Function(DateTime? date) setDateMethod,
 );
 
+typedef SetReadonlyBuilder<T> = void Function(
+  BuildContext context,
+  void Function(bool readonly, bool clear) setReadonlyBuilder,
+);
+
 class DatePickerWidget extends StatefulWidget {
   final String placeholder;
   final void Function(DateTime? selectedDate)? onDateSelected;
@@ -19,6 +24,7 @@ class DatePickerWidget extends StatefulWidget {
   final bool readOnly;
   final GlobalKey<_DatePickerWidgetState> key = GlobalKey();
   final SetDateValueBuilder? setDateValueBuilder;
+  final SetReadonlyBuilder? setReadonlyBuilder;
   final DateFormat? formato;
 
   DatePickerWidget({
@@ -27,6 +33,7 @@ class DatePickerWidget extends StatefulWidget {
     this.initialValue,
     this.readOnly = false,
     this.setDateValueBuilder,
+    this.setReadonlyBuilder,
     this.formato,
   });
 
@@ -41,15 +48,17 @@ class DatePickerWidget extends StatefulWidget {
   }
 
   @override
-  _DatePickerWidgetState createState() => _DatePickerWidgetState(key: key);
+  _DatePickerWidgetState createState() =>
+      _DatePickerWidgetState(key: key, readOnly: readOnly);
 }
 
 class _DatePickerWidgetState extends State<DatePickerWidget> {
-  _DatePickerWidgetState({required Key key});
+  _DatePickerWidgetState({required this.readOnly, required Key key});
   DateTime? selectedDate;
   late TextEditingController textController;
   late FocusNode focusNode;
   late DateFormat format;
+  bool? readOnly;
 
   @override
   void initState() {
@@ -127,6 +136,13 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
     });
   }
 
+  void setReadonly(bool readonly, bool clear) {
+    setState(() {
+      readOnly = readonly;
+      if (clear) setValue(null);
+    });
+  }
+
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -182,6 +198,10 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
       context,
       setDateValue,
     );
+    widget.setReadonlyBuilder?.call(
+      context,
+      setReadonly,
+    );
     return TextFormField(
       scrollPadding: EdgeInsets.zero,
       focusNode: focusNode,
@@ -216,8 +236,8 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
           ),
         ),
       ),
-      enabled: !widget.readOnly,
-      readOnly: widget.readOnly,
+      enabled: readOnly == false,
+      readOnly: readOnly == true,
     );
   }
 }
