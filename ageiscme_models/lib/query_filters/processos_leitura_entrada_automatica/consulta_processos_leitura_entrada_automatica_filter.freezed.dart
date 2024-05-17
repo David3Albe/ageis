@@ -30,8 +30,12 @@ mixin _$ConsultaProcessosLeituraEntradaAutomaticaFilter {
   set codSituacao(int? value) => throw _privateConstructorUsedError;
   int? get codKit => throw _privateConstructorUsedError;
   set codKit(int? value) => throw _privateConstructorUsedError;
+  String? get codBarraKitContem => throw _privateConstructorUsedError;
+  set codBarraKitContem(String? value) => throw _privateConstructorUsedError;
   int? get codItem => throw _privateConstructorUsedError;
   set codItem(int? value) => throw _privateConstructorUsedError;
+  String? get idEtiquetaContem => throw _privateConstructorUsedError;
+  set idEtiquetaContem(String? value) => throw _privateConstructorUsedError;
   int? get codEtapaProcesso => throw _privateConstructorUsedError;
   set codEtapaProcesso(int? value) => throw _privateConstructorUsedError;
   int? get codRegistroProcesso => throw _privateConstructorUsedError;
@@ -63,7 +67,9 @@ abstract class $ConsultaProcessosLeituraEntradaAutomaticaFilterCopyWith<$Res> {
       DateTime? finalDate,
       int? codSituacao,
       int? codKit,
+      String? codBarraKitContem,
       int? codItem,
+      String? idEtiquetaContem,
       int? codEtapaProcesso,
       int? codRegistroProcesso,
       String? indicador,
@@ -92,7 +98,9 @@ class _$ConsultaProcessosLeituraEntradaAutomaticaFilterCopyWithImpl<$Res,
     Object? finalDate = freezed,
     Object? codSituacao = freezed,
     Object? codKit = freezed,
+    Object? codBarraKitContem = freezed,
     Object? codItem = freezed,
+    Object? idEtiquetaContem = freezed,
     Object? codEtapaProcesso = freezed,
     Object? codRegistroProcesso = freezed,
     Object? indicador = freezed,
@@ -116,10 +124,18 @@ class _$ConsultaProcessosLeituraEntradaAutomaticaFilterCopyWithImpl<$Res,
           ? _value.codKit
           : codKit // ignore: cast_nullable_to_non_nullable
               as int?,
+      codBarraKitContem: freezed == codBarraKitContem
+          ? _value.codBarraKitContem
+          : codBarraKitContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codItem: freezed == codItem
           ? _value.codItem
           : codItem // ignore: cast_nullable_to_non_nullable
               as int?,
+      idEtiquetaContem: freezed == idEtiquetaContem
+          ? _value.idEtiquetaContem
+          : idEtiquetaContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codEtapaProcesso: freezed == codEtapaProcesso
           ? _value.codEtapaProcesso
           : codEtapaProcesso // ignore: cast_nullable_to_non_nullable
@@ -172,7 +188,9 @@ abstract class _$$ConsultaProcessosLeituraEntradaAutomaticaFilterImplCopyWith<
       DateTime? finalDate,
       int? codSituacao,
       int? codKit,
+      String? codBarraKitContem,
       int? codItem,
+      String? idEtiquetaContem,
       int? codEtapaProcesso,
       int? codRegistroProcesso,
       String? indicador,
@@ -202,7 +220,9 @@ class __$$ConsultaProcessosLeituraEntradaAutomaticaFilterImplCopyWithImpl<$Res>
     Object? finalDate = freezed,
     Object? codSituacao = freezed,
     Object? codKit = freezed,
+    Object? codBarraKitContem = freezed,
     Object? codItem = freezed,
+    Object? idEtiquetaContem = freezed,
     Object? codEtapaProcesso = freezed,
     Object? codRegistroProcesso = freezed,
     Object? indicador = freezed,
@@ -226,10 +246,18 @@ class __$$ConsultaProcessosLeituraEntradaAutomaticaFilterImplCopyWithImpl<$Res>
           ? _value.codKit
           : codKit // ignore: cast_nullable_to_non_nullable
               as int?,
+      codBarraKitContem: freezed == codBarraKitContem
+          ? _value.codBarraKitContem
+          : codBarraKitContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codItem: freezed == codItem
           ? _value.codItem
           : codItem // ignore: cast_nullable_to_non_nullable
               as int?,
+      idEtiquetaContem: freezed == idEtiquetaContem
+          ? _value.idEtiquetaContem
+          : idEtiquetaContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codEtapaProcesso: freezed == codEtapaProcesso
           ? _value.codEtapaProcesso
           : codEtapaProcesso // ignore: cast_nullable_to_non_nullable
@@ -263,7 +291,9 @@ class _$ConsultaProcessosLeituraEntradaAutomaticaFilterImpl
       required this.finalDate,
       required this.codSituacao,
       required this.codKit,
+      required this.codBarraKitContem,
       required this.codItem,
+      required this.idEtiquetaContem,
       required this.codEtapaProcesso,
       required this.codRegistroProcesso,
       required this.indicador,
@@ -284,7 +314,11 @@ class _$ConsultaProcessosLeituraEntradaAutomaticaFilterImpl
   @override
   int? codKit;
   @override
+  String? codBarraKitContem;
+  @override
   int? codItem;
+  @override
+  String? idEtiquetaContem;
   @override
   int? codEtapaProcesso;
   @override
@@ -298,7 +332,7 @@ class _$ConsultaProcessosLeituraEntradaAutomaticaFilterImpl
 
   @override
   String toString() {
-    return 'ConsultaProcessosLeituraEntradaAutomaticaFilter(startDate: $startDate, finalDate: $finalDate, codSituacao: $codSituacao, codKit: $codKit, codItem: $codItem, codEtapaProcesso: $codEtapaProcesso, codRegistroProcesso: $codRegistroProcesso, indicador: $indicador, prontuarioRetirada: $prontuarioRetirada, item: $item)';
+    return 'ConsultaProcessosLeituraEntradaAutomaticaFilter(startDate: $startDate, finalDate: $finalDate, codSituacao: $codSituacao, codKit: $codKit, codBarraKitContem: $codBarraKitContem, codItem: $codItem, idEtiquetaContem: $idEtiquetaContem, codEtapaProcesso: $codEtapaProcesso, codRegistroProcesso: $codRegistroProcesso, indicador: $indicador, prontuarioRetirada: $prontuarioRetirada, item: $item)';
   }
 
   @JsonKey(ignore: true)
@@ -326,7 +360,9 @@ abstract class _ConsultaProcessosLeituraEntradaAutomaticaFilter
       required DateTime? finalDate,
       required int? codSituacao,
       required int? codKit,
+      required String? codBarraKitContem,
       required int? codItem,
+      required String? idEtiquetaContem,
       required int? codEtapaProcesso,
       required int? codRegistroProcesso,
       required String? indicador,
@@ -351,8 +387,14 @@ abstract class _ConsultaProcessosLeituraEntradaAutomaticaFilter
   int? get codKit;
   set codKit(int? value);
   @override
+  String? get codBarraKitContem;
+  set codBarraKitContem(String? value);
+  @override
   int? get codItem;
   set codItem(int? value);
+  @override
+  String? get idEtiquetaContem;
+  set idEtiquetaContem(String? value);
   @override
   int? get codEtapaProcesso;
   set codEtapaProcesso(int? value);

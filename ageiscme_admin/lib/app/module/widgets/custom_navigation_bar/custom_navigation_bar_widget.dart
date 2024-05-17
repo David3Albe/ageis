@@ -1,6 +1,6 @@
 import 'package:ageiscme_admin/app/module/widgets/custom_navigation_bar/cubit/custom_navigation_bar_cubit.dart';
+import 'package:ageiscme_admin/app/module/widgets/custom_navigation_bar/cubit/items_menu_cubit.dart';
 import 'package:ageiscme_admin/app/module/widgets/custom_navigation_bar/menu_items_widget.dart';
-import 'package:ageiscme_data/services/item_menu/item_menu_service.dart';
 import 'package:ageiscme_models/models/item_menu/item_menu_model.dart';
 import 'package:compartilhados/cores/cores.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
@@ -47,7 +47,7 @@ class _CustomNavigationBarWidgetState extends State<CustomNavigationBarWidget>
     with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late Animation<double> _widthAnimation;
-  late final List<ItemMenuModel> itens;
+  late final ItemsMenuCubit cubit; 
 
   @override
   void initState() {
@@ -55,8 +55,9 @@ class _CustomNavigationBarWidgetState extends State<CustomNavigationBarWidget>
       vsync: this,
       duration: const Duration(milliseconds: 100),
     );
-    
-    itens = ItemMenuService().getItems();
+    cubit = ItemsMenuCubit();
+    cubit.loadItems();
+
     super.initState();
   }
 
@@ -80,14 +81,20 @@ class _CustomNavigationBarWidgetState extends State<CustomNavigationBarWidget>
         Tween<double>(begin: width.$1, end: width.$2).animate(_controller);
     return Material(
       elevation: 150,
-      child: BlocConsumer<CustomNavigationBarCubit, CustomNavigationBarState>(
-        listener: (context, state) => changeExpanded(state.expanded),
-        builder: (context, state) => CustomNavigationBarAnimated(
-          listenable: _widthAnimation,
-          itens: itens,
-          expanded: state.expanded,
-          toogleExpand: setExpanded,
-        ),
+      child: BlocBuilder<ItemsMenuCubit, List<ItemMenuModel>>(
+        bloc: cubit,
+        builder: (context, itens) {
+          return BlocConsumer<CustomNavigationBarCubit,
+              CustomNavigationBarState>(
+            listener: (context, state) => changeExpanded(state.expanded),
+            builder: (context, state) => CustomNavigationBarAnimated(
+              listenable: _widthAnimation,
+              itens: itens,
+              expanded: state.expanded,
+              toogleExpand: setExpanded,
+            ),
+          );
+        },
       ),
     );
   }

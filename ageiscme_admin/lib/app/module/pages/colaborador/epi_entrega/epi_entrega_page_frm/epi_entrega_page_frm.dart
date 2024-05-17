@@ -1,5 +1,6 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/epi_entrega/epi_entrega_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/epi_entrega/epi_entrega_page_frm/epi_entrega_page_frm_state.dart';
+import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_data/services/epi_entrega/epi_entrega_service.dart';
 import 'package:ageiscme_data/stores/authentication/authentication_store.dart';
 import 'package:ageiscme_models/dto/authentication_result/authentication_result_dto.dart';
@@ -13,6 +14,8 @@ import 'package:compartilhados/componentes/campos/list_field/list_field_widget.d
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/fontes/fontes.dart';
@@ -120,6 +123,8 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
 
   void updateFields(EpiEntregaModel selectedEpiEntrega) {
     setState(() {
+      epiEntrega.cod = selectedEpiEntrega.cod;
+      epiEntrega.tstamp = selectedEpiEntrega.tstamp;
       epiEntrega.codDescritorEpi = selectedEpiEntrega.codDescritorEpi;
       epiEntrega.dataLimiteValidade = selectedEpiEntrega.dataLimiteValidade;
       setarDataValidade?.call(epiEntrega.dataLimiteValidade);
@@ -349,9 +354,9 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
                                   String descricao =
                                       epiDescritor?.descricao ?? '';
                                   String data = '';
-                                  if (value.dataEntrega != null) {
+                                  if (value.dataLimiteValidade != null) {
                                     data = DateFormat('dd/MM/yyyy')
-                                        .format(value.dataEntrega!);
+                                        .format(value.dataLimiteValidade!);
                                   }
                                   if (descricao.isNotEmpty && data.isNotEmpty) {
                                     descricao += ' - ';
@@ -419,9 +424,9 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
                                   String descricao =
                                       epiDescritor?.descricao ?? '';
                                   String data = '';
-                                  if (value.dataEntrega != null) {
+                                  if (value.dataLimiteValidade != null) {
                                     data = DateFormat('dd/MM/yyyy')
-                                        .format(value.dataEntrega!);
+                                        .format(value.dataLimiteValidade!);
                                   }
                                   if (descricao.isNotEmpty && data.isNotEmpty) {
                                     descricao += ' - ';
@@ -443,6 +448,18 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
           actions: [
             Row(
               children: [
+                if (epiEntrega.cod != null && epiEntrega.cod != 0)
+                  CustomPopupMenuWidget(
+                    items: [
+                      CustomPopupItemHistoryModel.getHistoryItem(
+                        child: HistoricoPage(
+                          pk: epiEntrega.cod!,
+                          termo: 'EPI_ENTREGA',
+                        ),
+                        context: context,
+                      ),
+                    ],
+                  ),
                 const Spacer(),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),

@@ -21,8 +21,8 @@ IndicadorProcessoModel _$IndicadorProcessoModelFromJson(
 
 /// @nodoc
 mixin _$IndicadorProcessoModel {
-  String? get codBarra => throw _privateConstructorUsedError;
-  set codBarra(String? value) => throw _privateConstructorUsedError;
+  String? get codBarraIndicador => throw _privateConstructorUsedError;
+  set codBarraIndicador(String? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,7 +36,7 @@ abstract class $IndicadorProcessoModelCopyWith<$Res> {
           $Res Function(IndicadorProcessoModel) then) =
       _$IndicadorProcessoModelCopyWithImpl<$Res, IndicadorProcessoModel>;
   @useResult
-  $Res call({String? codBarra});
+  $Res call({String? codBarraIndicador});
 }
 
 /// @nodoc
@@ -53,12 +53,12 @@ class _$IndicadorProcessoModelCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? codBarra = freezed,
+    Object? codBarraIndicador = freezed,
   }) {
     return _then(_value.copyWith(
-      codBarra: freezed == codBarra
-          ? _value.codBarra
-          : codBarra // ignore: cast_nullable_to_non_nullable
+      codBarraIndicador: freezed == codBarraIndicador
+          ? _value.codBarraIndicador
+          : codBarraIndicador // ignore: cast_nullable_to_non_nullable
               as String?,
     ) as $Val);
   }
@@ -73,7 +73,7 @@ abstract class _$$IndicadorProcessoModelImplCopyWith<$Res>
       __$$IndicadorProcessoModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? codBarra});
+  $Res call({String? codBarraIndicador});
 }
 
 /// @nodoc
@@ -89,12 +89,12 @@ class __$$IndicadorProcessoModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? codBarra = freezed,
+    Object? codBarraIndicador = freezed,
   }) {
     return _then(_$IndicadorProcessoModelImpl(
-      codBarra: freezed == codBarra
-          ? _value.codBarra
-          : codBarra // ignore: cast_nullable_to_non_nullable
+      codBarraIndicador: freezed == codBarraIndicador
+          ? _value.codBarraIndicador
+          : codBarraIndicador // ignore: cast_nullable_to_non_nullable
               as String?,
     ));
   }
@@ -104,17 +104,17 @@ class __$$IndicadorProcessoModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$IndicadorProcessoModelImpl extends _IndicadorProcessoModel
     with DiagnosticableTreeMixin {
-  _$IndicadorProcessoModelImpl({this.codBarra}) : super._();
+  _$IndicadorProcessoModelImpl({this.codBarraIndicador}) : super._();
 
   factory _$IndicadorProcessoModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$IndicadorProcessoModelImplFromJson(json);
 
   @override
-  String? codBarra;
+  String? codBarraIndicador;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'IndicadorProcessoModel(codBarra: $codBarra)';
+    return 'IndicadorProcessoModel(codBarraIndicador: $codBarraIndicador)';
   }
 
   @override
@@ -122,7 +122,7 @@ class _$IndicadorProcessoModelImpl extends _IndicadorProcessoModel
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'IndicadorProcessoModel'))
-      ..add(DiagnosticsProperty('codBarra', codBarra));
+      ..add(DiagnosticsProperty('codBarraIndicador', codBarraIndicador));
   }
 
   @JsonKey(ignore: true)
@@ -141,7 +141,7 @@ class _$IndicadorProcessoModelImpl extends _IndicadorProcessoModel
 }
 
 abstract class _IndicadorProcessoModel extends IndicadorProcessoModel {
-  factory _IndicadorProcessoModel({String? codBarra}) =
+  factory _IndicadorProcessoModel({String? codBarraIndicador}) =
       _$IndicadorProcessoModelImpl;
   _IndicadorProcessoModel._() : super._();
 
@@ -149,8 +149,8 @@ abstract class _IndicadorProcessoModel extends IndicadorProcessoModel {
       _$IndicadorProcessoModelImpl.fromJson;
 
   @override
-  String? get codBarra;
-  set codBarra(String? value);
+  String? get codBarraIndicador;
+  set codBarraIndicador(String? value);
   @override
   @JsonKey(ignore: true)
   _$$IndicadorProcessoModelImplCopyWith<_$IndicadorProcessoModelImpl>

@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_null_comparison
 
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/processo_etapa/processo_etapa_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/processo_tipo/processo_tipo_page_frm/processo_tipo_page_frm_state.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/processo_tipo_fluxo/presenter/processo_tipo_fluxo_page_presenter.dart';
 import 'package:ageiscme_data/services/processo_tipo/processo_tipo_service.dart';
@@ -9,19 +10,20 @@ import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/custom_default_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
-import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
 class ProcessoTipoPageFrm extends StatefulWidget {
@@ -249,15 +251,21 @@ class _ProcessoTipoPageFrmState extends State<ProcessoTipoPageFrm> {
             actions: [
               Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: 4.0),
-                    child: CustomDefaultButtonWidget(
-                      text: 'Fluxo',
-                      cor: Colors.grey.shade500,
-                      corHovered: Colors.grey.shade600,
-                      icon: Symbols.schema,
-                      onPressed: abrirFluxo,
-                    ),
+                  CustomPopupMenuWidget(
+                    items: [
+                      if (processoTipo.cod != null && processoTipo.cod != 0)
+                        CustomPopupItemHistoryModel.getHistoryItem(
+                          child: HistoricoPage(
+                            pk: processoTipo.cod!,
+                            termo: 'PROCESSO_TIPO',
+                          ),
+                          context: context,
+                        ),
+                      CustomPopupItemModel(
+                        text: 'Fluxo',
+                        onTap: abrirFluxo,
+                      ),
+                    ],
                   ),
                   const Spacer(),
                   Padding(

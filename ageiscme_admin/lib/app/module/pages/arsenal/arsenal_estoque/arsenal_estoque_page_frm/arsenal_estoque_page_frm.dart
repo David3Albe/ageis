@@ -2,17 +2,20 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/local_institu
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/localizacao_arsenal_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/arsenal/arsenal_estoque/arsenal_estoque_page_frm/arsenal_estoque_page_frm_state.dart';
 import 'package:ageiscme_admin/app/module/pages/arsenal/localizacao_arsenal/localizacao_arsenal_page_frm/localizacao_arsenal_page_frm.dart';
+import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_data/services/arsenal/arsenal_estoque_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/navigation_buttom_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_area_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
@@ -237,44 +240,52 @@ class _ArsenalEstoquePageFrmState extends State<ArsenalEstoquePageFrm> {
                     const Spacer(),
                     Row(
                       children: [
-                        if (arsenalEstoque.cod != 0) ...{
-                          Padding(
-                            padding: const EdgeInsets.only(left: 0.0),
-                            child: NavigationButtonWidget(
-                              placeholder: 'Localizações',
-                              onPressed: () => {
-                                showDialog<(bool, String)>(
-                                  barrierDismissible: false,
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      content: LocalizacaoArsenalPageFrm(
-                                        localizacaoArsenal:
-                                            LocalizacaoArsenalModel(
-                                          cod: 0,
-                                          ativo: true,
-                                          arsenal: null,
-                                          codBarra: null,
-                                          codInstituicao: 0,
-                                          local: '',
-                                          ultimaAlteracao: null,
-                                          tstamp: '',
-                                          codEstoque: arsenalEstoque.cod,
+                        if (arsenalEstoque.cod != null &&
+                            arsenalEstoque.cod != 0)
+                          CustomPopupMenuWidget(
+                            items: [
+                              CustomPopupItemModel(
+                                text: 'Localizações',
+                                onTap: () => {
+                                  showDialog<(bool, String)>(
+                                    barrierDismissible: false,
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: LocalizacaoArsenalPageFrm(
+                                          localizacaoArsenal:
+                                              LocalizacaoArsenalModel(
+                                            cod: 0,
+                                            ativo: true,
+                                            arsenal: null,
+                                            codBarra: null,
+                                            codInstituicao: 0,
+                                            local: '',
+                                            ultimaAlteracao: null,
+                                            tstamp: '',
+                                            codEstoque: arsenalEstoque.cod,
+                                          ),
                                         ),
-                                      ),
+                                      );
+                                    },
+                                  ).then((result) {
+                                    if (result == null || !result.$1) return;
+                                    ToastUtils.showCustomToastSucess(
+                                      context,
+                                      result.$2,
                                     );
-                                  },
-                                ).then((result) {
-                                  if (result == null || !result.$1) return;
-                                  ToastUtils.showCustomToastSucess(
-                                    context,
-                                    result.$2,
-                                  );
-                                }),
-                              },
-                            ),
+                                  }),
+                                },
+                              ),
+                              CustomPopupItemHistoryModel.getHistoryItem(
+                                child: HistoricoPage(
+                                  pk: arsenalEstoque.cod!,
+                                  termo: 'ARSENAL_ESTQOUE',
+                                ),
+                                context: context,
+                              ),
+                            ],
                           ),
-                        },
                         const Spacer(),
                         Padding(
                           padding: const EdgeInsets.only(left: 16.0),

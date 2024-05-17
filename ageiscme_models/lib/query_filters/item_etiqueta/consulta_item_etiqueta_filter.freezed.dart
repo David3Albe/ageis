@@ -35,6 +35,14 @@ mixin _$ConsultaItemEtiquetaFilter {
   set idEtiqueta(String? value) => throw _privateConstructorUsedError;
   bool? get descartar => throw _privateConstructorUsedError;
   set descartar(bool? value) => throw _privateConstructorUsedError;
+  String? get codBarraKitContem => throw _privateConstructorUsedError;
+  set codBarraKitContem(String? value) => throw _privateConstructorUsedError;
+  ItemDescritorDropDownSearchResponseDTO? get itemDescritor =>
+      throw _privateConstructorUsedError;
+  set itemDescritor(ItemDescritorDropDownSearchResponseDTO? value) =>
+      throw _privateConstructorUsedError;
+  int? get numeroRegistros => throw _privateConstructorUsedError;
+  set numeroRegistros(int? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -56,7 +64,12 @@ abstract class $ConsultaItemEtiquetaFilterCopyWith<$Res> {
       int? codItemDescritor,
       int? codKit,
       String? idEtiqueta,
-      bool? descartar});
+      bool? descartar,
+      String? codBarraKitContem,
+      ItemDescritorDropDownSearchResponseDTO? itemDescritor,
+      int? numeroRegistros});
+
+  $ItemDescritorDropDownSearchResponseDTOCopyWith<$Res>? get itemDescritor;
 }
 
 /// @nodoc
@@ -80,6 +93,9 @@ class _$ConsultaItemEtiquetaFilterCopyWithImpl<$Res,
     Object? codKit = freezed,
     Object? idEtiqueta = freezed,
     Object? descartar = freezed,
+    Object? codBarraKitContem = freezed,
+    Object? itemDescritor = freezed,
+    Object? numeroRegistros = freezed,
   }) {
     return _then(_value.copyWith(
       startDate: freezed == startDate
@@ -110,7 +126,32 @@ class _$ConsultaItemEtiquetaFilterCopyWithImpl<$Res,
           ? _value.descartar
           : descartar // ignore: cast_nullable_to_non_nullable
               as bool?,
+      codBarraKitContem: freezed == codBarraKitContem
+          ? _value.codBarraKitContem
+          : codBarraKitContem // ignore: cast_nullable_to_non_nullable
+              as String?,
+      itemDescritor: freezed == itemDescritor
+          ? _value.itemDescritor
+          : itemDescritor // ignore: cast_nullable_to_non_nullable
+              as ItemDescritorDropDownSearchResponseDTO?,
+      numeroRegistros: freezed == numeroRegistros
+          ? _value.numeroRegistros
+          : numeroRegistros // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ItemDescritorDropDownSearchResponseDTOCopyWith<$Res>? get itemDescritor {
+    if (_value.itemDescritor == null) {
+      return null;
+    }
+
+    return $ItemDescritorDropDownSearchResponseDTOCopyWith<$Res>(
+        _value.itemDescritor!, (value) {
+      return _then(_value.copyWith(itemDescritor: value) as $Val);
+    });
   }
 }
 
@@ -130,7 +171,13 @@ abstract class _$$ConsultaItemEtiquetaFilterImplCopyWith<$Res>
       int? codItemDescritor,
       int? codKit,
       String? idEtiqueta,
-      bool? descartar});
+      bool? descartar,
+      String? codBarraKitContem,
+      ItemDescritorDropDownSearchResponseDTO? itemDescritor,
+      int? numeroRegistros});
+
+  @override
+  $ItemDescritorDropDownSearchResponseDTOCopyWith<$Res>? get itemDescritor;
 }
 
 /// @nodoc
@@ -153,6 +200,9 @@ class __$$ConsultaItemEtiquetaFilterImplCopyWithImpl<$Res>
     Object? codKit = freezed,
     Object? idEtiqueta = freezed,
     Object? descartar = freezed,
+    Object? codBarraKitContem = freezed,
+    Object? itemDescritor = freezed,
+    Object? numeroRegistros = freezed,
   }) {
     return _then(_$ConsultaItemEtiquetaFilterImpl(
       startDate: freezed == startDate
@@ -183,6 +233,18 @@ class __$$ConsultaItemEtiquetaFilterImplCopyWithImpl<$Res>
           ? _value.descartar
           : descartar // ignore: cast_nullable_to_non_nullable
               as bool?,
+      codBarraKitContem: freezed == codBarraKitContem
+          ? _value.codBarraKitContem
+          : codBarraKitContem // ignore: cast_nullable_to_non_nullable
+              as String?,
+      itemDescritor: freezed == itemDescritor
+          ? _value.itemDescritor
+          : itemDescritor // ignore: cast_nullable_to_non_nullable
+              as ItemDescritorDropDownSearchResponseDTO?,
+      numeroRegistros: freezed == numeroRegistros
+          ? _value.numeroRegistros
+          : numeroRegistros // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -197,7 +259,10 @@ class _$ConsultaItemEtiquetaFilterImpl extends _ConsultaItemEtiquetaFilter {
       required this.codItemDescritor,
       required this.codKit,
       required this.idEtiqueta,
-      required this.descartar})
+      required this.descartar,
+      this.codBarraKitContem,
+      this.itemDescritor,
+      this.numeroRegistros})
       : super._();
 
   factory _$ConsultaItemEtiquetaFilterImpl.fromJson(
@@ -218,10 +283,16 @@ class _$ConsultaItemEtiquetaFilterImpl extends _ConsultaItemEtiquetaFilter {
   String? idEtiqueta;
   @override
   bool? descartar;
+  @override
+  String? codBarraKitContem;
+  @override
+  ItemDescritorDropDownSearchResponseDTO? itemDescritor;
+  @override
+  int? numeroRegistros;
 
   @override
   String toString() {
-    return 'ConsultaItemEtiquetaFilter(startDate: $startDate, finalDate: $finalDate, codProprietario: $codProprietario, codItemDescritor: $codItemDescritor, codKit: $codKit, idEtiqueta: $idEtiqueta, descartar: $descartar)';
+    return 'ConsultaItemEtiquetaFilter(startDate: $startDate, finalDate: $finalDate, codProprietario: $codProprietario, codItemDescritor: $codItemDescritor, codKit: $codKit, idEtiqueta: $idEtiqueta, descartar: $descartar, codBarraKitContem: $codBarraKitContem, itemDescritor: $itemDescritor, numeroRegistros: $numeroRegistros)';
   }
 
   @JsonKey(ignore: true)
@@ -247,7 +318,10 @@ abstract class _ConsultaItemEtiquetaFilter extends ConsultaItemEtiquetaFilter {
       required int? codItemDescritor,
       required int? codKit,
       required String? idEtiqueta,
-      required bool? descartar}) = _$ConsultaItemEtiquetaFilterImpl;
+      required bool? descartar,
+      String? codBarraKitContem,
+      ItemDescritorDropDownSearchResponseDTO? itemDescritor,
+      int? numeroRegistros}) = _$ConsultaItemEtiquetaFilterImpl;
   _ConsultaItemEtiquetaFilter._() : super._();
 
   factory _ConsultaItemEtiquetaFilter.fromJson(Map<String, dynamic> json) =
@@ -274,6 +348,15 @@ abstract class _ConsultaItemEtiquetaFilter extends ConsultaItemEtiquetaFilter {
   @override
   bool? get descartar;
   set descartar(bool? value);
+  @override
+  String? get codBarraKitContem;
+  set codBarraKitContem(String? value);
+  @override
+  ItemDescritorDropDownSearchResponseDTO? get itemDescritor;
+  set itemDescritor(ItemDescritorDropDownSearchResponseDTO? value);
+  @override
+  int? get numeroRegistros;
+  set numeroRegistros(int? value);
   @override
   @JsonKey(ignore: true)
   _$$ConsultaItemEtiquetaFilterImplCopyWith<_$ConsultaItemEtiquetaFilterImpl>

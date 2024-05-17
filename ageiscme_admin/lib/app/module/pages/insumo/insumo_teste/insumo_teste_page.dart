@@ -1,8 +1,10 @@
+import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_drop_down_search_cubit.dart';
+import 'package:ageiscme_models/dto/usuario/usuario_drop_down_search_dto.dart';
+import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/deposito_insumo/deposito_insumo_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/insumo/insumo_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/insumo_movimento/cubit/insumo_movimento_filter_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/insumo_teste/insumo_teste_page_frm/insumo_teste_page_frm.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/insumo_teste/insumo_teste_page_state.dart';
@@ -37,22 +39,22 @@ class InsumoTestePage extends StatefulWidget {
 class _InsumoTestePageState extends State<InsumoTestePage> {
   late final InsumoTestePageCubit bloc;
   late final InsumoTesteService service;
-  late final UsuarioCubit usuarioBloc;
   late final InsumoTesteFilter filter;
   late final InsumoCubit insumoBloc;
+  late final UsuarioDropDownSearchCubit usuarioCubit;
   late final DepositoInsumoCubit depositoInsumoBloc;
 
   @override
   void initState() {
+    usuarioCubit = UsuarioDropDownSearchCubit();
+    usuarioCubit.loadDropDownSearch(
+      UsuarioDropDownSearchDTO(
+        numeroRegistros: 10000,
+      ),
+    );
     filter = InsumoTesteFilter.empty();
     service = InsumoTesteService();
-    usuarioBloc = UsuarioCubit();
-    usuarioBloc.loadAll();
     bloc = InsumoTestePageCubit(service: service);
-    insumoBloc = InsumoCubit();
-    insumoBloc.loadAll();
-    depositoInsumoBloc = DepositoInsumoCubit();
-    depositoInsumoBloc.loadAll();
     bloc.filter(filter);
     super.initState();
   }
@@ -60,7 +62,7 @@ class _InsumoTestePageState extends State<InsumoTestePage> {
   List<CustomDataColumn> getColunas() {
     List<InsumoModel> insumos = insumoBloc.state.objs;
     List<DepositoInsumoModel> depositos = depositoInsumoBloc.state.objs;
-    List<UsuarioModel> usuarios = usuarioBloc.state.usuarios;
+    List<UsuarioDropDownSearchResponseDTO> usuarios = usuarioCubit.state.usuarios;
     return [
       CustomDataColumn(
         text: 'Cód',
@@ -245,7 +247,6 @@ class _InsumoTestePageState extends State<InsumoTestePage> {
           insumoReadOnly: false,
           depositoInsumoCubit: depositoInsumoBloc,
           insumoTeste: insumoTeste,
-          usuarioCubit: usuarioBloc,
         );
       },
     ).then((result) {

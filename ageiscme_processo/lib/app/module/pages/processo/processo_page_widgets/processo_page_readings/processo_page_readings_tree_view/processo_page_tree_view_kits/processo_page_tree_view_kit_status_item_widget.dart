@@ -15,14 +15,23 @@ class ProcessoPageTreeViewKitStatusItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double scale = MediaQuery.of(context).size.width / 1920;
+    (double, double?) escalaHeight = context.select(
+      (ProcessoLeituraCubit cubit) => (
+        cubit.state.processo.getEscala(),
+        cubit.state.processo.getLineHeightPadraoVeryBig()
+      ),
+    );
     return Tooltip(
       message: item.informacoesResponsavelPendenteKit ?? '',
-      child: SelectableText(
-      onTap: () => showItem(context),
-        '${item.idEtiqueta} ${item.descricao}',
-        style: TextStyle(
-          fontSize: 16 * scale,
-          color: color,
+      child: InkWell(
+        onTap: () => showItem(context),
+        child: Text(
+          '${item.idEtiqueta} ${item.descricao}',
+          style: TextStyle(
+            fontSize: 14 * scale * escalaHeight.$1,
+            color: color,
+            height: escalaHeight.$2,
+          ),
         ),
       ),
     );

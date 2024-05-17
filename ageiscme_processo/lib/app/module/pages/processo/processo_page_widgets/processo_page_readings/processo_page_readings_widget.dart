@@ -1,6 +1,8 @@
+import 'package:ageiscme_processo/app/module/blocs/processo_leitura_cubit.dart';
 import 'package:ageiscme_processo/app/module/pages/processo/processo_page_widgets/processo_page_readings/processo_page_readings_tree_view/processo_page_readings_tree_view_widget.dart';
 import 'package:ageiscme_processo/app/module/shared/cores.dart';
 import 'package:compartilhados/fontes/fontes.dart';
+import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ProcessoPageReadingsWidget extends StatelessWidget {
@@ -9,6 +11,12 @@ class ProcessoPageReadingsWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var scale = MediaQuery.of(context).size.width / 1920;
+    (double, double?) escalaHeight = context.select(
+      (ProcessoLeituraCubit cubit) => (
+        cubit.state.processo.getEscala(),
+        cubit.state.processo.getLineHeightSegoeBig()
+      ),
+    );
     return Material(
       elevation: 10,
       child: Container(
@@ -37,8 +45,9 @@ class ProcessoPageReadingsWidget extends StatelessWidget {
                         child: Text(
                           'Lista de Materiais/Kits',
                           style: Fontes.getSegoe(
-                            fontSize: 26 * scale,
+                            fontSize: 20 * scale * escalaHeight.$1,
                             cor: Cores.CorTitleCards,
+                            lineHeight: escalaHeight.$2,
                           ),
                         ),
                       ),

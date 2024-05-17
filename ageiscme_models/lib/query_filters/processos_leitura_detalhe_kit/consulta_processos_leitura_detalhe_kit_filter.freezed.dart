@@ -28,6 +28,8 @@ mixin _$ConsultaProcessosLeituraDetalheKitFilter {
   set codRegistroProcesso(int? value) => throw _privateConstructorUsedError;
   int? get faltantes => throw _privateConstructorUsedError;
   set faltantes(int? value) => throw _privateConstructorUsedError;
+  DateTime? get dataHora => throw _privateConstructorUsedError;
+  set dataHora(DateTime? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -44,7 +46,11 @@ abstract class $ConsultaProcessosLeituraDetalheKitFilterCopyWith<$Res> {
       _$ConsultaProcessosLeituraDetalheKitFilterCopyWithImpl<$Res,
           ConsultaProcessosLeituraDetalheKitFilter>;
   @useResult
-  $Res call({int? codKit, int? codRegistroProcesso, int? faltantes});
+  $Res call(
+      {int? codKit,
+      int? codRegistroProcesso,
+      int? faltantes,
+      DateTime? dataHora});
 }
 
 /// @nodoc
@@ -65,6 +71,7 @@ class _$ConsultaProcessosLeituraDetalheKitFilterCopyWithImpl<$Res,
     Object? codKit = freezed,
     Object? codRegistroProcesso = freezed,
     Object? faltantes = freezed,
+    Object? dataHora = freezed,
   }) {
     return _then(_value.copyWith(
       codKit: freezed == codKit
@@ -79,6 +86,10 @@ class _$ConsultaProcessosLeituraDetalheKitFilterCopyWithImpl<$Res,
           ? _value.faltantes
           : faltantes // ignore: cast_nullable_to_non_nullable
               as int?,
+      dataHora: freezed == dataHora
+          ? _value.dataHora
+          : dataHora // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ) as $Val);
   }
 }
@@ -92,7 +103,11 @@ abstract class _$$ConsultaProcessosLeituraDetalheKitFilterImplCopyWith<$Res>
       __$$ConsultaProcessosLeituraDetalheKitFilterImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? codKit, int? codRegistroProcesso, int? faltantes});
+  $Res call(
+      {int? codKit,
+      int? codRegistroProcesso,
+      int? faltantes,
+      DateTime? dataHora});
 }
 
 /// @nodoc
@@ -111,6 +126,7 @@ class __$$ConsultaProcessosLeituraDetalheKitFilterImplCopyWithImpl<$Res>
     Object? codKit = freezed,
     Object? codRegistroProcesso = freezed,
     Object? faltantes = freezed,
+    Object? dataHora = freezed,
   }) {
     return _then(_$ConsultaProcessosLeituraDetalheKitFilterImpl(
       codKit: freezed == codKit
@@ -125,6 +141,10 @@ class __$$ConsultaProcessosLeituraDetalheKitFilterImplCopyWithImpl<$Res>
           ? _value.faltantes
           : faltantes // ignore: cast_nullable_to_non_nullable
               as int?,
+      dataHora: freezed == dataHora
+          ? _value.dataHora
+          : dataHora // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
@@ -134,9 +154,7 @@ class __$$ConsultaProcessosLeituraDetalheKitFilterImplCopyWithImpl<$Res>
 class _$ConsultaProcessosLeituraDetalheKitFilterImpl
     extends _ConsultaProcessosLeituraDetalheKitFilter {
   _$ConsultaProcessosLeituraDetalheKitFilterImpl(
-      {required this.codKit,
-      required this.codRegistroProcesso,
-      required this.faltantes})
+      {this.codKit, this.codRegistroProcesso, this.faltantes, this.dataHora})
       : super._();
 
   factory _$ConsultaProcessosLeituraDetalheKitFilterImpl.fromJson(
@@ -149,10 +167,12 @@ class _$ConsultaProcessosLeituraDetalheKitFilterImpl
   int? codRegistroProcesso;
   @override
   int? faltantes;
+  @override
+  DateTime? dataHora;
 
   @override
   String toString() {
-    return 'ConsultaProcessosLeituraDetalheKitFilter(codKit: $codKit, codRegistroProcesso: $codRegistroProcesso, faltantes: $faltantes)';
+    return 'ConsultaProcessosLeituraDetalheKitFilter(codKit: $codKit, codRegistroProcesso: $codRegistroProcesso, faltantes: $faltantes, dataHora: $dataHora)';
   }
 
   @JsonKey(ignore: true)
@@ -175,10 +195,10 @@ class _$ConsultaProcessosLeituraDetalheKitFilterImpl
 abstract class _ConsultaProcessosLeituraDetalheKitFilter
     extends ConsultaProcessosLeituraDetalheKitFilter {
   factory _ConsultaProcessosLeituraDetalheKitFilter(
-          {required int? codKit,
-          required int? codRegistroProcesso,
-          required int? faltantes}) =
-      _$ConsultaProcessosLeituraDetalheKitFilterImpl;
+      {int? codKit,
+      int? codRegistroProcesso,
+      int? faltantes,
+      DateTime? dataHora}) = _$ConsultaProcessosLeituraDetalheKitFilterImpl;
   _ConsultaProcessosLeituraDetalheKitFilter._() : super._();
 
   factory _ConsultaProcessosLeituraDetalheKitFilter.fromJson(
@@ -194,6 +214,9 @@ abstract class _ConsultaProcessosLeituraDetalheKitFilter
   @override
   int? get faltantes;
   set faltantes(int? value);
+  @override
+  DateTime? get dataHora;
+  set dataHora(DateTime? value);
   @override
   @JsonKey(ignore: true)
   _$$ConsultaProcessosLeituraDetalheKitFilterImplCopyWith<

@@ -339,7 +339,7 @@ class DropDownSearchApiWidgetState<T>
     cubit.setLoading();
     lastTypedsTime.add(DateTime.now());
     await Future.delayed(
-      const Duration(milliseconds: 1500),
+      const Duration(milliseconds: 500),
     );
     lastTypedsTime.removeAt(0);
     if (lastTypedsTime.isNotEmpty) return;

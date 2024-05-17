@@ -21,6 +21,7 @@ _$UsuarioFilterImpl _$$UsuarioFilterImplFromJson(Map json) =>
       nomeContem: json['nomeContem'] as String?,
       numeroRegistros: json['numeroRegistros'] as int?,
       ordenarPorAtivosPrimeiro: json['ordenarPorAtivosPrimeiro'] as bool?,
+      termoPesquisa: json['termoPesquisa'] as String?,
     );
 
 Map<String, dynamic> _$$UsuarioFilterImplToJson(_$UsuarioFilterImpl instance) =>
@@ -38,4 +39,5 @@ Map<String, dynamic> _$$UsuarioFilterImplToJson(_$UsuarioFilterImpl instance) =>
       'nomeContem': instance.nomeContem,
       'numeroRegistros': instance.numeroRegistros,
       'ordenarPorAtivosPrimeiro': instance.ordenarPorAtivosPrimeiro,
+      'termoPesquisa': instance.termoPesquisa,
     };

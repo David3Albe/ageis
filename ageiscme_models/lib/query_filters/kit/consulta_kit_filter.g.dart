@@ -12,6 +12,11 @@ _$ConsultaKitFilterImpl _$$ConsultaKitFilterImplFromJson(Map json) =>
       codKit: json['codKit'] as int?,
       codSituacao: json['codSituacao'] as String?,
       codProprietario: json['codProprietario'] as int?,
+      codBarraKitContem: json['codBarraKitContem'] as String?,
+      kitDescritor: json['kitDescritor'] == null
+          ? null
+          : KitDescritorDropDownSearchResponseDTO.fromJson(
+              Map<String, Object?>.from(json['kitDescritor'] as Map)),
     );
 
 Map<String, dynamic> _$$ConsultaKitFilterImplToJson(
@@ -21,4 +26,6 @@ Map<String, dynamic> _$$ConsultaKitFilterImplToJson(
       'codKit': instance.codKit,
       'codSituacao': instance.codSituacao,
       'codProprietario': instance.codProprietario,
+      'codBarraKitContem': instance.codBarraKitContem,
+      'kitDescritor': instance.kitDescritor?.toJson(),
     };

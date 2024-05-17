@@ -17,49 +17,47 @@ class ProcessoPageOriginDestinyWidget extends StatelessWidget {
         decoration: const BoxDecoration(
           color: Cores.CorCards,
         ),
-        child: Padding(
-          padding: EdgeInsets.only(
-            top: 8 * scale,
-            bottom: 8 * scale,
-            right: 14 * scale,
-            left: 14 * scale,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+        child: BlocBuilder<ProcessoLeituraCubit, ProcessoLeituraState>(
+          buildWhen: (previous, current) =>
+              current.rebuildType == ProcessoLeituraRebuildType.All,
+          builder: (context, state) {
+            LocalInstituicaoModel? local = state.processo.leituraAtual.local;
+            double? escalaFonte = state.processo.getEscala();
+            double lineHeightSegoe = state.processo.getLineHeightSegoe();
+            return Padding(
+              padding: EdgeInsets.only(
+                top: 8 * scale / escalaFonte,
+                bottom: 8 * scale / escalaFonte,
+                right: 14 * scale / escalaFonte,
+                left: 14 * scale / escalaFonte,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    child: Text(
-                      'ORGEM/DESTINO',
-                      style: Fontes.getSegoe(
-                        fontSize: 14 * scale,
-                        cor: Cores.CorTitleCards,
+                  Row(
+                    children: [
+                      Text(
+                        'ORGEM/DESTINO',
+                        style: Fontes.getSegoe(
+                          fontSize: 14 * scale * escalaFonte,
+                          cor: Cores.CorTitleCards,
+                        ),
                       ),
+                    ],
+                  ),
+                  Text(
+                    local == null ? ' ' : local.nome,
+                    style: Fontes.getSegoe(
+                      fontSize: 20 * scale * escalaFonte,
+                      cor: Cores.CorTextCards,
+                      lineHeight: lineHeightSegoe,
                     ),
                   ),
                 ],
               ),
-              BlocBuilder<ProcessoLeituraCubit, ProcessoLeituraState>(
-                buildWhen: (previous, current) =>
-                    current.rebuildType == ProcessoLeituraRebuildType.All,
-                builder: (context, state) {
-                  LocalInstituicaoModel? local =
-                      state.processo.leituraAtual.local;
-                  return FittedBox(
-                    child: Text(
-                      local == null ? ' ' : local.nome,
-                      style: Fontes.getSegoe(
-                        fontSize: 20 * scale,
-                        cor: Cores.CorTextCards,
-                      ),
-                    ),
-                  );
-                },
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

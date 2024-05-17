@@ -13,6 +13,7 @@ sealed class KitDescritorFilter with _$KitDescritorFilter {
     int? numeroRegistros,
     bool? ordenarAtivosPrimeiro,
     String? nomeContem,
+    String? termoPesquisa,
     @JsonKey(name: 'tStamp') String? tStamp,
   }) = _KitDescritorFilter;
 

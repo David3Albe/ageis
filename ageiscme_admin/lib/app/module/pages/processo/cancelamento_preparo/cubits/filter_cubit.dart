@@ -1,6 +1,4 @@
 import 'package:ageiscme_admin/app/module/pages/processo/cancelamento_preparo/states/filter_state.dart';
-import 'package:ageiscme_models/models/item/item_model.dart';
-import 'package:ageiscme_models/response_dto/kit/drop_down_search/kit_drop_down_search_response_dto.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 
 class FilterCubit extends Cubit<FilterState> {
@@ -9,24 +7,20 @@ class FilterCubit extends Cubit<FilterState> {
           FilterState(),
         );
 
-  void setItem(ItemModel? item) {
+  void setItem(String? idEtiqueta) {
     emit(
       FilterState(
-        item: item,
-        codItem: item?.cod,
-        codKit: state.codKit,
-        kit: state.kit,
+        codBarraKit: state.codBarraKit,
+        idEtiqueta: idEtiqueta,
       ),
     );
   }
 
-  void setKit(KitDropDownSearchResponseDTO? kit) {
+  void setKit(String? codBarraKit) {
     emit(
       FilterState(
-        item: state.item,
-        codItem: state.codItem,
-        codKit: kit?.cod,
-        kit: kit,
+        codBarraKit: codBarraKit,
+        idEtiqueta: state.idEtiqueta,
       ),
     );
   }

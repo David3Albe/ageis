@@ -1,3 +1,4 @@
+import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_admin/app/module/pages/material/tamanho/tamanho_page_frm/tamanho_page_frm_state.dart';
 import 'package:ageiscme_data/services/tamanho/tamanho_service.dart';
 import 'package:ageiscme_models/main.dart';
@@ -6,6 +7,8 @@ import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
@@ -145,6 +148,18 @@ class _TamanhoPageFrmState extends State<TamanhoPageFrm> {
                     const Spacer(),
                     Row(
                       children: [
+                        if (tamanho.cod != null && tamanho.cod != 0)
+                          CustomPopupMenuWidget(
+                            items: [
+                              CustomPopupItemHistoryModel.getHistoryItem(
+                                child: HistoricoPage(
+                                  pk: tamanho.cod!,
+                                  termo: 'TAMANHO',
+                                ),
+                                context: context,
+                              ),
+                            ],
+                          ),
                         const Spacer(),
                         Padding(
                           padding: const EdgeInsets.only(left: 16.0),

@@ -25,6 +25,7 @@ _$InstituicaoModelImpl _$$InstituicaoModelImplFromJson(Map json) =>
       naoAlertarKitIncompleto: json['naoAlertarKitIncompleto'] as bool?,
       tempoMin: json['tempoMin'] as int?,
       tstamp: json['tStamp'] as String?,
+      escalaFonte: (json['escalaFonte'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$$InstituicaoModelImplToJson(
@@ -47,4 +48,5 @@ Map<String, dynamic> _$$InstituicaoModelImplToJson(
       'naoAlertarKitIncompleto': instance.naoAlertarKitIncompleto,
       'tempoMin': instance.tempoMin,
       'tStamp': instance.tstamp,
+      'escalaFonte': instance.escalaFonte,
     };

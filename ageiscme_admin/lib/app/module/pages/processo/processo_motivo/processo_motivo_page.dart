@@ -48,11 +48,6 @@ class _ProcessoMotivoPageState extends State<ProcessoMotivoPage> {
       field: 'recepcaoExpurgo',
       type: CustomDataColumnType.Checkbox,
     ),
-    CustomDataColumn(
-      text: 'Bloquear Preparo',
-      field: 'bloquearPreparo',
-      type: CustomDataColumnType.Checkbox,
-    ),
   ];
 
   final ProcessoMotivoPageCubit bloc =

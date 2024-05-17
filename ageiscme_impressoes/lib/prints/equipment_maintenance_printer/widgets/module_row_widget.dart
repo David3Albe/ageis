@@ -31,8 +31,8 @@ class ModuleRowWidget extends StatelessWidget {
           ),
           BarcodeWidget(
             data: tagId,
-            height: 25,
-            width: 25,
+            height: 17,
+            width: 17,
             barcode: Barcode.dataMatrix(),
           ),
         ],

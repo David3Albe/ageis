@@ -2,6 +2,7 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/arsenal/arsen
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/equipamento/equipamento_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/processo_tipo/processo_tipo_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/servico_tipo/servico_tipo_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/processo_etapa/processo_etapa_page_frm/processo_etapa_page_frm_imprimir_funcoes/processo_etapa_page_frm_imprimir_funcoes_page.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/processo_etapa/processo_etapa_page_frm/processo_etapa_page_frm_state.dart';
 import 'package:ageiscme_data/services/processo_etapa/processo_etapa_service.dart';
@@ -875,9 +876,17 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
         ),
       );
     }
-    items.add(
-      CustomPopupItemHistoryModel.getHistoryItem(),
-    );
+    if (processoEtapa.cod != null && processoEtapa.cod != 0) {
+      items.add(
+        CustomPopupItemHistoryModel.getHistoryItem(
+          child: HistoricoPage(
+            pk: processoEtapa.cod!,
+            termo: 'PROCESSO_ETAPA',
+          ),
+          context: context,
+        ),
+      );
+    }
     return items;
   }
 
@@ -943,7 +952,8 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
 
     if (processoEtapa.codEquipamento == null &&
         processoEtapa.codEstoque == null) {
-      WarningUtils.showWarningDialog(context, 
+      WarningUtils.showWarningDialog(
+        context,
         'É obrigatório a seleção do Equipamento ou Arsenal vinculados a Etapa de Processo. Campo Obrigatório não preenchido',
       );
       return;

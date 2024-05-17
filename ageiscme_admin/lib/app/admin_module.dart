@@ -217,7 +217,9 @@ class AdminModule extends Module {
         ),
         createParallelRoute(
           '/biblioteca/documento',
-          child: (context) => DocumentoPage(),
+          child: (context) => DocumentoPage(
+            cod: r.args.data,
+          ),
         ),
         createParallelRoute(
           '/insumo/insumo',
@@ -229,7 +231,9 @@ class AdminModule extends Module {
         ),
         createParallelRoute(
           '/colaborador/atestado-saude-ocupacional',
-          child: (context) => AtestadoSaudeOcupacionalPage(),
+          child: (context) => AtestadoSaudeOcupacionalPage(
+            cod: r.args.data,
+          ),
         ),
         createParallelRoute(
           '/material/item-descritor',
@@ -245,7 +249,9 @@ class AdminModule extends Module {
         ),
         createParallelRoute(
           '/equipamento/equipamento-manutencao',
-          child: (context) => EquipamentoManutencaoPage(),
+          child: (context) => EquipamentoManutencaoPage(
+            cod: r.args.data,
+          ),
         ),
         createParallelRoute(
           '/equipamento/equipamento',

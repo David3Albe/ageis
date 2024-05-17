@@ -23,6 +23,10 @@ ConsultaKitInventarioFilter _$ConsultaKitInventarioFilterFromJson(
 mixin _$ConsultaKitInventarioFilter {
   int? get codKitDescritor => throw _privateConstructorUsedError;
   set codKitDescritor(int? value) => throw _privateConstructorUsedError;
+  KitDescritorDropDownSearchResponseDTO? get kitDescritor =>
+      throw _privateConstructorUsedError;
+  set kitDescritor(KitDescritorDropDownSearchResponseDTO? value) =>
+      throw _privateConstructorUsedError;
   String? get codSituacao => throw _privateConstructorUsedError;
   set codSituacao(String? value) => throw _privateConstructorUsedError;
 
@@ -40,7 +44,12 @@ abstract class $ConsultaKitInventarioFilterCopyWith<$Res> {
       _$ConsultaKitInventarioFilterCopyWithImpl<$Res,
           ConsultaKitInventarioFilter>;
   @useResult
-  $Res call({int? codKitDescritor, String? codSituacao});
+  $Res call(
+      {int? codKitDescritor,
+      KitDescritorDropDownSearchResponseDTO? kitDescritor,
+      String? codSituacao});
+
+  $KitDescritorDropDownSearchResponseDTOCopyWith<$Res>? get kitDescritor;
 }
 
 /// @nodoc
@@ -58,6 +67,7 @@ class _$ConsultaKitInventarioFilterCopyWithImpl<$Res,
   @override
   $Res call({
     Object? codKitDescritor = freezed,
+    Object? kitDescritor = freezed,
     Object? codSituacao = freezed,
   }) {
     return _then(_value.copyWith(
@@ -65,11 +75,28 @@ class _$ConsultaKitInventarioFilterCopyWithImpl<$Res,
           ? _value.codKitDescritor
           : codKitDescritor // ignore: cast_nullable_to_non_nullable
               as int?,
+      kitDescritor: freezed == kitDescritor
+          ? _value.kitDescritor
+          : kitDescritor // ignore: cast_nullable_to_non_nullable
+              as KitDescritorDropDownSearchResponseDTO?,
       codSituacao: freezed == codSituacao
           ? _value.codSituacao
           : codSituacao // ignore: cast_nullable_to_non_nullable
               as String?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $KitDescritorDropDownSearchResponseDTOCopyWith<$Res>? get kitDescritor {
+    if (_value.kitDescritor == null) {
+      return null;
+    }
+
+    return $KitDescritorDropDownSearchResponseDTOCopyWith<$Res>(
+        _value.kitDescritor!, (value) {
+      return _then(_value.copyWith(kitDescritor: value) as $Val);
+    });
   }
 }
 
@@ -82,7 +109,13 @@ abstract class _$$ConsultaKitInventarioFilterImplCopyWith<$Res>
       __$$ConsultaKitInventarioFilterImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? codKitDescritor, String? codSituacao});
+  $Res call(
+      {int? codKitDescritor,
+      KitDescritorDropDownSearchResponseDTO? kitDescritor,
+      String? codSituacao});
+
+  @override
+  $KitDescritorDropDownSearchResponseDTOCopyWith<$Res>? get kitDescritor;
 }
 
 /// @nodoc
@@ -99,6 +132,7 @@ class __$$ConsultaKitInventarioFilterImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? codKitDescritor = freezed,
+    Object? kitDescritor = freezed,
     Object? codSituacao = freezed,
   }) {
     return _then(_$ConsultaKitInventarioFilterImpl(
@@ -106,6 +140,10 @@ class __$$ConsultaKitInventarioFilterImplCopyWithImpl<$Res>
           ? _value.codKitDescritor
           : codKitDescritor // ignore: cast_nullable_to_non_nullable
               as int?,
+      kitDescritor: freezed == kitDescritor
+          ? _value.kitDescritor
+          : kitDescritor // ignore: cast_nullable_to_non_nullable
+              as KitDescritorDropDownSearchResponseDTO?,
       codSituacao: freezed == codSituacao
           ? _value.codSituacao
           : codSituacao // ignore: cast_nullable_to_non_nullable
@@ -118,7 +156,9 @@ class __$$ConsultaKitInventarioFilterImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ConsultaKitInventarioFilterImpl extends _ConsultaKitInventarioFilter {
   _$ConsultaKitInventarioFilterImpl(
-      {required this.codKitDescritor, required this.codSituacao})
+      {required this.codKitDescritor,
+      required this.kitDescritor,
+      required this.codSituacao})
       : super._();
 
   factory _$ConsultaKitInventarioFilterImpl.fromJson(
@@ -128,11 +168,13 @@ class _$ConsultaKitInventarioFilterImpl extends _ConsultaKitInventarioFilter {
   @override
   int? codKitDescritor;
   @override
+  KitDescritorDropDownSearchResponseDTO? kitDescritor;
+  @override
   String? codSituacao;
 
   @override
   String toString() {
-    return 'ConsultaKitInventarioFilter(codKitDescritor: $codKitDescritor, codSituacao: $codSituacao)';
+    return 'ConsultaKitInventarioFilter(codKitDescritor: $codKitDescritor, kitDescritor: $kitDescritor, codSituacao: $codSituacao)';
   }
 
   @JsonKey(ignore: true)
@@ -154,6 +196,7 @@ abstract class _ConsultaKitInventarioFilter
     extends ConsultaKitInventarioFilter {
   factory _ConsultaKitInventarioFilter(
       {required int? codKitDescritor,
+      required KitDescritorDropDownSearchResponseDTO? kitDescritor,
       required String? codSituacao}) = _$ConsultaKitInventarioFilterImpl;
   _ConsultaKitInventarioFilter._() : super._();
 
@@ -163,6 +206,9 @@ abstract class _ConsultaKitInventarioFilter
   @override
   int? get codKitDescritor;
   set codKitDescritor(int? value);
+  @override
+  KitDescritorDropDownSearchResponseDTO? get kitDescritor;
+  set kitDescritor(KitDescritorDropDownSearchResponseDTO? value);
   @override
   String? get codSituacao;
   set codSituacao(String? value);

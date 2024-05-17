@@ -5,6 +5,11 @@ import 'package:compartilhados/icones/icones.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+typedef SetReadonlyBuilder = void Function(
+  BuildContext context,
+  Function(bool) setReadonly,
+);
+
 class TextFieldNumberWidget extends StatefulWidget {
   TextFieldNumberWidget({
     required this.placeholder,
@@ -12,6 +17,7 @@ class TextFieldNumberWidget extends StatefulWidget {
     this.onChanged,
     this.readOnly = false,
     this.startValue,
+    this.setReadonlyBuilder,
   });
 
   final String placeholder;
@@ -23,6 +29,7 @@ class TextFieldNumberWidget extends StatefulWidget {
       GlobalKey<_TextFieldNumberWidgetState>();
   final void Function(String str)? onChanged;
   final int? startValue;
+  final SetReadonlyBuilder? setReadonlyBuilder;
 
   set text(String value) => _controller.text = value;
 
@@ -36,6 +43,8 @@ class TextFieldNumberWidget extends StatefulWidget {
   State<TextFieldNumberWidget> createState() => _TextFieldNumberWidgetState(
         key: key,
         onChanged: onChanged,
+        readonly: readOnly,
+        setReadonlyBuilder: setReadonlyBuilder,
       );
 }
 
@@ -46,8 +55,15 @@ class _TextFieldNumberWidgetState extends State<TextFieldNumberWidget> {
   String errorText = '';
   final void Function(String str)? onChanged;
   DateTime? lastTypedTime;
+  final SetReadonlyBuilder? setReadonlyBuilder;
+  bool readonly;
 
-  _TextFieldNumberWidgetState({required Key key, this.onChanged});
+  _TextFieldNumberWidgetState({
+    required Key key,
+    required this.readonly,
+    this.onChanged,
+    this.setReadonlyBuilder,
+  });
   @override
   void initState() {
     if (widget.startValue != null) {
@@ -67,8 +83,18 @@ class _TextFieldNumberWidgetState extends State<TextFieldNumberWidget> {
     if (onChanged != null) onChanged!(str == null ? '' : str);
   }
 
+  void setReadonly(bool readonly) {
+    setState(() {
+      this.readonly = readonly;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    setReadonlyBuilder?.call(
+      context,
+      setReadonly,
+    );
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [

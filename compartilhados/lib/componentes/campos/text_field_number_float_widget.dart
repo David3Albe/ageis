@@ -10,9 +10,11 @@ class TextFieldNumberFloatWidget extends StatefulWidget {
     this.password = false,
     this.onChanged,
     this.readOnly = false,
+    this.negative = false,
   });
 
   final String placeholder;
+  final bool negative;
   final bool password;
   final List<String Function(String str)> validators = [];
   final TextEditingController _controller = TextEditingController();
@@ -50,16 +52,23 @@ class _TextFieldNumberFloatWidgetState
 
   @override
   Widget build(BuildContext context) {
+    String negative = widget.negative ? '-' : '';
+    String expressao = '[0-9,.$negative]';
+    RegExp regex = RegExp(expressao);
     return Column(
       children: [
         TextFormField(
           controller: widget._controller,
           onChanged: (String? str) {
             validate();
-            if (onChanged != null) onChanged!(str == null ? '' : str);
+            if (onChanged != null) {
+              onChanged!(
+                str == null ? '' : str.replaceAll('.', '').replaceAll(',', '.'),
+              );
+            }
           },
           inputFormatters: <TextInputFormatter>[
-            FilteringTextInputFormatter.allow(RegExp(r'[0-9,.]')),
+            FilteringTextInputFormatter.allow(regex),
           ],
           keyboardType: TextInputType.number,
           obscureText: !visible && widget.password,

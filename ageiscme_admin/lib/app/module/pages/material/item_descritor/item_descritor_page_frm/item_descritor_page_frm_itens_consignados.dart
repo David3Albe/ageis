@@ -100,7 +100,7 @@ class _ItemDescritorPageFrmItensConsignadosState
     await submitMethod.call();
     ItemDescritorConsignadoModel? itemConsignado = widget
         .itemDescritor.itensDescritoresConsignados
-        ?.where((element) => element.cod == item.cod)
+        ?.where((element) => element.descricao == item.descricao)
         .firstOrNull;
     if (itemConsignado == null) return;
     setState(() {

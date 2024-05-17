@@ -114,12 +114,16 @@ class DireitoEnum {
   static const int EtiquetasConsulta = 530;
   static const int EtiquetasManutencao = 531;
 
-  static const int ProcessoLeituraConsulta = 910;
+  static const int ProcessoAutorizarReporRemoverItem = 908;
 
+  static const int ProcessoLeituraConsulta = 910;
+  
   static const int AcoesOcorrencias = 1001;
   static const int AcoesOcorrenciasConsulta = 1002;
 
-  static const int MotivoReporRemoverItens = 1011;
+  static const int ConsultaMotivoReporRemoverItens = 1012;
+
+  static const int ManutencaoMotivoReporRemoverItens = 1011;
 
   static const int Manutencao = 1101;
 
@@ -136,6 +140,8 @@ class DireitoEnum {
   static const int GestaoContratoCadastro = 1801;
   static const int GestaoContratoConsulta = 1802;
 
+  static const int PermissaoManutencaoPopup = 1902;
+
   static const int FabricantesConsulta = 2001;
   static const int FabricantesManutencao = 2002;
 
@@ -151,7 +157,13 @@ class DireitoEnum {
   static const int ItensConsignadosConsulta = 2302;
   static const int ItensConsignadosManutencao = 2303;
 
-  static const int ProcessoAutorizarReporRemoverItem = 908;
+  static const int HistoricoColaboradoresConsulta = 2501;
+
+  static const int ConsultaReporRemoverItem = 2601;
+  static const int ManutencaoReporRemoverItem = 2602;
+
+  static const int ConsultaLiberacaoLeituras = 2701;
+  static const int ManutencaoLiberacaoLeituras = 2702;
 
   static const int Desativado = 9999;
 }

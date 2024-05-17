@@ -13,7 +13,7 @@ class AtestadoSaudeOcupacionalPageCubit
           ),
         );
 
-  void loadAtestadoSaudeOcupacional() async {
+  Future loadAtestadoSaudeOcupacional() async {
     emit(
       AtestadoSaudeOcupacionalPageState(
         loading: true,

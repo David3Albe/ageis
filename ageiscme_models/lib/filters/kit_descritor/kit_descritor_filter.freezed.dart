@@ -35,6 +35,8 @@ mixin _$KitDescritorFilter {
   set ordenarAtivosPrimeiro(bool? value) => throw _privateConstructorUsedError;
   String? get nomeContem => throw _privateConstructorUsedError;
   set nomeContem(String? value) => throw _privateConstructorUsedError;
+  String? get termoPesquisa => throw _privateConstructorUsedError;
+  set termoPesquisa(String? value) => throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
   String? get tStamp => throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
@@ -60,6 +62,7 @@ abstract class $KitDescritorFilterCopyWith<$Res> {
       int? numeroRegistros,
       bool? ordenarAtivosPrimeiro,
       String? nomeContem,
+      String? termoPesquisa,
       @JsonKey(name: 'tStamp') String? tStamp});
 }
 
@@ -83,6 +86,7 @@ class _$KitDescritorFilterCopyWithImpl<$Res, $Val extends KitDescritorFilter>
     Object? numeroRegistros = freezed,
     Object? ordenarAtivosPrimeiro = freezed,
     Object? nomeContem = freezed,
+    Object? termoPesquisa = freezed,
     Object? tStamp = freezed,
   }) {
     return _then(_value.copyWith(
@@ -114,6 +118,10 @@ class _$KitDescritorFilterCopyWithImpl<$Res, $Val extends KitDescritorFilter>
           ? _value.nomeContem
           : nomeContem // ignore: cast_nullable_to_non_nullable
               as String?,
+      termoPesquisa: freezed == termoPesquisa
+          ? _value.termoPesquisa
+          : termoPesquisa // ignore: cast_nullable_to_non_nullable
+              as String?,
       tStamp: freezed == tStamp
           ? _value.tStamp
           : tStamp // ignore: cast_nullable_to_non_nullable
@@ -138,6 +146,7 @@ abstract class _$$KitDescritorFilterImplCopyWith<$Res>
       int? numeroRegistros,
       bool? ordenarAtivosPrimeiro,
       String? nomeContem,
+      String? termoPesquisa,
       @JsonKey(name: 'tStamp') String? tStamp});
 }
 
@@ -159,6 +168,7 @@ class __$$KitDescritorFilterImplCopyWithImpl<$Res>
     Object? numeroRegistros = freezed,
     Object? ordenarAtivosPrimeiro = freezed,
     Object? nomeContem = freezed,
+    Object? termoPesquisa = freezed,
     Object? tStamp = freezed,
   }) {
     return _then(_$KitDescritorFilterImpl(
@@ -190,6 +200,10 @@ class __$$KitDescritorFilterImplCopyWithImpl<$Res>
           ? _value.nomeContem
           : nomeContem // ignore: cast_nullable_to_non_nullable
               as String?,
+      termoPesquisa: freezed == termoPesquisa
+          ? _value.termoPesquisa
+          : termoPesquisa // ignore: cast_nullable_to_non_nullable
+              as String?,
       tStamp: freezed == tStamp
           ? _value.tStamp
           : tStamp // ignore: cast_nullable_to_non_nullable
@@ -209,6 +223,7 @@ class _$KitDescritorFilterImpl implements _KitDescritorFilter {
       this.numeroRegistros,
       this.ordenarAtivosPrimeiro,
       this.nomeContem,
+      this.termoPesquisa,
       @JsonKey(name: 'tStamp') this.tStamp});
 
   factory _$KitDescritorFilterImpl.fromJson(Map<String, dynamic> json) =>
@@ -229,12 +244,14 @@ class _$KitDescritorFilterImpl implements _KitDescritorFilter {
   @override
   String? nomeContem;
   @override
+  String? termoPesquisa;
+  @override
   @JsonKey(name: 'tStamp')
   String? tStamp;
 
   @override
   String toString() {
-    return 'KitDescritorFilter(cod: $cod, apenasAtivos: $apenasAtivos, ordernarPorNomeCrescente: $ordernarPorNomeCrescente, carregarProcessoTipo: $carregarProcessoTipo, numeroRegistros: $numeroRegistros, ordenarAtivosPrimeiro: $ordenarAtivosPrimeiro, nomeContem: $nomeContem, tStamp: $tStamp)';
+    return 'KitDescritorFilter(cod: $cod, apenasAtivos: $apenasAtivos, ordernarPorNomeCrescente: $ordernarPorNomeCrescente, carregarProcessoTipo: $carregarProcessoTipo, numeroRegistros: $numeroRegistros, ordenarAtivosPrimeiro: $ordenarAtivosPrimeiro, nomeContem: $nomeContem, termoPesquisa: $termoPesquisa, tStamp: $tStamp)';
   }
 
   @JsonKey(ignore: true)
@@ -261,6 +278,7 @@ abstract class _KitDescritorFilter implements KitDescritorFilter {
       int? numeroRegistros,
       bool? ordenarAtivosPrimeiro,
       String? nomeContem,
+      String? termoPesquisa,
       @JsonKey(name: 'tStamp') String? tStamp}) = _$KitDescritorFilterImpl;
 
   factory _KitDescritorFilter.fromJson(Map<String, dynamic> json) =
@@ -287,6 +305,9 @@ abstract class _KitDescritorFilter implements KitDescritorFilter {
   @override
   String? get nomeContem;
   set nomeContem(String? value);
+  @override
+  String? get termoPesquisa;
+  set termoPesquisa(String? value);
   @override
   @JsonKey(name: 'tStamp')
   String? get tStamp;

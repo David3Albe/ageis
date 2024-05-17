@@ -25,6 +25,7 @@ sealed class ItemFilter with _$ItemFilter {
     String? termoPesquisa,
     String? idEtiquetaComecaCom,
     String? idEtiquetaContem,
+    String? codBarraKitContem,
     @JsonKey(name: 'tStamp') String? tStamp,
     ItemModel? itemFilter,
     KitModel? kitFilter,

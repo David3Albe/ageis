@@ -1,4 +1,5 @@
 import 'package:ageiscme_admin/app/module/pages/colaborador/tipo_afastamento/tipo_afastamento_page_frm/tipo_afastamento_page_frm_state.dart';
+import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_data/services/tipo_afastamento/tipo_afastamento_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
@@ -7,6 +8,8 @@ import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
@@ -86,7 +89,7 @@ class _TipoAfastamentoPageFrmState extends State<TipoAfastamentoPageFrm> {
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<TipoAfastamentoPageFrmCubit,
+    return BlocConsumer<TipoAfastamentoPageFrmCubit,
         TipoAfastamentoPageFrmState>(
       bloc: cubit,
       listener: (context, state) {
@@ -94,90 +97,98 @@ class _TipoAfastamentoPageFrmState extends State<TipoAfastamentoPageFrm> {
           Navigator.of(context).pop((state.saved, state.message));
         }
       },
-      child:
-          BlocBuilder<TipoAfastamentoPageFrmCubit, TipoAfastamentoPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return Container(
-            constraints: BoxConstraints(
-              minWidth: size.width * .5,
-              minHeight: size.height * .5,
-              maxHeight: size.height * .8,
-            ),
-            child: Stack(
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TitleWidget(
-                            text: titulo,
-                          ),
+      builder: (context, state) {
+        return Container(
+          constraints: BoxConstraints(
+            minWidth: size.width * .5,
+            minHeight: size.height * .5,
+            maxHeight: size.height * .8,
+          ),
+          child: Stack(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TitleWidget(
+                          text: titulo,
                         ),
-                        const Spacer(),
-                        CloseButtonWidget(
-                          onPressed: () =>
-                              Navigator.of(context).pop((false, '')),
+                      ),
+                      const Spacer(),
+                      CloseButtonWidget(
+                        onPressed: () => Navigator.of(context).pop((false, '')),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: txtMotivo,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: txtDiasConcedido,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: Row(
+                      children: [
+                        CustomCheckboxWidget(
+                          checked: tipoAfastamento.cat!,
+                          onClick: (value) => tipoAfastamento.cat = value,
+                          text: 'Abertura Obrigatória de CAT',
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtMotivo,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtDiasConcedido,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: Row(
-                        children: [
-                          CustomCheckboxWidget(
-                            checked: tipoAfastamento.cat!,
-                            onClick: (value) => tipoAfastamento.cat = value,
-                            text: 'Abertura Obrigatória de CAT',
-                          ),
+                  ),
+                  const Spacer(),
+                  Row(
+                    children: [
+                      CustomPopupMenuWidget(
+                        items: [
+                          if (tipoAfastamento.cod != null &&
+                              tipoAfastamento.cod != 0)
+                            CustomPopupItemHistoryModel.getHistoryItem(
+                              child: HistoricoPage(
+                                pk: tipoAfastamento.cod!,
+                                termo: 'TIPO_AFASTAMENTO',
+                              ),
+                              context: context,
+                            ),
                         ],
                       ),
-                    ),
-                    const Spacer(),
-                    Row(
-                      children: [
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: SaveButtonWidget(
-                            onPressed: () => {salvar()},
-                          ),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: SaveButtonWidget(
+                          onPressed: () => {salvar()},
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: CleanButtonWidget(
-                            onPressed: () => {
-                              setState(() {
-                                tipoAfastamento = TipoAfastamentoModel.empty();
-                              }),
-                            },
-                          ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: CleanButtonWidget(
+                          onPressed: () => {
+                            setState(() {
+                              tipoAfastamento = TipoAfastamentoModel.empty();
+                            }),
+                          },
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: CancelButtonUnfilledWidget(
-                            onPressed: () =>
-                                {Navigator.of(context).pop((false, ''))},
-                          ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: CancelButtonUnfilledWidget(
+                          onPressed: () =>
+                              {Navigator.of(context).pop((false, ''))},
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 

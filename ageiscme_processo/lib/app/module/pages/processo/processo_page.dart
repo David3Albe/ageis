@@ -65,12 +65,14 @@ class ProcessoPage extends StatefulWidget {
 
 class _ProcessoPageState extends State<ProcessoPage> {
   static const Duration TIMER_REFRESH_DURATION = Duration(seconds: 60);
+  static const Duration TIMER_FECHAR_TELA_DURATION = Duration(seconds: 30);
   FocusNode _textNode = FocusNode();
   late final ColetoresHelper coletorHelper = ColetoresHelper(
     onEnter: handleKey,
   );
   late ProcessoLeituraCubit _disposeCubit;
   Timer? TIMER_REFRESH_LEITURAS;
+  Timer? TIMER_FECHAR_TELA;
 
   @override
   void initState() {
@@ -80,8 +82,13 @@ class _ProcessoPageState extends State<ProcessoPage> {
       if (!t.isActive) return;
       updateLastRefreshTime();
     });
+    TIMER_FECHAR_TELA = Timer.periodic(TIMER_FECHAR_TELA_DURATION, (timer) {
+      if (!timer.isActive) return;
+      fecharTela();
+    });
 
     _cubit.webSocket = ProcessoLeituraWebSocket(
+      onConnectionLost: onConnectionLost,
       handleKey: () => _cubit.setHandleKey(handleKey),
       onMessageReceived: (p0) => _cubit.onMessage(p0, context),
       onError: _cubit.setException,
@@ -92,15 +99,24 @@ class _ProcessoPageState extends State<ProcessoPage> {
         _cubit.readCode(widget.userCode);
       }
     });
-   
+
     super.initState();
+  }
+
+  void onConnectionLost(String str) {
+    ToastUtils.showCustomToastWarning(context, 'Perca de conexão' + str);
+  }
+
+  void fecharTela() {
+    ProcessoLeituraCubit cubit = BlocProvider.of<ProcessoLeituraCubit>(context);
+    cubit.fecharTela(context);
   }
 
   @override
   void dispose() {
-    _disposeCubit.webSocket?.webSocket?.sink.close();
+    _disposeCubit.webSocket?.close();
     TIMER_REFRESH_LEITURAS?.cancel();
-    _disposeCubit.removeReadingInProcess(_disposeCubit.state.processo);
+    TIMER_FECHAR_TELA?.cancel();
     super.dispose();
   }
 
@@ -157,7 +173,7 @@ class _ProcessoPageState extends State<ProcessoPage> {
               switch (state.rebuildType) {
                 case (ProcessoLeituraRebuildType.All):
                   _playAudio(state.processo);
-                  _showProntuaryDialog(state.processo);
+                  await _showProntuaryDialog(state.processo);
                   _showLoteEquipamento(state.processo);
                   _showReasonForNonComplianceItemDialog(state.processo);
                   _showReasonForNonComplianceKitDialog(state.processo);
@@ -209,10 +225,10 @@ class _ProcessoPageState extends State<ProcessoPage> {
                                     Expanded(
                                       child: Container(
                                         constraints: const BoxConstraints(
-                                          maxHeight: 65,
+                                          maxHeight: 70,
                                           minHeight: 45,
                                         ),
-                                        height: constraints.maxHeight * 0.07,
+                                        height: constraints.maxHeight * 0.08,
                                         child:
                                             const ProcessoPageStepperWidget(),
                                       ),
@@ -468,22 +484,23 @@ class _ProcessoPageState extends State<ProcessoPage> {
     }
   }
 
-  void _showProntuaryDialog(ProcessoLeituraMontagemModel processoLeitura) {
+  Future _showProntuaryDialog(
+    ProcessoLeituraMontagemModel processoLeitura,
+  ) async {
     if (processoLeitura.leituraAtual.decisao != DecisaoEnum.MontarProntuario) {
       return;
     }
-    showDialog<bool>(
+    await showDialog<bool>(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return ProcessoPageProntuaryDialog(processoLeitura: processoLeitura);
       },
-    ).then((salvou) {
-      final ProcessoLeituraCubit cubit =
-          BlocProvider.of<ProcessoLeituraCubit>(context);
-      String lastCode = cubit.state.processo.filaLeituras!.removeLast();
-      cubit.readCode(lastCode);
-    });
+    );
+    final ProcessoLeituraCubit cubit =
+        BlocProvider.of<ProcessoLeituraCubit>(context);
+    String lastCode = cubit.state.processo.filaLeituras!.removeLast();
+    await cubit.readCode(lastCode);
   }
 
   void _showLoteEquipamento(ProcessoLeituraMontagemModel processoLeitura) {
@@ -798,8 +815,18 @@ class _ProcessoPageState extends State<ProcessoPage> {
     List<ProcessoPreparationKitPrintDTO> kits = [];
     for (KitProcessoModel kit in processoLeitura.leituraAtual.kits) {
       KitDescritorModel kitDescritor = kit.descritor!;
-      int prioridade =
-          kit.prioridade ?? processoLeitura.leituraAtual.prioridade!;
+      int? prioridade =
+          kit.prioridade ?? processoLeitura.leituraAtual.prioridade;
+      if (prioridade == null) {
+        prioridade = kit.itens
+            ?.where((item) => item.prioridade != null)
+            .firstOrNull
+            ?.prioridade;
+      }
+      if(prioridade==null) {
+        WarningUtils.showWarningDialog(context, 'Não foi possível definir a prioridade do kit ${kitDescritor.descricao} Entre em contato com o suporte!');
+        continue;
+      }
       ProcessoTipoModel processoTipo = getTipoProcessoPrioridade(
         prioridade: prioridade,
         tipoProcessoEmergencia: kitDescritor.tipoProcessoEmergencia,
@@ -871,34 +898,22 @@ class _ProcessoPageState extends State<ProcessoPage> {
   EtiquetaLotePrintDTO _criarDTOetiquetaLote(
     ProcessoLeituraMontagemModel processoLeitura,
   ) {
-    int quantidadePaginas = 0;
-    int contador = 3;
+    int impressoes = 0;
     for (int i = 0; i < processoLeitura.leituraAtual.kits.length; i++) {
-      if (contador == 3) {
-        quantidadePaginas++;
-      }
-      contador--;
-      if (contador == 0) {
-        contador = 3;
-      }
+      impressoes++;
     }
 
     for (int i = 0; i < processoLeitura.leituraAtual.itens.length; i++) {
-      if (contador == 3) {
-        quantidadePaginas++;
-      }
-      contador--;
-      if (contador == 0) {
-        contador = 3;
-      }
+      impressoes++;
     }
+    impressoes = impressoes+2;
 
     return EtiquetaLotePrintDTO(
       codRegistroProcesso: processoLeitura.leituraAtual.processoRegistro!.cod!,
       dataAtual: DateTime.now(),
       nomeEquipamento: processoLeitura.leituraAtual.equipamento!.nome!,
       nomeUsuario: processoLeitura.leituraAtual.usuario!.nome!,
-      quantidadePadinas: quantidadePaginas,
+      impressoes: impressoes,
     );
   }
 

@@ -1,6 +1,8 @@
 import 'package:ageiscme_data/shared/custom_dio.dart';
+import 'package:ageiscme_models/dto/item_descritor/drop_down_search/item_descritor_drop_down_search_dto.dart';
 import 'package:ageiscme_models/filters/item_descritor/item_descritor_filter.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/response_dto/item_descritor/drop_down_search/item_descritor_drop_down_search_response_dto.dart';
 
 class ItemDescritorService {
   final CustomDio _client = CustomDio();
@@ -56,4 +58,15 @@ class ItemDescritorService {
       (dynamic json) => ItemDescritorModel.fromJson(json),
     );
   }
+
+      Future<(String, List<ItemDescritorDropDownSearchResponseDTO>)?> getDropDownSearch(
+    ItemDescritorDropDownSearchDTO dto,
+  ) async =>
+      await _client.post(
+        baseRoute + 'drop-down-search',
+        dto,
+        (dynamic json) => (json as List<dynamic>)
+            .map((e) => ItemDescritorDropDownSearchResponseDTO.fromJson(e))
+            .toList(),
+      );
 }

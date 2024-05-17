@@ -7,16 +7,13 @@ class ConsultaProcessosLeituraDetalheKitService {
 
   ConsultaProcessosLeituraDetalheKitService();
 
-  Future<(String message, List<ConsultaProcessosLeituraDetalheKitModel> items)?>
-      filter(
+  Future<(String message, ConsultaProcessosLeituraDetalheKitModel kit)?> filter(
     ConsultaProcessosLeituraDetalheKitFilter obj,
   ) async {
     return await _client.post(
       '/consulta-processo-leitura-detalhe-kit',
       obj,
-      (dynamic json) => (json as List<dynamic>)
-          .map((e) => ConsultaProcessosLeituraDetalheKitModel.fromJson(e))
-          .toList(),
+      (dynamic json) => ConsultaProcessosLeituraDetalheKitModel.fromJson(json),
     );
   }
 }

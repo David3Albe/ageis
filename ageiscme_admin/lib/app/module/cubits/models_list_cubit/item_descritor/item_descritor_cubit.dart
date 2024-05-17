@@ -6,13 +6,6 @@ import 'package:ageiscme_models/filters/item_descritor/item_descritor_filter.dar
 class ItemDescritorCubit extends Cubit<ItemDescritorState> {
   ItemDescritorCubit() : super(ItemDescritorState(itensDescritores: []));
 
-  void loadAll() async {
-    emit(ItemDescritorState(itensDescritores: [], loaded: true));
-    List<ItemDescritorModel> itensDescritores =
-        await ItemDescritorService().GetAll();
-    emit(ItemDescritorState(itensDescritores: itensDescritores, loaded: true));
-  }
-
   void loadFilter(ItemDescritorFilter filter) async {
     emit(
       ItemDescritorState(

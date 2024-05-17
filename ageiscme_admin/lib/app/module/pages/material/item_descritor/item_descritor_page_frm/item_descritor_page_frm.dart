@@ -3,6 +3,7 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/embalagem/emb
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/grupo_material/grupo_material_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/processo_tipo/processo_tipo_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/tamanho/tamanho_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_admin/app/module/pages/material/item_descritor/item_descritor_page_frm/item_descritor_page_frm_image.dart';
 import 'package:ageiscme_admin/app/module/pages/material/item_descritor/item_descritor_page_frm/item_descritor_page_frm_itens_consignados.dart';
 import 'package:ageiscme_admin/app/module/pages/material/item_descritor/item_descritor_page_frm/item_descritor_page_frm_state.dart';
@@ -20,6 +21,8 @@ import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
@@ -650,6 +653,18 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
             actions: [
               Row(
                 children: [
+                  if (itemDescritor.cod != null && itemDescritor.cod != 0)
+                    CustomPopupMenuWidget(
+                      items: [
+                        CustomPopupItemHistoryModel.getHistoryItem(
+                          child: HistoricoPage(
+                            pk: itemDescritor.cod!,
+                            termo: 'ITEM_DESCRITOR',
+                          ),
+                          context: context,
+                        ),
+                      ],
+                    ),
                   const Spacer(),
                   Padding(
                     padding: const EdgeInsets.only(left: 16.0),
@@ -701,8 +716,11 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
         !txtDescricaoCompleta.valid ||
         !txtLimiteProcesso.valid) return;
     bool valido = await validaItensConsignados();
-    if(itemDescritor.codTipoProcessoUrgencia==null){
-      ToastUtils.showCustomToastWarning(context, 'Informe o tipo de processo para urgência');
+    if (itemDescritor.codTipoProcessoUrgencia == null) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'Informe o tipo de processo para urgência',
+      );
       return;
     }
     if (!valido) return;

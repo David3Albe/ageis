@@ -10,21 +10,28 @@ import 'package:ageiscme_processo/app/module/models/kit_processo/kit_processo_mo
 import 'package:ageiscme_processo/app/module/models/processo_leitura/processo_leitura_codigo/processo_leitura_codigo_model.dart';
 import 'package:ageiscme_processo/app/module/models/processo_leitura/processo_leitura_montagem_model.dart';
 import 'package:ageiscme_processo/app/module/models/selecao_kit_item/selecao_kit_item_model.dart';
+import 'package:ageiscme_processo/app/module/pages/processo/processo_page_close_screen/processo_page_close_screen_page.dart';
 import 'package:ageiscme_processo/app/module/services/processo_leitura/processo_leitura_service.dart';
+import 'package:ageiscme_processo/app/module/services/processo_navigator_service.dart';
 import 'package:ageiscme_processo/app/module/web_sockets/processo_leitura/processo_leitura_web_socket.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:dependencias_comuns/main.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 
 class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
   final LoadingController loadingController;
+  final List<String> filaLeituras = [];
   late final ProcessoLeituraService service =
       ProcessoLeituraService(loading: loadingController);
 
+  DateTime? dataUltimaLeitura;
   ProcessoLeituraWebSocket? webSocket;
-
-  final List<String> filaLeituras = [];
+  bool aviso15MinutosApareceu = false;
+  bool aviso5MinutosApareceu = false;
 
   ProcessoLeituraCubit({
     required this.loadingController,
@@ -47,10 +54,75 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
     webSocket?.sendMessage(leitura);
   }
 
+  Future<String?> getComputerNameIfWindows() async {
+    if (kIsWeb) return null;
+    final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
+    switch (defaultTargetPlatform) {
+      case TargetPlatform.windows:
+        return _readWindowsDeviceInfo(await deviceInfoPlugin.windowsInfo);
+      default:
+        return null;
+    }
+  }
+
+  String _readWindowsDeviceInfo(WindowsDeviceInfo data) => data.computerName;
+
+  Future fecharTela(BuildContext context) async {
+    int? tempoMinTela = state.processo.leituraAtual.instituicao?.tempoMin;
+    if (tempoMinTela == null) return;
+    if (dataUltimaLeitura == null) return;
+    int tempoUltimaLeitura =
+        DateTime.now().difference(dataUltimaLeitura!).inMinutes;
+    int tempoFechamento = tempoMinTela - tempoUltimaLeitura;
+    if (tempoFechamento > 15) {
+      aviso15MinutosApareceu = false;
+    }
+    if (tempoFechamento > 5) {
+      aviso5MinutosApareceu = false;
+    }
+    if (tempoFechamento <= 15 && aviso15MinutosApareceu != true) {
+      aviso15MinutosApareceu = true;
+      await abrirTelaFechamento(
+        tempoFechamento: 15,
+        context: context,
+      );
+    }
+    if (tempoFechamento <= 5 && aviso5MinutosApareceu != true) {
+      aviso5MinutosApareceu = true;
+      await abrirTelaFechamento(
+        tempoFechamento: 5,
+        context: context,
+      );
+    }
+    if (tempoFechamento <= 0) {
+      Navigator.of(context).popUntil((route) => route.isFirst);
+      ProcessoNavigatorService.ToUserScreen();
+    }
+  }
+
+  Future abrirTelaFechamento({
+    required int tempoFechamento,
+    required BuildContext context,
+  }) async {
+    await showDialog<bool>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return ProcessoPageCloseScreenPage(
+          tempoFecharTela: tempoFechamento,
+        );
+      },
+    );
+  }
+
   Future readCode(
     String? codigoLido, {
     bool pularAdicaoFilaLeituras = false,
   }) async {
+    if (codigoLido == null || codigoLido.isEmpty || codigoLido.length <= 2) {
+      return;
+    }
+    dataUltimaLeitura = DateTime.now();
     try {
       if (loadingController.isOpen && pularAdicaoFilaLeituras == false) {
         adicionarItemAFila(codigoLido);
@@ -58,10 +130,14 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
       }
       if (validateZoom(codigoLido)) return;
       emitLoading();
+      if (state.processo.maquina == null) {
+        String? maquina = await getComputerNameIfWindows();
+        state.processo.maquina = maquina;
+      }
       sendMessage(
         ProcessoLeituraMontagemModel(
           cancelado: null,
-          maquina: null,
+          maquina: state.processo.maquina,
           cod: state.processo.cod,
           dataHora: state.processo.dataHora,
           tstamp: state.processo.tstamp,
@@ -94,7 +170,7 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
   void setException(String error) {
     closeLoading();
     ErrorUtils.showErrorDialog(null, [
-      error,
+      'ERRO: ' + error,
     ]);
   }
 
@@ -139,12 +215,6 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
     }
   }
 
-  Future removeReadingInProcess(
-    ProcessoLeituraMontagemModel processoLeitura,
-  ) async {
-    await service.removerLeituraEmAndamento(processoLeitura);
-  }
-
   void updateLastRefreshTimeOfReading(
     ProcessoLeituraMontagemModel processoLeitura,
   ) {
@@ -187,7 +257,6 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
     if (cancelarLeituras == true) {
       closeLoading();
       fecharTelaExtra(processo, context);
-      removeReadingInProcess(processo);
       List<int> avisosSonoro = processo.leituraCodigo.avisosSonoro;
       processo = ProcessoLeituraMontagemModel.empty();
       processo.leituraCodigo.avisosSonoro = avisosSonoro;
@@ -228,7 +297,7 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
   }
 
   void reset() {
-    removeReadingInProcess(state.processo);
+    // removeReadingInProcess(state.processo);
     emit(
       ProcessoLeituraState(
         processo: ProcessoLeituraMontagemModel.empty(),

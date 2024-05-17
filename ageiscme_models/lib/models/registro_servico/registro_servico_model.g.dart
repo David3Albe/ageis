@@ -74,6 +74,10 @@ _$RegistroServicoModelImpl _$$RegistroServicoModelImplFromJson(Map json) =>
           ? null
           : UsuarioModel.fromJson(
               Map<String, Object?>.from(json['usuario'] as Map)),
+      usuarioDropDown: json['usuarioDropDown'] == null
+          ? null
+          : UsuarioDropDownSearchResponseDTO.fromJson(
+              Map<String, Object?>.from(json['usuarioDropDown'] as Map)),
     );
 
 Map<String, dynamic> _$$RegistroServicoModelImplToJson(
@@ -118,4 +122,5 @@ Map<String, dynamic> _$$RegistroServicoModelImplToJson(
       'item': instance.item?.toJson(),
       'servicoTipo': instance.servicoTipo?.toJson(),
       'usuario': instance.usuario?.toJson(),
+      'usuarioDropDown': instance.usuarioDropDown?.toJson(),
     };

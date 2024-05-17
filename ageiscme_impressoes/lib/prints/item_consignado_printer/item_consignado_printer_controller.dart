@@ -55,8 +55,8 @@ class ItemConsignadoPrinterController {
           pw.BarcodeWidget(
             data: dto.idEtiqueta,
             barcode: Barcode.dataMatrix(),
-            height: 30,
-            width: 30,
+            height: 20,
+            width: 20,
           ),
         ],
       ),

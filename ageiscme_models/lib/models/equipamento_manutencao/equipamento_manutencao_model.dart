@@ -1,4 +1,5 @@
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
 import 'package:compartilhados/mixins/drop_down_text.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
@@ -68,6 +69,8 @@ abstract class EquipamentoManutencaoModel with _$EquipamentoManutencaoModel {
     required PecaModel? peca3,
     required PecaModel? peca4,
     required PecaModel? peca5,
+    UsuarioDropDownSearchResponseDTO? usuarioDetectadoPor,
+    UsuarioDropDownSearchResponseDTO? usuarioTecnico,
   }) = _EquipamentoManutencaoModel;
 
   factory EquipamentoManutencaoModel.fromJson(Map<String, Object?> json) =>

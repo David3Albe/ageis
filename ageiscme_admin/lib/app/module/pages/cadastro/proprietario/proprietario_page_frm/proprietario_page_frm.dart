@@ -1,6 +1,7 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/arsenal/arsenal_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/local_instituicao/local_instituicao_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/cadastro/proprietario/proprietario_page_frm/proprietario_page_frm_state.dart';
+import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_data/services/proprietario/proprietario_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/models/proprietario_arsenal/proprietario_arsenal_model.dart';
@@ -14,6 +15,8 @@ import 'package:compartilhados/componentes/campos/list_field/list_field_widget.d
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
@@ -623,6 +626,18 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
             actions: [
               Row(
                 children: [
+                  CustomPopupMenuWidget(
+                    items: [
+                      if (proprietario.cod != null && proprietario.cod != 0)
+                        CustomPopupItemHistoryModel.getHistoryItem(
+                          child: HistoricoPage(
+                            pk: proprietario.cod!,
+                            termo: 'PROPRIETARIO',
+                          ),
+                          context: context,
+                        ),
+                    ],
+                  ),
                   const Spacer(),
                   Padding(
                     padding: const EdgeInsets.only(left: 16.0),

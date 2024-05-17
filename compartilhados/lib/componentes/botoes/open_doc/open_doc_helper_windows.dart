@@ -6,7 +6,6 @@ import 'package:compartilhados/componentes/botoes/open_doc/open_doc_interface.da
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
-
 class OpenDocHelperWindows implements OpenDocInterface {
   void open(
     BuildContext context,
@@ -15,12 +14,11 @@ class OpenDocHelperWindows implements OpenDocInterface {
   ) async {
     final Uint8List bytes = base64.decode(docString);
 
-    final directory = await getApplicationDocumentsDirectory();
+    final directory = await getTemporaryDirectory();
     final filePath = '${directory.path}\\$docName';
 
     final file = io.File(filePath);
     await file.writeAsBytes(bytes);
-
-    await io.Process.run('explorer', ['/select,${filePath.replaceAll('/', '\\')}}']);
+    await launchUrl(Uri.parse('file:///$filePath'));
   }
 }

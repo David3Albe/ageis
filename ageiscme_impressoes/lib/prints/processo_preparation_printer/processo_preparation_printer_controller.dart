@@ -40,7 +40,7 @@ class ProcessoPreparationPrinterController {
     final pdf = pw.Document(theme: themeOpenSans);
 
     String path = 'urgent_star.png';
-    if (kReleaseMode) {
+    if (kReleaseMode || !kIsWeb) {
       path = 'assets/urgent_star.png';
     }
     final pw.ImageProvider urgencyImageProvider =
@@ -68,6 +68,7 @@ class ProcessoPreparationPrinterController {
     return await PrinterHelper.PrintDocumentDefaultPrinter(
       context,
       await pdf.save(),
+      usePrinterConfig: false,
     );
   }
 
@@ -79,9 +80,12 @@ class ProcessoPreparationPrinterController {
     const double inch = 72.0;
     const double cm = inch / 2.54;
     return pw.Page(
-      orientation: pw.PageOrientation.landscape,
-      margin: pw.EdgeInsets.zero,
-      pageFormat: const PdfPageFormat(8.9 * cm, 4.8 * cm, marginAll: 0),
+      pageFormat: const PdfPageFormat(
+        8.9 * cm,
+        4.8 * cm,
+        marginAll: 0,
+      ),
+      margin: EdgeInsets.zero,
       build: (pw.Context context) {
         return pw.Padding(
           child: pw.Column(

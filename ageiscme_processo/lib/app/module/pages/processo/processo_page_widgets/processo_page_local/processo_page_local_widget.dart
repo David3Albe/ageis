@@ -16,49 +16,53 @@ class ProcessoPageLocalWidget extends StatelessWidget {
         decoration: const BoxDecoration(
           color: Cores.CorCards,
         ),
-        child: Padding(
-          padding: EdgeInsets.only(
-            top: 8 * scale,
-            bottom: 8 * scale,
-            right: 14 * scale,
-            left: 14 * scale,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+        child: BlocBuilder<ProcessoLeituraCubit, ProcessoLeituraState>(
+          buildWhen: (previous, current) =>
+              current.rebuildType == ProcessoLeituraRebuildType.All,
+          builder: (context, state) {
+            double escalaFonte = state.processo.getEscala();
+            double lineHeightSegoe = state.processo.getLineHeightSegoe();
+            return Padding(
+              padding: EdgeInsets.only(
+                top: (8 * scale) / escalaFonte,
+                bottom: (8 * scale) / escalaFonte,
+                right: (14 * scale) / escalaFonte,
+                left: (14 * scale) / escalaFonte,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        'LOCAL',
-                        style: Fontes.getSegoe(
-                          fontSize: 14 * scale,
-                          cor: Cores.CorTitleCards,
+                  Padding(
+                    padding: EdgeInsets.zero,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'LOCAL',
+                          style: Fontes.getSegoe(
+                            fontSize: 14 * scale * escalaFonte,
+                            cor: Cores.CorTitleCards,
+                          ),
                         ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.zero,
+                    child: Text(
+                      textAlign: TextAlign.start,
+                      state.processo.local?.nome ?? ' ',
+                      style: Fontes.getSegoe(
+                        fontSize: 20 * scale * escalaFonte,
+                        cor: Cores.CorTextCards,
+                        lineHeight: lineHeightSegoe,
                       ),
                     ),
                   ),
                 ],
               ),
-              BlocBuilder<ProcessoLeituraCubit, ProcessoLeituraState>(
-                buildWhen: (previous, current) =>
-                    current.rebuildType == ProcessoLeituraRebuildType.All,
-                builder: (context, state) => FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
-                    state.processo.local?.nome ?? ' ',
-                    style: Fontes.getSegoe(
-                      fontSize: 20 * scale,
-                      cor: Cores.CorTextCards,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

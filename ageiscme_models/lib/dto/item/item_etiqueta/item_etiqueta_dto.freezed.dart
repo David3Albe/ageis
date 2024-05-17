@@ -22,6 +22,10 @@ ItemEtiquetaDTO _$ItemEtiquetaDTOFromJson(Map<String, dynamic> json) {
 mixin _$ItemEtiquetaDTO {
   int? get codItem => throw _privateConstructorUsedError;
   set codItem(int? value) => throw _privateConstructorUsedError;
+  String? get idEtiquetaContem => throw _privateConstructorUsedError;
+  set idEtiquetaContem(String? value) => throw _privateConstructorUsedError;
+  String? get idEtiquetaItemContem => throw _privateConstructorUsedError;
+  set idEtiquetaItemContem(String? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +39,8 @@ abstract class $ItemEtiquetaDTOCopyWith<$Res> {
           ItemEtiquetaDTO value, $Res Function(ItemEtiquetaDTO) then) =
       _$ItemEtiquetaDTOCopyWithImpl<$Res, ItemEtiquetaDTO>;
   @useResult
-  $Res call({int? codItem});
+  $Res call(
+      {int? codItem, String? idEtiquetaContem, String? idEtiquetaItemContem});
 }
 
 /// @nodoc
@@ -52,12 +57,22 @@ class _$ItemEtiquetaDTOCopyWithImpl<$Res, $Val extends ItemEtiquetaDTO>
   @override
   $Res call({
     Object? codItem = freezed,
+    Object? idEtiquetaContem = freezed,
+    Object? idEtiquetaItemContem = freezed,
   }) {
     return _then(_value.copyWith(
       codItem: freezed == codItem
           ? _value.codItem
           : codItem // ignore: cast_nullable_to_non_nullable
               as int?,
+      idEtiquetaContem: freezed == idEtiquetaContem
+          ? _value.idEtiquetaContem
+          : idEtiquetaContem // ignore: cast_nullable_to_non_nullable
+              as String?,
+      idEtiquetaItemContem: freezed == idEtiquetaItemContem
+          ? _value.idEtiquetaItemContem
+          : idEtiquetaItemContem // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -70,7 +85,8 @@ abstract class _$$ItemEtiquetaDTOImplCopyWith<$Res>
       __$$ItemEtiquetaDTOImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? codItem});
+  $Res call(
+      {int? codItem, String? idEtiquetaContem, String? idEtiquetaItemContem});
 }
 
 /// @nodoc
@@ -85,12 +101,22 @@ class __$$ItemEtiquetaDTOImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? codItem = freezed,
+    Object? idEtiquetaContem = freezed,
+    Object? idEtiquetaItemContem = freezed,
   }) {
     return _then(_$ItemEtiquetaDTOImpl(
       codItem: freezed == codItem
           ? _value.codItem
           : codItem // ignore: cast_nullable_to_non_nullable
               as int?,
+      idEtiquetaContem: freezed == idEtiquetaContem
+          ? _value.idEtiquetaContem
+          : idEtiquetaContem // ignore: cast_nullable_to_non_nullable
+              as String?,
+      idEtiquetaItemContem: freezed == idEtiquetaItemContem
+          ? _value.idEtiquetaItemContem
+          : idEtiquetaItemContem // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -98,17 +124,22 @@ class __$$ItemEtiquetaDTOImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$ItemEtiquetaDTOImpl implements _ItemEtiquetaDTO {
-  _$ItemEtiquetaDTOImpl({this.codItem});
+  _$ItemEtiquetaDTOImpl(
+      {this.codItem, this.idEtiquetaContem, this.idEtiquetaItemContem});
 
   factory _$ItemEtiquetaDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$ItemEtiquetaDTOImplFromJson(json);
 
   @override
   int? codItem;
+  @override
+  String? idEtiquetaContem;
+  @override
+  String? idEtiquetaItemContem;
 
   @override
   String toString() {
-    return 'ItemEtiquetaDTO(codItem: $codItem)';
+    return 'ItemEtiquetaDTO(codItem: $codItem, idEtiquetaContem: $idEtiquetaContem, idEtiquetaItemContem: $idEtiquetaItemContem)';
   }
 
   @JsonKey(ignore: true)
@@ -127,7 +158,10 @@ class _$ItemEtiquetaDTOImpl implements _ItemEtiquetaDTO {
 }
 
 abstract class _ItemEtiquetaDTO implements ItemEtiquetaDTO {
-  factory _ItemEtiquetaDTO({int? codItem}) = _$ItemEtiquetaDTOImpl;
+  factory _ItemEtiquetaDTO(
+      {int? codItem,
+      String? idEtiquetaContem,
+      String? idEtiquetaItemContem}) = _$ItemEtiquetaDTOImpl;
 
   factory _ItemEtiquetaDTO.fromJson(Map<String, dynamic> json) =
       _$ItemEtiquetaDTOImpl.fromJson;
@@ -135,6 +169,12 @@ abstract class _ItemEtiquetaDTO implements ItemEtiquetaDTO {
   @override
   int? get codItem;
   set codItem(int? value);
+  @override
+  String? get idEtiquetaContem;
+  set idEtiquetaContem(String? value);
+  @override
+  String? get idEtiquetaItemContem;
+  set idEtiquetaItemContem(String? value);
   @override
   @JsonKey(ignore: true)
   _$$ItemEtiquetaDTOImplCopyWith<_$ItemEtiquetaDTOImpl> get copyWith =>

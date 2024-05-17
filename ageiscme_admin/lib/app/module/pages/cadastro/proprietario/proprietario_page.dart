@@ -28,6 +28,7 @@ class _ProprietarioPageState extends State<ProprietarioPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 90,
     ),
     CustomDataColumn(text: 'Nome', field: 'nome'),
     CustomDataColumn(text: 'Cod. Barra', field: 'codBarra'),

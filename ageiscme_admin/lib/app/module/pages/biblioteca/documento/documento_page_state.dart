@@ -12,7 +12,7 @@ class DocumentoPageCubit extends Cubit<DocumentoPageState> {
           ),
         );
 
-  void loadDocumento() async {
+  Future loadDocumento() async {
     emit(DocumentoPageState(loading: true, documentos: []));
     try {
       List<DocumentoModel> documentos = await service.GetAll();

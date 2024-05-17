@@ -8,9 +8,8 @@ import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/models/item/item_model.dart';
 import 'package:ageiscme_models/response_dto/kit/drop_down_search/kit_drop_down_search_response_dto.dart';
-import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
+import 'package:compartilhados/componentes/campos/custom_autocomplete/custom_autocomplete_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
-import 'package:dependencias_comuns/modular_export.dart';
 import 'package:flutter/material.dart';
 
 class FilterFormWidget extends StatelessWidget {
@@ -18,68 +17,41 @@ class FilterFormWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    late bool Function() validateItem;
-    late bool Function() validateKit;
-
-    FilterState state =
-        BlocProvider.of<FilterCubit>(context, listen: true).state;
+    FilterState state = BlocProvider.of<FilterCubit>(context).state;
     return FilterDialogWidget(
-      validate: () => (validateItem() && validateKit()) == true,
       child: Column(
         children: [
-          DropDownSearchApiWidget<ItemModel>(
-            validateBuilder: (context, validateMethodBuilder) =>
-                validateItem = validateMethodBuilder,
-            validator: (val) {
-              KitDropDownSearchResponseDTO? kit =
-                  BlocProvider.of<FilterCubit>(context).state.kit;
-              if (val != null && kit != null) {
-                return 'Não é possível filtrar kit e item ao mesmo tempo, escolha apenas 1.';
-              }
-              return null;
+          CustomAutocompleteWidget<ItemModel>(
+            initialValue: state.idEtiqueta,
+            onChange: (str) {
+              BlocProvider.of<FilterCubit>(context).setItem(str);
             },
-            textFunction: (item) => item.EtiquetaDescricaoText(),
-            initialValue: state.item,
-            search: (str) => Modular.get<ItemService>().Filter(
-              ItemFilter(
-                numeroRegistros: 35,
-                termoPesquisa: str,
-              ),
+            onItemSelectedText: (item) => item.idEtiqueta ?? null,
+            label: 'Item',
+            title: (p0) => Text(p0.EtiquetaDescricaoText()),
+            suggestionsCallback: (str) => ItemService().Filter(
+              ItemFilter(numeroRegistros: 30, termoPesquisa: str),
             ),
-            onChanged: (value) {
-              BlocProvider.of<FilterCubit>(context).setItem(value);
-              validateKit();
-            },
-            placeholder: 'Item',
           ),
           const Padding(padding: EdgeInsets.only(top: 4)),
-          DropDownSearchApiWidget<KitDropDownSearchResponseDTO>(
-            validateBuilder: (context, validateMethodBuilder) =>
-                validateKit = validateMethodBuilder,
-            textFunction: (kit) => kit.CodBarraDescritorText(),
-            initialValue: state.kit,
-            validator: (val) {
-              ItemModel? item =
-                  BlocProvider.of<FilterCubit>(context).state.item;
-              if (val != null && item != null) {
-                return 'Não é possível filtrar kit e item ao mesmo tempo, escolha apenas 1.';
-              }
-              return null;
+          CustomAutocompleteWidget<KitDropDownSearchResponseDTO>(
+            initialValue: state.codBarraKit,
+            onChange: (str) {
+              BlocProvider.of<FilterCubit>(context).setKit(str);
             },
-            search: (str) async =>
-                (await Modular.get<KitService>().getDropDownSearchKits(
-                  KitDropDownSearchDTO(
-                    numeroRegistros: 35,
-                    search: str,
-                  ),
-                ))
-                    ?.$2 ??
-                [],
-            onChanged: (value) {
-              BlocProvider.of<FilterCubit>(context).setKit(value);
-              validateItem();
+            onItemSelectedText: (kit) => kit.codBarra,
+            label: 'Kit',
+            title: (p0) => Text(p0.CodBarraDescritorText()),
+            suggestionsCallback: (str) async {
+              return (await KitService().getDropDownSearchKits(
+                    KitDropDownSearchDTO(
+                      search: str,
+                      numeroRegistros: 30,
+                    ),
+                  ))
+                      ?.$2 ??
+                  [];
             },
-            placeholder: 'Kit',
           ),
         ],
       ),

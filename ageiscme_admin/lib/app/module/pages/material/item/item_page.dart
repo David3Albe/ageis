@@ -1,4 +1,3 @@
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/kit/kit_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/proprietario/proprietario_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/material/item/item_page_frm/item_page_frm.dart';
 import 'package:ageiscme_admin/app/module/pages/material/item/item_page_frm_impressao_rotulados/item_page_frm_impressao_rotulados.dart';
@@ -6,16 +5,17 @@ import 'package:ageiscme_admin/app/module/pages/material/item/item_page_frm_type
 import 'package:ageiscme_admin/app/module/pages/material/item/item_page_state.dart';
 import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
 import 'package:ageiscme_data/services/item/item_service.dart';
+import 'package:ageiscme_data/services/kit/kit_service.dart';
+import 'package:ageiscme_models/dto/kit/drop_down_search/kit_drop_down_search_dto.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/filters/proprietario/proprietario_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/response_dto/item_rotulado_response/item_rotulado_response_dto.dart';
+import 'package:ageiscme_models/response_dto/kit/drop_down_search/kit_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
+import 'package:compartilhados/componentes/campos/custom_autocomplete/custom_autocomplete_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
-import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
@@ -30,9 +30,14 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ItemPage extends StatefulWidget {
-  const ItemPage({super.key, required this.frmType});
+  const ItemPage({
+    super.key,
+    required this.frmType,
+    this.codItem,
+  });
 
   final ItemPageFrmtype frmType;
+  final int? codItem;
 
   @override
   State<ItemPage> createState() => _ItemPageState();
@@ -71,11 +76,11 @@ class _ItemPageState extends State<ItemPage> {
   late final ItemService service;
   late final ProprietarioCubit proprietarioCubit;
   late final ItemFilter filter;
-  late final KitCubit kitBloc;
 
   @override
   void initState() {
     filter = ItemFilter.empty();
+    filter.cod = widget.codItem;
     // filter.startDate =
     //     DateUtils.dateOnly(DateTime.now().add(const Duration(days: -31)));
     // filter.finalDate = DateUtils.dateOnly(DateTime.now());
@@ -83,9 +88,14 @@ class _ItemPageState extends State<ItemPage> {
     service = ItemService();
     proprietarioCubit = ProprietarioCubit();
     bloc = ItemPageCubit(service: service);
-    kitBloc = KitCubit();
-    kitBloc.loadAll();
-    bloc.loadItemFilter(filter);
+    bloc.loadItemFilter(filter).then((value) {
+      int? codItem = filter.cod;
+      filter.cod = null;
+      ItemModel? item = bloc.state.itens.firstOrNull;
+      if (item == null || codItem == null) return;
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => openModal(context, item));
+    });
     super.initState();
   }
 
@@ -176,52 +186,32 @@ class _ItemPageState extends State<ItemPage> {
         return FilterDialogWidget(
           child: Column(
             children: [
-              // DatePickerWidget(
-              //   placeholder: 'Data Inicio',
-              //   onDateSelected: (value) => filter.startDate = value,
-              //   initialValue: filter.startDate,
-              // ),
-              // const Padding(padding: EdgeInsets.only(top: 2)),
-              // DatePickerWidget(
-              //   placeholder: 'Data Término',
-              //   onDateSelected: (value) => filter.finalDate = value,
-              //   initialValue: filter.finalDate,
-              // ),
-              // const Padding(padding: EdgeInsets.only(top: 2)),
-              TextFieldStringWidget(
+              CustomAutocompleteWidget<ItemModel>(
                 initialValue: filter.idEtiquetaContem,
-                placeholder: 'ID Etiqueta',
-                onChanged: (str) => {filter.idEtiquetaContem = str},
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              DropDownSearchApiWidget<ItemModel>(
-                textFunction: (item) => item.EtiquetaDescricaoText(),
-                initialValue: filter.itemFilter,
-                search: (str) => ItemService().Filter(
+                onChange: (str) => filter.idEtiquetaContem = str,
+                onItemSelectedText: (item) => item.idEtiqueta ?? null,
+                label: 'Item',
+                title: (p0) => Text(p0.EtiquetaDescricaoText()),
+                suggestionsCallback: (str) => ItemService().Filter(
                   ItemFilter(numeroRegistros: 30, termoPesquisa: str),
                 ),
-                onChanged: (value) {
-                  filter.itemFilter = value;
-                  filter.cod = value?.cod;
-                },
-                placeholder: 'Item',
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<KitCubit, List<KitModel>>(
-                bloc: kitBloc,
-                builder: (context, kits) {
-                  KitModel? kit = kits
-                      .where(
-                        (element) => element.cod == filter.codKit,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<KitModel>(
-                    textFunction: (kit) => kit.CodBarraDescritorText(),
-                    initialValue: kit,
-                    sourceList: kits,
-                    onChanged: (value) => filter.codKit = value?.cod,
-                    placeholder: 'Kit',
-                  );
+              CustomAutocompleteWidget<KitDropDownSearchResponseDTO>(
+                initialValue: filter.codBarraKitContem,
+                onChange: (str) => filter.codBarraKitContem = str,
+                onItemSelectedText: (kit) => kit.codBarra,
+                label: 'Kit',
+                title: (p0) => Text(p0.CodBarraDescritorText()),
+                suggestionsCallback: (str) async {
+                  return (await KitService().getDropDownSearchKits(
+                        KitDropDownSearchDTO(
+                          search: str,
+                          numeroRegistros: 30,
+                        ),
+                      ))
+                          ?.$2 ??
+                      [];
                 },
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
@@ -321,7 +311,7 @@ class _ItemPageState extends State<ItemPage> {
     }
     loading.close(context, mounted);
 
-    (bool, String)? result = await showDialog<(bool, String)>(
+    (bool, String, int?)? result = await showDialog<(bool, String, int?)>(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
@@ -333,8 +323,13 @@ class _ItemPageState extends State<ItemPage> {
       },
     );
     if (result == null || !result.$1) return;
+    if (result.$3 != null) {
+      item.tstamp = null;
+      await openModal(context, item);
+      return;
+    }
     ToastUtils.showCustomToastSucess(context, result.$2);
-    bloc.loadItemFilter(filter);
+    await bloc.loadItemFilter(filter);
   }
 
   void delete(BuildContext context, ItemModel item) async {

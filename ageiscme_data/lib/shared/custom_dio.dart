@@ -1,5 +1,7 @@
 import 'package:ageiscme_data/shared/app_config.dart';
 import 'package:ageiscme_data/shared/exception_helper.dart';
+import 'package:ageiscme_data/stores/authentication/authentication_store.dart';
+import 'package:ageiscme_models/dto/authentication_result/authentication_result_dto.dart';
 import 'package:ageiscme_models/models/erro_padrao/erro_padrao_model.dart';
 import 'package:ageiscme_models/models/result/command_result_model.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
@@ -7,6 +9,7 @@ import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/exceptions/custom_base_exception.dart';
 import 'package:dependencias_comuns/main.dart';
+import 'package:dependencias_comuns/modular_export.dart';
 
 class CustomDio {
   CustomDio({this.loading});
@@ -16,6 +19,11 @@ class CustomDio {
       connectTimeout: const Duration(seconds: 60),
       receiveTimeout: const Duration(seconds: 60),
     ),
+  );
+
+  final options = Options(
+    sendTimeout: const Duration(seconds: 60),
+    receiveTimeout: const Duration(seconds: 60),
   );
 
   bool _throwException = true;
@@ -31,9 +39,22 @@ class CustomDio {
   Future<String> get _route async =>
       (await AppConfig.forEnvironment(false)).apiUrl;
 
+  Future setHeaders() async {
+    AuthenticationResultDTO? auth =
+        await Modular.get<AuthenticationStore>().GetAuthenticated();
+    options.headers = {};
+    if (auth?.token != null) {
+      options.headers!.addAll({'authorization': 'bearer ${auth!.token}'});
+    }
+  }
+
   Future<List<dynamic>> getList(String route) async {
     String baseRoute = await _route;
-    Response resp = await _dio.get('$baseRoute$route');
+    await setHeaders();
+    Response resp = await _dio.get(
+      '$baseRoute$route',
+      options: options,
+    );
     if (!resp.statusCode.toString().startsWith('2')) {
       bool throwed = await throwResponseError(resp);
       if (!throwed) throw CustomBaseException(resp.data);
@@ -43,7 +64,11 @@ class CustomDio {
 
   Future<dynamic> getOne(String route) async {
     String baseRoute = await _route;
-    Response resp = await _dio.get('$baseRoute$route');
+    await setHeaders();
+    Response resp = await _dio.get(
+      '$baseRoute$route',
+      options: options,
+    );
     if (!resp.statusCode.toString().startsWith('2')) {
       bool throwed = await throwResponseError(resp);
       if (!throwed) throw CustomBaseException(resp.data);
@@ -53,7 +78,12 @@ class CustomDio {
 
   Future<dynamic> postOne(String route, dynamic objeto) async {
     String baseRoute = await _route;
-    Response resp = await _dio.post('$baseRoute$route', data: objeto.toJson());
+    await setHeaders();
+    Response resp = await _dio.post(
+      '$baseRoute$route',
+      data: objeto.toJson(),
+      options: options,
+    );
     if (!resp.statusCode.toString().startsWith('2')) {
       bool throwed = await throwResponseError(resp);
       if (!throwed) throw CustomBaseException(resp.data);
@@ -63,7 +93,12 @@ class CustomDio {
 
   Future<List<dynamic>> postList(String route, dynamic objeto) async {
     String baseRoute = await _route;
-    Response resp = await _dio.post('$baseRoute$route', data: objeto.toJson());
+    await setHeaders();
+    Response resp = await _dio.post(
+      '$baseRoute$route',
+      data: objeto.toJson(),
+      options: options,
+    );
     if (!resp.statusCode.toString().startsWith('2')) {
       bool throwed = await throwResponseError(resp);
       if (!throwed) throw CustomBaseException(resp.data);
@@ -73,7 +108,12 @@ class CustomDio {
 
   Future<dynamic> countFilter(String route, dynamic objeto) async {
     String baseRoute = await _route;
-    Response resp = await _dio.post('$baseRoute$route', data: objeto.toJson());
+    await setHeaders();
+    Response resp = await _dio.post(
+      '$baseRoute$route',
+      data: objeto.toJson(),
+      options: options,
+    );
     if (!resp.statusCode.toString().startsWith('2')) {
       bool throwed = await throwResponseError(resp);
       if (!throwed) throw CustomBaseException(resp.data);
@@ -89,8 +129,12 @@ class CustomDio {
   }) async {
     String baseRoute = await _route;
     try {
-      Response resp =
-          await _dio.post('$baseRoute$route', data: objeto.toJson());
+      await setHeaders();
+      Response resp = await _dio.post(
+        '$baseRoute$route',
+        data: objeto.toJson(),
+        options: options,
+      );
       if (!resp.statusCode.toString().startsWith('2')) {
         bool throwed = await throwResponseError(resp);
         if (throwed) return null;
@@ -122,8 +166,12 @@ class CustomDio {
   }) async {
     String baseRoute = await _route;
     try {
-      Response resp =
-          await _dio.post('$baseRoute$route', data: objeto.toJson());
+      await setHeaders();
+      Response resp = await _dio.post(
+        '$baseRoute$route',
+        data: objeto.toJson(),
+        options: options,
+      );
 
       if (!resp.statusCode.toString().startsWith('2')) {
         bool throwed = await throwResponseError(resp);
@@ -161,8 +209,12 @@ class CustomDio {
   }) async {
     String baseRoute = await _route;
     try {
-      Response resp =
-          await _dio.post('$baseRoute$route', data: objeto.toJson());
+      await setHeaders();
+      Response resp = await _dio.post(
+        '$baseRoute$route',
+        data: objeto.toJson(),
+        options: options,
+      );
 
       if (!resp.statusCode.toString().startsWith('2')) {
         bool throwed = await throwResponseError(resp);
@@ -201,8 +253,12 @@ class CustomDio {
   }) async {
     String baseRoute = await _route;
     try {
-      Response resp =
-          await _dio.delete('$baseRoute$route', data: objeto.toJson());
+      await setHeaders();
+      Response resp = await _dio.delete(
+        '$baseRoute$route',
+        data: objeto.toJson(),
+        options: options,
+      );
       if (!resp.statusCode.toString().startsWith('2')) {
         bool throwed = await throwResponseError(resp);
         if (throwed) return null;
@@ -275,7 +331,7 @@ class CustomDio {
     }
   }
 
-  Future<bool> throwCommandResultError(CommandResultModel cmd)  async {
+  Future<bool> throwCommandResultError(CommandResultModel cmd) async {
     if (_throwException == false) return false;
     if (ToastUtils.routerOutletContext == null) {
       throw CustomBaseException('Defina o context do ToastUtils');

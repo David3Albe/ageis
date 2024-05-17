@@ -79,10 +79,32 @@ class InsumoTestePageCubit extends Cubit<InsumoTestePageState> {
     }
   }
 
+  Future search(InsumoTesteFilter filter) async {
+    emit(
+      InsumoTestePageState(loading: true, insumosTestes: []),
+    );
+    try {
+      List<InsumoTesteModel> insumoTestes = await service.Filter(filter);
+      emit(
+        InsumoTestePageState(
+          loading: false,
+          insumosTestes: insumoTestes,
+        ),
+      );
+    } on Exception catch (ex) {
+      emit(
+        InsumoTestePageState(
+          loading: false,
+          insumosTestes: [],
+          error: ex.toString(),
+        ),
+      );
+    }
+  }
+
   void delete(InsumoTesteModel insumoTeste) async {
     try {
       (String, InsumoTesteModel)? result = await service.delete(insumoTeste);
-      print(2);
       if (result == null) return;
 
       emit(

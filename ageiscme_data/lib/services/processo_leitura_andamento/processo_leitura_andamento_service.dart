@@ -16,6 +16,13 @@ class ProcessoLeituraAndamentoService {
           .map((e) => ProcessoLeituraAndamentoModel.fromJson(e))
           .toList();
 
+  Future<List<ProcessoLeituraAndamentoModel>> FilterNoLock(
+    ProcessoLeituraAndamentoFilter filter,
+  ) async =>
+      (await _client.postList('/processo-leitura-andamento/filter-no-lock', filter))
+          .map((e) => ProcessoLeituraAndamentoModel.fromJson(e))
+          .toList();
+
   Future<(String message, ProcessoLeituraAndamentoModel leituraAndamento)?>
       delete(
     ProcessoLeituraAndamentoModel obj,

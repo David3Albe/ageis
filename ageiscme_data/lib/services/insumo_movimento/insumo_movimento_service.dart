@@ -1,7 +1,9 @@
 import 'package:ageiscme_data/shared/custom_dio.dart';
+import 'package:ageiscme_models/dto/insumo_movimento/drop_down_search/insumo_movimento_drop_down_search_dto.dart';
 import 'package:ageiscme_models/dto/insumo_movimento/save/insumo_movimento_save_dto.dart';
 import 'package:ageiscme_models/filters/insumo_movimento/insumo_movimento_filter.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/response_dto/insumo_movimento/drop_down_search/insumo_movimento_drop_down_search_response_dto.dart';
 
 class InsumoMovimentoService {
   final CustomDio _client = CustomDio();
@@ -47,6 +49,21 @@ class InsumoMovimentoService {
       '/insumo-movimento/${obj.cod}',
       obj,
       (dynamic json) => InsumoMovimentoModel.fromJson(json),
+    );
+  }
+
+  Future<(String, List<InsumoMovimentoDropDownSearchResponseDTO>)?>
+      getDropDownSearchInsumoMovimento(
+    InsumoMovimentoDropDownSearchDTO dto,
+  ) async {
+    return await _client.post(
+      '/insumo-movimento/drop-down-search',
+      dto,
+      (dynamic json) => (json as List<dynamic>)
+          .map(
+            (e) => InsumoMovimentoDropDownSearchResponseDTO.fromJson(e),
+          )
+          .toList(),
     );
   }
 }

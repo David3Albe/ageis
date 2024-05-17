@@ -12,6 +12,9 @@ _$ConsultaProcessosLeituraDetalheKitFilterImpl
           codKit: json['codKit'] as int?,
           codRegistroProcesso: json['codRegistroProcesso'] as int?,
           faltantes: json['faltantes'] as int?,
+          dataHora: json['dataHora'] == null
+              ? null
+              : DateTime.parse(json['dataHora'] as String),
         );
 
 Map<String, dynamic> _$$ConsultaProcessosLeituraDetalheKitFilterImplToJson(
@@ -20,4 +23,5 @@ Map<String, dynamic> _$$ConsultaProcessosLeituraDetalheKitFilterImplToJson(
       'codKit': instance.codKit,
       'codRegistroProcesso': instance.codRegistroProcesso,
       'faltantes': instance.faltantes,
+      'dataHora': instance.dataHora?.toIso8601String(),
     };

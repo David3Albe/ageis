@@ -1,17 +1,21 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/equipamento/equipamento_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/peca/peca_subit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/servico_tipo/servico_tipo_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento_manutencao/equipamento_manutencao_page_frm/equipamento_manutencao_page_frm_controller.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento_manutencao/equipamento_manutencao_page_frm/equipamento_manutencao_page_frm_state.dart';
+import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_data/services/equipamento_manutencao/equipamento_manutencao_service.dart';
+import 'package:ageiscme_data/services/usuario/usuario_service.dart';
 import 'package:ageiscme_data/stores/authentication/authentication_store.dart';
 import 'package:ageiscme_models/dto/authentication_result/authentication_result_dto.dart';
+import 'package:ageiscme_models/dto/usuario/usuario_drop_down_search_dto.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/label_string_widget.dart';
@@ -38,12 +42,10 @@ class EquipamentoManutencaoPageFrm extends StatefulWidget {
     Key? key,
     required this.equipamentoManutencao,
     required this.equipamentoCubit,
-    required this.usuarioCubit,
   }) : super(key: key);
 
   final EquipamentoManutencaoModel equipamentoManutencao;
   final EquipamentoCubit equipamentoCubit;
-  final UsuarioCubit usuarioCubit;
 
   @override
   State<EquipamentoManutencaoPageFrm> createState() =>
@@ -276,6 +278,9 @@ class _EquipamentoManutencaoPageFrmState
         ? TimeOfDay.fromDateTime(equipamentoManutencao.dataInicio!)
         : const TimeOfDay(hour: 0, minute: 0),
     onTimeSelected: (value) {
+      if (equipamentoManutencao.dataInicio == null) {
+        return;
+      }
       equipamentoManutencao.dataInicio = DateTime(
         equipamentoManutencao.dataInicio!.year,
         equipamentoManutencao.dataInicio!.month,
@@ -310,6 +315,9 @@ class _EquipamentoManutencaoPageFrmState
         ? TimeOfDay.fromDateTime(equipamentoManutencao.dataTermino!)
         : const TimeOfDay(hour: 0, minute: 0),
     onTimeSelected: (value) {
+      if (equipamentoManutencao.dataTermino == null) {
+        return;
+      }
       equipamentoManutencao.dataTermino = DateTime(
         equipamentoManutencao.dataTermino!.year,
         equipamentoManutencao.dataTermino!.month,
@@ -688,27 +696,24 @@ class _EquipamentoManutencaoPageFrmState
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
-                      child: BlocBuilder<UsuarioCubit, UsuarioState>(
-                        bloc: widget.usuarioCubit,
-                        builder: (context, state) {
-                          List<UsuarioModel> usuarios = state.usuarios;
-                          UsuarioModel? usuario = usuarios
-                              .where(
-                                (element) =>
-                                    element.cod.toString() ==
-                                    equipamentoManutencao.detectadoPor,
-                              )
-                              .firstOrNull;
-                          return DropDownSearchWidget(
-                            textFunction: (usuario) =>
-                                usuario.CodBarraNomeText(),
-                            initialValue: usuario,
-                            sourceList: usuarios,
-                            onChanged: (value) => equipamentoManutencao
-                                .detectadoPor = value?.cod.toString(),
-                            placeholder: 'Detectado por',
-                          );
+                      child: DropDownSearchApiWidget<
+                          UsuarioDropDownSearchResponseDTO>(
+                        search: (str) async =>
+                            (await UsuarioService().getDropDownSearch(
+                              UsuarioDropDownSearchDTO(
+                                numeroRegistros: 30,
+                                search: str,
+                              ),
+                            ))
+                                ?.$2 ??
+                            [],
+                        textFunction: (usuario) => usuario.CodBarraNome(),
+                        initialValue: equipamentoManutencao.usuarioDetectadoPor,
+                        onChanged: (value) {
+                          equipamentoManutencao.detectadoPor = value?.cod.toString();
+                          equipamentoManutencao.usuarioDetectadoPor = value;
                         },
+                        placeholder: 'Detectado por',
                       ),
                     ),
                     Padding(
@@ -720,27 +725,25 @@ class _EquipamentoManutencaoPageFrmState
                       child: Row(
                         children: [
                           Expanded(
-                            child: BlocBuilder<UsuarioCubit, UsuarioState>(
-                              bloc: widget.usuarioCubit,
-                              builder: (context, state) {
-                                List<UsuarioModel> usuarios = state.usuarios;
-                                UsuarioModel? usuario = usuarios
-                                    .where(
-                                      (element) =>
-                                          element.cod.toString() ==
-                                          equipamentoManutencao.tecnico,
-                                    )
-                                    .firstOrNull;
-                                return DropDownSearchWidget(
-                                  textFunction: (usuario) =>
-                                      usuario.CodBarraNomeText(),
-                                  initialValue: usuario,
-                                  sourceList: usuarios,
-                                  onChanged: (value) => equipamentoManutencao
-                                      .tecnico = value?.cod.toString(),
-                                  placeholder: 'Técnico',
-                                );
+                            child: DropDownSearchApiWidget<
+                                UsuarioDropDownSearchResponseDTO>(
+                              search: (str) async =>
+                                  (await UsuarioService().getDropDownSearch(
+                                    UsuarioDropDownSearchDTO(
+                                      numeroRegistros: 30,
+                                      search: str,
+                                    ),
+                                  ))
+                                      ?.$2 ??
+                                  [],
+                              textFunction: (usuario) => usuario.CodBarraNome(),
+                              initialValue: equipamentoManutencao.usuarioTecnico,
+                              onChanged: (value) {
+                                equipamentoManutencao.tecnico =
+                                    value?.cod.toString();
+                                equipamentoManutencao.usuarioTecnico = value;
                               },
+                              placeholder: 'Técnico',
                             ),
                           ),
                           const SizedBox(width: 50.0),
@@ -1108,7 +1111,15 @@ class _EquipamentoManutencaoPageFrmState
                           equipamentoManutencao,
                         ),
                       ),
-                      CustomPopupItemHistoryModel.getHistoryItem(),
+                      if (equipamentoManutencao.cod != null &&
+                          equipamentoManutencao.cod != 0)
+                        CustomPopupItemHistoryModel.getHistoryItem(
+                          child: HistoricoPage(
+                            pk: equipamentoManutencao.cod!,
+                            termo: 'EQUIPAMENTO_MANUTENCAO',
+                          ),
+                          context: context,
+                        ),
                     ],
                   ),
                   const Spacer(),
@@ -1182,7 +1193,6 @@ class _EquipamentoManutencaoPageFrmState
         !txtValor5.valid) {
       return;
     }
-
     cubit.save(equipamentoManutencao);
   }
 }

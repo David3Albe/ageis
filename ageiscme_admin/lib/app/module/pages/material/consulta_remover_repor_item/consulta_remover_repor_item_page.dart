@@ -1,14 +1,19 @@
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/kit/kit_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/motivo_remover_repor_item/motivo_remover_repor_item.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/material/consulta_remover_repor_item/consulta_remover_repor_item_page_state.dart';
 import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
 import 'package:ageiscme_data/query_services/motivo_remover_repor_item/consulta_remover_repor_item_service.dart';
 import 'package:ageiscme_data/services/item/item_service.dart';
+import 'package:ageiscme_data/services/kit/kit_service.dart';
+import 'package:ageiscme_data/services/usuario/usuario_service.dart';
+import 'package:ageiscme_models/dto/kit/drop_down_search/kit_drop_down_search_dto.dart';
+import 'package:ageiscme_models/dto/usuario/usuario_drop_down_search_dto.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/query_filters/motivo_remover_repor_item/consulta_remover_repor_item_filter.dart';
+import 'package:ageiscme_models/response_dto/kit/drop_down_search/kit_drop_down_search_response_dto.dart';
+import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/campos/custom_autocomplete/custom_autocomplete_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
@@ -82,8 +87,6 @@ class _ConsultaRemoverReporItemPageState
   ];
 
   late final ConsultaRemoverReporItemPageCubit bloc;
-  late final KitCubit kitBloc;
-  late final UsuarioCubit usuarioCubit;
   late final MotivoRemoverReporItemCubit motivoRemoverReporItemCubit;
   late final ConsultaRemoverReporItemFilter filter;
 
@@ -95,10 +98,6 @@ class _ConsultaRemoverReporItemPageState
     filter = ConsultaRemoverReporItemFilter.empty();
     filter.startDate = DateTime.now().add(const Duration(days: -1));
     filter.finalDate = DateTime.now();
-    kitBloc = KitCubit();
-    kitBloc.loadAll();
-    usuarioCubit = UsuarioCubit();
-    usuarioCubit.loadAll();
     motivoRemoverReporItemCubit = MotivoRemoverReporItemCubit();
     motivoRemoverReporItemCubit.loadAll();
 
@@ -171,63 +170,52 @@ class _ConsultaRemoverReporItemPageState
                 initialValue: filter.finalDate,
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<KitCubit, List<KitModel>>(
-                bloc: kitBloc,
-                builder: (context, kits) {
-                  KitModel? kit = kits
-                      .where(
-                        (element) => element.codBarra == filter.codBarraKit,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<KitModel>(
-                    textFunction: (kit) => kit.CodBarraDescritorText(),
-                    initialValue: kit,
-                    sourceList: kits,
-                    onChanged: (value) => filter.codBarraKit = value?.codBarra,
-                    placeholder: 'Kit',
-                  );
+              CustomAutocompleteWidget<KitDropDownSearchResponseDTO>(
+                initialValue: filter.codBarraKitContem,
+                onChange: (str) => filter.codBarraKitContem = str,
+                onItemSelectedText: (kit) => kit.codBarra,
+                label: 'Kit',
+                title: (p0) => Text(p0.CodBarraDescritorText()),
+                suggestionsCallback: (str) async {
+                  return (await KitService().getDropDownSearchKits(
+                        KitDropDownSearchDTO(
+                          search: str,
+                          numeroRegistros: 30,
+                        ),
+                      ))
+                          ?.$2 ??
+                      [];
                 },
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
-              DropDownSearchApiWidget<ItemModel>(
-                textFunction: (item) => item.EtiquetaDescricaoText(),
-                initialValue: filter.item,
-                search: (str) => ItemService().Filter(
+              CustomAutocompleteWidget<ItemModel>(
+                initialValue: filter.idEtiquetaContem,
+                onChange: (str) => filter.idEtiquetaContem = str,
+                onItemSelectedText: (item) => item.idEtiqueta ?? null,
+                label: 'Item',
+                title: (p0) => Text(p0.EtiquetaDescricaoText()),
+                suggestionsCallback: (str) => ItemService().Filter(
                   ItemFilter(numeroRegistros: 30, termoPesquisa: str),
                 ),
-                onChanged: (value) {
-                  filter.item = value;
-                  filter.codBarraItem = value?.idEtiqueta;
-                },
-                placeholder: 'Item',
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<UsuarioCubit, UsuarioState>(
-                bloc: usuarioCubit,
-                builder: (context, state) {
-                  List<UsuarioModel> usuarios = state.usuarios;
-                  usuarios.sort(
-                    (a, b) => a.nome!.compareTo(b.nome!),
-                  );
-                  UsuarioModel? usuario = usuarios
-                      .where(
-                        (element) => element.cod == filter.codUsuarioAcao,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<UsuarioModel>(
-                    textFunction: (usuario) => usuario.CodBarraNomeText(),
-                    initialValue: usuario,
-                    sourceList: usuarios
-                        .where(
-                          (element) =>
-                              element.ativo == true &&
-                              element.colaborador == true,
-                        )
-                        .toList(),
-                    onChanged: (value) => filter.codUsuarioAcao = value?.cod,
-                    placeholder: 'Usuário',
-                  );
+              DropDownSearchApiWidget<UsuarioDropDownSearchResponseDTO>(
+                search: (str) async =>
+                    (await UsuarioService().getDropDownSearch(
+                      UsuarioDropDownSearchDTO(
+                        numeroRegistros: 30,
+                        search: str,
+                      ),
+                    ))
+                        ?.$2 ??
+                    [],
+                textFunction: (usuario) => usuario.CodBarraNome(),
+                initialValue: filter.usuario,
+                onChanged: (value) {
+                  filter.codUsuarioAcao = value?.cod;
+                  filter.usuario = value;
                 },
+                placeholder: 'Usuário',
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
               BlocBuilder<MotivoRemoverReporItemCubit,

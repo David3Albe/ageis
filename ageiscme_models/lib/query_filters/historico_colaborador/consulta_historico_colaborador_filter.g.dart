@@ -16,6 +16,10 @@ _$ConsultaHistoricoColaboradorFilterImpl
               ? null
               : DateTime.parse(json['finalDate'] as String),
           codUsuario: json['codUsuario'] as int?,
+          usuario: json['usuario'] == null
+              ? null
+              : UsuarioDropDownSearchResponseDTO.fromJson(
+                  Map<String, Object?>.from(json['usuario'] as Map)),
         );
 
 Map<String, dynamic> _$$ConsultaHistoricoColaboradorFilterImplToJson(
@@ -24,4 +28,5 @@ Map<String, dynamic> _$$ConsultaHistoricoColaboradorFilterImplToJson(
       'startDate': instance.startDate?.toIso8601String(),
       'finalDate': instance.finalDate?.toIso8601String(),
       'codUsuario': instance.codUsuario,
+      'usuario': instance.usuario?.toJson(),
     };

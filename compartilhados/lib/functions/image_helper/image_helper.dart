@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:compartilhados/functions/image_helper/image_object_model.dart';
-import 'package:dependencias_comuns/main.dart';
+import 'package:dependencias_comuns/file_picker_export.dart';
 import 'package:flutter/foundation.dart';
 
 class ImageHelper {

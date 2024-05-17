@@ -16,7 +16,9 @@ _$ConsultaProcessosLeituraDispensadoFilterImpl
               ? null
               : DateTime.parse(json['finalDate'] as String),
           codItem: json['codItem'] as int?,
+          idEtiquetaContem: json['idEtiquetaContem'] as String?,
           codKit: json['codKit'] as int?,
+          codBarraKitContem: json['codBarraKitContem'] as String?,
           codLocal: json['codLocal'] as int?,
           item: json['item'] == null
               ? null
@@ -30,7 +32,9 @@ Map<String, dynamic> _$$ConsultaProcessosLeituraDispensadoFilterImplToJson(
       'startDate': instance.startDate?.toIso8601String(),
       'finalDate': instance.finalDate?.toIso8601String(),
       'codItem': instance.codItem,
+      'idEtiquetaContem': instance.idEtiquetaContem,
       'codKit': instance.codKit,
+      'codBarraKitContem': instance.codBarraKitContem,
       'codLocal': instance.codLocal,
       'item': instance.item?.toJson(),
     };

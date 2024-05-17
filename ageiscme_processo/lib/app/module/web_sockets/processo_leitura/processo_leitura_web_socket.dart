@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:ageiscme_data/shared/app_config.dart';
@@ -14,40 +15,69 @@ class ProcessoLeituraWebSocket {
   Function((String, ProcessoLeituraMontagemModel)) onMessageReceived;
   Function(String) onError;
   Function() handleKey;
+  Function(String) onConnectionLost;
+  Timer? TIMER;
 
-  WebSocketChannel? webSocket;
+  WebSocketChannel? _webSocket;
   ProcessoLeituraWebSocket({
     required this.onMessageReceived,
     required this.onError,
     required this.handleKey,
+    required this.onConnectionLost,
   });
 
   Future connect() async {
     String routeBase = await _route;
     routeBase = routeBase.replaceAll('http', 'ws');
-    webSocket =
-        WebSocketChannel.connect(Uri.parse(routeBase + _webSocketRoute));
-
-    webSocket!.stream.listen((event) {
-      CommandResultModel result =
-          CommandResultModel.fromJson(jsonDecode(event));
-      if (!result.success) {
-        onError(result.message);
-        return;
-      }
-      (String, ProcessoLeituraMontagemModel)? leitura =
-          (result.message, ProcessoLeituraMontagemModel.fromJson(result.data));
-      onMessageReceived(leitura);
+    _webSocket = WebSocketChannel.connect(
+      Uri.parse(routeBase + _webSocketRoute),
+    );
+    TIMER?.cancel();
+    TIMER = Timer.periodic(const Duration(minutes: 2), (timer) {
+      if (timer.isActive != true) return;
+      sendPing();
     });
+
+    _webSocket!.stream.listen(
+      (event) {
+        if (event == 'pong') {
+          print('pong');
+          return;
+        }
+        CommandResultModel result =
+            CommandResultModel.fromJson(jsonDecode(event));
+        if (!result.success) {
+          onError(result.message);
+          return;
+        }
+        (String, ProcessoLeituraMontagemModel)? leitura = (
+          result.message,
+          ProcessoLeituraMontagemModel.fromJson(result.data)
+        );
+        onMessageReceived(leitura);
+      },
+      cancelOnError: false,
+    );
+  }
+
+  void close() {
+    TIMER?.cancel();
+    _webSocket?.sink.close();
   }
 
   Future tryConnect() async {
-    if (webSocket?.closeCode == null) return;
+    if (_webSocket?.closeCode == null) return;
     await connect();
   }
 
   void sendMessage(ProcessoLeituraMontagemModel montagem) async {
     await tryConnect();
-    webSocket?.sink.add(jsonEncode(montagem.toJson()));
+    _webSocket?.sink.add(jsonEncode(montagem.toJson()));
+  }
+
+  Future sendPing() async {
+    print('ping');
+    await tryConnect();
+    _webSocket?.sink.add('ping');
   }
 }

@@ -19,6 +19,10 @@ _$ConsultaItemInventarioFilterImpl _$$ConsultaItemInventarioFilterImplFromJson(
       codProprietario: json['codProprietario'] as int?,
       cmInicio: (json['cmInicio'] as num?)?.toDouble(),
       cmFinal: (json['cmFinal'] as num?)?.toDouble(),
+      itemDescritor: json['itemDescritor'] == null
+          ? null
+          : ItemDescritorDropDownSearchResponseDTO.fromJson(
+              Map<String, Object?>.from(json['itemDescritor'] as Map)),
     );
 
 Map<String, dynamic> _$$ConsultaItemInventarioFilterImplToJson(
@@ -34,4 +38,5 @@ Map<String, dynamic> _$$ConsultaItemInventarioFilterImplToJson(
       'codProprietario': instance.codProprietario,
       'cmInicio': instance.cmInicio,
       'cmFinal': instance.cmFinal,
+      'itemDescritor': instance.itemDescritor?.toJson(),
     };

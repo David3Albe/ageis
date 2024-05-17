@@ -16,6 +16,11 @@ class EquipamentoInsumoCubit extends Cubit<EquipamentoInsumoState> {
   }
 
   void refresh() => emit(EquipamentoInsumoState(obj: state.obj));
+
+  void reload() {
+    emit(EquipamentoInsumoState(obj: state.obj, loading: true));
+    emit(EquipamentoInsumoState(obj: state.obj));
+  }
 }
 
 class EquipamentoInsumoState {

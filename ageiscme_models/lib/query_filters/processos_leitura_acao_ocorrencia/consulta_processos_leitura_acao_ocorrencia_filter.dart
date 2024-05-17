@@ -1,4 +1,5 @@
 import 'package:ageiscme_models/models/item/item_model.dart';
+import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'consulta_processos_leitura_acao_ocorrencia_filter.g.dart';
@@ -13,11 +14,15 @@ sealed class ConsultaProcessosLeituraAcaoOcorrenciaFilter
     required DateTime? startDate,
     required DateTime? finalDate,
     required int? codKit,
+    required String? codBarraKitContem,
     required int? codItem,
+    required String? idEtiquetaContem,
     required int? codUsuarioAcao,
     required int? codUsuarioAutorizacao,
     required int? codAcaoOcorrencia,
     ItemModel? item,
+    UsuarioDropDownSearchResponseDTO? usuarioAcao,
+    UsuarioDropDownSearchResponseDTO? usuarioAutorizacao,
   }) = _ConsultaProcessosLeituraAcaoOcorrenciaFilter;
 
   factory ConsultaProcessosLeituraAcaoOcorrenciaFilter.fromJson(
@@ -38,5 +43,7 @@ sealed class ConsultaProcessosLeituraAcaoOcorrenciaFilter
         finalDate: null,
         startDate: null,
         codAcaoOcorrencia: null,
+        codBarraKitContem: null,
+        idEtiquetaContem: null,
       );
 }

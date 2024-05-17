@@ -1,5 +1,3 @@
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/item/item_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/kit/kit_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/local_instituicao/local_instituicao_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/arsenal/consulta_processos_leitura_dispensado/consulta_processos_leitura_dispensado_page.dart';
 import 'package:ageiscme_admin/app/module/pages/arsenal/consulta_processos_leitura_dispensado/consulta_processos_leitura_dispensado_page_state.dart';
@@ -24,15 +22,11 @@ class _LoadConsultaProcessosLeituraDispensadoPageState
 
   late final ConsultaProcessosLeituraDispensadoPageCubit bloc;
   late final LocalInstituicaoCubit localInstituicaoBloc;
-  late final KitCubit kitBloc;
-  late final ItemCubit itemBloc;
   late final ConsultaProcessosLeituraDispensadoFilter filter;
 
   @override
   void dispose() {
     localInstituicaoBloc.close();
-    kitBloc.close();
-    itemBloc.close();
     bloc.close();
     super.dispose();
   }
@@ -47,8 +41,6 @@ class _LoadConsultaProcessosLeituraDispensadoPageState
     filter.finalDate = DateTime.now();
     localInstituicaoBloc = LocalInstituicaoCubit();
     localInstituicaoBloc.loadAll();
-    kitBloc = KitCubit();
-    kitBloc.loadAll();
 
     colunas = [
       CustomDataColumn(
@@ -113,7 +105,6 @@ class _LoadConsultaProcessosLeituraDispensadoPageState
       colunas: colunas,
       filter: filter,
       itemFilter: ItemFilter(),
-      kitBloc: kitBloc,
       localInstituicaoBloc: localInstituicaoBloc,
     );
   }

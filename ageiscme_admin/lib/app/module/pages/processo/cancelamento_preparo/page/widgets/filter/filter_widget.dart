@@ -38,7 +38,7 @@ class FilterWidget extends StatelessWidget {
     if (result != true) return;
     filterCubit = context.read<FilterCubit>();
     FilterState state = filterCubit.state;
-    if (state.kit == null && state.item == null) {
+    if (state.codBarraKit == null && state.idEtiqueta == null) {
       ToastUtils.showCustomToastWarning(
         context,
         'É necessário selecionar um kit ou item para realizar a busca.',
@@ -48,8 +48,8 @@ class FilterWidget extends StatelessWidget {
     SearchCubit searchCubit = context.read<SearchCubit>();
     ProcessoLeituraCancelamentoPreparoSearchDTO dto =
         ProcessoLeituraCancelamentoPreparoSearchDTO(
-      codItem: filterCubit.state.codItem,
-      codKit: filterCubit.state.codKit,
+      idEtiqueta: filterCubit.state.idEtiqueta,
+      codBarraKit: filterCubit.state.codBarraKit,
     );
     LoadingController loading = LoadingController(context: context);
     await searchCubit.search(dto);

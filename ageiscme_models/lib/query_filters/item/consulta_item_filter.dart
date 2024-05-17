@@ -1,4 +1,5 @@
 import 'package:ageiscme_models/models/item/item_model.dart';
+import 'package:ageiscme_models/response_dto/item_descritor/drop_down_search/item_descritor_drop_down_search_response_dto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'consulta_item_filter.g.dart';
@@ -11,8 +12,10 @@ sealed class ConsultaItemFilter with _$ConsultaItemFilter {
   factory ConsultaItemFilter({
     required int? codItemDescritor,
     required int? codItem,
+    required String? idEtiquetaContem,
     required String? codSituacao,
     required int? codGrupo,
+    required String? codBarraKitContem,
     required int? codKit,
     required int? codProprietario,
     required int? numeroPatrimonio,
@@ -24,7 +27,9 @@ sealed class ConsultaItemFilter with _$ConsultaItemFilter {
     required bool? descarte,
     required bool? rotulado,
     required bool? implantavel,
+    int? numeroRegistros,
     ItemModel? item,
+    ItemDescritorDropDownSearchResponseDTO? itemDescritor,
   }) = _ConsultaItemFilter;
 
   factory ConsultaItemFilter.fromJson(Map<String, Object?> json) =>
@@ -50,5 +55,7 @@ sealed class ConsultaItemFilter with _$ConsultaItemFilter {
         descarte: null,
         rotulado: null,
         implantavel: null,
+        codBarraKitContem: null,
+        idEtiquetaContem: null,
       );
 }

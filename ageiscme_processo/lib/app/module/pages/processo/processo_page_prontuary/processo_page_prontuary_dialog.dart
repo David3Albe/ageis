@@ -157,27 +157,9 @@ class _ProcessoPageProntuaryDialogState
 
   void InserirProntuario(String? removerDoCodigo) {
     if (!_validaCampos()) return;
-    removerCodigo(removerDoCodigo);
     widget.processoLeitura.leituraAtual.decisao =
         DecisaoEnum.MontagemProntuarioConfirmada;
     Navigator.of(context).pop();
-  }
-
-  void removerCodigo(String? removerDoCodigo) {
-    if (removerDoCodigo == null) return;
-    String? textoObservacao =
-        widget.processoLeitura.leituraAtual.processoDetalheRegistro!.observacao;
-    String? textoProntuario = widget.processoLeitura.leituraAtual
-        .processoDetalheRegistro!.prontuarioRetirada;
-    if (textoObservacao != null) {
-      widget.processoLeitura.leituraAtual.processoDetalheRegistro!.observacao =
-          textoObservacao.replaceAll(textoObservacao, removerDoCodigo);
-    }
-    if (textoProntuario != null) {
-      widget.processoLeitura.leituraAtual.processoDetalheRegistro!
-              .prontuarioRetirada =
-          textoProntuario.replaceAll(textoProntuario, removerDoCodigo);
-    }
   }
 
   bool _validaCampos() {

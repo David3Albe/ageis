@@ -12,7 +12,9 @@ sealed class ConsultaEstoqueVencidoFilter with _$ConsultaEstoqueVencidoFilter {
     required int? codEstoque,
     required int? codLocalEstoque,
     required int? codKit,
+    required String? codBarraKitContem,
     required int? codItem,
+    required String? idEtiquetaContem,
     required bool? rotulado,
     ItemModel? item,
   }) = _ConsultaEstoqueVencidoFilter;
@@ -30,5 +32,7 @@ sealed class ConsultaEstoqueVencidoFilter with _$ConsultaEstoqueVencidoFilter {
         codKit: null,
         codItem: null,
         rotulado: null,
+        codBarraKitContem: null,
+        idEtiquetaContem: null,
       );
 }

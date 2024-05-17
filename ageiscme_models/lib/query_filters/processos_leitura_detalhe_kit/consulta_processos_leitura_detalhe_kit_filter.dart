@@ -9,9 +9,10 @@ sealed class ConsultaProcessosLeituraDetalheKitFilter
   const ConsultaProcessosLeituraDetalheKitFilter._();
 
   factory ConsultaProcessosLeituraDetalheKitFilter({
-    required int? codKit,
-    required int? codRegistroProcesso,
-    required int? faltantes,
+     int? codKit,
+     int? codRegistroProcesso,
+     int? faltantes,
+     DateTime? dataHora,
   }) = _ConsultaProcessosLeituraDetalheKitFilter;
 
   factory ConsultaProcessosLeituraDetalheKitFilter.fromJson(

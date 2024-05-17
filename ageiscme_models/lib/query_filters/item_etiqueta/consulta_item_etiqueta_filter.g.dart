@@ -20,6 +20,12 @@ _$ConsultaItemEtiquetaFilterImpl _$$ConsultaItemEtiquetaFilterImplFromJson(
       codKit: json['codKit'] as int?,
       idEtiqueta: json['idEtiqueta'] as String?,
       descartar: json['descartar'] as bool?,
+      codBarraKitContem: json['codBarraKitContem'] as String?,
+      itemDescritor: json['itemDescritor'] == null
+          ? null
+          : ItemDescritorDropDownSearchResponseDTO.fromJson(
+              Map<String, Object?>.from(json['itemDescritor'] as Map)),
+      numeroRegistros: json['numeroRegistros'] as int?,
     );
 
 Map<String, dynamic> _$$ConsultaItemEtiquetaFilterImplToJson(
@@ -32,4 +38,7 @@ Map<String, dynamic> _$$ConsultaItemEtiquetaFilterImplToJson(
       'codKit': instance.codKit,
       'idEtiqueta': instance.idEtiqueta,
       'descartar': instance.descartar,
+      'codBarraKitContem': instance.codBarraKitContem,
+      'itemDescritor': instance.itemDescritor?.toJson(),
+      'numeroRegistros': instance.numeroRegistros,
     };

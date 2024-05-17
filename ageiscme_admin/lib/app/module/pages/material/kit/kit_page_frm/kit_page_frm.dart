@@ -1,25 +1,31 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/kit_cor/kit_cor_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/kit_descritor/kit_descritor_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
+import 'package:ageiscme_admin/app/module/pages/material/item/item_page.dart';
+import 'package:ageiscme_admin/app/module/pages/material/item/item_page_frm_type.dart';
 import 'package:ageiscme_admin/app/module/pages/material/kit/kit_page_frm/kit_page_frm_adicionar_item/kit_page_frm_adicionar_item_page.dart';
 import 'package:ageiscme_admin/app/module/pages/material/kit/kit_page_frm/kit_page_frm_remover_item/kit_page_frm_remover_item_page.dart';
 import 'package:ageiscme_admin/app/module/pages/material/kit/kit_page_frm/kit_page_frm_repor_item/kit_page_frm_repor_item_page.dart';
 import 'package:ageiscme_admin/app/module/pages/material/kit/kit_page_frm/kit_page_frm_state.dart';
 import 'package:ageiscme_data/services/item/item_service.dart';
 import 'package:ageiscme_data/services/kit/kit_service.dart';
+import 'package:ageiscme_data/services/kit_descritor/kit_descritor_service.dart';
 import 'package:ageiscme_impressoes/dto/kit_tag_print/kit_tag_print_dto.dart';
 import 'package:ageiscme_impressoes/dto/processo_preparation_print/processo_preparation_kit_print/processo_preparation_kit_print_dto.dart';
 import 'package:ageiscme_impressoes/dto/processo_preparation_print/processo_preparation_print_dto.dart';
 import 'package:ageiscme_impressoes/prints/kit_tag_printer/kit_tag_printer_controller.dart';
 import 'package:ageiscme_impressoes/prints/processo_preparation_printer/processo_preparation_printer_controller.dart';
 import 'package:ageiscme_models/dto/kit/kit_etiqueta_preparo/kit_etiqueta_preparo_dto.dart';
+import 'package:ageiscme_models/dto/kit_descritor/drop_down_search/kit_descritor_drop_down_search_dto.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/response_dto/kit_descritor/drop_down_search/kit_descritor_drop_down_search_response_dto.dart';
 import 'package:ageiscme_models/response_dto/kit_etiqueta_preparo_response/kit_etiqueta_preparo_kit_response/kit_etiqueta_preparo_kit_response_dto.dart';
 import 'package:ageiscme_models/response_dto/kit_etiqueta_preparo_response/kit_etiqueta_preparo_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/list_field/list_field_widget.dart';
@@ -33,6 +39,7 @@ import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/fontes/fontes.dart';
+import 'package:compartilhados/query_dialog/query_dialog_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -55,7 +62,6 @@ class _KitPageFrmState extends State<KitPageFrm> {
 
   late String titulo;
   KitModel kit;
-  late final KitDescritorCubit kitDescritorCubit;
 
   late final KitPageFrmCubit cubit = KitPageFrmCubit(
     kitModel: kit,
@@ -105,8 +111,6 @@ class _KitPageFrmState extends State<KitPageFrm> {
 
   @override
   void initState() {
-    kitDescritorCubit = KitDescritorCubit();
-    kitDescritorCubit.loadAll();
 
     txtRestricao.addValidator((String str) {
       if (str.length > 400) {
@@ -178,45 +182,30 @@ class _KitPageFrmState extends State<KitPageFrm> {
                       child: Row(
                         children: [
                           Expanded(
-                            child: BlocBuilder<KitDescritorCubit,
-                                KitDescritorState>(
-                              bloc: kitDescritorCubit,
-                              builder: (context, kitsDescritoresState) {
-                                if (kitsDescritoresState.loading) {
-                                  return const Center(
-                                    child: const LoadingWidget(),
-                                  );
-                                }
-                                List<KitDescritorModel> kitsDescritores =
-                                    kitsDescritoresState.kitDescritores;
-                                kitsDescritores.sort(
-                                  (a, b) => a.nome!.compareTo(b.nome!),
-                                );
-                                KitDescritorModel? kitDescritor =
-                                    kitsDescritores
-                                        .where(
-                                          (element) =>
-                                              element.cod ==
-                                              kit.codDescritorKit,
-                                        )
-                                        .firstOrNull;
-
-                                kitsDescritores.sort(
-                                  (a, b) => a.nome!.compareTo(b.nome!),
-                                );
-
-                                return DropDownSearchWidget(
-                                  textFunction: (kitDescritor) =>
-                                      kitDescritor.KitDescritorText(),
-                                  initialValue: kitDescritor,
-                                  sourceList: kitsDescritores
-                                      .where((element) => element.ativo == true)
-                                      .toList(),
-                                  onChanged: (value) =>
-                                      kit.codDescritorKit = value?.cod,
-                                  placeholder: 'Descritor do Kit',
-                                );
-                              },
+                            child: DropDownSearchApiWidget<
+                                KitDescritorDropDownSearchResponseDTO>(
+                              search: (str) async =>
+                                  (await KitDescritorService()
+                                          .getDropDownSearch(
+                                    KitDescritorDropDownSearchDTO(
+                                      numeroRegistros: 30,
+                                      termoPesquisa: str,
+                                      apenasAtivos: true,
+                                    ),
+                                  ))
+                                      ?.$2 ??
+                                  [],
+                              textFunction: (kitDescritor) =>
+                                  kitDescritor.Nome(),
+                              initialValue: kit.descritor == null
+                                  ? null
+                                  : KitDescritorDropDownSearchResponseDTO(
+                                      cod: kit.descritor!.cod!,
+                                      nome: kit.descritor?.nome,
+                                    ),
+                              onChanged: (value) =>
+                                  kit.codDescritorKit = value?.cod,
+                              placeholder: 'Descritor do Kit',
                             ),
                           ),
                           const SizedBox(width: 16.0),
@@ -410,6 +399,8 @@ class _KitPageFrmState extends State<KitPageFrm> {
                               sourceList: itens,
                               removeButton: false,
                               onItemSelected: (value) {},
+                              onDoubleTap: (ItemModel item) =>
+                                  _detalharItem(item.cod),
                               itemText: (value) {
                                 return '${value.descricao}, ${value.idEtiqueta}';
                               },
@@ -471,7 +462,13 @@ class _KitPageFrmState extends State<KitPageFrm> {
                           onTap: removerItemKit,
                         ),
                       if (kit.cod != 0 && kit.cod != null)
-                        CustomPopupItemHistoryModel.getHistoryItem(),
+                        CustomPopupItemHistoryModel.getHistoryItem(
+                          child: HistoricoPage(
+                            pk: kit.cod!,
+                            termo: 'KIT',
+                          ),
+                          context: context,
+                        ),
                     ],
                   ),
                   const Spacer(),
@@ -559,6 +556,22 @@ class _KitPageFrmState extends State<KitPageFrm> {
     await _carregarItensKit();
   }
 
+  Future _detalharItem(int? codItem) async {
+    await showDialog<bool>(
+      barrierDismissible: false,
+      context: context,
+      barrierColor: Colors.white,
+      builder: (BuildContext context) {
+        return QueryDialogWidget(
+          child: ItemPage(
+            frmType: ItemPageFrmtype.Items,
+            codItem: codItem,
+          ),
+        );
+      },
+    );
+  }
+
   Future adicionarItemKit() async {
     List<ItemModel>? itensAdicionados = await showDialog<List<ItemModel>>(
       barrierDismissible: false,
@@ -580,14 +593,18 @@ class _KitPageFrmState extends State<KitPageFrm> {
 
   void salvar() {
     if (!txtRestricao.valid) return;
-    cubit.save(kit);
+    Function(KitModel)? afterSave;
+    if (kit.cod == 0 || kit.cod == null) {
+      afterSave = (kitImprimir) => _imprimirTagKit(kitImprimir: kitImprimir);
+    }
+    cubit.save(kit, afterSave);
   }
 
-  Future _imprimirTagKit() async {
+  Future _imprimirTagKit({KitModel? kitImprimir}) async {
     KitTagPrinterController controller = KitTagPrinterController(
       context: context,
       dto: KitTagPrintDTO(
-        codBarra: kit.codBarra!,
+        codBarra: kitImprimir?.codBarra ?? kit.codBarra!,
       ),
     );
     LoadingController loading = LoadingController(context: context);

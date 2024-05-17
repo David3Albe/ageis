@@ -8,7 +8,7 @@ part 'indicador_processo_model.g.dart';
 abstract class IndicadorProcessoModel with _$IndicadorProcessoModel {
   const IndicadorProcessoModel._();
   factory IndicadorProcessoModel({
-    String? codBarra,
+    String? codBarraIndicador,
   }) = _IndicadorProcessoModel;
 
   factory IndicadorProcessoModel.fromJson(Map<String, Object?> json) =>

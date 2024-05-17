@@ -13,7 +13,7 @@ class InsumoMovimentoPageFrmCubit extends Cubit<InsumoMovimentoPageFrmState> {
           InsumoMovimentoPageFrmState(insumoMovimento: insumoMovimentoModel),
         );
 
-  void save(
+  Future<InsumoMovimentoModel?> save(
     InsumoMovimentoModel insumoMovimento,
     int? numeroSolicitacaoItem,
   ) async {
@@ -25,7 +25,7 @@ class InsumoMovimentoPageFrmCubit extends Cubit<InsumoMovimentoPageFrmState> {
       if (insumoMovimento.cod == null) insumoMovimento.cod = 0;
       (String message, InsumoMovimentoModel insumoMovimento)? result =
           await service.save(saveDTO);
-      if (result == null) return;
+      if (result == null) return null;
       emit(
         InsumoMovimentoPageFrmState(
           message: result.$1,
@@ -33,6 +33,7 @@ class InsumoMovimentoPageFrmCubit extends Cubit<InsumoMovimentoPageFrmState> {
           insumoMovimento: result.$2,
         ),
       );
+      return result.$2;
     } on Exception catch (ex) {
       emit(
         InsumoMovimentoPageFrmState(
@@ -41,6 +42,7 @@ class InsumoMovimentoPageFrmCubit extends Cubit<InsumoMovimentoPageFrmState> {
         ),
       );
     }
+    return null;
   }
 
   void clear() {

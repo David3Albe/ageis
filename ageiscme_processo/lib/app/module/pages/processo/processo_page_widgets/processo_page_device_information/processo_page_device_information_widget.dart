@@ -1,4 +1,3 @@
-import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_processo/app/module/blocs/processo_leitura_cubit.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
@@ -23,7 +22,8 @@ class _ProcessoPageDeviceInformationWidgetState
 
   double _getIconSize(Size size) {
     double width = size.width;
-    if (width > 1600) return 20;
+    if (width > 1600) return 16;
+    if (width > 800) return 14;
     if (width > 600) return 12;
     return 10;
   }
@@ -35,13 +35,17 @@ class _ProcessoPageDeviceInformationWidgetState
       buildWhen: (previous, current) =>
           current.rebuildType == ProcessoLeituraRebuildType.All,
       builder: (context, state) {
+        double? escalaFonte = state.processo.getEscala();
         return state.processo.maquina == null
             ? const SizedBox()
             : Tooltip(
-                message: _getMessage(state),
+                richMessage: TextSpan(
+                  text: _getMessage(state),
+                  style: TextStyle(fontSize: 16 * escalaFonte),
+                ),
                 child: Icon(
                   Symbols.help,
-                  size: _getIconSize(size),
+                  size: _getIconSize(size) * escalaFonte,
                 ),
               );
       },
@@ -50,17 +54,14 @@ class _ProcessoPageDeviceInformationWidgetState
 
   String _getMessage(ProcessoLeituraState state) {
     String value = '';
-    value = _addParameter(value, state.processo.maquina ?? '');
+    value = _addParameter(value, 'Máquina: ' + (state.processo.maquina ?? ''));
     if (state.processo.leituraAtual.dataHoraInicioProcesso != null) {
       final f = DateFormat('dd/MM/yyyy HH:mm');
       String dataHora =
           f.format(state.processo.leituraAtual.dataHoraInicioProcesso!);
 
-      value = _addParameter(value, dataHora);
+      value = _addParameter(value, 'Início Leitura: ' + dataHora);
     }
-    InstituicaoModel? instituicao = state.processo.leituraAtual.instituicao;
-    value = _addParameter(value, 'Instituição: ' + (instituicao?.nome ?? ''));
-
     return value;
   }
 

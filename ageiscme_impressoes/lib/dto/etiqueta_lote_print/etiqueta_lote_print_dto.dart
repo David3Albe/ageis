@@ -11,7 +11,7 @@ sealed class EtiquetaLotePrintDTO with _$EtiquetaLotePrintDTO {
     required DateTime dataAtual,
     required String nomeEquipamento,
     required String nomeUsuario,
-    required int quantidadePadinas,
+    required int impressoes,
     String? userDoc,
     String? codLote,
   }) = _EtiquetaLotePrintDTO;

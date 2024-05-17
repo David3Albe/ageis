@@ -69,6 +69,85 @@ sealed class ProcessoLeituraMontagemModel with _$ProcessoLeituraMontagemModel {
     throw Exception('Item não foi lido (getItemLido)');
   }
 
+  double getEscala() => leituraAtual.instituicao?.escalaFonte ?? 1.0;
+
+  double getLineHeightPadrao() {
+    double escala = getEscala();
+    if (escala >= 1.5) return 0.7;
+    if (escala >= 1.3) return 0.85;
+    if (escala >= 1.1) return 0.95;
+    if (escala <= 0.9) return 1.05;
+    if (escala <= 0.8) return 1.15;
+    if (escala <= 0.7) return 1.25;
+    return 1;
+  }
+
+  double? getLineHeightPadraoBig() {
+    double escala = getEscala();
+    if (escala >= 1.5) return 1.1;
+    if (escala >= 1.3) return 1;
+    if (escala >= 1.1) return 0.9;
+    if (escala <= 0.9) return 1.2;
+    if (escala <= 0.8) return 1.3;
+    if (escala <= 0.7) return 1.4;
+    return null;
+  }
+
+  double? getLineHeightPadraoMedium() {
+    double escala = getEscala();
+    if (escala >= 1.5) return 1.25;
+    if (escala >= 1.3) return 1.20;
+    if (escala >= 1.1) return 1.15;
+    if (escala <= 0.9) return 1.1;
+    if (escala <= 0.8) return 1;
+    if (escala <= 0.7) return 0.9;
+    return null;
+  }
+
+  double? getLineHeightPadraoVeryBig() {
+    double escala = getEscala();
+    if (escala >= 1.5) return 1.4;
+    if (escala >= 1.3) return 1.3;
+    if (escala >= 1.1) return 1.2;
+    if (escala <= 0.9) return 1.1;
+    if (escala <= 0.8) return 1;
+    if (escala <= 0.7) return 0.9;
+    return null;
+  }
+
+  double getLineHeightSegoe() {
+    double escala = getEscala();
+    if (escala >= 1.5) return 0.7;
+    if (escala >= 1.3) return 0.85;
+    if (escala >= 1.1) return 0.95;
+    if (escala <= 0.9) return 1.05;
+    if (escala <= 0.8) return 1.15;
+    if (escala <= 0.7) return 1.25;
+    return 1;
+  }
+
+  double? getLineHeightSegoeBig() {
+    double escala = getEscala();
+    if (escala >= 1.5) return 1;
+    if (escala >= 1.3) return 0.9;
+    if (escala >= 1.1) return 0.8;
+    if (escala <= 0.9) return 1.1;
+    if (escala <= 0.8) return 1.2;
+    if (escala <= 0.7) return 1.3;
+    return null;
+  }
+
+  double getLineHeightRoboto() {
+    double escala = getEscala();
+    if (escala >= 1.5) return 1;
+    if (escala >= 1.3) return 0.95;
+    if (escala >= 1.1) return 0.9;
+    if (escala <= 0.9) return 1.05;
+    if (escala <= 0.8) return 1.1;
+    if (escala <= 0.7) return 1.15;
+    return 1;
+  }
+
   ItemProcessoModel? getItemSelecionado() {
     ItemProcessoModel? item = leituraAtual.itens
         .where((element) => element.selecionado == true)

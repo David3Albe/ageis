@@ -11,6 +11,9 @@ sealed class InsumoMovimentoFilter with _$InsumoMovimentoFilter {
     DateTime? finalDate,
     int? codInsumo,
     String? codTipoMovimento,
+    bool? carregarInsumo,
+    bool? carregarUsuario,
+    bool? carregarUsuarioDepoisConsulta,
   }) = _InsumoMovimentoFilter;
 
   factory InsumoMovimentoFilter.fromJson(Map<String, Object?> json) =>

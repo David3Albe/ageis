@@ -102,6 +102,10 @@ mixin _$RegistroServicoModel {
       throw _privateConstructorUsedError;
   UsuarioModel? get usuario => throw _privateConstructorUsedError;
   set usuario(UsuarioModel? value) => throw _privateConstructorUsedError;
+  UsuarioDropDownSearchResponseDTO? get usuarioDropDown =>
+      throw _privateConstructorUsedError;
+  set usuarioDropDown(UsuarioDropDownSearchResponseDTO? value) =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -154,12 +158,14 @@ abstract class $RegistroServicoModelCopyWith<$Res> {
       EquipamentoModel? equipamento,
       ItemModel? item,
       ServicoTipoModel? servicoTipo,
-      UsuarioModel? usuario});
+      UsuarioModel? usuario,
+      UsuarioDropDownSearchResponseDTO? usuarioDropDown});
 
   $EquipamentoModelCopyWith<$Res>? get equipamento;
   $ItemModelCopyWith<$Res>? get item;
   $ServicoTipoModelCopyWith<$Res>? get servicoTipo;
   $UsuarioModelCopyWith<$Res>? get usuario;
+  $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuarioDropDown;
 }
 
 /// @nodoc
@@ -215,6 +221,7 @@ class _$RegistroServicoModelCopyWithImpl<$Res,
     Object? item = freezed,
     Object? servicoTipo = freezed,
     Object? usuario = freezed,
+    Object? usuarioDropDown = freezed,
   }) {
     return _then(_value.copyWith(
       cod: freezed == cod
@@ -373,6 +380,10 @@ class _$RegistroServicoModelCopyWithImpl<$Res,
           ? _value.usuario
           : usuario // ignore: cast_nullable_to_non_nullable
               as UsuarioModel?,
+      usuarioDropDown: freezed == usuarioDropDown
+          ? _value.usuarioDropDown
+          : usuarioDropDown // ignore: cast_nullable_to_non_nullable
+              as UsuarioDropDownSearchResponseDTO?,
     ) as $Val);
   }
 
@@ -421,6 +432,19 @@ class _$RegistroServicoModelCopyWithImpl<$Res,
 
     return $UsuarioModelCopyWith<$Res>(_value.usuario!, (value) {
       return _then(_value.copyWith(usuario: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuarioDropDown {
+    if (_value.usuarioDropDown == null) {
+      return null;
+    }
+
+    return $UsuarioDropDownSearchResponseDTOCopyWith<$Res>(
+        _value.usuarioDropDown!, (value) {
+      return _then(_value.copyWith(usuarioDropDown: value) as $Val);
     });
   }
 }
@@ -472,7 +496,8 @@ abstract class _$$RegistroServicoModelImplCopyWith<$Res>
       EquipamentoModel? equipamento,
       ItemModel? item,
       ServicoTipoModel? servicoTipo,
-      UsuarioModel? usuario});
+      UsuarioModel? usuario,
+      UsuarioDropDownSearchResponseDTO? usuarioDropDown});
 
   @override
   $EquipamentoModelCopyWith<$Res>? get equipamento;
@@ -482,6 +507,8 @@ abstract class _$$RegistroServicoModelImplCopyWith<$Res>
   $ServicoTipoModelCopyWith<$Res>? get servicoTipo;
   @override
   $UsuarioModelCopyWith<$Res>? get usuario;
+  @override
+  $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuarioDropDown;
 }
 
 /// @nodoc
@@ -534,6 +561,7 @@ class __$$RegistroServicoModelImplCopyWithImpl<$Res>
     Object? item = freezed,
     Object? servicoTipo = freezed,
     Object? usuario = freezed,
+    Object? usuarioDropDown = freezed,
   }) {
     return _then(_$RegistroServicoModelImpl(
       cod: freezed == cod
@@ -692,6 +720,10 @@ class __$$RegistroServicoModelImplCopyWithImpl<$Res>
           ? _value.usuario
           : usuario // ignore: cast_nullable_to_non_nullable
               as UsuarioModel?,
+      usuarioDropDown: freezed == usuarioDropDown
+          ? _value.usuarioDropDown
+          : usuarioDropDown // ignore: cast_nullable_to_non_nullable
+              as UsuarioDropDownSearchResponseDTO?,
     ));
   }
 }
@@ -739,7 +771,8 @@ class _$RegistroServicoModelImpl extends _RegistroServicoModel
       this.equipamento,
       this.item,
       this.servicoTipo,
-      this.usuario})
+      this.usuario,
+      this.usuarioDropDown})
       : super._();
 
   factory _$RegistroServicoModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -824,10 +857,12 @@ class _$RegistroServicoModelImpl extends _RegistroServicoModel
   ServicoTipoModel? servicoTipo;
   @override
   UsuarioModel? usuario;
+  @override
+  UsuarioDropDownSearchResponseDTO? usuarioDropDown;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'RegistroServicoModel(cod: $cod, indicador: $indicador, resultado: $resultado, descricao: $descricao, restricao: $restricao, usuarioRegistro: $usuarioRegistro, lote: $lote, tecnico: $tecnico, imagemDocAnexo: $imagemDocAnexo, motivoLiberacao: $motivoLiberacao, dataEnvio: $dataEnvio, dataRetorno: $dataRetorno, dataInicio: $dataInicio, dataTermino: $dataTermino, dataValidade: $dataValidade, dataLiberacao: $dataLiberacao, dataRegistro: $dataRegistro, codUsuario: $codUsuario, codEquipamento: $codEquipamento, codItem: $codItem, codEstoque: $codEstoque, codUsuarioLiberado: $codUsuarioLiberado, codServicosTipos: $codServicosTipos, codInstituicao: $codInstituicao, temperatura: $temperatura, umidade: $umidade, temperaturaMax: $temperaturaMax, temperaturaMin: $temperaturaMin, umidadeMax: $umidadeMax, umidadeMin: $umidadeMin, docAnexa: $docAnexa, docAnexaNome: $docAnexaNome, controlarValidade: $controlarValidade, ultimaAlteracao: $ultimaAlteracao, tstamp: $tstamp, equipamento: $equipamento, item: $item, servicoTipo: $servicoTipo, usuario: $usuario)';
+    return 'RegistroServicoModel(cod: $cod, indicador: $indicador, resultado: $resultado, descricao: $descricao, restricao: $restricao, usuarioRegistro: $usuarioRegistro, lote: $lote, tecnico: $tecnico, imagemDocAnexo: $imagemDocAnexo, motivoLiberacao: $motivoLiberacao, dataEnvio: $dataEnvio, dataRetorno: $dataRetorno, dataInicio: $dataInicio, dataTermino: $dataTermino, dataValidade: $dataValidade, dataLiberacao: $dataLiberacao, dataRegistro: $dataRegistro, codUsuario: $codUsuario, codEquipamento: $codEquipamento, codItem: $codItem, codEstoque: $codEstoque, codUsuarioLiberado: $codUsuarioLiberado, codServicosTipos: $codServicosTipos, codInstituicao: $codInstituicao, temperatura: $temperatura, umidade: $umidade, temperaturaMax: $temperaturaMax, temperaturaMin: $temperaturaMin, umidadeMax: $umidadeMax, umidadeMin: $umidadeMin, docAnexa: $docAnexa, docAnexaNome: $docAnexaNome, controlarValidade: $controlarValidade, ultimaAlteracao: $ultimaAlteracao, tstamp: $tstamp, equipamento: $equipamento, item: $item, servicoTipo: $servicoTipo, usuario: $usuario, usuarioDropDown: $usuarioDropDown)';
   }
 
   @override
@@ -873,7 +908,8 @@ class _$RegistroServicoModelImpl extends _RegistroServicoModel
       ..add(DiagnosticsProperty('equipamento', equipamento))
       ..add(DiagnosticsProperty('item', item))
       ..add(DiagnosticsProperty('servicoTipo', servicoTipo))
-      ..add(DiagnosticsProperty('usuario', usuario));
+      ..add(DiagnosticsProperty('usuario', usuario))
+      ..add(DiagnosticsProperty('usuarioDropDown', usuarioDropDown));
   }
 
   @JsonKey(ignore: true)
@@ -894,45 +930,47 @@ class _$RegistroServicoModelImpl extends _RegistroServicoModel
 
 abstract class _RegistroServicoModel extends RegistroServicoModel {
   factory _RegistroServicoModel(
-      {int? cod,
-      String? indicador,
-      String? resultado,
-      String? descricao,
-      String? restricao,
-      String? usuarioRegistro,
-      String? lote,
-      String? tecnico,
-      String? imagemDocAnexo,
-      String? motivoLiberacao,
-      DateTime? dataEnvio,
-      DateTime? dataRetorno,
-      DateTime? dataInicio,
-      DateTime? dataTermino,
-      DateTime? dataValidade,
-      DateTime? dataLiberacao,
-      DateTime? dataRegistro,
-      int? codUsuario,
-      int? codEquipamento,
-      int? codItem,
-      int? codEstoque,
-      int? codUsuarioLiberado,
-      int? codServicosTipos,
-      int? codInstituicao,
-      double? temperatura,
-      double? umidade,
-      double? temperaturaMax,
-      double? temperaturaMin,
-      double? umidadeMax,
-      double? umidadeMin,
-      String? docAnexa,
-      String? docAnexaNome,
-      bool? controlarValidade,
-      DateTime? ultimaAlteracao,
-      @JsonKey(name: 'tStamp') String? tstamp,
-      EquipamentoModel? equipamento,
-      ItemModel? item,
-      ServicoTipoModel? servicoTipo,
-      UsuarioModel? usuario}) = _$RegistroServicoModelImpl;
+          {int? cod,
+          String? indicador,
+          String? resultado,
+          String? descricao,
+          String? restricao,
+          String? usuarioRegistro,
+          String? lote,
+          String? tecnico,
+          String? imagemDocAnexo,
+          String? motivoLiberacao,
+          DateTime? dataEnvio,
+          DateTime? dataRetorno,
+          DateTime? dataInicio,
+          DateTime? dataTermino,
+          DateTime? dataValidade,
+          DateTime? dataLiberacao,
+          DateTime? dataRegistro,
+          int? codUsuario,
+          int? codEquipamento,
+          int? codItem,
+          int? codEstoque,
+          int? codUsuarioLiberado,
+          int? codServicosTipos,
+          int? codInstituicao,
+          double? temperatura,
+          double? umidade,
+          double? temperaturaMax,
+          double? temperaturaMin,
+          double? umidadeMax,
+          double? umidadeMin,
+          String? docAnexa,
+          String? docAnexaNome,
+          bool? controlarValidade,
+          DateTime? ultimaAlteracao,
+          @JsonKey(name: 'tStamp') String? tstamp,
+          EquipamentoModel? equipamento,
+          ItemModel? item,
+          ServicoTipoModel? servicoTipo,
+          UsuarioModel? usuario,
+          UsuarioDropDownSearchResponseDTO? usuarioDropDown}) =
+      _$RegistroServicoModelImpl;
   _RegistroServicoModel._() : super._();
 
   factory _RegistroServicoModel.fromJson(Map<String, dynamic> json) =
@@ -1057,6 +1095,9 @@ abstract class _RegistroServicoModel extends RegistroServicoModel {
   @override
   UsuarioModel? get usuario;
   set usuario(UsuarioModel? value);
+  @override
+  UsuarioDropDownSearchResponseDTO? get usuarioDropDown;
+  set usuarioDropDown(UsuarioDropDownSearchResponseDTO? value);
   @override
   @JsonKey(ignore: true)
   _$$RegistroServicoModelImplCopyWith<_$RegistroServicoModelImpl>

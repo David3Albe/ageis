@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:compartilhados/functions/file_helper/file_object_model.dart';
-import 'package:dependencias_comuns/main.dart';
+import 'package:dependencias_comuns/file_picker_export.dart';
 import 'package:flutter/foundation.dart';
 
 class FileHelper {

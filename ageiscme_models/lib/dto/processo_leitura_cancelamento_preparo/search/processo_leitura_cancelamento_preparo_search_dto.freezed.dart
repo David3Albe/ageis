@@ -22,10 +22,10 @@ ProcessoLeituraCancelamentoPreparoSearchDTO
 
 /// @nodoc
 mixin _$ProcessoLeituraCancelamentoPreparoSearchDTO {
-  int? get codKit => throw _privateConstructorUsedError;
-  set codKit(int? value) => throw _privateConstructorUsedError;
-  int? get codItem => throw _privateConstructorUsedError;
-  set codItem(int? value) => throw _privateConstructorUsedError;
+  String? get codBarraKit => throw _privateConstructorUsedError;
+  set codBarraKit(String? value) => throw _privateConstructorUsedError;
+  String? get idEtiqueta => throw _privateConstructorUsedError;
+  set idEtiqueta(String? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -42,7 +42,7 @@ abstract class $ProcessoLeituraCancelamentoPreparoSearchDTOCopyWith<$Res> {
       _$ProcessoLeituraCancelamentoPreparoSearchDTOCopyWithImpl<$Res,
           ProcessoLeituraCancelamentoPreparoSearchDTO>;
   @useResult
-  $Res call({int? codKit, int? codItem});
+  $Res call({String? codBarraKit, String? idEtiqueta});
 }
 
 /// @nodoc
@@ -60,18 +60,18 @@ class _$ProcessoLeituraCancelamentoPreparoSearchDTOCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? codKit = freezed,
-    Object? codItem = freezed,
+    Object? codBarraKit = freezed,
+    Object? idEtiqueta = freezed,
   }) {
     return _then(_value.copyWith(
-      codKit: freezed == codKit
-          ? _value.codKit
-          : codKit // ignore: cast_nullable_to_non_nullable
-              as int?,
-      codItem: freezed == codItem
-          ? _value.codItem
-          : codItem // ignore: cast_nullable_to_non_nullable
-              as int?,
+      codBarraKit: freezed == codBarraKit
+          ? _value.codBarraKit
+          : codBarraKit // ignore: cast_nullable_to_non_nullable
+              as String?,
+      idEtiqueta: freezed == idEtiqueta
+          ? _value.idEtiqueta
+          : idEtiqueta // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -86,7 +86,7 @@ abstract class _$$ProcessoLeituraCancelamentoPreparoSearchDTOImplCopyWith<$Res>
       __$$ProcessoLeituraCancelamentoPreparoSearchDTOImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? codKit, int? codItem});
+  $Res call({String? codBarraKit, String? idEtiqueta});
 }
 
 /// @nodoc
@@ -103,18 +103,18 @@ class __$$ProcessoLeituraCancelamentoPreparoSearchDTOImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? codKit = freezed,
-    Object? codItem = freezed,
+    Object? codBarraKit = freezed,
+    Object? idEtiqueta = freezed,
   }) {
     return _then(_$ProcessoLeituraCancelamentoPreparoSearchDTOImpl(
-      codKit: freezed == codKit
-          ? _value.codKit
-          : codKit // ignore: cast_nullable_to_non_nullable
-              as int?,
-      codItem: freezed == codItem
-          ? _value.codItem
-          : codItem // ignore: cast_nullable_to_non_nullable
-              as int?,
+      codBarraKit: freezed == codBarraKit
+          ? _value.codBarraKit
+          : codBarraKit // ignore: cast_nullable_to_non_nullable
+              as String?,
+      idEtiqueta: freezed == idEtiqueta
+          ? _value.idEtiqueta
+          : idEtiqueta // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -125,20 +125,20 @@ class _$ProcessoLeituraCancelamentoPreparoSearchDTOImpl
     with DiagnosticableTreeMixin
     implements _ProcessoLeituraCancelamentoPreparoSearchDTO {
   _$ProcessoLeituraCancelamentoPreparoSearchDTOImpl(
-      {this.codKit, this.codItem});
+      {this.codBarraKit, this.idEtiqueta});
 
   factory _$ProcessoLeituraCancelamentoPreparoSearchDTOImpl.fromJson(
           Map<String, dynamic> json) =>
       _$$ProcessoLeituraCancelamentoPreparoSearchDTOImplFromJson(json);
 
   @override
-  int? codKit;
+  String? codBarraKit;
   @override
-  int? codItem;
+  String? idEtiqueta;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ProcessoLeituraCancelamentoPreparoSearchDTO(codKit: $codKit, codItem: $codItem)';
+    return 'ProcessoLeituraCancelamentoPreparoSearchDTO(codBarraKit: $codBarraKit, idEtiqueta: $idEtiqueta)';
   }
 
   @override
@@ -147,8 +147,8 @@ class _$ProcessoLeituraCancelamentoPreparoSearchDTOImpl
     properties
       ..add(DiagnosticsProperty(
           'type', 'ProcessoLeituraCancelamentoPreparoSearchDTO'))
-      ..add(DiagnosticsProperty('codKit', codKit))
-      ..add(DiagnosticsProperty('codItem', codItem));
+      ..add(DiagnosticsProperty('codBarraKit', codBarraKit))
+      ..add(DiagnosticsProperty('idEtiqueta', idEtiqueta));
   }
 
   @JsonKey(ignore: true)
@@ -172,19 +172,19 @@ class _$ProcessoLeituraCancelamentoPreparoSearchDTOImpl
 abstract class _ProcessoLeituraCancelamentoPreparoSearchDTO
     implements ProcessoLeituraCancelamentoPreparoSearchDTO {
   factory _ProcessoLeituraCancelamentoPreparoSearchDTO(
-      {int? codKit,
-      int? codItem}) = _$ProcessoLeituraCancelamentoPreparoSearchDTOImpl;
+      {String? codBarraKit,
+      String? idEtiqueta}) = _$ProcessoLeituraCancelamentoPreparoSearchDTOImpl;
 
   factory _ProcessoLeituraCancelamentoPreparoSearchDTO.fromJson(
           Map<String, dynamic> json) =
       _$ProcessoLeituraCancelamentoPreparoSearchDTOImpl.fromJson;
 
   @override
-  int? get codKit;
-  set codKit(int? value);
+  String? get codBarraKit;
+  set codBarraKit(String? value);
   @override
-  int? get codItem;
-  set codItem(int? value);
+  String? get idEtiqueta;
+  set idEtiqueta(String? value);
   @override
   @JsonKey(ignore: true)
   _$$ProcessoLeituraCancelamentoPreparoSearchDTOImplCopyWith<

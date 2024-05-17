@@ -1,5 +1,4 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/kit_cor/kit_cor_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/kit_descritor/kit_descritor_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/material/kit/cubits/kit_cubit_filter.dart';
 import 'package:ageiscme_admin/app/module/pages/material/kit/filter/kit_filter_button_widget.dart';
 import 'package:ageiscme_admin/app/module/pages/material/kit/kit_page_frm/kit_page_frm.dart';
@@ -7,7 +6,6 @@ import 'package:ageiscme_admin/app/module/pages/material/kit/kit_page_state.dart
 import 'package:ageiscme_data/services/kit/kit_service.dart';
 import 'package:ageiscme_models/dto/kit/kit_search/kit_search_dto.dart';
 import 'package:ageiscme_models/filters/kit/kit_filter.dart';
-import 'package:ageiscme_models/filters/kit_descritor/kit_descritor_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/response_dto/kit/kit_search/kit_search_kit/kit_search_kit_response_dto.dart';
 import 'package:ageiscme_models/response_dto/kit/kit_search/kit_search_response_dto.dart';
@@ -78,14 +76,13 @@ class _KitPageState extends State<KitPage> {
   late final KitPageCubit bloc;
   late final KitService service;
   late final KitCorCubit kitCorCubit;
-  late final KitDescritorCubit kitDescritorCubit;
   late final KitCubitFilter kitFilterCubit;
 
   @override
   void initState() {
     service = KitService();
     kitCorCubit = KitCorCubit();
-    kitDescritorCubit = KitDescritorCubit();
+    // kitDescritorCubit = KitDescritorCubit();
     bloc = KitPageCubit(service: service);
     kitFilterCubit = KitCubitFilter();
     bloc.searchKits(kitFilterCubit.state);
@@ -165,22 +162,12 @@ class _KitPageState extends State<KitPage> {
     }
   }
 
-  void loadKitDescritorCubit() {
-    if (!kitDescritorCubit.state.loaded) {
-      kitDescritorCubit.loadFilter(
-        KitDescritorFilter(
-          apenasAtivos: true,
-          ordernarPorNomeCrescente: true,
-        ),
-      );
-    }
-  }
-
   Future<KitModel?> getFilter(KitSearchKitResponseDTO kit) async {
     return service.FilterOne(
       KitFilter(
         cod: kit.cod,
         carregarItens: true,
+        carregarDescritor: true,
       ),
     );
   }

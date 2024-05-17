@@ -1,18 +1,20 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/grupo_material/grupo_material_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/item_descritor/item_descritor_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/proprietario/proprietario_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/material/consulta_item/consulta_item_page.dart';
 import 'package:ageiscme_admin/app/module/pages/material/consulta_item_inventario/consulta_item_inventario_page_state.dart';
 import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
-import 'package:ageiscme_admin/app/module/widgets/query_dialog/query_dialog_widget.dart';
 import 'package:ageiscme_data/query_services/item_inventario/consulta_item_inventario_service.dart';
 import 'package:ageiscme_data/services/access_user/access_user_service.dart';
+import 'package:ageiscme_data/services/item_descritor/item_descritor_service.dart';
+import 'package:ageiscme_models/dto/item_descritor/drop_down_search/item_descritor_drop_down_search_dto.dart';
 import 'package:ageiscme_models/enums/direito_enum.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/query_filters/item/consulta_item_filter.dart';
 import 'package:ageiscme_models/query_filters/item_inventario/consulta_item_inventario_filter.dart';
 import 'package:ageiscme_models/query_models/item_inventario/consulta_item_inventario_model.dart';
+import 'package:ageiscme_models/response_dto/item_descritor/drop_down_search/item_descritor_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_float_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
@@ -23,6 +25,7 @@ import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_footer_type.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/query_dialog/query_dialog_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -63,7 +66,6 @@ class _ConsultaItemInventarioPageState
   ];
 
   late final ConsultaItemInventarioPageCubit bloc;
-  late final ItemDescritorCubit itemDescritorBloc;
   late final GrupoMaterialCubit grupoMaterialBloc;
   late final ProprietarioCubit proprietarioBloc;
   late final ConsultaItemInventarioFilter filter;
@@ -74,8 +76,6 @@ class _ConsultaItemInventarioPageState
       service: ConsultaItemInventarioService(),
     );
     filter = ConsultaItemInventarioFilter.empty();
-    itemDescritorBloc = ItemDescritorCubit();
-    itemDescritorBloc.loadAll();
     grupoMaterialBloc = GrupoMaterialCubit();
     grupoMaterialBloc.loadAll();
     proprietarioBloc = ProprietarioCubit();
@@ -162,33 +162,29 @@ class _ConsultaItemInventarioPageState
         return FilterDialogWidget(
           child: Column(
             children: [
-              BlocBuilder<ItemDescritorCubit, ItemDescritorState>(
-                bloc: itemDescritorBloc,
-                builder: (context, itensDescritorState) {
-                  if (itensDescritorState.loading) {
-                    return const LoadingWidget();
-                  }
-                  List<ItemDescritorModel> itensDescritores =
-                      itensDescritorState.itensDescritores;
-
-                  itensDescritores.sort(
-                    (a, b) => a.descricaoCurta!.compareTo(b.descricaoCurta!),
-                  );
-
-                  ItemDescritorModel? itemDescritor = itensDescritores
-                      .where(
-                        (element) => element.cod == filter.codItemDescritor,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<ItemDescritorModel>(
-                    textFunction: (itemDescritor) =>
-                        itemDescritor.ItemDescritorText(),
-                    initialValue: itemDescritor,
-                    sourceList: itensDescritores,
-                    onChanged: (value) => filter.codItemDescritor = value?.cod,
-                    placeholder: 'Item Descritor',
-                  );
+              DropDownSearchApiWidget<ItemDescritorDropDownSearchResponseDTO>(
+                search: (str) async =>
+                    (await ItemDescritorService().getDropDownSearch(
+                      ItemDescritorDropDownSearchDTO(
+                        numeroRegistros: 30,
+                        termoPesquisa: str,
+                        apenasAtivos: true,
+                      ),
+                    ))
+                        ?.$2 ??
+                    [],
+                textFunction: (itemDescritor) => itemDescritor.Nome(),
+                initialValue: filter.itemDescritor == null
+                    ? null
+                    : ItemDescritorDropDownSearchResponseDTO(
+                        cod: filter.itemDescritor!.cod,
+                        nome: filter.itemDescritor?.nome,
+                      ),
+                onChanged: (value) {
+                  filter.codItemDescritor = value?.cod;
+                  filter.itemDescritor = value;
                 },
+                placeholder: 'Item Descritor',
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
               Builder(
@@ -347,6 +343,8 @@ class _ConsultaItemInventarioPageState
               descarte: filter.descartado,
               implantavel: null,
               rotulado: null,
+              codBarraKitContem: null,
+              idEtiquetaContem: null,
             ),
           ),
         );

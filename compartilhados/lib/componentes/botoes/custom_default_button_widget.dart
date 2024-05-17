@@ -15,6 +15,7 @@ class CustomDefaultButtonWidget extends StatefulWidget {
     this.paddingHeight = 6,
     this.paddingWidth = 12,
     Key? key,
+    this.readonly,
   });
 
   final String text;
@@ -27,6 +28,7 @@ class CustomDefaultButtonWidget extends StatefulWidget {
   final IconData? icon;
   final Color iconColor;
   final void Function()? onPressed;
+  final bool? readonly;
 
   @override
   State<CustomDefaultButtonWidget> createState() =>
@@ -62,7 +64,7 @@ class _CustomDefaultButtonWidgetState extends State<CustomDefaultButtonWidget> {
               elevation: widget.elevation,
               backgroundColor: widget.corHovered,
             ),
-      onPressed: widget.onPressed,
+      onPressed: widget.readonly == true ? null : widget.onPressed,
       child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: widget.paddingWidth * scaleW,

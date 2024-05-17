@@ -29,10 +29,16 @@ mixin _$ConsultaProcessosConsignadoFilter {
   set codItemDescritor(int? value) => throw _privateConstructorUsedError;
   int? get codItemConsignado => throw _privateConstructorUsedError;
   set codItemConsignado(int? value) => throw _privateConstructorUsedError;
+  String? get idEtiquetaContem => throw _privateConstructorUsedError;
+  set idEtiquetaContem(String? value) => throw _privateConstructorUsedError;
   int? get codProprietario => throw _privateConstructorUsedError;
   set codProprietario(int? value) => throw _privateConstructorUsedError;
   bool? get consignado => throw _privateConstructorUsedError;
   set consignado(bool? value) => throw _privateConstructorUsedError;
+  ItemDescritorDropDownSearchResponseDTO? get itemDescritor =>
+      throw _privateConstructorUsedError;
+  set itemDescritor(ItemDescritorDropDownSearchResponseDTO? value) =>
+      throw _privateConstructorUsedError;
   ItemModel? get item => throw _privateConstructorUsedError;
   set item(ItemModel? value) => throw _privateConstructorUsedError;
 
@@ -55,10 +61,13 @@ abstract class $ConsultaProcessosConsignadoFilterCopyWith<$Res> {
       DateTime? finalDate,
       int? codItemDescritor,
       int? codItemConsignado,
+      String? idEtiquetaContem,
       int? codProprietario,
       bool? consignado,
+      ItemDescritorDropDownSearchResponseDTO? itemDescritor,
       ItemModel? item});
 
+  $ItemDescritorDropDownSearchResponseDTOCopyWith<$Res>? get itemDescritor;
   $ItemModelCopyWith<$Res>? get item;
 }
 
@@ -80,8 +89,10 @@ class _$ConsultaProcessosConsignadoFilterCopyWithImpl<$Res,
     Object? finalDate = freezed,
     Object? codItemDescritor = freezed,
     Object? codItemConsignado = freezed,
+    Object? idEtiquetaContem = freezed,
     Object? codProprietario = freezed,
     Object? consignado = freezed,
+    Object? itemDescritor = freezed,
     Object? item = freezed,
   }) {
     return _then(_value.copyWith(
@@ -101,6 +112,10 @@ class _$ConsultaProcessosConsignadoFilterCopyWithImpl<$Res,
           ? _value.codItemConsignado
           : codItemConsignado // ignore: cast_nullable_to_non_nullable
               as int?,
+      idEtiquetaContem: freezed == idEtiquetaContem
+          ? _value.idEtiquetaContem
+          : idEtiquetaContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codProprietario: freezed == codProprietario
           ? _value.codProprietario
           : codProprietario // ignore: cast_nullable_to_non_nullable
@@ -109,11 +124,28 @@ class _$ConsultaProcessosConsignadoFilterCopyWithImpl<$Res,
           ? _value.consignado
           : consignado // ignore: cast_nullable_to_non_nullable
               as bool?,
+      itemDescritor: freezed == itemDescritor
+          ? _value.itemDescritor
+          : itemDescritor // ignore: cast_nullable_to_non_nullable
+              as ItemDescritorDropDownSearchResponseDTO?,
       item: freezed == item
           ? _value.item
           : item // ignore: cast_nullable_to_non_nullable
               as ItemModel?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ItemDescritorDropDownSearchResponseDTOCopyWith<$Res>? get itemDescritor {
+    if (_value.itemDescritor == null) {
+      return null;
+    }
+
+    return $ItemDescritorDropDownSearchResponseDTOCopyWith<$Res>(
+        _value.itemDescritor!, (value) {
+      return _then(_value.copyWith(itemDescritor: value) as $Val);
+    });
   }
 
   @override
@@ -143,10 +175,14 @@ abstract class _$$ConsultaProcessosConsignadoFilterImplCopyWith<$Res>
       DateTime? finalDate,
       int? codItemDescritor,
       int? codItemConsignado,
+      String? idEtiquetaContem,
       int? codProprietario,
       bool? consignado,
+      ItemDescritorDropDownSearchResponseDTO? itemDescritor,
       ItemModel? item});
 
+  @override
+  $ItemDescritorDropDownSearchResponseDTOCopyWith<$Res>? get itemDescritor;
   @override
   $ItemModelCopyWith<$Res>? get item;
 }
@@ -168,8 +204,10 @@ class __$$ConsultaProcessosConsignadoFilterImplCopyWithImpl<$Res>
     Object? finalDate = freezed,
     Object? codItemDescritor = freezed,
     Object? codItemConsignado = freezed,
+    Object? idEtiquetaContem = freezed,
     Object? codProprietario = freezed,
     Object? consignado = freezed,
+    Object? itemDescritor = freezed,
     Object? item = freezed,
   }) {
     return _then(_$ConsultaProcessosConsignadoFilterImpl(
@@ -189,6 +227,10 @@ class __$$ConsultaProcessosConsignadoFilterImplCopyWithImpl<$Res>
           ? _value.codItemConsignado
           : codItemConsignado // ignore: cast_nullable_to_non_nullable
               as int?,
+      idEtiquetaContem: freezed == idEtiquetaContem
+          ? _value.idEtiquetaContem
+          : idEtiquetaContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codProprietario: freezed == codProprietario
           ? _value.codProprietario
           : codProprietario // ignore: cast_nullable_to_non_nullable
@@ -197,6 +239,10 @@ class __$$ConsultaProcessosConsignadoFilterImplCopyWithImpl<$Res>
           ? _value.consignado
           : consignado // ignore: cast_nullable_to_non_nullable
               as bool?,
+      itemDescritor: freezed == itemDescritor
+          ? _value.itemDescritor
+          : itemDescritor // ignore: cast_nullable_to_non_nullable
+              as ItemDescritorDropDownSearchResponseDTO?,
       item: freezed == item
           ? _value.item
           : item // ignore: cast_nullable_to_non_nullable
@@ -214,8 +260,10 @@ class _$ConsultaProcessosConsignadoFilterImpl
       required this.finalDate,
       required this.codItemDescritor,
       required this.codItemConsignado,
+      required this.idEtiquetaContem,
       required this.codProprietario,
       required this.consignado,
+      this.itemDescritor,
       this.item})
       : super._();
 
@@ -232,15 +280,19 @@ class _$ConsultaProcessosConsignadoFilterImpl
   @override
   int? codItemConsignado;
   @override
+  String? idEtiquetaContem;
+  @override
   int? codProprietario;
   @override
   bool? consignado;
+  @override
+  ItemDescritorDropDownSearchResponseDTO? itemDescritor;
   @override
   ItemModel? item;
 
   @override
   String toString() {
-    return 'ConsultaProcessosConsignadoFilter(startDate: $startDate, finalDate: $finalDate, codItemDescritor: $codItemDescritor, codItemConsignado: $codItemConsignado, codProprietario: $codProprietario, consignado: $consignado, item: $item)';
+    return 'ConsultaProcessosConsignadoFilter(startDate: $startDate, finalDate: $finalDate, codItemDescritor: $codItemDescritor, codItemConsignado: $codItemConsignado, idEtiquetaContem: $idEtiquetaContem, codProprietario: $codProprietario, consignado: $consignado, itemDescritor: $itemDescritor, item: $item)';
   }
 
   @JsonKey(ignore: true)
@@ -266,8 +318,10 @@ abstract class _ConsultaProcessosConsignadoFilter
       required DateTime? finalDate,
       required int? codItemDescritor,
       required int? codItemConsignado,
+      required String? idEtiquetaContem,
       required int? codProprietario,
       required bool? consignado,
+      ItemDescritorDropDownSearchResponseDTO? itemDescritor,
       ItemModel? item}) = _$ConsultaProcessosConsignadoFilterImpl;
   _ConsultaProcessosConsignadoFilter._() : super._();
 
@@ -288,11 +342,17 @@ abstract class _ConsultaProcessosConsignadoFilter
   int? get codItemConsignado;
   set codItemConsignado(int? value);
   @override
+  String? get idEtiquetaContem;
+  set idEtiquetaContem(String? value);
+  @override
   int? get codProprietario;
   set codProprietario(int? value);
   @override
   bool? get consignado;
   set consignado(bool? value);
+  @override
+  ItemDescritorDropDownSearchResponseDTO? get itemDescritor;
+  set itemDescritor(ItemDescritorDropDownSearchResponseDTO? value);
   @override
   ItemModel? get item;
   set item(ItemModel? value);

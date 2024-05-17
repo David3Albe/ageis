@@ -13,6 +13,7 @@ sealed class ConsultaRegistroServicoFilter
     required DateTime? startDate,
     required DateTime? finalDate,
     required String? codBarraItem,
+    required String? idEtiquetaContem,
     required int? codEquipamento,
     required int? codServicoTipo,
     ItemModel? item,
@@ -33,5 +34,6 @@ sealed class ConsultaRegistroServicoFilter
         finalDate: null,
         item: null,
         startDate: null,
+        idEtiquetaContem: null,
       );
 }

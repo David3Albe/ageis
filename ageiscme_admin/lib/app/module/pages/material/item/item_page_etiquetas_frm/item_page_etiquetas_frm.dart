@@ -6,10 +6,12 @@ import 'package:ageiscme_models/models/item/item_model.dart';
 import 'package:ageiscme_models/response_dto/item_etiqueta_response/item_etiqueta_usuario_response/item_etiqueta_usuario_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
+import 'package:compartilhados/componentes/botoes/default_button_widget.dart';
+import 'package:compartilhados/componentes/campos/custom_autocomplete/custom_autocomplete_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
@@ -75,6 +77,7 @@ class _ItemPageEtiquetasFrmState extends State<ItemPageEtiquetasFrm> {
   void initState() {
     _cubit = ItemEtiquetasPageCubit(service: ItemService());
     if (widget.item != null) {
+      _cubit.setEtiqueta(widget.item?.idEtiqueta);
       _cubit.loadEtiquetasFilter(ItemEtiquetaDTO(codItem: widget.item!.cod!));
     }
     super.initState();
@@ -113,47 +116,76 @@ class _ItemPageEtiquetasFrmState extends State<ItemPageEtiquetasFrm> {
           minHeight: size.height * .5,
           maxHeight: size.height * .8,
         ),
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.only(right: 14),
-          child: Column(
-            children: [
-              DropDownSearchApiWidget<ItemModel>(
-                textFunction: (item) => item.EtiquetaDescricaoText(),
-                initialValue: widget.item,
-                search: (str) => ItemService().Filter(
-                  ItemFilter(numeroRegistros: 30, termoPesquisa: str),
-                ),
-                onChanged: (value) {
-                  _cubit.loadEtiquetasFilter(
-                    ItemEtiquetaDTO(
-                      codItem: value?.cod,
+        child: MultiBlocProvider(
+          providers: [
+            BlocProvider<ItemEtiquetasPageCubit>.value(value: _cubit),
+          ],
+          child: Builder(
+            builder: (context) {
+              return SingleChildScrollView(
+                padding: const EdgeInsets.only(right: 14),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Flexible(
+                          flex: 2,
+                          fit: FlexFit.loose,
+                          child: CustomAutocompleteWidget<ItemModel>(
+                            initialValue: context
+                                .read<ItemEtiquetasPageCubit>()
+                                .state
+                                .idEtiquetaFind,
+                            onChange: (str) => context
+                                .read<ItemEtiquetasPageCubit>()
+                                .setEtiqueta(str),
+                            onItemSelectedText: (item) =>
+                                item.idEtiqueta ?? null,
+                            label: 'Item',
+                            title: (p0) => Text(p0.EtiquetaDescricaoText()),
+                            suggestionsCallback: (str) => ItemService().Filter(
+                              ItemFilter(
+                                numeroRegistros: 30,
+                                termoPesquisa: str,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        DefaultButtonWidget(
+                          text: 'Consultar',
+                          onPressed: () => consultar(context),
+                          cor: Colors.blue.shade400,
+                          corHovered: Colors.blue.shade600,
+                          icon: Icons.search,
+                        ),
+                      ],
                     ),
-                  );
-                },
-                placeholder: 'Item',
-              ),
-              const Padding(padding: EdgeInsets.only(top: 8)),
-              Container(
-                constraints: BoxConstraints(
-                  minHeight: size.height * .3,
-                  maxHeight: size.height * .5,
+                    const Padding(padding: EdgeInsets.only(top: 8)),
+                    Container(
+                      constraints: BoxConstraints(
+                        minHeight: size.height * .3,
+                        maxHeight: size.height * .5,
+                      ),
+                      child: BlocBuilder<ItemEtiquetasPageCubit,
+                          ItemEtiquetasPageState>(
+                        bloc: _cubit,
+                        builder: (context, state) {
+                          usuarios = state.item?.usuarios ?? {};
+                          if (state.loading) {
+                            return const Center(child: LoadingWidget());
+                          }
+                          return PlutoGridWidget(
+                            columns: colunas,
+                            items: state.item?.itens ?? [],
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
-                child:
-                    BlocBuilder<ItemEtiquetasPageCubit, ItemEtiquetasPageState>(
-                  bloc: _cubit,
-                  builder: (context, state) {
-                    usuarios = state.item?.usuarios ?? {};
-                    if (state.loading) {
-                      return const Center(child: LoadingWidget());
-                    }
-                    return PlutoGridWidget(
-                      columns: colunas,
-                      items: state.item?.itens ?? [],
-                    );
-                  },
-                ),
-              ),
-            ],
+              );
+            },
           ),
         ),
       ),
@@ -165,6 +197,23 @@ class _ItemPageEtiquetasFrmState extends State<ItemPageEtiquetasFrm> {
           ],
         ),
       ],
+    );
+  }
+
+  void consultar(BuildContext context) {
+    String? etiqueta =
+        context.read<ItemEtiquetasPageCubit>().state.idEtiquetaFind;
+    if (etiqueta == null) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'É necessário filtrar uma etiqueta para buscar',
+      );
+      return;
+    }
+    _cubit.loadEtiquetasFilter(
+      ItemEtiquetaDTO(
+        idEtiquetaItemContem: etiqueta,
+      ),
     );
   }
 }

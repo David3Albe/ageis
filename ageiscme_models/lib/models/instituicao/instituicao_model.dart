@@ -26,6 +26,7 @@ abstract class InstituicaoModel with _$InstituicaoModel {
     required bool? naoAlertarKitIncompleto,
     required int? tempoMin,
     @JsonKey(name: 'tStamp') required String? tstamp,
+    double? escalaFonte,
   }) = _InstituicaoModel;
 
   factory InstituicaoModel.fromJson(Map<String, Object?> json) =>

@@ -14,6 +14,7 @@ sealed class ConsultaEstoqueDisponivelRotuladoFilter
     required DateTime? finalDate,
     required int? codEstoque,
     required int? codItem,
+    required String? idEtiquetaContem,
     required String? idEtiqueta,
     required int? codProprietario,
     required bool? entrada,
@@ -40,5 +41,6 @@ sealed class ConsultaEstoqueDisponivelRotuladoFilter
         entrada: null,
         saida: null,
         idEtiqueta: null,
+        idEtiquetaContem: null,
       );
 }

@@ -6,13 +6,6 @@ import 'package:dependencias_comuns/bloc_export.dart';
 class KitDescritorCubit extends Cubit<KitDescritorState> {
   KitDescritorCubit() : super(KitDescritorState(kitDescritores: []));
 
-  void loadAll() async {
-    emit(KitDescritorState(kitDescritores: [], loading: true));
-    List<KitDescritorModel> kitDescritores =
-        await KitDescritorService().GetAll();
-    emit(KitDescritorState(kitDescritores: kitDescritores, loaded: true));
-  }
-
   void loadFilter(KitDescritorFilter filter) async {
     emit(
       KitDescritorState(

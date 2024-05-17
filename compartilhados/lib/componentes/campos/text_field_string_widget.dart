@@ -82,7 +82,9 @@ class _TextFieldStringWidgetState extends State<TextFieldStringWidget> {
 
   @override
   void initState() {
-    if (initialValue != null) widget._controller.text = initialValue!;
+    if (initialValue != null) {
+      widget._controller.text = initialValue!;
+    }
     readonly = widget.readOnly;
     super.initState();
   }

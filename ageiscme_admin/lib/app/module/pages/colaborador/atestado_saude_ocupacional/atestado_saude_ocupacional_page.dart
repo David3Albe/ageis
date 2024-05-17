@@ -18,7 +18,8 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class AtestadoSaudeOcupacionalPage extends StatefulWidget {
-  AtestadoSaudeOcupacionalPage({super.key});
+  AtestadoSaudeOcupacionalPage({this.cod, super.key});
+  final int? cod;
 
   @override
   State<AtestadoSaudeOcupacionalPage> createState() =>
@@ -86,7 +87,19 @@ class _AtestadoSaudeOcupacionalPageState
     bloc = AtestadoSaudeOcupacionalPageCubit(
       service: service,
     );
-    bloc.loadAtestadoSaudeOcupacional();
+    bloc.loadAtestadoSaudeOcupacional().then((value) {
+      if (widget.cod == null) return;
+      AtestadoSaudeOcupacionalModel? obj = bloc.state.atestadosSaudeOcupacionais
+          .where((element) => element.cod == widget.cod)
+          .firstOrNull;
+      if (obj == null) return;
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) => openModal(
+          context,
+          obj,
+        ),
+      );
+    });
     super.initState();
   }
 
@@ -145,7 +158,7 @@ class _AtestadoSaudeOcupacionalPageState
   }
 
   void loadUserCubit() {
-    if (!usuarioCubit.state.loaded) { 
+    if (!usuarioCubit.state.loaded) {
       usuarioCubit.loadFilter(
         UsuarioFilter(
           apenasAtivos: true,
@@ -182,7 +195,7 @@ class _AtestadoSaudeOcupacionalPageState
         atestadoSaudeOcupacional,
       );
       if (atestado == null) {
-        loading.close(context, mounted); 
+        loading.close(context, mounted);
         notFoundError();
         return;
       }
@@ -201,7 +214,7 @@ class _AtestadoSaudeOcupacionalPageState
     );
     if (result == null || !result.$1) return;
     ToastUtils.showCustomToastSucess(context, result.$2);
-    bloc.loadAtestadoSaudeOcupacional();
+    await bloc.loadAtestadoSaudeOcupacional();
   }
 
   void delete(

@@ -1,3 +1,4 @@
+import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'consulta_historico_colaborador_filter.g.dart';
@@ -12,6 +13,7 @@ sealed class ConsultaHistoricoColaboradorFilter
     required DateTime? startDate,
     required DateTime? finalDate,
     required int? codUsuario,
+    UsuarioDropDownSearchResponseDTO? usuario,
   }) = _ConsultaHistoricoColaboradorFilter;
 
   factory ConsultaHistoricoColaboradorFilter.fromJson(

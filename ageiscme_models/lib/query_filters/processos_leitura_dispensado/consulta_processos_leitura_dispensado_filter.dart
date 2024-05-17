@@ -13,7 +13,9 @@ sealed class ConsultaProcessosLeituraDispensadoFilter
     required DateTime? startDate,
     required DateTime? finalDate,
     required int? codItem,
+    required String? idEtiquetaContem,
     required int? codKit,
+    required String? codBarraKitContem,
     required int? codLocal,
     ItemModel? item,
   }) = _ConsultaProcessosLeituraDispensadoFilter;
@@ -34,5 +36,7 @@ sealed class ConsultaProcessosLeituraDispensadoFilter
         codLocal: null,
         finalDate: null,
         startDate: null,
+        codBarraKitContem: null,
+        idEtiquetaContem: null,
       );
 }

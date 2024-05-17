@@ -14,7 +14,7 @@ _$EtiquetaLotePrintDTOImpl _$$EtiquetaLotePrintDTOImplFromJson(Map json) =>
       dataAtual: DateTime.parse(json['dataAtual'] as String),
       nomeEquipamento: json['nomeEquipamento'] as String,
       nomeUsuario: json['nomeUsuario'] as String,
-      quantidadePadinas: json['quantidadePadinas'] as int,
+      impressoes: json['impressoes'] as int,
       userDoc: json['userDoc'] as String?,
       codLote: json['codLote'] as String?,
     );
@@ -26,7 +26,7 @@ Map<String, dynamic> _$$EtiquetaLotePrintDTOImplToJson(
       'dataAtual': instance.dataAtual.toIso8601String(),
       'nomeEquipamento': instance.nomeEquipamento,
       'nomeUsuario': instance.nomeUsuario,
-      'quantidadePadinas': instance.quantidadePadinas,
+      'impressoes': instance.impressoes,
       'userDoc': instance.userDoc,
       'codLote': instance.codLote,
     };

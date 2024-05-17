@@ -153,6 +153,11 @@ abstract class ProcessoEtapaModel
               object.nome == null ||
               object.nome!.toUpperCase().contains(filter.toUpperCase()),
         ),
+        DropDownFilterModel(
+          (object) =>
+              object.tipoProcesso?.nome != null &&
+              object.tipoProcesso!.nome.toUpperCase().contains(filter.toUpperCase()),
+        ),
       ];
 
   String GetNomeEtapaText() => '($cod) ${nome == null ? '' : nome!}';

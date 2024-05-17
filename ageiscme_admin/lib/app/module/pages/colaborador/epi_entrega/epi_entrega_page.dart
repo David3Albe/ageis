@@ -161,7 +161,6 @@ class _EpiEntregaPageState extends State<EpiEntregaPage> {
       epiDescritor: null,
       tstamp: '',
     );
-    print('tentou2');
     showDialog<(bool, String)>(
       barrierDismissible: false,
       context: context,

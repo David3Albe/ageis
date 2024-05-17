@@ -1,8 +1,5 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/equipamento/equipamento_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/item/item_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/registro_servico/registro_servico_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/servico_tipo/servico_tipo_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/consulta_registro_servico/consulta_registro_servico_page_state.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/registro_servico/registro_servico_page_frm/registro_servico_page_frm.dart';
 import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
@@ -13,11 +10,10 @@ import 'package:ageiscme_data/services/registro_servico/registro_servico_service
 import 'package:ageiscme_models/enums/direito_enum.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/filters/registro_servico/registro_servico_filter.dart';
-import 'package:ageiscme_models/filters/usuario_filter/usuario_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/query_filters/registro_servico/consulta_registro_servico_filter.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
+import 'package:compartilhados/componentes/campos/custom_autocomplete/custom_autocomplete_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
@@ -130,10 +126,7 @@ class _ConsultaRegistroServicoPageState
 
   late final ConsultaRegistroServicoPageCubit bloc;
   late final EquipamentoCubit equipamentoBloc;
-  late final ItemCubit itemBloc;
   late final ServicoTipoCubit servicoTipoBloc;
-  late final RegistroServicoCubit registroServicoCubit;
-  late final UsuarioCubit usuarioCubit;
   late final ConsultaRegistroServicoFilter filter;
   late final RegistroServicoService service;
 
@@ -149,9 +142,6 @@ class _ConsultaRegistroServicoPageState
     equipamentoBloc.loadAll();
     servicoTipoBloc = ServicoTipoCubit();
     servicoTipoBloc.loadAll();
-    registroServicoCubit = RegistroServicoCubit();
-    registroServicoCubit.loadAll();
-    usuarioCubit = UsuarioCubit();
 
     service = RegistroServicoService();
 
@@ -271,17 +261,15 @@ class _ConsultaRegistroServicoPageState
                 },
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
-              DropDownSearchApiWidget<ItemModel>(
-                textFunction: (item) => item.EtiquetaDescricaoText(),
-                initialValue: filter.item,
-                search: (str) => ItemService().Filter(
+              CustomAutocompleteWidget<ItemModel>(
+                initialValue: filter.idEtiquetaContem,
+                onChange: (str) => filter.idEtiquetaContem = str,
+                onItemSelectedText: (item) => item.idEtiqueta ?? null,
+                label: 'Item',
+                title: (p0) => Text(p0.EtiquetaDescricaoText()),
+                suggestionsCallback: (str) => ItemService().Filter(
                   ItemFilter(numeroRegistros: 30, termoPesquisa: str),
                 ),
-                onChanged: (value) {
-                  filter.item = value;
-                  filter.codBarraItem = value?.idEtiqueta;
-                },
-                placeholder: 'Item',
               ),
               BlocBuilder<ServicoTipoCubit, ServicoTipoState>(
                 bloc: servicoTipoBloc,
@@ -327,22 +315,8 @@ class _ConsultaRegistroServicoPageState
     );
   }
 
-  void loadUserCubit() {
-    if (!usuarioCubit.state.loaded) {
-      usuarioCubit.loadFilter(
-        UsuarioFilter(
-          apenasAtivos: true,
-          tipoQuery: UsuarioFilterTipoQuery.SemFoto,
-          ordenarPorNomeCrescente: true,
-          apenasColaboradores: true,
-        ),
-      );
-    }
-  }
-
   Future<void> openModalRedirect(BuildContext context, int cod) async {
     LoadingController loading = LoadingController(context: context);
-    loadUserCubit();
 
     RegistroServicoModel? servico;
     servico = await getFilter(cod);
@@ -360,7 +334,6 @@ class _ConsultaRegistroServicoPageState
         return RegistroServicoPageFrm(
           equipamentoCubit: equipamentoBloc,
           itemFilter: ItemFilter(),
-          usuarioCubit: usuarioCubit,
           registroServico: servico!,
         );
       },

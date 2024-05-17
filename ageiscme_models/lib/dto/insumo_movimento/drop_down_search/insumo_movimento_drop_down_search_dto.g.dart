@@ -9,7 +9,7 @@ part of 'insumo_movimento_drop_down_search_dto.dart';
 _$InsumoMovimentoDropDownSearchDTOImpl
     _$$InsumoMovimentoDropDownSearchDTOImplFromJson(Map json) =>
         _$InsumoMovimentoDropDownSearchDTOImpl(
-          numeroRegistros: (json['numeroRegistros'] as num).toInt(),
+          numeroRegistros: json['numeroRegistros'] as int,
           search: json['search'] as String?,
         );
 

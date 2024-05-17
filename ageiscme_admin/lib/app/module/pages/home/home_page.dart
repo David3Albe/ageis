@@ -58,6 +58,7 @@ class _HomePageState extends State<HomePage> {
     late OverlayEntry overlayEntry;
     overlayEntry = OverlayEntry(
       builder: (context) => CustomOverlayWidget(
+        onEnter: () => onEnter(overlayInsumo!),
         height: 350,
         onClose: overlayEntry.remove,
         width: 600,
@@ -71,9 +72,14 @@ class _HomePageState extends State<HomePage> {
     overlayInsumo = overlayEntry;
   }
 
-  void removerOverlays(){
+  void removerOverlays() {
     overlayInsumo?.remove();
     overlayRegistro?.remove();
+  }
+
+  void onEnter(OverlayEntry entry) {
+    entry.remove();
+    Overlay.of(context).insert(entry);
   }
 
   Future showOverlayRegistrosExpirar() async {
@@ -88,6 +94,7 @@ class _HomePageState extends State<HomePage> {
 
     overlayEntry = OverlayEntry(
       builder: (context) => CustomOverlayWidget(
+        onEnter: () => onEnter(overlayRegistro!),
         ofssetBase: Offset(right, 0),
         height: 500,
         onClose: overlayEntry.remove,

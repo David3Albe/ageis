@@ -2,11 +2,13 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/local_institu
 import 'package:ageiscme_admin/app/module/pages/cadastro/instituicao/instituicao_page_frm/instituicao_page_frm_impressao/instituicao_page_frm_impressao.dart';
 import 'package:ageiscme_admin/app/module/pages/cadastro/instituicao/instituicao_page_frm/instituicao_page_frm_state.dart';
 import 'package:ageiscme_admin/app/module/pages/cadastro/local_instituicao/local_instituicao_page_frm/local_instituicao_page_frm.dart';
+import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_data/services/instituicao/instituicao_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_number_float_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_area_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
@@ -101,6 +103,14 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
     },
   );
 
+  late final TextFieldNumberFloatWidget txtEscalaFonte =
+      TextFieldNumberFloatWidget(
+    placeholder: 'Escala Fonte',
+    onChanged: (String? str) {
+      instituicao.escalaFonte = str == null ? null : double.parse(str);
+    },
+  );
+
   late final TextFieldStringAreaWidget txtLocais = TextFieldStringAreaWidget(
     placeholder: 'Locais',
     readOnly: true,
@@ -154,6 +164,8 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
     txtCnpj.text = instituicao.cnpj.toString();
     txtFoneCme.text = instituicao.foneCme.toString();
     txtFoneResponsavel.text = instituicao.foneResponsavel.toString();
+    txtEscalaFonte.text =
+        instituicao.escalaFonte.toString().replaceAll('.', ',');
 
     titulo = 'Cadastro de Instituições';
     if (instituicao.cod != 0) {
@@ -326,6 +338,16 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: txtEscalaFonte,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
                       child: BlocBuilder<LocalInstituicaoCubit,
                           LocalInstituicaoState>(
                         bloc: localInstituicaoCubit,
@@ -364,7 +386,14 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
                         text: 'Imprimir Locais',
                         onTap: _imprimir,
                       ),
-                      CustomPopupItemHistoryModel.getHistoryItem(),
+                      if (instituicao.cod != null && instituicao.cod != 0)
+                        CustomPopupItemHistoryModel.getHistoryItem(
+                          child: HistoricoPage(
+                            pk: instituicao.cod!,
+                            termo: 'INSTITUICAO',
+                          ),
+                          context: context,
+                        ),
                     ],
                   ),
                   const Spacer(),
@@ -446,6 +475,13 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
         !txtResponsavel.valid ||
         !txtDebugLevel.valid ||
         !txtTempoMin.valid) return;
+    if (instituicao.escalaFonte != null && instituicao.escalaFonte! > 1.5) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'Escala Fonte não pode ser maior que 1.5',
+      );
+      return;
+    }
 
     cubit.save(instituicao);
   }

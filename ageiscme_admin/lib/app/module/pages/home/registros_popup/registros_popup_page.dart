@@ -1,3 +1,4 @@
+import 'package:ageiscme_admin/app/module/pages/home/registros_popup/resumo/cubits/remove_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/home/registros_popup/resumo/cubits/search_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/home/registros_popup/resumo/registros_popup_page_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
@@ -17,6 +18,9 @@ class RegistrosPopupPage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider.value(value: cubit),
+        BlocProvider(
+          create: (context) => RemoveCubit(),
+        ),
       ],
       child: RegistrosPopupPageWidget(onClose: onClose),
     );

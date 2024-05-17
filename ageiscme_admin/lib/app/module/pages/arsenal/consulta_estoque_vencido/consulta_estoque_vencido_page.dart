@@ -1,20 +1,21 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/arsenal/arsenal_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/kit/kit_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/localizacao_arsenal_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/arsenal/consulta_estoque_vencido/consulta_estoque_vencido_page_state.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/consulta_processos_leitura/consulta_processos_leitura_page.dart';
 import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
-import 'package:ageiscme_admin/app/module/widgets/query_dialog/query_dialog_widget.dart';
 import 'package:ageiscme_data/query_services/estoque_vencido/consulta_estoque_vencido_service.dart';
 import 'package:ageiscme_data/services/access_user/access_user_service.dart';
 import 'package:ageiscme_data/services/item/item_service.dart';
+import 'package:ageiscme_data/services/kit/kit_service.dart';
+import 'package:ageiscme_models/dto/kit/drop_down_search/kit_drop_down_search_dto.dart';
 import 'package:ageiscme_models/enums/direito_enum.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/query_filters/estoque_vencido/consulta_estoque_vencido_filter.dart';
 import 'package:ageiscme_models/query_filters/processos_leitura/consulta_processos_leitura_filter.dart';
+import 'package:ageiscme_models/response_dto/kit/drop_down_search/kit_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
+import 'package:compartilhados/componentes/campos/custom_autocomplete/custom_autocomplete_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
@@ -23,6 +24,7 @@ import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/query_dialog/query_dialog_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -68,7 +70,6 @@ class _ConsultaEstoqueVencidoPageState
   late final ConsultaEstoqueVencidoPageCubit bloc;
   late final ArsenalEstoqueCubit arsenalEstoqueBloc;
   late final LocalizacaoArsenalCubit localizacaoArsenalBloc;
-  late final KitCubit kitBloc;
   late final ConsultaEstoqueVencidoFilter filter;
 
   @override
@@ -81,8 +82,6 @@ class _ConsultaEstoqueVencidoPageState
     arsenalEstoqueBloc.loadAll();
     localizacaoArsenalBloc = LocalizacaoArsenalCubit();
     localizacaoArsenalBloc.loadAll();
-    kitBloc = KitCubit();
-    kitBloc.loadAll();
 
     super.initState();
   }
@@ -222,35 +221,33 @@ class _ConsultaEstoqueVencidoPageState
                 },
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<KitCubit, List<KitModel>>(
-                bloc: kitBloc,
-                builder: (context, kits) {
-                  KitModel? kit = kits
-                      .where(
-                        (element) => element.cod == filter.codKit,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<KitModel>(
-                    textFunction: (kit) => kit.CodBarraDescritorText(),
-                    initialValue: kit,
-                    sourceList: kits,
-                    onChanged: (value) => filter.codKit = value?.cod,
-                    placeholder: 'Kit',
-                  );
+              CustomAutocompleteWidget<KitDropDownSearchResponseDTO>(
+                initialValue: filter.codBarraKitContem,
+                onChange: (str) => filter.codBarraKitContem = str,
+                onItemSelectedText: (kit) => kit.codBarra,
+                label: 'Kit',
+                title: (p0) => Text(p0.CodBarraDescritorText()),
+                suggestionsCallback: (str) async {
+                  return (await KitService().getDropDownSearchKits(
+                        KitDropDownSearchDTO(
+                          search: str,
+                          numeroRegistros: 30,
+                        ),
+                      ))
+                          ?.$2 ??
+                      [];
                 },
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
-              DropDownSearchApiWidget<ItemModel>(
-                textFunction: (item) => item.EtiquetaDescricaoText(),
-                initialValue: filter.item,
-                search: (str) => ItemService().Filter(
+              CustomAutocompleteWidget<ItemModel>(
+                initialValue: filter.idEtiquetaContem,
+                onChange: (str) => filter.idEtiquetaContem = str,
+                onItemSelectedText: (item) => item.idEtiqueta ?? null,
+                label: 'Item',
+                title: (p0) => Text(p0.EtiquetaDescricaoText()),
+                suggestionsCallback: (str) => ItemService().Filter(
                   ItemFilter(numeroRegistros: 30, termoPesquisa: str),
                 ),
-                onChanged: (value) {
-                  filter.item = value;
-                  filter.codItem = value?.cod;
-                },
-                placeholder: 'Item',
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
               CustomCheckboxWidget(
@@ -296,6 +293,8 @@ class _ConsultaEstoqueVencidoPageState
               indicador: null,
               lote: null,
               prontuario: null,
+              idEtiquetaContem: null,
+              codBarraKitContem: null,
             ),
           ),
         );

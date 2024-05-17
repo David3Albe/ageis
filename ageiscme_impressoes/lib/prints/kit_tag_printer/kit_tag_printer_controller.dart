@@ -55,8 +55,8 @@ class KitTagPrinterController {
           pw.BarcodeWidget(
             data: dto.codBarra,
             barcode: Barcode.dataMatrix(),
-            height: 30,
-            width: 30,
+            height: 20,
+            width: 20,
           ),
         ],
       ),

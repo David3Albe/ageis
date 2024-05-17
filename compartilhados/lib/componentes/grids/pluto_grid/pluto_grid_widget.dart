@@ -5,7 +5,9 @@ import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart'
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_column_helper.dart';
 import 'package:compartilhados/componentes/rows/custom_data_rows.dart';
+import 'package:compartilhados/exporters/pluto_grid_xml_export.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:dependencias_comuns/font_awesome_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
@@ -86,6 +88,8 @@ class PlutoGridWidget<T> extends StatelessWidget {
   final Function(PlutoGridOnChangedEvent, Map<PlutoRow, T> rowsObject)?
       onChanged;
   final List<void Function()> listeners = [];
+  final PlutoGridMode mode;
+  final void Function(T)? onSelected;
   PlutoGridWidget({
     required this.items,
     required this.columns,
@@ -102,6 +106,8 @@ class PlutoGridWidget<T> extends StatelessWidget {
     this.onChanged,
     this.onAddClick,
     this.getObjectByRowMethod,
+    this.mode = PlutoGridMode.normal,
+    this.onSelected,
   }) {
     cellsObject = getCellObjects(items);
     this.rows = _getRows(cellsObject);
@@ -211,6 +217,12 @@ class PlutoGridWidget<T> extends StatelessWidget {
     return 19;
   }
 
+  void onSelectedBase(PlutoGridOnSelectedEvent event) {
+    if (onSelected == null) return;
+    T obj = rowsObject[event.row]!;
+    this.onSelected!(obj);
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -233,58 +245,101 @@ class PlutoGridWidget<T> extends StatelessWidget {
             context,
             getObjectByRow,
           );
-          return PlutoGrid(
-            onRowDoubleTap: (event) {
-              T objeto = rowsObject[event.row]!;
-              if (onDetail != null) {
-                onDetail!(event, objeto);
-              }
-            },
-            onChanged: onChanged != null
-                ? (event) => onChanged!(event, rowsObject)
-                : null,
-            rowColorCallback: rowColorCallback,
-            columns: _getColumns(fontSize, context, gridState.stateManager),
-            noRowsWidget: const Center(child: Text('Sem registros')),
-            configuration: PlutoGridConfiguration(
-              scrollbar: PlutoGridScrollbarConfig(
-                scrollbarThickness: 10,
-                dragDevices: [
-                  PointerDeviceKind.mouse,
-                  PointerDeviceKind.touch,
-                  PointerDeviceKind.trackpad,
-                ].toSet(),
-              ),
-              localeText: const PlutoGridLocaleText.brazilianPortuguese(),
-              style: PlutoGridStyleConfig(
-                cellTextStyle: TextStyle(
-                  color: Colors.black,
-                  fontSize: fontSize,
-                ),
-                columnTextStyle: TextStyle(fontSize: fontSize),
-                rowHeight: rowsSize,
-                rowColor: const Color(0xffF4F4F4),
-              ),
+          return ContextMenuOverlay(
+            buttonStyle: const ContextMenuButtonStyle(
+              textStyle: TextStyle(fontSize: 12),
             ),
-            rows: this.rows,
-            onLoaded: (event) {
-              this.setRows(
-                this.filterOnlyActives,
-                event.stateManager,
-              );
-              event.stateManager.addListener(() {
-                gridCubit.changeStateManager(event.stateManager);
-              });
-            },
-            createFooter: (PlutoGridStateManager state) => _getFooter(
-              state,
-              filterOnlyActives,
-              gridState.onlyActives,
+            child: ContextMenuRegion(
+              contextMenu: GenericContextMenu(
+                buttonStyle: const ContextMenuButtonStyle(
+                  textStyle: TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
+                buttonConfigs: [
+                  ContextMenuButtonConfig(
+                    'XML',
+                    icon: const FaIcon(FontAwesomeIcons.file),
+                    onPressed: () => exportXml(
+                      context: context,
+                      gridState: gridState,
+                    ),
+                  ),
+                ],
+              ),
+              child: PlutoGrid(
+                onSelected: onSelectedBase,
+                mode: mode,
+                onRowDoubleTap: (event) {
+                  T objeto = rowsObject[event.row]!;
+                  if (onDetail != null) {
+                    onDetail!(event, objeto);
+                  }
+                },
+                onChanged: onChanged != null
+                    ? (event) => onChanged!(event, rowsObject)
+                    : null,
+                rowColorCallback: rowColorCallback,
+                columns: _getColumns(fontSize, context, gridState.stateManager),
+                noRowsWidget: const Center(child: Text('Sem registros')),
+                configuration: PlutoGridConfiguration(
+                  scrollbar: PlutoGridScrollbarConfig(
+                    scrollbarThickness: 10,
+                    dragDevices: [
+                      PointerDeviceKind.mouse,
+                      PointerDeviceKind.touch,
+                      PointerDeviceKind.trackpad,
+                    ].toSet(),
+                  ),
+                  localeText: const PlutoGridLocaleText.brazilianPortuguese(),
+                  style: PlutoGridStyleConfig(
+                    cellTextStyle: TextStyle(
+                      color: Colors.black,
+                      fontSize: fontSize,
+                    ),
+                    columnTextStyle: TextStyle(fontSize: fontSize),
+                    rowHeight: rowsSize,
+                    rowColor: const Color(0xffF4F4F4),
+                  ),
+                ),
+                rows: this.rows,
+                onLoaded: (event) {
+                  this.setRows(
+                    this.filterOnlyActives,
+                    event.stateManager,
+                  );
+                  event.stateManager.addListener(() {
+                    gridCubit.changeStateManager(event.stateManager);
+                  });
+                },
+                createFooter: (PlutoGridStateManager state) => _getFooter(
+                  state,
+                  filterOnlyActives,
+                  gridState.onlyActives,
+                ),
+              ),
             ),
           );
         },
       ),
     );
+  }
+
+  void exportXml({
+    required BuildContext context,
+    required PlutoGridState gridState,
+  }) {
+    List<String> columnsToIgnore = columns
+        .where((element) => element.actionColumn == true)
+        .map((e) => e.field)
+        .toList();
+    columnsToIgnore.add('');
+    PlutoGridXmlExport xmlExport = PlutoGridXmlExport(
+      context: context,
+      stateManager: gridState.stateManager!,
+      columnsToIgnore: columnsToIgnore,
+    );
+    xmlExport.export();
   }
 
   void setRows(

@@ -27,12 +27,20 @@ mixin _$ConsultaRemoverReporItemFilter {
   set finalDate(DateTime? value) => throw _privateConstructorUsedError;
   String? get codBarraKit => throw _privateConstructorUsedError;
   set codBarraKit(String? value) => throw _privateConstructorUsedError;
+  String? get codBarraKitContem => throw _privateConstructorUsedError;
+  set codBarraKitContem(String? value) => throw _privateConstructorUsedError;
+  String? get idEtiquetaContem => throw _privateConstructorUsedError;
+  set idEtiquetaContem(String? value) => throw _privateConstructorUsedError;
   String? get codBarraItem => throw _privateConstructorUsedError;
   set codBarraItem(String? value) => throw _privateConstructorUsedError;
   int? get codUsuarioAcao => throw _privateConstructorUsedError;
   set codUsuarioAcao(int? value) => throw _privateConstructorUsedError;
   int? get codMotivo => throw _privateConstructorUsedError;
   set codMotivo(int? value) => throw _privateConstructorUsedError;
+  UsuarioDropDownSearchResponseDTO? get usuario =>
+      throw _privateConstructorUsedError;
+  set usuario(UsuarioDropDownSearchResponseDTO? value) =>
+      throw _privateConstructorUsedError;
   ItemModel? get item => throw _privateConstructorUsedError;
   set item(ItemModel? value) => throw _privateConstructorUsedError;
 
@@ -54,11 +62,15 @@ abstract class $ConsultaRemoverReporItemFilterCopyWith<$Res> {
       {DateTime? startDate,
       DateTime? finalDate,
       String? codBarraKit,
+      String? codBarraKitContem,
+      String? idEtiquetaContem,
       String? codBarraItem,
       int? codUsuarioAcao,
       int? codMotivo,
+      UsuarioDropDownSearchResponseDTO? usuario,
       ItemModel? item});
 
+  $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuario;
   $ItemModelCopyWith<$Res>? get item;
 }
 
@@ -79,9 +91,12 @@ class _$ConsultaRemoverReporItemFilterCopyWithImpl<$Res,
     Object? startDate = freezed,
     Object? finalDate = freezed,
     Object? codBarraKit = freezed,
+    Object? codBarraKitContem = freezed,
+    Object? idEtiquetaContem = freezed,
     Object? codBarraItem = freezed,
     Object? codUsuarioAcao = freezed,
     Object? codMotivo = freezed,
+    Object? usuario = freezed,
     Object? item = freezed,
   }) {
     return _then(_value.copyWith(
@@ -97,6 +112,14 @@ class _$ConsultaRemoverReporItemFilterCopyWithImpl<$Res,
           ? _value.codBarraKit
           : codBarraKit // ignore: cast_nullable_to_non_nullable
               as String?,
+      codBarraKitContem: freezed == codBarraKitContem
+          ? _value.codBarraKitContem
+          : codBarraKitContem // ignore: cast_nullable_to_non_nullable
+              as String?,
+      idEtiquetaContem: freezed == idEtiquetaContem
+          ? _value.idEtiquetaContem
+          : idEtiquetaContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codBarraItem: freezed == codBarraItem
           ? _value.codBarraItem
           : codBarraItem // ignore: cast_nullable_to_non_nullable
@@ -109,11 +132,28 @@ class _$ConsultaRemoverReporItemFilterCopyWithImpl<$Res,
           ? _value.codMotivo
           : codMotivo // ignore: cast_nullable_to_non_nullable
               as int?,
+      usuario: freezed == usuario
+          ? _value.usuario
+          : usuario // ignore: cast_nullable_to_non_nullable
+              as UsuarioDropDownSearchResponseDTO?,
       item: freezed == item
           ? _value.item
           : item // ignore: cast_nullable_to_non_nullable
               as ItemModel?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuario {
+    if (_value.usuario == null) {
+      return null;
+    }
+
+    return $UsuarioDropDownSearchResponseDTOCopyWith<$Res>(_value.usuario!,
+        (value) {
+      return _then(_value.copyWith(usuario: value) as $Val);
+    });
   }
 
   @override
@@ -142,11 +182,16 @@ abstract class _$$ConsultaRemoverReporItemFilterImplCopyWith<$Res>
       {DateTime? startDate,
       DateTime? finalDate,
       String? codBarraKit,
+      String? codBarraKitContem,
+      String? idEtiquetaContem,
       String? codBarraItem,
       int? codUsuarioAcao,
       int? codMotivo,
+      UsuarioDropDownSearchResponseDTO? usuario,
       ItemModel? item});
 
+  @override
+  $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuario;
   @override
   $ItemModelCopyWith<$Res>? get item;
 }
@@ -167,9 +212,12 @@ class __$$ConsultaRemoverReporItemFilterImplCopyWithImpl<$Res>
     Object? startDate = freezed,
     Object? finalDate = freezed,
     Object? codBarraKit = freezed,
+    Object? codBarraKitContem = freezed,
+    Object? idEtiquetaContem = freezed,
     Object? codBarraItem = freezed,
     Object? codUsuarioAcao = freezed,
     Object? codMotivo = freezed,
+    Object? usuario = freezed,
     Object? item = freezed,
   }) {
     return _then(_$ConsultaRemoverReporItemFilterImpl(
@@ -185,6 +233,14 @@ class __$$ConsultaRemoverReporItemFilterImplCopyWithImpl<$Res>
           ? _value.codBarraKit
           : codBarraKit // ignore: cast_nullable_to_non_nullable
               as String?,
+      codBarraKitContem: freezed == codBarraKitContem
+          ? _value.codBarraKitContem
+          : codBarraKitContem // ignore: cast_nullable_to_non_nullable
+              as String?,
+      idEtiquetaContem: freezed == idEtiquetaContem
+          ? _value.idEtiquetaContem
+          : idEtiquetaContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codBarraItem: freezed == codBarraItem
           ? _value.codBarraItem
           : codBarraItem // ignore: cast_nullable_to_non_nullable
@@ -197,6 +253,10 @@ class __$$ConsultaRemoverReporItemFilterImplCopyWithImpl<$Res>
           ? _value.codMotivo
           : codMotivo // ignore: cast_nullable_to_non_nullable
               as int?,
+      usuario: freezed == usuario
+          ? _value.usuario
+          : usuario // ignore: cast_nullable_to_non_nullable
+              as UsuarioDropDownSearchResponseDTO?,
       item: freezed == item
           ? _value.item
           : item // ignore: cast_nullable_to_non_nullable
@@ -213,9 +273,12 @@ class _$ConsultaRemoverReporItemFilterImpl
       {required this.startDate,
       required this.finalDate,
       required this.codBarraKit,
+      required this.codBarraKitContem,
+      required this.idEtiquetaContem,
       required this.codBarraItem,
       required this.codUsuarioAcao,
       required this.codMotivo,
+      this.usuario,
       this.item})
       : super._();
 
@@ -230,17 +293,23 @@ class _$ConsultaRemoverReporItemFilterImpl
   @override
   String? codBarraKit;
   @override
+  String? codBarraKitContem;
+  @override
+  String? idEtiquetaContem;
+  @override
   String? codBarraItem;
   @override
   int? codUsuarioAcao;
   @override
   int? codMotivo;
   @override
+  UsuarioDropDownSearchResponseDTO? usuario;
+  @override
   ItemModel? item;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ConsultaRemoverReporItemFilter(startDate: $startDate, finalDate: $finalDate, codBarraKit: $codBarraKit, codBarraItem: $codBarraItem, codUsuarioAcao: $codUsuarioAcao, codMotivo: $codMotivo, item: $item)';
+    return 'ConsultaRemoverReporItemFilter(startDate: $startDate, finalDate: $finalDate, codBarraKit: $codBarraKit, codBarraKitContem: $codBarraKitContem, idEtiquetaContem: $idEtiquetaContem, codBarraItem: $codBarraItem, codUsuarioAcao: $codUsuarioAcao, codMotivo: $codMotivo, usuario: $usuario, item: $item)';
   }
 
   @override
@@ -251,9 +320,12 @@ class _$ConsultaRemoverReporItemFilterImpl
       ..add(DiagnosticsProperty('startDate', startDate))
       ..add(DiagnosticsProperty('finalDate', finalDate))
       ..add(DiagnosticsProperty('codBarraKit', codBarraKit))
+      ..add(DiagnosticsProperty('codBarraKitContem', codBarraKitContem))
+      ..add(DiagnosticsProperty('idEtiquetaContem', idEtiquetaContem))
       ..add(DiagnosticsProperty('codBarraItem', codBarraItem))
       ..add(DiagnosticsProperty('codUsuarioAcao', codUsuarioAcao))
       ..add(DiagnosticsProperty('codMotivo', codMotivo))
+      ..add(DiagnosticsProperty('usuario', usuario))
       ..add(DiagnosticsProperty('item', item));
   }
 
@@ -279,9 +351,12 @@ abstract class _ConsultaRemoverReporItemFilter
       {required DateTime? startDate,
       required DateTime? finalDate,
       required String? codBarraKit,
+      required String? codBarraKitContem,
+      required String? idEtiquetaContem,
       required String? codBarraItem,
       required int? codUsuarioAcao,
       required int? codMotivo,
+      UsuarioDropDownSearchResponseDTO? usuario,
       ItemModel? item}) = _$ConsultaRemoverReporItemFilterImpl;
   _ConsultaRemoverReporItemFilter._() : super._();
 
@@ -298,6 +373,12 @@ abstract class _ConsultaRemoverReporItemFilter
   String? get codBarraKit;
   set codBarraKit(String? value);
   @override
+  String? get codBarraKitContem;
+  set codBarraKitContem(String? value);
+  @override
+  String? get idEtiquetaContem;
+  set idEtiquetaContem(String? value);
+  @override
   String? get codBarraItem;
   set codBarraItem(String? value);
   @override
@@ -306,6 +387,9 @@ abstract class _ConsultaRemoverReporItemFilter
   @override
   int? get codMotivo;
   set codMotivo(int? value);
+  @override
+  UsuarioDropDownSearchResponseDTO? get usuario;
+  set usuario(UsuarioDropDownSearchResponseDTO? value);
   @override
   ItemModel? get item;
   set item(ItemModel? value);

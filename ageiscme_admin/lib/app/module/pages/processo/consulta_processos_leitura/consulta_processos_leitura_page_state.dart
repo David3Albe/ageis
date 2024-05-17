@@ -1,6 +1,6 @@
 import 'package:ageiscme_data/query_services/processos_leitura/consulta_processos_leitura_service.dart';
 import 'package:ageiscme_models/query_filters/processos_leitura/consulta_processos_leitura_filter.dart';
-import 'package:ageiscme_models/query_models/processos_leitura/consulta_processos_leitura_model.dart';
+import 'package:ageiscme_models/query_models/processos_leitura/consulta_processos_leitura_response_model.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 
 class ConsultaProcessosLeituraPageCubit
@@ -9,7 +9,7 @@ class ConsultaProcessosLeituraPageCubit
   ConsultaProcessosLeituraPageCubit({required this.service})
       : super(
           ConsultaProcessosLeituraPageState(
-            processosLeituras: [],
+            response: null,
             loading: false,
           ),
         );
@@ -18,28 +18,36 @@ class ConsultaProcessosLeituraPageCubit
     emit(
       ConsultaProcessosLeituraPageState(
         loading: true,
-        processosLeituras: [],
+        response: null,
       ),
     );
     try {
-      (String, List<ConsultaProcessosLeituraModel>)? itens =
+      (String, ConsultaProcessosLeituraResponseModel)? response =
           await service.filter(
         filter,
       );
-      if (itens == null) return;
+      if (response == null) {
+        emit(
+          ConsultaProcessosLeituraPageState(
+            loading: false,
+            response: state.response,
+          ),
+        );
+        return;
+      }
 
-      List<ConsultaProcessosLeituraModel> processosLeituras = itens.$2;
+      ConsultaProcessosLeituraResponseModel processosLeituras = response.$2;
       emit(
         ConsultaProcessosLeituraPageState(
           loading: false,
-          processosLeituras: processosLeituras,
+          response: processosLeituras,
         ),
       );
     } on Exception catch (ex) {
       emit(
         ConsultaProcessosLeituraPageState(
           loading: false,
-          processosLeituras: [],
+          response: state.response,
           error: ex.toString(),
         ),
       );
@@ -49,13 +57,13 @@ class ConsultaProcessosLeituraPageCubit
 
 class ConsultaProcessosLeituraPageState {
   final bool loading;
-  final List<ConsultaProcessosLeituraModel> processosLeituras;
+  final ConsultaProcessosLeituraResponseModel? response;
   final String error;
   final String message;
 
   ConsultaProcessosLeituraPageState({
     required this.loading,
-    required this.processosLeituras,
+    required this.response,
     this.error = '',
     this.message = '',
   });

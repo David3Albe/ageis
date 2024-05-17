@@ -10,8 +10,10 @@ _$ConsultaItemFilterImpl _$$ConsultaItemFilterImplFromJson(Map json) =>
     _$ConsultaItemFilterImpl(
       codItemDescritor: json['codItemDescritor'] as int?,
       codItem: json['codItem'] as int?,
+      idEtiquetaContem: json['idEtiquetaContem'] as String?,
       codSituacao: json['codSituacao'] as String?,
       codGrupo: json['codGrupo'] as int?,
+      codBarraKitContem: json['codBarraKitContem'] as String?,
       codKit: json['codKit'] as int?,
       codProprietario: json['codProprietario'] as int?,
       numeroPatrimonio: json['numeroPatrimonio'] as int?,
@@ -23,9 +25,14 @@ _$ConsultaItemFilterImpl _$$ConsultaItemFilterImplFromJson(Map json) =>
       descarte: json['descarte'] as bool?,
       rotulado: json['rotulado'] as bool?,
       implantavel: json['implantavel'] as bool?,
+      numeroRegistros: json['numeroRegistros'] as int?,
       item: json['item'] == null
           ? null
           : ItemModel.fromJson(Map<String, Object?>.from(json['item'] as Map)),
+      itemDescritor: json['itemDescritor'] == null
+          ? null
+          : ItemDescritorDropDownSearchResponseDTO.fromJson(
+              Map<String, Object?>.from(json['itemDescritor'] as Map)),
     );
 
 Map<String, dynamic> _$$ConsultaItemFilterImplToJson(
@@ -33,8 +40,10 @@ Map<String, dynamic> _$$ConsultaItemFilterImplToJson(
     <String, dynamic>{
       'codItemDescritor': instance.codItemDescritor,
       'codItem': instance.codItem,
+      'idEtiquetaContem': instance.idEtiquetaContem,
       'codSituacao': instance.codSituacao,
       'codGrupo': instance.codGrupo,
+      'codBarraKitContem': instance.codBarraKitContem,
       'codKit': instance.codKit,
       'codProprietario': instance.codProprietario,
       'numeroPatrimonio': instance.numeroPatrimonio,
@@ -46,5 +55,7 @@ Map<String, dynamic> _$$ConsultaItemFilterImplToJson(
       'descarte': instance.descarte,
       'rotulado': instance.rotulado,
       'implantavel': instance.implantavel,
+      'numeroRegistros': instance.numeroRegistros,
       'item': instance.item?.toJson(),
+      'itemDescritor': instance.itemDescritor?.toJson(),
     };

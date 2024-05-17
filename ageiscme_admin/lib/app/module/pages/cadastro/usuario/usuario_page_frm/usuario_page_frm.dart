@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/perfil_acesso/perfil_acesso_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/cadastro/usuario/usuario_page_frm/usuario_page_frm_helper.dart';
 import 'package:ageiscme_admin/app/module/pages/cadastro/usuario/usuario_page_frm/usuario_page_frm_state.dart';
+import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_data/services/usuario/usuario_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
@@ -163,7 +164,7 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
 
   void setUserImage() {
     image =
-        usuario.foto != null ? Image.memory(base64Decode(usuario.foto!)) : null;
+        usuario.foto != null && !usuario.foto!.isEmpty ? Image.memory(base64Decode(usuario.foto!)) : null;
   }
 
   @override
@@ -524,7 +525,14 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
                       text: 'Imprimir Etiqueta',
                       onTap: printTag,
                     ),
-                    CustomPopupItemHistoryModel.getHistoryItem(),
+                    if (usuario.cod != null && usuario.cod != 0)
+                      CustomPopupItemHistoryModel.getHistoryItem(
+                        child: HistoricoPage(
+                          pk: usuario.cod!,
+                          termo: 'USUARIO',
+                        ),
+                        context: context,
+                      ),
                   ],
                 ),
                 const Spacer(),

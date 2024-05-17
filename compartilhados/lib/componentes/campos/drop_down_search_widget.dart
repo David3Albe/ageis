@@ -40,6 +40,7 @@ class DropDownSearchWidget<T> extends StatefulWidget {
     this.expandOnStart,
     this.validator,
     this.validateBuilder,
+    this.maxItems = 30,
   });
   final List<T> sourceList;
   final T? initialValue;
@@ -55,9 +56,11 @@ class DropDownSearchWidget<T> extends StatefulWidget {
   final Future<bool> Function(T? itemSelecionado)? validateChange;
   final bool? expandOnStart;
   final String? Function(T? val)? validator;
+  final int maxItems;
 
   @override
   DropDownSearchWidgetState<T> createState() => DropDownSearchWidgetState<T>(
+        maxItems: maxItems,
         onChanged: onChanged,
         key: key,
       );
@@ -71,14 +74,15 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
   late bool filterVisible;
   final void Function(T? value)? onChanged;
   late final TextFieldStringWidget txtFilter;
-  static const int MAX_ITENS = 30;
   late final DropDownSearchCubit<T> cubit;
+  final int maxItems;
   DateTime? lastTypedTime;
   final Key? key;
   String? errorText;
   final String? Function(T? val)? validator;
 
   DropDownSearchWidgetState({
+    required this.maxItems,
     this.validator,
     this.onChanged,
     this.key,
@@ -316,10 +320,28 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
     Navigator.of(context).pop();
   }
 
+  double _getHeight(Size size) {
+    double height = size.height;
+    if (height > 800) {
+      return 60;
+    }
+    else if (height > 700) {
+      return 57;
+    } else if (height > 600) {
+      return 55;
+    } else if (height > 500) {
+      return 53;
+    } else if (height > 400) {
+      return 50;
+    }
+    return 48;
+  }
+
   Widget getSelectedItemText(T? item, BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     String text = getItemText(item);
     return Container(
-      height: 60,
+      height: _getHeight(size),
       child: Align(
         alignment: Alignment.centerLeft,
         child: Column(
@@ -386,8 +408,8 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
       return [];
     }
     if (filter == null || filter.isEmpty) {
-      int maxItens = widget.sourceList.length >= MAX_ITENS
-          ? MAX_ITENS
+      int maxItens = widget.sourceList.length >= widget.maxItems
+          ? widget.maxItems
           : widget.sourceList.length;
       return widget.sourceList.getRange(0, maxItens).toList();
     }
@@ -403,7 +425,7 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
       }
       if (!itemValid) continue;
       items.add(item);
-      if (items.length == MAX_ITENS) {
+      if (items.length == widget.maxItems) {
         return items;
       }
     }
@@ -415,7 +437,7 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
     DateTime lastTimeValidation = lastTypedTime!;
     if (!ignoreTimer) {
       await Future.delayed(
-        const Duration(milliseconds: 1500),
+        const Duration(milliseconds: 500),
       );
     }
     List<T> itens = Filter(filter);

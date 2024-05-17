@@ -1,16 +1,18 @@
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/item_descritor/item_descritor_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/kit_descritor/kit_descritor_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/material/kit_descritor/item_descritor_kit_page_frm/item_descritor_kit_page_frm_state.dart';
+import 'package:ageiscme_data/services/item_descritor/item_descritor_service.dart';
 import 'package:ageiscme_data/services/item_descritor_kit/item_descritor_kit_service.dart';
+import 'package:ageiscme_data/services/kit_descritor/kit_descritor_service.dart';
+import 'package:ageiscme_models/dto/item_descritor/drop_down_search/item_descritor_drop_down_search_dto.dart';
+import 'package:ageiscme_models/dto/kit_descritor/drop_down_search/kit_descritor_drop_down_search_dto.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/response_dto/item_descritor/drop_down_search/item_descritor_drop_down_search_response_dto.dart';
+import 'package:ageiscme_models/response_dto/kit_descritor/drop_down_search/kit_descritor_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
-import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
@@ -20,12 +22,10 @@ class ItemDescritorKitPageFrm extends StatefulWidget {
     Key? key,
     required this.itemDescritorKit,
     required this.onSave,
-    required this.itemDescritorCubit,
   }) : super(key: key);
 
   final ItemDescritorKitModel itemDescritorKit;
   final void Function(ItemDescritorKitModel) onSave;
-  final ItemDescritorCubit itemDescritorCubit;
 
   @override
   State<ItemDescritorKitPageFrm> createState() =>
@@ -37,7 +37,6 @@ class _ItemDescritorKitPageFrmState extends State<ItemDescritorKitPageFrm> {
 
   late String titulo;
   ItemDescritorKitModel itemDescritorKit;
-  late final KitDescritorCubit kitDescritorCubit;
 
   late final ItemDescritorKitPageFrmCubit cubit = ItemDescritorKitPageFrmCubit(
     service: ItemDescritorKitService(),
@@ -53,9 +52,6 @@ class _ItemDescritorKitPageFrmState extends State<ItemDescritorKitPageFrm> {
 
   @override
   void initState() {
-    kitDescritorCubit = KitDescritorCubit();
-    kitDescritorCubit.loadAll();
-
     txtQuantidade.addValidator((String str) {
       if (str.isEmpty) {
         return 'Obrigatório';
@@ -122,68 +118,48 @@ class _ItemDescritorKitPageFrmState extends State<ItemDescritorKitPageFrm> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
-                      child: BlocBuilder<KitDescritorCubit, KitDescritorState>(
-                        bloc: kitDescritorCubit,
-                        builder: (context, kitsDescritoresState) {
-                          if (kitsDescritoresState.loading) {
-                            return const LoadingWidget();
-                          }
-                          List<KitDescritorModel> kitsDescritores =
-                              kitsDescritoresState.kitDescritores;
-                          KitDescritorModel? kitDescritor = kitsDescritores
-                              .where(
-                                (element) =>
-                                    element.cod ==
-                                    itemDescritorKit.codDescritorKit,
-                              )
-                              .firstOrNull;
-
-                          kitsDescritores.sort(
-                            (a, b) => a.nome!.compareTo(b.nome!),
-                          );
-                          return DropDownWidget(
-                            initialValue: kitDescritor,
-                            sourceList: kitsDescritores,
-                            onChanged: (value) =>
-                                itemDescritorKit.codDescritorKit = value.cod!,
-                            placeholder: 'Descritor de Kit',
-                          );
+                      child: DropDownSearchApiWidget<
+                          KitDescritorDropDownSearchResponseDTO>(
+                        search: (str) async =>
+                            (await KitDescritorService().getDropDownSearch(
+                              KitDescritorDropDownSearchDTO(
+                                numeroRegistros: 30,
+                                termoPesquisa: str,
+                                apenasAtivos: true,
+                              ),
+                            ))
+                                ?.$2 ??
+                            [],
+                        textFunction: (kitDescritor) => kitDescritor.Nome(),
+                        initialValue: itemDescritorKit.kitDescritor,
+                        onChanged: (value) {
+                          itemDescritorKit.codDescritorKit = value?.cod;
+                          itemDescritorKit.kitDescritor = value;
                         },
+                        placeholder: 'Descritor do Kit',
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
-                      child:
-                          BlocBuilder<ItemDescritorCubit, ItemDescritorState>(
-                        bloc: widget.itemDescritorCubit,
-                        builder: (context, itensDescritorState) {
-                          if (itensDescritorState.loading) {
-                            return const LoadingWidget();
-                          }
-                          List<ItemDescritorModel> itensDescritores =
-                              itensDescritorState.itensDescritores;
-
-                          ItemDescritorModel? itemDescritor = itensDescritores
-                              .where(
-                                (element) =>
-                                    element.cod ==
-                                    itemDescritorKit.codDescritorItem,
-                              )
-                              .firstOrNull;
-                          itensDescritores.sort(
-                            (a, b) =>
-                                a.descricaoCurta!.compareTo(b.descricaoCurta!),
-                          );
-                          return DropDownSearchWidget(
-                            textFunction: (itemDescritor) =>
-                                itemDescritor.ItemDescritorText(),
-                            initialValue: itemDescritor,
-                            sourceList: itensDescritores,
-                            onChanged: (value) =>
-                                itemDescritorKit.codDescritorItem = value?.cod,
-                            placeholder: 'Descritor de Item',
-                          );
+                      child: DropDownSearchApiWidget<
+                          ItemDescritorDropDownSearchResponseDTO>(
+                        search: (str) async =>
+                            (await ItemDescritorService().getDropDownSearch(
+                              ItemDescritorDropDownSearchDTO(
+                                numeroRegistros: 30,
+                                termoPesquisa: str,
+                                apenasAtivos: true,
+                              ),
+                            ))
+                                ?.$2 ??
+                            [],
+                        textFunction: (itemDescritor) => itemDescritor.Nome(),
+                        initialValue: itemDescritorKit.itemDescritor,
+                        onChanged: (value) {
+                          itemDescritorKit.codDescritorItem = value?.cod;
+                          itemDescritorKit.itemDescritor = value;
                         },
+                        placeholder: 'Descritor do Item',
                       ),
                     ),
                     Padding(

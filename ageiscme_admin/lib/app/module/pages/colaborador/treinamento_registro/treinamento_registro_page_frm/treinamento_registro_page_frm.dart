@@ -1,26 +1,30 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/treinamento_registro/treinamento_registro_page_frm/treinamento_registro_page_frm_state.dart';
+import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_data/services/treinamento_registro/treinamento_registro_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/models/treinamento_usuario/treinamento_usuario_model.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/delete_image_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/open_doc/open_doc_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/upload_button_widget.dart';
 import 'package:compartilhados/componentes/campos/label_string_widget.dart';
 import 'package:compartilhados/componentes/campos/list_field/list_field_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_float_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_area_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_file_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_save_file_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/fontes/fontes.dart';
 import 'package:compartilhados/componentes/botoes/list_button_widget.dart';
+import 'package:compartilhados/functions/file_helper/file_object_model.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -424,60 +428,66 @@ class _TreinamentoRegistroPageFrmState
                         ],
                       ),
                     ),
-                    const Padding(padding: EdgeInsets.only(top: 5)),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Wrap(
-                            runSpacing: 16 * paddingHorizontalScale,
-                            spacing: 16 * paddingHorizontalScale,
-                            children: [
-                              UploadButtonWidget(
-                                placeholder: 'Anexar DOC',
-                                imageSelected: (value1, value2) {
-                                  salvarDoc(value1, value2);
-                                },
-                              ),
-                              DeleteImageButtonWidget(
-                                placeholder: 'Excluir DOC',
-                                onPressed: treinamentoRegistro.doc == null
-                                    ? null
-                                    : () => {excluirDoc()},
-                              ),
-                              OpenDocWidget(
-                                placeholder: 'Abrir DOC',
-                                documentoString: treinamentoRegistro.doc,
-                                documentName: treinamentoRegistro.docNome ??
-                                    'arquivo sem nome.jpg',
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Padding(padding: EdgeInsets.only(top: 24)),
                   ],
                 ),
               ),
             ),
             actions: [
-              Wrap(
-                spacing: 16 * paddingHorizontalScale,
-                runSpacing: 16 * paddingHorizontalScale,
-                alignment: WrapAlignment.end,
+              Row(
                 children: [
-                  SaveButtonWidget(
-                    onPressed: () => {salvar()},
+                  CustomPopupMenuWidget(
+                    items: [
+                      CustomPopupItemFileModel.getFileItem(
+                        'Anexar DOC',
+                        salvarDoc,
+                      ),
+                      if (treinamentoRegistro.docNome != null &&
+                          treinamentoRegistro.doc != null)
+                        CustomPopupItemModel(
+                          text: 'Excluir DOC',
+                          onTap: excluirDoc,
+                        ),
+                      if (treinamentoRegistro.docNome != null &&
+                          treinamentoRegistro.doc != null)
+                        CustomPopupItemSaveFileModel.getOpenDocItem(
+                          text: 'Abrir DOC',
+                          context: context,
+                          docName: treinamentoRegistro.docNome,
+                          docString: treinamentoRegistro.doc,
+                        ),
+                      if (treinamentoRegistro.cod != null &&
+                          treinamentoRegistro.cod != 0)
+                        CustomPopupItemHistoryModel.getHistoryItem(
+                          child: HistoricoPage(
+                            pk: treinamentoRegistro.cod!,
+                            termo: 'TREINAMENTO_REGISTRO',
+                          ),
+                          context: context,
+                        ),
+                    ],
                   ),
-                  CleanButtonWidget(
-                    onPressed: () => {
-                      setState(() {
-                        treinamentoRegistro = TreinamentoRegistroModel.empty();
-                      }),
-                    },
-                  ),
-                  CancelButtonUnfilledWidget(
-                    onPressed: () => {Navigator.of(context).pop((false, ''))},
+                  const Spacer(),
+                  Wrap(
+                    spacing: 16 * paddingHorizontalScale,
+                    runSpacing: 16 * paddingHorizontalScale,
+                    alignment: WrapAlignment.end,
+                    children: [
+                      SaveButtonWidget(
+                        onPressed: () => {salvar()},
+                      ),
+                      CleanButtonWidget(
+                        onPressed: () => {
+                          setState(() {
+                            treinamentoRegistro =
+                                TreinamentoRegistroModel.empty();
+                          }),
+                        },
+                      ),
+                      CancelButtonUnfilledWidget(
+                        onPressed: () =>
+                            {Navigator.of(context).pop((false, ''))},
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -488,10 +498,12 @@ class _TreinamentoRegistroPageFrmState
     );
   }
 
-  void salvarDoc(String doc, String nomeDoc) {
+  void salvarDoc(Future<FileObjectModel?> Function() onSelectFile) async {
+    FileObjectModel? fileNew = await onSelectFile();
+    if (fileNew == null) return;
     setState(() {
-      treinamentoRegistro.doc = doc;
-      treinamentoRegistro.docNome = nomeDoc;
+      treinamentoRegistro.doc = fileNew.base64;
+      treinamentoRegistro.docNome = fileNew.fileName;
     });
   }
 

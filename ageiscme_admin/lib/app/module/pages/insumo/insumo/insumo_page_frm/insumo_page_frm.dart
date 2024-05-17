@@ -1,19 +1,31 @@
+import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/deposito_insumo/deposito_insumo_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/fabricante/fabricante_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/fornecedor/fornecedor_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/unidade_medida/unidade_medida_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento_insumos/equipamento_insumo_page.dart';
+import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/insumo/insumo_page_frm/insumo_page_frm_state.dart';
+import 'package:ageiscme_admin/app/module/pages/insumo/insumo_teste/insumo_teste_page_frm/insumo_teste_page_frm.dart';
 import 'package:ageiscme_data/services/insumo/insumo_service.dart';
 import 'package:ageiscme_data/services/item/item_service.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/models/insumo_teste/insumo_teste_model.dart';
+import 'package:compartilhados/alert_dialog/form_alert_dialog_widget.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
+import 'package:compartilhados/componentes/loading/loading_widget.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
@@ -135,6 +147,8 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
     },
   );
 
+  late final DepositoInsumoCubit depositoInsumoCubit;
+
   void initState() {
     fabricanteCubit = FabricanteCubit();
     fabricanteCubit.loadAll();
@@ -142,6 +156,7 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
     fornecedorCubit.loadAll();
     unidadeMedidaCubit = UnidadeMedidaCubit();
     unidadeMedidaCubit.loadAll();
+    depositoInsumoCubit = DepositoInsumoCubit();
 
     txtCodBarra.addValidator((String str) {
       if (str.isEmpty) {
@@ -302,10 +317,8 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
             actionsPadding: const EdgeInsets.all(8.0),
             title: Row(
               children: [
-                Expanded(
-                  child: TitleWidget(
-                    text: titulo,
-                  ),
+                TitleWidget(
+                  text: titulo,
                 ),
                 const Spacer(),
                 CloseButtonWidget(
@@ -314,10 +327,11 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
               ],
             ),
             content: Container(
-              constraints: BoxConstraints(
-                minWidth: size.width * .5,
-                minHeight: size.height * .5,
-                maxHeight: size.height * .8,
+              width: size.width * .6,
+              height: size.height * .8,
+              constraints: const BoxConstraints(
+                minWidth: 500,
+                minHeight: 600,
               ),
               child: SingleChildScrollView(
                 padding: const EdgeInsets.only(right: 14),
@@ -437,10 +451,17 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                       child: Row(
                         children: [
                           Expanded(
-                            child: BlocBuilder<FabricanteCubit,
-                                List<FabricanteModel>>(
+                            child:
+                                BlocBuilder<FabricanteCubit, FabricanteState>(
                               bloc: fabricanteCubit,
-                              builder: (context, fabricantes) {
+                              builder: (context, fabricanteState) {
+                                if (fabricanteState.loading) {
+                                  return const Center(
+                                    child: LoadingWidget(),
+                                  );
+                                }
+                                List<FabricanteModel> fabricantes =
+                                    fabricanteState.fabricantes;
                                 fabricantes.sort(
                                   (a, b) => a.nome!.compareTo(b.nome!),
                                 );
@@ -450,11 +471,14 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                                           element.cod == insumo.codFabricante,
                                     )
                                     .firstOrNull;
-                                return DropDownWidget<FabricanteModel>(
+                                return DropDownSearchWidget<FabricanteModel>(
+                                  textFunction: (p0) => p0.GetDropDownText(),
                                   initialValue: fabricante,
                                   sourceList: fabricantes,
-                                  onChanged: (value) =>
-                                      insumo.codFabricante = value.cod!,
+                                  onChanged: (value) {
+                                    insumo.fabricanteItem = value;
+                                    insumo.codFabricante = value?.cod;
+                                  },
                                   placeholder: 'Fabricante',
                                 );
                               },
@@ -462,10 +486,15 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                           ),
                           const SizedBox(width: 16.0),
                           Expanded(
-                            child: BlocBuilder<FornecedorCubit,
-                                List<FornecedorModel>>(
+                            child:
+                                BlocBuilder<FornecedorCubit, FornecedorState>(
                               bloc: fornecedorCubit,
-                              builder: (context, fornecedores) {
+                              builder: (context, stateFornecedor) {
+                                if (stateFornecedor.loading) {
+                                  return const Center(child: LoadingWidget());
+                                }
+                                List<FornecedorModel> fornecedores =
+                                    stateFornecedor.fornecedores;
                                 fornecedores.sort(
                                   (a, b) => a.nome!.compareTo(b.nome!),
                                 );
@@ -475,11 +504,26 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                                           element.cod == insumo.codFornecedor,
                                     )
                                     .firstOrNull;
-                                return DropDownWidget<FornecedorModel>(
+                                insumo.fornecedorItem = fornecedor;
+                                return DropDownSearchWidget<FornecedorModel>(
+                                  textFunction: (p0) => p0.GetDropDownText(),
                                   initialValue: fornecedor,
                                   sourceList: fornecedores,
-                                  onChanged: (value) =>
-                                      insumo.codFabricante = value.cod!,
+                                  onChanged: (value) {
+                                    setState(() {
+                                      insumo.nome = insumo.nome?.replaceAll(
+                                        ' - ' +
+                                            (insumo.fornecedorItem?.nome ?? ''),
+                                        '',
+                                      );
+                                      txtNomeitem.text = insumo.nome ?? '';
+                                      insumo.codFornecedor = value?.cod;
+                                      if (insumo.nome == null ||
+                                          value?.nome == null) return;
+                                      insumo.nome =
+                                          insumo.nome! + ' - ' + value!.nome!;
+                                    });
+                                  },
                                   placeholder: 'Fornecedor',
                                 );
                               },
@@ -575,6 +619,28 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
             actions: [
               Row(
                 children: [
+                  CustomPopupMenuWidget(
+                    items: [
+                      if (insumo.cod != null && insumo.cod != 0)
+                        CustomPopupItemModel(
+                          text: 'Testes',
+                          onTap: abrirTesteInsumo,
+                        ),
+                      if (insumo.cod != null && insumo.cod != 0)
+                        CustomPopupItemModel(
+                          text: 'Equipamentos',
+                          onTap: _abrirEquipamentos,
+                        ),
+                      if (insumo.cod != null && insumo.cod != 0)
+                        CustomPopupItemHistoryModel.getHistoryItem(
+                          child: HistoricoPage(
+                            pk: insumo.cod!,
+                            termo: 'INSUMO',
+                          ),
+                          context: context,
+                        ),
+                    ],
+                  ),
                   const Spacer(),
                   Padding(
                     padding: const EdgeInsets.only(left: 16.0),
@@ -604,6 +670,83 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
           );
         },
       ),
+    );
+  }
+
+  void loadDepositoInsumo() {
+    depositoInsumoCubit.loadAll();
+  }
+
+  Future abrirTesteInsumo() async {
+    if (insumo.cod == null || insumo.cod == 0) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'É necessário ter o teste cadastrado para acessar a tela de insumos.',
+      );
+      return;
+    }
+    loadDepositoInsumo();
+    InsumoTesteModel insumoTesteModel = InsumoTesteModel.empty();
+    insumoTesteModel.codInsumo = insumo.cod;
+    insumoTesteModel.insumo = insumo;
+    (bool, String)? result = await showDialog<(bool, String)>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return InsumoTestePageFrm(
+          insumoReadOnly: true,
+          depositoInsumoCubit: depositoInsumoCubit,
+          insumoTeste: insumoTesteModel,
+        );
+      },
+    );
+    if (result == null || !result.$1) return;
+    Navigator.of(context).pop(result);
+  }
+
+  Future _abrirEquipamentos() async {
+    if (insumo.cod == null || insumo.cod == 0) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'É necessário ter o insumo cadastrado para acessar a tela de vinculação de insumos e equipamentos.',
+      );
+      return;
+    }
+
+    Size size = MediaQuery.of(context).size;
+    await showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return FormAlertDialogWidget(
+          title: Row(
+            children: [
+              const Expanded(
+                child: TitleWidget(
+                  text: 'Cadastro de Insumos do Equipamento',
+                ),
+              ),
+              const Spacer(),
+              CloseButtonWidget(
+                onPressed: () => Navigator.of(context).pop(),
+              ),
+            ],
+          ),
+          content: Container(
+            width: size.width * 0.8,
+            height: size.height * 0.7,
+            constraints: const BoxConstraints(
+              minWidth: 700,
+              minHeight: 700,
+              maxHeight: 900,
+              maxWidth: 900,
+            ),
+            child: EquipamentoInsumoPage(
+              codInsumo: insumo.cod,
+            ),
+          ),
+        );
+      },
     );
   }
 

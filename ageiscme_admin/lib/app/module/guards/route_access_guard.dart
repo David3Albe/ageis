@@ -17,8 +17,8 @@ class RouteAccessGuard extends RouteGuard {
   ) async {
     if (path == '/admin/') return true;
     if (path == '/admin/home') return true;
-    final ItemMenuModel? itemMenu = ItemMenuService()
-        .getItems()
+    final ItemMenuModel? itemMenu = (await ItemMenuService()
+        .getItemsLiberados())
         .getLastLevels()
         .firstWhere((element) => element.getFullRoute() == path, orElse: null);
     if (itemMenu == null) return false;

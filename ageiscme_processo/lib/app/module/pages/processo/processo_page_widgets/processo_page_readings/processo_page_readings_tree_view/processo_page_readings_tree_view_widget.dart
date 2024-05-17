@@ -16,6 +16,8 @@ class ProcessoPageReadingsTreeViewWidget extends StatelessWidget {
               current.rebuildType == ProcessoLeituraRebuildType.All ||
               current.rebuildType == ProcessoLeituraRebuildType.Kit,
           builder: (context, state) {
+            double escalaFonte = state.processo.getEscala();
+            double? lineHeight = state.processo.getLineHeightPadraoBig();
             return Padding(
               padding: EdgeInsets.only(right: 4.0 * scale),
               child: Row(
@@ -29,7 +31,10 @@ class ProcessoPageReadingsTreeViewWidget extends StatelessWidget {
                           visible: state.processo.leituraAtual.kits.isNotEmpty,
                           child: Text(
                             'Kits (${state.processo.leituraAtual.kits.length})',
-                            style: TextStyle(fontSize: 20 * scale),
+                            style: TextStyle(
+                              fontSize: 16 * scale * escalaFonte,
+                              height: lineHeight,
+                            ),
                           ),
                         ),
                         ProcessoPageTreeViewKitsWidget(
@@ -41,7 +46,10 @@ class ProcessoPageReadingsTreeViewWidget extends StatelessWidget {
                           visible: state.processo.leituraAtual.itens.isNotEmpty,
                           child: Text(
                             'Itens (${state.processo.leituraAtual.itens.length})',
-                            style: TextStyle(fontSize: 20 * scale),
+                            style: TextStyle(
+                              fontSize: 16 * scale * escalaFonte,
+                              height: lineHeight,
+                            ),
                           ),
                         ),
                         Padding(padding: EdgeInsets.only(top: 8 * scale)),

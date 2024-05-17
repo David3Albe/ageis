@@ -1,4 +1,6 @@
+import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/fornecedor/fornecedor_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/epi_descritor/epi_descritor_page_frm/epi_descritor_page_frm_state.dart';
+import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_data/services/epi_descritor/epi_descritor_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
@@ -8,11 +10,15 @@ import 'package:compartilhados/componentes/botoes/delete_image_button_widget.dar
 import 'package:compartilhados/componentes/botoes/open_doc/open_doc_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/upload_button_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
 import 'package:compartilhados/componentes/images/image_widget.dart';
+import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
@@ -56,8 +62,12 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
     initialValue: epiDescritor.prazoValidade,
   );
 
+  late FornecedorCubit fornecedorCubit;
+
   @override
   void initState() {
+    fornecedorCubit = FornecedorCubit();
+    fornecedorCubit.loadAll();
     txtDescricao.addValidator((String str) {
       if (str.length > 400) {
         return 'Pode ter no máximo 400 caracteres';
@@ -154,6 +164,36 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
                       padding: const EdgeInsets.only(top: 5.0),
                       child: txtNumeroCA,
                     ),
+                    BlocBuilder<FornecedorCubit, FornecedorState>(
+                      bloc: fornecedorCubit,
+                      builder: (context, fornecedorState) {
+                        if (fornecedorState.loading) {
+                          return const LoadingWidget();
+                        }
+                        List<FornecedorModel> fornecedores =
+                            fornecedorState.fornecedores;
+                        fornecedores.sort(
+                          (a, b) => a.nome!.compareTo(b.nome!),
+                        );
+                        FornecedorModel? fornecedor = fornecedores
+                            .where(
+                              (element) =>
+                                  element.cod == epiDescritor.codFornecedor,
+                            )
+                            .firstOrNull;
+                        return DropDownSearchWidget<FornecedorModel>(
+                          textFunction: (fornecedor) =>
+                              fornecedor.GetDropDownText(),
+                          initialValue: fornecedor,
+                          sourceList: fornecedores.toList(),
+                          onChanged: (value) {
+                            epiDescritor.codFornecedor = value?.cod;
+                            epiDescritor.fornecedor = value;
+                          },
+                          placeholder: 'Fornecedor',
+                        );
+                      },
+                    ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
                       child: dtpPrazoValidade,
@@ -225,23 +265,41 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
               ),
             ),
             actions: [
-              Wrap(
-                spacing: 16 * paddingHorizontalScale,
-                runSpacing: 16 * paddingHorizontalScale,
-                alignment: WrapAlignment.end,
+              Row(
                 children: [
-                  SaveButtonWidget(
-                    onPressed: () => {salvar()},
+                  CustomPopupMenuWidget(
+                    items: [
+                      if (epiDescritor.cod != null && epiDescritor.cod != 0)
+                        CustomPopupItemHistoryModel.getHistoryItem(
+                          child: HistoricoPage(
+                            pk: epiDescritor.cod!,
+                            termo: 'EPI_DESCRITOR',
+                          ),
+                          context: context,
+                        ),
+                    ],
                   ),
-                  CleanButtonWidget(
-                    onPressed: () => {
-                      setState(() {
-                        epiDescritor = EpiDescritorModel.empty();
-                      }),
-                    },
-                  ),
-                  CancelButtonUnfilledWidget(
-                    onPressed: () => {Navigator.of(context).pop((false, ''))},
+                  const Spacer(),
+                  Wrap(
+                    spacing: 16 * paddingHorizontalScale,
+                    runSpacing: 16 * paddingHorizontalScale,
+                    alignment: WrapAlignment.end,
+                    children: [
+                      SaveButtonWidget(
+                        onPressed: () => {salvar()},
+                      ),
+                      CleanButtonWidget(
+                        onPressed: () => {
+                          setState(() {
+                            epiDescritor = EpiDescritorModel.empty();
+                          }),
+                        },
+                      ),
+                      CancelButtonUnfilledWidget(
+                        onPressed: () =>
+                            {Navigator.of(context).pop((false, ''))},
+                      ),
+                    ],
                   ),
                 ],
               ),

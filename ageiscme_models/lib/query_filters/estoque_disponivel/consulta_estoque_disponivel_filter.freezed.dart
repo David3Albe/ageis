@@ -27,8 +27,12 @@ mixin _$ConsultaEstoqueDisponivelFilter {
   set codEstoqueLocal(int? value) => throw _privateConstructorUsedError;
   int? get codKit => throw _privateConstructorUsedError;
   set codKit(int? value) => throw _privateConstructorUsedError;
+  String? get codBarraKitContem => throw _privateConstructorUsedError;
+  set codBarraKitContem(String? value) => throw _privateConstructorUsedError;
   int? get codItem => throw _privateConstructorUsedError;
   set codItem(int? value) => throw _privateConstructorUsedError;
+  String? get idEtiquetaContem => throw _privateConstructorUsedError;
+  set idEtiquetaContem(String? value) => throw _privateConstructorUsedError;
   int? get codProprietario => throw _privateConstructorUsedError;
   set codProprietario(int? value) => throw _privateConstructorUsedError;
   bool? get ignorarRemovidos => throw _privateConstructorUsedError;
@@ -54,7 +58,9 @@ abstract class $ConsultaEstoqueDisponivelFilterCopyWith<$Res> {
       {int? codEstoque,
       int? codEstoqueLocal,
       int? codKit,
+      String? codBarraKitContem,
       int? codItem,
+      String? idEtiquetaContem,
       int? codProprietario,
       bool? ignorarRemovidos,
       ItemModel? item});
@@ -79,7 +85,9 @@ class _$ConsultaEstoqueDisponivelFilterCopyWithImpl<$Res,
     Object? codEstoque = freezed,
     Object? codEstoqueLocal = freezed,
     Object? codKit = freezed,
+    Object? codBarraKitContem = freezed,
     Object? codItem = freezed,
+    Object? idEtiquetaContem = freezed,
     Object? codProprietario = freezed,
     Object? ignorarRemovidos = freezed,
     Object? item = freezed,
@@ -97,10 +105,18 @@ class _$ConsultaEstoqueDisponivelFilterCopyWithImpl<$Res,
           ? _value.codKit
           : codKit // ignore: cast_nullable_to_non_nullable
               as int?,
+      codBarraKitContem: freezed == codBarraKitContem
+          ? _value.codBarraKitContem
+          : codBarraKitContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codItem: freezed == codItem
           ? _value.codItem
           : codItem // ignore: cast_nullable_to_non_nullable
               as int?,
+      idEtiquetaContem: freezed == idEtiquetaContem
+          ? _value.idEtiquetaContem
+          : idEtiquetaContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codProprietario: freezed == codProprietario
           ? _value.codProprietario
           : codProprietario // ignore: cast_nullable_to_non_nullable
@@ -142,7 +158,9 @@ abstract class _$$ConsultaEstoqueDisponivelFilterImplCopyWith<$Res>
       {int? codEstoque,
       int? codEstoqueLocal,
       int? codKit,
+      String? codBarraKitContem,
       int? codItem,
+      String? idEtiquetaContem,
       int? codProprietario,
       bool? ignorarRemovidos,
       ItemModel? item});
@@ -167,7 +185,9 @@ class __$$ConsultaEstoqueDisponivelFilterImplCopyWithImpl<$Res>
     Object? codEstoque = freezed,
     Object? codEstoqueLocal = freezed,
     Object? codKit = freezed,
+    Object? codBarraKitContem = freezed,
     Object? codItem = freezed,
+    Object? idEtiquetaContem = freezed,
     Object? codProprietario = freezed,
     Object? ignorarRemovidos = freezed,
     Object? item = freezed,
@@ -185,10 +205,18 @@ class __$$ConsultaEstoqueDisponivelFilterImplCopyWithImpl<$Res>
           ? _value.codKit
           : codKit // ignore: cast_nullable_to_non_nullable
               as int?,
+      codBarraKitContem: freezed == codBarraKitContem
+          ? _value.codBarraKitContem
+          : codBarraKitContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codItem: freezed == codItem
           ? _value.codItem
           : codItem // ignore: cast_nullable_to_non_nullable
               as int?,
+      idEtiquetaContem: freezed == idEtiquetaContem
+          ? _value.idEtiquetaContem
+          : idEtiquetaContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codProprietario: freezed == codProprietario
           ? _value.codProprietario
           : codProprietario // ignore: cast_nullable_to_non_nullable
@@ -213,7 +241,9 @@ class _$ConsultaEstoqueDisponivelFilterImpl
       {required this.codEstoque,
       required this.codEstoqueLocal,
       required this.codKit,
+      required this.codBarraKitContem,
       required this.codItem,
+      required this.idEtiquetaContem,
       required this.codProprietario,
       this.ignorarRemovidos,
       this.item})
@@ -230,7 +260,11 @@ class _$ConsultaEstoqueDisponivelFilterImpl
   @override
   int? codKit;
   @override
+  String? codBarraKitContem;
+  @override
   int? codItem;
+  @override
+  String? idEtiquetaContem;
   @override
   int? codProprietario;
   @override
@@ -240,7 +274,7 @@ class _$ConsultaEstoqueDisponivelFilterImpl
 
   @override
   String toString() {
-    return 'ConsultaEstoqueDisponivelFilter(codEstoque: $codEstoque, codEstoqueLocal: $codEstoqueLocal, codKit: $codKit, codItem: $codItem, codProprietario: $codProprietario, ignorarRemovidos: $ignorarRemovidos, item: $item)';
+    return 'ConsultaEstoqueDisponivelFilter(codEstoque: $codEstoque, codEstoqueLocal: $codEstoqueLocal, codKit: $codKit, codBarraKitContem: $codBarraKitContem, codItem: $codItem, idEtiquetaContem: $idEtiquetaContem, codProprietario: $codProprietario, ignorarRemovidos: $ignorarRemovidos, item: $item)';
   }
 
   @JsonKey(ignore: true)
@@ -265,7 +299,9 @@ abstract class _ConsultaEstoqueDisponivelFilter
       {required int? codEstoque,
       required int? codEstoqueLocal,
       required int? codKit,
+      required String? codBarraKitContem,
       required int? codItem,
+      required String? idEtiquetaContem,
       required int? codProprietario,
       bool? ignorarRemovidos,
       ItemModel? item}) = _$ConsultaEstoqueDisponivelFilterImpl;
@@ -284,8 +320,14 @@ abstract class _ConsultaEstoqueDisponivelFilter
   int? get codKit;
   set codKit(int? value);
   @override
+  String? get codBarraKitContem;
+  set codBarraKitContem(String? value);
+  @override
   int? get codItem;
   set codItem(int? value);
+  @override
+  String? get idEtiquetaContem;
+  set idEtiquetaContem(String? value);
   @override
   int? get codProprietario;
   set codProprietario(int? value);

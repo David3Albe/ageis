@@ -70,14 +70,13 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
       format = widget.formato!;
     }
 
+    selectedDate = null;
+    textController.text = '';
+
     if (widget.initialValue != null) {
       selectedDate = widget.initialValue!;
       textController.text = format.format(selectedDate!);
-    } else {
-      selectedDate = null;
-      textController.text = '';
     }
-    textController.addListener(_onTextChanged);
     focusNode.addListener(onEditComplete);
   }
 
@@ -98,24 +97,6 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
     textController.dispose();
     focusNode.dispose();
     super.dispose();
-  }
-
-  void _onTextChanged() {
-    // String text = maskFormatter.maskText(textController.text);
-    // DateFormat format = DateFormat('dd/MM/yyyy');
-    // DateTime? data;
-    // if (text.length == 10 && lastText.length != textController.text.length) {
-    //   data = format.parse(text);
-    //   textController.text = format.format(data);
-    //   textController.selection = TextSelection.fromPosition(
-    //     TextPosition(offset: textController.text.length),
-    //   );
-    //   return;
-    // }
-    // setState(() {
-    //   selectedDate = data;
-    //   if (widget.onDateSelected != null) widget.onDateSelected!(selectedDate);
-    // });
   }
 
   void clear() {
@@ -203,15 +184,14 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
       setReadonly,
     );
     return TextFormField(
-      scrollPadding: EdgeInsets.zero,
       focusNode: focusNode,
       controller: textController,
       keyboardType: TextInputType.datetime,
       inputFormatters: [
         LengthLimitingTextInputFormatter(widget.formato?.pattern?.length ?? 10),
-        maskFormatter,
+        _DateInputFormatter(),
       ],
-      style: TextStyle(
+      style: Fontes.getRoboto(
         fontSize: HelperFunctions.calculaFontSize(context, 16),
       ),
       decoration: InputDecoration(
@@ -219,11 +199,11 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
           widget.placeholder,
           style: Fontes.getRoboto(
             letterSpacing: 0,
-            fontSize: HelperFunctions.calculaFontSize(context, 16),
+            fontSize: HelperFunctions.calculaFontSize(context, 18),
             cor: Cores.corPlaceholderTextField,
           ),
         ),
-        isDense: true,
+        // isDense: true,
         suffixIcon: InkWell(
           onTap: () => _selectDate(context),
           child: FittedBox(
@@ -238,6 +218,35 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
       ),
       enabled: readOnly == false,
       readOnly: readOnly == true,
+    );
+  }
+}
+
+class _DateInputFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    final newText = newValue.text;
+    if (newValue.selection.baseOffset == 0) {
+      return newValue;
+    }
+
+    final buffer = StringBuffer();
+    for (int i = 0; i < newText.length; i++) {
+      if (i == 2 || i == 5) {
+        buffer.write('/');
+      }
+      if (newText[i] != '/' && (newText[i].isNotEmpty)) {
+        buffer.write(newText[i]);
+      }
+    }
+
+    final formattedText = buffer.toString();
+    return newValue.copyWith(
+      text: formattedText,
+      selection: TextSelection.collapsed(offset: formattedText.length),
     );
   }
 }

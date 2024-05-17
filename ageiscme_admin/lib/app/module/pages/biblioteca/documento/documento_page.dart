@@ -16,7 +16,8 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class DocumentoPage extends StatefulWidget {
-  DocumentoPage({super.key});
+  DocumentoPage({this.cod, super.key});
+  final int? cod;
 
   @override
   State<DocumentoPage> createState() => _DocumentoPageState();
@@ -54,7 +55,19 @@ class _DocumentoPageState extends State<DocumentoPage> {
   void initState() {
     service = DocumentoService();
     bloc = DocumentoPageCubit(service: service);
-    bloc.loadDocumento();
+    bloc.loadDocumento().then((value) {
+      if (widget.cod == null) return;
+      DocumentoModel? documento = bloc.state.documentos
+          .where((element) => element.cod == widget.cod)
+          .firstOrNull;
+      if (documento == null) return;
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) => openModal(
+          context,
+          documento,
+        ),
+      );
+    });
     super.initState();
   }
 
@@ -123,7 +136,7 @@ class _DocumentoPageState extends State<DocumentoPage> {
         documento,
       );
       if (doc == null) {
-        loading.close(context, mounted); 
+        loading.close(context, mounted);
         notFoundError();
         return;
       }
@@ -141,7 +154,7 @@ class _DocumentoPageState extends State<DocumentoPage> {
     );
     if (result == null || !result.$1) return;
     ToastUtils.showCustomToastSucess(context, result.$2);
-    bloc.loadDocumento();
+    await bloc.loadDocumento();
   }
 
   void delete(BuildContext context, DocumentoModel documento) async {

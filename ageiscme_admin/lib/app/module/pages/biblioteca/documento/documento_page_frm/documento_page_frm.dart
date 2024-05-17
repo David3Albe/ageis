@@ -1,5 +1,6 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/tipo_documento/tipo_documento_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/biblioteca/documento/documento_page_frm/documento_page_frm_state.dart';
+import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_data/services/documento/documento_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
@@ -15,6 +16,8 @@ import 'package:compartilhados/componentes/campos/text_field_string_widget.dart'
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/botoes/upload_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/delete_image_button_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
@@ -227,23 +230,41 @@ class _DocumentoPageFrmState extends State<DocumentoPageFrm> {
               ),
             ),
             actions: [
-              Wrap(
-                spacing: 16 * paddingHorizontalScale,
-                runSpacing: 16 * paddingHorizontalScale,
-                alignment: WrapAlignment.end,
+              Row(
                 children: [
-                  SaveButtonWidget(
-                    onPressed: () => {salvar()},
+                  CustomPopupMenuWidget(
+                    items: [
+                      if (documento.cod != null && documento.cod != 0)
+                        CustomPopupItemHistoryModel.getHistoryItem(
+                          child: HistoricoPage(
+                            pk: documento.cod!,
+                            termo: 'DOCUMENTO',
+                          ),
+                          context: context,
+                        ),
+                    ],
                   ),
-                  CleanButtonWidget(
-                    onPressed: () => {
-                      setState(() {
-                        documento = DocumentoModel.empty();
-                      }),
-                    },
-                  ),
-                  CancelButtonUnfilledWidget(
-                    onPressed: () => {Navigator.of(context).pop((false, ''))},
+                  const Spacer(),
+                  Wrap(
+                    spacing: 16 * paddingHorizontalScale,
+                    runSpacing: 16 * paddingHorizontalScale,
+                    alignment: WrapAlignment.end,
+                    children: [
+                      SaveButtonWidget(
+                        onPressed: () => {salvar()},
+                      ),
+                      CleanButtonWidget(
+                        onPressed: () => {
+                          setState(() {
+                            documento = DocumentoModel.empty();
+                          }),
+                        },
+                      ),
+                      CancelButtonUnfilledWidget(
+                        onPressed: () =>
+                            {Navigator.of(context).pop((false, ''))},
+                      ),
+                    ],
                   ),
                 ],
               ),

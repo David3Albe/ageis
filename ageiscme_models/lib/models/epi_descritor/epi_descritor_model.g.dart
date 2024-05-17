@@ -23,6 +23,11 @@ _$EpiDescritorModelImpl _$$EpiDescritorModelImplFromJson(Map json) =>
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),
       tstamp: json['tStamp'] as String?,
+      codFornecedor: json['codFornecedor'] as int?,
+      fornecedor: json['fornecedor'] == null
+          ? null
+          : FornecedorModel.fromJson(
+              Map<String, Object?>.from(json['fornecedor'] as Map)),
     );
 
 Map<String, dynamic> _$$EpiDescritorModelImplToJson(
@@ -39,4 +44,6 @@ Map<String, dynamic> _$$EpiDescritorModelImplToJson(
       'imagem': instance.imagem,
       'ultimaAlteracao': instance.ultimaAlteracao?.toIso8601String(),
       'tStamp': instance.tstamp,
+      'codFornecedor': instance.codFornecedor,
+      'fornecedor': instance.fornecedor?.toJson(),
     };

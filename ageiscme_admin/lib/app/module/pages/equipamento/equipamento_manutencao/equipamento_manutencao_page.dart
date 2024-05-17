@@ -1,5 +1,4 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/equipamento/equipamento_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento_manutencao/cubits/equipamento_manutencao_filter_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento_manutencao/equipamento_manutencao_page_frm/equipamento_manutencao_page_frm.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento_manutencao/equipamento_manutencao_page_state.dart';
@@ -7,7 +6,6 @@ import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento_manutenc
 import 'package:ageiscme_data/services/equipamento_manutencao/equipamento_manutencao_service.dart';
 import 'package:ageiscme_models/filters/equipamento/equipamento_filter.dart';
 import 'package:ageiscme_models/filters/equipamento_manutencao/equipamento_manutencao_filter.dart';
-import 'package:ageiscme_models/filters/usuario_filter/usuario_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
@@ -22,7 +20,8 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class EquipamentoManutencaoPage extends StatefulWidget {
-  EquipamentoManutencaoPage({super.key});
+  EquipamentoManutencaoPage({this.cod, super.key});
+  final int? cod;
 
   @override
   State<EquipamentoManutencaoPage> createState() =>
@@ -73,20 +72,29 @@ class _EquipamentoManutencaoPageState extends State<EquipamentoManutencaoPage> {
   late final EquipamentoManutencaoPageCubit bloc;
   late final EquipamentoManutencaoService service;
   late final EquipamentoCubit equipamentoCubit;
-  late final UsuarioCubit usuarioCubit;
   late EquipamentoManutencaoFilter filter;
 
   @override
   void initState() {
     service = EquipamentoManutencaoService();
     equipamentoCubit = EquipamentoCubit();
-    usuarioCubit = UsuarioCubit();
     bloc = EquipamentoManutencaoPageCubit(service: service);
     filter = EquipamentoManutencaoFilter(
       numeroRegistros: 500,
+      cod: widget.cod,
     );
-    bloc.getScreenData(filter);
+    consultar().then((value) {
+      bool detalhar = filter.cod != null;
+      filter.cod = null;
+      if (!detalhar) return;
+      if (bloc.state.equipamentosManutencoes.isEmpty) return;
+      openModal(context, bloc.state.equipamentosManutencoes.first);
+    });
     super.initState();
+  }
+
+  Future consultar()async{
+    await bloc.getScreenData(filter);
   }
 
   @override
@@ -166,18 +174,6 @@ class _EquipamentoManutencaoPageState extends State<EquipamentoManutencaoPage> {
     }
   }
 
-  void loadUserCubit() {
-    if (!usuarioCubit.state.loaded) {
-      usuarioCubit.loadFilter(
-        UsuarioFilter(
-          apenasAtivos: true,
-          ordenarPorNomeCrescente: true,
-          apenasColaboradores: true,
-        ),
-      );
-    }
-  }
-
   Future<EquipamentoManutencaoModel?> getFilter(
     EquipamentoManutencaoModel equipamentoManutencao,
   ) async {
@@ -195,7 +191,6 @@ class _EquipamentoManutencaoPageState extends State<EquipamentoManutencaoPage> {
   ) async {
     LoadingController loading = LoadingController(context: context);
     loadEquipamentoCubit();
-    loadUserCubit();
 
     EquipamentoManutencaoModel? equipamentoMan = equipamentoManutencao;
     if (equipamentoManutencao.cod != 0) {
@@ -216,14 +211,13 @@ class _EquipamentoManutencaoPageState extends State<EquipamentoManutencaoPage> {
       builder: (BuildContext context) {
         return EquipamentoManutencaoPageFrm(
           equipamentoCubit: equipamentoCubit,
-          usuarioCubit: usuarioCubit,
           equipamentoManutencao: equipamentoMan!,
         );
       },
     );
     if (result == null || !result.$1) return;
     ToastUtils.showCustomToastSucess(context, result.$2);
-    bloc.loadEquipamentoManutencao();
+    await consultar();
   }
 
   void delete(
@@ -237,12 +231,12 @@ class _EquipamentoManutencaoPageState extends State<EquipamentoManutencaoPage> {
     if (confirmacao) bloc.delete(equipamentoManutencao);
   }
 
-  void deleted(EquipamentoManutencaoPageState state) {
+  Future deleted(EquipamentoManutencaoPageState state) async{
     ToastUtils.showCustomToastSucess(
       context,
       state.message,
     );
-    bloc.loadEquipamentoManutencao();
+    await consultar();
   }
 
   void onError(EquipamentoManutencaoPageState state) {

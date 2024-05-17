@@ -13,7 +13,7 @@ class ItemPageCubit extends Cubit<ItemPageState> {
           ),
         );
 
-  void loadItemFilter(ItemFilter filter) async {
+  Future loadItemFilter(ItemFilter filter) async {
     emit(
       ItemPageState(
         loading: true,

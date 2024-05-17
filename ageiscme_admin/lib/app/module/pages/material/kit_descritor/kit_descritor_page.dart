@@ -63,8 +63,12 @@ class _KitDescritorPageState extends State<KitDescritorPage> {
     itemDescritorCubit = ItemDescritorCubit();
     bloc = KitDescritorPageCubit(service: service);
     cubitFilter = KitDescritorCubitFilter();
-    bloc.getScreenData(cubitFilter.state);
+    carregar();
     super.initState();
+  }
+
+  Future carregar()async{
+    await bloc.getScreenData(cubitFilter.state);
   }
 
   @override
@@ -193,7 +197,7 @@ class _KitDescritorPageState extends State<KitDescritorPage> {
     );
     if (result == null || !result.$1) return;
     ToastUtils.showCustomToastSucess(context, result.$2);
-    await bloc.loadKitDescritor();
+    await carregar();
   }
 
   void delete(BuildContext context, KitDescritorModel kitDescritor) async {
@@ -204,12 +208,12 @@ class _KitDescritorPageState extends State<KitDescritorPage> {
     if (confirmacao) bloc.delete(kitDescritor);
   }
 
-  void deleted(KitDescritorPageState state) {
+  Future deleted(KitDescritorPageState state) async{
     ToastUtils.showCustomToastSucess(
       context,
       state.message,
     );
-    bloc.loadKitDescritor();
+    await carregar();
   }
 
   void onError(KitDescritorPageState state) {

@@ -17,13 +17,23 @@ class PrinterHelper {
 
   static Future<bool> PrintDocumentDefaultPrinter(
     BuildContext context,
-    Uint8List bytes,
-  ) async {
+    Uint8List bytes, {
+    bool usePrinterConfig = true,
+  }) async {
     PrintingInfo info = await Printing.info();
     if (info.directPrint == true && info.canListPrinters == true) {
-      return await _directPrint(context, bytes, false);
+      return await _directPrint(
+        context,
+        bytes,
+        false,
+        usePrinterConfig: usePrinterConfig,
+      );
     }
-    return await _printLayout(context, bytes);
+    return await _printLayout(
+      context,
+      bytes,
+      usePrinterConfig: usePrinterConfig,
+    );
   }
 
   static String decodeBase64(String encodedString) {
@@ -34,8 +44,9 @@ class PrinterHelper {
   static Future<bool> _directPrint(
     BuildContext context,
     Uint8List bytes,
-    bool retryed,
-  ) async {
+    bool retryed, {
+    bool usePrinterConfig = true,
+  }) async {
     List<Printer> printers = await Printing.listPrinters();
     Printer? printer =
         printers.where((element) => element.isDefault).firstOrNull;
@@ -52,16 +63,18 @@ class PrinterHelper {
     return await Printing.directPrintPdf(
       printer: printer,
       onLayout: (PageFormat) => bytes,
+      usePrinterSettings: usePrinterConfig,
     );
   }
 
   static Future<bool> _printLayout(
     BuildContext context,
-    Uint8List bytes,
-  ) async {
+    Uint8List bytes, {
+    bool usePrinterConfig = true,
+  }) async {
     return await Printing.layoutPdf(
       onLayout: (PageFormat) => bytes,
-      usePrinterSettings: true,
+      usePrinterSettings: usePrinterConfig,
     );
   }
 }

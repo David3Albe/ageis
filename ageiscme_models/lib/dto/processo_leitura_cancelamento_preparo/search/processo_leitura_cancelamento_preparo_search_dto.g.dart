@@ -9,13 +9,13 @@ part of 'processo_leitura_cancelamento_preparo_search_dto.dart';
 _$ProcessoLeituraCancelamentoPreparoSearchDTOImpl
     _$$ProcessoLeituraCancelamentoPreparoSearchDTOImplFromJson(Map json) =>
         _$ProcessoLeituraCancelamentoPreparoSearchDTOImpl(
-          codKit: json['codKit'] as int?,
-          codItem: json['codItem'] as int?,
+          codBarraKit: json['codBarraKit'] as String?,
+          idEtiqueta: json['idEtiqueta'] as String?,
         );
 
 Map<String, dynamic> _$$ProcessoLeituraCancelamentoPreparoSearchDTOImplToJson(
         _$ProcessoLeituraCancelamentoPreparoSearchDTOImpl instance) =>
     <String, dynamic>{
-      'codKit': instance.codKit,
-      'codItem': instance.codItem,
+      'codBarraKit': instance.codBarraKit,
+      'idEtiqueta': instance.idEtiqueta,
     };

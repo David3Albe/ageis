@@ -37,6 +37,14 @@ mixin _$ItemDescritorKitModel {
   String? get tstamp => throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
   set tstamp(String? value) => throw _privateConstructorUsedError;
+  KitDescritorDropDownSearchResponseDTO? get kitDescritor =>
+      throw _privateConstructorUsedError;
+  set kitDescritor(KitDescritorDropDownSearchResponseDTO? value) =>
+      throw _privateConstructorUsedError;
+  ItemDescritorDropDownSearchResponseDTO? get itemDescritor =>
+      throw _privateConstructorUsedError;
+  set itemDescritor(ItemDescritorDropDownSearchResponseDTO? value) =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -57,7 +65,12 @@ abstract class $ItemDescritorKitModelCopyWith<$Res> {
       int? quantidade,
       int? codInstituicao,
       DateTime? ultimaAlteracao,
-      @JsonKey(name: 'tStamp') String? tstamp});
+      @JsonKey(name: 'tStamp') String? tstamp,
+      KitDescritorDropDownSearchResponseDTO? kitDescritor,
+      ItemDescritorDropDownSearchResponseDTO? itemDescritor});
+
+  $KitDescritorDropDownSearchResponseDTOCopyWith<$Res>? get kitDescritor;
+  $ItemDescritorDropDownSearchResponseDTOCopyWith<$Res>? get itemDescritor;
 }
 
 /// @nodoc
@@ -81,6 +94,8 @@ class _$ItemDescritorKitModelCopyWithImpl<$Res,
     Object? codInstituicao = freezed,
     Object? ultimaAlteracao = freezed,
     Object? tstamp = freezed,
+    Object? kitDescritor = freezed,
+    Object? itemDescritor = freezed,
   }) {
     return _then(_value.copyWith(
       cod: freezed == cod
@@ -111,7 +126,41 @@ class _$ItemDescritorKitModelCopyWithImpl<$Res,
           ? _value.tstamp
           : tstamp // ignore: cast_nullable_to_non_nullable
               as String?,
+      kitDescritor: freezed == kitDescritor
+          ? _value.kitDescritor
+          : kitDescritor // ignore: cast_nullable_to_non_nullable
+              as KitDescritorDropDownSearchResponseDTO?,
+      itemDescritor: freezed == itemDescritor
+          ? _value.itemDescritor
+          : itemDescritor // ignore: cast_nullable_to_non_nullable
+              as ItemDescritorDropDownSearchResponseDTO?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $KitDescritorDropDownSearchResponseDTOCopyWith<$Res>? get kitDescritor {
+    if (_value.kitDescritor == null) {
+      return null;
+    }
+
+    return $KitDescritorDropDownSearchResponseDTOCopyWith<$Res>(
+        _value.kitDescritor!, (value) {
+      return _then(_value.copyWith(kitDescritor: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ItemDescritorDropDownSearchResponseDTOCopyWith<$Res>? get itemDescritor {
+    if (_value.itemDescritor == null) {
+      return null;
+    }
+
+    return $ItemDescritorDropDownSearchResponseDTOCopyWith<$Res>(
+        _value.itemDescritor!, (value) {
+      return _then(_value.copyWith(itemDescritor: value) as $Val);
+    });
   }
 }
 
@@ -131,7 +180,14 @@ abstract class _$$ItemDescritorKitModelImplCopyWith<$Res>
       int? quantidade,
       int? codInstituicao,
       DateTime? ultimaAlteracao,
-      @JsonKey(name: 'tStamp') String? tstamp});
+      @JsonKey(name: 'tStamp') String? tstamp,
+      KitDescritorDropDownSearchResponseDTO? kitDescritor,
+      ItemDescritorDropDownSearchResponseDTO? itemDescritor});
+
+  @override
+  $KitDescritorDropDownSearchResponseDTOCopyWith<$Res>? get kitDescritor;
+  @override
+  $ItemDescritorDropDownSearchResponseDTOCopyWith<$Res>? get itemDescritor;
 }
 
 /// @nodoc
@@ -153,6 +209,8 @@ class __$$ItemDescritorKitModelImplCopyWithImpl<$Res>
     Object? codInstituicao = freezed,
     Object? ultimaAlteracao = freezed,
     Object? tstamp = freezed,
+    Object? kitDescritor = freezed,
+    Object? itemDescritor = freezed,
   }) {
     return _then(_$ItemDescritorKitModelImpl(
       cod: freezed == cod
@@ -183,6 +241,14 @@ class __$$ItemDescritorKitModelImplCopyWithImpl<$Res>
           ? _value.tstamp
           : tstamp // ignore: cast_nullable_to_non_nullable
               as String?,
+      kitDescritor: freezed == kitDescritor
+          ? _value.kitDescritor
+          : kitDescritor // ignore: cast_nullable_to_non_nullable
+              as KitDescritorDropDownSearchResponseDTO?,
+      itemDescritor: freezed == itemDescritor
+          ? _value.itemDescritor
+          : itemDescritor // ignore: cast_nullable_to_non_nullable
+              as ItemDescritorDropDownSearchResponseDTO?,
     ));
   }
 }
@@ -197,7 +263,9 @@ class _$ItemDescritorKitModelImpl implements _ItemDescritorKitModel {
       required this.quantidade,
       required this.codInstituicao,
       required this.ultimaAlteracao,
-      @JsonKey(name: 'tStamp') required this.tstamp});
+      @JsonKey(name: 'tStamp') required this.tstamp,
+      this.kitDescritor,
+      this.itemDescritor});
 
   factory _$ItemDescritorKitModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ItemDescritorKitModelImplFromJson(json);
@@ -217,10 +285,14 @@ class _$ItemDescritorKitModelImpl implements _ItemDescritorKitModel {
   @override
   @JsonKey(name: 'tStamp')
   String? tstamp;
+  @override
+  KitDescritorDropDownSearchResponseDTO? kitDescritor;
+  @override
+  ItemDescritorDropDownSearchResponseDTO? itemDescritor;
 
   @override
   String toString() {
-    return 'ItemDescritorKitModel(cod: $cod, codDescritorKit: $codDescritorKit, codDescritorItem: $codDescritorItem, quantidade: $quantidade, codInstituicao: $codInstituicao, ultimaAlteracao: $ultimaAlteracao, tstamp: $tstamp)';
+    return 'ItemDescritorKitModel(cod: $cod, codDescritorKit: $codDescritorKit, codDescritorItem: $codDescritorItem, quantidade: $quantidade, codInstituicao: $codInstituicao, ultimaAlteracao: $ultimaAlteracao, tstamp: $tstamp, kitDescritor: $kitDescritor, itemDescritor: $itemDescritor)';
   }
 
   @JsonKey(ignore: true)
@@ -246,7 +318,9 @@ abstract class _ItemDescritorKitModel implements ItemDescritorKitModel {
           required int? quantidade,
           required int? codInstituicao,
           required DateTime? ultimaAlteracao,
-          @JsonKey(name: 'tStamp') required String? tstamp}) =
+          @JsonKey(name: 'tStamp') required String? tstamp,
+          KitDescritorDropDownSearchResponseDTO? kitDescritor,
+          ItemDescritorDropDownSearchResponseDTO? itemDescritor}) =
       _$ItemDescritorKitModelImpl;
 
   factory _ItemDescritorKitModel.fromJson(Map<String, dynamic> json) =
@@ -275,6 +349,12 @@ abstract class _ItemDescritorKitModel implements ItemDescritorKitModel {
   String? get tstamp;
   @JsonKey(name: 'tStamp')
   set tstamp(String? value);
+  @override
+  KitDescritorDropDownSearchResponseDTO? get kitDescritor;
+  set kitDescritor(KitDescritorDropDownSearchResponseDTO? value);
+  @override
+  ItemDescritorDropDownSearchResponseDTO? get itemDescritor;
+  set itemDescritor(ItemDescritorDropDownSearchResponseDTO? value);
   @override
   @JsonKey(ignore: true)
   _$$ItemDescritorKitModelImplCopyWith<_$ItemDescritorKitModelImpl>

@@ -13,7 +13,9 @@ sealed class ConsultaEstoqueDisponivelFilter
     required int? codEstoque,
     required int? codEstoqueLocal,
     required int? codKit,
+    required String? codBarraKitContem,
     required int? codItem,
+    required String? idEtiquetaContem,
     required int? codProprietario,
     bool? ignorarRemovidos,
     ItemModel? item,
@@ -35,5 +37,7 @@ sealed class ConsultaEstoqueDisponivelFilter
         codItem: null,
         codProprietario: null,
         ignorarRemovidos: null,
+        codBarraKitContem: null,
+        idEtiquetaContem: null,
       );
 }

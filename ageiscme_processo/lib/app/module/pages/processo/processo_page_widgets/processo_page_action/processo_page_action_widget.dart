@@ -16,52 +16,50 @@ class ProcessoPageActionWidget extends StatelessWidget {
         decoration: const BoxDecoration(
           color: Cores.CorCards,
         ),
-        child: Padding(
-          padding: EdgeInsets.only(
-            top: 8 * scale,
-            bottom: 8 * scale,
-            right: 14 * scale,
-            left: 14 * scale,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
+        child: BlocBuilder<ProcessoLeituraCubit, ProcessoLeituraState>(
+          buildWhen: (previous, current) =>
+              current.rebuildType == ProcessoLeituraRebuildType.All,
+          builder: (context, state) {
+            double escala = state.processo.getEscala();
+              double lineHeightRobot = state.processo.getLineHeightSegoe();
+            return Padding(
+              padding: EdgeInsets.only(
+                top: 8 * scale / escala,
+                bottom: 8 * scale / escala,
+                right: 14 * scale / escala,
+                left: 14 * scale / escala,
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
-                    child: FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
+                  Row(
+                    children: [
+                      Text(
                         'AÇÃO',
                         style: Fontes.getSegoe(
-                          fontSize: 14 * scale,
+                          fontSize: 14 * scale * escala,
                           cor: Cores.CorTitleCards,
                         ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
-              BlocBuilder<ProcessoLeituraCubit, ProcessoLeituraState>(
-                buildWhen: (previous, current) =>
-                    current.rebuildType == ProcessoLeituraRebuildType.All,
-                builder: (context, state) {
-                  return FittedBox(
+                  FittedBox(
                     child: Text(
                       state.processo.leituraAtual.acao == null
                           ? ' '
                           : state.processo.leituraAtual.acao!.toUpperCase(),
                       style: Fontes.getSegoe(
-                        fontSize: 20 * scale,
+                        fontSize: 20 * scale * escala,
                         cor: Cores.CorTextCards,
+                        lineHeight: lineHeightRobot,
                       ),
                     ),
-                  );
-                },
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

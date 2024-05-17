@@ -9,11 +9,11 @@ part of 'indicador_processo_model.dart';
 _$IndicadorProcessoModelImpl _$$IndicadorProcessoModelImplFromJson(
         Map<String, dynamic> json) =>
     _$IndicadorProcessoModelImpl(
-      codBarra: json['codBarra'] as String?,
+      codBarraIndicador: json['codBarraIndicador'] as String?,
     );
 
 Map<String, dynamic> _$$IndicadorProcessoModelImplToJson(
         _$IndicadorProcessoModelImpl instance) =>
     <String, dynamic>{
-      'codBarra': instance.codBarra,
+      'codBarraIndicador': instance.codBarraIndicador,
     };

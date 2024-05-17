@@ -50,7 +50,7 @@ class _ConsultaProcessosLeituraDevolvidoSubPageState
       field: 'codDescritorItem',
       type: CustomDataColumnType.Number,
     ),
-    CustomDataColumn(text: 'Item', field: 'nomeItem'),
+    CustomDataColumn(text: 'Item', field: 'descricaoCurtaItem'),
     CustomDataColumn(
       text: 'Saída',
       field: 'saida',

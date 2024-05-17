@@ -1,8 +1,11 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/etiqueta/etiqueta_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/proprietario/proprietario_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
+import 'package:ageiscme_admin/app/module/pages/material/item/inserir_rapido/inserir_rapido_page.dart';
 import 'package:ageiscme_admin/app/module/pages/material/item/item_page_etiquetas_frm/item_page_etiquetas_frm.dart';
 import 'package:ageiscme_admin/app/module/pages/material/item/item_page_frm/item_page_frm_state.dart';
 import 'package:ageiscme_admin/app/module/pages/material/item/item_page_frm_type.dart';
+import 'package:ageiscme_admin/app/module/pages/material/item/trocar_etiqueta/trocar_etiqueta_page.dart';
 import 'package:ageiscme_data/services/item/item_service.dart';
 import 'package:ageiscme_data/services/item_descritor/item_descritor_service.dart';
 import 'package:ageiscme_data/services/processo_leitura/processo_leitura_service.dart';
@@ -16,6 +19,7 @@ import 'package:ageiscme_impressoes/prints/item_tag_printer/item_tag_printer_con
 import 'package:ageiscme_impressoes/prints/processo_preparation_printer/processo_preparation_printer_controller.dart';
 import 'package:ageiscme_models/dto/authentication_result/authentication_result_dto.dart';
 import 'package:ageiscme_models/dto/item/item_etiqueta_preparo/item_etiqueta_preparo_dto.dart';
+import 'package:ageiscme_models/dto/item_save_result/item_save_result_dto.dart';
 import 'package:ageiscme_models/filters/item_descritor/item_descritor_filter.dart';
 import 'package:ageiscme_models/filters/processo_leitura/processo_leitura_filter.dart';
 import 'package:ageiscme_models/main.dart';
@@ -288,9 +292,14 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
   }
 
   void setFields() {
+    String? usuario = item.usuario?.nome;
+    if (usuario == null && txtUsuarioCadastro.text.isNotEmpty) {
+      usuario = txtUsuarioCadastro.text;
+    }
+
     txtDescricao.text = item.descricao ?? '';
     txtIdEtiqueta.text = item.idEtiqueta ?? '';
-    txtUsuarioCadastro.text = item.usuario?.nome ?? '';
+    txtUsuarioCadastro.text = usuario ?? '';
     txtKitAtual.text = item.kit?.descritor?.nome ?? '';
     txtConjuntoAtual.text = item.codConjunto?.toString() ?? '';
     txtRegistroAnvisa.text = item.registroAnvisa ?? '';
@@ -417,415 +426,425 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return BlocListener<ItemPageFrmCubit, ItemPageFrmState>(
+    return BlocConsumer<ItemPageFrmCubit, ItemPageFrmState>(
       bloc: cubit,
-      listener: (context, state) async {
-        if (state.saved) {
-          if (state.novo) await _printConsignado(state.item);
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
-      child: BlocBuilder<ItemPageFrmCubit, ItemPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return AlertDialog(
-            contentPadding: const EdgeInsets.all(8.0),
-            titlePadding: const EdgeInsets.all(8.0),
-            actionsPadding: const EdgeInsets.all(8.0),
-            title: Row(
-              children: [
-                Expanded(
-                  child: TitleWidget(
-                    text: titulo,
-                  ),
+      listener: (context, state) async {},
+      builder: (context, state) {
+        return AlertDialog(
+          contentPadding: const EdgeInsets.all(8.0),
+          titlePadding: const EdgeInsets.all(8.0),
+          actionsPadding: const EdgeInsets.all(8.0),
+          title: Row(
+            children: [
+              Expanded(
+                child: TitleWidget(
+                  text: titulo,
                 ),
-                const Spacer(),
-                CloseButtonWidget(
-                  onPressed: () => Navigator.of(context).pop((false, '')),
-                ),
-              ],
-            ),
-            content: Container(
-              constraints: BoxConstraints(
-                minWidth: size.width * .5,
-                maxWidth: size.width * .5,
-                minHeight: size.height * .5,
-                maxHeight: size.height * .8,
               ),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: DropDownSearchApiWidget<ItemDescritorModel>(
-                        initialValue: item.descritor,
-                        textFunction: (item) => item.ItemDescritorText(),
-                        search: (str) => ItemDescritorService().Filter(
-                          ItemDescritorFilter(
-                            numeroMaximoRegistros: 30,
-                            apenasAtivos: true,
-                            termoPesquisa: str,
-                            carregarImagem: false,
-                            apenasConsignados:
-                                widget.frmType == ItemPageFrmtype.Consigned,
-                            apenasNaoConsignados:
-                                widget.frmType == ItemPageFrmtype.Items,
-                            carregarItensConsignados:
-                                widget.frmType == ItemPageFrmtype.Consigned,
-                          ),
+              const Spacer(),
+              CloseButtonWidget(
+                onPressed: () => Navigator.of(context).pop((false, '', null)),
+              ),
+            ],
+          ),
+          content: Container(
+            constraints: BoxConstraints(
+              minWidth: size.width * .5,
+              maxWidth: size.width * .5,
+              minHeight: size.height * .5,
+              maxHeight: size.height * .8,
+            ),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: DropDownSearchApiWidget<ItemDescritorModel>(
+                      initialValue: item.descritor,
+                      textFunction: (item) => item.ItemDescritorText(),
+                      search: (str) => ItemDescritorService().Filter(
+                        ItemDescritorFilter(
+                          numeroMaximoRegistros: 30,
+                          apenasAtivos: true,
+                          termoPesquisa: str,
+                          carregarImagem: false,
+                          apenasConsignados:
+                              widget.frmType == ItemPageFrmtype.Consigned,
+                          apenasNaoConsignados:
+                              widget.frmType == ItemPageFrmtype.Items,
+                          carregarItensConsignados:
+                              widget.frmType == ItemPageFrmtype.Consigned,
                         ),
-                        onChanged: (value) {
-                          setState(() {
-                            item.codDescritor = value?.cod;
-                            item.descritor = value;
-                            setDescription
-                                ?.call(value?.descricaoCompleta ?? '');
-                            setarImagemDescritor();
-                            if (item.cod != 0) return;
-                            item.itensConsignados =
-                                buscaItensConsignadosDescritor(
-                              value,
-                            );
-                          });
-                        },
-                        placeholder: 'Item',
                       ),
+                      onChanged: (value) {
+                        setState(() {
+                          item.codDescritor = value?.cod;
+                          item.descritor = value;
+                          setDescription?.call(value?.descricaoCompleta ?? '');
+                          setarImagemDescritor();
+                          if (item.cod != 0) return;
+                          item.itensConsignados =
+                              buscaItensConsignadosDescritor(
+                            value,
+                          );
+                        });
+                      },
+                      placeholder: 'Item',
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtDescricao,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtIdEtiqueta,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: txtFabricante,
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: txtFornecedor,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: txtRegistroAnvisa,
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: dtpRmsValidade,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtRefFornecedor,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: dtpDataAquisicao,
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child:
-                                BlocBuilder<EtiquetaCubit, List<EtiquetaModel>>(
-                              bloc: etiquetaCubit,
-                              builder: (context, etiquetas) {
-                                EtiquetaModel? etiqueta = etiquetas
-                                    .where(
-                                      (element) =>
-                                          element.cod == item.codEtiqueta,
-                                    )
-                                    .firstOrNull;
-
-                                etiquetas.sort(
-                                  (a, b) =>
-                                      a.descricao!.compareTo(b.descricao!),
-                                );
-                                return DropDownWidget<EtiquetaModel>(
-                                  initialValue: etiqueta,
-                                  sourceList: etiquetas
-                                      .where((element) => element.ativo == true)
-                                      .toList(),
-                                  onChanged: (value) =>
-                                      item.codEtiqueta = value.cod!,
-                                  placeholder: 'Etiqueta',
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: BlocBuilder<ProprietarioCubit,
-                                ProprietarioState>(
-                              bloc: widget.proprietarioCubit,
-                              builder: (context, proprietarioState) {
-                                if (proprietarioState.loading) {
-                                  return const LoadingWidget();
-                                }
-                                List<ProprietarioModel> proprietarios =
-                                    proprietarioState.proprietarios;
-                                proprietarios.sort(
-                                  (a, b) => a.nome!.compareTo(b.nome!),
-                                );
-                                ProprietarioModel? proprietario = proprietarios
-                                    .where(
-                                      (element) =>
-                                          element.cod == item.codProprietario,
-                                    )
-                                    .firstOrNull;
-
-                                proprietarios.sort(
-                                  (a, b) => a.nome!.compareTo(b.nome!),
-                                );
-                                return DropDownSearchWidget<ProprietarioModel>(
-                                  setSelectedItemBuilder: (context, method) =>
-                                      setSelectedProprietarioMethod = method,
-                                  textFunction: (proprietario) =>
-                                      proprietario.ProprietarioText(),
-                                  initialValue: proprietario,
-                                  sourceList: proprietarios
-                                      .where((element) => element.ativo == true)
-                                      .toList(),
-                                  onChanged: (value) =>
-                                      item.codProprietario = value?.cod,
-                                  placeholder: 'Proprietário',
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: DropDownWidget<ItemSituacaoOption>(
-                              initialValue: ItemSituacaoOption.situacaoOptions
-                                  .where(
-                                    (element) => element.cod == item.status,
-                                  )
-                                  .firstOrNull,
-                              sourceList: ItemSituacaoOption.situacaoOptions,
-                              onChanged: (value) => item.status = value.cod,
-                              placeholder: 'Situação',
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtRestricao,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: dtpDataDescarte,
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: txtNumeroPatrimonio,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: txtValorItem,
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: txtNumeroNota,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Row(
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: txtDescricao,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: txtIdEtiqueta,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: Row(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5.0),
-                          child: Row(
-                            children: [
-                              CustomCheckboxWidget(
-                                checked: item.repositorio,
-                                onClick: (value) => item.repositorio = value,
-                                text: 'Função de armazenar outros Itens',
-                              ),
-                            ],
-                          ),
+                        Expanded(
+                          child: txtFabricante,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5.0, left: 16.0),
-                          child: Row(
-                            children: [
-                              CustomCheckboxWidget(
-                                checked: item.implantavel,
-                                onClick: (value) => item.implantavel = value,
-                                text: 'Implantável',
-                              ),
-                            ],
+                        const SizedBox(width: 16.0),
+                        Expanded(
+                          child: txtFornecedor,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: txtRegistroAnvisa,
+                        ),
+                        const SizedBox(width: 16.0),
+                        Expanded(
+                          child: dtpRmsValidade,
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: txtRefFornecedor,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: dtpDataAquisicao,
+                        ),
+                        const SizedBox(width: 16.0),
+                        Expanded(
+                          child:
+                              BlocBuilder<EtiquetaCubit, List<EtiquetaModel>>(
+                            bloc: etiquetaCubit,
+                            builder: (context, etiquetas) {
+                              EtiquetaModel? etiqueta = etiquetas
+                                  .where(
+                                    (element) =>
+                                        element.cod == item.codEtiqueta,
+                                  )
+                                  .firstOrNull;
+
+                              etiquetas.sort(
+                                (a, b) => a.descricao!.compareTo(b.descricao!),
+                              );
+                              return DropDownWidget<EtiquetaModel>(
+                                initialValue: etiqueta,
+                                sourceList: etiquetas
+                                    .where((element) => element.ativo == true)
+                                    .toList(),
+                                onChanged: (value) =>
+                                    item.codEtiqueta = value.cod!,
+                                placeholder: 'Etiqueta',
+                              );
+                            },
                           ),
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: txtKitAtual,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child:
+                              BlocBuilder<ProprietarioCubit, ProprietarioState>(
+                            bloc: widget.proprietarioCubit,
+                            builder: (context, proprietarioState) {
+                              if (proprietarioState.loading) {
+                                return const LoadingWidget();
+                              }
+                              List<ProprietarioModel> proprietarios =
+                                  proprietarioState.proprietarios;
+                              proprietarios.sort(
+                                (a, b) => a.nome!.compareTo(b.nome!),
+                              );
+                              ProprietarioModel? proprietario = proprietarios
+                                  .where(
+                                    (element) =>
+                                        element.cod == item.codProprietario,
+                                  )
+                                  .firstOrNull;
+
+                              proprietarios.sort(
+                                (a, b) => a.nome!.compareTo(b.nome!),
+                              );
+                              return DropDownSearchWidget<ProprietarioModel>(
+                                setSelectedItemBuilder: (context, method) =>
+                                    setSelectedProprietarioMethod = method,
+                                textFunction: (proprietario) =>
+                                    proprietario.ProprietarioText(),
+                                initialValue: proprietario,
+                                sourceList: proprietarios
+                                    .where((element) => element.ativo == true)
+                                    .toList(),
+                                onChanged: (value) =>
+                                    item.codProprietario = value?.cod,
+                                placeholder: 'Proprietário',
+                              );
+                            },
                           ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: txtConjuntoAtual,
+                        ),
+                        const SizedBox(width: 16.0),
+                        Expanded(
+                          child: DropDownWidget<ItemSituacaoOption>(
+                            initialValue: ItemSituacaoOption.situacaoOptions
+                                .where(
+                                  (element) => element.cod == item.status,
+                                )
+                                .firstOrNull,
+                            sourceList: ItemSituacaoOption.situacaoOptions,
+                            onChanged: (value) => item.status = value.cod,
+                            placeholder: 'Situação',
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: txtQtdeProcessos,
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: txtEmbalagem,
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: txtLeitura,
-                          ),
-                        ],
-                      ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: txtRestricao,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: dtpDataDescarte,
+                        ),
+                        const SizedBox(width: 16.0),
+                        Expanded(
+                          child: txtNumeroPatrimonio,
+                        ),
+                      ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: txtUsuarioCadastro,
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: dtpDataCadastro,
-                          ),
-                        ],
-                      ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: txtValorItem,
+                        ),
+                        const SizedBox(width: 16.0),
+                        Expanded(
+                          child: txtNumeroNota,
+                        ),
+                      ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 14.0),
-                      child: ImageDisplayWidget(
-                        imageBase64: item.descritor?.foto ?? '',
-                      ),
-                    ),
-                    const Padding(padding: EdgeInsets.only(top: 2)),
-                    widget.frmType == ItemPageFrmtype.Consigned
-                        ? SizedBox(
-                            height: 400,
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: PlutoGridWidget<ItemConsignadoModel>(
-                                    onChanged: onChanged,
-                                    items: item.itensConsignados ?? [],
-                                    columns: colunas,
-                                    submitBuilder: (context, method) =>
-                                        submitMethod = method,
-                                  ),
-                                ),
-                              ],
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5.0),
+                        child: Row(
+                          children: [
+                            CustomCheckboxWidget(
+                              checked: item.repositorio,
+                              onClick: (value) => item.repositorio = value,
+                              text: 'Função de armazenar outros Itens',
                             ),
-                          )
-                        : const SizedBox(),
-                  ],
-                ),
-              ),
-            ),
-            actions: [
-              Row(
-                children: [
-                  CustomPopupMenuWidget(
-                    items: [
-                      if (item.cod != null && item.cod != 0)
-                        CustomPopupItemModel(
-                          text: 'Imprimir Etiqueta',
-                          onTap: _imprimirEtiqueta,
+                          ],
                         ),
-                      if (item.cod != null && item.cod != 0)
-                        CustomPopupItemModel(
-                          text: 'Imprimir Etiqueta Preparo',
-                          onTap: _imprimirEtiquetaPreparo,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 5.0, left: 16.0),
+                        child: Row(
+                          children: [
+                            CustomCheckboxWidget(
+                              checked: item.implantavel,
+                              onClick: (value) => item.implantavel = value,
+                              text: 'Implantável',
+                            ),
+                          ],
                         ),
-                      if (item.cod != null && item.cod != 0)
-                        CustomPopupItemModel(
-                          text: 'Etiquetas',
-                          onTap: _telaEtiquetas,
-                        ),
-                      CustomPopupItemHistoryModel.getHistoryItem(),
+                      ),
                     ],
                   ),
-                  const Spacer(),
                   Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: SaveButtonWidget(
-                      onPressed: () => {salvar()},
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: txtKitAtual,
+                        ),
+                        const SizedBox(width: 16.0),
+                        Expanded(
+                          child: txtConjuntoAtual,
+                        ),
+                      ],
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: CleanButtonWidget(
-                      onPressed: () => {
-                        setState(() {
-                          item = ItemModel.empty();
-                          if (widget.frmType != ItemPageFrmtype.Consigned) {
-                            readonlyIdEtiquetaMethod?.call(false);
-                          }
-                          setFields();
-                          setSelectedItemDescritorMethod?.call(null);
-                          setSelectedProprietarioMethod?.call(null);
-                          setDateCadastro?.call(DateTime.now());
-                          setDateDescarte?.call(null);
-                          setDateRmsValidade?.call(null);
-                          setDateAquisicao?.call(null);
-                        }),
-                      },
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: txtQtdeProcessos,
+                        ),
+                        const SizedBox(width: 16.0),
+                        Expanded(
+                          child: txtEmbalagem,
+                        ),
+                        const SizedBox(width: 16.0),
+                        Expanded(
+                          child: txtLeitura,
+                        ),
+                      ],
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: CancelButtonUnfilledWidget(
-                      onPressed: () => {Navigator.of(context).pop((false, ''))},
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: txtUsuarioCadastro,
+                        ),
+                        const SizedBox(width: 16.0),
+                        Expanded(
+                          child: dtpDataCadastro,
+                        ),
+                      ],
                     ),
                   ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 14.0),
+                    child: ImageDisplayWidget(
+                      imageBase64: item.descritor?.foto ?? '',
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 2)),
+                  widget.frmType == ItemPageFrmtype.Consigned
+                      ? SizedBox(
+                          height: 400,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: PlutoGridWidget<ItemConsignadoModel>(
+                                  onChanged: onChanged,
+                                  items: item.itensConsignados ?? [],
+                                  columns: colunas,
+                                  submitBuilder: (context, method) =>
+                                      submitMethod = method,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      : const SizedBox(),
                 ],
               ),
-            ],
-          );
-        },
-      ),
+            ),
+          ),
+          actions: [
+            Row(
+              children: [
+                CustomPopupMenuWidget(
+                  items: [
+                    if (item.cod != null && item.cod != 0)
+                      CustomPopupItemModel(
+                        text: 'Imprimir Etiqueta',
+                        onTap: _imprimirEtiqueta,
+                      ),
+                    if (item.cod != null && item.cod != 0)
+                      CustomPopupItemModel(
+                        text: 'Imprimir Etiqueta Preparo',
+                        onTap: _imprimirEtiquetaPreparo,
+                      ),
+                    if (item.cod != null && item.cod != 0)
+                      CustomPopupItemModel(
+                        text: 'Inserir Rápido',
+                        onTap: _inserirRapido,
+                      ),
+                    if (item.cod != null && item.cod != 0)
+                      CustomPopupItemModel(
+                        text: 'Etiquetas',
+                        onTap: _telaEtiquetas,
+                      ),
+                    if (item.cod != null &&
+                        item.cod != 0 &&
+                        widget.frmType == ItemPageFrmtype.Items)
+                      CustomPopupItemModel(
+                        text: 'Trocar Etiqueta',
+                        onTap: _trocarEtiqueta,
+                      ),
+                    if (item.cod != null && item.cod != 0)
+                      CustomPopupItemHistoryModel.getHistoryItem(
+                        child: HistoricoPage(
+                          pk: item.cod!,
+                          termo: 'ITEM',
+                        ),
+                        context: context,
+                      ),
+                  ],
+                ),
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: SaveButtonWidget(
+                    onPressed: () => {salvar()},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: CleanButtonWidget(
+                    onPressed: () => {
+                      setState(() {
+                        item = ItemModel.empty();
+                        if (widget.frmType != ItemPageFrmtype.Consigned) {
+                          readonlyIdEtiquetaMethod?.call(false);
+                        }
+                        setFields();
+                        setSelectedItemDescritorMethod?.call(null);
+                        setSelectedProprietarioMethod?.call(null);
+                        setDateCadastro?.call(DateTime.now());
+                        setDateDescarte?.call(null);
+                        setDateRmsValidade?.call(null);
+                        setDateAquisicao?.call(null);
+                      }),
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: CancelButtonUnfilledWidget(
+                    onPressed: () =>
+                        {Navigator.of(context).pop((false, '', null))},
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -902,7 +921,42 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
         !txtRestricao.valid) {
       return;
     }
-    cubit.save(item);
+    (String, ItemSaveResultDTO)? itemSave = await cubit.save(item);
+    if (itemSave == null) return;
+    ToastUtils.showCustomToastSucess(context, itemSave.$1);
+    await _printConsignado(itemSave.$2.item);
+    setState(() {
+      item = itemSave.$2.item;
+      setFields();
+    });
+  }
+
+  Future _trocarEtiqueta() async {
+    if (item.idEtiqueta == null) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'É necessário um item criado para realizar a alteração da etiqueta',
+      );
+      return;
+    }
+    if (widget.frmType != ItemPageFrmtype.Items) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'Não é possível trocar a etiqueta de um item consignado',
+      );
+      return;
+    }
+    (bool, String, int?)? trocou = await showDialog<(bool, String, int?)>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return TrocarEtiquetaPage(
+          item: item,
+        );
+      },
+    );
+    if (trocou?.$1 != true) return;
+    Navigator.of(context).pop((true, '', item.cod));
   }
 
   Future _telaEtiquetas() async {
@@ -929,6 +983,18 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
     LoadingController loading = LoadingController(context: context);
     await controller.print();
     loading.close(context, mounted);
+  }
+
+  Future _inserirRapido() async {
+    await showDialog<bool>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return InserirRapidoPage(
+          item: item,
+        );
+      },
+    );
   }
 
   Future _imprimirEtiquetaPreparo() async {

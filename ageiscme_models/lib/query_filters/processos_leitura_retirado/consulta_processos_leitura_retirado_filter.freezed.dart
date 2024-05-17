@@ -28,8 +28,12 @@ mixin _$ConsultaProcessosLeituraRetiradoFilter {
   set finalDate(DateTime? value) => throw _privateConstructorUsedError;
   int? get codItem => throw _privateConstructorUsedError;
   set codItem(int? value) => throw _privateConstructorUsedError;
+  String? get idEtiquetaContem => throw _privateConstructorUsedError;
+  set idEtiquetaContem(String? value) => throw _privateConstructorUsedError;
   int? get codKit => throw _privateConstructorUsedError;
   set codKit(int? value) => throw _privateConstructorUsedError;
+  String? get codBarraKitContem => throw _privateConstructorUsedError;
+  set codBarraKitContem(String? value) => throw _privateConstructorUsedError;
   int? get codLocal => throw _privateConstructorUsedError;
   set codLocal(int? value) => throw _privateConstructorUsedError;
   bool? get rotulado => throw _privateConstructorUsedError;
@@ -56,7 +60,9 @@ abstract class $ConsultaProcessosLeituraRetiradoFilterCopyWith<$Res> {
       {DateTime? startDate,
       DateTime? finalDate,
       int? codItem,
+      String? idEtiquetaContem,
       int? codKit,
+      String? codBarraKitContem,
       int? codLocal,
       bool? rotulado,
       ItemModel? item});
@@ -81,7 +87,9 @@ class _$ConsultaProcessosLeituraRetiradoFilterCopyWithImpl<$Res,
     Object? startDate = freezed,
     Object? finalDate = freezed,
     Object? codItem = freezed,
+    Object? idEtiquetaContem = freezed,
     Object? codKit = freezed,
+    Object? codBarraKitContem = freezed,
     Object? codLocal = freezed,
     Object? rotulado = freezed,
     Object? item = freezed,
@@ -99,10 +107,18 @@ class _$ConsultaProcessosLeituraRetiradoFilterCopyWithImpl<$Res,
           ? _value.codItem
           : codItem // ignore: cast_nullable_to_non_nullable
               as int?,
+      idEtiquetaContem: freezed == idEtiquetaContem
+          ? _value.idEtiquetaContem
+          : idEtiquetaContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codKit: freezed == codKit
           ? _value.codKit
           : codKit // ignore: cast_nullable_to_non_nullable
               as int?,
+      codBarraKitContem: freezed == codBarraKitContem
+          ? _value.codBarraKitContem
+          : codBarraKitContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codLocal: freezed == codLocal
           ? _value.codLocal
           : codLocal // ignore: cast_nullable_to_non_nullable
@@ -144,7 +160,9 @@ abstract class _$$ConsultaProcessosLeituraRetiradoFilterImplCopyWith<$Res>
       {DateTime? startDate,
       DateTime? finalDate,
       int? codItem,
+      String? idEtiquetaContem,
       int? codKit,
+      String? codBarraKitContem,
       int? codLocal,
       bool? rotulado,
       ItemModel? item});
@@ -169,7 +187,9 @@ class __$$ConsultaProcessosLeituraRetiradoFilterImplCopyWithImpl<$Res>
     Object? startDate = freezed,
     Object? finalDate = freezed,
     Object? codItem = freezed,
+    Object? idEtiquetaContem = freezed,
     Object? codKit = freezed,
+    Object? codBarraKitContem = freezed,
     Object? codLocal = freezed,
     Object? rotulado = freezed,
     Object? item = freezed,
@@ -187,10 +207,18 @@ class __$$ConsultaProcessosLeituraRetiradoFilterImplCopyWithImpl<$Res>
           ? _value.codItem
           : codItem // ignore: cast_nullable_to_non_nullable
               as int?,
+      idEtiquetaContem: freezed == idEtiquetaContem
+          ? _value.idEtiquetaContem
+          : idEtiquetaContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codKit: freezed == codKit
           ? _value.codKit
           : codKit // ignore: cast_nullable_to_non_nullable
               as int?,
+      codBarraKitContem: freezed == codBarraKitContem
+          ? _value.codBarraKitContem
+          : codBarraKitContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codLocal: freezed == codLocal
           ? _value.codLocal
           : codLocal // ignore: cast_nullable_to_non_nullable
@@ -215,7 +243,9 @@ class _$ConsultaProcessosLeituraRetiradoFilterImpl
       {required this.startDate,
       required this.finalDate,
       required this.codItem,
+      required this.idEtiquetaContem,
       required this.codKit,
+      required this.codBarraKitContem,
       required this.codLocal,
       required this.rotulado,
       this.item})
@@ -232,7 +262,11 @@ class _$ConsultaProcessosLeituraRetiradoFilterImpl
   @override
   int? codItem;
   @override
+  String? idEtiquetaContem;
+  @override
   int? codKit;
+  @override
+  String? codBarraKitContem;
   @override
   int? codLocal;
   @override
@@ -242,7 +276,7 @@ class _$ConsultaProcessosLeituraRetiradoFilterImpl
 
   @override
   String toString() {
-    return 'ConsultaProcessosLeituraRetiradoFilter(startDate: $startDate, finalDate: $finalDate, codItem: $codItem, codKit: $codKit, codLocal: $codLocal, rotulado: $rotulado, item: $item)';
+    return 'ConsultaProcessosLeituraRetiradoFilter(startDate: $startDate, finalDate: $finalDate, codItem: $codItem, idEtiquetaContem: $idEtiquetaContem, codKit: $codKit, codBarraKitContem: $codBarraKitContem, codLocal: $codLocal, rotulado: $rotulado, item: $item)';
   }
 
   @JsonKey(ignore: true)
@@ -268,7 +302,9 @@ abstract class _ConsultaProcessosLeituraRetiradoFilter
       {required DateTime? startDate,
       required DateTime? finalDate,
       required int? codItem,
+      required String? idEtiquetaContem,
       required int? codKit,
+      required String? codBarraKitContem,
       required int? codLocal,
       required bool? rotulado,
       ItemModel? item}) = _$ConsultaProcessosLeituraRetiradoFilterImpl;
@@ -288,8 +324,14 @@ abstract class _ConsultaProcessosLeituraRetiradoFilter
   int? get codItem;
   set codItem(int? value);
   @override
+  String? get idEtiquetaContem;
+  set idEtiquetaContem(String? value);
+  @override
   int? get codKit;
   set codKit(int? value);
+  @override
+  String? get codBarraKitContem;
+  set codBarraKitContem(String? value);
   @override
   int? get codLocal;
   set codLocal(int? value);

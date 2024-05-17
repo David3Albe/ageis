@@ -1,24 +1,31 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/atestado_saude_ocupacional/atestado-saude_ocupacional_page_frm/atestado_saude_ocupacional_page_frm_state.dart';
+import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_data/services/atestado_saude_ocupacional/atestado_saude_ocupacional_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/models/atestado_saude_ocupacional/atestado_saude_ocupacional_model.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/delete_image_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/open_doc/open_doc_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/upload_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_file_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_image_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_open_doc_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_save_file_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/images/image_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
+import 'package:compartilhados/functions/file_helper/file_object_model.dart';
+import 'package:compartilhados/functions/image_helper/image_object_model.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -133,10 +140,8 @@ class _AtestadoSaudeOcupacionalFrmState
             actionsPadding: const EdgeInsets.all(8.0),
             title: Row(
               children: [
-                Expanded(
-                  child: TitleWidget(
-                    text: titulo,
-                  ),
+                TitleWidget(
+                  text: titulo,
                 ),
                 const Spacer(),
                 CloseButtonWidget(
@@ -145,10 +150,13 @@ class _AtestadoSaudeOcupacionalFrmState
               ],
             ),
             content: Container(
-              constraints: BoxConstraints(
-                minWidth: size.width * .5,
-                minHeight: size.height * .5,
-                maxHeight: size.height * .8,
+              height: size.height * .8,
+              width: size.width * .8,
+              constraints: const BoxConstraints(
+                minWidth: 400,
+                maxWidth: 1500,
+                minHeight: 500,
+                maxHeight: 800,
               ),
               child: SingleChildScrollView(
                 padding: const EdgeInsets.only(right: 14),
@@ -259,79 +267,89 @@ class _AtestadoSaudeOcupacionalFrmState
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
-                      child: ImageDisplayWidget(
-                        imageBase64: atestadoSaudeOcupacional.anexo,
+                      child: Container(
+                        height: 250,
+                        child: ImageDisplayWidget(
+                          imageBase64: atestadoSaudeOcupacional.anexo,
+                        ),
                       ),
                     ),
-                    const Padding(padding: EdgeInsets.only(top: 5)),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Wrap(
-                            runSpacing: 16 * paddingHorizontalScale,
-                            spacing: 16 * paddingHorizontalScale,
-                            children: [
-                              UploadButtonWidget(
-                                placeholder: 'Anexar ASO',
-                                imageSelected: (value1, value2) {
-                                  salvarAso(value1);
-                                },
-                              ),
-                              UploadButtonWidget(
-                                placeholder: 'Anexar DOC',
-                                imageSelected: (value1, value2) {
-                                  salvarDoc(value1, value2);
-                                },
-                              ),
-                              DeleteImageButtonWidget(
-                                placeholder: 'Excluir ASO',
-                                onPressed:
-                                    atestadoSaudeOcupacional.anexo == null
-                                        ? null
-                                        : () => {excluirAso()},
-                              ),
-                              DeleteImageButtonWidget(
-                                placeholder: 'Excluir DOC',
-                                onPressed: atestadoSaudeOcupacional.doc == null
-                                    ? null
-                                    : () => {excluirDoc()},
-                              ),
-                              OpenDocWidget(
-                                placeholder: 'Extrair ASO',
-                                documentoString: atestadoSaudeOcupacional.anexo,
-                                documentName:
-                                    atestadoSaudeOcupacional.docNome ??
-                                        'arquivo sem nome.jpg',
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Padding(padding: EdgeInsets.only(top: 24)),
                   ],
                 ),
               ),
             ),
             actions: [
-              Wrap(
-                spacing: 16 * paddingHorizontalScale,
-                runSpacing: 16 * paddingHorizontalScale,
-                alignment: WrapAlignment.end,
+              Row(
                 children: [
-                  SaveButtonWidget(
-                    onPressed: () => {salvar()},
+                  CustomPopupMenuWidget(
+                    items: [
+                      if (atestadoSaudeOcupacional.cod != null &&
+                          atestadoSaudeOcupacional.cod != 0)
+                        CustomPopupItemHistoryModel.getHistoryItem(
+                          child: HistoricoPage(
+                            pk: atestadoSaudeOcupacional.cod!,
+                            termo: 'ATESTADO_SAUDE_OCUPACIONAL',
+                          ),
+                          context: context,
+                        ),
+                      CustomPopupItemImageModel.getImageItem(
+                        'Anexar ASO',
+                        salvarASO,
+                      ),
+                      if (atestadoSaudeOcupacional.anexo != null)
+                        CustomPopupItemModel(
+                          text: 'Desanexar ASO',
+                          onTap: excluirAso,
+                        ),
+                      if (atestadoSaudeOcupacional.anexo != null)
+                        CustomPopupItemOpenDocModel.getOpenDocItem(
+                          'Abrir ASO',
+                          context,
+                          atestadoSaudeOcupacional.anexo,
+                          'aso ${atestadoSaudeOcupacional.usuario?.nome}.png',
+                        ),
+                      CustomPopupItemFileModel.getFileItem(
+                        'Anexar DOC',
+                        salvarDoc,
+                      ),
+                      if (atestadoSaudeOcupacional.docNome != null &&
+                          atestadoSaudeOcupacional.doc != null)
+                        CustomPopupItemModel(
+                          text: 'Excluir DOC',
+                          onTap: excluirDoc,
+                        ),
+                      if (atestadoSaudeOcupacional.docNome != null &&
+                          atestadoSaudeOcupacional.doc != null)
+                        CustomPopupItemSaveFileModel.getOpenDocItem(
+                          text: 'Abrir DOC',
+                          context: context,
+                          docName: atestadoSaudeOcupacional.docNome,
+                          docString: atestadoSaudeOcupacional.doc,
+                        ),
+                    ],
                   ),
-                  CleanButtonWidget(
-                    onPressed: () => {
-                      setState(() {
-                        atestadoSaudeOcupacional =
-                            AtestadoSaudeOcupacionalModel.empty();
-                      }),
-                    },
-                  ),
-                  CancelButtonUnfilledWidget(
-                    onPressed: () => {Navigator.of(context).pop((false, ''))},
+                  const Spacer(),
+                  Wrap(
+                    spacing: 16 * paddingHorizontalScale,
+                    runSpacing: 16 * paddingHorizontalScale,
+                    alignment: WrapAlignment.end,
+                    children: [
+                      SaveButtonWidget(
+                        onPressed: () => {salvar()},
+                      ),
+                      CleanButtonWidget(
+                        onPressed: () => {
+                          setState(() {
+                            atestadoSaudeOcupacional =
+                                AtestadoSaudeOcupacionalModel.empty();
+                          }),
+                        },
+                      ),
+                      CancelButtonUnfilledWidget(
+                        onPressed: () =>
+                            {Navigator.of(context).pop((false, ''))},
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -342,16 +360,20 @@ class _AtestadoSaudeOcupacionalFrmState
     );
   }
 
-  void salvarAso(String Aso) {
+  void salvarASO(Future<ImageObjectModel?> Function() onSelectImage) async {
+    ImageObjectModel? imageNew = await onSelectImage();
+    if (imageNew == null) return;
     setState(() {
-      atestadoSaudeOcupacional.anexo = Aso;
+      atestadoSaudeOcupacional.anexo = imageNew.base64;
     });
   }
 
-  void salvarDoc(String doc, String nomeDoc) {
+  void salvarDoc(Future<FileObjectModel?> Function() onSelectFile) async {
+    FileObjectModel? fileNew = await onSelectFile();
+    if (fileNew == null) return;
     setState(() {
-      atestadoSaudeOcupacional.doc = doc;
-      atestadoSaudeOcupacional.docNome = nomeDoc;
+      atestadoSaudeOcupacional.doc = fileNew.base64;
+      atestadoSaudeOcupacional.docNome = fileNew.fileName;
     });
   }
 

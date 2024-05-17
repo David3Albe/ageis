@@ -7,6 +7,8 @@ part 'item_etiqueta_dto.freezed.dart';
 sealed class ItemEtiquetaDTO with _$ItemEtiquetaDTO {
   factory ItemEtiquetaDTO({
     int? codItem,
+    String? idEtiquetaContem,
+    String? idEtiquetaItemContem,
   }) = _ItemEtiquetaDTO;
 
   factory ItemEtiquetaDTO.fromJson(Map<String, Object?> json) =>

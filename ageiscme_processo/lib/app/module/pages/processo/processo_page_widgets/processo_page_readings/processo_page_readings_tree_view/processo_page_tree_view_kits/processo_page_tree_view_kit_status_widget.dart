@@ -22,7 +22,14 @@ class ProcessoPageTreeViewKitStatusWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+    (double, double?) escalaHeight = context.select(
+      (ProcessoLeituraCubit cubit) => (
+        cubit.state.processo.getEscala(),
+        cubit.state.processo.getLineHeightPadraoBig()
+      ),
+    );
     double fontSize = getFontSize(size);
+    fontSize = fontSize * escalaHeight.$1;
     double scale = size.width / 1920;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -45,7 +52,8 @@ class ProcessoPageTreeViewKitStatusWidget extends StatelessWidget {
                 '${KitProcessoStatus.getDescription(status)} (${itens.length})',
                 style: TextStyle(
                   color: KitProcessoStatus.getCorFromStatus(status),
-                  fontSize: 16 * scale,
+                  fontSize: 14 * scale * escalaHeight.$1,
+                  height: escalaHeight.$2,
                 ),
               ),
             ],
@@ -54,11 +62,11 @@ class ProcessoPageTreeViewKitStatusWidget extends StatelessWidget {
         Visibility(
           visible: expandido,
           child: Padding(
-            padding: EdgeInsets.only(left: 32.0 * scale),
+            padding: EdgeInsets.only(left: 32.0 * scale / escalaHeight.$1),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.start,
-              children: getItens(context),
+              children: getItens(context, escalaHeight.$1),
             ),
           ),
         ),
@@ -86,7 +94,7 @@ class ProcessoPageTreeViewKitStatusWidget extends StatelessWidget {
     return 14;
   }
 
-  List<Widget> getItens(BuildContext context) {
+  List<Widget> getItens(BuildContext context, double escala) {
     List<Widget> widgets = [];
     for (ItemProcessoModel item in itens) {
       widgets.add(
@@ -94,9 +102,14 @@ class ProcessoPageTreeViewKitStatusWidget extends StatelessWidget {
           children: [
             ContextMenuRegion(
               contextMenu: GenericContextMenu(
+                buttonStyle: ContextMenuButtonStyle(
+                  textStyle: TextStyle(
+                    fontSize: 14 * escala,
+                  ),
+                ),
                 buttonConfigs: [
                   ContextMenuButtonConfig(
-                    'Informar item como Data Matrix danificado',
+                    'Informar ${item.idEtiqueta} - ${item.descricao} como Data Matrix danificado ',
                     onPressed: () => setarItemDataMatrixDanificado(
                       context,
                       item,

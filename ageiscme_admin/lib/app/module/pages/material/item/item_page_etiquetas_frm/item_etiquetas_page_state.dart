@@ -8,6 +8,7 @@ class ItemEtiquetasPageCubit extends Cubit<ItemEtiquetasPageState> {
   ItemEtiquetasPageCubit({required this.service})
       : super(
           ItemEtiquetasPageState(
+            idEtiquetaFind: null,
             item: null,
             loading: false,
           ),
@@ -16,6 +17,7 @@ class ItemEtiquetasPageCubit extends Cubit<ItemEtiquetasPageState> {
   void loadEtiquetasFilter(ItemEtiquetaDTO dto) async {
     emit(
       ItemEtiquetasPageState(
+        idEtiquetaFind: state.idEtiquetaFind,
         loading: true,
         item: null,
       ),
@@ -24,6 +26,7 @@ class ItemEtiquetasPageCubit extends Cubit<ItemEtiquetasPageState> {
       ItemEtiquetaResponseDTO? item = await service.getItensEtiquetas(dto: dto);
       emit(
         ItemEtiquetasPageState(
+          idEtiquetaFind: state.idEtiquetaFind,
           loading: false,
           item: item,
         ),
@@ -31,12 +34,23 @@ class ItemEtiquetasPageCubit extends Cubit<ItemEtiquetasPageState> {
     } on Exception catch (ex) {
       emit(
         ItemEtiquetasPageState(
+          idEtiquetaFind: state.idEtiquetaFind,
           loading: false,
           item: null,
           error: ex.toString(),
         ),
       );
     }
+  }
+
+  void setEtiqueta(String? etiqueta) {
+    emit(
+      ItemEtiquetasPageState(
+        loading: false,
+        item: state.item,
+        idEtiquetaFind: etiqueta,
+      ),
+    );
   }
 }
 
@@ -45,10 +59,12 @@ class ItemEtiquetasPageState {
   final ItemEtiquetaResponseDTO? item;
   final String error;
   final String message;
+  String? idEtiquetaFind;
 
   ItemEtiquetasPageState({
     required this.loading,
     required this.item,
+    required this.idEtiquetaFind,
     this.error = '',
     this.message = '',
   });

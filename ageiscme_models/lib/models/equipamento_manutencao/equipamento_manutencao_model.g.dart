@@ -109,6 +109,14 @@ _$EquipamentoManutencaoModelImpl _$$EquipamentoManutencaoModelImplFromJson(
       peca5: json['peca5'] == null
           ? null
           : PecaModel.fromJson(Map<String, Object?>.from(json['peca5'] as Map)),
+      usuarioDetectadoPor: json['usuarioDetectadoPor'] == null
+          ? null
+          : UsuarioDropDownSearchResponseDTO.fromJson(
+              Map<String, Object?>.from(json['usuarioDetectadoPor'] as Map)),
+      usuarioTecnico: json['usuarioTecnico'] == null
+          ? null
+          : UsuarioDropDownSearchResponseDTO.fromJson(
+              Map<String, Object?>.from(json['usuarioTecnico'] as Map)),
     );
 
 Map<String, dynamic> _$$EquipamentoManutencaoModelImplToJson(
@@ -171,4 +179,6 @@ Map<String, dynamic> _$$EquipamentoManutencaoModelImplToJson(
       'peca3': instance.peca3?.toJson(),
       'peca4': instance.peca4?.toJson(),
       'peca5': instance.peca5?.toJson(),
+      'usuarioDetectadoPor': instance.usuarioDetectadoPor?.toJson(),
+      'usuarioTecnico': instance.usuarioTecnico?.toJson(),
     };

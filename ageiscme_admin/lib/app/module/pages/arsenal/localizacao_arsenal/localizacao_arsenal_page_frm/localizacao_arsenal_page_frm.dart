@@ -1,15 +1,18 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/arsenal/arsenal_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/arsenal/localizacao_arsenal/localizacao_arsenal_page_frm/localizacao_arsenal_page_frm_state.dart';
+import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_data/services/localizacao_arsenal/localizacao_arsenal_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
@@ -151,13 +154,13 @@ class _LocalizacaoArsenalPageFrmState extends State<LocalizacaoArsenalPageFrm> {
                                     localizacaoArsenal.codEstoque,
                               )
                               .firstOrNull;
-                          return DropDownWidget<ArsenalEstoqueModel>(
+                          return DropDownSearchWidget<ArsenalEstoqueModel>(
                             initialValue: arsenal,
                             sourceList: arsenaisEstoques
                                 .where((element) => element.ativo == true)
                                 .toList(),
                             onChanged: (value) =>
-                                localizacaoArsenal.codEstoque = value.cod!,
+                                localizacaoArsenal.codEstoque = value?.cod,
                             placeholder: 'Arsenal',
                           );
                         },
@@ -187,6 +190,19 @@ class _LocalizacaoArsenalPageFrmState extends State<LocalizacaoArsenalPageFrm> {
                     const Spacer(),
                     Row(
                       children: [
+                        CustomPopupMenuWidget(
+                          items: [
+                            if (localizacaoArsenal.cod != null &&
+                                localizacaoArsenal.cod != 0)
+                              CustomPopupItemHistoryModel.getHistoryItem(
+                                child: HistoricoPage(
+                                  pk: localizacaoArsenal.cod!,
+                                  termo: 'LOCALIZACAO_ARSENAL',
+                                ),
+                                context: context,
+                              ),
+                          ],
+                        ),
                         const Spacer(),
                         Padding(
                           padding: const EdgeInsets.only(left: 16.0),

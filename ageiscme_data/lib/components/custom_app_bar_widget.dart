@@ -14,7 +14,9 @@ class CustomAppBarWidget extends StatefulWidget {
     this.onLogout,
     required this.body,
     this.drawer,
+    this.title,
   });
+  final Widget? title;
   final Widget body;
   final Widget? drawer;
   final void Function()? onLogout;
@@ -97,7 +99,7 @@ class _CustomAppBarWidgetState extends State<CustomAppBarWidget> {
               },
             ),
           ),
-          const Spacer(),
+          widget.title == null ? const Spacer() : Expanded(child: Center(child: widget.title!)),
           BlocBuilder<ImagemCubit, ImagemState>(
             bloc: cubit,
             builder: (context, state) {

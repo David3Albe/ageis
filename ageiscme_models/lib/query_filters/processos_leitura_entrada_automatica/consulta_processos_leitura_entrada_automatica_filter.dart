@@ -14,7 +14,9 @@ sealed class ConsultaProcessosLeituraEntradaAutomaticaFilter
     required DateTime? finalDate,
     required int? codSituacao,
     required int? codKit,
+    required String? codBarraKitContem,
     required int? codItem,
+    required String? idEtiquetaContem,
     required int? codEtapaProcesso,
     required int? codRegistroProcesso,
     required String? indicador,
@@ -43,5 +45,7 @@ sealed class ConsultaProcessosLeituraEntradaAutomaticaFilter
         codRegistroProcesso: null,
         indicador: null,
         prontuarioRetirada: null,
+        codBarraKitContem: null,
+        idEtiquetaContem: null,
       );
 }

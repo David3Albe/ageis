@@ -1,4 +1,5 @@
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
 import 'package:compartilhados/mixins/drop_down_text.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
@@ -50,6 +51,7 @@ abstract class RegistroServicoModel with _$RegistroServicoModel {
      ItemModel? item,
      ServicoTipoModel? servicoTipo,
      UsuarioModel? usuario,
+     UsuarioDropDownSearchResponseDTO? usuarioDropDown,
   }) = _RegistroServicoModel;
 
   factory RegistroServicoModel.fromJson(Map<String, Object?> json) =>

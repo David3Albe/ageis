@@ -1,20 +1,25 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/grupo_material/grupo_material_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/kit/kit_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/kit_cor/kit_cor_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/kit_descritor/kit_descritor_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/proprietario/proprietario_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/tamanho/tamanho_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/material/consulta_item/consulta_item_page.dart';
 import 'package:ageiscme_admin/app/module/pages/material/consulta_kit/consulta_kit_page_state.dart';
 import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
-import 'package:ageiscme_admin/app/module/widgets/query_dialog/query_dialog_widget.dart';
 import 'package:ageiscme_data/query_services/kit/consulta_kit_service.dart';
 import 'package:ageiscme_data/services/access_user/access_user_service.dart';
+import 'package:ageiscme_data/services/kit/kit_service.dart';
+import 'package:ageiscme_data/services/kit_descritor/kit_descritor_service.dart';
+import 'package:ageiscme_models/dto/kit/drop_down_search/kit_drop_down_search_dto.dart';
+import 'package:ageiscme_models/dto/kit_descritor/drop_down_search/kit_descritor_drop_down_search_dto.dart';
 import 'package:ageiscme_models/enums/direito_enum.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/query_filters/item/consulta_item_filter.dart';
 import 'package:ageiscme_models/query_filters/kit/consulta_kit_filter.dart';
+import 'package:ageiscme_models/response_dto/kit/drop_down_search/kit_drop_down_search_response_dto.dart';
+import 'package:ageiscme_models/response_dto/kit_descritor/drop_down_search/kit_descritor_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/campos/custom_autocomplete/custom_autocomplete_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
@@ -22,6 +27,7 @@ import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/query_dialog/query_dialog_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -73,12 +79,10 @@ class _ConsultaKitPageState extends State<ConsultaKitPage> {
   ];
 
   late final ConsultaKitPageCubit bloc;
-  late final KitDescritorCubit kitDescritorBloc;
   late final ProprietarioCubit proprietarioBloc;
   late final TamanhoCubit tamanhoBloc;
   late final GrupoMaterialCubit grupoMaterialBloc;
   late final KitCorCubit kitCorBloc;
-  late final KitCubit kitBloc;
   late final ConsultaKitFilter filter;
 
   @override
@@ -90,8 +94,6 @@ class _ConsultaKitPageState extends State<ConsultaKitPage> {
     } else {
       filter = ConsultaKitFilter.empty();
     }
-    kitDescritorBloc = KitDescritorCubit();
-    kitDescritorBloc.loadAll();
     proprietarioBloc = ProprietarioCubit();
     proprietarioBloc.loadAll();
     tamanhoBloc = TamanhoCubit();
@@ -100,8 +102,6 @@ class _ConsultaKitPageState extends State<ConsultaKitPage> {
     grupoMaterialBloc.loadAll();
     kitCorBloc = KitCorCubit();
     kitCorBloc.loadAll();
-    kitBloc = KitCubit();
-    kitBloc.loadAll();
 
     super.initState();
   }
@@ -182,53 +182,46 @@ class _ConsultaKitPageState extends State<ConsultaKitPage> {
         return FilterDialogWidget(
           child: Column(
             children: [
-              BlocBuilder<KitDescritorCubit, KitDescritorState>(
-                bloc: kitDescritorBloc,
-                builder: (context, kitsDescritoresState) {
-                  if (kitsDescritoresState.loading) {
-                    return const LoadingWidget();
-                  }
-                  List<KitDescritorModel> kitsDescritores =
-                      kitsDescritoresState.kitDescritores;
-                  kitsDescritores.sort(
-                    (a, b) => a.nome!.compareTo(b.nome!),
-                  );
-                  KitDescritorModel? kitDescritor = kitsDescritores
-                      .where(
-                        (element) => element.cod == filter.codKitDescritor,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<KitDescritorModel>(
-                    textFunction: (kitDescritor) =>
-                        kitDescritor.KitDescritorText(),
-                    initialValue: kitDescritor,
-                    sourceList: kitsDescritores
-                        .where((element) => element.ativo == true)
-                        .toList(),
-                    onChanged: (value) => filter.codKitDescritor = value?.cod,
-                    placeholder: 'Kit Descritor',
-                  );
+              DropDownSearchApiWidget<KitDescritorDropDownSearchResponseDTO>(
+                search: (str) async =>
+                    (await KitDescritorService().getDropDownSearch(
+                      KitDescritorDropDownSearchDTO(
+                        numeroRegistros: 30,
+                        termoPesquisa: str,
+                        apenasAtivos: true,
+                      ),
+                    ))
+                        ?.$2 ??
+                    [],
+                textFunction: (kitDescritor) => kitDescritor.Nome(),
+                initialValue: filter.kitDescritor == null
+                    ? null
+                    : KitDescritorDropDownSearchResponseDTO(
+                        cod: filter.kitDescritor!.cod,
+                        nome: filter.kitDescritor?.nome,
+                      ),
+                onChanged: (value) {
+                  filter.codKitDescritor = value?.cod;
+                  filter.kitDescritor = value;
                 },
+                placeholder: 'Descritor do Kit',
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<KitCubit, List<KitModel>>(
-                bloc: kitBloc,
-                builder: (context, kits) {
-                  kits.sort(
-                    (a, b) => a.codBarra!.compareTo(b.codBarra!),
-                  );
-                  KitModel? kitDescritor = kits
-                      .where(
-                        (element) => element.cod == filter.codKit,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<KitModel>(
-                    textFunction: (kit) => kit.CodBarraDescritorText(),
-                    initialValue: kitDescritor,
-                    sourceList: kits,
-                    onChanged: (value) => filter.codKit = value?.cod,
-                    placeholder: 'Kit',
-                  );
+              CustomAutocompleteWidget<KitDropDownSearchResponseDTO>(
+                initialValue: filter.codBarraKitContem,
+                onChange: (str) => filter.codBarraKitContem = str,
+                onItemSelectedText: (kit) => kit.codBarra,
+                label: 'Kit',
+                title: (p0) => Text(p0.CodBarraDescritorText()),
+                suggestionsCallback: (str) async {
+                  return (await KitService().getDropDownSearchKits(
+                        KitDropDownSearchDTO(
+                          search: str,
+                          numeroRegistros: 30,
+                        ),
+                      ))
+                          ?.$2 ??
+                      [];
                 },
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
@@ -311,6 +304,8 @@ class _ConsultaKitPageState extends State<ConsultaKitPage> {
               numeroPatrimonio: null,
               repositorio: null,
               rotulado: null,
+              codBarraKitContem: null,
+              idEtiquetaContem: null,
             ),
           ),
         );

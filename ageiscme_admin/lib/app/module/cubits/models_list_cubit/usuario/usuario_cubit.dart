@@ -6,11 +6,6 @@ import 'package:dependencias_comuns/bloc_export.dart';
 class UsuarioCubit extends Cubit<UsuarioState> {
   UsuarioCubit() : super(UsuarioState(usuarios: []));
 
-  void loadAll() async {
-    emit(UsuarioState(usuarios: [], loading: true));
-    List<UsuarioModel> usuarios = await UsuarioService().Filter(UsuarioFilter(tipoQuery: UsuarioFilterTipoQuery.SemFoto));
-    emit(UsuarioState(usuarios: usuarios, loaded: true));
-  }
 
   Future loadFilter(UsuarioFilter filter) async {
     emit(

@@ -8,7 +8,7 @@ part 'indicador_biologico_processo_model.g.dart';
 abstract class IndicadorBiologicoProcessoModel with _$IndicadorBiologicoProcessoModel {
   const IndicadorBiologicoProcessoModel._();
   factory IndicadorBiologicoProcessoModel({
-    String? codBarra,
+    String? codBarraIndicador,
     int? codServicoTipo,
   }) = _IndicadorBiologicoProcessoModel;
 

@@ -17,6 +17,14 @@ _$ItemDescritorKitModelImpl _$$ItemDescritorKitModelImplFromJson(Map json) =>
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),
       tstamp: json['tStamp'] as String?,
+      kitDescritor: json['kitDescritor'] == null
+          ? null
+          : KitDescritorDropDownSearchResponseDTO.fromJson(
+              Map<String, Object?>.from(json['kitDescritor'] as Map)),
+      itemDescritor: json['itemDescritor'] == null
+          ? null
+          : ItemDescritorDropDownSearchResponseDTO.fromJson(
+              Map<String, Object?>.from(json['itemDescritor'] as Map)),
     );
 
 Map<String, dynamic> _$$ItemDescritorKitModelImplToJson(
@@ -29,4 +37,6 @@ Map<String, dynamic> _$$ItemDescritorKitModelImplToJson(
       'codInstituicao': instance.codInstituicao,
       'ultimaAlteracao': instance.ultimaAlteracao?.toIso8601String(),
       'tStamp': instance.tstamp,
+      'kitDescritor': instance.kitDescritor?.toJson(),
+      'itemDescritor': instance.itemDescritor?.toJson(),
     };

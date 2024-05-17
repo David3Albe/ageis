@@ -27,47 +27,69 @@ class ProcessoPageStepperWidget extends StatelessWidget {
     return 50;
   }
 
+  double getStepperEscala(Size size, double escala) {
+    double width = size.width;
+    print(width);
+    if (width > 1700 && escala > 1) {
+      return 0.3;
+    } else if (width > 1500) {
+      return 0.25;
+    } else if (width > 1300) {
+      return 0.2;
+    } else if (width > 1100) {
+      return 0.15;
+    } else if (width > 700) {
+      return 0.1;
+    }
+    return 0;
+  }
+
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    var scale = size.width / 1920;
-    // double height = getStepperHeight(size);
     return Material(
       elevation: 10,
       child: Container(
-        // constraints: BoxConstraints(maxHeight: height, minHeight: height),
         decoration: const BoxDecoration(
           color: Cores.CorCards,
         ),
         child: BlocBuilder<ProcessoLeituraCubit, ProcessoLeituraState>(
-          builder: (context, state) => Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                  top: 8 * scale,
-                  bottom: 0,
-                  right: 14 * scale,
-                  left: 14 * scale,
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Expanded(
-                      child: Transform.scale(
-                        scale: scale,
-                        child: CustomStepperWidget(
-                          corCompletos: const Color(0xff03468A),
-                          steps: state.processo.passos,
+          builder: (context, state) {
+            Size size = MediaQuery.of(context).size;
+            var scale = size.width / 1920;
+            var novaEscala = scale;
+            double escala = state.processo.getEscala();
+            if (escala != 1) {
+              novaEscala = scale + getStepperEscala(size, escala);
+            }
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: 9 * novaEscala,
+                    right: 14 * novaEscala,
+                    left: 14 * novaEscala,
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Expanded(
+                        child: Transform.scale(
+                          filterQuality: FilterQuality.high,
+                          scale: novaEscala,
+                          child: CustomStepperWidget(
+                            corCompletos: const Color(0xff03468A),
+                            steps: state.processo.passos,
+                          ),
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ),
+              ],
+            );
+          },
         ),
       ),
     );

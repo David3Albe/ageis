@@ -13,7 +13,7 @@ import 'package:pdf/widgets.dart' as pw;
 class EquipmentMaintenanceController {
   final EquipmentMaintenancePrintDTO equipmentMaintenance;
   BuildContext context;
-  pw.TextStyle _style = const pw.TextStyle(fontSize: 9);
+  pw.TextStyle _style = const pw.TextStyle(fontSize: 8);
   static const double DEFAULT_PADDING_TOP = 0;
 
   EquipmentMaintenanceController({
@@ -49,7 +49,7 @@ class EquipmentMaintenanceController {
           child: pw.Column(
             children: [
               pw.Padding(
-                padding: const pw.EdgeInsets.only(top: 6),
+                padding: const pw.EdgeInsets.only(top: 1),
               ),
               CompanyRowWidget(
                 company: equipmentMaintenance.company,

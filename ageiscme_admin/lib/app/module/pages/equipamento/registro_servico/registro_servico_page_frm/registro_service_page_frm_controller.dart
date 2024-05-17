@@ -14,8 +14,6 @@ class RegistroServicePageFrmController {
   late final RegistroServicoPageFrmCubit cubit;
   late final ServicoTipoCubit servicoTipoCubit;
   late final TextEditingController usuarioRegistroController;
-  late DateTime? dataHoraInicioSelecionada;
-  late DateTime? dataHoraTerminoSelecionada;
   late final TextFieldStringWidget txtLote;
   late final TextFieldStringAreaWidget txtDescricaoServico;
   late final TextFieldStringWidget txtUsuarioRegistro;
@@ -64,8 +62,6 @@ class RegistroServicePageFrmController {
     _criaTxts();
 
     usuarioRegistroController = TextEditingController();
-    dataHoraInicioSelecionada = DateTime(0, 0, 0);
-    dataHoraTerminoSelecionada = DateTime(0, 0, 0);
     txtUsuarioRegistro.text = usuarioRegistroController.text;
     registroServico.indicador = 'zerado';
     _criaValidators();
@@ -131,32 +127,30 @@ class RegistroServicePageFrmController {
       placeholder: 'Data Início',
       onDateSelected: (value) {
         if (value == null) {
-          dataHoraInicioSelecionada = null;
+          registroServico.dataInicio = null;
           return;
         }
-        dataHoraInicioSelecionada = DateTime(
+        registroServico.dataInicio = DateTime(
           value.year,
           value.month,
           value.day,
-          dataHoraInicioSelecionada?.hour ?? 0,
-          dataHoraInicioSelecionada?.minute ?? 0,
+          registroServico.dataInicio?.hour ?? 0,
+          registroServico.dataInicio?.minute ?? 0,
         );
-        registroServico.dataInicio = dataHoraInicioSelecionada;
       },
       initialValue: registroServico.dataInicio,
     );
     tmpHoraInicio = TimePickerWidget(
       placeholder: 'Hora Início',
       onTimeSelected: (value) {
-        if (dataHoraInicioSelecionada == null) return;
-        dataHoraInicioSelecionada = DateTime(
-          dataHoraInicioSelecionada!.year,
-          dataHoraInicioSelecionada!.month,
-          dataHoraInicioSelecionada!.day,
+        if (registroServico.dataInicio == null) return;
+        registroServico.dataInicio = DateTime(
+          registroServico.dataInicio!.year,
+          registroServico.dataInicio!.month,
+          registroServico.dataInicio!.day,
           value?.hour ?? 00,
           value?.minute ?? 0,
         );
-        registroServico.dataInicio = dataHoraInicioSelecionada;
       },
       initialValue: TimeOfDay.fromDateTime(registroServico.dataInicio!),
     );
@@ -164,32 +158,30 @@ class RegistroServicePageFrmController {
       placeholder: 'Data Término',
       onDateSelected: (value) {
         if (value == null) {
-          dataHoraTerminoSelecionada = null;
+          registroServico.dataTermino = null;
           return;
         }
-        dataHoraTerminoSelecionada = DateTime(
+        registroServico.dataTermino = DateTime(
           value.year,
           value.month,
           value.day,
-          dataHoraTerminoSelecionada?.hour ?? 0,
-          dataHoraTerminoSelecionada?.minute ?? 0,
+          registroServico.dataTermino?.hour ?? 0,
+          registroServico.dataTermino?.minute ?? 0,
         );
-        registroServico.dataTermino = dataHoraTerminoSelecionada;
       },
       initialValue: registroServico.dataTermino,
     );
     tmpHoraTermino = TimePickerWidget(
       placeholder: 'Hora Término',
       onTimeSelected: (value) {
-        if (dataHoraInicioSelecionada == null) return;
-        dataHoraTerminoSelecionada = DateTime(
-          dataHoraTerminoSelecionada!.year,
-          dataHoraTerminoSelecionada!.month,
-          dataHoraTerminoSelecionada!.day,
+        if (registroServico.dataTermino == null) return;
+        registroServico.dataTermino = DateTime(
+          registroServico.dataTermino!.year,
+          registroServico.dataTermino!.month,
+          registroServico.dataTermino!.day,
           value?.hour ?? 0,
           value?.minute ?? 0,
         );
-        registroServico.dataTermino = dataHoraTerminoSelecionada;
       },
       initialValue: registroServico.dataTermino != null
           ? TimeOfDay.fromDateTime(registroServico.dataTermino!)

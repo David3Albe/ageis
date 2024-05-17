@@ -41,6 +41,10 @@ mixin _$ConsultaItemInventarioFilter {
   set cmInicio(double? value) => throw _privateConstructorUsedError;
   double? get cmFinal => throw _privateConstructorUsedError;
   set cmFinal(double? value) => throw _privateConstructorUsedError;
+  ItemDescritorDropDownSearchResponseDTO? get itemDescritor =>
+      throw _privateConstructorUsedError;
+  set itemDescritor(ItemDescritorDropDownSearchResponseDTO? value) =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -66,7 +70,10 @@ abstract class $ConsultaItemInventarioFilterCopyWith<$Res> {
       int? codGrupoItem,
       int? codProprietario,
       double? cmInicio,
-      double? cmFinal});
+      double? cmFinal,
+      ItemDescritorDropDownSearchResponseDTO? itemDescritor});
+
+  $ItemDescritorDropDownSearchResponseDTOCopyWith<$Res>? get itemDescritor;
 }
 
 /// @nodoc
@@ -93,6 +100,7 @@ class _$ConsultaItemInventarioFilterCopyWithImpl<$Res,
     Object? codProprietario = freezed,
     Object? cmInicio = freezed,
     Object? cmFinal = freezed,
+    Object? itemDescritor = freezed,
   }) {
     return _then(_value.copyWith(
       codItemDescritor: freezed == codItemDescritor
@@ -135,7 +143,24 @@ class _$ConsultaItemInventarioFilterCopyWithImpl<$Res,
           ? _value.cmFinal
           : cmFinal // ignore: cast_nullable_to_non_nullable
               as double?,
+      itemDescritor: freezed == itemDescritor
+          ? _value.itemDescritor
+          : itemDescritor // ignore: cast_nullable_to_non_nullable
+              as ItemDescritorDropDownSearchResponseDTO?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ItemDescritorDropDownSearchResponseDTOCopyWith<$Res>? get itemDescritor {
+    if (_value.itemDescritor == null) {
+      return null;
+    }
+
+    return $ItemDescritorDropDownSearchResponseDTOCopyWith<$Res>(
+        _value.itemDescritor!, (value) {
+      return _then(_value.copyWith(itemDescritor: value) as $Val);
+    });
   }
 }
 
@@ -158,7 +183,11 @@ abstract class _$$ConsultaItemInventarioFilterImplCopyWith<$Res>
       int? codGrupoItem,
       int? codProprietario,
       double? cmInicio,
-      double? cmFinal});
+      double? cmFinal,
+      ItemDescritorDropDownSearchResponseDTO? itemDescritor});
+
+  @override
+  $ItemDescritorDropDownSearchResponseDTOCopyWith<$Res>? get itemDescritor;
 }
 
 /// @nodoc
@@ -184,6 +213,7 @@ class __$$ConsultaItemInventarioFilterImplCopyWithImpl<$Res>
     Object? codProprietario = freezed,
     Object? cmInicio = freezed,
     Object? cmFinal = freezed,
+    Object? itemDescritor = freezed,
   }) {
     return _then(_$ConsultaItemInventarioFilterImpl(
       codItemDescritor: freezed == codItemDescritor
@@ -226,6 +256,10 @@ class __$$ConsultaItemInventarioFilterImplCopyWithImpl<$Res>
           ? _value.cmFinal
           : cmFinal // ignore: cast_nullable_to_non_nullable
               as double?,
+      itemDescritor: freezed == itemDescritor
+          ? _value.itemDescritor
+          : itemDescritor // ignore: cast_nullable_to_non_nullable
+              as ItemDescritorDropDownSearchResponseDTO?,
     ));
   }
 }
@@ -243,7 +277,8 @@ class _$ConsultaItemInventarioFilterImpl extends _ConsultaItemInventarioFilter {
       required this.codGrupoItem,
       required this.codProprietario,
       required this.cmInicio,
-      required this.cmFinal})
+      required this.cmFinal,
+      this.itemDescritor})
       : super._();
 
   factory _$ConsultaItemInventarioFilterImpl.fromJson(
@@ -270,10 +305,12 @@ class _$ConsultaItemInventarioFilterImpl extends _ConsultaItemInventarioFilter {
   double? cmInicio;
   @override
   double? cmFinal;
+  @override
+  ItemDescritorDropDownSearchResponseDTO? itemDescritor;
 
   @override
   String toString() {
-    return 'ConsultaItemInventarioFilter(codItemDescritor: $codItemDescritor, repositorio: $repositorio, descartado: $descartado, implantavel: $implantavel, complementar: $complementar, situacao: $situacao, codGrupoItem: $codGrupoItem, codProprietario: $codProprietario, cmInicio: $cmInicio, cmFinal: $cmFinal)';
+    return 'ConsultaItemInventarioFilter(codItemDescritor: $codItemDescritor, repositorio: $repositorio, descartado: $descartado, implantavel: $implantavel, complementar: $complementar, situacao: $situacao, codGrupoItem: $codGrupoItem, codProprietario: $codProprietario, cmInicio: $cmInicio, cmFinal: $cmFinal, itemDescritor: $itemDescritor)';
   }
 
   @JsonKey(ignore: true)
@@ -295,16 +332,18 @@ class _$ConsultaItemInventarioFilterImpl extends _ConsultaItemInventarioFilter {
 abstract class _ConsultaItemInventarioFilter
     extends ConsultaItemInventarioFilter {
   factory _ConsultaItemInventarioFilter(
-      {required int? codItemDescritor,
-      required bool? repositorio,
-      required bool? descartado,
-      required bool? implantavel,
-      required bool? complementar,
-      required String? situacao,
-      required int? codGrupoItem,
-      required int? codProprietario,
-      required double? cmInicio,
-      required double? cmFinal}) = _$ConsultaItemInventarioFilterImpl;
+          {required int? codItemDescritor,
+          required bool? repositorio,
+          required bool? descartado,
+          required bool? implantavel,
+          required bool? complementar,
+          required String? situacao,
+          required int? codGrupoItem,
+          required int? codProprietario,
+          required double? cmInicio,
+          required double? cmFinal,
+          ItemDescritorDropDownSearchResponseDTO? itemDescritor}) =
+      _$ConsultaItemInventarioFilterImpl;
   _ConsultaItemInventarioFilter._() : super._();
 
   factory _ConsultaItemInventarioFilter.fromJson(Map<String, dynamic> json) =
@@ -340,6 +379,9 @@ abstract class _ConsultaItemInventarioFilter
   @override
   double? get cmFinal;
   set cmFinal(double? value);
+  @override
+  ItemDescritorDropDownSearchResponseDTO? get itemDescritor;
+  set itemDescritor(ItemDescritorDropDownSearchResponseDTO? value);
   @override
   @JsonKey(ignore: true)
   _$$ConsultaItemInventarioFilterImplCopyWith<

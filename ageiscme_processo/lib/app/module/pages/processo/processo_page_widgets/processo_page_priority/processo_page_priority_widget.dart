@@ -1,5 +1,8 @@
 import 'package:ageiscme_models/models/processo_leitura_prioridade/processo_leitura_prioridade_model.dart';
 import 'package:ageiscme_processo/app/module/blocs/processo_leitura_cubit.dart';
+import 'package:ageiscme_processo/app/module/models/item_processo/item_processo_model.dart';
+import 'package:ageiscme_processo/app/module/models/kit_processo/kit_processo_model.dart';
+import 'package:ageiscme_processo/app/module/models/processo_leitura/processo_leitura_montagem_model.dart';
 import 'package:ageiscme_processo/app/module/shared/cores.dart';
 import 'package:compartilhados/fontes/fontes.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
@@ -18,11 +21,18 @@ class ProcessoPagePriorityWidget extends StatelessWidget {
             current.rebuildType == ProcessoLeituraRebuildType.All,
         builder: (context, state) {
           ProcessoLeituraPrioridadeModel? prioridade;
-          if (state.processo.leituraAtual.prioridade != null) {
+          int? prioridadeItemKit = getItemKitPriority(
+            state.processo,
+          );
+          print(prioridadeItemKit);
+          if (prioridadeItemKit != null ||
+              state.processo.leituraAtual.prioridade != null) {
             prioridade = ProcessoLeituraPrioridadeModel.getPriorityFromCode(
-              state.processo.leituraAtual.prioridade!,
+              prioridadeItemKit ?? state.processo.leituraAtual.prioridade!,
             );
           }
+          double escalaFonte = state.processo.getEscala();
+          double lineHeightSegoe = state.processo.getLineHeightSegoe();
           return Container(
             decoration: BoxDecoration(
               color: prioridade != null && prioridade.urgente
@@ -31,10 +41,10 @@ class ProcessoPagePriorityWidget extends StatelessWidget {
             ),
             child: Padding(
               padding: EdgeInsets.only(
-                top: 8 * scale,
-                bottom: 8 * scale,
-                right: 14 * scale,
-                left: 14 * scale,
+                top: 8 * scale / escalaFonte,
+                bottom: 8 * scale / escalaFonte,
+                right: 14 * scale / escalaFonte,
+                left: 14 * scale / escalaFonte,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,15 +58,11 @@ class ProcessoPagePriorityWidget extends StatelessWidget {
                         Expanded(
                           child: Align(
                             alignment: Alignment.topLeft,
-                            child: FittedBox(
-                              fit: BoxFit.scaleDown,
-                              alignment: Alignment.topLeft,
-                              child: Text(
-                                'PRIORIDADE',
-                                style: Fontes.getSegoe(
-                                  fontSize: 14 * scale,
-                                  cor: Cores.CorPrioridadeUrgente,
-                                ),
+                            child: Text(
+                              'PRIORIDADE',
+                              style: Fontes.getSegoe(
+                                fontSize: 14 * scale * escalaFonte,
+                                cor: Cores.CorPrioridadeUrgente,
                               ),
                             ),
                           ),
@@ -70,16 +76,13 @@ class ProcessoPagePriorityWidget extends StatelessWidget {
                                   Align(
                                     alignment: Alignment.center,
                                     child: prioridade != null
-                                        ? FittedBox(
-                                            fit: BoxFit.scaleDown,
-                                            alignment: Alignment.center,
-                                            child: Text(
-                                              prioridade.descricao
-                                                  .toUpperCase(),
-                                              style: Fontes.getSegoe(
-                                                fontSize: 32 * scale,
-                                                cor: Cores.CorTextCards,
-                                              ),
+                                        ? Text(
+                                            prioridade.descricao.toUpperCase(),
+                                            style: Fontes.getSegoe(
+                                              fontSize:
+                                                  32 * scale * escalaFonte,
+                                              cor: Cores.CorTextCards,
+                                              lineHeight: lineHeightSegoe,
                                             ),
                                           )
                                         : const Text(''),
@@ -96,7 +99,7 @@ class ProcessoPagePriorityWidget extends StatelessWidget {
                                               prioridade.urgente
                                           ? Icon(
                                               Symbols.warning,
-                                              size: 38 * scale,
+                                              size: 38 * scale * escalaFonte,
                                             )
                                           : const Text(' '),
                                     ),
@@ -116,5 +119,17 @@ class ProcessoPagePriorityWidget extends StatelessWidget {
         },
       ),
     );
+  }
+
+  int? getItemKitPriority(
+    ProcessoLeituraMontagemModel processo,
+  ) {
+    ItemProcessoModel? item = processo.getItemSelecionado();
+    if (item != null) {
+      return item.prioridade;
+    }
+    KitProcessoModel? kit = processo.getKitLidoOuNull();
+    if (kit != null) return kit.prioridade;
+    return null;
   }
 }

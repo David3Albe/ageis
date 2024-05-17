@@ -1,3 +1,4 @@
+import 'package:ageiscme_admin/app/module/pages/home/registros_popup/resumo/widgets/footer/footer_widget.dart';
 import 'package:ageiscme_admin/app/module/pages/home/registros_popup/resumo/widgets/grid/grid_widget.dart';
 import 'package:ageiscme_admin/app/module/pages/home/registros_popup/resumo/widgets/header/header_widget.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ class RegistrosPopupPageWidget extends StatelessWidget {
       children: [
         const HeaderWidget(),
         GridWidget(onClose: onClose),
+        const FotterWidget(),
       ],
     );
   }

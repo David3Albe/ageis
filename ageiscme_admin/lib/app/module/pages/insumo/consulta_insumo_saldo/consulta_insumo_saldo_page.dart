@@ -3,7 +3,6 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/insumo/insumo
 import 'package:ageiscme_admin/app/module/pages/insumo/consulta_insumo_saldo/consulta_insumo_saldo_page_state.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/consulta_movimentacao_estoque/consulta_movimentacao_estoque_page.dart';
 import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
-import 'package:ageiscme_admin/app/module/widgets/query_dialog/query_dialog_widget.dart';
 import 'package:ageiscme_data/query_services/insumo_saldo/consulta_insumo_saldo_service.dart';
 import 'package:ageiscme_data/services/access_user/access_user_service.dart';
 import 'package:ageiscme_models/enums/direito_enum.dart';
@@ -20,6 +19,7 @@ import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/query_dialog/query_dialog_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 

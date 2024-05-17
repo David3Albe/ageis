@@ -1,4 +1,3 @@
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/item_descritor/item_descritor_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/proprietario/proprietario_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/consulta_processos_consignado/consulta_processos_consignado_page_state.dart';
@@ -8,15 +7,19 @@ import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_wi
 import 'package:ageiscme_data/query_services/processos_consignado/consulta_processos_consignado_service.dart';
 import 'package:ageiscme_data/services/item/item_service.dart';
 import 'package:ageiscme_data/services/item_consignado_processado/item_consignado_processado_service.dart';
+import 'package:ageiscme_data/services/item_descritor/item_descritor_service.dart';
 import 'package:ageiscme_data/stores/authentication/authentication_store.dart';
 import 'package:ageiscme_models/dto/authentication_result/authentication_result_dto.dart';
+import 'package:ageiscme_models/dto/item_descritor/drop_down_search/item_descritor_drop_down_search_dto.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/filters/usuario_filter/usuario_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/query_filters/processos_consignado/consulta_processos_consignado_filter.dart';
 import 'package:ageiscme_models/query_models/processos_consignado/consulta_processos_consignado_model.dart';
+import 'package:ageiscme_models/response_dto/item_descritor/drop_down_search/item_descritor_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/print_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/campos/custom_autocomplete/custom_autocomplete_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
@@ -49,7 +52,6 @@ class _ConsultaProcessosConsignadoPageState
     service: ItemConsignadoProcessadoService(),
     itemConsignadoProcessadoModel: itemConsignadoProcessado,
   );
-  late final ItemDescritorCubit itemDescritorBloc;
   late final ProprietarioCubit proprietarioBloc;
   late final UsuarioCubit usuarioCubit;
   late final ItemConsignadoProcessadoModel itemConsignadoProcessado;
@@ -70,8 +72,6 @@ class _ConsultaProcessosConsignadoPageState
     filter = ConsultaProcessosConsignadoFilter.empty();
     filter.startDate = DateTime.now().add(const Duration(days: -1));
     filter.finalDate = DateTime.now();
-    itemDescritorBloc = ItemDescritorCubit();
-    itemDescritorBloc.loadAll();
     proprietarioBloc = ProprietarioCubit();
     proprietarioBloc.loadAll();
     usuarioCubit = UsuarioCubit();
@@ -365,49 +365,40 @@ class _ConsultaProcessosConsignadoPageState
                 initialValue: filter.finalDate,
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<ItemDescritorCubit, ItemDescritorState>(
-                bloc: itemDescritorBloc,
-                builder: (context, itensDescritorState) {
-                  if (itensDescritorState.loading) {
-                    return const LoadingWidget();
-                  }
-                  List<ItemDescritorModel> itensDescritores =
-                      itensDescritorState.itensDescritores;
-
-                  itensDescritores.sort(
-                    (a, b) => a.descricaoCurta!.compareTo(b.descricaoCurta!),
-                  );
-                  ItemDescritorModel? itemDescritor = itensDescritores
-                      .where(
-                        (element) => element.cod == filter.codItemConsignado,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<ItemDescritorModel>(
-                    textFunction: (itemDescritor) =>
-                        itemDescritor.ItemDescritorText(),
-                    initialValue: itemDescritor,
-                    sourceList: itensDescritores,
-                    onChanged: (value) => filter.codItemConsignado = value?.cod,
-                    placeholder: 'Item Descritor',
-                  );
+              DropDownSearchApiWidget<ItemDescritorDropDownSearchResponseDTO>(
+                search: (str) async =>
+                    (await ItemDescritorService().getDropDownSearch(
+                      ItemDescritorDropDownSearchDTO(
+                        numeroRegistros: 30,
+                        termoPesquisa: str,
+                        apenasAtivos: true,
+                      ),
+                    ))
+                        ?.$2 ??
+                    [],
+                textFunction: (itemDescritor) => itemDescritor.Nome(),
+                initialValue: filter.itemDescritor == null
+                    ? null
+                    : ItemDescritorDropDownSearchResponseDTO(
+                        cod: filter.itemDescritor!.cod,
+                        nome: filter.itemDescritor?.nome,
+                      ),
+                onChanged: (value) {
+                  filter.codItemDescritor = value?.cod;
+                  filter.itemDescritor = value;
                 },
+                placeholder: 'Item Descritor',
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
-              DropDownSearchApiWidget<ItemModel>(
-                textFunction: (item) => item.EtiquetaDescricaoText(),
-                initialValue: filter.item,
-                search: (str) => ItemService().Filter(
-                  ItemFilter(
-                    apenasItensConsignados: true,
-                    numeroRegistros: 30,
-                    termoPesquisa: str,
-                  ),
+              CustomAutocompleteWidget<ItemModel>(
+                initialValue: filter.idEtiquetaContem,
+                onChange: (str) => filter.idEtiquetaContem = str,
+                onItemSelectedText: (item) => item.idEtiqueta ?? null,
+                label: 'Item',
+                title: (p0) => Text(p0.EtiquetaDescricaoText()),
+                suggestionsCallback: (str) => ItemService().Filter(
+                  ItemFilter(numeroRegistros: 30, termoPesquisa: str),
                 ),
-                onChanged: (value) {
-                  filter.item = value;
-                  filter.codItemConsignado = value?.cod;
-                },
-                placeholder: 'Item Consignado',
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
               BlocBuilder<ProprietarioCubit, ProprietarioState>(

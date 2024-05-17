@@ -1,6 +1,8 @@
 import 'package:ageiscme_admin/app/module/pages/processo/consulta_processos_leitura_detalhe_kit/consulta_processos_leitura_detalhe_kit_page_state.dart';
+import 'package:ageiscme_admin/app/module/pages/processo/consulta_processos_leitura_detalhe_kit/widgets/legenda/legenda_widget.dart';
 import 'package:ageiscme_data/query_services/processos_leitura_detalhe_kit/consulta_processos_leitura_detalhe_kit_service.dart';
 import 'package:ageiscme_models/query_filters/processos_leitura_detalhe_kit/consulta_processos_leitura_detalhe_kit_filter.dart';
+import 'package:ageiscme_models/query_models/processos_leitura_detalhe_kit/consulta_processos_leitura_detalhe_kit_item/consulta_processos_leitura_detalhe_kit_item_model.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -108,54 +110,59 @@ class _ConsultaProcessosLeituraDetalheKitPageState
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          padding: const EdgeInsets.all(8.0),
-          child: Row(
-            children: [
-              _legendItem('Bloqueado', Cores.corTextoBloqueado),
-              _legendItem('Liberado', Cores.corTextoLiberado),
-              _legendItem(
-                'Liberado com Restrições',
-                Cores.corTextoLiberadoRestricao,
-              ),
-              _legendItem('Pendente no Kit', Cores.corTextoPendente),
-              _legendItem('DataMatrix Danificado', Cores.corTextoDanificado),
-            ],
-          ),
-        ),
-        BlocListener<ConsultaProcessosLeituraDetalheKitPageCubit,
-            ConsultaProcessosLeituraDetalheKitPageState>(
-          bloc: bloc,
-          listener: (context, state) {
-            if (state.error.isNotEmpty) onError(state);
-          },
-          child: BlocBuilder<ConsultaProcessosLeituraDetalheKitPageCubit,
-              ConsultaProcessosLeituraDetalheKitPageState>(
-            bloc: bloc,
-            builder: (context, state) {
-              if (state.loading) {
-                return const Center(
-                  child: LoadingWidget(),
-                );
-              }
-              return Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 16.0, bottom: 16),
-                  child: PlutoGridWidget(
-                    smallRows: true,
-                    columns: colunas,
-                    items: state.processosLeituras,
+    return BlocConsumer<ConsultaProcessosLeituraDetalheKitPageCubit,
+        ConsultaProcessosLeituraDetalheKitPageState>(
+      bloc: bloc,
+      listener: (context, state) {
+        if (state.error.isNotEmpty) onError(state);
+      },
+      builder: (context, state) {
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  _legendItem('Bloqueado', Cores.corTextoBloqueado),
+                  _legendItem('Liberado', Cores.corTextoLiberado),
+                  _legendItem(
+                    'Liberado com Restrições',
+                    Cores.corTextoLiberadoRestricao,
                   ),
-                ),
-              );
-            },
-          ),
-        ),
-      ],
+                  _legendItem('Pendente no Kit', Cores.corTextoPendente),
+                  _legendItem(
+                    'DataMatrix Danificado',
+                    Cores.corTextoDanificado,
+                  ),
+                ],
+              ),
+            ),
+            Builder(
+              builder: (context) {
+                if (state.loading) {
+                  return const Center(
+                    child: LoadingWidget(),
+                  );
+                }
+                return Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 16.0, bottom: 16),
+                    child: PlutoGridWidget<
+                        ConsultaProcessosLeituraDetalheKitItemModel>(
+                      smallRows: true,
+                      columns: colunas,
+                      items: state.kit?.itens ?? [],
+                    ),
+                  ),
+                );
+              },
+            ),
+            LegendaWidget(kit: state.kit),
+          ],
+        );
+      },
     );
   }
 

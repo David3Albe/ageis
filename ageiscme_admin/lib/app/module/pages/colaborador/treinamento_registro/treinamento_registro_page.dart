@@ -56,11 +56,7 @@ class _TreinamentoRegistroPageState extends State<TreinamentoRegistroPage> {
     service = TreinamentoRegistroService();
     usuarioCubit = UsuarioCubit();
     bloc = TreinamentoRegistroPageCubit(service: service);
-    TreinamentoRegistroFilter filter = TreinamentoRegistroFilter(
-      numeroRegistros: 500,
-      carregarUsuario: true,
-    );
-    bloc.filter(filter);
+    carregar();
     super.initState();
   }
 
@@ -191,7 +187,21 @@ class _TreinamentoRegistroPageState extends State<TreinamentoRegistroPage> {
     );
     if (result == null || !result.$1) return;
     ToastUtils.showCustomToastSucess(context, result.$2);
-    bloc.loadTreinamentoRegistro();
+    TreinamentoRegistroCubitFilter filterCubit =
+        context.read<TreinamentoRegistroCubitFilter>();
+    TreinamentoRegistroPageCubit treinamentoCubit =
+        context.read<TreinamentoRegistroPageCubit>();
+    filterCubit = context.read<TreinamentoRegistroCubitFilter>();
+    TreinamentoRegistroFilter dto = filterCubit.state;
+    await treinamentoCubit.filter(dto);
+  }
+
+  Future carregar() async {
+    TreinamentoRegistroFilter filter = TreinamentoRegistroFilter(
+      numeroRegistros: 500,
+      carregarUsuario: true,
+    );
+    await bloc.filter(filter);
   }
 
   void delete(
@@ -208,12 +218,18 @@ class _TreinamentoRegistroPageState extends State<TreinamentoRegistroPage> {
     }
   }
 
-  void deleted(TreinamentoRegistroPageState state) {
+  Future deleted(TreinamentoRegistroPageState state) async {
     ToastUtils.showCustomToastSucess(
       context,
       state.message,
     );
-    bloc.loadTreinamentoRegistro();
+    TreinamentoRegistroCubitFilter filterCubit =
+        context.read<TreinamentoRegistroCubitFilter>();
+    TreinamentoRegistroPageCubit treinamentoCubit =
+        context.read<TreinamentoRegistroPageCubit>();
+    filterCubit = context.read<TreinamentoRegistroCubitFilter>();
+    TreinamentoRegistroFilter dto = filterCubit.state;
+    await treinamentoCubit.filter(dto);
   }
 
   void notFoundError() {

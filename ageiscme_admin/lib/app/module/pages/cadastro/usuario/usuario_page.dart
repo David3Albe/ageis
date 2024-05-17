@@ -56,8 +56,13 @@ class _UsuarioPageState extends State<UsuarioPage> {
 
   @override
   void initState() {
+    load();
+    super.initState();
+  }
+
+  Future load() async {
     bloc = UsuarioPageCubit(service: UsuarioService());
-    bloc.loadFilter(
+    await bloc.loadFilter(
       UsuarioFilter(
         tipoQuery: UsuarioFilterTipoQuery.SemFoto,
         carregarFoto: false,
@@ -65,7 +70,6 @@ class _UsuarioPageState extends State<UsuarioPage> {
         ordenarPorAtivosPrimeiro: true,
       ),
     );
-    super.initState();
   }
 
   @override
@@ -114,17 +118,14 @@ class _UsuarioPageState extends State<UsuarioPage> {
                   ),
                 ],
               ),
-              BlocConsumer<UsuarioPageCubit, UsuarioPageState>(
-                listener: (context, state) {
-                  if (state.deleted) deleted(state);
-                },
+              BlocBuilder<UsuarioPageCubit, UsuarioPageState>(
                 builder: (context, state) {
                   if (state.loading) {
                     return const Center(
                       child: LoadingWidget(),
                     );
                   }
-                  state.usuarios.sort((a,b)=> a.cod!.compareTo(b.cod!));
+                  state.usuarios.sort((a, b) => a.cod!.compareTo(b.cod!));
                   return Expanded(
                     child: Padding(
                       padding: const EdgeInsets.only(top: 16.0, bottom: 16),
@@ -206,8 +207,12 @@ class _UsuarioPageState extends State<UsuarioPage> {
       },
     );
     if (result == null || !result.$1) return;
+    UsuarioCubitFilter filterCubit = context.read<UsuarioCubitFilter>();
     ToastUtils.showCustomToastSucess(context, result.$2);
-    bloc.loadUsuario();
+    UsuarioPageCubit userCubit = context.read<UsuarioPageCubit>();
+    filterCubit = context.read<UsuarioCubitFilter>();
+    UsuarioFilter dto = filterCubit.state;
+    await userCubit.loadFilter(dto);
   }
 
   void delete(BuildContext context, UsuarioModel usuario) async {
@@ -215,14 +220,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
       context,
       'Confirma a remoção do  Usuário\n${usuario.cod} - ${usuario.nome}',
     );
-    if (confirmacao) bloc.delete(usuario);
-  }
-
-  void deleted(UsuarioPageState state) {
-    ToastUtils.showCustomToastSucess(
-      context,
-      state.message,
-    );
-    bloc.loadUsuario();
+    if (!confirmacao) return;
+    await bloc.delete(context, usuario);
   }
 }

@@ -1,5 +1,5 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/equipamento/equipamento_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/equipamento/registro_servico/cubits/readonly_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/registro_servico/registro_servico_page_frm/registro_servico_page_frm.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/registro_servico/registro_servico_page_state.dart';
 import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
@@ -7,7 +7,6 @@ import 'package:ageiscme_data/services/registro_servico/registro_servico_service
 import 'package:ageiscme_models/filters/equipamento/equipamento_filter.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/filters/registro_servico/registro_servico_filter.dart';
-import 'package:ageiscme_models/filters/usuario_filter/usuario_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
@@ -79,16 +78,18 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
   late final RegistroServicoService service;
   late final RegistroServicoFilter filter;
   late final EquipamentoCubit equipamentoCubit;
-  late final UsuarioCubit usuarioCubit;
+  late final ReadonlyCubit readonlyCubit;
 
   @override
   void initState() {
+    readonlyCubit = ReadonlyCubit();
+    readonlyCubit.setarReadonly();
     filter = RegistroServicoFilter.empty();
     filter.startDate = DateTime.now().add(const Duration(days: -1));
     filter.finalDate = DateTime.now();
     filter.numeroRegistros = 500;
     equipamentoCubit = EquipamentoCubit();
-    usuarioCubit = UsuarioCubit();
+    equipamentoCubit.loadAll();
     service = RegistroServicoService();
     bloc = RegistroServicoPageCubit(service: service);
     super.initState();
@@ -103,60 +104,70 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            FilterButtonWidget(
-              onPressed: () => {
-                openModalFilter(context),
-              },
-            ),
-            const Padding(padding: EdgeInsets.only(right: 5)),
-            AddButtonWidget(
-              onPressed: () => {
-                openModal(
-                  context,
-                  RegistroServicoModel.empty(),
-                ),
-              },
-            ),
-          ],
-        ),
-        BlocListener<RegistroServicoPageCubit, RegistroServicoPageState>(
-          bloc: bloc,
-          listener: (context, state) {
-            if (state.deleted) deleted(state);
-            if (state.error.isNotEmpty) onError(state);
-          },
-          child:
-              BlocBuilder<RegistroServicoPageCubit, RegistroServicoPageState>(
-            bloc: bloc,
-            builder: (context, state) {
-              if (state.loading) {
-                return const Center(
-                  child: LoadingWidget(),
-                );
-              }
-              return Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 16.0, bottom: 16),
-                  child: PlutoGridWidget(
-                    onEdit: (RegistroServicoModel objeto) =>
-                        {openModal(context, RegistroServicoModel.copy(objeto))},
-                    // onDelete: (RegistroServicoModel objeto) =>
-                    //     {delete(context, objeto)},
-                    columns: colunas,
-                    items: state.registrosServicos,
+    return MultiBlocProvider(
+      providers: [BlocProvider.value(value: readonlyCubit)],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              FilterButtonWidget(
+                onPressed: () => {
+                  openModalFilter(context),
+                },
+              ),
+              const Padding(padding: EdgeInsets.only(right: 5)),
+              AddButtonWidget(
+                onPressed: () => {
+                  openModal(
+                    context,
+                    RegistroServicoModel.empty(),
                   ),
-                ),
-              );
-            },
+                },
+              ),
+            ],
           ),
-        ),
-      ],
+          BlocListener<RegistroServicoPageCubit, RegistroServicoPageState>(
+            bloc: bloc,
+            listener: (context, state) {
+              if (state.deleted) deleted(state);
+              if (state.error.isNotEmpty) onError(state);
+            },
+            child:
+                BlocBuilder<RegistroServicoPageCubit, RegistroServicoPageState>(
+              bloc: bloc,
+              builder: (context, state) {
+                if (state.loading) {
+                  return const Center(
+                    child: LoadingWidget(),
+                  );
+                }
+                return Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 16.0, bottom: 16),
+                    child: PlutoGridWidget(
+                      onEdit: (RegistroServicoModel objeto) => {
+                        openModal(context, RegistroServicoModel.copy(objeto)),
+                      },
+                      onDelete: context.select(
+                                (ReadonlyCubit readonlyCubit) =>
+                                    readonlyCubit.state.botaoSalvarReadonly,
+                              ) ==
+                              true
+                          ? null
+                          : (RegistroServicoModel objeto) =>
+                              {delete(context, objeto)},
+                      columns: colunas,
+                      items: state.registrosServicos,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -236,18 +247,6 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
     }
   }
 
-  void loadUserCubit() {
-    if (!usuarioCubit.state.loaded) {
-      usuarioCubit.loadFilter(
-        UsuarioFilter(
-          apenasAtivos: true,
-          ordenarPorNomeCrescente: true,
-          apenasColaboradores: true,
-        ),
-      );
-    }
-  }
-
   Future<RegistroServicoModel?> getFilter(
     RegistroServicoModel registroServico,
   ) async {
@@ -268,7 +267,6 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
   ) async {
     LoadingController loading = LoadingController(context: context);
     loadEquipamentoCubit();
-    loadUserCubit();
 
     RegistroServicoModel? registroServicoModel = registroServico;
     if (registroServico.cod != 0) {
@@ -289,7 +287,6 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
       builder: (BuildContext context) {
         return RegistroServicoPageFrm(
           equipamentoCubit: equipamentoCubit,
-          usuarioCubit: usuarioCubit,
           itemFilter: ItemFilter(
             apenasAtivos: true,
             ordenarPorNomeCrescente: true,

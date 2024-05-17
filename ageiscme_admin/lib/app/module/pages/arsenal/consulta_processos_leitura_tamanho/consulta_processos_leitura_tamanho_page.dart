@@ -2,7 +2,6 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/centro_custo/
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/local_instituicao/local_instituicao_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/arsenal/consulta_processos_leitura_tamanho/consulta_processos_leitura_tamanho_page_state.dart';
 import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
-import 'package:ageiscme_admin/app/module/widgets/query_dialog/query_dialog_widget.dart';
 import 'package:ageiscme_data/query_services/processos_leitura_tamanho/processos_leitura_tamanho_service.dart';
 import 'package:ageiscme_data/services/access_user/access_user_service.dart';
 import 'package:ageiscme_models/enums/direito_enum.dart';
@@ -18,6 +17,7 @@ import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_footer_type.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/query_dialog/query_dialog_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 

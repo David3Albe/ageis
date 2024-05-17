@@ -12,10 +12,11 @@ class KitPageFrmCubit extends Cubit<KitPageFrmState> {
           KitPageFrmState(kit: kitModel),
         );
 
-  void save(KitModel kit) async {
+  Future save(KitModel kit, Function(KitModel)? afterSave) async {
     try {
       (String message, KitModel kit)? result = await service.save(kit);
-      if (result == null) return;
+      if (result == null) return null;
+      if (afterSave != null) afterSave(result.$2);
 
       emit(
         KitPageFrmState(

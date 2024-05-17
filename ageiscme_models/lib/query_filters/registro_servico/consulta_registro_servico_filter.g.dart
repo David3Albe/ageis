@@ -16,6 +16,7 @@ _$ConsultaRegistroServicoFilterImpl
               ? null
               : DateTime.parse(json['finalDate'] as String),
           codBarraItem: json['codBarraItem'] as String?,
+          idEtiquetaContem: json['idEtiquetaContem'] as String?,
           codEquipamento: json['codEquipamento'] as int?,
           codServicoTipo: json['codServicoTipo'] as int?,
           item: json['item'] == null
@@ -30,6 +31,7 @@ Map<String, dynamic> _$$ConsultaRegistroServicoFilterImplToJson(
       'startDate': instance.startDate?.toIso8601String(),
       'finalDate': instance.finalDate?.toIso8601String(),
       'codBarraItem': instance.codBarraItem,
+      'idEtiquetaContem': instance.idEtiquetaContem,
       'codEquipamento': instance.codEquipamento,
       'codServicoTipo': instance.codServicoTipo,
       'item': instance.item?.toJson(),

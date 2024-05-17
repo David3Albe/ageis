@@ -1,3 +1,4 @@
+import 'package:ageiscme_models/query_models/processos_leitura_detalhe_kit/consulta_processos_leitura_detalhe_kit_item/consulta_processos_leitura_detalhe_kit_item_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'consulta_processos_leitura_detalhe_kit_model.g.dart';
@@ -9,22 +10,9 @@ sealed class ConsultaProcessosLeituraDetalheKitModel
   const ConsultaProcessosLeituraDetalheKitModel._();
 
   factory ConsultaProcessosLeituraDetalheKitModel({
-    required String? idEtiqueta,
-    required String? descricaoCurta,
-    required String? descritor,
-    required String? situacao,
-    required String? responsavel,
-    required DateTime? dataHora,
-    required String? tamanho,
-    required String? grupo,
-    required String? proprietario,
-    required String? implantavel,
-    required DateTime? dataDescarte,
-    required String? restricao,
-    required String? statusCod,
-    required int? cod,
-    required int? codKit,
-    required int? codRegistroProcesso,
+    String? legenda,
+        String? statusKit,
+        required List<ConsultaProcessosLeituraDetalheKitItemModel> itens,
   }) = _ConsultaProcessosLeituraDetalheKitModel;
 
   factory ConsultaProcessosLeituraDetalheKitModel.fromJson(

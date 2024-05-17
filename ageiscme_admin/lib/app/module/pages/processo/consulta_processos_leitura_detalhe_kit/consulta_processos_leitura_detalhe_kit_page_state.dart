@@ -9,7 +9,7 @@ class ConsultaProcessosLeituraDetalheKitPageCubit
   ConsultaProcessosLeituraDetalheKitPageCubit({required this.service})
       : super(
           ConsultaProcessosLeituraDetalheKitPageState(
-            processosLeituras: [],
+            kit: null,
             loading: false,
           ),
         );
@@ -20,29 +20,27 @@ class ConsultaProcessosLeituraDetalheKitPageCubit
     emit(
       ConsultaProcessosLeituraDetalheKitPageState(
         loading: true,
-        processosLeituras: [],
+        kit: null,
       ),
     );
     try {
-      (String, List<ConsultaProcessosLeituraDetalheKitModel>)? itens =
+      (String, ConsultaProcessosLeituraDetalheKitModel)? result =
           await service.filter(
         filter,
       );
-      if (itens == null) return;
+      if (result == null) return;
 
-      List<ConsultaProcessosLeituraDetalheKitModel> processosLeituras =
-          itens.$2;
       emit(
         ConsultaProcessosLeituraDetalheKitPageState(
           loading: false,
-          processosLeituras: processosLeituras,
+          kit: result.$2,
         ),
       );
     } on Exception catch (ex) {
       emit(
         ConsultaProcessosLeituraDetalheKitPageState(
           loading: false,
-          processosLeituras: [],
+          kit: null,
           error: ex.toString(),
         ),
       );
@@ -52,13 +50,13 @@ class ConsultaProcessosLeituraDetalheKitPageCubit
 
 class ConsultaProcessosLeituraDetalheKitPageState {
   final bool loading;
-  final List<ConsultaProcessosLeituraDetalheKitModel> processosLeituras;
+  final ConsultaProcessosLeituraDetalheKitModel? kit;
   final String error;
   final String message;
 
   ConsultaProcessosLeituraDetalheKitPageState({
     required this.loading,
-    required this.processosLeituras,
+    required this.kit,
     this.error = '',
     this.message = '',
   });

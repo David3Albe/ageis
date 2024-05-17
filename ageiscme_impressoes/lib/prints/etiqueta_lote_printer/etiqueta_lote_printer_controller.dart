@@ -13,6 +13,8 @@ class EtiquetaLotePrinterController {
   final EtiquetaLotePrintDTO dto;
   BuildContext context;
 
+  static const double MAX_WIDTH = 100;
+
   EtiquetaLotePrinterController({
     required this.dto,
     required this.context,
@@ -27,10 +29,12 @@ class EtiquetaLotePrinterController {
     );
     final pdf = pw.Document(theme: themeOpenSans);
 
-    for (int i = 1; i <= dto.quantidadePadinas; i++) {
+    int impressoes = dto.impressoes;
+    while (impressoes > 0) {
       pdf.addPage(
-        _createPage(),
+        _createPage(impressoes: dto.impressoes),
       );
+      impressoes = impressoes - 3;
     }
 
     return await PrinterHelper.PrintDocumentDefaultPrinter(
@@ -39,34 +43,66 @@ class EtiquetaLotePrinterController {
     );
   }
 
-  pw.Page _createPage() {
-    const double inch = 72.0;
-    const double cm = inch / 2.54;
+  pw.Page _createPage({required int impressoes}) {
+    // const double inch = 72.0;
+    // const double cm = inch / 2.54;
     return pw.Page(
       orientation: pw.PageOrientation.landscape,
-      pageFormat: const PdfPageFormat(10 * cm, 3 * cm, marginAll: 0),
+      pageFormat: const PdfPageFormat(
+        10 * PdfPageFormat.cm,
+        3 * PdfPageFormat.cm,
+        marginAll: 0,
+      ),
       margin: pw.EdgeInsets.zero,
       build: (pw.Context context) {
         return pw.Padding(
           child: pw.Column(
-            children: _getPage(),
+            children: _getPage(
+              impressoes: impressoes,
+            ),
           ),
           padding: const pw.EdgeInsets.only(
-            top: 15,
+            top: 10,
+            left: 0,
           ),
         );
       },
     );
   }
 
-  List<pw.Widget> _getPage() {
+  List<pw.Widget> _getPage({required int impressoes}) {
     List<pw.Widget> widgets = [];
-    widgets.add(LoteRowWidget(dto: dto));
+    widgets.add(
+      LoteRowWidget(
+        dto: dto,
+        impressoes: impressoes,
+      ),
+    );
     widgets.add(pw.SizedBox(height: 0.2));
-    widgets.add(ValidadeRowWidget(dto: dto));
-    widgets.add(EquipamentoRowWidget(dto: dto));
-    widgets.add(UserRowWidget(dto: dto));
-    widgets.add(LoteEquipamentoRowWidget(dto: dto));
+    widgets.add(
+      ValidadeRowWidget(
+        dto: dto,
+        impressoes: impressoes,
+      ),
+    );
+    widgets.add(
+      EquipamentoRowWidget(
+        dto: dto,
+        impressoes: impressoes,
+      ),
+    );
+    widgets.add(
+      UserRowWidget(
+        dto: dto,
+        impressoes: impressoes,
+      ),
+    );
+    widgets.add(
+      LoteEquipamentoRowWidget(
+        dto: dto,
+        impressoes: impressoes,
+      ),
+    );
     return widgets;
   }
 }

@@ -1,11 +1,12 @@
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/consulta_historico_colaborador/consulta_historico_colaborador_page_state.dart';
 import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
 import 'package:ageiscme_data/query_services/historico_colaborador/consulta_historico_colaborador_service.dart';
-import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_data/services/usuario/usuario_service.dart';
+import 'package:ageiscme_models/dto/usuario/usuario_drop_down_search_dto.dart';
 import 'package:ageiscme_models/query_filters/historico_colaborador/consulta_historico_colaborador_filter.dart';
+import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
@@ -43,7 +44,6 @@ class _ConsultaHistoricoColaboradorPageState
   ];
 
   late final ConsultaHistoricoColaboradorPageCubit bloc;
-  late final UsuarioCubit usuarioBloc;
   late final ConsultaHistoricoColaboradorFilter filter;
 
   @override
@@ -54,8 +54,6 @@ class _ConsultaHistoricoColaboradorPageState
     filter = ConsultaHistoricoColaboradorFilter.empty();
     filter.startDate = DateTime.now().add(const Duration(days: -1));
     filter.finalDate = DateTime.now();
-    usuarioBloc = UsuarioCubit();
-    usuarioBloc.loadAll();
 
     super.initState();
   }
@@ -126,23 +124,23 @@ class _ConsultaHistoricoColaboradorPageState
                 initialValue: filter.finalDate,
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<UsuarioCubit, UsuarioState>(
-                bloc: usuarioBloc,
-                builder: (context, state) {
-                  List<UsuarioModel> usuarios = state.usuarios;
-                  UsuarioModel? usuario = usuarios
-                      .where(
-                        (element) => element.cod == filter.codUsuario,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<UsuarioModel>(
-                    textFunction: (usuario) => usuario.CodBarraNomeText(),
-                    initialValue: usuario,
-                    sourceList: usuarios,
-                    onChanged: (value) => filter.codUsuario = value?.cod,
-                    placeholder: 'Usuário',
-                  );
+              DropDownSearchApiWidget<UsuarioDropDownSearchResponseDTO>(
+                search: (str) async =>
+                    (await UsuarioService().getDropDownSearch(
+                      UsuarioDropDownSearchDTO(
+                        numeroRegistros: 30,
+                        search: str,
+                      ),
+                    ))
+                        ?.$2 ??
+                    [],
+                textFunction: (usuario) => usuario.CodBarraNome(),
+                initialValue: filter.usuario,
+                onChanged: (value) {
+                  filter.codUsuario = value?.cod;
+                  filter.usuario = value;
                 },
+                placeholder: 'Usuário',
               ),
             ],
           ),

@@ -50,6 +50,8 @@ mixin _$UsuarioFilter {
   bool? get ordenarPorAtivosPrimeiro => throw _privateConstructorUsedError;
   set ordenarPorAtivosPrimeiro(bool? value) =>
       throw _privateConstructorUsedError;
+  String? get termoPesquisa => throw _privateConstructorUsedError;
+  set termoPesquisa(String? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -76,7 +78,8 @@ abstract class $UsuarioFilterCopyWith<$Res> {
       bool? carregarFoto,
       String? nomeContem,
       int? numeroRegistros,
-      bool? ordenarPorAtivosPrimeiro});
+      bool? ordenarPorAtivosPrimeiro,
+      String? termoPesquisa});
 }
 
 /// @nodoc
@@ -105,6 +108,7 @@ class _$UsuarioFilterCopyWithImpl<$Res, $Val extends UsuarioFilter>
     Object? nomeContem = freezed,
     Object? numeroRegistros = freezed,
     Object? ordenarPorAtivosPrimeiro = freezed,
+    Object? termoPesquisa = freezed,
   }) {
     return _then(_value.copyWith(
       cod: freezed == cod
@@ -159,6 +163,10 @@ class _$UsuarioFilterCopyWithImpl<$Res, $Val extends UsuarioFilter>
           ? _value.ordenarPorAtivosPrimeiro
           : ordenarPorAtivosPrimeiro // ignore: cast_nullable_to_non_nullable
               as bool?,
+      termoPesquisa: freezed == termoPesquisa
+          ? _value.termoPesquisa
+          : termoPesquisa // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -184,7 +192,8 @@ abstract class _$$UsuarioFilterImplCopyWith<$Res>
       bool? carregarFoto,
       String? nomeContem,
       int? numeroRegistros,
-      bool? ordenarPorAtivosPrimeiro});
+      bool? ordenarPorAtivosPrimeiro,
+      String? termoPesquisa});
 }
 
 /// @nodoc
@@ -211,6 +220,7 @@ class __$$UsuarioFilterImplCopyWithImpl<$Res>
     Object? nomeContem = freezed,
     Object? numeroRegistros = freezed,
     Object? ordenarPorAtivosPrimeiro = freezed,
+    Object? termoPesquisa = freezed,
   }) {
     return _then(_$UsuarioFilterImpl(
       cod: freezed == cod
@@ -265,6 +275,10 @@ class __$$UsuarioFilterImplCopyWithImpl<$Res>
           ? _value.ordenarPorAtivosPrimeiro
           : ordenarPorAtivosPrimeiro // ignore: cast_nullable_to_non_nullable
               as bool?,
+      termoPesquisa: freezed == termoPesquisa
+          ? _value.termoPesquisa
+          : termoPesquisa // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -287,7 +301,8 @@ class _$UsuarioFilterImpl
       this.carregarFoto,
       this.nomeContem,
       this.numeroRegistros,
-      this.ordenarPorAtivosPrimeiro});
+      this.ordenarPorAtivosPrimeiro,
+      this.termoPesquisa});
 
   factory _$UsuarioFilterImpl.fromJson(Map<String, dynamic> json) =>
       _$$UsuarioFilterImplFromJson(json);
@@ -319,10 +334,12 @@ class _$UsuarioFilterImpl
   int? numeroRegistros;
   @override
   bool? ordenarPorAtivosPrimeiro;
+  @override
+  String? termoPesquisa;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UsuarioFilter(cod: $cod, codBarra: $codBarra, login: $login, tStamp: $tStamp, incluirDireitos: $incluirDireitos, apenasAtivos: $apenasAtivos, ordenarPorNomeCrescente: $ordenarPorNomeCrescente, apenasColaboradores: $apenasColaboradores, tipoQuery: $tipoQuery, carregarFoto: $carregarFoto, nomeContem: $nomeContem, numeroRegistros: $numeroRegistros, ordenarPorAtivosPrimeiro: $ordenarPorAtivosPrimeiro)';
+    return 'UsuarioFilter(cod: $cod, codBarra: $codBarra, login: $login, tStamp: $tStamp, incluirDireitos: $incluirDireitos, apenasAtivos: $apenasAtivos, ordenarPorNomeCrescente: $ordenarPorNomeCrescente, apenasColaboradores: $apenasColaboradores, tipoQuery: $tipoQuery, carregarFoto: $carregarFoto, nomeContem: $nomeContem, numeroRegistros: $numeroRegistros, ordenarPorAtivosPrimeiro: $ordenarPorAtivosPrimeiro, termoPesquisa: $termoPesquisa)';
   }
 
   @override
@@ -344,7 +361,8 @@ class _$UsuarioFilterImpl
       ..add(DiagnosticsProperty('nomeContem', nomeContem))
       ..add(DiagnosticsProperty('numeroRegistros', numeroRegistros))
       ..add(DiagnosticsProperty(
-          'ordenarPorAtivosPrimeiro', ordenarPorAtivosPrimeiro));
+          'ordenarPorAtivosPrimeiro', ordenarPorAtivosPrimeiro))
+      ..add(DiagnosticsProperty('termoPesquisa', termoPesquisa));
   }
 
   @JsonKey(ignore: true)
@@ -375,7 +393,8 @@ abstract class _UsuarioFilter implements UsuarioFilter {
       bool? carregarFoto,
       String? nomeContem,
       int? numeroRegistros,
-      bool? ordenarPorAtivosPrimeiro}) = _$UsuarioFilterImpl;
+      bool? ordenarPorAtivosPrimeiro,
+      String? termoPesquisa}) = _$UsuarioFilterImpl;
 
   factory _UsuarioFilter.fromJson(Map<String, dynamic> json) =
       _$UsuarioFilterImpl.fromJson;
@@ -421,6 +440,9 @@ abstract class _UsuarioFilter implements UsuarioFilter {
   @override
   bool? get ordenarPorAtivosPrimeiro;
   set ordenarPorAtivosPrimeiro(bool? value);
+  @override
+  String? get termoPesquisa;
+  set termoPesquisa(String? value);
   @override
   @JsonKey(ignore: true)
   _$$UsuarioFilterImplCopyWith<_$UsuarioFilterImpl> get copyWith =>

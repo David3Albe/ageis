@@ -22,75 +22,77 @@ class ProcessoPageUserWidget extends StatelessWidget {
         decoration: const BoxDecoration(
           color: Cores.CorCards,
         ),
-        child: Padding(
-          padding: EdgeInsets.only(
-            top: 8 * scale,
-            bottom: 8 * scale,
-            right: 14 * scale,
-            left: 14 * scale,
-          ),
-          child: BlocBuilder<ProcessoLeituraCubit, ProcessoLeituraState>(
-            buildWhen: (previous, current) =>
-                current.rebuildType == ProcessoLeituraRebuildType.All,
-            builder: (context, state) {
-              UsuarioProcessoModel? usuario =
-                  state.processo.leituraAtual.usuario;
-              ProcessoRespostaEPCEPIModel? epcEpi =
-                  state.processo.leituraAtual.respostaEPCEPI;
-              return Column(
+        child: BlocBuilder<ProcessoLeituraCubit, ProcessoLeituraState>(
+          buildWhen: (previous, current) =>
+              current.rebuildType == ProcessoLeituraRebuildType.All,
+          builder: (context, state) {
+            UsuarioProcessoModel? usuario = state.processo.leituraAtual.usuario;
+            ProcessoRespostaEPCEPIModel? epcEpi =
+                state.processo.leituraAtual.respostaEPCEPI;
+            double? escalaFonte = state.processo.getEscala();
+            double lineHeight = state.processo.getLineHeightPadrao();
+            return Padding(
+              padding: EdgeInsets.only(
+                top: (8 * scale) / escalaFonte,
+                bottom: (8 * scale) / escalaFonte,
+                right: (14 * scale) / escalaFonte,
+                left: (14 * scale) / escalaFonte,
+              ),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Row(
-                    children: [
-                      InkWell(
-                        mouseCursor: SystemMouseCursors.basic,
-                        onTap: _manualReadingsCubit.toogleVisibility,
-                        child: SizedBox(
-                          child: FittedBox(
-                            child: Text(
-                              'USUÁRIO',
-                              style: Fontes.getSegoe(
-                                fontSize: 14 * scale,
-                                cor: Cores.CorTitleCards,
-                              ),
+                  Padding(
+                    padding: EdgeInsets.zero,
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        InkWell(
+                          mouseCursor: SystemMouseCursors.basic,
+                          onTap: _manualReadingsCubit.toogleVisibility,
+                          child: Text(
+                            'USUÁRIO',
+                            style: Fontes.getSegoe(
+                              fontSize: (14 * scale) * escalaFonte,
+                              cor: Cores.CorTitleCards,
                             ),
                           ),
                         ),
-                      ),
-                      const Padding(
-                        padding: const EdgeInsets.only(left: 4.0),
-                        child: const ProcessoPageDeviceInformationWidget(),
-                      ),
-                      const Spacer(),
-                      Visibility(
-                        visible: epcEpi != null && epcEpi.resposta == 1,
-                        child: Text(
-                          'EPI OK',
-                          style: Fontes.getSegoe(
-                            fontSize: 14 * scale,
-                            cor: Cores.CorGreenText,
+                        const Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: const ProcessoPageDeviceInformationWidget(),
+                        ),
+                        const Spacer(),
+                        Visibility(
+                          visible: epcEpi != null && epcEpi.resposta == 1,
+                          child: Text(
+                            'EPI OK',
+                            style: Fontes.getSegoe(
+                              fontSize: (14 * scale) * escalaFonte,
+                              cor: Cores.CorGreenText,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                  FittedBox(
-                    fit: BoxFit.scaleDown,
+                  Padding(
+                    padding: EdgeInsets.zero,
                     child: Text(
+                      textAlign: TextAlign.start,
                       usuario != null && usuario.nome != null
                           ? usuario.nome!
                           : ' ',
                       style: Fontes.getSegoe(
-                        fontSize: 20 * scale,
+                        fontSize: (20 * scale) * escalaFonte,
                         cor: Cores.CorTextCards,
+                        lineHeight: lineHeight,
                       ),
                     ),
                   ),
                 ],
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
       ),
     );

@@ -18,6 +18,7 @@ abstract class Fontes {
     double? fontSize,
     Color? cor,
     double? letterSpacing,
+    double? lineHeight,
   }) {
     return TextStyle(
       fontFamily: 'Roboto',
@@ -25,6 +26,7 @@ abstract class Fontes {
       color: cor,
       letterSpacing: letterSpacing,
       fontWeight: FontWeight.bold,
+      height: lineHeight,
     );
   }
 
@@ -32,12 +34,14 @@ abstract class Fontes {
     double? fontSize,
     Color? cor,
     double? letterSpacing,
+    double? lineHeight,
   }) {
     return TextStyle(
       fontFamily: 'Segoe Ui',
       fontSize: fontSize,
       color: cor,
       letterSpacing: letterSpacing,
+      height: lineHeight,
     );
   }
 }

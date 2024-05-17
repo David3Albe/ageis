@@ -28,8 +28,12 @@ mixin _$ConsultaProcessosLeituraAcaoOcorrenciaFilter {
   set finalDate(DateTime? value) => throw _privateConstructorUsedError;
   int? get codKit => throw _privateConstructorUsedError;
   set codKit(int? value) => throw _privateConstructorUsedError;
+  String? get codBarraKitContem => throw _privateConstructorUsedError;
+  set codBarraKitContem(String? value) => throw _privateConstructorUsedError;
   int? get codItem => throw _privateConstructorUsedError;
   set codItem(int? value) => throw _privateConstructorUsedError;
+  String? get idEtiquetaContem => throw _privateConstructorUsedError;
+  set idEtiquetaContem(String? value) => throw _privateConstructorUsedError;
   int? get codUsuarioAcao => throw _privateConstructorUsedError;
   set codUsuarioAcao(int? value) => throw _privateConstructorUsedError;
   int? get codUsuarioAutorizacao => throw _privateConstructorUsedError;
@@ -38,6 +42,14 @@ mixin _$ConsultaProcessosLeituraAcaoOcorrenciaFilter {
   set codAcaoOcorrencia(int? value) => throw _privateConstructorUsedError;
   ItemModel? get item => throw _privateConstructorUsedError;
   set item(ItemModel? value) => throw _privateConstructorUsedError;
+  UsuarioDropDownSearchResponseDTO? get usuarioAcao =>
+      throw _privateConstructorUsedError;
+  set usuarioAcao(UsuarioDropDownSearchResponseDTO? value) =>
+      throw _privateConstructorUsedError;
+  UsuarioDropDownSearchResponseDTO? get usuarioAutorizacao =>
+      throw _privateConstructorUsedError;
+  set usuarioAutorizacao(UsuarioDropDownSearchResponseDTO? value) =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -58,13 +70,19 @@ abstract class $ConsultaProcessosLeituraAcaoOcorrenciaFilterCopyWith<$Res> {
       {DateTime? startDate,
       DateTime? finalDate,
       int? codKit,
+      String? codBarraKitContem,
       int? codItem,
+      String? idEtiquetaContem,
       int? codUsuarioAcao,
       int? codUsuarioAutorizacao,
       int? codAcaoOcorrencia,
-      ItemModel? item});
+      ItemModel? item,
+      UsuarioDropDownSearchResponseDTO? usuarioAcao,
+      UsuarioDropDownSearchResponseDTO? usuarioAutorizacao});
 
   $ItemModelCopyWith<$Res>? get item;
+  $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuarioAcao;
+  $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuarioAutorizacao;
 }
 
 /// @nodoc
@@ -85,11 +103,15 @@ class _$ConsultaProcessosLeituraAcaoOcorrenciaFilterCopyWithImpl<$Res,
     Object? startDate = freezed,
     Object? finalDate = freezed,
     Object? codKit = freezed,
+    Object? codBarraKitContem = freezed,
     Object? codItem = freezed,
+    Object? idEtiquetaContem = freezed,
     Object? codUsuarioAcao = freezed,
     Object? codUsuarioAutorizacao = freezed,
     Object? codAcaoOcorrencia = freezed,
     Object? item = freezed,
+    Object? usuarioAcao = freezed,
+    Object? usuarioAutorizacao = freezed,
   }) {
     return _then(_value.copyWith(
       startDate: freezed == startDate
@@ -104,10 +126,18 @@ class _$ConsultaProcessosLeituraAcaoOcorrenciaFilterCopyWithImpl<$Res,
           ? _value.codKit
           : codKit // ignore: cast_nullable_to_non_nullable
               as int?,
+      codBarraKitContem: freezed == codBarraKitContem
+          ? _value.codBarraKitContem
+          : codBarraKitContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codItem: freezed == codItem
           ? _value.codItem
           : codItem // ignore: cast_nullable_to_non_nullable
               as int?,
+      idEtiquetaContem: freezed == idEtiquetaContem
+          ? _value.idEtiquetaContem
+          : idEtiquetaContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codUsuarioAcao: freezed == codUsuarioAcao
           ? _value.codUsuarioAcao
           : codUsuarioAcao // ignore: cast_nullable_to_non_nullable
@@ -124,6 +154,14 @@ class _$ConsultaProcessosLeituraAcaoOcorrenciaFilterCopyWithImpl<$Res,
           ? _value.item
           : item // ignore: cast_nullable_to_non_nullable
               as ItemModel?,
+      usuarioAcao: freezed == usuarioAcao
+          ? _value.usuarioAcao
+          : usuarioAcao // ignore: cast_nullable_to_non_nullable
+              as UsuarioDropDownSearchResponseDTO?,
+      usuarioAutorizacao: freezed == usuarioAutorizacao
+          ? _value.usuarioAutorizacao
+          : usuarioAutorizacao // ignore: cast_nullable_to_non_nullable
+              as UsuarioDropDownSearchResponseDTO?,
     ) as $Val);
   }
 
@@ -136,6 +174,32 @@ class _$ConsultaProcessosLeituraAcaoOcorrenciaFilterCopyWithImpl<$Res,
 
     return $ItemModelCopyWith<$Res>(_value.item!, (value) {
       return _then(_value.copyWith(item: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuarioAcao {
+    if (_value.usuarioAcao == null) {
+      return null;
+    }
+
+    return $UsuarioDropDownSearchResponseDTOCopyWith<$Res>(_value.usuarioAcao!,
+        (value) {
+      return _then(_value.copyWith(usuarioAcao: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuarioAutorizacao {
+    if (_value.usuarioAutorizacao == null) {
+      return null;
+    }
+
+    return $UsuarioDropDownSearchResponseDTOCopyWith<$Res>(
+        _value.usuarioAutorizacao!, (value) {
+      return _then(_value.copyWith(usuarioAutorizacao: value) as $Val);
     });
   }
 }
@@ -154,14 +218,22 @@ abstract class _$$ConsultaProcessosLeituraAcaoOcorrenciaFilterImplCopyWith<$Res>
       {DateTime? startDate,
       DateTime? finalDate,
       int? codKit,
+      String? codBarraKitContem,
       int? codItem,
+      String? idEtiquetaContem,
       int? codUsuarioAcao,
       int? codUsuarioAutorizacao,
       int? codAcaoOcorrencia,
-      ItemModel? item});
+      ItemModel? item,
+      UsuarioDropDownSearchResponseDTO? usuarioAcao,
+      UsuarioDropDownSearchResponseDTO? usuarioAutorizacao});
 
   @override
   $ItemModelCopyWith<$Res>? get item;
+  @override
+  $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuarioAcao;
+  @override
+  $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuarioAutorizacao;
 }
 
 /// @nodoc
@@ -181,11 +253,15 @@ class __$$ConsultaProcessosLeituraAcaoOcorrenciaFilterImplCopyWithImpl<$Res>
     Object? startDate = freezed,
     Object? finalDate = freezed,
     Object? codKit = freezed,
+    Object? codBarraKitContem = freezed,
     Object? codItem = freezed,
+    Object? idEtiquetaContem = freezed,
     Object? codUsuarioAcao = freezed,
     Object? codUsuarioAutorizacao = freezed,
     Object? codAcaoOcorrencia = freezed,
     Object? item = freezed,
+    Object? usuarioAcao = freezed,
+    Object? usuarioAutorizacao = freezed,
   }) {
     return _then(_$ConsultaProcessosLeituraAcaoOcorrenciaFilterImpl(
       startDate: freezed == startDate
@@ -200,10 +276,18 @@ class __$$ConsultaProcessosLeituraAcaoOcorrenciaFilterImplCopyWithImpl<$Res>
           ? _value.codKit
           : codKit // ignore: cast_nullable_to_non_nullable
               as int?,
+      codBarraKitContem: freezed == codBarraKitContem
+          ? _value.codBarraKitContem
+          : codBarraKitContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codItem: freezed == codItem
           ? _value.codItem
           : codItem // ignore: cast_nullable_to_non_nullable
               as int?,
+      idEtiquetaContem: freezed == idEtiquetaContem
+          ? _value.idEtiquetaContem
+          : idEtiquetaContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codUsuarioAcao: freezed == codUsuarioAcao
           ? _value.codUsuarioAcao
           : codUsuarioAcao // ignore: cast_nullable_to_non_nullable
@@ -220,6 +304,14 @@ class __$$ConsultaProcessosLeituraAcaoOcorrenciaFilterImplCopyWithImpl<$Res>
           ? _value.item
           : item // ignore: cast_nullable_to_non_nullable
               as ItemModel?,
+      usuarioAcao: freezed == usuarioAcao
+          ? _value.usuarioAcao
+          : usuarioAcao // ignore: cast_nullable_to_non_nullable
+              as UsuarioDropDownSearchResponseDTO?,
+      usuarioAutorizacao: freezed == usuarioAutorizacao
+          ? _value.usuarioAutorizacao
+          : usuarioAutorizacao // ignore: cast_nullable_to_non_nullable
+              as UsuarioDropDownSearchResponseDTO?,
     ));
   }
 }
@@ -232,11 +324,15 @@ class _$ConsultaProcessosLeituraAcaoOcorrenciaFilterImpl
       {required this.startDate,
       required this.finalDate,
       required this.codKit,
+      required this.codBarraKitContem,
       required this.codItem,
+      required this.idEtiquetaContem,
       required this.codUsuarioAcao,
       required this.codUsuarioAutorizacao,
       required this.codAcaoOcorrencia,
-      this.item})
+      this.item,
+      this.usuarioAcao,
+      this.usuarioAutorizacao})
       : super._();
 
   factory _$ConsultaProcessosLeituraAcaoOcorrenciaFilterImpl.fromJson(
@@ -250,7 +346,11 @@ class _$ConsultaProcessosLeituraAcaoOcorrenciaFilterImpl
   @override
   int? codKit;
   @override
+  String? codBarraKitContem;
+  @override
   int? codItem;
+  @override
+  String? idEtiquetaContem;
   @override
   int? codUsuarioAcao;
   @override
@@ -259,10 +359,14 @@ class _$ConsultaProcessosLeituraAcaoOcorrenciaFilterImpl
   int? codAcaoOcorrencia;
   @override
   ItemModel? item;
+  @override
+  UsuarioDropDownSearchResponseDTO? usuarioAcao;
+  @override
+  UsuarioDropDownSearchResponseDTO? usuarioAutorizacao;
 
   @override
   String toString() {
-    return 'ConsultaProcessosLeituraAcaoOcorrenciaFilter(startDate: $startDate, finalDate: $finalDate, codKit: $codKit, codItem: $codItem, codUsuarioAcao: $codUsuarioAcao, codUsuarioAutorizacao: $codUsuarioAutorizacao, codAcaoOcorrencia: $codAcaoOcorrencia, item: $item)';
+    return 'ConsultaProcessosLeituraAcaoOcorrenciaFilter(startDate: $startDate, finalDate: $finalDate, codKit: $codKit, codBarraKitContem: $codBarraKitContem, codItem: $codItem, idEtiquetaContem: $idEtiquetaContem, codUsuarioAcao: $codUsuarioAcao, codUsuarioAutorizacao: $codUsuarioAutorizacao, codAcaoOcorrencia: $codAcaoOcorrencia, item: $item, usuarioAcao: $usuarioAcao, usuarioAutorizacao: $usuarioAutorizacao)';
   }
 
   @JsonKey(ignore: true)
@@ -286,14 +390,19 @@ class _$ConsultaProcessosLeituraAcaoOcorrenciaFilterImpl
 abstract class _ConsultaProcessosLeituraAcaoOcorrenciaFilter
     extends ConsultaProcessosLeituraAcaoOcorrenciaFilter {
   factory _ConsultaProcessosLeituraAcaoOcorrenciaFilter(
-      {required DateTime? startDate,
-      required DateTime? finalDate,
-      required int? codKit,
-      required int? codItem,
-      required int? codUsuarioAcao,
-      required int? codUsuarioAutorizacao,
-      required int? codAcaoOcorrencia,
-      ItemModel? item}) = _$ConsultaProcessosLeituraAcaoOcorrenciaFilterImpl;
+          {required DateTime? startDate,
+          required DateTime? finalDate,
+          required int? codKit,
+          required String? codBarraKitContem,
+          required int? codItem,
+          required String? idEtiquetaContem,
+          required int? codUsuarioAcao,
+          required int? codUsuarioAutorizacao,
+          required int? codAcaoOcorrencia,
+          ItemModel? item,
+          UsuarioDropDownSearchResponseDTO? usuarioAcao,
+          UsuarioDropDownSearchResponseDTO? usuarioAutorizacao}) =
+      _$ConsultaProcessosLeituraAcaoOcorrenciaFilterImpl;
   _ConsultaProcessosLeituraAcaoOcorrenciaFilter._() : super._();
 
   factory _ConsultaProcessosLeituraAcaoOcorrenciaFilter.fromJson(
@@ -310,8 +419,14 @@ abstract class _ConsultaProcessosLeituraAcaoOcorrenciaFilter
   int? get codKit;
   set codKit(int? value);
   @override
+  String? get codBarraKitContem;
+  set codBarraKitContem(String? value);
+  @override
   int? get codItem;
   set codItem(int? value);
+  @override
+  String? get idEtiquetaContem;
+  set idEtiquetaContem(String? value);
   @override
   int? get codUsuarioAcao;
   set codUsuarioAcao(int? value);
@@ -324,6 +439,12 @@ abstract class _ConsultaProcessosLeituraAcaoOcorrenciaFilter
   @override
   ItemModel? get item;
   set item(ItemModel? value);
+  @override
+  UsuarioDropDownSearchResponseDTO? get usuarioAcao;
+  set usuarioAcao(UsuarioDropDownSearchResponseDTO? value);
+  @override
+  UsuarioDropDownSearchResponseDTO? get usuarioAutorizacao;
+  set usuarioAutorizacao(UsuarioDropDownSearchResponseDTO? value);
   @override
   @JsonKey(ignore: true)
   _$$ConsultaProcessosLeituraAcaoOcorrenciaFilterImplCopyWith<

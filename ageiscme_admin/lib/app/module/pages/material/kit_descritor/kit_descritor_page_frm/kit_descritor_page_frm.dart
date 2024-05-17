@@ -3,6 +3,7 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/embalagem/emb
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/item_descritor/item_descritor_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/processo_tipo/processo_tipo_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/tamanho/tamanho_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_admin/app/module/pages/material/kit_descritor/item_descritor_kit_page_frm/item_descritor_kit_page_frm.dart';
 import 'package:ageiscme_admin/app/module/pages/material/kit_descritor/kit_descritor_page_frm/kit_descritor_page_frm_state.dart';
 import 'package:ageiscme_data/services/kit_descritor/kit_descritor_service.dart';
@@ -20,6 +21,8 @@ import 'package:compartilhados/componentes/campos/list_field/list_field_widget.d
 import 'package:compartilhados/componentes/campos/text_field_string_area_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
 import 'package:compartilhados/componentes/images/image_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
@@ -461,8 +464,6 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
                                         builder: (BuildContext context) {
                                           return AlertDialog(
                                             content: ItemDescritorKitPageFrm(
-                                              itemDescritorCubit:
-                                                  widget.itemDescritorCubit,
                                               itemDescritorKit:
                                                   ItemDescritorKitModel(
                                                 cod: 0,
@@ -524,6 +525,18 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
               actions: [
                 Row(
                   children: [
+                    if (kitDescritor.cod != null && kitDescritor.cod != 0)
+                      CustomPopupMenuWidget(
+                        items: [
+                          CustomPopupItemHistoryModel.getHistoryItem(
+                            child: HistoricoPage(
+                              pk: kitDescritor.cod!,
+                              termo: 'KIT_DESCRITOR',
+                            ),
+                            context: context,
+                          ),
+                        ],
+                      ),
                     const Spacer(),
                     Padding(
                       padding: const EdgeInsets.only(left: 16.0),

@@ -1,4 +1,5 @@
 import 'package:ageiscme_models/models/item/item_model.dart';
+import 'package:ageiscme_models/response_dto/item_descritor/drop_down_search/item_descritor_drop_down_search_response_dto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'consulta_processos_consignado_filter.g.dart';
@@ -14,8 +15,10 @@ sealed class ConsultaProcessosConsignadoFilter
     required DateTime? finalDate,
     required int? codItemDescritor,
     required int? codItemConsignado,
+    required String? idEtiquetaContem,
     required int? codProprietario,
     required bool? consignado,
+    ItemDescritorDropDownSearchResponseDTO? itemDescritor,
     ItemModel? item,
   }) = _ConsultaProcessosConsignadoFilter;
 
@@ -36,5 +39,6 @@ sealed class ConsultaProcessosConsignadoFilter
         codItemDescritor: null,
         codProprietario: null,
         consignado: null,
+        idEtiquetaContem: null,
       );
 }

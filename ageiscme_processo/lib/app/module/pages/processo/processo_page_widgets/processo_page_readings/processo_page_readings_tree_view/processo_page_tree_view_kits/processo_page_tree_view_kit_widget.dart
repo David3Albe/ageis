@@ -19,7 +19,14 @@ class ProcessoPageTreeViewKitWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double scale = size.width / 1920;
+    (double, double?) escalaHeight = context.select(
+      (ProcessoLeituraCubit cubit) => (
+        cubit.state.processo.getEscala(),
+        cubit.state.processo.getLineHeightPadraoBig()
+      ),
+    );
     double fontSize = getFontSize(size);
+    fontSize = fontSize * escalaHeight.$1;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
@@ -45,7 +52,8 @@ class ProcessoPageTreeViewKitWidget extends StatelessWidget {
               onTap: () => showKit(context, kit),
               '${kit.codBarra} ${kit.descritor == null ? '' : kit.descritor!.nome} ${getItensKitLidos()}',
               style: TextStyle(
-                fontSize: 16 * scale,
+                fontSize: 14 * scale * escalaHeight.$1,
+                height: escalaHeight.$2,
                 color: getAllItensKitLidos()
                     ? null
                     : KitProcessoStatus.getCorTextItemFromStatus(
@@ -76,7 +84,9 @@ class ProcessoPageTreeViewKitWidget extends StatelessWidget {
     cubit.showKit(kit);
   }
 
-  double getFontSize(Size size) {
+  double getFontSize(
+    Size size,
+  ) {
     double height = size.height;
     if (height > 900) {
       return 20;

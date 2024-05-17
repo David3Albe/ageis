@@ -30,6 +30,8 @@ mixin _$ConsultaEstoqueDisponivelRotuladoFilter {
   set codEstoque(int? value) => throw _privateConstructorUsedError;
   int? get codItem => throw _privateConstructorUsedError;
   set codItem(int? value) => throw _privateConstructorUsedError;
+  String? get idEtiquetaContem => throw _privateConstructorUsedError;
+  set idEtiquetaContem(String? value) => throw _privateConstructorUsedError;
   String? get idEtiqueta => throw _privateConstructorUsedError;
   set idEtiqueta(String? value) => throw _privateConstructorUsedError;
   int? get codProprietario => throw _privateConstructorUsedError;
@@ -61,6 +63,7 @@ abstract class $ConsultaEstoqueDisponivelRotuladoFilterCopyWith<$Res> {
       DateTime? finalDate,
       int? codEstoque,
       int? codItem,
+      String? idEtiquetaContem,
       String? idEtiqueta,
       int? codProprietario,
       bool? entrada,
@@ -89,6 +92,7 @@ class _$ConsultaEstoqueDisponivelRotuladoFilterCopyWithImpl<$Res,
     Object? finalDate = freezed,
     Object? codEstoque = freezed,
     Object? codItem = freezed,
+    Object? idEtiquetaContem = freezed,
     Object? idEtiqueta = freezed,
     Object? codProprietario = freezed,
     Object? entrada = freezed,
@@ -112,6 +116,10 @@ class _$ConsultaEstoqueDisponivelRotuladoFilterCopyWithImpl<$Res,
           ? _value.codItem
           : codItem // ignore: cast_nullable_to_non_nullable
               as int?,
+      idEtiquetaContem: freezed == idEtiquetaContem
+          ? _value.idEtiquetaContem
+          : idEtiquetaContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       idEtiqueta: freezed == idEtiqueta
           ? _value.idEtiqueta
           : idEtiqueta // ignore: cast_nullable_to_non_nullable
@@ -162,6 +170,7 @@ abstract class _$$ConsultaEstoqueDisponivelRotuladoFilterImplCopyWith<$Res>
       DateTime? finalDate,
       int? codEstoque,
       int? codItem,
+      String? idEtiquetaContem,
       String? idEtiqueta,
       int? codProprietario,
       bool? entrada,
@@ -189,6 +198,7 @@ class __$$ConsultaEstoqueDisponivelRotuladoFilterImplCopyWithImpl<$Res>
     Object? finalDate = freezed,
     Object? codEstoque = freezed,
     Object? codItem = freezed,
+    Object? idEtiquetaContem = freezed,
     Object? idEtiqueta = freezed,
     Object? codProprietario = freezed,
     Object? entrada = freezed,
@@ -212,6 +222,10 @@ class __$$ConsultaEstoqueDisponivelRotuladoFilterImplCopyWithImpl<$Res>
           ? _value.codItem
           : codItem // ignore: cast_nullable_to_non_nullable
               as int?,
+      idEtiquetaContem: freezed == idEtiquetaContem
+          ? _value.idEtiquetaContem
+          : idEtiquetaContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       idEtiqueta: freezed == idEtiqueta
           ? _value.idEtiqueta
           : idEtiqueta // ignore: cast_nullable_to_non_nullable
@@ -245,6 +259,7 @@ class _$ConsultaEstoqueDisponivelRotuladoFilterImpl
       required this.finalDate,
       required this.codEstoque,
       required this.codItem,
+      required this.idEtiquetaContem,
       required this.idEtiqueta,
       required this.codProprietario,
       required this.entrada,
@@ -265,6 +280,8 @@ class _$ConsultaEstoqueDisponivelRotuladoFilterImpl
   @override
   int? codItem;
   @override
+  String? idEtiquetaContem;
+  @override
   String? idEtiqueta;
   @override
   int? codProprietario;
@@ -277,7 +294,7 @@ class _$ConsultaEstoqueDisponivelRotuladoFilterImpl
 
   @override
   String toString() {
-    return 'ConsultaEstoqueDisponivelRotuladoFilter(startDate: $startDate, finalDate: $finalDate, codEstoque: $codEstoque, codItem: $codItem, idEtiqueta: $idEtiqueta, codProprietario: $codProprietario, entrada: $entrada, saida: $saida, item: $item)';
+    return 'ConsultaEstoqueDisponivelRotuladoFilter(startDate: $startDate, finalDate: $finalDate, codEstoque: $codEstoque, codItem: $codItem, idEtiquetaContem: $idEtiquetaContem, idEtiqueta: $idEtiqueta, codProprietario: $codProprietario, entrada: $entrada, saida: $saida, item: $item)';
   }
 
   @JsonKey(ignore: true)
@@ -304,6 +321,7 @@ abstract class _ConsultaEstoqueDisponivelRotuladoFilter
       required DateTime? finalDate,
       required int? codEstoque,
       required int? codItem,
+      required String? idEtiquetaContem,
       required String? idEtiqueta,
       required int? codProprietario,
       required bool? entrada,
@@ -327,6 +345,9 @@ abstract class _ConsultaEstoqueDisponivelRotuladoFilter
   @override
   int? get codItem;
   set codItem(int? value);
+  @override
+  String? get idEtiquetaContem;
+  set idEtiquetaContem(String? value);
   @override
   String? get idEtiqueta;
   set idEtiqueta(String? value);

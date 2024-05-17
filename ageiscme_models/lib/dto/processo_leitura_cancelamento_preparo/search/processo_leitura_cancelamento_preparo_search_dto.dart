@@ -8,8 +8,8 @@ part 'processo_leitura_cancelamento_preparo_search_dto.g.dart';
 abstract class ProcessoLeituraCancelamentoPreparoSearchDTO
     with _$ProcessoLeituraCancelamentoPreparoSearchDTO {
   factory ProcessoLeituraCancelamentoPreparoSearchDTO({
-    int? codKit,
-    int? codItem,
+    String? codBarraKit,
+    String? idEtiqueta,
   }) = _ProcessoLeituraCancelamentoPreparoSearchDTO;
 
   factory ProcessoLeituraCancelamentoPreparoSearchDTO.fromJson(Map<String, Object?> json) =>

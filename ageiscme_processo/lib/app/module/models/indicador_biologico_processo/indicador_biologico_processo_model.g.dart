@@ -9,13 +9,13 @@ part of 'indicador_biologico_processo_model.dart';
 _$IndicadorBiologicoProcessoModelImpl
     _$$IndicadorBiologicoProcessoModelImplFromJson(Map<String, dynamic> json) =>
         _$IndicadorBiologicoProcessoModelImpl(
-          codBarra: json['codBarra'] as String?,
+          codBarraIndicador: json['codBarraIndicador'] as String?,
           codServicoTipo: json['codServicoTipo'] as int?,
         );
 
 Map<String, dynamic> _$$IndicadorBiologicoProcessoModelImplToJson(
         _$IndicadorBiologicoProcessoModelImpl instance) =>
     <String, dynamic>{
-      'codBarra': instance.codBarra,
+      'codBarraIndicador': instance.codBarraIndicador,
       'codServicoTipo': instance.codServicoTipo,
     };

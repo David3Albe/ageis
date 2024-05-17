@@ -21,8 +21,8 @@ IndicadorBiologicoProcessoModel _$IndicadorBiologicoProcessoModelFromJson(
 
 /// @nodoc
 mixin _$IndicadorBiologicoProcessoModel {
-  String? get codBarra => throw _privateConstructorUsedError;
-  set codBarra(String? value) => throw _privateConstructorUsedError;
+  String? get codBarraIndicador => throw _privateConstructorUsedError;
+  set codBarraIndicador(String? value) => throw _privateConstructorUsedError;
   int? get codServicoTipo => throw _privateConstructorUsedError;
   set codServicoTipo(int? value) => throw _privateConstructorUsedError;
 
@@ -40,7 +40,7 @@ abstract class $IndicadorBiologicoProcessoModelCopyWith<$Res> {
       _$IndicadorBiologicoProcessoModelCopyWithImpl<$Res,
           IndicadorBiologicoProcessoModel>;
   @useResult
-  $Res call({String? codBarra, int? codServicoTipo});
+  $Res call({String? codBarraIndicador, int? codServicoTipo});
 }
 
 /// @nodoc
@@ -57,13 +57,13 @@ class _$IndicadorBiologicoProcessoModelCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? codBarra = freezed,
+    Object? codBarraIndicador = freezed,
     Object? codServicoTipo = freezed,
   }) {
     return _then(_value.copyWith(
-      codBarra: freezed == codBarra
-          ? _value.codBarra
-          : codBarra // ignore: cast_nullable_to_non_nullable
+      codBarraIndicador: freezed == codBarraIndicador
+          ? _value.codBarraIndicador
+          : codBarraIndicador // ignore: cast_nullable_to_non_nullable
               as String?,
       codServicoTipo: freezed == codServicoTipo
           ? _value.codServicoTipo
@@ -82,7 +82,7 @@ abstract class _$$IndicadorBiologicoProcessoModelImplCopyWith<$Res>
       __$$IndicadorBiologicoProcessoModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? codBarra, int? codServicoTipo});
+  $Res call({String? codBarraIndicador, int? codServicoTipo});
 }
 
 /// @nodoc
@@ -98,13 +98,13 @@ class __$$IndicadorBiologicoProcessoModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? codBarra = freezed,
+    Object? codBarraIndicador = freezed,
     Object? codServicoTipo = freezed,
   }) {
     return _then(_$IndicadorBiologicoProcessoModelImpl(
-      codBarra: freezed == codBarra
-          ? _value.codBarra
-          : codBarra // ignore: cast_nullable_to_non_nullable
+      codBarraIndicador: freezed == codBarraIndicador
+          ? _value.codBarraIndicador
+          : codBarraIndicador // ignore: cast_nullable_to_non_nullable
               as String?,
       codServicoTipo: freezed == codServicoTipo
           ? _value.codServicoTipo
@@ -118,7 +118,8 @@ class __$$IndicadorBiologicoProcessoModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$IndicadorBiologicoProcessoModelImpl
     extends _IndicadorBiologicoProcessoModel with DiagnosticableTreeMixin {
-  _$IndicadorBiologicoProcessoModelImpl({this.codBarra, this.codServicoTipo})
+  _$IndicadorBiologicoProcessoModelImpl(
+      {this.codBarraIndicador, this.codServicoTipo})
       : super._();
 
   factory _$IndicadorBiologicoProcessoModelImpl.fromJson(
@@ -126,13 +127,13 @@ class _$IndicadorBiologicoProcessoModelImpl
       _$$IndicadorBiologicoProcessoModelImplFromJson(json);
 
   @override
-  String? codBarra;
+  String? codBarraIndicador;
   @override
   int? codServicoTipo;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'IndicadorBiologicoProcessoModel(codBarra: $codBarra, codServicoTipo: $codServicoTipo)';
+    return 'IndicadorBiologicoProcessoModel(codBarraIndicador: $codBarraIndicador, codServicoTipo: $codServicoTipo)';
   }
 
   @override
@@ -140,7 +141,7 @@ class _$IndicadorBiologicoProcessoModelImpl
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'IndicadorBiologicoProcessoModel'))
-      ..add(DiagnosticsProperty('codBarra', codBarra))
+      ..add(DiagnosticsProperty('codBarraIndicador', codBarraIndicador))
       ..add(DiagnosticsProperty('codServicoTipo', codServicoTipo));
   }
 
@@ -163,7 +164,7 @@ class _$IndicadorBiologicoProcessoModelImpl
 abstract class _IndicadorBiologicoProcessoModel
     extends IndicadorBiologicoProcessoModel {
   factory _IndicadorBiologicoProcessoModel(
-      {String? codBarra,
+      {String? codBarraIndicador,
       int? codServicoTipo}) = _$IndicadorBiologicoProcessoModelImpl;
   _IndicadorBiologicoProcessoModel._() : super._();
 
@@ -171,8 +172,8 @@ abstract class _IndicadorBiologicoProcessoModel
       _$IndicadorBiologicoProcessoModelImpl.fromJson;
 
   @override
-  String? get codBarra;
-  set codBarra(String? value);
+  String? get codBarraIndicador;
+  set codBarraIndicador(String? value);
   @override
   int? get codServicoTipo;
   set codServicoTipo(int? value);

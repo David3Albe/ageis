@@ -21,6 +21,10 @@ _$ConsultaProcessoRespostaEPCEPIFilterImpl
           respostaNao: json['respostaNao'] as bool?,
           entrada: json['entrada'] as bool?,
           saida: json['saida'] as bool?,
+          usuario: json['usuario'] == null
+              ? null
+              : UsuarioDropDownSearchResponseDTO.fromJson(
+                  Map<String, Object?>.from(json['usuario'] as Map)),
         );
 
 Map<String, dynamic> _$$ConsultaProcessoRespostaEPCEPIFilterImplToJson(
@@ -34,4 +38,5 @@ Map<String, dynamic> _$$ConsultaProcessoRespostaEPCEPIFilterImplToJson(
       'respostaNao': instance.respostaNao,
       'entrada': instance.entrada,
       'saida': instance.saida,
+      'usuario': instance.usuario?.toJson(),
     };

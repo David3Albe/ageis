@@ -1,8 +1,6 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/equipamento/equipamento_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/equipamento_manutencao/equipamento_manutencao_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/peca/peca_subit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/servico_tipo/servico_tipo_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/consulta_manutencao/consulta_manutencao_page_state.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento_manutencao/equipamento_manutencao_page_frm/equipamento_manutencao_page_frm.dart';
 import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
@@ -11,7 +9,6 @@ import 'package:ageiscme_data/services/access_user/access_user_service.dart';
 import 'package:ageiscme_data/services/equipamento_manutencao/equipamento_manutencao_service.dart';
 import 'package:ageiscme_models/enums/direito_enum.dart';
 import 'package:ageiscme_models/filters/equipamento_manutencao/equipamento_manutencao_filter.dart';
-import 'package:ageiscme_models/filters/usuario_filter/usuario_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/query_filters/equipamento_manutencao/consulta_manutencao_filter.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
@@ -162,10 +159,8 @@ class _ConsultaManutencaoPageState extends State<ConsultaManutencaoPage> {
   late final EquipamentoCubit equipamentoBloc;
   late final ServicoTipoCubit servicoTipoBloc;
   late final PecaCubit pecaBloc;
-  late final EquipamentoManutencaoCubit equipamentoManutencaoBloc;
   late final ConsultaManutencaoFilter filter;
   late final EquipamentoManutencaoService service;
-  late final UsuarioCubit usuarioCubit;
 
   @override
   void initState() {
@@ -181,10 +176,7 @@ class _ConsultaManutencaoPageState extends State<ConsultaManutencaoPage> {
     servicoTipoBloc.loadAll();
     pecaBloc = PecaCubit();
     pecaBloc.loadAll();
-    equipamentoManutencaoBloc = EquipamentoManutencaoCubit();
-    equipamentoManutencaoBloc.loadAll();
     service = EquipamentoManutencaoService();
-    usuarioCubit = UsuarioCubit();
 
     super.initState();
   }
@@ -271,6 +263,7 @@ class _ConsultaManutencaoPageState extends State<ConsultaManutencaoPage> {
                 children: [
                   Expanded(
                     child: DatePickerWidget(
+                      readOnly: filter.apenasSemTermino == true,
                       setReadonlyBuilder: (context, setReadonlyBuilder) =>
                           setReadonlyDataTermino = setReadonlyBuilder,
                       placeholder: 'Data Término',
@@ -280,15 +273,16 @@ class _ConsultaManutencaoPageState extends State<ConsultaManutencaoPage> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 16, top: 6),
-                    child: Expanded(
-                      child: CustomCheckboxWidget(
-                        checked: filter.apenasSemTermino,
-                        onClick: (value) {
-                          filter.apenasSemTermino = value;
-                          setReadonlyDataTermino(filter.apenasSemTermino==true, true);
-                        },
-                        text: 'Apenas sem término',
-                      ),
+                    child: CustomCheckboxWidget(
+                      checked: filter.apenasSemTermino,
+                      onClick: (value) {
+                        filter.apenasSemTermino = value;
+                        setReadonlyDataTermino(
+                          filter.apenasSemTermino == true,
+                          false,
+                        );
+                      },
+                      text: 'Apenas sem término',
                     ),
                   ),
                 ],
@@ -404,19 +398,6 @@ class _ConsultaManutencaoPageState extends State<ConsultaManutencaoPage> {
     });
   }
 
-  void loadUserCubit() {
-    if (!usuarioCubit.state.loaded) {
-      usuarioCubit.loadFilter(
-        UsuarioFilter(
-          apenasAtivos: true,
-          tipoQuery: UsuarioFilterTipoQuery.SemFoto,
-          ordenarPorNomeCrescente: true,
-          apenasColaboradores: true,
-        ),
-      );
-    }
-  }
-
   Future<EquipamentoManutencaoModel?> getFilter(int cod) async {
     return service.FilterOne(
       EquipamentoManutencaoFilter(
@@ -427,7 +408,6 @@ class _ConsultaManutencaoPageState extends State<ConsultaManutencaoPage> {
 
   Future<void> openModalRedirect(BuildContext context, int cod) async {
     LoadingController loading = LoadingController(context: context);
-    loadUserCubit();
 
     EquipamentoManutencaoModel? manutencao;
     manutencao = await getFilter(cod);
@@ -444,7 +424,6 @@ class _ConsultaManutencaoPageState extends State<ConsultaManutencaoPage> {
       builder: (BuildContext context) {
         return EquipamentoManutencaoPageFrm(
           equipamentoCubit: equipamentoBloc,
-          usuarioCubit: usuarioCubit,
           equipamentoManutencao: manutencao!,
         );
       },

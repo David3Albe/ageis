@@ -37,6 +37,10 @@ mixin _$ConsultaProcessoRespostaEPCEPIFilter {
   set entrada(bool? value) => throw _privateConstructorUsedError;
   bool? get saida => throw _privateConstructorUsedError;
   set saida(bool? value) => throw _privateConstructorUsedError;
+  UsuarioDropDownSearchResponseDTO? get usuario =>
+      throw _privateConstructorUsedError;
+  set usuario(UsuarioDropDownSearchResponseDTO? value) =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -61,7 +65,10 @@ abstract class $ConsultaProcessoRespostaEPCEPIFilterCopyWith<$Res> {
       bool? respostaSim,
       bool? respostaNao,
       bool? entrada,
-      bool? saida});
+      bool? saida,
+      UsuarioDropDownSearchResponseDTO? usuario});
+
+  $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuario;
 }
 
 /// @nodoc
@@ -86,6 +93,7 @@ class _$ConsultaProcessoRespostaEPCEPIFilterCopyWithImpl<$Res,
     Object? respostaNao = freezed,
     Object? entrada = freezed,
     Object? saida = freezed,
+    Object? usuario = freezed,
   }) {
     return _then(_value.copyWith(
       startDate: freezed == startDate
@@ -120,7 +128,24 @@ class _$ConsultaProcessoRespostaEPCEPIFilterCopyWithImpl<$Res,
           ? _value.saida
           : saida // ignore: cast_nullable_to_non_nullable
               as bool?,
+      usuario: freezed == usuario
+          ? _value.usuario
+          : usuario // ignore: cast_nullable_to_non_nullable
+              as UsuarioDropDownSearchResponseDTO?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuario {
+    if (_value.usuario == null) {
+      return null;
+    }
+
+    return $UsuarioDropDownSearchResponseDTOCopyWith<$Res>(_value.usuario!,
+        (value) {
+      return _then(_value.copyWith(usuario: value) as $Val);
+    });
   }
 }
 
@@ -141,7 +166,11 @@ abstract class _$$ConsultaProcessoRespostaEPCEPIFilterImplCopyWith<$Res>
       bool? respostaSim,
       bool? respostaNao,
       bool? entrada,
-      bool? saida});
+      bool? saida,
+      UsuarioDropDownSearchResponseDTO? usuario});
+
+  @override
+  $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuario;
 }
 
 /// @nodoc
@@ -165,6 +194,7 @@ class __$$ConsultaProcessoRespostaEPCEPIFilterImplCopyWithImpl<$Res>
     Object? respostaNao = freezed,
     Object? entrada = freezed,
     Object? saida = freezed,
+    Object? usuario = freezed,
   }) {
     return _then(_$ConsultaProcessoRespostaEPCEPIFilterImpl(
       startDate: freezed == startDate
@@ -199,6 +229,10 @@ class __$$ConsultaProcessoRespostaEPCEPIFilterImplCopyWithImpl<$Res>
           ? _value.saida
           : saida // ignore: cast_nullable_to_non_nullable
               as bool?,
+      usuario: freezed == usuario
+          ? _value.usuario
+          : usuario // ignore: cast_nullable_to_non_nullable
+              as UsuarioDropDownSearchResponseDTO?,
     ));
   }
 }
@@ -215,7 +249,8 @@ class _$ConsultaProcessoRespostaEPCEPIFilterImpl
       required this.respostaSim,
       required this.respostaNao,
       required this.entrada,
-      required this.saida})
+      required this.saida,
+      this.usuario})
       : super._();
 
   factory _$ConsultaProcessoRespostaEPCEPIFilterImpl.fromJson(
@@ -238,10 +273,12 @@ class _$ConsultaProcessoRespostaEPCEPIFilterImpl
   bool? entrada;
   @override
   bool? saida;
+  @override
+  UsuarioDropDownSearchResponseDTO? usuario;
 
   @override
   String toString() {
-    return 'ConsultaProcessoRespostaEPCEPIFilter(startDate: $startDate, finalDate: $finalDate, codUsuario: $codUsuario, codEquipamento: $codEquipamento, respostaSim: $respostaSim, respostaNao: $respostaNao, entrada: $entrada, saida: $saida)';
+    return 'ConsultaProcessoRespostaEPCEPIFilter(startDate: $startDate, finalDate: $finalDate, codUsuario: $codUsuario, codEquipamento: $codEquipamento, respostaSim: $respostaSim, respostaNao: $respostaNao, entrada: $entrada, saida: $saida, usuario: $usuario)';
   }
 
   @JsonKey(ignore: true)
@@ -263,14 +300,16 @@ class _$ConsultaProcessoRespostaEPCEPIFilterImpl
 abstract class _ConsultaProcessoRespostaEPCEPIFilter
     extends ConsultaProcessoRespostaEPCEPIFilter {
   factory _ConsultaProcessoRespostaEPCEPIFilter(
-      {required DateTime? startDate,
-      required DateTime? finalDate,
-      required int? codUsuario,
-      required int? codEquipamento,
-      required bool? respostaSim,
-      required bool? respostaNao,
-      required bool? entrada,
-      required bool? saida}) = _$ConsultaProcessoRespostaEPCEPIFilterImpl;
+          {required DateTime? startDate,
+          required DateTime? finalDate,
+          required int? codUsuario,
+          required int? codEquipamento,
+          required bool? respostaSim,
+          required bool? respostaNao,
+          required bool? entrada,
+          required bool? saida,
+          UsuarioDropDownSearchResponseDTO? usuario}) =
+      _$ConsultaProcessoRespostaEPCEPIFilterImpl;
   _ConsultaProcessoRespostaEPCEPIFilter._() : super._();
 
   factory _ConsultaProcessoRespostaEPCEPIFilter.fromJson(
@@ -301,6 +340,9 @@ abstract class _ConsultaProcessoRespostaEPCEPIFilter
   @override
   bool? get saida;
   set saida(bool? value);
+  @override
+  UsuarioDropDownSearchResponseDTO? get usuario;
+  set usuario(UsuarioDropDownSearchResponseDTO? value);
   @override
   @JsonKey(ignore: true)
   _$$ConsultaProcessoRespostaEPCEPIFilterImplCopyWith<

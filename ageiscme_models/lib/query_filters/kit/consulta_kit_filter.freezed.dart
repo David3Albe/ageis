@@ -28,6 +28,12 @@ mixin _$ConsultaKitFilter {
   set codSituacao(String? value) => throw _privateConstructorUsedError;
   int? get codProprietario => throw _privateConstructorUsedError;
   set codProprietario(int? value) => throw _privateConstructorUsedError;
+  String? get codBarraKitContem => throw _privateConstructorUsedError;
+  set codBarraKitContem(String? value) => throw _privateConstructorUsedError;
+  KitDescritorDropDownSearchResponseDTO? get kitDescritor =>
+      throw _privateConstructorUsedError;
+  set kitDescritor(KitDescritorDropDownSearchResponseDTO? value) =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -45,7 +51,11 @@ abstract class $ConsultaKitFilterCopyWith<$Res> {
       {int? codKitDescritor,
       int? codKit,
       String? codSituacao,
-      int? codProprietario});
+      int? codProprietario,
+      String? codBarraKitContem,
+      KitDescritorDropDownSearchResponseDTO? kitDescritor});
+
+  $KitDescritorDropDownSearchResponseDTOCopyWith<$Res>? get kitDescritor;
 }
 
 /// @nodoc
@@ -65,6 +75,8 @@ class _$ConsultaKitFilterCopyWithImpl<$Res, $Val extends ConsultaKitFilter>
     Object? codKit = freezed,
     Object? codSituacao = freezed,
     Object? codProprietario = freezed,
+    Object? codBarraKitContem = freezed,
+    Object? kitDescritor = freezed,
   }) {
     return _then(_value.copyWith(
       codKitDescritor: freezed == codKitDescritor
@@ -83,7 +95,28 @@ class _$ConsultaKitFilterCopyWithImpl<$Res, $Val extends ConsultaKitFilter>
           ? _value.codProprietario
           : codProprietario // ignore: cast_nullable_to_non_nullable
               as int?,
+      codBarraKitContem: freezed == codBarraKitContem
+          ? _value.codBarraKitContem
+          : codBarraKitContem // ignore: cast_nullable_to_non_nullable
+              as String?,
+      kitDescritor: freezed == kitDescritor
+          ? _value.kitDescritor
+          : kitDescritor // ignore: cast_nullable_to_non_nullable
+              as KitDescritorDropDownSearchResponseDTO?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $KitDescritorDropDownSearchResponseDTOCopyWith<$Res>? get kitDescritor {
+    if (_value.kitDescritor == null) {
+      return null;
+    }
+
+    return $KitDescritorDropDownSearchResponseDTOCopyWith<$Res>(
+        _value.kitDescritor!, (value) {
+      return _then(_value.copyWith(kitDescritor: value) as $Val);
+    });
   }
 }
 
@@ -99,7 +132,12 @@ abstract class _$$ConsultaKitFilterImplCopyWith<$Res>
       {int? codKitDescritor,
       int? codKit,
       String? codSituacao,
-      int? codProprietario});
+      int? codProprietario,
+      String? codBarraKitContem,
+      KitDescritorDropDownSearchResponseDTO? kitDescritor});
+
+  @override
+  $KitDescritorDropDownSearchResponseDTOCopyWith<$Res>? get kitDescritor;
 }
 
 /// @nodoc
@@ -117,6 +155,8 @@ class __$$ConsultaKitFilterImplCopyWithImpl<$Res>
     Object? codKit = freezed,
     Object? codSituacao = freezed,
     Object? codProprietario = freezed,
+    Object? codBarraKitContem = freezed,
+    Object? kitDescritor = freezed,
   }) {
     return _then(_$ConsultaKitFilterImpl(
       codKitDescritor: freezed == codKitDescritor
@@ -135,6 +175,14 @@ class __$$ConsultaKitFilterImplCopyWithImpl<$Res>
           ? _value.codProprietario
           : codProprietario // ignore: cast_nullable_to_non_nullable
               as int?,
+      codBarraKitContem: freezed == codBarraKitContem
+          ? _value.codBarraKitContem
+          : codBarraKitContem // ignore: cast_nullable_to_non_nullable
+              as String?,
+      kitDescritor: freezed == kitDescritor
+          ? _value.kitDescritor
+          : kitDescritor // ignore: cast_nullable_to_non_nullable
+              as KitDescritorDropDownSearchResponseDTO?,
     ));
   }
 }
@@ -146,7 +194,9 @@ class _$ConsultaKitFilterImpl extends _ConsultaKitFilter {
       {required this.codKitDescritor,
       required this.codKit,
       required this.codSituacao,
-      required this.codProprietario})
+      required this.codProprietario,
+      this.codBarraKitContem,
+      this.kitDescritor})
       : super._();
 
   factory _$ConsultaKitFilterImpl.fromJson(Map<String, dynamic> json) =>
@@ -160,10 +210,14 @@ class _$ConsultaKitFilterImpl extends _ConsultaKitFilter {
   String? codSituacao;
   @override
   int? codProprietario;
+  @override
+  String? codBarraKitContem;
+  @override
+  KitDescritorDropDownSearchResponseDTO? kitDescritor;
 
   @override
   String toString() {
-    return 'ConsultaKitFilter(codKitDescritor: $codKitDescritor, codKit: $codKit, codSituacao: $codSituacao, codProprietario: $codProprietario)';
+    return 'ConsultaKitFilter(codKitDescritor: $codKitDescritor, codKit: $codKit, codSituacao: $codSituacao, codProprietario: $codProprietario, codBarraKitContem: $codBarraKitContem, kitDescritor: $kitDescritor)';
   }
 
   @JsonKey(ignore: true)
@@ -183,10 +237,13 @@ class _$ConsultaKitFilterImpl extends _ConsultaKitFilter {
 
 abstract class _ConsultaKitFilter extends ConsultaKitFilter {
   factory _ConsultaKitFilter(
-      {required int? codKitDescritor,
-      required int? codKit,
-      required String? codSituacao,
-      required int? codProprietario}) = _$ConsultaKitFilterImpl;
+          {required int? codKitDescritor,
+          required int? codKit,
+          required String? codSituacao,
+          required int? codProprietario,
+          String? codBarraKitContem,
+          KitDescritorDropDownSearchResponseDTO? kitDescritor}) =
+      _$ConsultaKitFilterImpl;
   _ConsultaKitFilter._() : super._();
 
   factory _ConsultaKitFilter.fromJson(Map<String, dynamic> json) =
@@ -204,6 +261,12 @@ abstract class _ConsultaKitFilter extends ConsultaKitFilter {
   @override
   int? get codProprietario;
   set codProprietario(int? value);
+  @override
+  String? get codBarraKitContem;
+  set codBarraKitContem(String? value);
+  @override
+  KitDescritorDropDownSearchResponseDTO? get kitDescritor;
+  set kitDescritor(KitDescritorDropDownSearchResponseDTO? value);
   @override
   @JsonKey(ignore: true)
   _$$ConsultaKitFilterImplCopyWith<_$ConsultaKitFilterImpl> get copyWith =>

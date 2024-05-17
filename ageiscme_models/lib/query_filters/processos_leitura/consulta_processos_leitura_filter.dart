@@ -16,12 +16,14 @@ sealed class ConsultaProcessosLeituraFilter
     required DateTime? finalTime,
     required int? codKit,
     required int? codItem,
+    required String? idEtiquetaContem,
     required int? codEtapaProcesso,
     required int? lote,
     required String? indicador,
     required String? biologico,
     required bool? implantavel,
     required String? prontuario,
+    required String? codBarraKitContem,
     ItemModel? item,
   }) = _ConsultaProcessosLeituraFilter;
 
@@ -47,5 +49,7 @@ sealed class ConsultaProcessosLeituraFilter
         indicador: null,
         biologico: null,
         prontuario: null,
+        idEtiquetaContem: null,
+        codBarraKitContem: null,
       );
 }

@@ -31,6 +31,13 @@ mixin _$InsumoMovimentoFilter {
   set codInsumo(int? value) => throw _privateConstructorUsedError;
   String? get codTipoMovimento => throw _privateConstructorUsedError;
   set codTipoMovimento(String? value) => throw _privateConstructorUsedError;
+  bool? get carregarInsumo => throw _privateConstructorUsedError;
+  set carregarInsumo(bool? value) => throw _privateConstructorUsedError;
+  bool? get carregarUsuario => throw _privateConstructorUsedError;
+  set carregarUsuario(bool? value) => throw _privateConstructorUsedError;
+  bool? get carregarUsuarioDepoisConsulta => throw _privateConstructorUsedError;
+  set carregarUsuarioDepoisConsulta(bool? value) =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -49,7 +56,10 @@ abstract class $InsumoMovimentoFilterCopyWith<$Res> {
       DateTime? startDate,
       DateTime? finalDate,
       int? codInsumo,
-      String? codTipoMovimento});
+      String? codTipoMovimento,
+      bool? carregarInsumo,
+      bool? carregarUsuario,
+      bool? carregarUsuarioDepoisConsulta});
 }
 
 /// @nodoc
@@ -71,6 +81,9 @@ class _$InsumoMovimentoFilterCopyWithImpl<$Res,
     Object? finalDate = freezed,
     Object? codInsumo = freezed,
     Object? codTipoMovimento = freezed,
+    Object? carregarInsumo = freezed,
+    Object? carregarUsuario = freezed,
+    Object? carregarUsuarioDepoisConsulta = freezed,
   }) {
     return _then(_value.copyWith(
       cod: freezed == cod
@@ -93,6 +106,18 @@ class _$InsumoMovimentoFilterCopyWithImpl<$Res,
           ? _value.codTipoMovimento
           : codTipoMovimento // ignore: cast_nullable_to_non_nullable
               as String?,
+      carregarInsumo: freezed == carregarInsumo
+          ? _value.carregarInsumo
+          : carregarInsumo // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      carregarUsuario: freezed == carregarUsuario
+          ? _value.carregarUsuario
+          : carregarUsuario // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      carregarUsuarioDepoisConsulta: freezed == carregarUsuarioDepoisConsulta
+          ? _value.carregarUsuarioDepoisConsulta
+          : carregarUsuarioDepoisConsulta // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 }
@@ -111,7 +136,10 @@ abstract class _$$InsumoMovimentoFilterImplCopyWith<$Res>
       DateTime? startDate,
       DateTime? finalDate,
       int? codInsumo,
-      String? codTipoMovimento});
+      String? codTipoMovimento,
+      bool? carregarInsumo,
+      bool? carregarUsuario,
+      bool? carregarUsuarioDepoisConsulta});
 }
 
 /// @nodoc
@@ -131,6 +159,9 @@ class __$$InsumoMovimentoFilterImplCopyWithImpl<$Res>
     Object? finalDate = freezed,
     Object? codInsumo = freezed,
     Object? codTipoMovimento = freezed,
+    Object? carregarInsumo = freezed,
+    Object? carregarUsuario = freezed,
+    Object? carregarUsuarioDepoisConsulta = freezed,
   }) {
     return _then(_$InsumoMovimentoFilterImpl(
       cod: freezed == cod
@@ -153,6 +184,18 @@ class __$$InsumoMovimentoFilterImplCopyWithImpl<$Res>
           ? _value.codTipoMovimento
           : codTipoMovimento // ignore: cast_nullable_to_non_nullable
               as String?,
+      carregarInsumo: freezed == carregarInsumo
+          ? _value.carregarInsumo
+          : carregarInsumo // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      carregarUsuario: freezed == carregarUsuario
+          ? _value.carregarUsuario
+          : carregarUsuario // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      carregarUsuarioDepoisConsulta: freezed == carregarUsuarioDepoisConsulta
+          ? _value.carregarUsuarioDepoisConsulta
+          : carregarUsuarioDepoisConsulta // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -165,7 +208,10 @@ class _$InsumoMovimentoFilterImpl implements _InsumoMovimentoFilter {
       this.startDate,
       this.finalDate,
       this.codInsumo,
-      this.codTipoMovimento});
+      this.codTipoMovimento,
+      this.carregarInsumo,
+      this.carregarUsuario,
+      this.carregarUsuarioDepoisConsulta});
 
   factory _$InsumoMovimentoFilterImpl.fromJson(Map<String, dynamic> json) =>
       _$$InsumoMovimentoFilterImplFromJson(json);
@@ -180,10 +226,16 @@ class _$InsumoMovimentoFilterImpl implements _InsumoMovimentoFilter {
   int? codInsumo;
   @override
   String? codTipoMovimento;
+  @override
+  bool? carregarInsumo;
+  @override
+  bool? carregarUsuario;
+  @override
+  bool? carregarUsuarioDepoisConsulta;
 
   @override
   String toString() {
-    return 'InsumoMovimentoFilter(cod: $cod, startDate: $startDate, finalDate: $finalDate, codInsumo: $codInsumo, codTipoMovimento: $codTipoMovimento)';
+    return 'InsumoMovimentoFilter(cod: $cod, startDate: $startDate, finalDate: $finalDate, codInsumo: $codInsumo, codTipoMovimento: $codTipoMovimento, carregarInsumo: $carregarInsumo, carregarUsuario: $carregarUsuario, carregarUsuarioDepoisConsulta: $carregarUsuarioDepoisConsulta)';
   }
 
   @JsonKey(ignore: true)
@@ -207,7 +259,10 @@ abstract class _InsumoMovimentoFilter implements InsumoMovimentoFilter {
       DateTime? startDate,
       DateTime? finalDate,
       int? codInsumo,
-      String? codTipoMovimento}) = _$InsumoMovimentoFilterImpl;
+      String? codTipoMovimento,
+      bool? carregarInsumo,
+      bool? carregarUsuario,
+      bool? carregarUsuarioDepoisConsulta}) = _$InsumoMovimentoFilterImpl;
 
   factory _InsumoMovimentoFilter.fromJson(Map<String, dynamic> json) =
       _$InsumoMovimentoFilterImpl.fromJson;
@@ -227,6 +282,15 @@ abstract class _InsumoMovimentoFilter implements InsumoMovimentoFilter {
   @override
   String? get codTipoMovimento;
   set codTipoMovimento(String? value);
+  @override
+  bool? get carregarInsumo;
+  set carregarInsumo(bool? value);
+  @override
+  bool? get carregarUsuario;
+  set carregarUsuario(bool? value);
+  @override
+  bool? get carregarUsuarioDepoisConsulta;
+  set carregarUsuarioDepoisConsulta(bool? value);
   @override
   @JsonKey(ignore: true)
   _$$InsumoMovimentoFilterImplCopyWith<_$InsumoMovimentoFilterImpl>

@@ -1,15 +1,23 @@
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/item_descritor/item_descritor_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/kit/kit_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/proprietario/proprietario_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/material/consulta_item_etiqueta/consulta_item_etiqueta_page_state.dart';
 import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
 import 'package:ageiscme_data/query_services/item_etiqueta/item_etiqueta_service.dart';
+import 'package:ageiscme_data/services/item/item_service.dart';
+import 'package:ageiscme_data/services/item_descritor/item_descritor_service.dart';
+import 'package:ageiscme_data/services/kit/kit_service.dart';
+import 'package:ageiscme_models/dto/item_descritor/drop_down_search/item_descritor_drop_down_search_dto.dart';
+import 'package:ageiscme_models/dto/kit/drop_down_search/kit_drop_down_search_dto.dart';
+import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/query_filters/item_etiqueta/consulta_item_etiqueta_filter.dart';
+import 'package:ageiscme_models/response_dto/item_descritor/drop_down_search/item_descritor_drop_down_search_response_dto.dart';
+import 'package:ageiscme_models/response_dto/kit/drop_down_search/kit_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/campos/custom_autocomplete/custom_autocomplete_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
-import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
@@ -77,8 +85,6 @@ class _ConsultaItemEtiquetaPageState extends State<ConsultaItemEtiquetaPage> {
 
   late final ConsultaItemEtiquetaPageCubit bloc;
   late final ProprietarioCubit proprietarioBloc;
-  late final KitCubit kitBloc;
-  late final ItemDescritorCubit itemDescritorBloc;
   late final ConsultaItemEtiquetaFilter filter;
 
   @override
@@ -87,14 +93,11 @@ class _ConsultaItemEtiquetaPageState extends State<ConsultaItemEtiquetaPage> {
       service: ConsultaItemEtiquetaService(),
     );
     filter = ConsultaItemEtiquetaFilter.empty();
+    filter.numeroRegistros = 500;
     filter.startDate = DateTime.now().add(const Duration(days: -1));
     filter.finalDate = DateTime.now();
     proprietarioBloc = ProprietarioCubit();
     proprietarioBloc.loadAll();
-    kitBloc = KitCubit();
-    kitBloc.loadAll();
-    itemDescritorBloc = ItemDescritorCubit();
-    itemDescritorBloc.loadAll();
 
     super.initState();
   }
@@ -190,52 +193,68 @@ class _ConsultaItemEtiquetaPageState extends State<ConsultaItemEtiquetaPage> {
                 },
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<KitCubit, List<KitModel>>(
-                bloc: kitBloc,
-                builder: (context, kits) {
-                  KitModel? kit = kits
-                      .where(
-                        (element) => element.cod == filter.codKit,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<KitModel>(
-                    textFunction: (kit) => kit.CodBarraDescritorText(),
-                    initialValue: kit,
-                    sourceList: kits,
-                    onChanged: (value) => filter.codKit = value?.cod,
-                    placeholder: 'Kit',
-                  );
+              CustomAutocompleteWidget<KitDropDownSearchResponseDTO>(
+                initialValue: filter.codBarraKitContem,
+                onChange: (str) => filter.codBarraKitContem = str,
+                onItemSelectedText: (kit) => kit.codBarra,
+                label: 'Kit',
+                title: (p0) => Text(p0.CodBarraDescritorText()),
+                suggestionsCallback: (str) async {
+                  return (await KitService().getDropDownSearchKits(
+                        KitDropDownSearchDTO(
+                          search: str,
+                          numeroRegistros: 30,
+                        ),
+                      ))
+                          ?.$2 ??
+                      [];
                 },
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<ItemDescritorCubit, ItemDescritorState>(
-                bloc: itemDescritorBloc,
-                builder: (context, itensDescritorState) {
-                  if (itensDescritorState.loading) {
-                    return const LoadingWidget();
-                  }
-                  List<ItemDescritorModel> itensDescritores =
-                      itensDescritorState.itensDescritores;
-
-                  ItemDescritorModel? itemDescritor = itensDescritores
-                      .where(
-                        (element) => element.cod == filter.codItemDescritor,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<ItemDescritorModel>(
-                    textFunction: (itemDescritor) =>
-                        itemDescritor.ItemDescritorText(),
-                    initialValue: itemDescritor,
-                    sourceList: itensDescritores,
-                    onChanged: (value) => filter.codItemDescritor = value?.cod,
-                    placeholder: 'Item',
-                  );
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              CustomAutocompleteWidget<ItemModel>(
+                initialValue: filter.idEtiqueta,
+                onChange: (str) {
+                  filter.idEtiqueta = str;
                 },
+                onItemSelectedText: (item) => item.idEtiqueta ?? null,
+                label: 'Item',
+                title: (p0) => Text(p0.EtiquetaDescricaoText()),
+                suggestionsCallback: (str) => ItemService().Filter(
+                  ItemFilter(numeroRegistros: 30, termoPesquisa: str),
+                ),
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
-              TextFieldStringWidget(
-                placeholder: 'DataMatrix Atual do item',
-                onChanged: (value) => filter.idEtiqueta = value,
+              DropDownSearchApiWidget<ItemDescritorDropDownSearchResponseDTO>(
+                search: (str) async =>
+                    (await ItemDescritorService().getDropDownSearch(
+                      ItemDescritorDropDownSearchDTO(
+                        numeroRegistros: 30,
+                        termoPesquisa: str,
+                        apenasAtivos: true,
+                      ),
+                    ))
+                        ?.$2 ??
+                    [],
+                textFunction: (itemDescritor) => itemDescritor.Nome(),
+                initialValue: filter.itemDescritor == null
+                    ? null
+                    : ItemDescritorDropDownSearchResponseDTO(
+                        cod: filter.itemDescritor!.cod,
+                        nome: filter.itemDescritor?.nome,
+                      ),
+                onChanged: (value) {
+                  filter.codItemDescritor = value?.cod;
+                  filter.itemDescritor = value;
+                },
+                placeholder: 'Item Descritor',
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              TextFieldNumberWidget(
+                placeholder: 'Número Registros',
+                startValue: filter.numeroRegistros,
+                onChanged: (value) => filter.numeroRegistros =
+                    value.isEmpty ? null : int.parse(value),
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
               CustomCheckboxWidget(

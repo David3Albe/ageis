@@ -28,6 +28,7 @@ _$ItemFilterImpl _$$ItemFilterImplFromJson(Map json) => _$ItemFilterImpl(
       termoPesquisa: json['termoPesquisa'] as String?,
       idEtiquetaComecaCom: json['idEtiquetaComecaCom'] as String?,
       idEtiquetaContem: json['idEtiquetaContem'] as String?,
+      codBarraKitContem: json['codBarraKitContem'] as String?,
       tStamp: json['tStamp'] as String?,
       itemFilter: json['itemFilter'] == null
           ? null
@@ -60,6 +61,7 @@ Map<String, dynamic> _$$ItemFilterImplToJson(_$ItemFilterImpl instance) =>
       'termoPesquisa': instance.termoPesquisa,
       'idEtiquetaComecaCom': instance.idEtiquetaComecaCom,
       'idEtiquetaContem': instance.idEtiquetaContem,
+      'codBarraKitContem': instance.codBarraKitContem,
       'tStamp': instance.tStamp,
       'itemFilter': instance.itemFilter?.toJson(),
       'kitFilter': instance.kitFilter?.toJson(),

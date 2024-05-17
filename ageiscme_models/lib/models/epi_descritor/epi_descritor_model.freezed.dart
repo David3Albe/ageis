@@ -44,6 +44,10 @@ mixin _$EpiDescritorModel {
   String? get tstamp => throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
   set tstamp(String? value) => throw _privateConstructorUsedError;
+  int? get codFornecedor => throw _privateConstructorUsedError;
+  set codFornecedor(int? value) => throw _privateConstructorUsedError;
+  FornecedorModel? get fornecedor => throw _privateConstructorUsedError;
+  set fornecedor(FornecedorModel? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -68,7 +72,11 @@ abstract class $EpiDescritorModelCopyWith<$Res> {
       int? codInstituicao,
       String? imagem,
       DateTime? ultimaAlteracao,
-      @JsonKey(name: 'tStamp') String? tstamp});
+      @JsonKey(name: 'tStamp') String? tstamp,
+      int? codFornecedor,
+      FornecedorModel? fornecedor});
+
+  $FornecedorModelCopyWith<$Res>? get fornecedor;
 }
 
 /// @nodoc
@@ -95,6 +103,8 @@ class _$EpiDescritorModelCopyWithImpl<$Res, $Val extends EpiDescritorModel>
     Object? imagem = freezed,
     Object? ultimaAlteracao = freezed,
     Object? tstamp = freezed,
+    Object? codFornecedor = freezed,
+    Object? fornecedor = freezed,
   }) {
     return _then(_value.copyWith(
       cod: freezed == cod
@@ -141,7 +151,27 @@ class _$EpiDescritorModelCopyWithImpl<$Res, $Val extends EpiDescritorModel>
           ? _value.tstamp
           : tstamp // ignore: cast_nullable_to_non_nullable
               as String?,
+      codFornecedor: freezed == codFornecedor
+          ? _value.codFornecedor
+          : codFornecedor // ignore: cast_nullable_to_non_nullable
+              as int?,
+      fornecedor: freezed == fornecedor
+          ? _value.fornecedor
+          : fornecedor // ignore: cast_nullable_to_non_nullable
+              as FornecedorModel?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $FornecedorModelCopyWith<$Res>? get fornecedor {
+    if (_value.fornecedor == null) {
+      return null;
+    }
+
+    return $FornecedorModelCopyWith<$Res>(_value.fornecedor!, (value) {
+      return _then(_value.copyWith(fornecedor: value) as $Val);
+    });
   }
 }
 
@@ -164,7 +194,12 @@ abstract class _$$EpiDescritorModelImplCopyWith<$Res>
       int? codInstituicao,
       String? imagem,
       DateTime? ultimaAlteracao,
-      @JsonKey(name: 'tStamp') String? tstamp});
+      @JsonKey(name: 'tStamp') String? tstamp,
+      int? codFornecedor,
+      FornecedorModel? fornecedor});
+
+  @override
+  $FornecedorModelCopyWith<$Res>? get fornecedor;
 }
 
 /// @nodoc
@@ -189,6 +224,8 @@ class __$$EpiDescritorModelImplCopyWithImpl<$Res>
     Object? imagem = freezed,
     Object? ultimaAlteracao = freezed,
     Object? tstamp = freezed,
+    Object? codFornecedor = freezed,
+    Object? fornecedor = freezed,
   }) {
     return _then(_$EpiDescritorModelImpl(
       cod: freezed == cod
@@ -235,6 +272,14 @@ class __$$EpiDescritorModelImplCopyWithImpl<$Res>
           ? _value.tstamp
           : tstamp // ignore: cast_nullable_to_non_nullable
               as String?,
+      codFornecedor: freezed == codFornecedor
+          ? _value.codFornecedor
+          : codFornecedor // ignore: cast_nullable_to_non_nullable
+              as int?,
+      fornecedor: freezed == fornecedor
+          ? _value.fornecedor
+          : fornecedor // ignore: cast_nullable_to_non_nullable
+              as FornecedorModel?,
     ));
   }
 }
@@ -253,7 +298,9 @@ class _$EpiDescritorModelImpl extends _EpiDescritorModel {
       required this.codInstituicao,
       required this.imagem,
       required this.ultimaAlteracao,
-      @JsonKey(name: 'tStamp') required this.tstamp})
+      @JsonKey(name: 'tStamp') required this.tstamp,
+      this.codFornecedor,
+      this.fornecedor})
       : super._();
 
   factory _$EpiDescritorModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -282,10 +329,14 @@ class _$EpiDescritorModelImpl extends _EpiDescritorModel {
   @override
   @JsonKey(name: 'tStamp')
   String? tstamp;
+  @override
+  int? codFornecedor;
+  @override
+  FornecedorModel? fornecedor;
 
   @override
   String toString() {
-    return 'EpiDescritorModel(cod: $cod, descricao: $descricao, numeroCA: $numeroCA, tipoEpi: $tipoEpi, prazoValidade: $prazoValidade, conferenciaVisual: $conferenciaVisual, ativo: $ativo, codInstituicao: $codInstituicao, imagem: $imagem, ultimaAlteracao: $ultimaAlteracao, tstamp: $tstamp)';
+    return 'EpiDescritorModel(cod: $cod, descricao: $descricao, numeroCA: $numeroCA, tipoEpi: $tipoEpi, prazoValidade: $prazoValidade, conferenciaVisual: $conferenciaVisual, ativo: $ativo, codInstituicao: $codInstituicao, imagem: $imagem, ultimaAlteracao: $ultimaAlteracao, tstamp: $tstamp, codFornecedor: $codFornecedor, fornecedor: $fornecedor)';
   }
 
   @JsonKey(ignore: true)
@@ -305,18 +356,19 @@ class _$EpiDescritorModelImpl extends _EpiDescritorModel {
 
 abstract class _EpiDescritorModel extends EpiDescritorModel {
   factory _EpiDescritorModel(
-          {required int? cod,
-          required String? descricao,
-          required String? numeroCA,
-          required int? tipoEpi,
-          required DateTime? prazoValidade,
-          required bool? conferenciaVisual,
-          required bool? ativo,
-          required int? codInstituicao,
-          required String? imagem,
-          required DateTime? ultimaAlteracao,
-          @JsonKey(name: 'tStamp') required String? tstamp}) =
-      _$EpiDescritorModelImpl;
+      {required int? cod,
+      required String? descricao,
+      required String? numeroCA,
+      required int? tipoEpi,
+      required DateTime? prazoValidade,
+      required bool? conferenciaVisual,
+      required bool? ativo,
+      required int? codInstituicao,
+      required String? imagem,
+      required DateTime? ultimaAlteracao,
+      @JsonKey(name: 'tStamp') required String? tstamp,
+      int? codFornecedor,
+      FornecedorModel? fornecedor}) = _$EpiDescritorModelImpl;
   _EpiDescritorModel._() : super._();
 
   factory _EpiDescritorModel.fromJson(Map<String, dynamic> json) =
@@ -357,6 +409,12 @@ abstract class _EpiDescritorModel extends EpiDescritorModel {
   String? get tstamp;
   @JsonKey(name: 'tStamp')
   set tstamp(String? value);
+  @override
+  int? get codFornecedor;
+  set codFornecedor(int? value);
+  @override
+  FornecedorModel? get fornecedor;
+  set fornecedor(FornecedorModel? value);
   @override
   @JsonKey(ignore: true)
   _$$EpiDescritorModelImplCopyWith<_$EpiDescritorModelImpl> get copyWith =>

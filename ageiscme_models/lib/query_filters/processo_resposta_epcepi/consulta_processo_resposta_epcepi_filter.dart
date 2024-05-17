@@ -1,3 +1,4 @@
+import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'consulta_processo_resposta_epcepi_filter.g.dart';
@@ -17,6 +18,7 @@ sealed class ConsultaProcessoRespostaEPCEPIFilter
     required bool? respostaNao,
     required bool? entrada,
     required bool? saida,
+    UsuarioDropDownSearchResponseDTO? usuario,
   }) = _ConsultaProcessoRespostaEPCEPIFilter;
 
   factory ConsultaProcessoRespostaEPCEPIFilter.fromJson(

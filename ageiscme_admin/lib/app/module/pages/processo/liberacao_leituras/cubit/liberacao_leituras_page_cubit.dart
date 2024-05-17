@@ -17,7 +17,7 @@ class LiberacaoLeiturasPageCubit extends Cubit<LiberacaoLeiturasPageState> {
     emit(LiberacaoLeiturasPageState(loading: true, leiturasEmAndamento: []));
     try {
       List<ProcessoLeituraAndamentoModel> leiturasEmAndamento =
-          await service.Filter(
+          await service.FilterNoLock(
         ProcessoLeituraAndamentoFilter(
           carregarUsuario: true,
         ),

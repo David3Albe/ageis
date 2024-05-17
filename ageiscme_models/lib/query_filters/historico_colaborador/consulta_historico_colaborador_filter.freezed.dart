@@ -27,6 +27,10 @@ mixin _$ConsultaHistoricoColaboradorFilter {
   set finalDate(DateTime? value) => throw _privateConstructorUsedError;
   int? get codUsuario => throw _privateConstructorUsedError;
   set codUsuario(int? value) => throw _privateConstructorUsedError;
+  UsuarioDropDownSearchResponseDTO? get usuario =>
+      throw _privateConstructorUsedError;
+  set usuario(UsuarioDropDownSearchResponseDTO? value) =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -43,7 +47,13 @@ abstract class $ConsultaHistoricoColaboradorFilterCopyWith<$Res> {
       _$ConsultaHistoricoColaboradorFilterCopyWithImpl<$Res,
           ConsultaHistoricoColaboradorFilter>;
   @useResult
-  $Res call({DateTime? startDate, DateTime? finalDate, int? codUsuario});
+  $Res call(
+      {DateTime? startDate,
+      DateTime? finalDate,
+      int? codUsuario,
+      UsuarioDropDownSearchResponseDTO? usuario});
+
+  $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuario;
 }
 
 /// @nodoc
@@ -63,6 +73,7 @@ class _$ConsultaHistoricoColaboradorFilterCopyWithImpl<$Res,
     Object? startDate = freezed,
     Object? finalDate = freezed,
     Object? codUsuario = freezed,
+    Object? usuario = freezed,
   }) {
     return _then(_value.copyWith(
       startDate: freezed == startDate
@@ -77,7 +88,24 @@ class _$ConsultaHistoricoColaboradorFilterCopyWithImpl<$Res,
           ? _value.codUsuario
           : codUsuario // ignore: cast_nullable_to_non_nullable
               as int?,
+      usuario: freezed == usuario
+          ? _value.usuario
+          : usuario // ignore: cast_nullable_to_non_nullable
+              as UsuarioDropDownSearchResponseDTO?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuario {
+    if (_value.usuario == null) {
+      return null;
+    }
+
+    return $UsuarioDropDownSearchResponseDTOCopyWith<$Res>(_value.usuario!,
+        (value) {
+      return _then(_value.copyWith(usuario: value) as $Val);
+    });
   }
 }
 
@@ -90,7 +118,14 @@ abstract class _$$ConsultaHistoricoColaboradorFilterImplCopyWith<$Res>
       __$$ConsultaHistoricoColaboradorFilterImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({DateTime? startDate, DateTime? finalDate, int? codUsuario});
+  $Res call(
+      {DateTime? startDate,
+      DateTime? finalDate,
+      int? codUsuario,
+      UsuarioDropDownSearchResponseDTO? usuario});
+
+  @override
+  $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuario;
 }
 
 /// @nodoc
@@ -109,6 +144,7 @@ class __$$ConsultaHistoricoColaboradorFilterImplCopyWithImpl<$Res>
     Object? startDate = freezed,
     Object? finalDate = freezed,
     Object? codUsuario = freezed,
+    Object? usuario = freezed,
   }) {
     return _then(_$ConsultaHistoricoColaboradorFilterImpl(
       startDate: freezed == startDate
@@ -123,6 +159,10 @@ class __$$ConsultaHistoricoColaboradorFilterImplCopyWithImpl<$Res>
           ? _value.codUsuario
           : codUsuario // ignore: cast_nullable_to_non_nullable
               as int?,
+      usuario: freezed == usuario
+          ? _value.usuario
+          : usuario // ignore: cast_nullable_to_non_nullable
+              as UsuarioDropDownSearchResponseDTO?,
     ));
   }
 }
@@ -134,7 +174,8 @@ class _$ConsultaHistoricoColaboradorFilterImpl
   _$ConsultaHistoricoColaboradorFilterImpl(
       {required this.startDate,
       required this.finalDate,
-      required this.codUsuario})
+      required this.codUsuario,
+      this.usuario})
       : super._();
 
   factory _$ConsultaHistoricoColaboradorFilterImpl.fromJson(
@@ -147,10 +188,12 @@ class _$ConsultaHistoricoColaboradorFilterImpl
   DateTime? finalDate;
   @override
   int? codUsuario;
+  @override
+  UsuarioDropDownSearchResponseDTO? usuario;
 
   @override
   String toString() {
-    return 'ConsultaHistoricoColaboradorFilter(startDate: $startDate, finalDate: $finalDate, codUsuario: $codUsuario)';
+    return 'ConsultaHistoricoColaboradorFilter(startDate: $startDate, finalDate: $finalDate, codUsuario: $codUsuario, usuario: $usuario)';
   }
 
   @JsonKey(ignore: true)
@@ -172,9 +215,11 @@ class _$ConsultaHistoricoColaboradorFilterImpl
 abstract class _ConsultaHistoricoColaboradorFilter
     extends ConsultaHistoricoColaboradorFilter {
   factory _ConsultaHistoricoColaboradorFilter(
-      {required DateTime? startDate,
-      required DateTime? finalDate,
-      required int? codUsuario}) = _$ConsultaHistoricoColaboradorFilterImpl;
+          {required DateTime? startDate,
+          required DateTime? finalDate,
+          required int? codUsuario,
+          UsuarioDropDownSearchResponseDTO? usuario}) =
+      _$ConsultaHistoricoColaboradorFilterImpl;
   _ConsultaHistoricoColaboradorFilter._() : super._();
 
   factory _ConsultaHistoricoColaboradorFilter.fromJson(
@@ -190,6 +235,9 @@ abstract class _ConsultaHistoricoColaboradorFilter
   @override
   int? get codUsuario;
   set codUsuario(int? value);
+  @override
+  UsuarioDropDownSearchResponseDTO? get usuario;
+  set usuario(UsuarioDropDownSearchResponseDTO? value);
   @override
   @JsonKey(ignore: true)
   _$$ConsultaHistoricoColaboradorFilterImplCopyWith<

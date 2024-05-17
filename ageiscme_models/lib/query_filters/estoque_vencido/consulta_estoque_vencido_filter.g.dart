@@ -12,7 +12,9 @@ _$ConsultaEstoqueVencidoFilterImpl _$$ConsultaEstoqueVencidoFilterImplFromJson(
       codEstoque: json['codEstoque'] as int?,
       codLocalEstoque: json['codLocalEstoque'] as int?,
       codKit: json['codKit'] as int?,
+      codBarraKitContem: json['codBarraKitContem'] as String?,
       codItem: json['codItem'] as int?,
+      idEtiquetaContem: json['idEtiquetaContem'] as String?,
       rotulado: json['rotulado'] as bool?,
       item: json['item'] == null
           ? null
@@ -25,7 +27,9 @@ Map<String, dynamic> _$$ConsultaEstoqueVencidoFilterImplToJson(
       'codEstoque': instance.codEstoque,
       'codLocalEstoque': instance.codLocalEstoque,
       'codKit': instance.codKit,
+      'codBarraKitContem': instance.codBarraKitContem,
       'codItem': instance.codItem,
+      'idEtiquetaContem': instance.idEtiquetaContem,
       'rotulado': instance.rotulado,
       'item': instance.item?.toJson(),
     };

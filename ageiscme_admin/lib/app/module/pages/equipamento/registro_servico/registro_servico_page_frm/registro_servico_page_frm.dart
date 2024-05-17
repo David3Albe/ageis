@@ -1,29 +1,39 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/equipamento/equipamento_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/servico_tipo/servico_tipo_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/equipamento/registro_servico/cubits/readonly_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/registro_servico/registro_servico_page_frm/registro_service_page_frm_controller.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/registro_servico/registro_servico_page_frm/registro_servico_page_frm_state.dart';
+import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_data/services/item/item_service.dart';
+import 'package:ageiscme_data/services/usuario/usuario_service.dart';
 import 'package:ageiscme_data/stores/authentication/authentication_store.dart';
+import 'package:ageiscme_impressoes/dto/monitoring_print/monitoring_print_dto.dart';
+import 'package:ageiscme_impressoes/prints/monitoring_printer/monitoring_printer_controller.dart';
 import 'package:ageiscme_models/dto/authentication_result/authentication_result_dto.dart';
+import 'package:ageiscme_models/dto/usuario/usuario_drop_down_search_dto.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
 import 'package:compartilhados/alert_dialog/form_alert_dialog_widget.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/delete_image_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/open_doc/open_doc_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/upload_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/label_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_file_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_save_file_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
+import 'package:compartilhados/functions/file_helper/file_object_model.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/modular_export.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +43,6 @@ class RegistroServicoPageFrm extends StatefulWidget {
     Key? key,
     required this.registroServico,
     required this.equipamentoCubit,
-    required this.usuarioCubit,
     required this.itemFilter,
     this.equipamentoReadOnly,
     this.itemReadOnly,
@@ -42,7 +51,6 @@ class RegistroServicoPageFrm extends StatefulWidget {
   final RegistroServicoModel registroServico;
   final EquipamentoCubit equipamentoCubit;
   final ItemFilter itemFilter;
-  final UsuarioCubit usuarioCubit;
   final bool? equipamentoReadOnly;
   final bool? itemReadOnly;
 
@@ -55,6 +63,8 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
   _RegistroServicoPageFrmState({required this.registroServico});
   RegistroServicoModel registroServico;
 
+  late ReadonlyCubit readonlyCubit;
+
   Future<AuthenticationResultDTO?> recuperaUsuario() async {
     return await Modular.get<AuthenticationStore>().GetAuthenticated();
   }
@@ -62,6 +72,8 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
   late final RegistroServicePageFrmController controller;
 
   void initState() {
+    readonlyCubit = ReadonlyCubit();
+    readonlyCubit.setarReadonly();
     controller = RegistroServicePageFrmController(
       registroServico: registroServico,
     );
@@ -88,17 +100,16 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
   Widget build(BuildContext context) {
     double paddingHorizontalScale = MediaQuery.of(context).size.width / 1920;
     Size size = MediaQuery.of(context).size;
-    return BlocListener<RegistroServicoPageFrmCubit,
-        RegistroServicoPageFrmState>(
-      bloc: controller.cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
-      child:
-          BlocBuilder<RegistroServicoPageFrmCubit, RegistroServicoPageFrmState>(
+    return MultiBlocProvider(
+      providers: [BlocProvider.value(value: readonlyCubit)],
+      child: BlocConsumer<RegistroServicoPageFrmCubit,
+          RegistroServicoPageFrmState>(
         bloc: controller.cubit,
+        listener: (context, state) {
+          if (state.saved) {
+            Navigator.of(context).pop((state.saved, state.message));
+          }
+        },
         builder: (context, state) {
           return FormAlertDialogWidget(
             title: Row(
@@ -223,7 +234,6 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                                 );
                                 List<ServicoTipoModel> servicos = controller
                                     .buscarServicosEquipamento(servicosTipos);
-                                print(servicos);
 
                                 return DropDownSearchWidget<ServicoTipoModel>(
                                   refreshSourceListBuilder:
@@ -324,32 +334,31 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                       child: Row(
                         children: [
                           Expanded(
-                            child: BlocBuilder<UsuarioCubit, UsuarioState>(
-                              bloc: widget.usuarioCubit,
-                              builder: (context, usuarioState) {
-                                if (usuarioState.loading) {
-                                  return const Center(child: LoadingWidget());
-                                }
-                                List<UsuarioModel> usuarios =
-                                    usuarioState.usuarios;
-
-                                UsuarioModel? usuario = usuarios
-                                    .where(
-                                      (element) =>
-                                          element.cod.toString() ==
-                                          registroServico.tecnico,
+                            child: DropDownSearchApiWidget<
+                                UsuarioDropDownSearchResponseDTO>(
+                              search: (str) async =>
+                                  (await UsuarioService().getDropDownSearch(
+                                    UsuarioDropDownSearchDTO(
+                                      numeroRegistros: 30,
+                                      search: str,
+                                    ),
+                                  ))
+                                      ?.$2 ??
+                                  [],
+                              textFunction: (usuario) => usuario.CodBarraNome(),
+                              initialValue: registroServico.usuario != null
+                                  ? UsuarioDropDownSearchResponseDTO(
+                                      cod: registroServico.codUsuario!,
+                                      nome: registroServico.usuario!.nome,
+                                      codBarra:
+                                          registroServico.usuario!.codBarra!,
                                     )
-                                    .firstOrNull;
-                                return DropDownSearchWidget(
-                                  textFunction: (usuario) =>
-                                      usuario.CodBarraNomeText(),
-                                  initialValue: usuario,
-                                  sourceList: usuarios,
-                                  onChanged: (value) => registroServico
-                                      .tecnico = value?.cod!.toString(),
-                                  placeholder: 'Responsável',
-                                );
+                                  : registroServico.usuarioDropDown,
+                              onChanged: (value) {
+                                registroServico.usuarioDropDown = value;
+                                registroServico.tecnico = value?.cod.toString();
                               },
+                              placeholder: 'Responsável',
                             ),
                           ),
                           const SizedBox(width: 16.0),
@@ -417,63 +426,76 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                             'Documento Anexado: ${registroServico.docAnexaNome == null ? 'Nenhum Documento Encontrado' : registroServico.docAnexaNome}',
                       ),
                     ),
-                    const Padding(padding: EdgeInsets.only(top: 5)),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Wrap(
-                            runSpacing: 16 * paddingHorizontalScale,
-                            spacing: 16 * paddingHorizontalScale,
-                            children: [
-                              UploadButtonWidget(
-                                placeholder: 'Anexar DOC',
-                                imageSelected: (value1, value2) {
-                                  salvarArquivo(value1, value2);
-                                },
-                              ),
-                              DeleteImageButtonWidget(
-                                placeholder: 'Excluir DOC',
-                                onPressed: registroServico.docAnexa == null
-                                    ? null
-                                    : () => {excluirArquivo()},
-                              ),
-                              OpenDocWidget(
-                                placeholder: 'Abrir DOC',
-                                documentoString: registroServico.docAnexa,
-                                documentName: registroServico.docAnexaNome ??
-                                    'arquivo sem nome.jpg',
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Padding(padding: EdgeInsets.only(top: 14.0)),
                   ],
                 ),
               ),
             ),
             actions: [
-              Wrap(
-                spacing: 16 * paddingHorizontalScale,
-                runSpacing: 16 * paddingHorizontalScale,
-                alignment: WrapAlignment.end,
+              Row(
                 children: [
-                  SaveButtonWidget(
-                    readonly:
-                        registroServico.cod != null || registroServico.cod != 0,
-                    onPressed: () => {salvar()},
+                  CustomPopupMenuWidget(
+                    items: [
+                      CustomPopupItemFileModel.getFileItem(
+                        'Anexar DOC',
+                        salvarDoc,
+                      ),
+                      if (registroServico.docAnexa != null &&
+                          registroServico.docAnexaNome != null)
+                        CustomPopupItemModel(
+                          text: 'Excluir DOC',
+                          onTap: excluirDoc,
+                        ),
+                      if (registroServico.docAnexa != null &&
+                          registroServico.docAnexaNome != null)
+                        CustomPopupItemSaveFileModel.getOpenDocItem(
+                          text: 'Abrir DOC',
+                          context: context,
+                          docName: registroServico.docAnexaNome,
+                          docString: registroServico.docAnexa,
+                        ),
+                      if (registroServico.cod != null &&
+                          registroServico.cod != 0)
+                        CustomPopupItemHistoryModel.getHistoryItem(
+                          child: HistoricoPage(
+                            pk: registroServico.cod!,
+                            termo: 'REGISTRO_SERVICO',
+                          ),
+                          context: context,
+                        ),
+                      CustomPopupItemModel(
+                        text: 'Imprimir Etiqueta',
+                        onTap: printTag,
+                      ),
+                    ],
                   ),
-                  CleanButtonWidget(
-                    onPressed: () => {
-                      setState(() {
-                        registroServico = RegistroServicoModel.empty();
-                        controller.setFields();
-                      }),
-                    },
-                  ),
-                  CancelButtonUnfilledWidget(
-                    onPressed: () => {Navigator.of(context).pop((false, ''))},
+                  const Spacer(),
+                  Wrap(
+                    spacing: 16 * paddingHorizontalScale,
+                    runSpacing: 16 * paddingHorizontalScale,
+                    alignment: WrapAlignment.end,
+                    children: [
+                      SaveButtonWidget(
+                        readonly: context.select(
+                          (ReadonlyCubit readonlyCubit) =>
+                              readonlyCubit.state.botaoSalvarReadonly,
+                        ),
+                        onPressed: () {
+                          salvar();
+                        },
+                      ),
+                      CleanButtonWidget(
+                        onPressed: () => {
+                          setState(() {
+                            registroServico = RegistroServicoModel.empty();
+                            controller.setFields();
+                          }),
+                        },
+                      ),
+                      CancelButtonUnfilledWidget(
+                        onPressed: () =>
+                            {Navigator.of(context).pop((false, ''))},
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -484,14 +506,45 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
     );
   }
 
-  void salvarArquivo(String value1, String value2) {
+  Future printTag() async {
+    if (registroServico.cod == null || registroServico.cod == 0) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'É necessário ter o Monitoramento cadastrado para fazer a impressão da etiqueta.',
+      );
+      return;
+    }
+    AuthenticationResultDTO? auth =
+        await Modular.get<AuthenticationStore>().GetAuthenticated();
+
+    MonitoringPrintDTO monitoringPrintDTO = MonitoringPrintDTO(
+      cod: registroServico.cod!,
+      companyCod: registroServico.codInstituicao!,
+      companyName: auth!.instituicao!.nome!,
+      dataAtual: DateTime.now(),
+      serviceTypeName: registroServico.servicoTipo!.nome!,
+      userName: auth.usuario!.nome!,
+      equipamentCod: registroServico.codEquipamento?.toString(),
+      equipamentName: registroServico.equipamento?.nome,
+      itemCod: registroServico.codItem?.toString(),
+      itemName: registroServico.item?.descricao,
+      userDocClasse: auth.usuario!.docClasse,
+    );
+    MonitoringPrinterController controller =
+        MonitoringPrinterController(context: context, dto: monitoringPrintDTO);
+    await controller.print();
+  }
+
+  void salvarDoc(Future<FileObjectModel?> Function() onSelectFile) async {
+    FileObjectModel? fileNew = await onSelectFile();
+    if (fileNew == null) return;
     setState(() {
-      registroServico.docAnexa = value1;
-      registroServico.docAnexaNome = value2;
+      registroServico.docAnexa = fileNew.base64;
+      registroServico.docAnexaNome = fileNew.fileName;
     });
   }
 
-  void excluirArquivo() {
+  void excluirDoc() {
     setState(() {
       registroServico.docAnexa = null;
       registroServico.docAnexaNome = null;

@@ -1,3 +1,4 @@
+import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_admin/app/module/pages/material/kit_cor/kit_cor_page_frm/kit_cor_page_frm_state.dart';
 import 'package:ageiscme_data/services/kit_cor/kit_cor_service.dart';
 import 'package:ageiscme_models/main.dart';
@@ -8,6 +9,8 @@ import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
@@ -195,6 +198,18 @@ class _KitCorPageFrmState extends State<KitCorPageFrm> {
                     const Spacer(),
                     Row(
                       children: [
+                        if (kitCor.cod != null && kitCor.cod != 0)
+                          CustomPopupMenuWidget(
+                            items: [
+                              CustomPopupItemHistoryModel.getHistoryItem(
+                                child: HistoricoPage(
+                                  pk: kitCor.cod!,
+                                  termo: 'KIT_COR',
+                                ),
+                                context: context,
+                              ),
+                            ],
+                          ),
                         const Spacer(),
                         Padding(
                           padding: const EdgeInsets.only(left: 16.0),

@@ -1,3 +1,4 @@
+import 'package:ageiscme_models/models/fornecedor/fornecedor_model.dart';
 import 'package:compartilhados/mixins/drop_down_text.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -20,6 +21,8 @@ abstract class EpiDescritorModel with _$EpiDescritorModel, DropDownText {
     required String? imagem,
     required DateTime? ultimaAlteracao,
     @JsonKey(name: 'tStamp') required String? tstamp,
+    int? codFornecedor,
+    FornecedorModel? fornecedor,
   }) = _EpiDescritorModel;
 
   factory EpiDescritorModel.fromJson(Map<String, Object?> json) =>

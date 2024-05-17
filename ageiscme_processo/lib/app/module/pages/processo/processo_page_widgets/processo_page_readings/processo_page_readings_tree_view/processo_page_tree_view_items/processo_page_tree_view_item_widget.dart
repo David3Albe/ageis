@@ -9,13 +9,23 @@ class ProcessoPageTreeViewItemWidget extends StatelessWidget {
   final ItemProcessoModel item;
   @override
   Widget build(BuildContext context) {
+    print('processo_page_tree_view_item_rebuild');
+    (double, double?) escalaHeight = context.select(
+      (ProcessoLeituraCubit cubit) => (
+        cubit.state.processo.getEscala(),
+        cubit.state.processo.getLineHeightPadraoMedium()
+      ),
+    );
     return Align(
       alignment: Alignment.centerLeft,
       child: SelectableText(
-      onTap: () => showItem(context),
+        onTap: () => showItem(context),
         '${item.idEtiqueta} ${item.descricao}',
-        style:
-            TextStyle(fontSize: HelperFunctions.calculaFontSize(context, 16)),
+        style: TextStyle(
+          fontSize:
+              HelperFunctions.calculaFontSize(context, 14) * escalaHeight.$1,
+          height: escalaHeight.$2,
+        ),
       ),
     );
   }

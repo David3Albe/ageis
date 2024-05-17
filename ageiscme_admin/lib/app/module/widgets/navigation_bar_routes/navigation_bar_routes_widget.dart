@@ -24,7 +24,7 @@ class NavigationBarRoutesWidget extends StatelessWidget {
   List<Widget> getRoutes(String currentRoute) {
     List<Widget> widgets = [];
     List<ItemMenuModel> itens = ItemMenuService()
-        .getItems()
+        .getItems({}, ignorarDireitos: true)
         .getLastLevels()
         .where(
           (element) => element.route == currentRoute.replaceAll('/admin', ''),

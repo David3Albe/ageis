@@ -57,6 +57,8 @@ mixin _$InstituicaoModel {
   String? get tstamp => throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
   set tstamp(String? value) => throw _privateConstructorUsedError;
+  double? get escalaFonte => throw _privateConstructorUsedError;
+  set escalaFonte(double? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -87,7 +89,8 @@ abstract class $InstituicaoModelCopyWith<$Res> {
       bool? embalagemItem,
       bool? naoAlertarKitIncompleto,
       int? tempoMin,
-      @JsonKey(name: 'tStamp') String? tstamp});
+      @JsonKey(name: 'tStamp') String? tstamp,
+      double? escalaFonte});
 }
 
 /// @nodoc
@@ -120,6 +123,7 @@ class _$InstituicaoModelCopyWithImpl<$Res, $Val extends InstituicaoModel>
     Object? naoAlertarKitIncompleto = freezed,
     Object? tempoMin = freezed,
     Object? tstamp = freezed,
+    Object? escalaFonte = freezed,
   }) {
     return _then(_value.copyWith(
       cod: freezed == cod
@@ -190,6 +194,10 @@ class _$InstituicaoModelCopyWithImpl<$Res, $Val extends InstituicaoModel>
           ? _value.tstamp
           : tstamp // ignore: cast_nullable_to_non_nullable
               as String?,
+      escalaFonte: freezed == escalaFonte
+          ? _value.escalaFonte
+          : escalaFonte // ignore: cast_nullable_to_non_nullable
+              as double?,
     ) as $Val);
   }
 }
@@ -219,7 +227,8 @@ abstract class _$$InstituicaoModelImplCopyWith<$Res>
       bool? embalagemItem,
       bool? naoAlertarKitIncompleto,
       int? tempoMin,
-      @JsonKey(name: 'tStamp') String? tstamp});
+      @JsonKey(name: 'tStamp') String? tstamp,
+      double? escalaFonte});
 }
 
 /// @nodoc
@@ -250,6 +259,7 @@ class __$$InstituicaoModelImplCopyWithImpl<$Res>
     Object? naoAlertarKitIncompleto = freezed,
     Object? tempoMin = freezed,
     Object? tstamp = freezed,
+    Object? escalaFonte = freezed,
   }) {
     return _then(_$InstituicaoModelImpl(
       cod: freezed == cod
@@ -320,6 +330,10 @@ class __$$InstituicaoModelImplCopyWithImpl<$Res>
           ? _value.tstamp
           : tstamp // ignore: cast_nullable_to_non_nullable
               as String?,
+      escalaFonte: freezed == escalaFonte
+          ? _value.escalaFonte
+          : escalaFonte // ignore: cast_nullable_to_non_nullable
+              as double?,
     ));
   }
 }
@@ -345,7 +359,8 @@ class _$InstituicaoModelImpl extends _InstituicaoModel
       required this.embalagemItem,
       required this.naoAlertarKitIncompleto,
       required this.tempoMin,
-      @JsonKey(name: 'tStamp') required this.tstamp})
+      @JsonKey(name: 'tStamp') required this.tstamp,
+      this.escalaFonte})
       : super._();
 
   factory _$InstituicaoModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -386,10 +401,12 @@ class _$InstituicaoModelImpl extends _InstituicaoModel
   @override
   @JsonKey(name: 'tStamp')
   String? tstamp;
+  @override
+  double? escalaFonte;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'InstituicaoModel(cod: $cod, nome: $nome, endereco: $endereco, cnpj: $cnpj, responsavel: $responsavel, foneResponsavel: $foneResponsavel, foneCme: $foneCme, ativo: $ativo, imprimeQrCode: $imprimeQrCode, debugLevel: $debugLevel, calculadoraRotulados: $calculadoraRotulados, fluxoAlternado: $fluxoAlternado, embalagemKit: $embalagemKit, embalagemItem: $embalagemItem, naoAlertarKitIncompleto: $naoAlertarKitIncompleto, tempoMin: $tempoMin, tstamp: $tstamp)';
+    return 'InstituicaoModel(cod: $cod, nome: $nome, endereco: $endereco, cnpj: $cnpj, responsavel: $responsavel, foneResponsavel: $foneResponsavel, foneCme: $foneCme, ativo: $ativo, imprimeQrCode: $imprimeQrCode, debugLevel: $debugLevel, calculadoraRotulados: $calculadoraRotulados, fluxoAlternado: $fluxoAlternado, embalagemKit: $embalagemKit, embalagemItem: $embalagemItem, naoAlertarKitIncompleto: $naoAlertarKitIncompleto, tempoMin: $tempoMin, tstamp: $tstamp, escalaFonte: $escalaFonte)';
   }
 
   @override
@@ -414,7 +431,8 @@ class _$InstituicaoModelImpl extends _InstituicaoModel
       ..add(DiagnosticsProperty(
           'naoAlertarKitIncompleto', naoAlertarKitIncompleto))
       ..add(DiagnosticsProperty('tempoMin', tempoMin))
-      ..add(DiagnosticsProperty('tstamp', tstamp));
+      ..add(DiagnosticsProperty('tstamp', tstamp))
+      ..add(DiagnosticsProperty('escalaFonte', escalaFonte));
   }
 
   @JsonKey(ignore: true)
@@ -434,24 +452,24 @@ class _$InstituicaoModelImpl extends _InstituicaoModel
 
 abstract class _InstituicaoModel extends InstituicaoModel {
   factory _InstituicaoModel(
-          {required int? cod,
-          required String? nome,
-          required String? endereco,
-          required String? cnpj,
-          required String? responsavel,
-          required String? foneResponsavel,
-          required String? foneCme,
-          required bool? ativo,
-          required bool? imprimeQrCode,
-          required int? debugLevel,
-          required bool? calculadoraRotulados,
-          required bool? fluxoAlternado,
-          required bool? embalagemKit,
-          required bool? embalagemItem,
-          required bool? naoAlertarKitIncompleto,
-          required int? tempoMin,
-          @JsonKey(name: 'tStamp') required String? tstamp}) =
-      _$InstituicaoModelImpl;
+      {required int? cod,
+      required String? nome,
+      required String? endereco,
+      required String? cnpj,
+      required String? responsavel,
+      required String? foneResponsavel,
+      required String? foneCme,
+      required bool? ativo,
+      required bool? imprimeQrCode,
+      required int? debugLevel,
+      required bool? calculadoraRotulados,
+      required bool? fluxoAlternado,
+      required bool? embalagemKit,
+      required bool? embalagemItem,
+      required bool? naoAlertarKitIncompleto,
+      required int? tempoMin,
+      @JsonKey(name: 'tStamp') required String? tstamp,
+      double? escalaFonte}) = _$InstituicaoModelImpl;
   _InstituicaoModel._() : super._();
 
   factory _InstituicaoModel.fromJson(Map<String, dynamic> json) =
@@ -510,6 +528,9 @@ abstract class _InstituicaoModel extends InstituicaoModel {
   String? get tstamp;
   @JsonKey(name: 'tStamp')
   set tstamp(String? value);
+  @override
+  double? get escalaFonte;
+  set escalaFonte(double? value);
   @override
   @JsonKey(ignore: true)
   _$$InstituicaoModelImplCopyWith<_$InstituicaoModelImpl> get copyWith =>

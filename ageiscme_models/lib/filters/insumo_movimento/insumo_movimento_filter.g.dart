@@ -17,6 +17,10 @@ _$InsumoMovimentoFilterImpl _$$InsumoMovimentoFilterImplFromJson(Map json) =>
           : DateTime.parse(json['finalDate'] as String),
       codInsumo: json['codInsumo'] as int?,
       codTipoMovimento: json['codTipoMovimento'] as String?,
+      carregarInsumo: json['carregarInsumo'] as bool?,
+      carregarUsuario: json['carregarUsuario'] as bool?,
+      carregarUsuarioDepoisConsulta:
+          json['carregarUsuarioDepoisConsulta'] as bool?,
     );
 
 Map<String, dynamic> _$$InsumoMovimentoFilterImplToJson(
@@ -27,4 +31,7 @@ Map<String, dynamic> _$$InsumoMovimentoFilterImplToJson(
       'finalDate': instance.finalDate?.toIso8601String(),
       'codInsumo': instance.codInsumo,
       'codTipoMovimento': instance.codTipoMovimento,
+      'carregarInsumo': instance.carregarInsumo,
+      'carregarUsuario': instance.carregarUsuario,
+      'carregarUsuarioDepoisConsulta': instance.carregarUsuarioDepoisConsulta,
     };

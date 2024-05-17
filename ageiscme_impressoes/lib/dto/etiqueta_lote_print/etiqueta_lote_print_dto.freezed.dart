@@ -28,8 +28,8 @@ mixin _$EtiquetaLotePrintDTO {
   set nomeEquipamento(String value) => throw _privateConstructorUsedError;
   String get nomeUsuario => throw _privateConstructorUsedError;
   set nomeUsuario(String value) => throw _privateConstructorUsedError;
-  int get quantidadePadinas => throw _privateConstructorUsedError;
-  set quantidadePadinas(int value) => throw _privateConstructorUsedError;
+  int get impressoes => throw _privateConstructorUsedError;
+  set impressoes(int value) => throw _privateConstructorUsedError;
   String? get userDoc => throw _privateConstructorUsedError;
   set userDoc(String? value) => throw _privateConstructorUsedError;
   String? get codLote => throw _privateConstructorUsedError;
@@ -52,7 +52,7 @@ abstract class $EtiquetaLotePrintDTOCopyWith<$Res> {
       DateTime dataAtual,
       String nomeEquipamento,
       String nomeUsuario,
-      int quantidadePadinas,
+      int impressoes,
       String? userDoc,
       String? codLote});
 }
@@ -75,7 +75,7 @@ class _$EtiquetaLotePrintDTOCopyWithImpl<$Res,
     Object? dataAtual = null,
     Object? nomeEquipamento = null,
     Object? nomeUsuario = null,
-    Object? quantidadePadinas = null,
+    Object? impressoes = null,
     Object? userDoc = freezed,
     Object? codLote = freezed,
   }) {
@@ -96,9 +96,9 @@ class _$EtiquetaLotePrintDTOCopyWithImpl<$Res,
           ? _value.nomeUsuario
           : nomeUsuario // ignore: cast_nullable_to_non_nullable
               as String,
-      quantidadePadinas: null == quantidadePadinas
-          ? _value.quantidadePadinas
-          : quantidadePadinas // ignore: cast_nullable_to_non_nullable
+      impressoes: null == impressoes
+          ? _value.impressoes
+          : impressoes // ignore: cast_nullable_to_non_nullable
               as int,
       userDoc: freezed == userDoc
           ? _value.userDoc
@@ -125,7 +125,7 @@ abstract class _$$EtiquetaLotePrintDTOImplCopyWith<$Res>
       DateTime dataAtual,
       String nomeEquipamento,
       String nomeUsuario,
-      int quantidadePadinas,
+      int impressoes,
       String? userDoc,
       String? codLote});
 }
@@ -145,7 +145,7 @@ class __$$EtiquetaLotePrintDTOImplCopyWithImpl<$Res>
     Object? dataAtual = null,
     Object? nomeEquipamento = null,
     Object? nomeUsuario = null,
-    Object? quantidadePadinas = null,
+    Object? impressoes = null,
     Object? userDoc = freezed,
     Object? codLote = freezed,
   }) {
@@ -166,9 +166,9 @@ class __$$EtiquetaLotePrintDTOImplCopyWithImpl<$Res>
           ? _value.nomeUsuario
           : nomeUsuario // ignore: cast_nullable_to_non_nullable
               as String,
-      quantidadePadinas: null == quantidadePadinas
-          ? _value.quantidadePadinas
-          : quantidadePadinas // ignore: cast_nullable_to_non_nullable
+      impressoes: null == impressoes
+          ? _value.impressoes
+          : impressoes // ignore: cast_nullable_to_non_nullable
               as int,
       userDoc: freezed == userDoc
           ? _value.userDoc
@@ -192,7 +192,7 @@ class _$EtiquetaLotePrintDTOImpl
       required this.dataAtual,
       required this.nomeEquipamento,
       required this.nomeUsuario,
-      required this.quantidadePadinas,
+      required this.impressoes,
       this.userDoc,
       this.codLote});
 
@@ -208,7 +208,7 @@ class _$EtiquetaLotePrintDTOImpl
   @override
   String nomeUsuario;
   @override
-  int quantidadePadinas;
+  int impressoes;
   @override
   String? userDoc;
   @override
@@ -216,7 +216,7 @@ class _$EtiquetaLotePrintDTOImpl
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'EtiquetaLotePrintDTO(codRegistroProcesso: $codRegistroProcesso, dataAtual: $dataAtual, nomeEquipamento: $nomeEquipamento, nomeUsuario: $nomeUsuario, quantidadePadinas: $quantidadePadinas, userDoc: $userDoc, codLote: $codLote)';
+    return 'EtiquetaLotePrintDTO(codRegistroProcesso: $codRegistroProcesso, dataAtual: $dataAtual, nomeEquipamento: $nomeEquipamento, nomeUsuario: $nomeUsuario, impressoes: $impressoes, userDoc: $userDoc, codLote: $codLote)';
   }
 
   @override
@@ -228,7 +228,7 @@ class _$EtiquetaLotePrintDTOImpl
       ..add(DiagnosticsProperty('dataAtual', dataAtual))
       ..add(DiagnosticsProperty('nomeEquipamento', nomeEquipamento))
       ..add(DiagnosticsProperty('nomeUsuario', nomeUsuario))
-      ..add(DiagnosticsProperty('quantidadePadinas', quantidadePadinas))
+      ..add(DiagnosticsProperty('impressoes', impressoes))
       ..add(DiagnosticsProperty('userDoc', userDoc))
       ..add(DiagnosticsProperty('codLote', codLote));
   }
@@ -255,7 +255,7 @@ abstract class _EtiquetaLotePrintDTO implements EtiquetaLotePrintDTO {
       required DateTime dataAtual,
       required String nomeEquipamento,
       required String nomeUsuario,
-      required int quantidadePadinas,
+      required int impressoes,
       String? userDoc,
       String? codLote}) = _$EtiquetaLotePrintDTOImpl;
 
@@ -275,8 +275,8 @@ abstract class _EtiquetaLotePrintDTO implements EtiquetaLotePrintDTO {
   String get nomeUsuario;
   set nomeUsuario(String value);
   @override
-  int get quantidadePadinas;
-  set quantidadePadinas(int value);
+  int get impressoes;
+  set impressoes(int value);
   @override
   String? get userDoc;
   set userDoc(String? value);

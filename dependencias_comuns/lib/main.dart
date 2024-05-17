@@ -5,7 +5,6 @@ export 'package:cupertino_icons/cupertino_icons.dart';
 export 'package:shared_preferences/shared_preferences.dart';
 export 'package:url_launcher/url_launcher.dart';
 export 'package:intl/intl.dart';
-export 'package:file_picker/file_picker.dart';
 export 'package:path_provider/path_provider.dart';
 export 'package:audioplayers/audioplayers.dart';
 export 'package:easy_stepper/easy_stepper.dart';

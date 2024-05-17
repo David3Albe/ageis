@@ -1,14 +1,13 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/equipamento/equipamento_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/fabricante/fabricante_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/servico_tipo/servico_tipo_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento/equipamento_page_frm/equipamento_page_frm_state.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento_insumos/equipamento_insumo_page.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/registro_servico/registro_servico_page_frm/registro_servico_page_frm.dart';
+import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_data/services/equipamento/equipamento_service.dart';
 import 'package:ageiscme_models/filters/equipamento/equipamento_filter.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
-import 'package:ageiscme_models/filters/usuario_filter/usuario_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/models/equipamento_servico/equipamento_servico_model.dart';
 import 'package:compartilhados/alert_dialog/form_alert_dialog_widget.dart';
@@ -16,7 +15,7 @@ import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
@@ -25,6 +24,7 @@ import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart'
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
+import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/functions/helper_functions.dart';
@@ -118,7 +118,6 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
     initialValue: equipamento.validadeInspecao,
   );
   late final EquipamentoCubit equipamentoCubit;
-  late final UsuarioCubit usuarioCubit;
 
   @override
   void initState() {
@@ -128,7 +127,6 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
     servicoTipoCubit.loadAll();
 
     equipamentoCubit = EquipamentoCubit();
-    usuarioCubit = UsuarioCubit();
 
     txtNome.addValidator((String str) {
       if (str.isEmpty) {
@@ -188,32 +186,11 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
     txtNome.text = equipamento.nome.toString();
     txtStatus.text = equipamento.status.toString();
     txtCodBarra.text = equipamento.codBarra.toString();
-
-    if (equipamento.fabricante == null) {
-      txtFabricante.text = '';
-    } else {
-      txtFabricante.text = equipamento.fabricante.toString();
-    }
-    if (equipamento.anoFabricacao == null || equipamento.anoFabricacao == 0) {
-      txtAnoFabricacao.text = '';
-    } else {
-      txtAnoFabricacao.text = equipamento.anoFabricacao.toString();
-    }
-    if (equipamento.capacidadeLitro == null) {
-      txtCapacidadeLitro.text = '';
-    } else {
-      txtCapacidadeLitro.text = equipamento.capacidadeLitro.toString();
-    }
-    if (equipamento.serie == null) {
-      txtSerie.text = '';
-    } else {
-      txtSerie.text = equipamento.serie.toString();
-    }
-    if (equipamento.registroAnvisa == null) {
-      txtRegistroAnvisa.text = '';
-    } else {
-      txtRegistroAnvisa.text = equipamento.registroAnvisa.toString();
-    }
+    txtFabricante.text = equipamento.fabricante?.toString() ?? '';
+    txtAnoFabricacao.text = equipamento.anoFabricacao?.toString() ?? '';
+    txtCapacidadeLitro.text = equipamento.capacidadeLitro?.toString() ?? '';
+    txtSerie.text = equipamento.serie?.toString() ?? '';
+    txtRegistroAnvisa.text = equipamento.registroAnvisa?.toString() ?? '';
 
     if (equipamento.status == '0') {
       txtStatus.text = 'Bloqueado';
@@ -296,10 +273,17 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
                           ),
                           const SizedBox(width: 50.0),
                           Expanded(
-                            child: BlocBuilder<FabricanteCubit,
-                                List<FabricanteModel>>(
+                            child:
+                                BlocBuilder<FabricanteCubit, FabricanteState>(
                               bloc: fabricanteCubit,
-                              builder: (context, fabricantes) {
+                              builder: (context, fabricanteState) {
+                                if (fabricanteState.loading) {
+                                  return const Center(
+                                    child: LoadingWidget(),
+                                  );
+                                }
+                                List<FabricanteModel> fabricantes =
+                                    fabricanteState.fabricantes;
                                 FabricanteModel? fabricante = fabricantes
                                     .where(
                                       (element) =>
@@ -307,11 +291,13 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
                                           equipamento.fabricante,
                                     )
                                     .firstOrNull;
-                                return DropDownWidget(
+                                return DropDownSearchWidget(
+                                  textFunction: (p0) => p0.GetDropDownText(),
                                   initialValue: fabricante,
                                   sourceList: fabricantes,
-                                  onChanged: (value) =>
-                                      equipamento.fabricante = value.nome!,
+                                  onChanged: (value) {
+                                    equipamento.fabricante = value?.nome;
+                                  },
                                   placeholder: 'Fabricante',
                                 );
                               },
@@ -455,7 +441,14 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
                         text: 'Insumos',
                         onTap: abrirInsumos,
                       ),
-                      CustomPopupItemHistoryModel.getHistoryItem(),
+                      if (equipamento.cod != null && equipamento.cod != 0)
+                        CustomPopupItemHistoryModel.getHistoryItem(
+                          child: HistoricoPage(
+                            pk: equipamento.cod!,
+                            termo: 'EQUIPAMENTO',
+                          ),
+                          context: context,
+                        ),
                     ],
                   ),
                   const Spacer(),
@@ -508,18 +501,6 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
           incluirTipoServicos: true,
           apenasAtivos: true,
           ordenarPorNomeCrescente: true,
-        ),
-      );
-    }
-  }
-
-  void loadUserCubit() {
-    if (!usuarioCubit.state.loaded) {
-      usuarioCubit.loadFilter(
-        UsuarioFilter(
-          apenasAtivos: true,
-          ordenarPorNomeCrescente: true,
-          apenasColaboradores: true,
         ),
       );
     }
@@ -580,7 +561,6 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
       return;
     }
     loadEquipamentoCubit();
-    loadUserCubit();
     RegistroServicoModel registroServicoModel = RegistroServicoModel.empty();
     registroServicoModel.codEquipamento = equipamento.cod;
     registroServicoModel.equipamento = equipamento;
@@ -593,7 +573,6 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
           equipamentoReadOnly: true,
           itemReadOnly: true,
           equipamentoCubit: equipamentoCubit,
-          usuarioCubit: usuarioCubit,
           itemFilter: ItemFilter(
             apenasAtivos: true,
             ordenarPorNomeCrescente: true,

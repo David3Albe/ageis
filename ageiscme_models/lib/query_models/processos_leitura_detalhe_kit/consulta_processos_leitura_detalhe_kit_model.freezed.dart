@@ -22,38 +22,14 @@ ConsultaProcessosLeituraDetalheKitModel
 
 /// @nodoc
 mixin _$ConsultaProcessosLeituraDetalheKitModel {
-  String? get idEtiqueta => throw _privateConstructorUsedError;
-  set idEtiqueta(String? value) => throw _privateConstructorUsedError;
-  String? get descricaoCurta => throw _privateConstructorUsedError;
-  set descricaoCurta(String? value) => throw _privateConstructorUsedError;
-  String? get descritor => throw _privateConstructorUsedError;
-  set descritor(String? value) => throw _privateConstructorUsedError;
-  String? get situacao => throw _privateConstructorUsedError;
-  set situacao(String? value) => throw _privateConstructorUsedError;
-  String? get responsavel => throw _privateConstructorUsedError;
-  set responsavel(String? value) => throw _privateConstructorUsedError;
-  DateTime? get dataHora => throw _privateConstructorUsedError;
-  set dataHora(DateTime? value) => throw _privateConstructorUsedError;
-  String? get tamanho => throw _privateConstructorUsedError;
-  set tamanho(String? value) => throw _privateConstructorUsedError;
-  String? get grupo => throw _privateConstructorUsedError;
-  set grupo(String? value) => throw _privateConstructorUsedError;
-  String? get proprietario => throw _privateConstructorUsedError;
-  set proprietario(String? value) => throw _privateConstructorUsedError;
-  String? get implantavel => throw _privateConstructorUsedError;
-  set implantavel(String? value) => throw _privateConstructorUsedError;
-  DateTime? get dataDescarte => throw _privateConstructorUsedError;
-  set dataDescarte(DateTime? value) => throw _privateConstructorUsedError;
-  String? get restricao => throw _privateConstructorUsedError;
-  set restricao(String? value) => throw _privateConstructorUsedError;
-  String? get statusCod => throw _privateConstructorUsedError;
-  set statusCod(String? value) => throw _privateConstructorUsedError;
-  int? get cod => throw _privateConstructorUsedError;
-  set cod(int? value) => throw _privateConstructorUsedError;
-  int? get codKit => throw _privateConstructorUsedError;
-  set codKit(int? value) => throw _privateConstructorUsedError;
-  int? get codRegistroProcesso => throw _privateConstructorUsedError;
-  set codRegistroProcesso(int? value) => throw _privateConstructorUsedError;
+  String? get legenda => throw _privateConstructorUsedError;
+  set legenda(String? value) => throw _privateConstructorUsedError;
+  String? get statusKit => throw _privateConstructorUsedError;
+  set statusKit(String? value) => throw _privateConstructorUsedError;
+  List<ConsultaProcessosLeituraDetalheKitItemModel> get itens =>
+      throw _privateConstructorUsedError;
+  set itens(List<ConsultaProcessosLeituraDetalheKitItemModel> value) =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -71,22 +47,9 @@ abstract class $ConsultaProcessosLeituraDetalheKitModelCopyWith<$Res> {
           ConsultaProcessosLeituraDetalheKitModel>;
   @useResult
   $Res call(
-      {String? idEtiqueta,
-      String? descricaoCurta,
-      String? descritor,
-      String? situacao,
-      String? responsavel,
-      DateTime? dataHora,
-      String? tamanho,
-      String? grupo,
-      String? proprietario,
-      String? implantavel,
-      DateTime? dataDescarte,
-      String? restricao,
-      String? statusCod,
-      int? cod,
-      int? codKit,
-      int? codRegistroProcesso});
+      {String? legenda,
+      String? statusKit,
+      List<ConsultaProcessosLeituraDetalheKitItemModel> itens});
 }
 
 /// @nodoc
@@ -104,88 +67,23 @@ class _$ConsultaProcessosLeituraDetalheKitModelCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? idEtiqueta = freezed,
-    Object? descricaoCurta = freezed,
-    Object? descritor = freezed,
-    Object? situacao = freezed,
-    Object? responsavel = freezed,
-    Object? dataHora = freezed,
-    Object? tamanho = freezed,
-    Object? grupo = freezed,
-    Object? proprietario = freezed,
-    Object? implantavel = freezed,
-    Object? dataDescarte = freezed,
-    Object? restricao = freezed,
-    Object? statusCod = freezed,
-    Object? cod = freezed,
-    Object? codKit = freezed,
-    Object? codRegistroProcesso = freezed,
+    Object? legenda = freezed,
+    Object? statusKit = freezed,
+    Object? itens = null,
   }) {
     return _then(_value.copyWith(
-      idEtiqueta: freezed == idEtiqueta
-          ? _value.idEtiqueta
-          : idEtiqueta // ignore: cast_nullable_to_non_nullable
+      legenda: freezed == legenda
+          ? _value.legenda
+          : legenda // ignore: cast_nullable_to_non_nullable
               as String?,
-      descricaoCurta: freezed == descricaoCurta
-          ? _value.descricaoCurta
-          : descricaoCurta // ignore: cast_nullable_to_non_nullable
+      statusKit: freezed == statusKit
+          ? _value.statusKit
+          : statusKit // ignore: cast_nullable_to_non_nullable
               as String?,
-      descritor: freezed == descritor
-          ? _value.descritor
-          : descritor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      situacao: freezed == situacao
-          ? _value.situacao
-          : situacao // ignore: cast_nullable_to_non_nullable
-              as String?,
-      responsavel: freezed == responsavel
-          ? _value.responsavel
-          : responsavel // ignore: cast_nullable_to_non_nullable
-              as String?,
-      dataHora: freezed == dataHora
-          ? _value.dataHora
-          : dataHora // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      tamanho: freezed == tamanho
-          ? _value.tamanho
-          : tamanho // ignore: cast_nullable_to_non_nullable
-              as String?,
-      grupo: freezed == grupo
-          ? _value.grupo
-          : grupo // ignore: cast_nullable_to_non_nullable
-              as String?,
-      proprietario: freezed == proprietario
-          ? _value.proprietario
-          : proprietario // ignore: cast_nullable_to_non_nullable
-              as String?,
-      implantavel: freezed == implantavel
-          ? _value.implantavel
-          : implantavel // ignore: cast_nullable_to_non_nullable
-              as String?,
-      dataDescarte: freezed == dataDescarte
-          ? _value.dataDescarte
-          : dataDescarte // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      restricao: freezed == restricao
-          ? _value.restricao
-          : restricao // ignore: cast_nullable_to_non_nullable
-              as String?,
-      statusCod: freezed == statusCod
-          ? _value.statusCod
-          : statusCod // ignore: cast_nullable_to_non_nullable
-              as String?,
-      cod: freezed == cod
-          ? _value.cod
-          : cod // ignore: cast_nullable_to_non_nullable
-              as int?,
-      codKit: freezed == codKit
-          ? _value.codKit
-          : codKit // ignore: cast_nullable_to_non_nullable
-              as int?,
-      codRegistroProcesso: freezed == codRegistroProcesso
-          ? _value.codRegistroProcesso
-          : codRegistroProcesso // ignore: cast_nullable_to_non_nullable
-              as int?,
+      itens: null == itens
+          ? _value.itens
+          : itens // ignore: cast_nullable_to_non_nullable
+              as List<ConsultaProcessosLeituraDetalheKitItemModel>,
     ) as $Val);
   }
 }
@@ -200,22 +98,9 @@ abstract class _$$ConsultaProcessosLeituraDetalheKitModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String? idEtiqueta,
-      String? descricaoCurta,
-      String? descritor,
-      String? situacao,
-      String? responsavel,
-      DateTime? dataHora,
-      String? tamanho,
-      String? grupo,
-      String? proprietario,
-      String? implantavel,
-      DateTime? dataDescarte,
-      String? restricao,
-      String? statusCod,
-      int? cod,
-      int? codKit,
-      int? codRegistroProcesso});
+      {String? legenda,
+      String? statusKit,
+      List<ConsultaProcessosLeituraDetalheKitItemModel> itens});
 }
 
 /// @nodoc
@@ -231,88 +116,23 @@ class __$$ConsultaProcessosLeituraDetalheKitModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? idEtiqueta = freezed,
-    Object? descricaoCurta = freezed,
-    Object? descritor = freezed,
-    Object? situacao = freezed,
-    Object? responsavel = freezed,
-    Object? dataHora = freezed,
-    Object? tamanho = freezed,
-    Object? grupo = freezed,
-    Object? proprietario = freezed,
-    Object? implantavel = freezed,
-    Object? dataDescarte = freezed,
-    Object? restricao = freezed,
-    Object? statusCod = freezed,
-    Object? cod = freezed,
-    Object? codKit = freezed,
-    Object? codRegistroProcesso = freezed,
+    Object? legenda = freezed,
+    Object? statusKit = freezed,
+    Object? itens = null,
   }) {
     return _then(_$ConsultaProcessosLeituraDetalheKitModelImpl(
-      idEtiqueta: freezed == idEtiqueta
-          ? _value.idEtiqueta
-          : idEtiqueta // ignore: cast_nullable_to_non_nullable
+      legenda: freezed == legenda
+          ? _value.legenda
+          : legenda // ignore: cast_nullable_to_non_nullable
               as String?,
-      descricaoCurta: freezed == descricaoCurta
-          ? _value.descricaoCurta
-          : descricaoCurta // ignore: cast_nullable_to_non_nullable
+      statusKit: freezed == statusKit
+          ? _value.statusKit
+          : statusKit // ignore: cast_nullable_to_non_nullable
               as String?,
-      descritor: freezed == descritor
-          ? _value.descritor
-          : descritor // ignore: cast_nullable_to_non_nullable
-              as String?,
-      situacao: freezed == situacao
-          ? _value.situacao
-          : situacao // ignore: cast_nullable_to_non_nullable
-              as String?,
-      responsavel: freezed == responsavel
-          ? _value.responsavel
-          : responsavel // ignore: cast_nullable_to_non_nullable
-              as String?,
-      dataHora: freezed == dataHora
-          ? _value.dataHora
-          : dataHora // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      tamanho: freezed == tamanho
-          ? _value.tamanho
-          : tamanho // ignore: cast_nullable_to_non_nullable
-              as String?,
-      grupo: freezed == grupo
-          ? _value.grupo
-          : grupo // ignore: cast_nullable_to_non_nullable
-              as String?,
-      proprietario: freezed == proprietario
-          ? _value.proprietario
-          : proprietario // ignore: cast_nullable_to_non_nullable
-              as String?,
-      implantavel: freezed == implantavel
-          ? _value.implantavel
-          : implantavel // ignore: cast_nullable_to_non_nullable
-              as String?,
-      dataDescarte: freezed == dataDescarte
-          ? _value.dataDescarte
-          : dataDescarte // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      restricao: freezed == restricao
-          ? _value.restricao
-          : restricao // ignore: cast_nullable_to_non_nullable
-              as String?,
-      statusCod: freezed == statusCod
-          ? _value.statusCod
-          : statusCod // ignore: cast_nullable_to_non_nullable
-              as String?,
-      cod: freezed == cod
-          ? _value.cod
-          : cod // ignore: cast_nullable_to_non_nullable
-              as int?,
-      codKit: freezed == codKit
-          ? _value.codKit
-          : codKit // ignore: cast_nullable_to_non_nullable
-              as int?,
-      codRegistroProcesso: freezed == codRegistroProcesso
-          ? _value.codRegistroProcesso
-          : codRegistroProcesso // ignore: cast_nullable_to_non_nullable
-              as int?,
+      itens: null == itens
+          ? _value.itens
+          : itens // ignore: cast_nullable_to_non_nullable
+              as List<ConsultaProcessosLeituraDetalheKitItemModel>,
     ));
   }
 }
@@ -322,22 +142,7 @@ class __$$ConsultaProcessosLeituraDetalheKitModelImplCopyWithImpl<$Res>
 class _$ConsultaProcessosLeituraDetalheKitModelImpl
     extends _ConsultaProcessosLeituraDetalheKitModel {
   _$ConsultaProcessosLeituraDetalheKitModelImpl(
-      {required this.idEtiqueta,
-      required this.descricaoCurta,
-      required this.descritor,
-      required this.situacao,
-      required this.responsavel,
-      required this.dataHora,
-      required this.tamanho,
-      required this.grupo,
-      required this.proprietario,
-      required this.implantavel,
-      required this.dataDescarte,
-      required this.restricao,
-      required this.statusCod,
-      required this.cod,
-      required this.codKit,
-      required this.codRegistroProcesso})
+      {this.legenda, this.statusKit, required this.itens})
       : super._();
 
   factory _$ConsultaProcessosLeituraDetalheKitModelImpl.fromJson(
@@ -345,41 +150,15 @@ class _$ConsultaProcessosLeituraDetalheKitModelImpl
       _$$ConsultaProcessosLeituraDetalheKitModelImplFromJson(json);
 
   @override
-  String? idEtiqueta;
+  String? legenda;
   @override
-  String? descricaoCurta;
+  String? statusKit;
   @override
-  String? descritor;
-  @override
-  String? situacao;
-  @override
-  String? responsavel;
-  @override
-  DateTime? dataHora;
-  @override
-  String? tamanho;
-  @override
-  String? grupo;
-  @override
-  String? proprietario;
-  @override
-  String? implantavel;
-  @override
-  DateTime? dataDescarte;
-  @override
-  String? restricao;
-  @override
-  String? statusCod;
-  @override
-  int? cod;
-  @override
-  int? codKit;
-  @override
-  int? codRegistroProcesso;
+  List<ConsultaProcessosLeituraDetalheKitItemModel> itens;
 
   @override
   String toString() {
-    return 'ConsultaProcessosLeituraDetalheKitModel(idEtiqueta: $idEtiqueta, descricaoCurta: $descricaoCurta, descritor: $descritor, situacao: $situacao, responsavel: $responsavel, dataHora: $dataHora, tamanho: $tamanho, grupo: $grupo, proprietario: $proprietario, implantavel: $implantavel, dataDescarte: $dataDescarte, restricao: $restricao, statusCod: $statusCod, cod: $cod, codKit: $codKit, codRegistroProcesso: $codRegistroProcesso)';
+    return 'ConsultaProcessosLeituraDetalheKitModel(legenda: $legenda, statusKit: $statusKit, itens: $itens)';
   }
 
   @JsonKey(ignore: true)
@@ -402,22 +181,9 @@ class _$ConsultaProcessosLeituraDetalheKitModelImpl
 abstract class _ConsultaProcessosLeituraDetalheKitModel
     extends ConsultaProcessosLeituraDetalheKitModel {
   factory _ConsultaProcessosLeituraDetalheKitModel(
-          {required String? idEtiqueta,
-          required String? descricaoCurta,
-          required String? descritor,
-          required String? situacao,
-          required String? responsavel,
-          required DateTime? dataHora,
-          required String? tamanho,
-          required String? grupo,
-          required String? proprietario,
-          required String? implantavel,
-          required DateTime? dataDescarte,
-          required String? restricao,
-          required String? statusCod,
-          required int? cod,
-          required int? codKit,
-          required int? codRegistroProcesso}) =
+          {String? legenda,
+          String? statusKit,
+          required List<ConsultaProcessosLeituraDetalheKitItemModel> itens}) =
       _$ConsultaProcessosLeituraDetalheKitModelImpl;
   _ConsultaProcessosLeituraDetalheKitModel._() : super._();
 
@@ -426,53 +192,14 @@ abstract class _ConsultaProcessosLeituraDetalheKitModel
       _$ConsultaProcessosLeituraDetalheKitModelImpl.fromJson;
 
   @override
-  String? get idEtiqueta;
-  set idEtiqueta(String? value);
+  String? get legenda;
+  set legenda(String? value);
   @override
-  String? get descricaoCurta;
-  set descricaoCurta(String? value);
+  String? get statusKit;
+  set statusKit(String? value);
   @override
-  String? get descritor;
-  set descritor(String? value);
-  @override
-  String? get situacao;
-  set situacao(String? value);
-  @override
-  String? get responsavel;
-  set responsavel(String? value);
-  @override
-  DateTime? get dataHora;
-  set dataHora(DateTime? value);
-  @override
-  String? get tamanho;
-  set tamanho(String? value);
-  @override
-  String? get grupo;
-  set grupo(String? value);
-  @override
-  String? get proprietario;
-  set proprietario(String? value);
-  @override
-  String? get implantavel;
-  set implantavel(String? value);
-  @override
-  DateTime? get dataDescarte;
-  set dataDescarte(DateTime? value);
-  @override
-  String? get restricao;
-  set restricao(String? value);
-  @override
-  String? get statusCod;
-  set statusCod(String? value);
-  @override
-  int? get cod;
-  set cod(int? value);
-  @override
-  int? get codKit;
-  set codKit(int? value);
-  @override
-  int? get codRegistroProcesso;
-  set codRegistroProcesso(int? value);
+  List<ConsultaProcessosLeituraDetalheKitItemModel> get itens;
+  set itens(List<ConsultaProcessosLeituraDetalheKitItemModel> value);
   @override
   @JsonKey(ignore: true)
   _$$ConsultaProcessosLeituraDetalheKitModelImplCopyWith<

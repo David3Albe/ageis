@@ -1,3 +1,5 @@
+import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_drop_down_search_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/deposito_insumo/deposito_insumo_cubit.dart';
@@ -41,7 +43,7 @@ class InsumoTestePageFrm extends StatefulWidget {
 
   final InsumoTesteModel insumoTeste;
   final DepositoInsumoCubit depositoInsumoCubit;
-  final UsuarioCubit? usuarioCubit;
+  final UsuarioDropDownSearchCubit? usuarioCubit;
   final bool? insumoReadOnly;
 
   @override
@@ -410,7 +412,14 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
                 children: [
                   CustomPopupMenuWidget(
                     items: [
-                      CustomPopupItemHistoryModel.getHistoryItem(),
+                      if (insumoTeste.cod != null && insumoTeste.cod != 0)
+                        CustomPopupItemHistoryModel.getHistoryItem(
+                          child: HistoricoPage(
+                            pk: insumoTeste.cod!,
+                            termo: 'INSUMO_TESTE',
+                          ),
+                          context: context,
+                        ),
                     ],
                   ),
                   const Spacer(),
@@ -449,7 +458,6 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
     if (!txtLote.valid && !txtUsuario.valid) return;
 
     if (insumoTeste.resultado == '0') {
-      print(10);
       txtUsuarioLiberacao.text = nomeUsuarioLiberacao;
       insumoTeste.codUsuarioLiberacao = codUsuarioLiberacao;
     }

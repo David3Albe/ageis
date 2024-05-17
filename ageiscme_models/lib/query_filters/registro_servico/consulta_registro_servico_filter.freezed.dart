@@ -27,6 +27,8 @@ mixin _$ConsultaRegistroServicoFilter {
   set finalDate(DateTime? value) => throw _privateConstructorUsedError;
   String? get codBarraItem => throw _privateConstructorUsedError;
   set codBarraItem(String? value) => throw _privateConstructorUsedError;
+  String? get idEtiquetaContem => throw _privateConstructorUsedError;
+  set idEtiquetaContem(String? value) => throw _privateConstructorUsedError;
   int? get codEquipamento => throw _privateConstructorUsedError;
   set codEquipamento(int? value) => throw _privateConstructorUsedError;
   int? get codServicoTipo => throw _privateConstructorUsedError;
@@ -52,6 +54,7 @@ abstract class $ConsultaRegistroServicoFilterCopyWith<$Res> {
       {DateTime? startDate,
       DateTime? finalDate,
       String? codBarraItem,
+      String? idEtiquetaContem,
       int? codEquipamento,
       int? codServicoTipo,
       ItemModel? item});
@@ -76,6 +79,7 @@ class _$ConsultaRegistroServicoFilterCopyWithImpl<$Res,
     Object? startDate = freezed,
     Object? finalDate = freezed,
     Object? codBarraItem = freezed,
+    Object? idEtiquetaContem = freezed,
     Object? codEquipamento = freezed,
     Object? codServicoTipo = freezed,
     Object? item = freezed,
@@ -92,6 +96,10 @@ class _$ConsultaRegistroServicoFilterCopyWithImpl<$Res,
       codBarraItem: freezed == codBarraItem
           ? _value.codBarraItem
           : codBarraItem // ignore: cast_nullable_to_non_nullable
+              as String?,
+      idEtiquetaContem: freezed == idEtiquetaContem
+          ? _value.idEtiquetaContem
+          : idEtiquetaContem // ignore: cast_nullable_to_non_nullable
               as String?,
       codEquipamento: freezed == codEquipamento
           ? _value.codEquipamento
@@ -134,6 +142,7 @@ abstract class _$$ConsultaRegistroServicoFilterImplCopyWith<$Res>
       {DateTime? startDate,
       DateTime? finalDate,
       String? codBarraItem,
+      String? idEtiquetaContem,
       int? codEquipamento,
       int? codServicoTipo,
       ItemModel? item});
@@ -158,6 +167,7 @@ class __$$ConsultaRegistroServicoFilterImplCopyWithImpl<$Res>
     Object? startDate = freezed,
     Object? finalDate = freezed,
     Object? codBarraItem = freezed,
+    Object? idEtiquetaContem = freezed,
     Object? codEquipamento = freezed,
     Object? codServicoTipo = freezed,
     Object? item = freezed,
@@ -174,6 +184,10 @@ class __$$ConsultaRegistroServicoFilterImplCopyWithImpl<$Res>
       codBarraItem: freezed == codBarraItem
           ? _value.codBarraItem
           : codBarraItem // ignore: cast_nullable_to_non_nullable
+              as String?,
+      idEtiquetaContem: freezed == idEtiquetaContem
+          ? _value.idEtiquetaContem
+          : idEtiquetaContem // ignore: cast_nullable_to_non_nullable
               as String?,
       codEquipamento: freezed == codEquipamento
           ? _value.codEquipamento
@@ -199,6 +213,7 @@ class _$ConsultaRegistroServicoFilterImpl
       {required this.startDate,
       required this.finalDate,
       required this.codBarraItem,
+      required this.idEtiquetaContem,
       required this.codEquipamento,
       required this.codServicoTipo,
       this.item})
@@ -215,6 +230,8 @@ class _$ConsultaRegistroServicoFilterImpl
   @override
   String? codBarraItem;
   @override
+  String? idEtiquetaContem;
+  @override
   int? codEquipamento;
   @override
   int? codServicoTipo;
@@ -223,7 +240,7 @@ class _$ConsultaRegistroServicoFilterImpl
 
   @override
   String toString() {
-    return 'ConsultaRegistroServicoFilter(startDate: $startDate, finalDate: $finalDate, codBarraItem: $codBarraItem, codEquipamento: $codEquipamento, codServicoTipo: $codServicoTipo, item: $item)';
+    return 'ConsultaRegistroServicoFilter(startDate: $startDate, finalDate: $finalDate, codBarraItem: $codBarraItem, idEtiquetaContem: $idEtiquetaContem, codEquipamento: $codEquipamento, codServicoTipo: $codServicoTipo, item: $item)';
   }
 
   @JsonKey(ignore: true)
@@ -248,6 +265,7 @@ abstract class _ConsultaRegistroServicoFilter
       {required DateTime? startDate,
       required DateTime? finalDate,
       required String? codBarraItem,
+      required String? idEtiquetaContem,
       required int? codEquipamento,
       required int? codServicoTipo,
       ItemModel? item}) = _$ConsultaRegistroServicoFilterImpl;
@@ -265,6 +283,9 @@ abstract class _ConsultaRegistroServicoFilter
   @override
   String? get codBarraItem;
   set codBarraItem(String? value);
+  @override
+  String? get idEtiquetaContem;
+  set idEtiquetaContem(String? value);
   @override
   int? get codEquipamento;
   set codEquipamento(int? value);

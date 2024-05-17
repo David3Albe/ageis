@@ -17,8 +17,13 @@ _$ConsultaProcessosConsignadoFilterImpl
               : DateTime.parse(json['finalDate'] as String),
           codItemDescritor: json['codItemDescritor'] as int?,
           codItemConsignado: json['codItemConsignado'] as int?,
+          idEtiquetaContem: json['idEtiquetaContem'] as String?,
           codProprietario: json['codProprietario'] as int?,
           consignado: json['consignado'] as bool?,
+          itemDescritor: json['itemDescritor'] == null
+              ? null
+              : ItemDescritorDropDownSearchResponseDTO.fromJson(
+                  Map<String, Object?>.from(json['itemDescritor'] as Map)),
           item: json['item'] == null
               ? null
               : ItemModel.fromJson(
@@ -32,7 +37,9 @@ Map<String, dynamic> _$$ConsultaProcessosConsignadoFilterImplToJson(
       'finalDate': instance.finalDate?.toIso8601String(),
       'codItemDescritor': instance.codItemDescritor,
       'codItemConsignado': instance.codItemConsignado,
+      'idEtiquetaContem': instance.idEtiquetaContem,
       'codProprietario': instance.codProprietario,
       'consignado': instance.consignado,
+      'itemDescritor': instance.itemDescritor?.toJson(),
       'item': instance.item?.toJson(),
     };

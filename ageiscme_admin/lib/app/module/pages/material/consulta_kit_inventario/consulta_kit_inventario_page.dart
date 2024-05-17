@@ -1,15 +1,17 @@
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/kit_descritor/kit_descritor_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/material/consulta_kit/consulta_kit_page.dart';
 import 'package:ageiscme_admin/app/module/pages/material/consulta_kit_inventario/consulta_kit_inventario_page_state.dart';
 import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
-import 'package:ageiscme_admin/app/module/widgets/query_dialog/query_dialog_widget.dart';
 import 'package:ageiscme_data/query_services/kit_inventario/consulta_kit_inventario_service.dart';
 import 'package:ageiscme_data/services/access_user/access_user_service.dart';
+import 'package:ageiscme_data/services/kit_descritor/kit_descritor_service.dart';
+import 'package:ageiscme_models/dto/kit_descritor/drop_down_search/kit_descritor_drop_down_search_dto.dart';
 import 'package:ageiscme_models/enums/direito_enum.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/query_filters/kit/consulta_kit_filter.dart';
 import 'package:ageiscme_models/query_filters/kit_inventario/consulta_kit_inventario_filter.dart';
+import 'package:ageiscme_models/response_dto/kit_descritor/drop_down_search/kit_descritor_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
@@ -18,6 +20,7 @@ import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_footer_type.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/query_dialog/query_dialog_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -67,7 +70,6 @@ class _ConsultaKitInventarioPageState extends State<ConsultaKitInventarioPage> {
   ];
 
   late final ConsultaKitInventarioPageCubit bloc;
-  late final KitDescritorCubit kitDescritorBloc;
   late final ConsultaKitInventarioFilter filter;
 
   @override
@@ -76,8 +78,6 @@ class _ConsultaKitInventarioPageState extends State<ConsultaKitInventarioPage> {
       service: ConsultaKitInventarioService(),
     );
     filter = ConsultaKitInventarioFilter.empty();
-    kitDescritorBloc = KitDescritorCubit();
-    kitDescritorBloc.loadAll();
 
     super.initState();
   }
@@ -160,32 +160,29 @@ class _ConsultaKitInventarioPageState extends State<ConsultaKitInventarioPage> {
         return FilterDialogWidget(
           child: Column(
             children: [
-              BlocBuilder<KitDescritorCubit, KitDescritorState>(
-                bloc: kitDescritorBloc,
-                builder: (context, kitsDescritoresState) {
-                  if (kitsDescritoresState.loading) {
-                    return const LoadingWidget();
-                  }
-                  List<KitDescritorModel> kitsDescritores =
-                      kitsDescritoresState.kitDescritores;
-                  kitsDescritores.sort(
-                    (a, b) => a.nome!.compareTo(b.nome!),
-                  );
-                  KitDescritorModel? kitDescritor = kitsDescritores
-                      .where(
-                        (element) => element.cod == filter.codKitDescritor,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<KitDescritorModel>(
-                    textFunction: (item) => item.GetDropDownText(),
-                    initialValue: kitDescritor,
-                    sourceList: kitsDescritores
-                        .where((element) => element.ativo == true)
-                        .toList(),
-                    onChanged: (value) => filter.codKitDescritor = value?.cod,
-                    placeholder: 'Kit Descritor',
-                  );
+              DropDownSearchApiWidget<KitDescritorDropDownSearchResponseDTO>(
+                search: (str) async =>
+                    (await KitDescritorService().getDropDownSearch(
+                      KitDescritorDropDownSearchDTO(
+                        numeroRegistros: 30,
+                        termoPesquisa: str,
+                        apenasAtivos: true,
+                      ),
+                    ))
+                        ?.$2 ??
+                    [],
+                textFunction: (kitDescritor) => kitDescritor.Nome(),
+                initialValue: filter.kitDescritor == null
+                    ? null
+                    : KitDescritorDropDownSearchResponseDTO(
+                        cod: filter.kitDescritor!.cod,
+                        nome: filter.kitDescritor?.nome,
+                      ),
+                onChanged: (value) {
+                  filter.codKitDescritor = value?.cod;
+                  filter.kitDescritor = value;
                 },
+                placeholder: 'Descritor do Kit',
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
               Builder(

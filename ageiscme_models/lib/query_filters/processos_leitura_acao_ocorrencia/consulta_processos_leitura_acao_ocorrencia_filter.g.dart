@@ -16,7 +16,9 @@ _$ConsultaProcessosLeituraAcaoOcorrenciaFilterImpl
               ? null
               : DateTime.parse(json['finalDate'] as String),
           codKit: json['codKit'] as int?,
+          codBarraKitContem: json['codBarraKitContem'] as String?,
           codItem: json['codItem'] as int?,
+          idEtiquetaContem: json['idEtiquetaContem'] as String?,
           codUsuarioAcao: json['codUsuarioAcao'] as int?,
           codUsuarioAutorizacao: json['codUsuarioAutorizacao'] as int?,
           codAcaoOcorrencia: json['codAcaoOcorrencia'] as int?,
@@ -24,6 +26,14 @@ _$ConsultaProcessosLeituraAcaoOcorrenciaFilterImpl
               ? null
               : ItemModel.fromJson(
                   Map<String, Object?>.from(json['item'] as Map)),
+          usuarioAcao: json['usuarioAcao'] == null
+              ? null
+              : UsuarioDropDownSearchResponseDTO.fromJson(
+                  Map<String, Object?>.from(json['usuarioAcao'] as Map)),
+          usuarioAutorizacao: json['usuarioAutorizacao'] == null
+              ? null
+              : UsuarioDropDownSearchResponseDTO.fromJson(
+                  Map<String, Object?>.from(json['usuarioAutorizacao'] as Map)),
         );
 
 Map<String, dynamic> _$$ConsultaProcessosLeituraAcaoOcorrenciaFilterImplToJson(
@@ -32,9 +42,13 @@ Map<String, dynamic> _$$ConsultaProcessosLeituraAcaoOcorrenciaFilterImplToJson(
       'startDate': instance.startDate?.toIso8601String(),
       'finalDate': instance.finalDate?.toIso8601String(),
       'codKit': instance.codKit,
+      'codBarraKitContem': instance.codBarraKitContem,
       'codItem': instance.codItem,
+      'idEtiquetaContem': instance.idEtiquetaContem,
       'codUsuarioAcao': instance.codUsuarioAcao,
       'codUsuarioAutorizacao': instance.codUsuarioAutorizacao,
       'codAcaoOcorrencia': instance.codAcaoOcorrencia,
       'item': instance.item?.toJson(),
+      'usuarioAcao': instance.usuarioAcao?.toJson(),
+      'usuarioAutorizacao': instance.usuarioAutorizacao?.toJson(),
     };

@@ -20,27 +20,28 @@ class ProcessoPageObjectReaderWidget extends StatelessWidget {
         decoration: const BoxDecoration(
           color: Cores.CorCards,
         ),
-        child: Padding(
-          padding: EdgeInsets.only(
-            top: 6 * scale,
-            bottom: 6 * scale,
-            right: 14 * scale,
-            left: 14 * scale,
-          ),
-          child: BlocBuilder<ProcessoLeituraCubit, ProcessoLeituraState>(
-            buildWhen: (previous, current) =>
-                current.rebuildType == ProcessoLeituraRebuildType.All,
-            builder: (context, state) {
-              ProprietarioModel? proprietario = getProprietario(state.processo);
-              String itemDescription = getItemKitDescription(
-                state.processo,
-              );
-              return Row(
+        child: BlocBuilder<ProcessoLeituraCubit, ProcessoLeituraState>(
+          buildWhen: (previous, current) =>
+              current.rebuildType == ProcessoLeituraRebuildType.All,
+          builder: (context, state) {
+            ProprietarioModel? proprietario = getProprietario(state.processo);
+            String itemDescription = getItemKitDescription(
+              state.processo,
+            );
+            double escalaFonte = state.processo.getEscala();
+            double lineHeightSegoe = state.processo.getLineHeightSegoe();
+            return Padding(
+              padding: EdgeInsets.only(
+                top: 6 * scale / escalaFonte,
+                bottom: 6 * scale / escalaFonte,
+                right: 14 * scale / escalaFonte,
+                left: 14 * scale / escalaFonte,
+              ),
+              child: Row(
                 children: [
                   Expanded(
                     flex: 4,
                     child: Column(
-                      mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -48,20 +49,18 @@ class ProcessoPageObjectReaderWidget extends StatelessWidget {
                           child: Text(
                             'ITEM',
                             style: Fontes.getSegoe(
-                              fontSize: 14 * scale,
+                              fontSize: 14 * scale * escalaFonte,
                               cor: Cores.CorTitleCards,
                             ),
                           ),
                         ),
-                        FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: SelectableText(
-                            itemDescription,
-                            textAlign: TextAlign.left,
-                            style: Fontes.getSegoe(
-                              fontSize: 24 * scale,
-                              cor: Cores.CorTextCards,
-                            ),
+                        SelectableText(
+                          itemDescription,
+                          textAlign: TextAlign.left,
+                          style: Fontes.getSegoe(
+                            fontSize: 22 * scale * escalaFonte,
+                            cor: Cores.CorTextCards,
+                            lineHeight: lineHeightSegoe,
                           ),
                         ),
                       ],
@@ -75,7 +74,6 @@ class ProcessoPageObjectReaderWidget extends StatelessWidget {
                   Expanded(
                     flex: 2,
                     child: Column(
-                      mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -83,29 +81,27 @@ class ProcessoPageObjectReaderWidget extends StatelessWidget {
                           child: Text(
                             'PROPRIETÁRIO',
                             style: Fontes.getSegoe(
-                              fontSize: 14 * scale,
+                              fontSize: 14 * scale * escalaFonte,
                               cor: Cores.CorTitleCards,
                             ),
                           ),
                         ),
-                        FittedBox(
-                          fit: BoxFit.scaleDown,
-                          child: SelectableText(
-                            proprietario != null ? proprietario.nome! : ' ',
-                            textAlign: TextAlign.left,
-                            style: Fontes.getSegoe(
-                              fontSize: 24 * scale,
-                              cor: Cores.CorTextCards,
-                            ),
+                        SelectableText(
+                          proprietario != null ? proprietario.nome! : ' ',
+                          textAlign: TextAlign.left,
+                          style: Fontes.getSegoe(
+                            fontSize: 24 * scale * escalaFonte,
+                            cor: Cores.CorTextCards,
+                            lineHeight: lineHeightSegoe,
                           ),
                         ),
                       ],
                     ),
                   ),
                 ],
-              );
-            },
-          ),
+              ),
+            );
+          },
         ),
       ),
     );

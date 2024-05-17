@@ -42,6 +42,12 @@ class GridWidget extends StatelessWidget {
     RegistrosExpirarSearchResponseDTO obj,
   ) async {
     onClose();
+     if (obj.codTipo == 5) {
+      NavigatorService.navigateToArguments(
+        '/admin/equipamento/equipamento-manutencao',
+        obj.codTabela,
+      );
+    }
     if (obj.codTipo == 4) {
       NavigatorService.navigateToArguments(
         '/admin/equipamento/registro-servico',
@@ -52,6 +58,18 @@ class GridWidget extends StatelessWidget {
       NavigatorService.navigateToArguments(
         '/admin/colaborador/epi-entrega',
         obj.codUsuario,
+      );
+    }
+    if (obj.codTipo == 2) {
+      NavigatorService.navigateToArguments(
+        '/admin/colaborador/atestado-saude-ocupacional',
+        obj.codTabela,
+      );
+    }
+    if (obj.codTipo == 1) {
+      NavigatorService.navigateToArguments(
+        '/admin/biblioteca/documento',
+        obj.codTabela,
       );
     }
   }

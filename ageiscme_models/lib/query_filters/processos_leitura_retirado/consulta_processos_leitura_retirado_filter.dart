@@ -13,7 +13,9 @@ sealed class ConsultaProcessosLeituraRetiradoFilter
     required DateTime? startDate,
     required DateTime? finalDate,
     required int? codItem,
+    required String? idEtiquetaContem,
     required int? codKit,
+    required String? codBarraKitContem,
     required int? codLocal,
     required bool? rotulado,
     ItemModel? item,
@@ -36,5 +38,7 @@ sealed class ConsultaProcessosLeituraRetiradoFilter
         rotulado: null,
         finalDate: null,
         startDate: null,
+        codBarraKitContem: null,
+        idEtiquetaContem: null,
       );
 }

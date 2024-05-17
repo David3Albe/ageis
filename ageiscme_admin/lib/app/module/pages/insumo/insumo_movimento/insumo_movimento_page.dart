@@ -73,10 +73,16 @@ class _InsumoMovimentoPageState extends State<InsumoMovimentoPage> {
     filter = InsumoMovimentoFilter.empty();
     filter.startDate = DateTime.now().add(const Duration(days: -1));
     filter.finalDate = DateTime.now();
-    bloc.loadInsumoMovimentoFilter(filter);
+    filter.carregarUsuarioDepoisConsulta = true;
+    filter.carregarInsumo = true;
+    carregarDados();
     insumoBloc = InsumoCubit();
     insumoBloc.loadAll();
     super.initState();
+  }
+
+  void carregarDados() {
+    bloc.loadInsumoMovimentoFilter(filter);
   }
 
   @override
@@ -138,8 +144,8 @@ class _InsumoMovimentoPageState extends State<InsumoMovimentoPage> {
     );
   }
 
-  void openModalFilter(BuildContext context) {
-    showDialog<bool>(
+  Future openModalFilter(BuildContext context) async {
+    bool? result = await showDialog<bool>(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
@@ -199,11 +205,9 @@ class _InsumoMovimentoPageState extends State<InsumoMovimentoPage> {
           ),
         );
       },
-    ).then((result) {
-      if (result == true) {
-        bloc.loadInsumoMovimentoFilter(filter);
-      }
-    });
+    );
+    if (result != true) return;
+    carregarDados();
   }
 
   void openModal(BuildContext context, InsumoMovimentoModel insumoMovimento) {
@@ -238,7 +242,7 @@ class _InsumoMovimentoPageState extends State<InsumoMovimentoPage> {
       context,
       state.message,
     );
-    bloc.loadInsumoMovimentoFilter(filter);
+    carregarDados();
   }
 
   void onError(InsumoMovimentoPageState state) {

@@ -33,6 +33,8 @@ mixin _$ConsultaProcessosLeituraFilter {
   set codKit(int? value) => throw _privateConstructorUsedError;
   int? get codItem => throw _privateConstructorUsedError;
   set codItem(int? value) => throw _privateConstructorUsedError;
+  String? get idEtiquetaContem => throw _privateConstructorUsedError;
+  set idEtiquetaContem(String? value) => throw _privateConstructorUsedError;
   int? get codEtapaProcesso => throw _privateConstructorUsedError;
   set codEtapaProcesso(int? value) => throw _privateConstructorUsedError;
   int? get lote => throw _privateConstructorUsedError;
@@ -45,6 +47,8 @@ mixin _$ConsultaProcessosLeituraFilter {
   set implantavel(bool? value) => throw _privateConstructorUsedError;
   String? get prontuario => throw _privateConstructorUsedError;
   set prontuario(String? value) => throw _privateConstructorUsedError;
+  String? get codBarraKitContem => throw _privateConstructorUsedError;
+  set codBarraKitContem(String? value) => throw _privateConstructorUsedError;
   ItemModel? get item => throw _privateConstructorUsedError;
   set item(ItemModel? value) => throw _privateConstructorUsedError;
 
@@ -69,12 +73,14 @@ abstract class $ConsultaProcessosLeituraFilterCopyWith<$Res> {
       DateTime? finalTime,
       int? codKit,
       int? codItem,
+      String? idEtiquetaContem,
       int? codEtapaProcesso,
       int? lote,
       String? indicador,
       String? biologico,
       bool? implantavel,
       String? prontuario,
+      String? codBarraKitContem,
       ItemModel? item});
 
   $ItemModelCopyWith<$Res>? get item;
@@ -100,12 +106,14 @@ class _$ConsultaProcessosLeituraFilterCopyWithImpl<$Res,
     Object? finalTime = freezed,
     Object? codKit = freezed,
     Object? codItem = freezed,
+    Object? idEtiquetaContem = freezed,
     Object? codEtapaProcesso = freezed,
     Object? lote = freezed,
     Object? indicador = freezed,
     Object? biologico = freezed,
     Object? implantavel = freezed,
     Object? prontuario = freezed,
+    Object? codBarraKitContem = freezed,
     Object? item = freezed,
   }) {
     return _then(_value.copyWith(
@@ -133,6 +141,10 @@ class _$ConsultaProcessosLeituraFilterCopyWithImpl<$Res,
           ? _value.codItem
           : codItem // ignore: cast_nullable_to_non_nullable
               as int?,
+      idEtiquetaContem: freezed == idEtiquetaContem
+          ? _value.idEtiquetaContem
+          : idEtiquetaContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codEtapaProcesso: freezed == codEtapaProcesso
           ? _value.codEtapaProcesso
           : codEtapaProcesso // ignore: cast_nullable_to_non_nullable
@@ -156,6 +168,10 @@ class _$ConsultaProcessosLeituraFilterCopyWithImpl<$Res,
       prontuario: freezed == prontuario
           ? _value.prontuario
           : prontuario // ignore: cast_nullable_to_non_nullable
+              as String?,
+      codBarraKitContem: freezed == codBarraKitContem
+          ? _value.codBarraKitContem
+          : codBarraKitContem // ignore: cast_nullable_to_non_nullable
               as String?,
       item: freezed == item
           ? _value.item
@@ -193,12 +209,14 @@ abstract class _$$ConsultaProcessosLeituraFilterImplCopyWith<$Res>
       DateTime? finalTime,
       int? codKit,
       int? codItem,
+      String? idEtiquetaContem,
       int? codEtapaProcesso,
       int? lote,
       String? indicador,
       String? biologico,
       bool? implantavel,
       String? prontuario,
+      String? codBarraKitContem,
       ItemModel? item});
 
   @override
@@ -224,12 +242,14 @@ class __$$ConsultaProcessosLeituraFilterImplCopyWithImpl<$Res>
     Object? finalTime = freezed,
     Object? codKit = freezed,
     Object? codItem = freezed,
+    Object? idEtiquetaContem = freezed,
     Object? codEtapaProcesso = freezed,
     Object? lote = freezed,
     Object? indicador = freezed,
     Object? biologico = freezed,
     Object? implantavel = freezed,
     Object? prontuario = freezed,
+    Object? codBarraKitContem = freezed,
     Object? item = freezed,
   }) {
     return _then(_$ConsultaProcessosLeituraFilterImpl(
@@ -257,6 +277,10 @@ class __$$ConsultaProcessosLeituraFilterImplCopyWithImpl<$Res>
           ? _value.codItem
           : codItem // ignore: cast_nullable_to_non_nullable
               as int?,
+      idEtiquetaContem: freezed == idEtiquetaContem
+          ? _value.idEtiquetaContem
+          : idEtiquetaContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codEtapaProcesso: freezed == codEtapaProcesso
           ? _value.codEtapaProcesso
           : codEtapaProcesso // ignore: cast_nullable_to_non_nullable
@@ -281,6 +305,10 @@ class __$$ConsultaProcessosLeituraFilterImplCopyWithImpl<$Res>
           ? _value.prontuario
           : prontuario // ignore: cast_nullable_to_non_nullable
               as String?,
+      codBarraKitContem: freezed == codBarraKitContem
+          ? _value.codBarraKitContem
+          : codBarraKitContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       item: freezed == item
           ? _value.item
           : item // ignore: cast_nullable_to_non_nullable
@@ -300,12 +328,14 @@ class _$ConsultaProcessosLeituraFilterImpl
       required this.finalTime,
       required this.codKit,
       required this.codItem,
+      required this.idEtiquetaContem,
       required this.codEtapaProcesso,
       required this.lote,
       required this.indicador,
       required this.biologico,
       required this.implantavel,
       required this.prontuario,
+      required this.codBarraKitContem,
       this.item})
       : super._();
 
@@ -326,6 +356,8 @@ class _$ConsultaProcessosLeituraFilterImpl
   @override
   int? codItem;
   @override
+  String? idEtiquetaContem;
+  @override
   int? codEtapaProcesso;
   @override
   int? lote;
@@ -338,11 +370,13 @@ class _$ConsultaProcessosLeituraFilterImpl
   @override
   String? prontuario;
   @override
+  String? codBarraKitContem;
+  @override
   ItemModel? item;
 
   @override
   String toString() {
-    return 'ConsultaProcessosLeituraFilter(startDate: $startDate, finalDate: $finalDate, startTime: $startTime, finalTime: $finalTime, codKit: $codKit, codItem: $codItem, codEtapaProcesso: $codEtapaProcesso, lote: $lote, indicador: $indicador, biologico: $biologico, implantavel: $implantavel, prontuario: $prontuario, item: $item)';
+    return 'ConsultaProcessosLeituraFilter(startDate: $startDate, finalDate: $finalDate, startTime: $startTime, finalTime: $finalTime, codKit: $codKit, codItem: $codItem, idEtiquetaContem: $idEtiquetaContem, codEtapaProcesso: $codEtapaProcesso, lote: $lote, indicador: $indicador, biologico: $biologico, implantavel: $implantavel, prontuario: $prontuario, codBarraKitContem: $codBarraKitContem, item: $item)';
   }
 
   @JsonKey(ignore: true)
@@ -370,12 +404,14 @@ abstract class _ConsultaProcessosLeituraFilter
       required DateTime? finalTime,
       required int? codKit,
       required int? codItem,
+      required String? idEtiquetaContem,
       required int? codEtapaProcesso,
       required int? lote,
       required String? indicador,
       required String? biologico,
       required bool? implantavel,
       required String? prontuario,
+      required String? codBarraKitContem,
       ItemModel? item}) = _$ConsultaProcessosLeituraFilterImpl;
   _ConsultaProcessosLeituraFilter._() : super._();
 
@@ -401,6 +437,9 @@ abstract class _ConsultaProcessosLeituraFilter
   int? get codItem;
   set codItem(int? value);
   @override
+  String? get idEtiquetaContem;
+  set idEtiquetaContem(String? value);
+  @override
   int? get codEtapaProcesso;
   set codEtapaProcesso(int? value);
   @override
@@ -418,6 +457,9 @@ abstract class _ConsultaProcessosLeituraFilter
   @override
   String? get prontuario;
   set prontuario(String? value);
+  @override
+  String? get codBarraKitContem;
+  set codBarraKitContem(String? value);
   @override
   ItemModel? get item;
   set item(ItemModel? value);

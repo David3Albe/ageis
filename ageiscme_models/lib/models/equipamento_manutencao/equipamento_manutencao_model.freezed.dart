@@ -139,6 +139,14 @@ mixin _$EquipamentoManutencaoModel {
   set peca4(PecaModel? value) => throw _privateConstructorUsedError;
   PecaModel? get peca5 => throw _privateConstructorUsedError;
   set peca5(PecaModel? value) => throw _privateConstructorUsedError;
+  UsuarioDropDownSearchResponseDTO? get usuarioDetectadoPor =>
+      throw _privateConstructorUsedError;
+  set usuarioDetectadoPor(UsuarioDropDownSearchResponseDTO? value) =>
+      throw _privateConstructorUsedError;
+  UsuarioDropDownSearchResponseDTO? get usuarioTecnico =>
+      throw _privateConstructorUsedError;
+  set usuarioTecnico(UsuarioDropDownSearchResponseDTO? value) =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -210,7 +218,9 @@ abstract class $EquipamentoManutencaoModelCopyWith<$Res> {
       PecaModel? peca2,
       PecaModel? peca3,
       PecaModel? peca4,
-      PecaModel? peca5});
+      PecaModel? peca5,
+      UsuarioDropDownSearchResponseDTO? usuarioDetectadoPor,
+      UsuarioDropDownSearchResponseDTO? usuarioTecnico});
 
   $EquipamentoModelCopyWith<$Res>? get equipamento;
   $ServicoTipoModelCopyWith<$Res>? get servicoTipo;
@@ -221,6 +231,8 @@ abstract class $EquipamentoManutencaoModelCopyWith<$Res> {
   $PecaModelCopyWith<$Res>? get peca3;
   $PecaModelCopyWith<$Res>? get peca4;
   $PecaModelCopyWith<$Res>? get peca5;
+  $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuarioDetectadoPor;
+  $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuarioTecnico;
 }
 
 /// @nodoc
@@ -294,6 +306,8 @@ class _$EquipamentoManutencaoModelCopyWithImpl<$Res,
     Object? peca3 = freezed,
     Object? peca4 = freezed,
     Object? peca5 = freezed,
+    Object? usuarioDetectadoPor = freezed,
+    Object? usuarioTecnico = freezed,
   }) {
     return _then(_value.copyWith(
       cod: freezed == cod
@@ -524,6 +538,14 @@ class _$EquipamentoManutencaoModelCopyWithImpl<$Res,
           ? _value.peca5
           : peca5 // ignore: cast_nullable_to_non_nullable
               as PecaModel?,
+      usuarioDetectadoPor: freezed == usuarioDetectadoPor
+          ? _value.usuarioDetectadoPor
+          : usuarioDetectadoPor // ignore: cast_nullable_to_non_nullable
+              as UsuarioDropDownSearchResponseDTO?,
+      usuarioTecnico: freezed == usuarioTecnico
+          ? _value.usuarioTecnico
+          : usuarioTecnico // ignore: cast_nullable_to_non_nullable
+              as UsuarioDropDownSearchResponseDTO?,
     ) as $Val);
   }
 
@@ -634,6 +656,32 @@ class _$EquipamentoManutencaoModelCopyWithImpl<$Res,
       return _then(_value.copyWith(peca5: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuarioDetectadoPor {
+    if (_value.usuarioDetectadoPor == null) {
+      return null;
+    }
+
+    return $UsuarioDropDownSearchResponseDTOCopyWith<$Res>(
+        _value.usuarioDetectadoPor!, (value) {
+      return _then(_value.copyWith(usuarioDetectadoPor: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuarioTecnico {
+    if (_value.usuarioTecnico == null) {
+      return null;
+    }
+
+    return $UsuarioDropDownSearchResponseDTOCopyWith<$Res>(
+        _value.usuarioTecnico!, (value) {
+      return _then(_value.copyWith(usuarioTecnico: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -702,7 +750,9 @@ abstract class _$$EquipamentoManutencaoModelImplCopyWith<$Res>
       PecaModel? peca2,
       PecaModel? peca3,
       PecaModel? peca4,
-      PecaModel? peca5});
+      PecaModel? peca5,
+      UsuarioDropDownSearchResponseDTO? usuarioDetectadoPor,
+      UsuarioDropDownSearchResponseDTO? usuarioTecnico});
 
   @override
   $EquipamentoModelCopyWith<$Res>? get equipamento;
@@ -722,6 +772,10 @@ abstract class _$$EquipamentoManutencaoModelImplCopyWith<$Res>
   $PecaModelCopyWith<$Res>? get peca4;
   @override
   $PecaModelCopyWith<$Res>? get peca5;
+  @override
+  $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuarioDetectadoPor;
+  @override
+  $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuarioTecnico;
 }
 
 /// @nodoc
@@ -794,6 +848,8 @@ class __$$EquipamentoManutencaoModelImplCopyWithImpl<$Res>
     Object? peca3 = freezed,
     Object? peca4 = freezed,
     Object? peca5 = freezed,
+    Object? usuarioDetectadoPor = freezed,
+    Object? usuarioTecnico = freezed,
   }) {
     return _then(_$EquipamentoManutencaoModelImpl(
       cod: freezed == cod
@@ -1024,6 +1080,14 @@ class __$$EquipamentoManutencaoModelImplCopyWithImpl<$Res>
           ? _value.peca5
           : peca5 // ignore: cast_nullable_to_non_nullable
               as PecaModel?,
+      usuarioDetectadoPor: freezed == usuarioDetectadoPor
+          ? _value.usuarioDetectadoPor
+          : usuarioDetectadoPor // ignore: cast_nullable_to_non_nullable
+              as UsuarioDropDownSearchResponseDTO?,
+      usuarioTecnico: freezed == usuarioTecnico
+          ? _value.usuarioTecnico
+          : usuarioTecnico // ignore: cast_nullable_to_non_nullable
+              as UsuarioDropDownSearchResponseDTO?,
     ));
   }
 }
@@ -1089,7 +1153,9 @@ class _$EquipamentoManutencaoModelImpl extends _EquipamentoManutencaoModel
       required this.peca2,
       required this.peca3,
       required this.peca4,
-      required this.peca5})
+      required this.peca5,
+      this.usuarioDetectadoPor,
+      this.usuarioTecnico})
       : super._();
 
   factory _$EquipamentoManutencaoModelImpl.fromJson(
@@ -1211,10 +1277,14 @@ class _$EquipamentoManutencaoModelImpl extends _EquipamentoManutencaoModel
   PecaModel? peca4;
   @override
   PecaModel? peca5;
+  @override
+  UsuarioDropDownSearchResponseDTO? usuarioDetectadoPor;
+  @override
+  UsuarioDropDownSearchResponseDTO? usuarioTecnico;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'EquipamentoManutencaoModel(cod: $cod, codEquipamento: $codEquipamento, codServicosTipo: $codServicosTipo, resultado: $resultado, descricao: $descricao, dataInicio: $dataInicio, dataTermino: $dataTermino, dataParada: $dataParada, imagemDoAnexo: $imagemDoAnexo, codUsuario: $codUsuario, codInstituicao: $codInstituicao, tecnico: $tecnico, usuarioRegistro: $usuarioRegistro, dataRegistro: $dataRegistro, numNF: $numNF, problema: $problema, detectadoPor: $detectadoPor, codPeca1: $codPeca1, codPeca2: $codPeca2, codPeca3: $codPeca3, codPeca4: $codPeca4, codPeca5: $codPeca5, qtde1: $qtde1, qtde2: $qtde2, qtde3: $qtde3, qtde4: $qtde4, qtde5: $qtde5, valor1: $valor1, valor2: $valor2, valor3: $valor3, valor4: $valor4, valor5: $valor5, garantia1: $garantia1, garantia2: $garantia2, garantia3: $garantia3, garantia4: $garantia4, garantia5: $garantia5, serie1: $serie1, serie2: $serie2, serie3: $serie3, serie4: $serie4, serie5: $serie5, nfAnexa: $nfAnexa, nfAnexaNome: $nfAnexaNome, validade: $validade, controlarValidade: $controlarValidade, ultimaAlteracao: $ultimaAlteracao, tstamp: $tstamp, equipamento: $equipamento, servicoTipo: $servicoTipo, usuario: $usuario, peca: $peca, peca1: $peca1, peca2: $peca2, peca3: $peca3, peca4: $peca4, peca5: $peca5)';
+    return 'EquipamentoManutencaoModel(cod: $cod, codEquipamento: $codEquipamento, codServicosTipo: $codServicosTipo, resultado: $resultado, descricao: $descricao, dataInicio: $dataInicio, dataTermino: $dataTermino, dataParada: $dataParada, imagemDoAnexo: $imagemDoAnexo, codUsuario: $codUsuario, codInstituicao: $codInstituicao, tecnico: $tecnico, usuarioRegistro: $usuarioRegistro, dataRegistro: $dataRegistro, numNF: $numNF, problema: $problema, detectadoPor: $detectadoPor, codPeca1: $codPeca1, codPeca2: $codPeca2, codPeca3: $codPeca3, codPeca4: $codPeca4, codPeca5: $codPeca5, qtde1: $qtde1, qtde2: $qtde2, qtde3: $qtde3, qtde4: $qtde4, qtde5: $qtde5, valor1: $valor1, valor2: $valor2, valor3: $valor3, valor4: $valor4, valor5: $valor5, garantia1: $garantia1, garantia2: $garantia2, garantia3: $garantia3, garantia4: $garantia4, garantia5: $garantia5, serie1: $serie1, serie2: $serie2, serie3: $serie3, serie4: $serie4, serie5: $serie5, nfAnexa: $nfAnexa, nfAnexaNome: $nfAnexaNome, validade: $validade, controlarValidade: $controlarValidade, ultimaAlteracao: $ultimaAlteracao, tstamp: $tstamp, equipamento: $equipamento, servicoTipo: $servicoTipo, usuario: $usuario, peca: $peca, peca1: $peca1, peca2: $peca2, peca3: $peca3, peca4: $peca4, peca5: $peca5, usuarioDetectadoPor: $usuarioDetectadoPor, usuarioTecnico: $usuarioTecnico)';
   }
 
   @override
@@ -1278,7 +1348,9 @@ class _$EquipamentoManutencaoModelImpl extends _EquipamentoManutencaoModel
       ..add(DiagnosticsProperty('peca2', peca2))
       ..add(DiagnosticsProperty('peca3', peca3))
       ..add(DiagnosticsProperty('peca4', peca4))
-      ..add(DiagnosticsProperty('peca5', peca5));
+      ..add(DiagnosticsProperty('peca5', peca5))
+      ..add(DiagnosticsProperty('usuarioDetectadoPor', usuarioDetectadoPor))
+      ..add(DiagnosticsProperty('usuarioTecnico', usuarioTecnico));
   }
 
   @JsonKey(ignore: true)
@@ -1298,63 +1370,66 @@ class _$EquipamentoManutencaoModelImpl extends _EquipamentoManutencaoModel
 
 abstract class _EquipamentoManutencaoModel extends EquipamentoManutencaoModel {
   factory _EquipamentoManutencaoModel(
-      {required int? cod,
-      required int? codEquipamento,
-      required int? codServicosTipo,
-      required String? resultado,
-      required String? descricao,
-      required DateTime? dataInicio,
-      required DateTime? dataTermino,
-      required DateTime? dataParada,
-      required String? imagemDoAnexo,
-      required int? codUsuario,
-      required int? codInstituicao,
-      required String? tecnico,
-      required String? usuarioRegistro,
-      required DateTime? dataRegistro,
-      required String? numNF,
-      required String? problema,
-      required String? detectadoPor,
-      required int? codPeca1,
-      required int? codPeca2,
-      required int? codPeca3,
-      required int? codPeca4,
-      required int? codPeca5,
-      required double? qtde1,
-      required double? qtde2,
-      required double? qtde3,
-      required double? qtde4,
-      required double? qtde5,
-      required double? valor1,
-      required double? valor2,
-      required double? valor3,
-      required double? valor4,
-      required double? valor5,
-      required DateTime? garantia1,
-      required DateTime? garantia2,
-      required DateTime? garantia3,
-      required DateTime? garantia4,
-      required DateTime? garantia5,
-      required String? serie1,
-      required String? serie2,
-      required String? serie3,
-      required String? serie4,
-      required String? serie5,
-      required String? nfAnexa,
-      required String? nfAnexaNome,
-      required DateTime? validade,
-      required bool? controlarValidade,
-      required DateTime? ultimaAlteracao,
-      @JsonKey(name: 'tStamp') required String? tstamp,
-      required EquipamentoModel? equipamento,
-      required ServicoTipoModel? servicoTipo,
-      required UsuarioModel? usuario,
-      required PecaModel? peca,
-      required PecaModel? peca1,
-      required PecaModel? peca2,
-      required PecaModel? peca3,
-      required PecaModel? peca4,
-      required PecaModel? peca5}) = _$EquipamentoManutencaoModelImpl;
+          {required int? cod,
+          required int? codEquipamento,
+          required int? codServicosTipo,
+          required String? resultado,
+          required String? descricao,
+          required DateTime? dataInicio,
+          required DateTime? dataTermino,
+          required DateTime? dataParada,
+          required String? imagemDoAnexo,
+          required int? codUsuario,
+          required int? codInstituicao,
+          required String? tecnico,
+          required String? usuarioRegistro,
+          required DateTime? dataRegistro,
+          required String? numNF,
+          required String? problema,
+          required String? detectadoPor,
+          required int? codPeca1,
+          required int? codPeca2,
+          required int? codPeca3,
+          required int? codPeca4,
+          required int? codPeca5,
+          required double? qtde1,
+          required double? qtde2,
+          required double? qtde3,
+          required double? qtde4,
+          required double? qtde5,
+          required double? valor1,
+          required double? valor2,
+          required double? valor3,
+          required double? valor4,
+          required double? valor5,
+          required DateTime? garantia1,
+          required DateTime? garantia2,
+          required DateTime? garantia3,
+          required DateTime? garantia4,
+          required DateTime? garantia5,
+          required String? serie1,
+          required String? serie2,
+          required String? serie3,
+          required String? serie4,
+          required String? serie5,
+          required String? nfAnexa,
+          required String? nfAnexaNome,
+          required DateTime? validade,
+          required bool? controlarValidade,
+          required DateTime? ultimaAlteracao,
+          @JsonKey(name: 'tStamp') required String? tstamp,
+          required EquipamentoModel? equipamento,
+          required ServicoTipoModel? servicoTipo,
+          required UsuarioModel? usuario,
+          required PecaModel? peca,
+          required PecaModel? peca1,
+          required PecaModel? peca2,
+          required PecaModel? peca3,
+          required PecaModel? peca4,
+          required PecaModel? peca5,
+          UsuarioDropDownSearchResponseDTO? usuarioDetectadoPor,
+          UsuarioDropDownSearchResponseDTO? usuarioTecnico}) =
+      _$EquipamentoManutencaoModelImpl;
   _EquipamentoManutencaoModel._() : super._();
 
   factory _EquipamentoManutencaoModel.fromJson(Map<String, dynamic> json) =
@@ -1533,6 +1608,12 @@ abstract class _EquipamentoManutencaoModel extends EquipamentoManutencaoModel {
   @override
   PecaModel? get peca5;
   set peca5(PecaModel? value);
+  @override
+  UsuarioDropDownSearchResponseDTO? get usuarioDetectadoPor;
+  set usuarioDetectadoPor(UsuarioDropDownSearchResponseDTO? value);
+  @override
+  UsuarioDropDownSearchResponseDTO? get usuarioTecnico;
+  set usuarioTecnico(UsuarioDropDownSearchResponseDTO? value);
   @override
   @JsonKey(ignore: true)
   _$$EquipamentoManutencaoModelImplCopyWith<_$EquipamentoManutencaoModelImpl>

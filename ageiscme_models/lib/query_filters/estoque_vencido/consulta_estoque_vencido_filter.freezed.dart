@@ -27,8 +27,12 @@ mixin _$ConsultaEstoqueVencidoFilter {
   set codLocalEstoque(int? value) => throw _privateConstructorUsedError;
   int? get codKit => throw _privateConstructorUsedError;
   set codKit(int? value) => throw _privateConstructorUsedError;
+  String? get codBarraKitContem => throw _privateConstructorUsedError;
+  set codBarraKitContem(String? value) => throw _privateConstructorUsedError;
   int? get codItem => throw _privateConstructorUsedError;
   set codItem(int? value) => throw _privateConstructorUsedError;
+  String? get idEtiquetaContem => throw _privateConstructorUsedError;
+  set idEtiquetaContem(String? value) => throw _privateConstructorUsedError;
   bool? get rotulado => throw _privateConstructorUsedError;
   set rotulado(bool? value) => throw _privateConstructorUsedError;
   ItemModel? get item => throw _privateConstructorUsedError;
@@ -52,7 +56,9 @@ abstract class $ConsultaEstoqueVencidoFilterCopyWith<$Res> {
       {int? codEstoque,
       int? codLocalEstoque,
       int? codKit,
+      String? codBarraKitContem,
       int? codItem,
+      String? idEtiquetaContem,
       bool? rotulado,
       ItemModel? item});
 
@@ -76,7 +82,9 @@ class _$ConsultaEstoqueVencidoFilterCopyWithImpl<$Res,
     Object? codEstoque = freezed,
     Object? codLocalEstoque = freezed,
     Object? codKit = freezed,
+    Object? codBarraKitContem = freezed,
     Object? codItem = freezed,
+    Object? idEtiquetaContem = freezed,
     Object? rotulado = freezed,
     Object? item = freezed,
   }) {
@@ -93,10 +101,18 @@ class _$ConsultaEstoqueVencidoFilterCopyWithImpl<$Res,
           ? _value.codKit
           : codKit // ignore: cast_nullable_to_non_nullable
               as int?,
+      codBarraKitContem: freezed == codBarraKitContem
+          ? _value.codBarraKitContem
+          : codBarraKitContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codItem: freezed == codItem
           ? _value.codItem
           : codItem // ignore: cast_nullable_to_non_nullable
               as int?,
+      idEtiquetaContem: freezed == idEtiquetaContem
+          ? _value.idEtiquetaContem
+          : idEtiquetaContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       rotulado: freezed == rotulado
           ? _value.rotulado
           : rotulado // ignore: cast_nullable_to_non_nullable
@@ -134,7 +150,9 @@ abstract class _$$ConsultaEstoqueVencidoFilterImplCopyWith<$Res>
       {int? codEstoque,
       int? codLocalEstoque,
       int? codKit,
+      String? codBarraKitContem,
       int? codItem,
+      String? idEtiquetaContem,
       bool? rotulado,
       ItemModel? item});
 
@@ -158,7 +176,9 @@ class __$$ConsultaEstoqueVencidoFilterImplCopyWithImpl<$Res>
     Object? codEstoque = freezed,
     Object? codLocalEstoque = freezed,
     Object? codKit = freezed,
+    Object? codBarraKitContem = freezed,
     Object? codItem = freezed,
+    Object? idEtiquetaContem = freezed,
     Object? rotulado = freezed,
     Object? item = freezed,
   }) {
@@ -175,10 +195,18 @@ class __$$ConsultaEstoqueVencidoFilterImplCopyWithImpl<$Res>
           ? _value.codKit
           : codKit // ignore: cast_nullable_to_non_nullable
               as int?,
+      codBarraKitContem: freezed == codBarraKitContem
+          ? _value.codBarraKitContem
+          : codBarraKitContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codItem: freezed == codItem
           ? _value.codItem
           : codItem // ignore: cast_nullable_to_non_nullable
               as int?,
+      idEtiquetaContem: freezed == idEtiquetaContem
+          ? _value.idEtiquetaContem
+          : idEtiquetaContem // ignore: cast_nullable_to_non_nullable
+              as String?,
       rotulado: freezed == rotulado
           ? _value.rotulado
           : rotulado // ignore: cast_nullable_to_non_nullable
@@ -198,7 +226,9 @@ class _$ConsultaEstoqueVencidoFilterImpl extends _ConsultaEstoqueVencidoFilter {
       {required this.codEstoque,
       required this.codLocalEstoque,
       required this.codKit,
+      required this.codBarraKitContem,
       required this.codItem,
+      required this.idEtiquetaContem,
       required this.rotulado,
       this.item})
       : super._();
@@ -214,7 +244,11 @@ class _$ConsultaEstoqueVencidoFilterImpl extends _ConsultaEstoqueVencidoFilter {
   @override
   int? codKit;
   @override
+  String? codBarraKitContem;
+  @override
   int? codItem;
+  @override
+  String? idEtiquetaContem;
   @override
   bool? rotulado;
   @override
@@ -222,7 +256,7 @@ class _$ConsultaEstoqueVencidoFilterImpl extends _ConsultaEstoqueVencidoFilter {
 
   @override
   String toString() {
-    return 'ConsultaEstoqueVencidoFilter(codEstoque: $codEstoque, codLocalEstoque: $codLocalEstoque, codKit: $codKit, codItem: $codItem, rotulado: $rotulado, item: $item)';
+    return 'ConsultaEstoqueVencidoFilter(codEstoque: $codEstoque, codLocalEstoque: $codLocalEstoque, codKit: $codKit, codBarraKitContem: $codBarraKitContem, codItem: $codItem, idEtiquetaContem: $idEtiquetaContem, rotulado: $rotulado, item: $item)';
   }
 
   @JsonKey(ignore: true)
@@ -247,7 +281,9 @@ abstract class _ConsultaEstoqueVencidoFilter
       {required int? codEstoque,
       required int? codLocalEstoque,
       required int? codKit,
+      required String? codBarraKitContem,
       required int? codItem,
+      required String? idEtiquetaContem,
       required bool? rotulado,
       ItemModel? item}) = _$ConsultaEstoqueVencidoFilterImpl;
   _ConsultaEstoqueVencidoFilter._() : super._();
@@ -265,8 +301,14 @@ abstract class _ConsultaEstoqueVencidoFilter
   int? get codKit;
   set codKit(int? value);
   @override
+  String? get codBarraKitContem;
+  set codBarraKitContem(String? value);
+  @override
   int? get codItem;
   set codItem(int? value);
+  @override
+  String? get idEtiquetaContem;
+  set idEtiquetaContem(String? value);
   @override
   bool? get rotulado;
   set rotulado(bool? value);

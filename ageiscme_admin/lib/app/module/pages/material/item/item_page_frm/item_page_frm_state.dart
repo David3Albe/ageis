@@ -13,12 +13,12 @@ class ItemPageFrmCubit extends Cubit<ItemPageFrmState> {
           ItemPageFrmState(item: itemModel),
         );
 
-  void save(ItemModel item) async {
+  Future<(String,ItemSaveResultDTO)?> save(ItemModel item) async {
     try {
       bool novo = item.cod == null || item.cod == 0;
       (String message, ItemSaveResultDTO item)? result =
           await service.save(item);
-      if (result == null) return;
+      if (result == null) return null;
 
       emit(
         ItemPageFrmState(
@@ -29,6 +29,7 @@ class ItemPageFrmCubit extends Cubit<ItemPageFrmState> {
           novo: novo,
         ),
       );
+      return result;
     } on Exception catch (ex) {
       emit(
         ItemPageFrmState(
@@ -37,6 +38,7 @@ class ItemPageFrmCubit extends Cubit<ItemPageFrmState> {
         ),
       );
     }
+    return null;
   }
 
   void clear() {

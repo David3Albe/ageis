@@ -1,6 +1,8 @@
 import 'package:ageiscme_data/shared/custom_dio.dart';
+import 'package:ageiscme_models/dto/kit_descritor/drop_down_search/kit_descritor_drop_down_search_dto.dart';
 import 'package:ageiscme_models/filters/kit_descritor/kit_descritor_filter.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/response_dto/kit_descritor/drop_down_search/kit_descritor_drop_down_search_response_dto.dart';
 
 class KitDescritorService {
   final CustomDio _client = CustomDio();
@@ -44,6 +46,17 @@ class KitDescritorService {
       (dynamic json) => KitDescritorModel.fromJson(json),
     );
   }
+
+    Future<(String, List<KitDescritorDropDownSearchResponseDTO>)?> getDropDownSearch(
+    KitDescritorDropDownSearchDTO dto,
+  ) async =>
+      await _client.post(
+        baseRoute + 'drop-down-search',
+        dto,
+        (dynamic json) => (json as List<dynamic>)
+            .map((e) => KitDescritorDropDownSearchResponseDTO.fromJson(e))
+            .toList(),
+      );
 
   Future<(String message, KitDescritorModel kitDescritor)?> delete(
     KitDescritorModel obj,
