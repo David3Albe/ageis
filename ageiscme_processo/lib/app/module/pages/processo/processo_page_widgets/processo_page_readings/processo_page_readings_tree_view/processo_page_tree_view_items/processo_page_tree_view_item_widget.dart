@@ -1,6 +1,5 @@
 import 'package:ageiscme_processo/app/module/blocs/processo_leitura_cubit.dart';
 import 'package:ageiscme_processo/app/module/models/item_processo/item_processo_model.dart';
-import 'package:compartilhados/main.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +8,7 @@ class ProcessoPageTreeViewItemWidget extends StatelessWidget {
   final ItemProcessoModel item;
   @override
   Widget build(BuildContext context) {
-    print('processo_page_tree_view_item_rebuild');
+    double scale = MediaQuery.of(context).size.width / 1920;
     (double, double?) escalaHeight = context.select(
       (ProcessoLeituraCubit cubit) => (
         cubit.state.processo.getEscala(),
@@ -22,8 +21,7 @@ class ProcessoPageTreeViewItemWidget extends StatelessWidget {
         onTap: () => showItem(context),
         '${item.idEtiqueta} ${item.descricao}',
         style: TextStyle(
-          fontSize:
-              HelperFunctions.calculaFontSize(context, 14) * escalaHeight.$1,
+          fontSize: 14 * scale * escalaHeight.$1,
           height: escalaHeight.$2,
         ),
       ),

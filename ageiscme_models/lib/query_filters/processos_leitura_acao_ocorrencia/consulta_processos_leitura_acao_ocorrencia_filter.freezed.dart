@@ -24,8 +24,12 @@ ConsultaProcessosLeituraAcaoOcorrenciaFilter
 mixin _$ConsultaProcessosLeituraAcaoOcorrenciaFilter {
   DateTime? get startDate => throw _privateConstructorUsedError;
   set startDate(DateTime? value) => throw _privateConstructorUsedError;
+  DateTime? get startTime => throw _privateConstructorUsedError;
+  set startTime(DateTime? value) => throw _privateConstructorUsedError;
   DateTime? get finalDate => throw _privateConstructorUsedError;
   set finalDate(DateTime? value) => throw _privateConstructorUsedError;
+  DateTime? get finalTime => throw _privateConstructorUsedError;
+  set finalTime(DateTime? value) => throw _privateConstructorUsedError;
   int? get codKit => throw _privateConstructorUsedError;
   set codKit(int? value) => throw _privateConstructorUsedError;
   String? get codBarraKitContem => throw _privateConstructorUsedError;
@@ -68,7 +72,9 @@ abstract class $ConsultaProcessosLeituraAcaoOcorrenciaFilterCopyWith<$Res> {
   @useResult
   $Res call(
       {DateTime? startDate,
+      DateTime? startTime,
       DateTime? finalDate,
+      DateTime? finalTime,
       int? codKit,
       String? codBarraKitContem,
       int? codItem,
@@ -101,7 +107,9 @@ class _$ConsultaProcessosLeituraAcaoOcorrenciaFilterCopyWithImpl<$Res,
   @override
   $Res call({
     Object? startDate = freezed,
+    Object? startTime = freezed,
     Object? finalDate = freezed,
+    Object? finalTime = freezed,
     Object? codKit = freezed,
     Object? codBarraKitContem = freezed,
     Object? codItem = freezed,
@@ -118,9 +126,17 @@ class _$ConsultaProcessosLeituraAcaoOcorrenciaFilterCopyWithImpl<$Res,
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      startTime: freezed == startTime
+          ? _value.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       finalDate: freezed == finalDate
           ? _value.finalDate
           : finalDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      finalTime: freezed == finalTime
+          ? _value.finalTime
+          : finalTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       codKit: freezed == codKit
           ? _value.codKit
@@ -216,7 +232,9 @@ abstract class _$$ConsultaProcessosLeituraAcaoOcorrenciaFilterImplCopyWith<$Res>
   @useResult
   $Res call(
       {DateTime? startDate,
+      DateTime? startTime,
       DateTime? finalDate,
+      DateTime? finalTime,
       int? codKit,
       String? codBarraKitContem,
       int? codItem,
@@ -251,7 +269,9 @@ class __$$ConsultaProcessosLeituraAcaoOcorrenciaFilterImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? startDate = freezed,
+    Object? startTime = freezed,
     Object? finalDate = freezed,
+    Object? finalTime = freezed,
     Object? codKit = freezed,
     Object? codBarraKitContem = freezed,
     Object? codItem = freezed,
@@ -268,9 +288,17 @@ class __$$ConsultaProcessosLeituraAcaoOcorrenciaFilterImplCopyWithImpl<$Res>
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      startTime: freezed == startTime
+          ? _value.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       finalDate: freezed == finalDate
           ? _value.finalDate
           : finalDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      finalTime: freezed == finalTime
+          ? _value.finalTime
+          : finalTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       codKit: freezed == codKit
           ? _value.codKit
@@ -321,15 +349,17 @@ class __$$ConsultaProcessosLeituraAcaoOcorrenciaFilterImplCopyWithImpl<$Res>
 class _$ConsultaProcessosLeituraAcaoOcorrenciaFilterImpl
     extends _ConsultaProcessosLeituraAcaoOcorrenciaFilter {
   _$ConsultaProcessosLeituraAcaoOcorrenciaFilterImpl(
-      {required this.startDate,
-      required this.finalDate,
-      required this.codKit,
-      required this.codBarraKitContem,
-      required this.codItem,
-      required this.idEtiquetaContem,
-      required this.codUsuarioAcao,
-      required this.codUsuarioAutorizacao,
-      required this.codAcaoOcorrencia,
+      {this.startDate,
+      this.startTime,
+      this.finalDate,
+      this.finalTime,
+      this.codKit,
+      this.codBarraKitContem,
+      this.codItem,
+      this.idEtiquetaContem,
+      this.codUsuarioAcao,
+      this.codUsuarioAutorizacao,
+      this.codAcaoOcorrencia,
       this.item,
       this.usuarioAcao,
       this.usuarioAutorizacao})
@@ -342,7 +372,11 @@ class _$ConsultaProcessosLeituraAcaoOcorrenciaFilterImpl
   @override
   DateTime? startDate;
   @override
+  DateTime? startTime;
+  @override
   DateTime? finalDate;
+  @override
+  DateTime? finalTime;
   @override
   int? codKit;
   @override
@@ -366,7 +400,7 @@ class _$ConsultaProcessosLeituraAcaoOcorrenciaFilterImpl
 
   @override
   String toString() {
-    return 'ConsultaProcessosLeituraAcaoOcorrenciaFilter(startDate: $startDate, finalDate: $finalDate, codKit: $codKit, codBarraKitContem: $codBarraKitContem, codItem: $codItem, idEtiquetaContem: $idEtiquetaContem, codUsuarioAcao: $codUsuarioAcao, codUsuarioAutorizacao: $codUsuarioAutorizacao, codAcaoOcorrencia: $codAcaoOcorrencia, item: $item, usuarioAcao: $usuarioAcao, usuarioAutorizacao: $usuarioAutorizacao)';
+    return 'ConsultaProcessosLeituraAcaoOcorrenciaFilter(startDate: $startDate, startTime: $startTime, finalDate: $finalDate, finalTime: $finalTime, codKit: $codKit, codBarraKitContem: $codBarraKitContem, codItem: $codItem, idEtiquetaContem: $idEtiquetaContem, codUsuarioAcao: $codUsuarioAcao, codUsuarioAutorizacao: $codUsuarioAutorizacao, codAcaoOcorrencia: $codAcaoOcorrencia, item: $item, usuarioAcao: $usuarioAcao, usuarioAutorizacao: $usuarioAutorizacao)';
   }
 
   @JsonKey(ignore: true)
@@ -390,15 +424,17 @@ class _$ConsultaProcessosLeituraAcaoOcorrenciaFilterImpl
 abstract class _ConsultaProcessosLeituraAcaoOcorrenciaFilter
     extends ConsultaProcessosLeituraAcaoOcorrenciaFilter {
   factory _ConsultaProcessosLeituraAcaoOcorrenciaFilter(
-          {required DateTime? startDate,
-          required DateTime? finalDate,
-          required int? codKit,
-          required String? codBarraKitContem,
-          required int? codItem,
-          required String? idEtiquetaContem,
-          required int? codUsuarioAcao,
-          required int? codUsuarioAutorizacao,
-          required int? codAcaoOcorrencia,
+          {DateTime? startDate,
+          DateTime? startTime,
+          DateTime? finalDate,
+          DateTime? finalTime,
+          int? codKit,
+          String? codBarraKitContem,
+          int? codItem,
+          String? idEtiquetaContem,
+          int? codUsuarioAcao,
+          int? codUsuarioAutorizacao,
+          int? codAcaoOcorrencia,
           ItemModel? item,
           UsuarioDropDownSearchResponseDTO? usuarioAcao,
           UsuarioDropDownSearchResponseDTO? usuarioAutorizacao}) =
@@ -413,8 +449,14 @@ abstract class _ConsultaProcessosLeituraAcaoOcorrenciaFilter
   DateTime? get startDate;
   set startDate(DateTime? value);
   @override
+  DateTime? get startTime;
+  set startTime(DateTime? value);
+  @override
   DateTime? get finalDate;
   set finalDate(DateTime? value);
+  @override
+  DateTime? get finalTime;
+  set finalTime(DateTime? value);
   @override
   int? get codKit;
   set codKit(int? value);

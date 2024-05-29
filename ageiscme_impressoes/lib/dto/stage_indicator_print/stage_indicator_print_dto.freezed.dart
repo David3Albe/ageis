@@ -23,6 +23,8 @@ StageIndicatorPrintDTO _$StageIndicatorPrintDTOFromJson(
 mixin _$StageIndicatorPrintDTO {
   int get instituitionCod => throw _privateConstructorUsedError;
   set instituitionCod(int value) => throw _privateConstructorUsedError;
+  int get quantity => throw _privateConstructorUsedError;
+  set quantity(int value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -36,7 +38,7 @@ abstract class $StageIndicatorPrintDTOCopyWith<$Res> {
           $Res Function(StageIndicatorPrintDTO) then) =
       _$StageIndicatorPrintDTOCopyWithImpl<$Res, StageIndicatorPrintDTO>;
   @useResult
-  $Res call({int instituitionCod});
+  $Res call({int instituitionCod, int quantity});
 }
 
 /// @nodoc
@@ -54,11 +56,16 @@ class _$StageIndicatorPrintDTOCopyWithImpl<$Res,
   @override
   $Res call({
     Object? instituitionCod = null,
+    Object? quantity = null,
   }) {
     return _then(_value.copyWith(
       instituitionCod: null == instituitionCod
           ? _value.instituitionCod
           : instituitionCod // ignore: cast_nullable_to_non_nullable
+              as int,
+      quantity: null == quantity
+          ? _value.quantity
+          : quantity // ignore: cast_nullable_to_non_nullable
               as int,
     ) as $Val);
   }
@@ -73,7 +80,7 @@ abstract class _$$StageIndicatorPrintDTOImplCopyWith<$Res>
       __$$StageIndicatorPrintDTOImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int instituitionCod});
+  $Res call({int instituitionCod, int quantity});
 }
 
 /// @nodoc
@@ -90,11 +97,16 @@ class __$$StageIndicatorPrintDTOImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? instituitionCod = null,
+    Object? quantity = null,
   }) {
     return _then(_$StageIndicatorPrintDTOImpl(
       instituitionCod: null == instituitionCod
           ? _value.instituitionCod
           : instituitionCod // ignore: cast_nullable_to_non_nullable
+              as int,
+      quantity: null == quantity
+          ? _value.quantity
+          : quantity // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }
@@ -105,17 +117,20 @@ class __$$StageIndicatorPrintDTOImplCopyWithImpl<$Res>
 class _$StageIndicatorPrintDTOImpl
     with DiagnosticableTreeMixin
     implements _StageIndicatorPrintDTO {
-  _$StageIndicatorPrintDTOImpl({required this.instituitionCod});
+  _$StageIndicatorPrintDTOImpl(
+      {required this.instituitionCod, required this.quantity});
 
   factory _$StageIndicatorPrintDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$StageIndicatorPrintDTOImplFromJson(json);
 
   @override
   int instituitionCod;
+  @override
+  int quantity;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'StageIndicatorPrintDTO(instituitionCod: $instituitionCod)';
+    return 'StageIndicatorPrintDTO(instituitionCod: $instituitionCod, quantity: $quantity)';
   }
 
   @override
@@ -123,7 +138,8 @@ class _$StageIndicatorPrintDTOImpl
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'StageIndicatorPrintDTO'))
-      ..add(DiagnosticsProperty('instituitionCod', instituitionCod));
+      ..add(DiagnosticsProperty('instituitionCod', instituitionCod))
+      ..add(DiagnosticsProperty('quantity', quantity));
   }
 
   @JsonKey(ignore: true)
@@ -142,8 +158,9 @@ class _$StageIndicatorPrintDTOImpl
 }
 
 abstract class _StageIndicatorPrintDTO implements StageIndicatorPrintDTO {
-  factory _StageIndicatorPrintDTO({required int instituitionCod}) =
-      _$StageIndicatorPrintDTOImpl;
+  factory _StageIndicatorPrintDTO(
+      {required int instituitionCod,
+      required int quantity}) = _$StageIndicatorPrintDTOImpl;
 
   factory _StageIndicatorPrintDTO.fromJson(Map<String, dynamic> json) =
       _$StageIndicatorPrintDTOImpl.fromJson;
@@ -151,6 +168,9 @@ abstract class _StageIndicatorPrintDTO implements StageIndicatorPrintDTO {
   @override
   int get instituitionCod;
   set instituitionCod(int value);
+  @override
+  int get quantity;
+  set quantity(int value);
   @override
   @JsonKey(ignore: true)
   _$$StageIndicatorPrintDTOImplCopyWith<_$StageIndicatorPrintDTOImpl>

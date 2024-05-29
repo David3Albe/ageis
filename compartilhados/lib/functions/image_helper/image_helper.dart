@@ -6,7 +6,12 @@ import 'package:dependencias_comuns/file_picker_export.dart';
 import 'package:flutter/foundation.dart';
 
 class ImageHelper {
-  static const List<String> _ALLOWED_EXTENSIONS = ['jpg', 'jpeg', 'png'];
+  static const List<String> _ALLOWED_EXTENSIONS = [
+    'jpg',
+    'jpeg',
+    'png',
+    'Webp',
+  ];
 
   static Future<ImageObjectModel?> selectImage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(

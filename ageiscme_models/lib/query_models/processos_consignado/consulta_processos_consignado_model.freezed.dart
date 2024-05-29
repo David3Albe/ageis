@@ -46,6 +46,8 @@ mixin _$ConsultaProcessosConsignadoModel {
   set qtdePadrao(int? value) => throw _privateConstructorUsedError;
   int? get recebido => throw _privateConstructorUsedError;
   set recebido(int? value) => throw _privateConstructorUsedError;
+  int? get preparado => throw _privateConstructorUsedError;
+  set preparado(int? value) => throw _privateConstructorUsedError;
   int? get consumido => throw _privateConstructorUsedError;
   set consumido(int? value) => throw _privateConstructorUsedError;
   int? get codRegistroProcessoExpurgo => throw _privateConstructorUsedError;
@@ -89,6 +91,7 @@ abstract class $ConsultaProcessosConsignadoModelCopyWith<$Res> {
       String? descricaoItemConsignado,
       int? qtdePadrao,
       int? recebido,
+      int? preparado,
       int? consumido,
       int? codRegistroProcessoExpurgo,
       int? codItem,
@@ -124,6 +127,7 @@ class _$ConsultaProcessosConsignadoModelCopyWithImpl<$Res,
     Object? descricaoItemConsignado = freezed,
     Object? qtdePadrao = freezed,
     Object? recebido = freezed,
+    Object? preparado = freezed,
     Object? consumido = freezed,
     Object? codRegistroProcessoExpurgo = freezed,
     Object? codItem = freezed,
@@ -181,6 +185,10 @@ class _$ConsultaProcessosConsignadoModelCopyWithImpl<$Res,
           ? _value.recebido
           : recebido // ignore: cast_nullable_to_non_nullable
               as int?,
+      preparado: freezed == preparado
+          ? _value.preparado
+          : preparado // ignore: cast_nullable_to_non_nullable
+              as int?,
       consumido: freezed == consumido
           ? _value.consumido
           : consumido // ignore: cast_nullable_to_non_nullable
@@ -235,6 +243,7 @@ abstract class _$$ConsultaProcessosConsignadoModelImplCopyWith<$Res>
       String? descricaoItemConsignado,
       int? qtdePadrao,
       int? recebido,
+      int? preparado,
       int? consumido,
       int? codRegistroProcessoExpurgo,
       int? codItem,
@@ -269,6 +278,7 @@ class __$$ConsultaProcessosConsignadoModelImplCopyWithImpl<$Res>
     Object? descricaoItemConsignado = freezed,
     Object? qtdePadrao = freezed,
     Object? recebido = freezed,
+    Object? preparado = freezed,
     Object? consumido = freezed,
     Object? codRegistroProcessoExpurgo = freezed,
     Object? codItem = freezed,
@@ -326,6 +336,10 @@ class __$$ConsultaProcessosConsignadoModelImplCopyWithImpl<$Res>
           ? _value.recebido
           : recebido // ignore: cast_nullable_to_non_nullable
               as int?,
+      preparado: freezed == preparado
+          ? _value.preparado
+          : preparado // ignore: cast_nullable_to_non_nullable
+              as int?,
       consumido: freezed == consumido
           ? _value.consumido
           : consumido // ignore: cast_nullable_to_non_nullable
@@ -375,6 +389,7 @@ class _$ConsultaProcessosConsignadoModelImpl
       required this.descricaoItemConsignado,
       required this.qtdePadrao,
       required this.recebido,
+      required this.preparado,
       required this.consumido,
       required this.codRegistroProcessoExpurgo,
       required this.codItem,
@@ -413,6 +428,8 @@ class _$ConsultaProcessosConsignadoModelImpl
   @override
   int? recebido;
   @override
+  int? preparado;
+  @override
   int? consumido;
   @override
   int? codRegistroProcessoExpurgo;
@@ -429,7 +446,7 @@ class _$ConsultaProcessosConsignadoModelImpl
 
   @override
   String toString() {
-    return 'ConsultaProcessosConsignadoModel(dataHora: $dataHora, usuario: $usuario, origem: $origem, circulante: $circulante, prontuario: $prontuario, idEtiqueta: $idEtiqueta, materialConsignado: $materialConsignado, nomeProprietario: $nomeProprietario, codItemConsignado: $codItemConsignado, descricaoItemConsignado: $descricaoItemConsignado, qtdePadrao: $qtdePadrao, recebido: $recebido, consumido: $consumido, codRegistroProcessoExpurgo: $codRegistroProcessoExpurgo, codItem: $codItem, medico: $medico, entreguePor: $entreguePor, retiradoPor: $retiradoPor, imprimir: $imprimir)';
+    return 'ConsultaProcessosConsignadoModel(dataHora: $dataHora, usuario: $usuario, origem: $origem, circulante: $circulante, prontuario: $prontuario, idEtiqueta: $idEtiqueta, materialConsignado: $materialConsignado, nomeProprietario: $nomeProprietario, codItemConsignado: $codItemConsignado, descricaoItemConsignado: $descricaoItemConsignado, qtdePadrao: $qtdePadrao, recebido: $recebido, preparado: $preparado, consumido: $consumido, codRegistroProcessoExpurgo: $codRegistroProcessoExpurgo, codItem: $codItem, medico: $medico, entreguePor: $entreguePor, retiradoPor: $retiradoPor, imprimir: $imprimir)';
   }
 
   @JsonKey(ignore: true)
@@ -463,6 +480,7 @@ abstract class _ConsultaProcessosConsignadoModel
       required String? descricaoItemConsignado,
       required int? qtdePadrao,
       required int? recebido,
+      required int? preparado,
       required int? consumido,
       required int? codRegistroProcessoExpurgo,
       required int? codItem,
@@ -512,6 +530,9 @@ abstract class _ConsultaProcessosConsignadoModel
   @override
   int? get recebido;
   set recebido(int? value);
+  @override
+  int? get preparado;
+  set preparado(int? value);
   @override
   int? get consumido;
   set consumido(int? value);

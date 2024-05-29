@@ -3,17 +3,24 @@ import 'package:compartilhados/fontes/fontes.dart';
 import 'package:compartilhados/functions/helper_functions.dart';
 import 'package:flutter/material.dart';
 
+typedef SetReadonlyBuilder<T> = void Function(
+  BuildContext context,
+  void Function(bool readonly) setReadonlyBuilder,
+);
+
 class TimePickerWidget extends StatefulWidget {
   final String placeholder;
   final void Function(TimeOfDay? selectedTime)? onTimeSelected;
   final TimeOfDay? initialValue;
   final bool readOnly;
+  final SetReadonlyBuilder? setReadonlyBuilder;
 
   TimePickerWidget({
     required this.placeholder,
     this.onTimeSelected,
     this.initialValue,
     this.readOnly = false,
+    this.setReadonlyBuilder,
   });
 
   @override
@@ -24,10 +31,12 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
   late TimeOfDay? selectedTime;
   TextEditingController textController = TextEditingController();
   FocusNode focusNode = FocusNode();
+  late bool readOnly;
 
   @override
   void initState() {
     super.initState();
+    readOnly = widget.readOnly;
 
     if (widget.initialValue == null) {
       selectedTime = null;
@@ -41,6 +50,12 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
     }
 
     textController.addListener(_onTextChanged);
+  }
+
+  void setReadonly(bool readonly) {
+    setState(() {
+      readOnly = readonly;
+    });
   }
 
   @override
@@ -128,6 +143,10 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
 
   @override
   Widget build(BuildContext context) {
+    widget.setReadonlyBuilder?.call(
+      context,
+      setReadonly,
+    );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
@@ -153,8 +172,8 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
               ),
             ),
           ),
-          enabled: !widget.readOnly,
-          readOnly: widget.readOnly,
+          enabled: !readOnly,
+          readOnly: readOnly,
         ),
       ],
     );

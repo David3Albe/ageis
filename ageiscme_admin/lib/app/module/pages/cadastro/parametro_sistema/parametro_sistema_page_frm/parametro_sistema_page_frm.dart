@@ -44,9 +44,9 @@ class _ParametroSistemaPageFrmState extends State<ParametroSistemaPageFrm> {
   late final TextFieldNumberWidget txtQtdeMaxProcessosEtiqueta =
       TextFieldNumberWidget(
     placeholder: 'Qtde. Máxima de Processos por Etiqueta',
-    onChanged: (String? str) {
+    onChanged: (String str) {
       parametroSistema.qtdeMaxProcessosEtiqueta =
-          int.parse(txtQtdeMaxProcessosEtiqueta.text);
+          str.isEmpty ? null : int.parse(txtQtdeMaxProcessosEtiqueta.text);
     },
   );
   late final TextFieldStringWidget txtVersaoAtual = TextFieldStringWidget(
@@ -166,7 +166,7 @@ class _ParametroSistemaPageFrmState extends State<ParametroSistemaPageFrm> {
                 ),
                 const Spacer(),
                 CloseButtonWidget(
-                  onPressed: () => Navigator.of(context).pop((false,  '')),
+                  onPressed: () => Navigator.of(context).pop((false, '')),
                 ),
               ],
             ),

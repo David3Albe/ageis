@@ -2,12 +2,14 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/deposito_insu
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/fabricante/fabricante_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/fornecedor/fornecedor_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/unidade_medida/unidade_medida_cubit.dart';
+import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_drop_down_search_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento_insumos/equipamento_insumo_page.dart';
 import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/insumo/insumo_page_frm/insumo_page_frm_state.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/insumo_teste/insumo_teste_page_frm/insumo_teste_page_frm.dart';
 import 'package:ageiscme_data/services/insumo/insumo_service.dart';
 import 'package:ageiscme_data/services/item/item_service.dart';
+import 'package:ageiscme_models/dto/usuario/usuario_drop_down_search_dto.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/models/insumo_teste/insumo_teste_model.dart';
@@ -677,6 +679,16 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
     depositoInsumoCubit.loadAll();
   }
 
+  void loadUsuarios({
+    required UsuarioDropDownSearchCubit usuarioCubit,
+  }) {
+    usuarioCubit.loadDropDownSearch(
+      UsuarioDropDownSearchDTO(
+        numeroRegistros: 10000,
+      ),
+    );
+  }
+
   Future abrirTesteInsumo() async {
     if (insumo.cod == null || insumo.cod == 0) {
       ToastUtils.showCustomToastWarning(
@@ -685,6 +697,8 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
       );
       return;
     }
+    UsuarioDropDownSearchCubit usuarioCubit = UsuarioDropDownSearchCubit();
+    loadUsuarios(usuarioCubit: usuarioCubit);
     loadDepositoInsumo();
     InsumoTesteModel insumoTesteModel = InsumoTesteModel.empty();
     insumoTesteModel.codInsumo = insumo.cod;
@@ -697,6 +711,7 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
           insumoReadOnly: true,
           depositoInsumoCubit: depositoInsumoCubit,
           insumoTeste: insumoTesteModel,
+          usuarioCubit: usuarioCubit,
         );
       },
     );

@@ -23,8 +23,12 @@ ConsultaRemoverReporItemFilter _$ConsultaRemoverReporItemFilterFromJson(
 mixin _$ConsultaRemoverReporItemFilter {
   DateTime? get startDate => throw _privateConstructorUsedError;
   set startDate(DateTime? value) => throw _privateConstructorUsedError;
+  DateTime? get startTime => throw _privateConstructorUsedError;
+  set startTime(DateTime? value) => throw _privateConstructorUsedError;
   DateTime? get finalDate => throw _privateConstructorUsedError;
   set finalDate(DateTime? value) => throw _privateConstructorUsedError;
+  DateTime? get finalTime => throw _privateConstructorUsedError;
+  set finalTime(DateTime? value) => throw _privateConstructorUsedError;
   String? get codBarraKit => throw _privateConstructorUsedError;
   set codBarraKit(String? value) => throw _privateConstructorUsedError;
   String? get codBarraKitContem => throw _privateConstructorUsedError;
@@ -60,7 +64,9 @@ abstract class $ConsultaRemoverReporItemFilterCopyWith<$Res> {
   @useResult
   $Res call(
       {DateTime? startDate,
+      DateTime? startTime,
       DateTime? finalDate,
+      DateTime? finalTime,
       String? codBarraKit,
       String? codBarraKitContem,
       String? idEtiquetaContem,
@@ -89,7 +95,9 @@ class _$ConsultaRemoverReporItemFilterCopyWithImpl<$Res,
   @override
   $Res call({
     Object? startDate = freezed,
+    Object? startTime = freezed,
     Object? finalDate = freezed,
+    Object? finalTime = freezed,
     Object? codBarraKit = freezed,
     Object? codBarraKitContem = freezed,
     Object? idEtiquetaContem = freezed,
@@ -104,9 +112,17 @@ class _$ConsultaRemoverReporItemFilterCopyWithImpl<$Res,
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      startTime: freezed == startTime
+          ? _value.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       finalDate: freezed == finalDate
           ? _value.finalDate
           : finalDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      finalTime: freezed == finalTime
+          ? _value.finalTime
+          : finalTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       codBarraKit: freezed == codBarraKit
           ? _value.codBarraKit
@@ -180,7 +196,9 @@ abstract class _$$ConsultaRemoverReporItemFilterImplCopyWith<$Res>
   @useResult
   $Res call(
       {DateTime? startDate,
+      DateTime? startTime,
       DateTime? finalDate,
+      DateTime? finalTime,
       String? codBarraKit,
       String? codBarraKitContem,
       String? idEtiquetaContem,
@@ -210,7 +228,9 @@ class __$$ConsultaRemoverReporItemFilterImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? startDate = freezed,
+    Object? startTime = freezed,
     Object? finalDate = freezed,
+    Object? finalTime = freezed,
     Object? codBarraKit = freezed,
     Object? codBarraKitContem = freezed,
     Object? idEtiquetaContem = freezed,
@@ -225,9 +245,17 @@ class __$$ConsultaRemoverReporItemFilterImplCopyWithImpl<$Res>
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      startTime: freezed == startTime
+          ? _value.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       finalDate: freezed == finalDate
           ? _value.finalDate
           : finalDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      finalTime: freezed == finalTime
+          ? _value.finalTime
+          : finalTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       codBarraKit: freezed == codBarraKit
           ? _value.codBarraKit
@@ -270,14 +298,16 @@ class __$$ConsultaRemoverReporItemFilterImplCopyWithImpl<$Res>
 class _$ConsultaRemoverReporItemFilterImpl
     extends _ConsultaRemoverReporItemFilter with DiagnosticableTreeMixin {
   _$ConsultaRemoverReporItemFilterImpl(
-      {required this.startDate,
-      required this.finalDate,
-      required this.codBarraKit,
-      required this.codBarraKitContem,
-      required this.idEtiquetaContem,
-      required this.codBarraItem,
-      required this.codUsuarioAcao,
-      required this.codMotivo,
+      {this.startDate,
+      this.startTime,
+      this.finalDate,
+      this.finalTime,
+      this.codBarraKit,
+      this.codBarraKitContem,
+      this.idEtiquetaContem,
+      this.codBarraItem,
+      this.codUsuarioAcao,
+      this.codMotivo,
       this.usuario,
       this.item})
       : super._();
@@ -289,7 +319,11 @@ class _$ConsultaRemoverReporItemFilterImpl
   @override
   DateTime? startDate;
   @override
+  DateTime? startTime;
+  @override
   DateTime? finalDate;
+  @override
+  DateTime? finalTime;
   @override
   String? codBarraKit;
   @override
@@ -309,7 +343,7 @@ class _$ConsultaRemoverReporItemFilterImpl
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ConsultaRemoverReporItemFilter(startDate: $startDate, finalDate: $finalDate, codBarraKit: $codBarraKit, codBarraKitContem: $codBarraKitContem, idEtiquetaContem: $idEtiquetaContem, codBarraItem: $codBarraItem, codUsuarioAcao: $codUsuarioAcao, codMotivo: $codMotivo, usuario: $usuario, item: $item)';
+    return 'ConsultaRemoverReporItemFilter(startDate: $startDate, startTime: $startTime, finalDate: $finalDate, finalTime: $finalTime, codBarraKit: $codBarraKit, codBarraKitContem: $codBarraKitContem, idEtiquetaContem: $idEtiquetaContem, codBarraItem: $codBarraItem, codUsuarioAcao: $codUsuarioAcao, codMotivo: $codMotivo, usuario: $usuario, item: $item)';
   }
 
   @override
@@ -318,7 +352,9 @@ class _$ConsultaRemoverReporItemFilterImpl
     properties
       ..add(DiagnosticsProperty('type', 'ConsultaRemoverReporItemFilter'))
       ..add(DiagnosticsProperty('startDate', startDate))
+      ..add(DiagnosticsProperty('startTime', startTime))
       ..add(DiagnosticsProperty('finalDate', finalDate))
+      ..add(DiagnosticsProperty('finalTime', finalTime))
       ..add(DiagnosticsProperty('codBarraKit', codBarraKit))
       ..add(DiagnosticsProperty('codBarraKitContem', codBarraKitContem))
       ..add(DiagnosticsProperty('idEtiquetaContem', idEtiquetaContem))
@@ -348,14 +384,16 @@ class _$ConsultaRemoverReporItemFilterImpl
 abstract class _ConsultaRemoverReporItemFilter
     extends ConsultaRemoverReporItemFilter {
   factory _ConsultaRemoverReporItemFilter(
-      {required DateTime? startDate,
-      required DateTime? finalDate,
-      required String? codBarraKit,
-      required String? codBarraKitContem,
-      required String? idEtiquetaContem,
-      required String? codBarraItem,
-      required int? codUsuarioAcao,
-      required int? codMotivo,
+      {DateTime? startDate,
+      DateTime? startTime,
+      DateTime? finalDate,
+      DateTime? finalTime,
+      String? codBarraKit,
+      String? codBarraKitContem,
+      String? idEtiquetaContem,
+      String? codBarraItem,
+      int? codUsuarioAcao,
+      int? codMotivo,
       UsuarioDropDownSearchResponseDTO? usuario,
       ItemModel? item}) = _$ConsultaRemoverReporItemFilterImpl;
   _ConsultaRemoverReporItemFilter._() : super._();
@@ -367,8 +405,14 @@ abstract class _ConsultaRemoverReporItemFilter
   DateTime? get startDate;
   set startDate(DateTime? value);
   @override
+  DateTime? get startTime;
+  set startTime(DateTime? value);
+  @override
   DateTime? get finalDate;
   set finalDate(DateTime? value);
+  @override
+  DateTime? get finalTime;
+  set finalTime(DateTime? value);
   @override
   String? get codBarraKit;
   set codBarraKit(String? value);

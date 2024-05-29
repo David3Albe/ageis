@@ -23,8 +23,12 @@ ConsultaProcessosConsignadoFilter _$ConsultaProcessosConsignadoFilterFromJson(
 mixin _$ConsultaProcessosConsignadoFilter {
   DateTime? get startDate => throw _privateConstructorUsedError;
   set startDate(DateTime? value) => throw _privateConstructorUsedError;
+  DateTime? get startTime => throw _privateConstructorUsedError;
+  set startTime(DateTime? value) => throw _privateConstructorUsedError;
   DateTime? get finalDate => throw _privateConstructorUsedError;
   set finalDate(DateTime? value) => throw _privateConstructorUsedError;
+  DateTime? get finalTime => throw _privateConstructorUsedError;
+  set finalTime(DateTime? value) => throw _privateConstructorUsedError;
   int? get codItemDescritor => throw _privateConstructorUsedError;
   set codItemDescritor(int? value) => throw _privateConstructorUsedError;
   int? get codItemConsignado => throw _privateConstructorUsedError;
@@ -58,7 +62,9 @@ abstract class $ConsultaProcessosConsignadoFilterCopyWith<$Res> {
   @useResult
   $Res call(
       {DateTime? startDate,
+      DateTime? startTime,
       DateTime? finalDate,
+      DateTime? finalTime,
       int? codItemDescritor,
       int? codItemConsignado,
       String? idEtiquetaContem,
@@ -86,7 +92,9 @@ class _$ConsultaProcessosConsignadoFilterCopyWithImpl<$Res,
   @override
   $Res call({
     Object? startDate = freezed,
+    Object? startTime = freezed,
     Object? finalDate = freezed,
+    Object? finalTime = freezed,
     Object? codItemDescritor = freezed,
     Object? codItemConsignado = freezed,
     Object? idEtiquetaContem = freezed,
@@ -100,9 +108,17 @@ class _$ConsultaProcessosConsignadoFilterCopyWithImpl<$Res,
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      startTime: freezed == startTime
+          ? _value.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       finalDate: freezed == finalDate
           ? _value.finalDate
           : finalDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      finalTime: freezed == finalTime
+          ? _value.finalTime
+          : finalTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       codItemDescritor: freezed == codItemDescritor
           ? _value.codItemDescritor
@@ -172,7 +188,9 @@ abstract class _$$ConsultaProcessosConsignadoFilterImplCopyWith<$Res>
   @useResult
   $Res call(
       {DateTime? startDate,
+      DateTime? startTime,
       DateTime? finalDate,
+      DateTime? finalTime,
       int? codItemDescritor,
       int? codItemConsignado,
       String? idEtiquetaContem,
@@ -201,7 +219,9 @@ class __$$ConsultaProcessosConsignadoFilterImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? startDate = freezed,
+    Object? startTime = freezed,
     Object? finalDate = freezed,
+    Object? finalTime = freezed,
     Object? codItemDescritor = freezed,
     Object? codItemConsignado = freezed,
     Object? idEtiquetaContem = freezed,
@@ -215,9 +235,17 @@ class __$$ConsultaProcessosConsignadoFilterImplCopyWithImpl<$Res>
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      startTime: freezed == startTime
+          ? _value.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       finalDate: freezed == finalDate
           ? _value.finalDate
           : finalDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      finalTime: freezed == finalTime
+          ? _value.finalTime
+          : finalTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       codItemDescritor: freezed == codItemDescritor
           ? _value.codItemDescritor
@@ -256,13 +284,15 @@ class __$$ConsultaProcessosConsignadoFilterImplCopyWithImpl<$Res>
 class _$ConsultaProcessosConsignadoFilterImpl
     extends _ConsultaProcessosConsignadoFilter {
   _$ConsultaProcessosConsignadoFilterImpl(
-      {required this.startDate,
-      required this.finalDate,
-      required this.codItemDescritor,
-      required this.codItemConsignado,
-      required this.idEtiquetaContem,
-      required this.codProprietario,
-      required this.consignado,
+      {this.startDate,
+      this.startTime,
+      this.finalDate,
+      this.finalTime,
+      this.codItemDescritor,
+      this.codItemConsignado,
+      this.idEtiquetaContem,
+      this.codProprietario,
+      this.consignado,
       this.itemDescritor,
       this.item})
       : super._();
@@ -274,7 +304,11 @@ class _$ConsultaProcessosConsignadoFilterImpl
   @override
   DateTime? startDate;
   @override
+  DateTime? startTime;
+  @override
   DateTime? finalDate;
+  @override
+  DateTime? finalTime;
   @override
   int? codItemDescritor;
   @override
@@ -292,7 +326,7 @@ class _$ConsultaProcessosConsignadoFilterImpl
 
   @override
   String toString() {
-    return 'ConsultaProcessosConsignadoFilter(startDate: $startDate, finalDate: $finalDate, codItemDescritor: $codItemDescritor, codItemConsignado: $codItemConsignado, idEtiquetaContem: $idEtiquetaContem, codProprietario: $codProprietario, consignado: $consignado, itemDescritor: $itemDescritor, item: $item)';
+    return 'ConsultaProcessosConsignadoFilter(startDate: $startDate, startTime: $startTime, finalDate: $finalDate, finalTime: $finalTime, codItemDescritor: $codItemDescritor, codItemConsignado: $codItemConsignado, idEtiquetaContem: $idEtiquetaContem, codProprietario: $codProprietario, consignado: $consignado, itemDescritor: $itemDescritor, item: $item)';
   }
 
   @JsonKey(ignore: true)
@@ -314,13 +348,15 @@ class _$ConsultaProcessosConsignadoFilterImpl
 abstract class _ConsultaProcessosConsignadoFilter
     extends ConsultaProcessosConsignadoFilter {
   factory _ConsultaProcessosConsignadoFilter(
-      {required DateTime? startDate,
-      required DateTime? finalDate,
-      required int? codItemDescritor,
-      required int? codItemConsignado,
-      required String? idEtiquetaContem,
-      required int? codProprietario,
-      required bool? consignado,
+      {DateTime? startDate,
+      DateTime? startTime,
+      DateTime? finalDate,
+      DateTime? finalTime,
+      int? codItemDescritor,
+      int? codItemConsignado,
+      String? idEtiquetaContem,
+      int? codProprietario,
+      bool? consignado,
       ItemDescritorDropDownSearchResponseDTO? itemDescritor,
       ItemModel? item}) = _$ConsultaProcessosConsignadoFilterImpl;
   _ConsultaProcessosConsignadoFilter._() : super._();
@@ -333,8 +369,14 @@ abstract class _ConsultaProcessosConsignadoFilter
   DateTime? get startDate;
   set startDate(DateTime? value);
   @override
+  DateTime? get startTime;
+  set startTime(DateTime? value);
+  @override
   DateTime? get finalDate;
   set finalDate(DateTime? value);
+  @override
+  DateTime? get finalTime;
+  set finalTime(DateTime? value);
   @override
   int? get codItemDescritor;
   set codItemDescritor(int? value);

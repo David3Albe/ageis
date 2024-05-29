@@ -21,6 +21,12 @@ _$ConsultaProcessoRespostaEPCEPIFilterImpl
           respostaNao: json['respostaNao'] as bool?,
           entrada: json['entrada'] as bool?,
           saida: json['saida'] as bool?,
+          startTime: json['startTime'] == null
+              ? null
+              : DateTime.parse(json['startTime'] as String),
+          finalTime: json['finalTime'] == null
+              ? null
+              : DateTime.parse(json['finalTime'] as String),
           usuario: json['usuario'] == null
               ? null
               : UsuarioDropDownSearchResponseDTO.fromJson(
@@ -38,5 +44,7 @@ Map<String, dynamic> _$$ConsultaProcessoRespostaEPCEPIFilterImplToJson(
       'respostaNao': instance.respostaNao,
       'entrada': instance.entrada,
       'saida': instance.saida,
+      'startTime': instance.startTime?.toIso8601String(),
+      'finalTime': instance.finalTime?.toIso8601String(),
       'usuario': instance.usuario?.toJson(),
     };

@@ -19,6 +19,7 @@ import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.da
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
+import 'package:compartilhados/componentes/toasts/warning_dialog.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
@@ -293,7 +294,7 @@ class _ProcessoPageConsignedItemsDialogState
     final ProcessoLeituraCubit processoCubit =
         BlocProvider.of<ProcessoLeituraCubit>(context);
     ProcessoLeituraMontagemModel processoState = processoCubit.state.processo;
-    if (!_validaCampos(processoState)) {
+    if (!_validaCampos(leitura: processoState, loading: loading)) {
       loading.closeDefault();
       return;
     }
@@ -315,8 +316,12 @@ class _ProcessoPageConsignedItemsDialogState
     await processoCubit.readCode(lastCode);
   }
 
-  bool _validaCampos(ProcessoLeituraMontagemModel leitura) {
+  bool _validaCampos({
+    required ProcessoLeituraMontagemModel leitura,
+    required LoadingController loading,
+  }) {
     if (codDescritorItem == null) {
+      loading.closeDefault();
       ToastUtils.showCustomToastWarning(
         context,
         'Selecione um Descritor de Item',
@@ -324,6 +329,7 @@ class _ProcessoPageConsignedItemsDialogState
       return false;
     }
     if (codProprietario == null) {
+      loading.closeDefault();
       ToastUtils.showCustomToastWarning(
         context,
         'Selecione um Proprietário',
@@ -331,6 +337,7 @@ class _ProcessoPageConsignedItemsDialogState
       return false;
     }
     if (refForncedor == null || refForncedor!.isEmpty) {
+      loading.closeDefault();
       ToastUtils.showCustomToastWarning(
         context,
         'Informe o campo Ref. Fornecedor',
@@ -339,11 +346,23 @@ class _ProcessoPageConsignedItemsDialogState
     }
     for (ItemConsignadoModel item in item!.itensConsignados!) {
       if (_validaCampoConsignado(item)) {
+        loading.closeDefault();
         ToastUtils.showCustomToastWarning(
           context,
           'Informe o valor conferido do consignado ${item.descricao}',
         );
         return false;
+      }
+      if (leitura.leituraAtual.consignado!.tipoAcesso ==
+          ConsignedItemPageTypeDart.Purge) {
+        if (item.conferenciaExpurgo! > item.conferenciaPreparo!) {
+          loading.closeDefault();
+          WarningUtils.showWarningDialog(
+            context,
+            'O valor de expurgo conferido não pode ser maior que o valor de preparo do consignado ${item.descricao}',
+          );
+          return false;
+        }
       }
     }
     return true;

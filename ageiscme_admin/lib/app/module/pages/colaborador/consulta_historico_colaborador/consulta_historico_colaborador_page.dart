@@ -134,7 +134,7 @@ class _ConsultaHistoricoColaboradorPageState
                     ))
                         ?.$2 ??
                     [],
-                textFunction: (usuario) => usuario.CodBarraNome(),
+                textFunction: (usuario) => usuario.NomeText(),
                 initialValue: filter.usuario,
                 onChanged: (value) {
                   filter.codUsuario = value?.cod;

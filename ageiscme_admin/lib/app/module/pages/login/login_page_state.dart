@@ -4,6 +4,7 @@ import 'package:ageiscme_models/dto/authentication/authentication_dto.dart';
 import 'package:ageiscme_models/dto/authentication_result/authentication_result_dto.dart';
 import 'package:ageiscme_models/models/usuario/usuario_model.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
+import 'package:compartilhados/functions/window_manager/window_manager_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/modular_export.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,8 @@ class LoginPageCubit extends Cubit<LoginPageState> {
 
       AuthenticationStore store = Modular.get<AuthenticationStore>();
       await store.SaveAuthentication(result.$2);
+      String? instituicao = result.$2.instituicao?.nome;
+      await WindowManagerHelper.setTitle(instituicao);
       loading.closeDefault();
       emit(LoginPageState(loading: false, usuario: result.$2.usuario));
     } on Exception catch (ex) {

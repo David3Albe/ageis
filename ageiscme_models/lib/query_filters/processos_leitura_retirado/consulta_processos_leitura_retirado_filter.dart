@@ -10,14 +10,16 @@ sealed class ConsultaProcessosLeituraRetiradoFilter
   const ConsultaProcessosLeituraRetiradoFilter._();
 
   factory ConsultaProcessosLeituraRetiradoFilter({
-    required DateTime? startDate,
-    required DateTime? finalDate,
-    required int? codItem,
-    required String? idEtiquetaContem,
-    required int? codKit,
-    required String? codBarraKitContem,
-    required int? codLocal,
-    required bool? rotulado,
+    DateTime? startDate,
+    DateTime? startTime,
+    DateTime? finalDate,
+    DateTime? finalTime,
+    int? codItem,
+    String? idEtiquetaContem,
+    int? codKit,
+    String? codBarraKitContem,
+    int? codLocal,
+    bool? rotulado,
     ItemModel? item,
   }) = _ConsultaProcessosLeituraRetiradoFilter;
 

@@ -346,6 +346,21 @@ class ItemMenuService {
       );
     }
 
+    if (direitosUsuario.contains(DireitoEnum.UnidadesMedidasConsulta) ||
+        direitosUsuario.contains(DireitoEnum.UnidadesMedidasManutencao) ||
+        ignorarDireitos) {
+      menuItemInsumo.addChildren(
+        ItemMenuModel(
+          'Unidade de Medidas',
+          route: '/material/unidade-medida',
+          rights: [
+            DireitoEnum.UnidadesMedidasConsulta,
+            DireitoEnum.UnidadesMedidasManutencao,
+          ],
+        ),
+      );
+    }
+
     if (direitosUsuario.contains(DireitoEnum.InsumosDepositoConsulta) ||
         direitosUsuario.contains(DireitoEnum.InsumosDepositoManutencao) ||
         ignorarDireitos) {
@@ -371,6 +386,21 @@ class ItemMenuService {
           rights: [
             DireitoEnum.InsumosMovimentosConsulta,
             DireitoEnum.InsumosMovimentosManutencao,
+          ],
+        ),
+      );
+    }
+
+    if (direitosUsuario.contains(DireitoEnum.InsumosDepositoConsulta) ||
+        direitosUsuario.contains(DireitoEnum.InsumosDepositoManutencao) ||
+        ignorarDireitos) {
+      menuItemInsumo.addChildren(
+        ItemMenuModel(
+          'Teste de Qualidade',
+          route: '/insumo/insumo-teste',
+          rights: [
+            DireitoEnum.InsumosTestesConsulta,
+            DireitoEnum.InsumosTestesManutencao,
           ],
         ),
       );
@@ -563,6 +593,7 @@ class ItemMenuService {
     }
 
     if (direitosUsuario.contains(DireitoEnum.CadastroPecasManutencao) ||
+        direitosUsuario.contains(DireitoEnum.PecasConsulta) ||
         ignorarDireitos) {
       menuItemEquipamento.addChildren(
         ItemMenuModel(
@@ -570,6 +601,7 @@ class ItemMenuService {
           route: '/equipamento/peca',
           rights: [
             DireitoEnum.CadastroPecasManutencao,
+            DireitoEnum.PecasConsulta,
           ],
         ),
       );
@@ -707,6 +739,19 @@ class ItemMenuService {
           route: '/processo/consulta-processo-consignado',
           rights: [
             DireitoEnum.EstoquesConsulta,
+          ],
+        ),
+      );
+    }
+
+    if (direitosUsuario.contains(DireitoEnum.ProcessosEtapasConsulta) ||
+        ignorarDireitos) {
+      menuItemProcesso.addChildren(
+        ItemMenuModel(
+          'Consulta Fluxo Processo',
+          route: '/processo/processo-tipo-consulta',
+          rights: [
+            DireitoEnum.ProcessosEtapasConsulta,
           ],
         ),
       );
@@ -1028,21 +1073,6 @@ class ItemMenuService {
           rights: [
             DireitoEnum.ConsultaReporRemoverItem,
             DireitoEnum.ManutencaoReporRemoverItem,
-          ],
-        ),
-      );
-    }
-
-    if (direitosUsuario.contains(DireitoEnum.UnidadesMedidasConsulta) ||
-        direitosUsuario.contains(DireitoEnum.UnidadesMedidasManutencao) ||
-        ignorarDireitos) {
-      menuItemMateriais.addChildren(
-        ItemMenuModel(
-          'Unidade de Medidas',
-          route: '/material/unidade-medida',
-          rights: [
-            DireitoEnum.UnidadesMedidasConsulta,
-            DireitoEnum.UnidadesMedidasManutencao,
           ],
         ),
       );

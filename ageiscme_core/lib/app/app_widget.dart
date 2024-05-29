@@ -2,6 +2,7 @@ import 'package:ageiscme_admin/app/module/widgets/custom_navigation_bar/cubit/cu
 import 'package:ageiscme_data/shared/app_config.dart';
 import 'package:compartilhados/cores/cores.dart';
 import 'package:compartilhados/cubits/route/current_route/current_route_cubit.dart';
+import 'package:compartilhados/functions/window_manager/window_manager_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:dependencias_comuns/modular_export.dart';
@@ -34,7 +35,7 @@ class AppWidget extends StatelessWidget {
       child: MaterialApp.router(
         locale: const Locale('pt', 'BR'),
         debugShowCheckedModeBanner: false,
-        title: 'Ageis CME',
+        title: WindowManagerHelper.BASE_TITLE,
         theme: ThemeData(
           dialogTheme: DialogTheme(
             shape: RoundedRectangleBorder(

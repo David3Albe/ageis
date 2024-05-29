@@ -49,8 +49,9 @@ class _LocalizacaoArsenalPageFrmState extends State<LocalizacaoArsenalPageFrm> {
   );
   late final TextFieldNumberWidget txtCodigoBarra = TextFieldNumberWidget(
     placeholder: 'Código de Barras',
-    onChanged: (String? str) {
-      localizacaoArsenal.codBarra = int.parse(txtCodigoBarra.text);
+    onChanged: (String str) {
+      localizacaoArsenal.codBarra =
+          str.isEmpty ? null : int.parse(txtCodigoBarra.text);
     },
   );
 

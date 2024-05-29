@@ -5,7 +5,7 @@ import 'package:ageiscme_admin/app/module/pages/material/item/inserir_rapido/cub
 import 'package:ageiscme_admin/app/module/pages/material/item/inserir_rapido/inserir_rapido_widget.dart';
 import 'package:ageiscme_models/dto/item/inserir_rapido/search/item_inserir_rapido_search_dto.dart';
 import 'package:ageiscme_models/main.dart';
-import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
+import 'package:compartilhados/componentes/botoes/custom_default_button_widget.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
@@ -56,8 +56,11 @@ class InserirRapidoPage extends StatelessWidget {
         ),
       ),
       actions: [
-        CancelButtonUnfilledWidget(
-          onPressed: () => Navigator.of(context).pop(),
+        CustomDefaultButtonWidget(
+          cor: Colors.red.shade500,
+          corHovered: Colors.red.shade700,
+          onPressed: Navigator.of(context).pop,
+          text: 'Fechar',
         ),
       ],
     );

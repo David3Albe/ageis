@@ -5,7 +5,12 @@ import 'package:compartilhados/main.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
-enum ToastType { success, error, warning }
+enum ToastType {
+  success,
+  error,
+  warning,
+  notice,
+}
 
 class ToastUtils {
   static BuildContext? routerOutletContext;
@@ -36,6 +41,15 @@ class ToastUtils {
         _createOverlayEntry(
           message,
           ToastType.warning,
+        ),
+      );
+
+  static void showCustomToastNotice(BuildContext? context, String message) =>
+      insertToast(
+        routerOutletContext == null ? context! : routerOutletContext!,
+        _createOverlayEntry(
+          message,
+          ToastType.notice,
         ),
       );
 
@@ -71,6 +85,12 @@ class ToastUtils {
           fill: 1,
           color: Cores.corIconeToastWarning,
         );
+      case ToastType.notice:
+        return const Icon(
+          Icons.info,
+          fill: 1,
+          color: Cores.corIconeToastNotice,
+        );
     }
   }
 
@@ -82,6 +102,8 @@ class ToastUtils {
         return 'Sucesso';
       case ToastType.warning:
         return 'Atenção';
+      case ToastType.notice:
+        return 'Aviso';
     }
   }
 
@@ -93,6 +115,8 @@ class ToastUtils {
         return Cores.corToastSucesso;
       case ToastType.warning:
         return Cores.corToastBackgroundWarning;
+      case ToastType.notice:
+        return Cores.corToastBackgroundNotice;
     }
   }
 

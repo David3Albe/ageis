@@ -150,7 +150,7 @@ class _ImagemPageFrmState extends State<ImagemPageFrm> {
                                 placeholder: 'Abrir Imagem',
                                 documentoString: imagem.foto,
                                 documentName:
-                                    imagem.nomeFoto ?? 'arquivo sem nome.jpg',
+                                    imagem.nomeFoto ?? 'arquivo sem nome.Webp',
                               ),
                             ],
                           ),

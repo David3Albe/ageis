@@ -217,7 +217,7 @@ class _DocumentoPageFrmState extends State<DocumentoPageFrm> {
                                 placeholder: 'Abrir DOC',
                                 documentoString: documento.documento,
                                 documentName: documento.nomeDocumento ??
-                                    'arquivo sem nome.jpg',
+                                    'arquivo sem nome.Webp',
                               ),
                             ],
                           ),

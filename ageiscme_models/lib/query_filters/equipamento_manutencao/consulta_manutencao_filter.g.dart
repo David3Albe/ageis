@@ -12,9 +12,15 @@ _$ConsultaManutencaoFilterImpl _$$ConsultaManutencaoFilterImplFromJson(
       startDate: json['startDate'] == null
           ? null
           : DateTime.parse(json['startDate'] as String),
+      startTime: json['startTime'] == null
+          ? null
+          : DateTime.parse(json['startTime'] as String),
       finalDate: json['finalDate'] == null
           ? null
           : DateTime.parse(json['finalDate'] as String),
+      finalTime: json['finalTime'] == null
+          ? null
+          : DateTime.parse(json['finalTime'] as String),
       codEquipamento: json['codEquipamento'] as int?,
       codServicosTipo: json['codServicosTipo'] as int?,
       codPeca: json['codPeca'] as int?,
@@ -28,7 +34,9 @@ Map<String, dynamic> _$$ConsultaManutencaoFilterImplToJson(
         _$ConsultaManutencaoFilterImpl instance) =>
     <String, dynamic>{
       'startDate': instance.startDate?.toIso8601String(),
+      'startTime': instance.startTime?.toIso8601String(),
       'finalDate': instance.finalDate?.toIso8601String(),
+      'finalTime': instance.finalTime?.toIso8601String(),
       'codEquipamento': instance.codEquipamento,
       'codServicosTipo': instance.codServicosTipo,
       'codPeca': instance.codPeca,

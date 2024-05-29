@@ -1,10 +1,12 @@
 import 'package:ageiscme_models/models/processo_leitura_prioridade/processo_leitura_prioridade_model.dart';
 import 'package:ageiscme_processo/app/module/blocs/processo_leitura_cubit.dart';
+import 'package:ageiscme_processo/app/module/enums/custom_audio.dart';
 import 'package:ageiscme_processo/app/module/models/item_processo/item_processo_model.dart';
 import 'package:ageiscme_processo/app/module/models/kit_processo/kit_processo_model.dart';
 import 'package:ageiscme_processo/app/module/models/processo_leitura/processo_leitura_montagem_model.dart';
 import 'package:ageiscme_processo/app/module/shared/cores.dart';
 import 'package:compartilhados/fontes/fontes.dart';
+import 'package:compartilhados/functions/custom_audio_player.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +18,19 @@ class ProcessoPagePriorityWidget extends StatelessWidget {
     var scale = MediaQuery.of(context).size.width / 1920;
     return Material(
       elevation: 10,
-      child: BlocBuilder<ProcessoLeituraCubit, ProcessoLeituraState>(
+      child: BlocConsumer<ProcessoLeituraCubit, ProcessoLeituraState>(
+        listenWhen: (previous, current) =>
+            current.rebuildType == ProcessoLeituraRebuildType.All &&
+            getItemKitPriority(previous.processo) !=
+                getItemKitPriority(current.processo),
+        listener: (context, state) {
+          ProcessoLeituraPrioridadeModel? prioridade =
+              getPrioridade(state.processo);
+          if (prioridade?.urgente != true) return;
+          CustomAudio? audio = CustomAudio.getOneFromCode(5);
+          if (audio == null) return;
+          CustomAudioPlayer.playAudioFromAsset(audio.path);
+        },
         buildWhen: (previous, current) =>
             current.rebuildType == ProcessoLeituraRebuildType.All,
         builder: (context, state) {
@@ -24,7 +38,6 @@ class ProcessoPagePriorityWidget extends StatelessWidget {
           int? prioridadeItemKit = getItemKitPriority(
             state.processo,
           );
-          print(prioridadeItemKit);
           if (prioridadeItemKit != null ||
               state.processo.leituraAtual.prioridade != null) {
             prioridade = ProcessoLeituraPrioridadeModel.getPriorityFromCode(
@@ -131,5 +144,20 @@ class ProcessoPagePriorityWidget extends StatelessWidget {
     KitProcessoModel? kit = processo.getKitLidoOuNull();
     if (kit != null) return kit.prioridade;
     return null;
+  }
+
+  ProcessoLeituraPrioridadeModel? getPrioridade(
+    ProcessoLeituraMontagemModel processo,
+  ) {
+    ProcessoLeituraPrioridadeModel? prioridade;
+    int? prioridadeItemKit = getItemKitPriority(
+      processo,
+    );
+    if (prioridadeItemKit != null || processo.leituraAtual.prioridade != null) {
+      prioridade = ProcessoLeituraPrioridadeModel.getPriorityFromCode(
+        prioridadeItemKit ?? processo.leituraAtual.prioridade!,
+      );
+    }
+    return prioridade;
   }
 }

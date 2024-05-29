@@ -13,7 +13,7 @@ sealed class TrainingRecordPrintDTO with _$TrainingRecordPrintDTO {
     String? description,
     String? entity,
     DateTime? date,
-    double? workload
+    double? workload,
   }) = _TrainingRecordPrintDTO;
 
   factory TrainingRecordPrintDTO.fromJson(Map<String, Object?> json) =>

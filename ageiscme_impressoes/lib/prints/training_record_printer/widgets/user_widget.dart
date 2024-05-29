@@ -14,19 +14,18 @@ class UserWidget extends StatelessWidget {
   @override
   Widget build(Context context) {
     return Container(
-      width: 120,
+      width: 195,
       child: Column(
         children: [
-          Padding(padding: const EdgeInsets.only(top: 16)),
+          Padding(padding: const EdgeInsets.only(top: 24)),
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Expanded(
                 child: Text(
                   user.userName,
-                  style: TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
+                  style: const TextStyle(
+                    fontSize: 8,
                   ),
                 ),
               ),

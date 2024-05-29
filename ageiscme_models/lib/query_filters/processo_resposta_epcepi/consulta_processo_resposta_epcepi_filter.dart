@@ -10,14 +10,16 @@ sealed class ConsultaProcessoRespostaEPCEPIFilter
   const ConsultaProcessoRespostaEPCEPIFilter._();
 
   factory ConsultaProcessoRespostaEPCEPIFilter({
-    required DateTime? startDate,
-    required DateTime? finalDate,
-    required int? codUsuario,
-    required int? codEquipamento,
-    required bool? respostaSim,
-    required bool? respostaNao,
-    required bool? entrada,
-    required bool? saida,
+    DateTime? startDate,
+    DateTime? finalDate,
+    int? codUsuario,
+    int? codEquipamento,
+    bool? respostaSim,
+    bool? respostaNao,
+    bool? entrada,
+    bool? saida,
+    DateTime? startTime,
+    DateTime? finalTime,
     UsuarioDropDownSearchResponseDTO? usuario,
   }) = _ConsultaProcessoRespostaEPCEPIFilter;
 

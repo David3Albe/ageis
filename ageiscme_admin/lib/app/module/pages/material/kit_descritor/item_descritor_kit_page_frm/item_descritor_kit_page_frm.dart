@@ -45,8 +45,8 @@ class _ItemDescritorKitPageFrmState extends State<ItemDescritorKitPageFrm> {
 
   late final TextFieldNumberWidget txtQuantidade = TextFieldNumberWidget(
     placeholder: 'Quantidade',
-    onChanged: (String? str) {
-      itemDescritorKit.quantidade = int.parse(txtQuantidade.text);
+    onChanged: (String str) {
+      itemDescritorKit.quantidade = str.isEmpty ? null : int.parse(str);
     },
   );
 

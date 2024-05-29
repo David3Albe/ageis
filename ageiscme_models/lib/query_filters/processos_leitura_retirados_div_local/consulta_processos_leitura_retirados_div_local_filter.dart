@@ -9,10 +9,12 @@ sealed class ConsultaProcessosLeituraRetiradosDivLocalFilter
   const ConsultaProcessosLeituraRetiradosDivLocalFilter._();
 
   factory ConsultaProcessosLeituraRetiradosDivLocalFilter({
-    required DateTime? startDate,
-    required DateTime? finalDate,
-    required int? codLocal,
-    required int? codProprietario,
+    DateTime? startDate,
+    DateTime? startTime,
+    DateTime? finalDate,
+    DateTime? finalTime,
+    int? codLocal,
+    int? codProprietario,
   }) = _ConsultaProcessosLeituraRetiradosDivLocalFilter;
 
   factory ConsultaProcessosLeituraRetiradosDivLocalFilter.fromJson(

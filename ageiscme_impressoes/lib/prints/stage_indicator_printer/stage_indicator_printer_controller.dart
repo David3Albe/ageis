@@ -37,7 +37,7 @@ class StageIndicatorPrinterController {
     }
 
     int qtdeImpressao = 0;
-    while (qtdeImpressao < 10) {
+    while (qtdeImpressao < stageIndicatorPrint.quantity) {
       sistema.indicador =
           sistema.indicador == null ? 1 : sistema.indicador! + 1;
       pdf.addPage(
@@ -46,7 +46,8 @@ class StageIndicatorPrinterController {
       qtdeImpressao++;
     }
 
-    await service.save(sistema);
+    var result = await service.save(sistema);
+    if (result == null) return;
     await PrinterHelper.PrintDocumentDefaultPrinter(
       context,
       await pdf.save(),

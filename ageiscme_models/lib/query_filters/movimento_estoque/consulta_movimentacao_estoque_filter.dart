@@ -9,12 +9,14 @@ sealed class ConsultaMovimentacaoEstoqueFilter
   const ConsultaMovimentacaoEstoqueFilter._();
 
   factory ConsultaMovimentacaoEstoqueFilter({
-    required DateTime? startDate,
-    required DateTime? finalDate,
-    required int? codDeposito,
-    required int? codInsumo,
-    required String? lote,
-    required String? nroNotaFiscal,
+     DateTime? startDate,
+     DateTime? startTime,
+     DateTime? finalDate,
+     DateTime? finalTime,
+     int? codDeposito,
+     int? codInsumo,
+     String? lote,
+     String? nroNotaFiscal,
   }) = _ConsultaMovimentacaoEstoqueFilter;
 
   factory ConsultaMovimentacaoEstoqueFilter.fromJson(

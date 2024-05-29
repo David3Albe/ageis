@@ -43,20 +43,20 @@ class _KitCorPageFrmState extends State<KitCorPageFrm> {
   );
   late final TextFieldNumberWidget txtCorRed = TextFieldNumberWidget(
     placeholder: 'Red',
-    onChanged: (String? str) {
-      kitCor.red = int.parse(txtCorRed.text);
+    onChanged: (String str) {
+      kitCor.red = str.isEmpty ? null : int.parse(str);
     },
   );
   late final TextFieldNumberWidget txtCorGreen = TextFieldNumberWidget(
     placeholder: 'Green',
-    onChanged: (String? str) {
-      kitCor.green = int.parse(txtCorGreen.text);
+    onChanged: (String str) {
+      kitCor.green = str.isEmpty ? null : int.parse(str);
     },
   );
   late final TextFieldNumberWidget txtCorBlue = TextFieldNumberWidget(
     placeholder: 'Blue',
-    onChanged: (String? str) {
-      kitCor.blue = int.parse(txtCorBlue.text);
+    onChanged: (String str) {
+      kitCor.blue = str.isEmpty ? null : int.parse(str);
     },
   );
 

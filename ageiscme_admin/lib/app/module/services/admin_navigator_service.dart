@@ -10,6 +10,13 @@ abstract class AdminNavigatorService {
     NavigatorService.navigateTo('/admin/home');
   }
 
-  static void navigateToModuleSelection() => 
+  static void navigateToChangePassword({
+    required String actualPassword,
+  }) {
+    NavigatorService.navigateToArguments(
+        '/admin/cadastro/alterar-senha', actualPassword,);
+  }
+
+  static void navigateToModuleSelection() =>
       NavigatorService.navigateToModuleSelection();
 }

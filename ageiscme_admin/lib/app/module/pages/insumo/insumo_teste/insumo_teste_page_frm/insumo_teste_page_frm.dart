@@ -37,13 +37,13 @@ class InsumoTestePageFrm extends StatefulWidget {
     Key? key,
     required this.insumoTeste,
     required this.depositoInsumoCubit,
-    this.usuarioCubit,
+    required this.usuarioCubit,
     this.insumoReadOnly,
   }) : super(key: key);
 
   final InsumoTesteModel insumoTeste;
   final DepositoInsumoCubit depositoInsumoCubit;
-  final UsuarioDropDownSearchCubit? usuarioCubit;
+  final UsuarioDropDownSearchCubit usuarioCubit;
   final bool? insumoReadOnly;
 
   @override
@@ -189,7 +189,7 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
           'Edição de Testes de Insumos: ${insumoTeste.cod} - ${insumoTeste.codInsumo}';
       if (insumoTeste.resultado == '0') {
         final nomeUsuarioLiberacao =
-            widget.usuarioCubit!.state.usuarios.firstWhere(
+            widget.usuarioCubit.state.usuarios.firstWhere(
           (user) => user.cod == insumoTeste.codUsuarioLiberacao,
         );
 

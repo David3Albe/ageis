@@ -10,17 +10,19 @@ sealed class ConsultaProcessosLeituraEntradaAutomaticaFilter
   const ConsultaProcessosLeituraEntradaAutomaticaFilter._();
 
   factory ConsultaProcessosLeituraEntradaAutomaticaFilter({
-    required DateTime? startDate,
-    required DateTime? finalDate,
-    required int? codSituacao,
-    required int? codKit,
-    required String? codBarraKitContem,
-    required int? codItem,
-    required String? idEtiquetaContem,
-    required int? codEtapaProcesso,
-    required int? codRegistroProcesso,
-    required String? indicador,
-    required String? prontuarioRetirada,
+    DateTime? startDate,
+    DateTime? startTime,
+    DateTime? finalDate,
+    DateTime? finalTime,
+    int? codSituacao,
+    int? codKit,
+    String? codBarraKitContem,
+    int? codItem,
+    String? idEtiquetaContem,
+    int? codEtapaProcesso,
+    int? codRegistroProcesso,
+    String? indicador,
+    String? prontuarioRetirada,
     ItemModel? item,
   }) = _ConsultaProcessosLeituraEntradaAutomaticaFilter;
 

@@ -2,6 +2,9 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuar
 import 'package:ageiscme_admin/app/module/pages/colaborador/treinamento_registro/treinamento_registro_page_frm/treinamento_registro_page_frm_state.dart';
 import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_data/services/treinamento_registro/treinamento_registro_service.dart';
+import 'package:ageiscme_impressoes/dto/training_record/training_record_print_dto.dart';
+import 'package:ageiscme_impressoes/dto/training_record/user/training_record_user_print_dto.dart';
+import 'package:ageiscme_impressoes/prints/training_record_printer/training_record_printer_controller.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/models/treinamento_usuario/treinamento_usuario_model.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
@@ -437,6 +440,10 @@ class _TreinamentoRegistroPageFrmState
                 children: [
                   CustomPopupMenuWidget(
                     items: [
+                      CustomPopupItemModel(
+                        text: 'Imprimir',
+                        onTap: print,
+                      ),
                       CustomPopupItemFileModel.getFileItem(
                         'Anexar DOC',
                         salvarDoc,
@@ -496,6 +503,46 @@ class _TreinamentoRegistroPageFrmState
         },
       ),
     );
+  }
+
+  Future print() async {
+    if (treinamentoRegistro.cod == null || treinamentoRegistro.cod == 0) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'É necessário ter o registro salvo para realizar a impressao',
+      );
+      return;
+    }
+    List<TrainingRecordUserPrintDTO> users = [];
+    if (treinamentoRegistro.usuariosTreinamentos == null) {
+      return;
+    }
+    for (TreinamentoUsuarioModel usuario
+        in treinamentoRegistro.usuariosTreinamentos!) {
+      String? nomeUsuario = widget.usuarioCubit.state.usuarios
+          .where((element) => element.cod == usuario.codUsuario)
+          .firstOrNull
+          ?.nome;
+      if (nomeUsuario != null) {
+        users.add(
+          TrainingRecordUserPrintDTO(
+            userName: nomeUsuario,
+          ),
+        );
+      }
+    }
+    TrainingRecordPrintDTO dto = TrainingRecordPrintDTO(
+      name: treinamentoRegistro.nome ?? '',
+      description: treinamentoRegistro.descricao ?? '',
+      date: treinamentoRegistro.data,
+      entity: treinamentoRegistro.entidade ?? '',
+      workload: treinamentoRegistro.cargaHoraria ?? 0.0,
+      users: users,
+    );
+    await TrainingRecordPrinterController(
+      context: context,
+      dto: dto,
+    ).print();
   }
 
   void salvarDoc(Future<FileObjectModel?> Function() onSelectFile) async {

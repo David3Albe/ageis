@@ -12,9 +12,15 @@ _$ConsultaProcessosLeituraEntradaAutomaticaFilterImpl
           startDate: json['startDate'] == null
               ? null
               : DateTime.parse(json['startDate'] as String),
+          startTime: json['startTime'] == null
+              ? null
+              : DateTime.parse(json['startTime'] as String),
           finalDate: json['finalDate'] == null
               ? null
               : DateTime.parse(json['finalDate'] as String),
+          finalTime: json['finalTime'] == null
+              ? null
+              : DateTime.parse(json['finalTime'] as String),
           codSituacao: json['codSituacao'] as int?,
           codKit: json['codKit'] as int?,
           codBarraKitContem: json['codBarraKitContem'] as String?,
@@ -35,7 +41,9 @@ Map<String, dynamic>
             _$ConsultaProcessosLeituraEntradaAutomaticaFilterImpl instance) =>
         <String, dynamic>{
           'startDate': instance.startDate?.toIso8601String(),
+          'startTime': instance.startTime?.toIso8601String(),
           'finalDate': instance.finalDate?.toIso8601String(),
+          'finalTime': instance.finalTime?.toIso8601String(),
           'codSituacao': instance.codSituacao,
           'codKit': instance.codKit,
           'codBarraKitContem': instance.codBarraKitContem,

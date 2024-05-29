@@ -252,7 +252,7 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
                               OpenDocWidget(
                                 placeholder: 'Abrir Imagem',
                                 documentoString: epiDescritor.imagem,
-                                documentName: 'arquivo sem nome.jpg',
+                                documentName: 'arquivo sem nome.Webp',
                               ),
                             ],
                           ),

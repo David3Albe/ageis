@@ -264,7 +264,7 @@ class _ConsultaDocumentoPageState extends State<ConsultaDocumentoPage> {
       documentoFiltro.documento!,
       documentoFiltro.nomeDocumento != null
           ? documentoFiltro.nomeDocumento!
-          : 'arquivo sem nome.jpg',
+          : 'arquivo sem nome.Webp',
     );
   }
 

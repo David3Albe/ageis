@@ -19,6 +19,7 @@ class OpenDocHelperWindows implements OpenDocInterface {
 
     final file = io.File(filePath);
     await file.writeAsBytes(bytes);
+    print(filePath);
     await launchUrl(Uri.parse('file:///$filePath'));
   }
 }

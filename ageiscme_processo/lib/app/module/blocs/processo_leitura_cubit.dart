@@ -16,6 +16,7 @@ import 'package:ageiscme_processo/app/module/services/processo_navigator_service
 import 'package:ageiscme_processo/app/module/web_sockets/processo_leitura/processo_leitura_web_socket.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
+import 'package:compartilhados/functions/window_manager/window_manager_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/foundation.dart';
@@ -32,6 +33,7 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
   ProcessoLeituraWebSocket? webSocket;
   bool aviso15MinutosApareceu = false;
   bool aviso5MinutosApareceu = false;
+  bool first = true;
 
   ProcessoLeituraCubit({
     required this.loadingController,
@@ -185,6 +187,13 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
 
     bool leituraFinalizada = endReading(result.$2, result.$1, context);
     if (leituraFinalizada) return;
+
+    if (first) {
+      await WindowManagerHelper.setTitle(
+        result.$2.leituraAtual.instituicao?.nome,
+      );
+    }
+    first = false;
 
     if (result.$2.leituraAtual.decisao != null) filaLeituras.clear();
     if (filaLeituras.isNotEmpty) {

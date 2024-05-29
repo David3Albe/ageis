@@ -24,8 +24,12 @@ ConsultaProcessosLeituraEntradaAutomaticaFilter
 mixin _$ConsultaProcessosLeituraEntradaAutomaticaFilter {
   DateTime? get startDate => throw _privateConstructorUsedError;
   set startDate(DateTime? value) => throw _privateConstructorUsedError;
+  DateTime? get startTime => throw _privateConstructorUsedError;
+  set startTime(DateTime? value) => throw _privateConstructorUsedError;
   DateTime? get finalDate => throw _privateConstructorUsedError;
   set finalDate(DateTime? value) => throw _privateConstructorUsedError;
+  DateTime? get finalTime => throw _privateConstructorUsedError;
+  set finalTime(DateTime? value) => throw _privateConstructorUsedError;
   int? get codSituacao => throw _privateConstructorUsedError;
   set codSituacao(int? value) => throw _privateConstructorUsedError;
   int? get codKit => throw _privateConstructorUsedError;
@@ -64,7 +68,9 @@ abstract class $ConsultaProcessosLeituraEntradaAutomaticaFilterCopyWith<$Res> {
   @useResult
   $Res call(
       {DateTime? startDate,
+      DateTime? startTime,
       DateTime? finalDate,
+      DateTime? finalTime,
       int? codSituacao,
       int? codKit,
       String? codBarraKitContem,
@@ -95,7 +101,9 @@ class _$ConsultaProcessosLeituraEntradaAutomaticaFilterCopyWithImpl<$Res,
   @override
   $Res call({
     Object? startDate = freezed,
+    Object? startTime = freezed,
     Object? finalDate = freezed,
+    Object? finalTime = freezed,
     Object? codSituacao = freezed,
     Object? codKit = freezed,
     Object? codBarraKitContem = freezed,
@@ -112,9 +120,17 @@ class _$ConsultaProcessosLeituraEntradaAutomaticaFilterCopyWithImpl<$Res,
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      startTime: freezed == startTime
+          ? _value.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       finalDate: freezed == finalDate
           ? _value.finalDate
           : finalDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      finalTime: freezed == finalTime
+          ? _value.finalTime
+          : finalTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       codSituacao: freezed == codSituacao
           ? _value.codSituacao
@@ -185,7 +201,9 @@ abstract class _$$ConsultaProcessosLeituraEntradaAutomaticaFilterImplCopyWith<
   @useResult
   $Res call(
       {DateTime? startDate,
+      DateTime? startTime,
       DateTime? finalDate,
+      DateTime? finalTime,
       int? codSituacao,
       int? codKit,
       String? codBarraKitContem,
@@ -217,7 +235,9 @@ class __$$ConsultaProcessosLeituraEntradaAutomaticaFilterImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? startDate = freezed,
+    Object? startTime = freezed,
     Object? finalDate = freezed,
+    Object? finalTime = freezed,
     Object? codSituacao = freezed,
     Object? codKit = freezed,
     Object? codBarraKitContem = freezed,
@@ -234,9 +254,17 @@ class __$$ConsultaProcessosLeituraEntradaAutomaticaFilterImplCopyWithImpl<$Res>
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      startTime: freezed == startTime
+          ? _value.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       finalDate: freezed == finalDate
           ? _value.finalDate
           : finalDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      finalTime: freezed == finalTime
+          ? _value.finalTime
+          : finalTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       codSituacao: freezed == codSituacao
           ? _value.codSituacao
@@ -287,17 +315,19 @@ class __$$ConsultaProcessosLeituraEntradaAutomaticaFilterImplCopyWithImpl<$Res>
 class _$ConsultaProcessosLeituraEntradaAutomaticaFilterImpl
     extends _ConsultaProcessosLeituraEntradaAutomaticaFilter {
   _$ConsultaProcessosLeituraEntradaAutomaticaFilterImpl(
-      {required this.startDate,
-      required this.finalDate,
-      required this.codSituacao,
-      required this.codKit,
-      required this.codBarraKitContem,
-      required this.codItem,
-      required this.idEtiquetaContem,
-      required this.codEtapaProcesso,
-      required this.codRegistroProcesso,
-      required this.indicador,
-      required this.prontuarioRetirada,
+      {this.startDate,
+      this.startTime,
+      this.finalDate,
+      this.finalTime,
+      this.codSituacao,
+      this.codKit,
+      this.codBarraKitContem,
+      this.codItem,
+      this.idEtiquetaContem,
+      this.codEtapaProcesso,
+      this.codRegistroProcesso,
+      this.indicador,
+      this.prontuarioRetirada,
       this.item})
       : super._();
 
@@ -308,7 +338,11 @@ class _$ConsultaProcessosLeituraEntradaAutomaticaFilterImpl
   @override
   DateTime? startDate;
   @override
+  DateTime? startTime;
+  @override
   DateTime? finalDate;
+  @override
+  DateTime? finalTime;
   @override
   int? codSituacao;
   @override
@@ -332,7 +366,7 @@ class _$ConsultaProcessosLeituraEntradaAutomaticaFilterImpl
 
   @override
   String toString() {
-    return 'ConsultaProcessosLeituraEntradaAutomaticaFilter(startDate: $startDate, finalDate: $finalDate, codSituacao: $codSituacao, codKit: $codKit, codBarraKitContem: $codBarraKitContem, codItem: $codItem, idEtiquetaContem: $idEtiquetaContem, codEtapaProcesso: $codEtapaProcesso, codRegistroProcesso: $codRegistroProcesso, indicador: $indicador, prontuarioRetirada: $prontuarioRetirada, item: $item)';
+    return 'ConsultaProcessosLeituraEntradaAutomaticaFilter(startDate: $startDate, startTime: $startTime, finalDate: $finalDate, finalTime: $finalTime, codSituacao: $codSituacao, codKit: $codKit, codBarraKitContem: $codBarraKitContem, codItem: $codItem, idEtiquetaContem: $idEtiquetaContem, codEtapaProcesso: $codEtapaProcesso, codRegistroProcesso: $codRegistroProcesso, indicador: $indicador, prontuarioRetirada: $prontuarioRetirada, item: $item)';
   }
 
   @JsonKey(ignore: true)
@@ -356,17 +390,19 @@ class _$ConsultaProcessosLeituraEntradaAutomaticaFilterImpl
 abstract class _ConsultaProcessosLeituraEntradaAutomaticaFilter
     extends ConsultaProcessosLeituraEntradaAutomaticaFilter {
   factory _ConsultaProcessosLeituraEntradaAutomaticaFilter(
-      {required DateTime? startDate,
-      required DateTime? finalDate,
-      required int? codSituacao,
-      required int? codKit,
-      required String? codBarraKitContem,
-      required int? codItem,
-      required String? idEtiquetaContem,
-      required int? codEtapaProcesso,
-      required int? codRegistroProcesso,
-      required String? indicador,
-      required String? prontuarioRetirada,
+      {DateTime? startDate,
+      DateTime? startTime,
+      DateTime? finalDate,
+      DateTime? finalTime,
+      int? codSituacao,
+      int? codKit,
+      String? codBarraKitContem,
+      int? codItem,
+      String? idEtiquetaContem,
+      int? codEtapaProcesso,
+      int? codRegistroProcesso,
+      String? indicador,
+      String? prontuarioRetirada,
       ItemModel? item}) = _$ConsultaProcessosLeituraEntradaAutomaticaFilterImpl;
   _ConsultaProcessosLeituraEntradaAutomaticaFilter._() : super._();
 
@@ -378,8 +414,14 @@ abstract class _ConsultaProcessosLeituraEntradaAutomaticaFilter
   DateTime? get startDate;
   set startDate(DateTime? value);
   @override
+  DateTime? get startTime;
+  set startTime(DateTime? value);
+  @override
   DateTime? get finalDate;
   set finalDate(DateTime? value);
+  @override
+  DateTime? get finalTime;
+  set finalTime(DateTime? value);
   @override
   int? get codSituacao;
   set codSituacao(int? value);

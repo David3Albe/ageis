@@ -23,6 +23,7 @@ _$ConsultaProcessosConsignadoModelImpl
           descricaoItemConsignado: json['descricaoItemConsignado'] as String?,
           qtdePadrao: json['qtdePadrao'] as int?,
           recebido: json['recebido'] as int?,
+          preparado: json['preparado'] as int?,
           consumido: json['consumido'] as int?,
           codRegistroProcessoExpurgo:
               json['codRegistroProcessoExpurgo'] as int?,
@@ -48,6 +49,7 @@ Map<String, dynamic> _$$ConsultaProcessosConsignadoModelImplToJson(
       'descricaoItemConsignado': instance.descricaoItemConsignado,
       'qtdePadrao': instance.qtdePadrao,
       'recebido': instance.recebido,
+      'preparado': instance.preparado,
       'consumido': instance.consumido,
       'codRegistroProcessoExpurgo': instance.codRegistroProcessoExpurgo,
       'codItem': instance.codItem,

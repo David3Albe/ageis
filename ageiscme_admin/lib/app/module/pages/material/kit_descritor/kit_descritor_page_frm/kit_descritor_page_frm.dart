@@ -512,7 +512,7 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
                               OpenDocWidget(
                                 placeholder: 'Abrir Imagem',
                                 documentoString: kitDescritor.imagem,
-                                documentName: 'arquivo sem nome.jpg',
+                                documentName: 'arquivo sem nome.Webp',
                               ),
                             ],
                           ),

@@ -37,6 +37,10 @@ mixin _$ConsultaProcessoRespostaEPCEPIFilter {
   set entrada(bool? value) => throw _privateConstructorUsedError;
   bool? get saida => throw _privateConstructorUsedError;
   set saida(bool? value) => throw _privateConstructorUsedError;
+  DateTime? get startTime => throw _privateConstructorUsedError;
+  set startTime(DateTime? value) => throw _privateConstructorUsedError;
+  DateTime? get finalTime => throw _privateConstructorUsedError;
+  set finalTime(DateTime? value) => throw _privateConstructorUsedError;
   UsuarioDropDownSearchResponseDTO? get usuario =>
       throw _privateConstructorUsedError;
   set usuario(UsuarioDropDownSearchResponseDTO? value) =>
@@ -66,6 +70,8 @@ abstract class $ConsultaProcessoRespostaEPCEPIFilterCopyWith<$Res> {
       bool? respostaNao,
       bool? entrada,
       bool? saida,
+      DateTime? startTime,
+      DateTime? finalTime,
       UsuarioDropDownSearchResponseDTO? usuario});
 
   $UsuarioDropDownSearchResponseDTOCopyWith<$Res>? get usuario;
@@ -93,6 +99,8 @@ class _$ConsultaProcessoRespostaEPCEPIFilterCopyWithImpl<$Res,
     Object? respostaNao = freezed,
     Object? entrada = freezed,
     Object? saida = freezed,
+    Object? startTime = freezed,
+    Object? finalTime = freezed,
     Object? usuario = freezed,
   }) {
     return _then(_value.copyWith(
@@ -128,6 +136,14 @@ class _$ConsultaProcessoRespostaEPCEPIFilterCopyWithImpl<$Res,
           ? _value.saida
           : saida // ignore: cast_nullable_to_non_nullable
               as bool?,
+      startTime: freezed == startTime
+          ? _value.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      finalTime: freezed == finalTime
+          ? _value.finalTime
+          : finalTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       usuario: freezed == usuario
           ? _value.usuario
           : usuario // ignore: cast_nullable_to_non_nullable
@@ -167,6 +183,8 @@ abstract class _$$ConsultaProcessoRespostaEPCEPIFilterImplCopyWith<$Res>
       bool? respostaNao,
       bool? entrada,
       bool? saida,
+      DateTime? startTime,
+      DateTime? finalTime,
       UsuarioDropDownSearchResponseDTO? usuario});
 
   @override
@@ -194,6 +212,8 @@ class __$$ConsultaProcessoRespostaEPCEPIFilterImplCopyWithImpl<$Res>
     Object? respostaNao = freezed,
     Object? entrada = freezed,
     Object? saida = freezed,
+    Object? startTime = freezed,
+    Object? finalTime = freezed,
     Object? usuario = freezed,
   }) {
     return _then(_$ConsultaProcessoRespostaEPCEPIFilterImpl(
@@ -229,6 +249,14 @@ class __$$ConsultaProcessoRespostaEPCEPIFilterImplCopyWithImpl<$Res>
           ? _value.saida
           : saida // ignore: cast_nullable_to_non_nullable
               as bool?,
+      startTime: freezed == startTime
+          ? _value.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      finalTime: freezed == finalTime
+          ? _value.finalTime
+          : finalTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       usuario: freezed == usuario
           ? _value.usuario
           : usuario // ignore: cast_nullable_to_non_nullable
@@ -242,14 +270,16 @@ class __$$ConsultaProcessoRespostaEPCEPIFilterImplCopyWithImpl<$Res>
 class _$ConsultaProcessoRespostaEPCEPIFilterImpl
     extends _ConsultaProcessoRespostaEPCEPIFilter {
   _$ConsultaProcessoRespostaEPCEPIFilterImpl(
-      {required this.startDate,
-      required this.finalDate,
-      required this.codUsuario,
-      required this.codEquipamento,
-      required this.respostaSim,
-      required this.respostaNao,
-      required this.entrada,
-      required this.saida,
+      {this.startDate,
+      this.finalDate,
+      this.codUsuario,
+      this.codEquipamento,
+      this.respostaSim,
+      this.respostaNao,
+      this.entrada,
+      this.saida,
+      this.startTime,
+      this.finalTime,
       this.usuario})
       : super._();
 
@@ -274,11 +304,15 @@ class _$ConsultaProcessoRespostaEPCEPIFilterImpl
   @override
   bool? saida;
   @override
+  DateTime? startTime;
+  @override
+  DateTime? finalTime;
+  @override
   UsuarioDropDownSearchResponseDTO? usuario;
 
   @override
   String toString() {
-    return 'ConsultaProcessoRespostaEPCEPIFilter(startDate: $startDate, finalDate: $finalDate, codUsuario: $codUsuario, codEquipamento: $codEquipamento, respostaSim: $respostaSim, respostaNao: $respostaNao, entrada: $entrada, saida: $saida, usuario: $usuario)';
+    return 'ConsultaProcessoRespostaEPCEPIFilter(startDate: $startDate, finalDate: $finalDate, codUsuario: $codUsuario, codEquipamento: $codEquipamento, respostaSim: $respostaSim, respostaNao: $respostaNao, entrada: $entrada, saida: $saida, startTime: $startTime, finalTime: $finalTime, usuario: $usuario)';
   }
 
   @JsonKey(ignore: true)
@@ -300,14 +334,16 @@ class _$ConsultaProcessoRespostaEPCEPIFilterImpl
 abstract class _ConsultaProcessoRespostaEPCEPIFilter
     extends ConsultaProcessoRespostaEPCEPIFilter {
   factory _ConsultaProcessoRespostaEPCEPIFilter(
-          {required DateTime? startDate,
-          required DateTime? finalDate,
-          required int? codUsuario,
-          required int? codEquipamento,
-          required bool? respostaSim,
-          required bool? respostaNao,
-          required bool? entrada,
-          required bool? saida,
+          {DateTime? startDate,
+          DateTime? finalDate,
+          int? codUsuario,
+          int? codEquipamento,
+          bool? respostaSim,
+          bool? respostaNao,
+          bool? entrada,
+          bool? saida,
+          DateTime? startTime,
+          DateTime? finalTime,
           UsuarioDropDownSearchResponseDTO? usuario}) =
       _$ConsultaProcessoRespostaEPCEPIFilterImpl;
   _ConsultaProcessoRespostaEPCEPIFilter._() : super._();
@@ -340,6 +376,12 @@ abstract class _ConsultaProcessoRespostaEPCEPIFilter
   @override
   bool? get saida;
   set saida(bool? value);
+  @override
+  DateTime? get startTime;
+  set startTime(DateTime? value);
+  @override
+  DateTime? get finalTime;
+  set finalTime(DateTime? value);
   @override
   UsuarioDropDownSearchResponseDTO? get usuario;
   set usuario(UsuarioDropDownSearchResponseDTO? value);

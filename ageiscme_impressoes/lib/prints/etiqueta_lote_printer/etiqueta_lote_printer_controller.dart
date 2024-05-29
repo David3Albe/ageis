@@ -13,7 +13,7 @@ class EtiquetaLotePrinterController {
   final EtiquetaLotePrintDTO dto;
   BuildContext context;
 
-  static const double MAX_WIDTH = 100;
+  static const double MAX_WIDTH = 95;
 
   EtiquetaLotePrinterController({
     required this.dto,
@@ -32,7 +32,7 @@ class EtiquetaLotePrinterController {
     int impressoes = dto.impressoes;
     while (impressoes > 0) {
       pdf.addPage(
-        _createPage(impressoes: dto.impressoes),
+        _createPage(impressoes: impressoes),
       );
       impressoes = impressoes - 3;
     }
@@ -63,7 +63,7 @@ class EtiquetaLotePrinterController {
           ),
           padding: const pw.EdgeInsets.only(
             top: 10,
-            left: 0,
+            left: 5,
           ),
         );
       },

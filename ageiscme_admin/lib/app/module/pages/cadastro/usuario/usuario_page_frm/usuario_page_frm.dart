@@ -4,8 +4,11 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/perfil_acesso
 import 'package:ageiscme_admin/app/module/pages/cadastro/usuario/usuario_page_frm/usuario_page_frm_helper.dart';
 import 'package:ageiscme_admin/app/module/pages/cadastro/usuario/usuario_page_frm/usuario_page_frm_state.dart';
 import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
+import 'package:ageiscme_data/services/alterar_senha_padrao/alterar_senha_padrao_service.dart';
 import 'package:ageiscme_data/services/usuario/usuario_service.dart';
+import 'package:ageiscme_models/dto/alterar_senha_padrao/alterar_senha_padrao_dto.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/response_dto/alterar_senha_padrao/alterar_senha_padrao_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
@@ -20,9 +23,11 @@ import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_pop
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_image_model.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/images/image_memory_widget.dart';
+import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/fontes/fontes.dart';
+import 'package:compartilhados/functions/clipboard/clipboard_helper.dart';
 import 'package:compartilhados/functions/image_helper/image_object_model.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
@@ -41,7 +46,6 @@ class UsuarioPageFrm extends StatefulWidget {
 
 class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
   _UsuarioPageFrmState({required this.usuario});
-
   late String titulo;
   late final PerfilAcessoCubit perfilAcessoCubit;
   UsuarioModel usuario;
@@ -77,6 +81,13 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
   late final TextFieldStringWidget txtCodBarra = TextFieldStringWidget(
     placeholder: 'Código de Barra',
     readOnly: true,
+    suffixWidget: InkWell(
+      onTap: () => ClipboardHelper.copy(
+        context: context,
+        text: txtCodBarra.text,
+      ),
+      child: const Icon(Icons.copy),
+    ),
   );
 
   late final TextFieldStringWidget txtNomeEmpresa = TextFieldStringWidget(
@@ -163,8 +174,9 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
   }
 
   void setUserImage() {
-    image =
-        usuario.foto != null && !usuario.foto!.isEmpty ? Image.memory(base64Decode(usuario.foto!)) : null;
+    image = usuario.foto != null && !usuario.foto!.isEmpty
+        ? Image.memory(base64Decode(usuario.foto!))
+        : null;
   }
 
   @override
@@ -526,6 +538,11 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
                       onTap: printTag,
                     ),
                     if (usuario.cod != null && usuario.cod != 0)
+                      CustomPopupItemModel(
+                        text: 'Resetar Senha',
+                        onTap: alterarSenhaParaPadrao,
+                      ),
+                    if (usuario.cod != null && usuario.cod != 0)
                       CustomPopupItemHistoryModel.getHistoryItem(
                         child: HistoricoPage(
                           pk: usuario.cod!,
@@ -581,6 +598,27 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
       usuario.foto = null;
       setUserImage();
     });
+  }
+
+  void alterarSenhaParaPadrao() async {
+    if (usuario.cod == 0 || usuario.cod == null) {
+      ToastUtils.showCustomToastWarning(context,
+          'Usuário precisa estar criado para alterar a senha para a padrão',);
+      return;
+    }
+    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
+      context,
+      'Confirma a alteração da senha do Usuário\n${usuario.cod} - ${usuario.nome} para a senha Padrão 123456?',
+    );
+    if (!confirmacao) return;
+    (String, AlterarSenhaPadraoResponseDTO)? result =
+        await AlterarSenhaPadraoService().changePassword(
+      AlterarSenhaPadraoDTO(
+        codUsuario: usuario.cod!,
+      ),
+    );
+    if (result == null) return;
+    ToastUtils.showCustomToastSucess(context, result.$1);
   }
 
   void printTag() {

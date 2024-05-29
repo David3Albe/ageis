@@ -91,23 +91,24 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
 
   late final TextFieldNumberWidget txtDebugLevel = TextFieldNumberWidget(
     placeholder: 'Debug Level',
-    onChanged: (String? str) {
-      instituicao.debugLevel = int.parse(txtDebugLevel.text);
+    onChanged: (String str) {
+      instituicao.debugLevel =
+          str.isEmpty ? null : int.parse(txtDebugLevel.text);
     },
   );
 
   late final TextFieldNumberWidget txtTempoMin = TextFieldNumberWidget(
     placeholder: 'Tempo Tela CME Processo (Min)',
-    onChanged: (String? str) {
-      instituicao.tempoMin = int.parse(txtTempoMin.text);
+    onChanged: (String str) {
+      instituicao.tempoMin = str.isEmpty ? null : int.parse(txtTempoMin.text);
     },
   );
 
   late final TextFieldNumberFloatWidget txtEscalaFonte =
       TextFieldNumberFloatWidget(
     placeholder: 'Escala Fonte',
-    onChanged: (String? str) {
-      instituicao.escalaFonte = str == null ? null : double.parse(str);
+    onChanged: (String str) {
+      instituicao.escalaFonte = str.isEmpty ? null : double.parse(str);
     },
   );
 

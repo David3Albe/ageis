@@ -65,72 +65,88 @@ class EstoquePrinterController {
     );
   }
 
+  List<pw.Widget> getLastWidgets(List<List<pw.Widget>> widgetsList) {
+    return widgetsList.last;
+  }
+
   void _generatePages(pw.Document pdf) {
-    List<pw.Widget> widgets = [];
+    List<List<pw.Widget>> widgetsList = [];
+    widgetsList.add([]);
+
     int itensInPage = 0;
     int pagina = 1;
     for (EstoqueKitPrintDTO kit in dto.kits) {
-      widgets.add(
+      getLastWidgets(widgetsList).add(
         KitRowWidget(
           dto: kit,
         ),
       );
       itensInPage++;
       if (itensInPage % 50 == 0) {
-        _createPage(pdf, widgets, pagina);
+        _createPage(pdf, getLastWidgets(widgetsList), pagina);
+        widgetsList.add([]);
         pagina++;
       }
       for (EstoqueKitItemPrintDTO itemKit
           in kit.itens.where((element) => element.riscado == true)) {
-        widgets.add(
+        getLastWidgets(widgetsList).add(
           KitItemRowWidget(
             dto: itemKit,
           ),
         );
         itensInPage++;
         if (itensInPage % 50 == 0) {
-          _createPage(pdf, widgets, pagina);
+          _createPage(pdf, getLastWidgets(widgetsList), pagina);
+          widgetsList.add([]);
           pagina++;
         }
       }
       for (EstoqueKitItemPrintDTO itemKit
           in kit.itens.where((element) => element.riscado != true)) {
-        widgets.add(
+        getLastWidgets(widgetsList).add(
           KitItemRowWidget(
             dto: itemKit,
           ),
         );
         itensInPage++;
         if (itensInPage % 50 == 0) {
-          _createPage(pdf, widgets, pagina);
+          _createPage(pdf, getLastWidgets(widgetsList), pagina);
+          widgetsList.add([]);
           pagina++;
         }
       }
     }
 
     for (EstoqueItemPrintDTO item in dto.itens) {
-      widgets.add(
+      getLastWidgets(widgetsList).add(
         ItemRowWidget(
           dto: item,
         ),
       );
       itensInPage++;
+      if (itensInPage % 50 == 0) {
+        _createPage(pdf, getLastWidgets(widgetsList), pagina);
+        widgetsList.add([]);
+        pagina++;
+      }
       for (EstoqueItemConsignadoPrintDTO itemConsignado in item.consignados) {
-        widgets.add(
+        getLastWidgets(widgetsList).add(
           ItemConsignadoRowWidget(
             dto: itemConsignado,
           ),
         );
         itensInPage++;
         if (itensInPage % 50 == 0) {
-          _createPage(pdf, widgets, pagina);
+          _createPage(pdf, getLastWidgets(widgetsList), pagina);
+          widgetsList.add([]);
           pagina++;
         }
       }
     }
 
-    if (itensInPage % 50 != 0) {
-      _createPage(pdf, widgets, pagina);
+    if (widgetsList.last.isNotEmpty) {
+      _createPage(pdf, getLastWidgets(widgetsList), pagina);
+      widgetsList.add([]);
       pagina++;
     }
   }

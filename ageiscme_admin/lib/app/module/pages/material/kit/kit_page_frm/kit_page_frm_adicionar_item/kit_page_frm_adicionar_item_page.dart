@@ -55,13 +55,13 @@ class _KitPageFrmAdicionarItemPageState
           value: _controller,
           child: Container(
             constraints: const BoxConstraints(
-              minWidth: 400,
+              minWidth: 500,
               maxWidth: 600,
-              maxHeight: 500,
-              minHeight: 400,
+              maxHeight: 600,
+              minHeight: 500,
             ),
-            height: size.height * .4,
-            width: size.width * .4,
+            height: size.height * .5,
+            width: size.width * .5,
             child: Column(
               children: [
                 const Text(

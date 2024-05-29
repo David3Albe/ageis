@@ -8,6 +8,7 @@ part 'stage_indicator_print_dto.freezed.dart';
 sealed class StageIndicatorPrintDTO with _$StageIndicatorPrintDTO {
   factory StageIndicatorPrintDTO({
     required int instituitionCod,
+    required int quantity,
   }) = _StageIndicatorPrintDTO;
 
   factory StageIndicatorPrintDTO.fromJson(Map<String, Object?> json) =>

@@ -85,33 +85,32 @@ class _KitPageFrmState extends State<KitPageFrm> {
     readOnly: true,
   );
 
-  late final TextFieldNumberWidget txtPreparo = TextFieldNumberWidget(
+  late final TextFieldStringWidget txtPreparo = TextFieldStringWidget(
     placeholder: 'Sit. Preparo',
     readOnly: true,
-    onChanged: (String? str) {
-      kit.preparo = txtPreparo.text;
+    onChanged: (String str) {
+      kit.preparo = str;
     },
   );
 
   late final TextFieldNumberWidget txtCodEmbalagem = TextFieldNumberWidget(
     placeholder: 'Embalagem',
     readOnly: true,
-    onChanged: (String? str) {
-      kit.codEmbalagem = int.parse(txtCodEmbalagem.text);
+    onChanged: (String str) {
+      kit.codEmbalagem = str.isEmpty ? null : int.parse(str);
     },
   );
 
   late final TextFieldNumberWidget txtProcessoLeitura = TextFieldNumberWidget(
     placeholder: 'Leitura',
     readOnly: true,
-    onChanged: (String? str) {
-      kit.codProcessoLeitura = int.parse(txtProcessoLeitura.text);
+    onChanged: (String str) {
+      kit.codProcessoLeitura = str.isEmpty ? null : int.parse(str);
     },
   );
 
   @override
   void initState() {
-
     txtRestricao.addValidator((String str) {
       if (str.length > 400) {
         return 'Pode ter no máximo 400 caracteres';
@@ -594,6 +593,13 @@ class _KitPageFrmState extends State<KitPageFrm> {
   void salvar() {
     if (!txtRestricao.valid) return;
     Function(KitModel)? afterSave;
+    if (kit.codDescritorKit == null || kit.codDescritorKit == 0) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'O campo Descritor do Kit é obrigatório.',
+      );
+      return;
+    }
     if (kit.cod == 0 || kit.cod == null) {
       afterSave = (kitImprimir) => _imprimirTagKit(kitImprimir: kitImprimir);
     }

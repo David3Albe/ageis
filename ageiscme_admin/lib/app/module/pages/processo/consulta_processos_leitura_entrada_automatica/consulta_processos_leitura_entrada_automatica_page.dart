@@ -23,6 +23,7 @@ import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_time_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -328,16 +329,83 @@ class _ConsultaProcessosLeituraEntradaAutomaticaPageState
           child: SingleChildScrollView(
             child: Column(
               children: [
-                DatePickerWidget(
-                  placeholder: 'Data Inicio',
-                  onDateSelected: (value) => filter.startDate = value,
-                  initialValue: filter.startDate,
+                Row(
+                  children: [
+                    Expanded(
+                      child: DatePickerWidget(
+                        placeholder: 'Data Inicio',
+                        onDateSelected: (value) => filter.startDate = value,
+                        initialValue: filter.startDate,
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 40),
+                    ),
+                    Expanded(
+                      child: TimePickerWidget(
+                        placeholder: 'Hora Início',
+                        initialValue: filter.startTime == null
+                            ? null
+                            : TimeOfDay(
+                                hour: filter.startTime!.hour,
+                                minute: filter.startTime!.minute,
+                              ),
+                        onTimeSelected: (selectedTime) {
+                          if (selectedTime == null) {
+                            filter.startTime = null;
+                            return;
+                          }
+                          filter.startTime = DateTime(
+                            DateTime.now().year,
+                            DateTime.now().month,
+                            DateTime.now().day,
+                            selectedTime.hour,
+                            selectedTime.minute,
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
                 const Padding(padding: EdgeInsets.only(top: 2)),
-                DatePickerWidget(
-                  placeholder: 'Data Término',
-                  onDateSelected: (value) => filter.finalDate = value,
-                  initialValue: filter.finalDate,
+                Row(
+                  children: [
+                    Expanded(
+                      child: DatePickerWidget(
+                        placeholder: 'Data Término',
+                        onDateSelected: (value) => filter.finalDate = value,
+                        initialValue: filter.finalDate,
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 40),
+                    ),
+                    Expanded(
+                      child: TimePickerWidget(
+                        placeholder: 'Hora Fim',
+                        initialValue: filter.finalTime == null
+                            ? null
+                            : TimeOfDay(
+                                hour: filter.finalTime!.hour,
+                                minute: filter.finalTime!.minute,
+                              ),
+                        onTimeSelected: (selectedTime) {
+                          print(selectedTime);
+                          if (selectedTime == null) {
+                            filter.finalTime = null;
+                            return;
+                          }
+                          filter.finalTime = DateTime(
+                            DateTime.now().year,
+                            DateTime.now().month,
+                            DateTime.now().day,
+                            selectedTime.hour,
+                            selectedTime.minute,
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
                 const Padding(padding: EdgeInsets.only(top: 2)),
                 CustomAutocompleteWidget<KitDropDownSearchResponseDTO>(

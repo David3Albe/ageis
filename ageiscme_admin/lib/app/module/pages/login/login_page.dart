@@ -1,13 +1,14 @@
+import 'package:ageiscme_admin/app/module/pages/login/image_widget.dart';
 import 'package:ageiscme_admin/app/module/pages/login/login_page_state.dart';
 import 'package:ageiscme_admin/app/module/services/admin_navigator_service.dart';
 import 'package:ageiscme_data/services/authentication/authentication_service.dart';
 import 'package:ageiscme_models/dto/authentication/authentication_dto.dart';
+import 'package:ageiscme_models/models/usuario/usuario_model.dart';
 import 'package:compartilhados/componentes/botoes/back_button_small.dart';
 import 'package:compartilhados/componentes/botoes/login_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_with_border_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/cores/cores.dart';
-import 'package:compartilhados/images/default_images.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -53,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Cores.corFundoAgeis,
       body: BlocListener<LoginPageCubit, LoginPageState>(
         listener: (context, state) {
-          if (state.usuario != null) AdminNavigatorService.navigateToHome();
+          if (state.usuario != null) Redirect(state.usuario!);
         },
         bloc: cubit,
         child: BlocBuilder<LoginPageCubit, LoginPageState>(
@@ -89,8 +90,8 @@ class _LoginPageState extends State<LoginPage> {
                                       top: MediaQuery.of(context).size.height *
                                           0.02,
                                     ),
-                                    child: Image(
-                                      image: DefaultImages.logoAgeisCme.image,
+                                    child: const ImageWidget(
+                                      identificador: 'logo_menu_cima',
                                       height: 50,
                                     ),
                                   ),
@@ -177,8 +178,8 @@ class _LoginPageState extends State<LoginPage> {
                   padding: EdgeInsets.only(
                     bottom: MediaQuery.of(context).size.height * 0.05,
                   ),
-                  child: Image(
-                    image: DefaultImages.logo3Albe.image,
+                  child: const ImageWidget(
+                    identificador: 'logo_menu_baixo',
                     height: 60,
                   ),
                 ),
@@ -188,6 +189,22 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  void Redirect(UsuarioModel usuario) {
+    String senhaPadrao = '123456';
+    if (txtPassword.text == senhaPadrao) {
+      ToastUtils.showCustomToastNotice(
+        context,
+        'É necessário redefinir sua senha',
+      );
+      AdminNavigatorService.navigateToChangePassword(
+        actualPassword: senhaPadrao,
+      );
+      return;
+    }
+
+    AdminNavigatorService.navigateToHome();
   }
 
   void Login() async {

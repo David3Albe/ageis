@@ -165,6 +165,17 @@ sealed class ProcessoLeituraMontagemModel with _$ProcessoLeituraMontagemModel {
     return null;
   }
 
+  KitProcessoModel? getKitSelecionado() {
+    KitProcessoModel? kit = leituraAtual.kits
+        .where((element) => element.selecionado == true)
+        .firstOrNull;
+    if (kit != null) return kit;
+    if (leituraAtual.kitEmLeitura?.selecionado == true) {
+      return leituraAtual.kitEmLeitura;
+    }
+    return null;
+  }
+
   KitProcessoModel getKitLido() {
     KitProcessoModel? kit = getKitLidoOuNull();
     if (kit != null) return kit;

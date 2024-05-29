@@ -12,9 +12,15 @@ _$ConsultaMovimentacaoEstoqueFilterImpl
           startDate: json['startDate'] == null
               ? null
               : DateTime.parse(json['startDate'] as String),
+          startTime: json['startTime'] == null
+              ? null
+              : DateTime.parse(json['startTime'] as String),
           finalDate: json['finalDate'] == null
               ? null
               : DateTime.parse(json['finalDate'] as String),
+          finalTime: json['finalTime'] == null
+              ? null
+              : DateTime.parse(json['finalTime'] as String),
           codDeposito: json['codDeposito'] as int?,
           codInsumo: json['codInsumo'] as int?,
           lote: json['lote'] as String?,
@@ -25,7 +31,9 @@ Map<String, dynamic> _$$ConsultaMovimentacaoEstoqueFilterImplToJson(
         _$ConsultaMovimentacaoEstoqueFilterImpl instance) =>
     <String, dynamic>{
       'startDate': instance.startDate?.toIso8601String(),
+      'startTime': instance.startTime?.toIso8601String(),
       'finalDate': instance.finalDate?.toIso8601String(),
+      'finalTime': instance.finalTime?.toIso8601String(),
       'codDeposito': instance.codDeposito,
       'codInsumo': instance.codInsumo,
       'lote': instance.lote,

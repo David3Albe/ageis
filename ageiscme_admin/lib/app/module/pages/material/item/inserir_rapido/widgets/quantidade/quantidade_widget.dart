@@ -12,7 +12,9 @@ class QuantidadeWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final TextFieldNumberWidget txtQuantidade = TextFieldNumberWidget(
-      readOnly: context.watch<ReadonlyCubit>().state.txtQuantidadeReadonly,
+      readOnly: context.select(
+        (ReadonlyCubit cubit) => cubit.state.txtQuantidadeReadonly,
+      ),
       placeholder: 'Quantidade',
       startValue: context.read<GenerateCubit>().state.dto.quantidade,
       onChanged: (String? str) {
@@ -30,12 +32,16 @@ class QuantidadeWidget extends StatelessWidget {
           child: txtQuantidade,
         ),
         Visibility(
-          visible: context.watch<ReadonlyCubit>().state.botaoGerarVisible,
+          visible: context.select(
+            (ReadonlyCubit cubit) => cubit.state.botaoGerarVisible,
+          ),
           child: Flexible(
             child: Padding(
               padding: const EdgeInsets.only(left: 4),
               child: CustomDefaultButtonWidget(
-                readonly: context.watch<GenerateCubit>().state.loading,
+                readonly: context.select(
+                  (GenerateCubit cubit) => cubit.state.loading,
+                ),
                 text: 'Gerar',
                 onPressed: () =>
                     context.read<GenerateCubit>().gerarInserir(context),

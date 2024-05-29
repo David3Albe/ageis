@@ -370,6 +370,13 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                           Expanded(
                             child: txtLimiteProcesso,
                           ),
+                          const Padding(
+                            padding: EdgeInsets.only(top: 10, left: 4),
+                            child: const Text(
+                              '0 = Ilimitado',
+                              style: TextStyle(fontSize: 16),
+                            ),
+                          ),
                           const SizedBox(width: 16.0),
                           Expanded(
                             child:
@@ -579,6 +586,10 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                                 onClick: (value) {
                                   itemDescritor.consignado = value;
                                   setStateGridMethod.call();
+                                  if (value) {
+                                    itemDescritor.limiteProcessos = 1;
+                                    txtLimiteProcesso.text = '1';
+                                  }
                                 },
                                 text: 'Material Consignado / Explante',
                               ),
@@ -638,7 +649,7 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                               OpenDocWidget(
                                 placeholder: 'Abrir Imagem',
                                 documentoString: itemDescritor.foto,
-                                documentName: 'arquivo sem nome.jpg',
+                                documentName: 'arquivo sem nome.Webp',
                               ),
                             ],
                           ),

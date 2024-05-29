@@ -2,6 +2,7 @@ import 'package:ageiscme_impressoes/dto/stage_functions_print/stage_functions_pr
 import 'package:ageiscme_impressoes/prints/stage_functions_printer/widgets/cancel_row_widget.dart';
 import 'package:ageiscme_impressoes/prints/stage_functions_printer/widgets/end_reading_row_widget.dart';
 import 'package:ageiscme_impressoes/prints/stage_functions_printer/widgets/entry_exit_row_widget.dart';
+import 'package:ageiscme_impressoes/prints/stage_functions_printer/widgets/priority_row_widget.dart';
 import 'package:ageiscme_impressoes/prints/stage_functions_printer/widgets/transfer_receibe_row_widget.dart';
 import 'package:ageiscme_impressoes/prints/stage_functions_printer/widgets/yes_no_row_widget.dart';
 import 'package:ageiscme_impressoes/prints/stage_functions_printer/widgets/zoom_row_widget.dart';
@@ -83,7 +84,8 @@ class StageFunctionsPrinterController {
   pw.Widget _getRowHeader() {
     return pw.Row(
       children: [
-        pw.Expanded(
+        pw.Container(
+          width: 400,
           child: pw.Padding(
             padding: const pw.EdgeInsets.only(left: 35),
             child: pw.Text(
@@ -93,22 +95,19 @@ class StageFunctionsPrinterController {
           ),
         ),
         stageFunctionsPrint.printTagLocal == true
-            ? pw.Expanded(
-                child: pw.Padding(
-                  padding: const pw.EdgeInsets.only(top: 10),
-                  child: pw.Container(
-                    child: pw.BarcodeWidget(
-                      barcode: Barcode.dataMatrix(),
-                      data: stageFunctionsPrint.localTag!,
-                      height: 15,
-                      width: 15,
-                    ),
-                    alignment: pw.Alignment.centerRight,
+            ? pw.Padding(
+                padding: const pw.EdgeInsets.only(top: 10),
+                child: pw.Container(
+                  child: pw.BarcodeWidget(
+                    barcode: Barcode.dataMatrix(),
+                    data: stageFunctionsPrint.localTag!,
+                    height: 15,
+                    width: 15,
                   ),
+                  alignment: pw.Alignment.centerRight,
                 ),
               )
             : pw.SizedBox(),
-        pw.Spacer(),
       ],
     );
   }
@@ -126,7 +125,12 @@ class StageFunctionsPrinterController {
     widgets.add(EndReadingRowWidget(stageFunctionsPrint: stageFunctionsPrint));
     widgets.add(CancelRowWidget(stageFunctionsPrint: stageFunctionsPrint));
     widgets.add(YesNoRowWidget(stageFunctionsPrint: stageFunctionsPrint));
-    widgets.add(TransferReceiveRowWidget(stageFunctionsPrint: stageFunctionsPrint));
+    widgets.add(PriorityRowWidget(stageFunctionsPrint: stageFunctionsPrint));
+    widgets.add(
+      TransferReceiveRowWidget(
+        stageFunctionsPrint: stageFunctionsPrint,
+      ),
+    );
     widgets.add(ZoomRowWidget(stageFunctionsPrint: stageFunctionsPrint));
   }
 }

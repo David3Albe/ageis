@@ -15,6 +15,7 @@ import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_time_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
@@ -37,6 +38,7 @@ class ConsultaManutencaoPage extends StatefulWidget {
 
 class _ConsultaManutencaoPageState extends State<ConsultaManutencaoPage> {
   late Function(bool, bool) setReadonlyDataTermino;
+  late Function(bool) setReadonlyHoraTermino;
 
   static Widget getCustomRenderer(
     PlutoColumnRendererContext renderContext, {
@@ -192,51 +194,47 @@ class _ConsultaManutencaoPageState extends State<ConsultaManutencaoPage> {
             openModal(context),
           },
         ),
-        BlocListener<ConsultaManutencaoPageCubit, ConsultaManutencaoPageState>(
+        BlocConsumer<ConsultaManutencaoPageCubit, ConsultaManutencaoPageState>(
           bloc: bloc,
           listener: (context, state) {
             if (state.error.isNotEmpty) onError(state);
           },
-          child: BlocBuilder<ConsultaManutencaoPageCubit,
-              ConsultaManutencaoPageState>(
-            bloc: bloc,
-            builder: (context, state) {
-              if (state.loading) {
-                return const Center(
-                  child: LoadingWidget(),
-                );
-              }
-              return Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 16.0, bottom: 16),
-                  child: PlutoGridWidget(
-                    smallRows: true,
-                    columns: colunas,
-                    items: state.manutencoes,
-                    onDetail: (event, obj) async {
-                      var isUserValid =
-                          await AccessUserService.validateUserHasRight(
-                        DireitoEnum.Manutencao,
-                      );
-
-                      if (isUserValid == false) {
-                        return ToastUtils.showCustomToastWarning(
-                          context,
-                          'O Seu usuário não tem permissão para esta tela!',
-                        );
-                      }
-
-                      await getFilter(obj.cod!).then((doc) {
-                        if (doc != null) {
-                          openModalRedirect(context, obj.cod!);
-                        }
-                      });
-                    },
-                  ),
-                ),
+          builder: (context, state) {
+            if (state.loading) {
+              return const Center(
+                child: LoadingWidget(),
               );
-            },
-          ),
+            }
+            return Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 16.0, bottom: 16),
+                child: PlutoGridWidget(
+                  smallRows: true,
+                  columns: colunas,
+                  items: state.manutencoes,
+                  onDetail: (event, obj) async {
+                    var isUserValid =
+                        await AccessUserService.validateUserHasRight(
+                      DireitoEnum.Manutencao,
+                    );
+
+                    if (isUserValid == false) {
+                      return ToastUtils.showCustomToastWarning(
+                        context,
+                        'O Seu usuário não tem permissão para esta tela!',
+                      );
+                    }
+
+                    await getFilter(obj.cod!).then((doc) {
+                      if (doc != null) {
+                        openModalRedirect(context, obj.cod!);
+                      }
+                    });
+                  },
+                ),
+              ),
+            );
+          },
         ),
       ],
     );
@@ -251,143 +249,213 @@ class _ConsultaManutencaoPageState extends State<ConsultaManutencaoPage> {
       context: context,
       builder: (BuildContext context) {
         return FilterDialogWidget(
-          child: Column(
-            children: [
-              DatePickerWidget(
-                placeholder: 'Data Início',
-                onDateSelected: (value) => filter.startDate = value,
-                initialValue: filter.startDate,
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              Row(
-                children: [
-                  Expanded(
-                    child: DatePickerWidget(
-                      readOnly: filter.apenasSemTermino == true,
-                      setReadonlyBuilder: (context, setReadonlyBuilder) =>
-                          setReadonlyDataTermino = setReadonlyBuilder,
-                      placeholder: 'Data Término',
-                      onDateSelected: (value) => filter.finalDate = value,
-                      initialValue: filter.finalDate,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: DatePickerWidget(
+                        placeholder: 'Data Inicio',
+                        onDateSelected: (value) => filter.startDate = value,
+                        initialValue: filter.startDate,
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16, top: 6),
-                    child: CustomCheckboxWidget(
-                      checked: filter.apenasSemTermino,
-                      onClick: (value) {
-                        filter.apenasSemTermino = value;
-                        setReadonlyDataTermino(
-                          filter.apenasSemTermino == true,
-                          false,
-                        );
-                      },
-                      text: 'Apenas sem término',
+                    const Padding(
+                      padding: EdgeInsets.only(left: 40),
                     ),
-                  ),
-                ],
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<EquipamentoCubit, EquipamentoState>(
-                bloc: equipamentoBloc,
-                builder: (context, equipamentoState) {
-                  if (equipamentoState.loading) {
-                    return const LoadingWidget();
-                  }
-                  List<EquipamentoModel> equipamentos = equipamentoState.objs;
-                  equipamentos.sort(
-                    (a, b) => a.nome!.compareTo(b.nome!),
-                  );
-                  EquipamentoModel? equipamento = equipamentos
-                      .where(
-                        (element) => element.cod == filter.codEquipamento,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget(
-                    textFunction: (equipamento) =>
-                        equipamento.EquipamentoNomeText(),
-                    initialValue: equipamento,
-                    sourceList: equipamentos
-                        .where((element) => element.ativo == true)
-                        .toList(),
-                    onChanged: (value) => filter.codEquipamento = value?.cod,
-                    placeholder: 'Equipamento',
-                  );
-                },
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<ServicoTipoCubit, ServicoTipoState>(
-                bloc: servicoTipoBloc,
-                builder: (context, state) {
-                  List<ServicoTipoModel> servicosTipos = state.tiposServico;
-
-                  servicosTipos.sort(
-                    (a, b) => a.nome!.compareTo(b.nome!),
-                  );
-                  ServicoTipoModel? servicoTipo = servicosTipos
-                      .where(
-                        (element) => element.cod == filter.codServicosTipo,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<ServicoTipoModel>(
-                    textFunction: (servicoTipo) =>
-                        servicoTipo.ServicoTipoNomeText(),
-                    initialValue: servicoTipo,
-                    sourceList: servicosTipos
-                        .where((element) => element.ativo == true)
-                        .toList(),
-                    onChanged: (value) => filter.codServicosTipo = value?.cod,
-                    placeholder: 'Tipo de Serviço',
-                  );
-                },
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<PecaCubit, List<PecaModel>>(
-                bloc: pecaBloc,
-                builder: (context, pecas) {
-                  pecas.sort(
-                    (a, b) => a.peca!.compareTo(b.peca!),
-                  );
-                  PecaModel? peca = pecas
-                      .where(
-                        (element) => element.cod == filter.codPeca,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<PecaModel>(
-                    textFunction: (peca) => peca.PecaNomeText(),
-                    initialValue: peca,
-                    sourceList: pecas,
-                    onChanged: (value) => filter.codPeca = value?.cod,
-                    placeholder: 'Peça',
-                  );
-                },
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              TextFieldStringWidget(
-                placeholder: 'Num. Nf',
-                onChanged: (value) => filter.numNF = value,
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              TextFieldStringWidget(
-                placeholder: 'Num. Série',
-                onChanged: (value) => filter.numSerie = value,
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              Builder(
-                builder: (context) {
-                  return DropDownSearchWidget<RegistroServicoResultOption>(
-                    sourceList: RegistroServicoResultOption.resultOptions,
-                    initialValue: RegistroServicoResultOption.resultOptions
+                    Expanded(
+                      child: TimePickerWidget(
+                        placeholder: 'Hora Início',
+                        initialValue: filter.startTime == null
+                            ? null
+                            : TimeOfDay(
+                                hour: filter.startTime!.hour,
+                                minute: filter.startTime!.minute,
+                              ),
+                        onTimeSelected: (selectedTime) {
+                          if (selectedTime == null) {
+                            filter.startTime = null;
+                            return;
+                          }
+                          filter.startTime = DateTime(
+                            DateTime.now().year,
+                            DateTime.now().month,
+                            DateTime.now().day,
+                            selectedTime.hour,
+                            selectedTime.minute,
+                          );
+                        },
+                      ),
+                    ),
+                    const Spacer(),
+                  ],
+                ),
+                const Padding(padding: EdgeInsets.only(top: 2)),
+                Row(
+                  children: [
+                    Expanded(
+                      child: DatePickerWidget(
+                        readOnly: filter.apenasSemTermino == true,
+                        setReadonlyBuilder: (context, setReadonlyBuilder) =>
+                            setReadonlyDataTermino = setReadonlyBuilder,
+                        placeholder: 'Data Término',
+                        onDateSelected: (value) => filter.finalDate = value,
+                        initialValue: filter.finalDate,
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 40),
+                    ),
+                    Expanded(
+                      child: TimePickerWidget(
+                        setReadonlyBuilder: (context, setReadonlyBuilder) =>
+                            setReadonlyHoraTermino = setReadonlyBuilder,
+                        placeholder: 'Hora Fim',
+                        initialValue: filter.finalTime == null
+                            ? null
+                            : TimeOfDay(
+                                hour: filter.finalTime!.hour,
+                                minute: filter.finalTime!.minute,
+                              ),
+                        onTimeSelected: (selectedTime) {
+                          if (selectedTime == null) {
+                            filter.finalTime = null;
+                            return;
+                          }
+                          filter.finalTime = DateTime(
+                            DateTime.now().year,
+                            DateTime.now().month,
+                            DateTime.now().day,
+                            selectedTime.hour,
+                            selectedTime.minute,
+                          );
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 16, top: 6),
+                        child: CustomCheckboxWidget(
+                          checked: filter.apenasSemTermino,
+                          onClick: (value) {
+                            filter.apenasSemTermino = value;
+                            setReadonlyDataTermino(
+                              filter.apenasSemTermino == true,
+                              false,
+                            );
+                            setReadonlyHoraTermino(
+                              filter.apenasSemTermino == true,
+                            );
+                          },
+                          text: 'Apenas sem término',
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                const Padding(padding: EdgeInsets.only(top: 2)),
+                BlocBuilder<EquipamentoCubit, EquipamentoState>(
+                  bloc: equipamentoBloc,
+                  builder: (context, equipamentoState) {
+                    if (equipamentoState.loading) {
+                      return const LoadingWidget();
+                    }
+                    List<EquipamentoModel> equipamentos = equipamentoState.objs;
+                    equipamentos.sort(
+                      (a, b) => a.nome!.compareTo(b.nome!),
+                    );
+                    EquipamentoModel? equipamento = equipamentos
                         .where(
                           (element) => element.cod == filter.codEquipamento,
                         )
-                        .firstOrNull,
-                    placeholder: 'Resultado',
-                    onChanged: (value) => filter.codResultado = value?.cod,
-                  );
-                },
-              ),
-            ],
+                        .firstOrNull;
+                    return DropDownSearchWidget(
+                      textFunction: (equipamento) =>
+                          equipamento.EquipamentoNomeText(),
+                      initialValue: equipamento,
+                      sourceList: equipamentos
+                          .where((element) => element.ativo == true)
+                          .toList(),
+                      onChanged: (value) => filter.codEquipamento = value?.cod,
+                      placeholder: 'Equipamento',
+                    );
+                  },
+                ),
+                const Padding(padding: EdgeInsets.only(top: 2)),
+                BlocBuilder<ServicoTipoCubit, ServicoTipoState>(
+                  bloc: servicoTipoBloc,
+                  builder: (context, state) {
+                    List<ServicoTipoModel> servicosTipos = state.tiposServico;
+            
+                    servicosTipos.sort(
+                      (a, b) => a.nome!.compareTo(b.nome!),
+                    );
+                    ServicoTipoModel? servicoTipo = servicosTipos
+                        .where(
+                          (element) => element.cod == filter.codServicosTipo,
+                        )
+                        .firstOrNull;
+                    return DropDownSearchWidget<ServicoTipoModel>(
+                      textFunction: (servicoTipo) =>
+                          servicoTipo.ServicoTipoNomeText(),
+                      initialValue: servicoTipo,
+                      sourceList: servicosTipos
+                          .where((element) => element.ativo == true)
+                          .toList(),
+                      onChanged: (value) => filter.codServicosTipo = value?.cod,
+                      placeholder: 'Tipo de Serviço',
+                    );
+                  },
+                ),
+                const Padding(padding: EdgeInsets.only(top: 2)),
+                BlocBuilder<PecaCubit, List<PecaModel>>(
+                  bloc: pecaBloc,
+                  builder: (context, pecas) {
+                    pecas.sort(
+                      (a, b) => a.peca!.compareTo(b.peca!),
+                    );
+                    PecaModel? peca = pecas
+                        .where(
+                          (element) => element.cod == filter.codPeca,
+                        )
+                        .firstOrNull;
+                    return DropDownSearchWidget<PecaModel>(
+                      textFunction: (peca) => peca.PecaNomeText(),
+                      initialValue: peca,
+                      sourceList: pecas,
+                      onChanged: (value) => filter.codPeca = value?.cod,
+                      placeholder: 'Peça',
+                    );
+                  },
+                ),
+                const Padding(padding: EdgeInsets.only(top: 2)),
+                TextFieldStringWidget(
+                  placeholder: 'Num. Nf',
+                  onChanged: (value) => filter.numNF = value,
+                ),
+                const Padding(padding: EdgeInsets.only(top: 2)),
+                TextFieldStringWidget(
+                  placeholder: 'Num. Série',
+                  onChanged: (value) => filter.numSerie = value,
+                ),
+                const Padding(padding: EdgeInsets.only(top: 2)),
+                Builder(
+                  builder: (context) {
+                    return DropDownSearchWidget<RegistroServicoResultOption>(
+                      sourceList: RegistroServicoResultOption.resultOptions,
+                      initialValue: RegistroServicoResultOption.resultOptions
+                          .where(
+                            (element) => element.cod == filter.codEquipamento,
+                          )
+                          .firstOrNull,
+                      placeholder: 'Resultado',
+                      onChanged: (value) => filter.codResultado = value?.cod,
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         );
       },

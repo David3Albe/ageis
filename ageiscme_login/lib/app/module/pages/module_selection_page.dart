@@ -1,9 +1,9 @@
+import 'package:ageiscme_login/app/module/pages/image_widget.dart';
 import 'package:ageiscme_login/app/module/services/login_navigator_service.dart';
 import 'package:ageiscme_login/app/module/widgets/module_selection_card/module_selection_card_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/cores/cores.dart';
 import 'package:compartilhados/icones/icones.dart';
-import 'package:compartilhados/images/default_images.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
@@ -81,9 +81,9 @@ class ModuleSelectionPage extends StatelessWidget {
                                   top: MediaQuery.of(context).size.height *
                                       smallPaddingScale,
                                 ),
-                                child: Image(
-                                  image: DefaultImages.logoAgeisCme.image,
-                                  height: 50 * scale,
+                                child: const ImageWidget(
+                                  identificador: 'logo_menu_cima',
+                                  height: 50,
                                 ),
                               ),
                             ],
@@ -182,8 +182,8 @@ class ModuleSelectionPage extends StatelessWidget {
               padding: EdgeInsets.only(
                 bottom: MediaQuery.of(context).size.height * smallPaddingScale,
               ),
-              child: Image(
-                image: DefaultImages.logo3Albe.image,
+              child: const ImageWidget(
+                identificador: 'logo_menu_baixo',
                 height: 60,
               ),
             ),

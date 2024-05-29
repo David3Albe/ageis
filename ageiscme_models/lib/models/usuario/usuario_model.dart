@@ -80,5 +80,5 @@ abstract class UsuarioModel
         ),
       ];
 
-  String CodBarraNomeText() => '($codBarra) ${nome == null ? '' : nome!}';
+  String NomeText() => '${nome == null ? '' : nome!}';
 }

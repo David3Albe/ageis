@@ -17,6 +17,7 @@ class ProcessoLeituraWebSocket {
   Function() handleKey;
   Function(String) onConnectionLost;
   Timer? TIMER;
+  StreamSubscription? _subscription;
 
   WebSocketChannel? _webSocket;
   ProcessoLeituraWebSocket({
@@ -27,23 +28,39 @@ class ProcessoLeituraWebSocket {
   });
 
   Future connect() async {
+    close();
+    await createWebSocket();
+    preparatePing();
+    listen();
+  }
+
+  Future createWebSocket() async {
     String routeBase = await _route;
     routeBase = routeBase.replaceAll('http', 'ws');
     _webSocket = WebSocketChannel.connect(
       Uri.parse(routeBase + _webSocketRoute),
     );
-    TIMER?.cancel();
-    TIMER = Timer.periodic(const Duration(minutes: 2), (timer) {
+  }
+
+  void preparatePing() {
+    TIMER = Timer.periodic(const Duration(seconds: 30), (timer) {
       if (timer.isActive != true) return;
       sendPing();
     });
+  }
 
-    _webSocket!.stream.listen(
-      (event) {
-        if (event == 'pong') {
-          print('pong');
-          return;
+  void listen() {
+    _subscription = _webSocket!.stream.listen(
+      onDone: () async {
+        int? closeCode = _webSocket?.closeCode;
+        if (closeCode == 1006 || closeCode == 1005) {
+          onError(
+            'A conexão com o servidor foi perdida, tente novamente e se o problema continuar entre em contato com o suporte. $closeCode',
+          );
         }
+      },
+      (event) {
+        if (event == 'pong') return;
         CommandResultModel result =
             CommandResultModel.fromJson(jsonDecode(event));
         if (!result.success) {
@@ -62,6 +79,7 @@ class ProcessoLeituraWebSocket {
 
   void close() {
     TIMER?.cancel();
+    _subscription?.cancel();
     _webSocket?.sink.close();
   }
 
@@ -71,12 +89,19 @@ class ProcessoLeituraWebSocket {
   }
 
   void sendMessage(ProcessoLeituraMontagemModel montagem) async {
+    String json = jsonEncode(montagem.toJson());
+    await sendJsonString(json: json);
+  }
+
+  Future sendJsonString({
+    required String json,
+    int? awaitTimeSeconds,
+  }) async {
     await tryConnect();
-    _webSocket?.sink.add(jsonEncode(montagem.toJson()));
+    _webSocket?.sink.add(json);
   }
 
   Future sendPing() async {
-    print('ping');
     await tryConnect();
     _webSocket?.sink.add('ping');
   }

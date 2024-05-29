@@ -1,5 +1,7 @@
+import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/equipamento/equipamento_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/etiqueta/etiqueta_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/proprietario/proprietario_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/equipamento/registro_servico/registro_servico_page_frm/registro_servico_page_frm.dart';
 import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_admin/app/module/pages/material/item/inserir_rapido/inserir_rapido_page.dart';
 import 'package:ageiscme_admin/app/module/pages/material/item/item_page_etiquetas_frm/item_page_etiquetas_frm.dart';
@@ -20,6 +22,8 @@ import 'package:ageiscme_impressoes/prints/processo_preparation_printer/processo
 import 'package:ageiscme_models/dto/authentication_result/authentication_result_dto.dart';
 import 'package:ageiscme_models/dto/item/item_etiqueta_preparo/item_etiqueta_preparo_dto.dart';
 import 'package:ageiscme_models/dto/item_save_result/item_save_result_dto.dart';
+import 'package:ageiscme_models/filters/equipamento/equipamento_filter.dart';
+import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/filters/item_descritor/item_descritor_filter.dart';
 import 'package:ageiscme_models/filters/processo_leitura/processo_leitura_filter.dart';
 import 'package:ageiscme_models/main.dart';
@@ -796,6 +800,13 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
                         text: 'Trocar Etiqueta',
                         onTap: _trocarEtiqueta,
                       ),
+                    if (item.cod != null &&
+                        item.cod != 0 &&
+                        widget.frmType == ItemPageFrmtype.Items)
+                      CustomPopupItemModel(
+                        text: 'Serviços',
+                        onTap: abrirMonitoramento,
+                      ),
                     if (item.cod != null && item.cod != 0)
                       CustomPopupItemHistoryModel.getHistoryItem(
                         child: HistoricoPage(
@@ -929,6 +940,52 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
       item = itemSave.$2.item;
       setFields();
     });
+  }
+
+  void loadEquipamentoCubit(EquipamentoCubit cubit) {
+    if (!cubit.state.loaded) {
+      cubit.loadFilter(
+        EquipamentoFilter(
+          incluirTipoServicos: true,
+          apenasAtivos: true,
+          ordenarPorNomeCrescente: true,
+        ),
+      );
+    }
+  }
+
+  Future abrirMonitoramento() async {
+    if (item.cod == null || item.cod == 0) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'É necessário ter o item cadastrado para acessar a tela de serviços.',
+      );
+      return;
+    }
+    EquipamentoCubit cubit = EquipamentoCubit();
+    loadEquipamentoCubit(cubit);
+    RegistroServicoModel registroServicoModel = RegistroServicoModel.empty();
+    registroServicoModel.codItem = item.cod;
+    registroServicoModel.item = item;
+    registroServicoModel.dataInicio = DateTime.now();
+    (bool, String)? result = await showDialog<(bool, String)>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return RegistroServicoPageFrm(
+          equipamentoReadOnly: true,
+          itemReadOnly: true,
+          equipamentoCubit: cubit,
+          itemFilter: ItemFilter(
+            apenasAtivos: true,
+            ordenarPorNomeCrescente: true,
+          ),
+          registroServico: registroServicoModel,
+        );
+      },
+    );
+    if (result == null || !result.$1) return;
+    Navigator.of(context).pop(result);
   }
 
   Future _trocarEtiqueta() async {

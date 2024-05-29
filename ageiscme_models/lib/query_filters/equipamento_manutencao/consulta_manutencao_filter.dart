@@ -9,7 +9,9 @@ sealed class ConsultaManutencaoFilter with _$ConsultaManutencaoFilter {
 
   factory ConsultaManutencaoFilter({
     DateTime? startDate,
+    DateTime? startTime,
     DateTime? finalDate,
+    DateTime? finalTime,
     int? codEquipamento,
     int? codServicosTipo,
     int? codPeca,

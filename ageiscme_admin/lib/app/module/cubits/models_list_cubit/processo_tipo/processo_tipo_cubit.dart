@@ -7,7 +7,7 @@ class ProcessoTipoCubit extends Cubit<ProcessoTipoState> {
   ProcessoTipoCubit() : super(ProcessoTipoState(processosTipos: []));
 
   void loadAll() async {
-    emit(ProcessoTipoState(processosTipos: [], loaded: true));
+    emit(ProcessoTipoState(processosTipos: [], loading: true));
     List<ProcessoTipoModel> processosTipos =
         await ProcessoTipoService().GetAll();
     emit(ProcessoTipoState(processosTipos: processosTipos, loaded: true));

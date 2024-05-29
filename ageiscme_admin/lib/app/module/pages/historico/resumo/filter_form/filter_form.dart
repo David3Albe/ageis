@@ -19,7 +19,7 @@ class FilterForm extends StatelessWidget {
       child: Column(
         children: [
           DropDownSearchApiWidget<UsuarioModel>(
-            textFunction: (usuario) => usuario.CodBarraNomeText(),
+            textFunction: (usuario) => usuario.NomeText(),
             initialValue: dto.usuario,
             search: (str) => UsuarioService().Filter(
               UsuarioFilter(

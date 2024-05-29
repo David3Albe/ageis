@@ -23,8 +23,12 @@ ConsultaManutencaoFilter _$ConsultaManutencaoFilterFromJson(
 mixin _$ConsultaManutencaoFilter {
   DateTime? get startDate => throw _privateConstructorUsedError;
   set startDate(DateTime? value) => throw _privateConstructorUsedError;
+  DateTime? get startTime => throw _privateConstructorUsedError;
+  set startTime(DateTime? value) => throw _privateConstructorUsedError;
   DateTime? get finalDate => throw _privateConstructorUsedError;
   set finalDate(DateTime? value) => throw _privateConstructorUsedError;
+  DateTime? get finalTime => throw _privateConstructorUsedError;
+  set finalTime(DateTime? value) => throw _privateConstructorUsedError;
   int? get codEquipamento => throw _privateConstructorUsedError;
   set codEquipamento(int? value) => throw _privateConstructorUsedError;
   int? get codServicosTipo => throw _privateConstructorUsedError;
@@ -54,7 +58,9 @@ abstract class $ConsultaManutencaoFilterCopyWith<$Res> {
   @useResult
   $Res call(
       {DateTime? startDate,
+      DateTime? startTime,
       DateTime? finalDate,
+      DateTime? finalTime,
       int? codEquipamento,
       int? codServicosTipo,
       int? codPeca,
@@ -79,7 +85,9 @@ class _$ConsultaManutencaoFilterCopyWithImpl<$Res,
   @override
   $Res call({
     Object? startDate = freezed,
+    Object? startTime = freezed,
     Object? finalDate = freezed,
+    Object? finalTime = freezed,
     Object? codEquipamento = freezed,
     Object? codServicosTipo = freezed,
     Object? codPeca = freezed,
@@ -93,9 +101,17 @@ class _$ConsultaManutencaoFilterCopyWithImpl<$Res,
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      startTime: freezed == startTime
+          ? _value.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       finalDate: freezed == finalDate
           ? _value.finalDate
           : finalDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      finalTime: freezed == finalTime
+          ? _value.finalTime
+          : finalTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       codEquipamento: freezed == codEquipamento
           ? _value.codEquipamento
@@ -140,7 +156,9 @@ abstract class _$$ConsultaManutencaoFilterImplCopyWith<$Res>
   @useResult
   $Res call(
       {DateTime? startDate,
+      DateTime? startTime,
       DateTime? finalDate,
+      DateTime? finalTime,
       int? codEquipamento,
       int? codServicosTipo,
       int? codPeca,
@@ -164,7 +182,9 @@ class __$$ConsultaManutencaoFilterImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? startDate = freezed,
+    Object? startTime = freezed,
     Object? finalDate = freezed,
+    Object? finalTime = freezed,
     Object? codEquipamento = freezed,
     Object? codServicosTipo = freezed,
     Object? codPeca = freezed,
@@ -178,9 +198,17 @@ class __$$ConsultaManutencaoFilterImplCopyWithImpl<$Res>
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      startTime: freezed == startTime
+          ? _value.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       finalDate: freezed == finalDate
           ? _value.finalDate
           : finalDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      finalTime: freezed == finalTime
+          ? _value.finalTime
+          : finalTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       codEquipamento: freezed == codEquipamento
           ? _value.codEquipamento
@@ -219,7 +247,9 @@ class __$$ConsultaManutencaoFilterImplCopyWithImpl<$Res>
 class _$ConsultaManutencaoFilterImpl extends _ConsultaManutencaoFilter {
   _$ConsultaManutencaoFilterImpl(
       {this.startDate,
+      this.startTime,
       this.finalDate,
+      this.finalTime,
       this.codEquipamento,
       this.codServicosTipo,
       this.codPeca,
@@ -235,7 +265,11 @@ class _$ConsultaManutencaoFilterImpl extends _ConsultaManutencaoFilter {
   @override
   DateTime? startDate;
   @override
+  DateTime? startTime;
+  @override
   DateTime? finalDate;
+  @override
+  DateTime? finalTime;
   @override
   int? codEquipamento;
   @override
@@ -253,7 +287,7 @@ class _$ConsultaManutencaoFilterImpl extends _ConsultaManutencaoFilter {
 
   @override
   String toString() {
-    return 'ConsultaManutencaoFilter(startDate: $startDate, finalDate: $finalDate, codEquipamento: $codEquipamento, codServicosTipo: $codServicosTipo, codPeca: $codPeca, numNF: $numNF, numSerie: $numSerie, codResultado: $codResultado, apenasSemTermino: $apenasSemTermino)';
+    return 'ConsultaManutencaoFilter(startDate: $startDate, startTime: $startTime, finalDate: $finalDate, finalTime: $finalTime, codEquipamento: $codEquipamento, codServicosTipo: $codServicosTipo, codPeca: $codPeca, numNF: $numNF, numSerie: $numSerie, codResultado: $codResultado, apenasSemTermino: $apenasSemTermino)';
   }
 
   @JsonKey(ignore: true)
@@ -274,7 +308,9 @@ class _$ConsultaManutencaoFilterImpl extends _ConsultaManutencaoFilter {
 abstract class _ConsultaManutencaoFilter extends ConsultaManutencaoFilter {
   factory _ConsultaManutencaoFilter(
       {DateTime? startDate,
+      DateTime? startTime,
       DateTime? finalDate,
+      DateTime? finalTime,
       int? codEquipamento,
       int? codServicosTipo,
       int? codPeca,
@@ -291,8 +327,14 @@ abstract class _ConsultaManutencaoFilter extends ConsultaManutencaoFilter {
   DateTime? get startDate;
   set startDate(DateTime? value);
   @override
+  DateTime? get startTime;
+  set startTime(DateTime? value);
+  @override
   DateTime? get finalDate;
   set finalDate(DateTime? value);
+  @override
+  DateTime? get finalTime;
+  set finalTime(DateTime? value);
   @override
   int? get codEquipamento;
   set codEquipamento(int? value);

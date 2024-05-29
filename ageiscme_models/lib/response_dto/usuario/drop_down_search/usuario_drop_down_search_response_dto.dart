@@ -16,7 +16,7 @@ sealed class UsuarioDropDownSearchResponseDTO with _$UsuarioDropDownSearchRespon
   factory UsuarioDropDownSearchResponseDTO.fromJson(Map<String, Object?> json) =>
       _$UsuarioDropDownSearchResponseDTOFromJson(json);
 
-  String CodBarraNome() {
-    return '($codBarra) ${nome ?? 'Descritor sem nome'}';
+  String NomeText() {
+    return '${nome ?? 'Usuário sem nome'}';
   }
 }

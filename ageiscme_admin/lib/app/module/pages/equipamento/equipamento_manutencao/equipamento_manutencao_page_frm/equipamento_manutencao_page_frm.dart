@@ -707,7 +707,7 @@ class _EquipamentoManutencaoPageFrmState
                             ))
                                 ?.$2 ??
                             [],
-                        textFunction: (usuario) => usuario.CodBarraNome(),
+                        textFunction: (usuario) => usuario.NomeText(),
                         initialValue: equipamentoManutencao.usuarioDetectadoPor,
                         onChanged: (value) {
                           equipamentoManutencao.detectadoPor = value?.cod.toString();
@@ -736,7 +736,7 @@ class _EquipamentoManutencaoPageFrmState
                                   ))
                                       ?.$2 ??
                                   [],
-                              textFunction: (usuario) => usuario.CodBarraNome(),
+                              textFunction: (usuario) => usuario.NomeText(),
                               initialValue: equipamentoManutencao.usuarioTecnico,
                               onChanged: (value) {
                                 equipamentoManutencao.tecnico =
@@ -1102,7 +1102,7 @@ class _EquipamentoManutencaoPageFrmState
                         context,
                         equipamentoManutencao.nfAnexa,
                         equipamentoManutencao.nfAnexaNome ??
-                            'arquivo sem nome.jpg',
+                            'arquivo sem nome.WebP',
                       ),
                       CustomPopupItemModel(
                         text: 'Imprimir Etiqueta',

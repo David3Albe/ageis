@@ -73,16 +73,18 @@ class _CustomCheckboxWidgetState extends State<CustomCheckboxWidget> {
           ),
         ),
         InkWell(
-          onTap: () => {
-            setState(() {
-              bool toogleChecked = false;
-              if (checked != null) toogleChecked = !checked!;
-              if (onClick != null) {
-                checked = toogleChecked;
-                onClick!(toogleChecked);
-              }
-            }),
-          },
+          onTap: widget.readonly
+              ? null
+              : () {
+                  setState(() {
+                    bool toogleChecked = false;
+                    if (checked != null) toogleChecked = !checked!;
+                    if (onClick != null) {
+                      checked = toogleChecked;
+                      onClick!(toogleChecked);
+                    }
+                  });
+                },
           child: Text(
             widget.text,
             style: TextStyle(

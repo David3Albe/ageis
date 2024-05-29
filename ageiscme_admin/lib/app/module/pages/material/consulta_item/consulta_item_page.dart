@@ -454,7 +454,7 @@ class _ConsultaItemPageState extends State<ConsultaItemPage> {
     }
     loading.close(context, mounted);
 
-    await showDialog<(bool, String)>(
+    await showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {

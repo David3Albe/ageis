@@ -46,6 +46,7 @@ import 'package:ageiscme_admin/app/module/pages/insumo/fabricante/fabricante_pag
 import 'package:ageiscme_admin/app/module/pages/insumo/fornecedor/fornecedor_page.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/insumo/insumo_page.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/insumo_movimento/insumo_movimento_page.dart';
+import 'package:ageiscme_admin/app/module/pages/insumo/insumo_teste/insumo_teste_page.dart';
 // import 'package:ageiscme_admin/app/module/pages/insumo/insumo_solicitacao_consulta/insumo_solicitacao_consulta_page.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/solicitacao_material/solicitacao_material_page.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/solicitacao_material_expedicoes/solicitacao_material_expedicoes_page.dart';
@@ -81,6 +82,7 @@ import 'package:ageiscme_admin/app/module/pages/processo/motivo_quebra_fluxo/mot
 import 'package:ageiscme_admin/app/module/pages/processo/processo_etapa/processo_etapa_page.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/processo_motivo/processo_motivo_page.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/processo_tipo/processo_tipo_page.dart';
+import 'package:ageiscme_admin/app/module/pages/processo/processo_tipo_consulta/processo_tipo_consulta_page.dart';
 import 'package:ageiscme_admin/app/module/pages/router_outlet/router_outlet.dart';
 import 'package:dependencias_comuns/modular_export.dart';
 import 'package:ageiscme_admin/app/module/guards/authentication_guard.dart';
@@ -121,7 +123,9 @@ class AdminModule extends Module {
         ),
         createParallelRoute(
           '/cadastro/alterar-senha',
-          child: (context) => AlterarSenhaPage(),
+          child: (context) => AlterarSenhaPage(
+            actualPassword: r.args.data,
+          ),
         ),
         createParallelRoute(
           '/cadastro/centro-custo',
@@ -465,6 +469,14 @@ class AdminModule extends Module {
         createParallelRoute(
           '/processo/cancelamento-preparo',
           child: (context) => CancelamentoPreparoPage(),
+        ),
+        createParallelRoute(
+          '/insumo/insumo-teste',
+          child: (context) => InsumoTestePage(),
+        ),
+        createParallelRoute(
+          '/processo/processo-tipo-consulta',
+          child: (context) => ProcessoTipoConsultaPage(),
         ),
       ],
     );

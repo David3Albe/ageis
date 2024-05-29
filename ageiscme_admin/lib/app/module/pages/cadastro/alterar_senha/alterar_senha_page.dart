@@ -1,4 +1,5 @@
 import 'package:ageiscme_admin/app/module/pages/cadastro/alterar_senha/alterar_senha_page_state.dart';
+import 'package:ageiscme_admin/app/module/services/admin_navigator_service.dart';
 import 'package:ageiscme_data/services/alterar_senha/alterar_senha_service.dart';
 import 'package:ageiscme_data/stores/authentication/authentication_store.dart';
 import 'package:ageiscme_models/dto/alterar_senha/alterar_senha_dto.dart';
@@ -10,7 +11,11 @@ import 'package:dependencias_comuns/modular_export.dart';
 import 'package:flutter/material.dart';
 
 class AlterarSenhaPage extends StatefulWidget {
-  AlterarSenhaPage({super.key});
+  const AlterarSenhaPage({
+    super.key,
+    this.actualPassword,
+  });
+  final String? actualPassword;
 
   @override
   State<AlterarSenhaPage> createState() => _AlterarSenhaPageState();
@@ -40,6 +45,10 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
         alterarSenhaDTO.senhaAntiga = str ?? '';
       },
     );
+    if (widget.actualPassword != null) {
+      alterarSenhaDTO.senhaAntiga = widget.actualPassword!;
+      txtSenhaAntiga.text = widget.actualPassword!;
+    }
     txtSenhaAntiga.addValidator((str) {
       if (str.isEmpty) return 'Deve ser informada';
       return '';
@@ -133,5 +142,6 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
       context,
       state.message,
     );
+    AdminNavigatorService.navigateToHome();
   }
 }

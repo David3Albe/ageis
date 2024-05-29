@@ -9,8 +9,12 @@ import 'package:flutter/material.dart';
 
 class ProcessoTipoFluxoPagePresenter extends StatefulWidget {
   final ProcessoTipoModel processoTipo;
+  final bool canEdit;
 
-  const ProcessoTipoFluxoPagePresenter({required this.processoTipo});
+  const ProcessoTipoFluxoPagePresenter({
+    required this.processoTipo,
+    required this.canEdit,
+  });
 
   @override
   State<ProcessoTipoFluxoPagePresenter> createState() =>
@@ -31,7 +35,6 @@ class _ProcessoTipoFluxoPagePresenterState
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return AlertDialog(
       contentPadding: const EdgeInsets.all(4.0),
       titlePadding: const EdgeInsets.only(top: 4.0, left: 8, right: 8),
@@ -53,56 +56,50 @@ class _ProcessoTipoFluxoPagePresenterState
           ),
         ],
       ),
-      content: Container(
-        constraints: BoxConstraints(
-          minWidth: size.width * .9,
-          minHeight: size.height,
-          maxHeight: size.height,
-          maxWidth: size.width * .9,
-        ),
-        child: InteractiveViewer(
-          constrained: false,
-          minScale: 0.1,
-          maxScale: 3,
-          child: Column(
-            children: [
-              CustomDiagramWidget(
-                objects: controller.getRects,
-                defaultHeight: 40,
-                defaultWidth: 70,
-                itemsAddable: controller.getItemAddable,
-                clearWidgetBuilder: (context, clearMethod) =>
-                    controller.clearMethod = clearMethod,
-              ),
-            ],
-          ),
+      content: InteractiveViewer(
+        constrained: false,
+        minScale: 0.1,
+        maxScale: 3,
+        child: Column(
+          children: [
+            CustomDiagramWidget(
+              objects: controller.getRects,
+              defaultHeight: 40,
+              defaultWidth: 70,
+              itemsAddable: controller.getItemAddable,
+              clearWidgetBuilder: (context, clearMethod) =>
+                  controller.clearMethod = clearMethod,
+            ),
+          ],
         ),
       ),
       actions: [
         CustomDefaultButtonWidget(
           icon: Symbols.cancel,
-          text: 'Cancelar',
+          text: widget.canEdit ? 'Cancelar' : 'Fechar',
           onPressed: Navigator.of(context).pop,
           cor: Colors.red.shade400,
           corHovered: Colors.red.shade500,
         ),
-        CustomDefaultButtonWidget(
-          icon: Symbols.cleaning,
-          text: 'Limpar',
-          onPressed: controller.clear,
-          cor: Colors.grey.shade400,
-          corHovered: Colors.grey.shade500,
-        ),
-        CustomDefaultButtonWidget(
-          icon: Icons.save,
-          text: 'Confirmar Edição',
-          onPressed: () {
-            controller.save();
-            Navigator.of(context).pop();
-          },
-          cor: Colors.green.shade400,
-          corHovered: Colors.green.shade500,
-        ),
+        if (widget.canEdit)
+          CustomDefaultButtonWidget(
+            icon: Symbols.cleaning,
+            text: 'Limpar',
+            onPressed: controller.clear,
+            cor: Colors.grey.shade400,
+            corHovered: Colors.grey.shade500,
+          ),
+        if (widget.canEdit)
+          CustomDefaultButtonWidget(
+            icon: Icons.save,
+            text: 'Confirmar Edição',
+            onPressed: () {
+              controller.save();
+              Navigator.of(context).pop();
+            },
+            cor: Colors.green.shade400,
+            corHovered: Colors.green.shade500,
+          ),
       ],
     );
   }

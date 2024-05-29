@@ -22,6 +22,7 @@ class TextFieldStringWidget extends StatefulWidget {
     this.onEditComplete,
     this.onTapOutside,
     this.autoFocus = false,
+    this.suffixWidget,
   });
 
   final String placeholder;
@@ -39,6 +40,7 @@ class TextFieldStringWidget extends StatefulWidget {
   final Function()? onEditComplete;
   final Function(PointerDownEvent)? onTapOutside;
   final bool autoFocus;
+  final Widget? suffixWidget;
 
   set text(String value) => _controller.text = value;
 
@@ -131,22 +133,29 @@ class _TextFieldStringWidgetState extends State<TextFieldStringWidget> {
           obscureText: !visible && widget.password,
           obscuringCharacter: '*',
           autocorrect: false,
+          enableInteractiveSelection: true,
           style: Fontes.getRoboto(
-            cor: errorText.isNotEmpty ? Colors.red : null,
+            cor: errorText.isNotEmpty
+                ? Colors.red
+                : widget.readOnly
+                    ? Colors.grey
+                    : null,
             letterSpacing: !visible && widget.password ? 5 : 0,
             fontSize: HelperFunctions.calculaFontSize(context, 18),
           ),
           decoration: InputDecoration(
-            suffixIcon: widget.password
-                ? InkWell(
-                    onTap: () => setState(
-                      () => visible = !visible,
-                    ),
-                    child: visible
-                        ? Icones.iconeSenhaVisivel
-                        : Icones.iconeSenhaInvisivel,
-                  )
-                : null,
+            hoverColor: widget.readOnly ? Colors.grey : null,
+            suffixIcon: widget.suffixWidget ??
+                (widget.password
+                    ? InkWell(
+                        onTap: () => setState(
+                          () => visible = !visible,
+                        ),
+                        child: visible
+                            ? Icones.iconeSenhaVisivel
+                            : Icones.iconeSenhaInvisivel,
+                      )
+                    : null),
             label: Text(
               widget.placeholder,
               style: Fontes.getRoboto(
@@ -176,8 +185,17 @@ class _TextFieldStringWidgetState extends State<TextFieldStringWidget> {
                       Radius.circular(1),
                     ),
                   )
-                : null,
-            enabled: !readonly,
+                : widget.readOnly
+                    ? const UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.grey,
+                          width: 1.0,
+                        ),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(1),
+                        ),
+                      )
+                    : null,
           ),
           readOnly: readonly,
         ),

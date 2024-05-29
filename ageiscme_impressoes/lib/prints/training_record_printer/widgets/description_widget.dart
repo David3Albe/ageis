@@ -21,7 +21,10 @@ class DescriptionWidget extends StatelessWidget {
     return Column(
       children: [
         Padding(padding: const EdgeInsets.only(top: 2)),
-        Divider(height: 1, thickness: 1),
+        Divider(
+          height: 1,
+          thickness: 0.5,
+        ),
         Padding(padding: const EdgeInsets.only(top: 2)),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -38,23 +41,28 @@ class DescriptionWidget extends StatelessWidget {
           ],
         ),
         Padding(padding: const EdgeInsets.only(top: 4)),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Text(
-                dto.description ?? '',
-                style: const TextStyle(
-                  fontSize: 8,
+        Container(
+          height: 185,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Text(
+                  dto.description ?? '',
+                  style: const TextStyle(
+                    fontSize: 8,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         Divider(
           height: 1,
-          thickness: 1,
+          thickness: 0.5,
         ),
+        Padding(padding: const EdgeInsets.only(top: 4)),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -88,7 +96,7 @@ class DescriptionWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              width: 50,
+              width: 100,
               child: Text(
                 'DATA:',
                 style: TextStyle(
@@ -111,7 +119,7 @@ class DescriptionWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Container(
-              width: 50,
+              width: 100,
               child: Text(
                 dateFormated,
                 style: const TextStyle(
@@ -127,10 +135,10 @@ class DescriptionWidget extends StatelessWidget {
             ),
           ],
         ),
-        Padding(padding: const EdgeInsets.only(top: 4)),
+        Padding(padding: const EdgeInsets.only(top: 8)),
         Divider(
           height: 1,
-          thickness: 1,
+          thickness: 0.5,
         ),
       ],
     );

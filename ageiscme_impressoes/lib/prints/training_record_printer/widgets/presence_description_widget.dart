@@ -7,6 +7,7 @@ class PresenceDescriptionWidget extends StatelessWidget {
   Widget build(Context context) {
     return Column(
       children: [
+        Padding(padding: const EdgeInsets.only(top: 14)),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

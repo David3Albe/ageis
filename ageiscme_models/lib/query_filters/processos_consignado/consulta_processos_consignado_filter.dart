@@ -11,13 +11,15 @@ sealed class ConsultaProcessosConsignadoFilter
   const ConsultaProcessosConsignadoFilter._();
 
   factory ConsultaProcessosConsignadoFilter({
-    required DateTime? startDate,
-    required DateTime? finalDate,
-    required int? codItemDescritor,
-    required int? codItemConsignado,
-    required String? idEtiquetaContem,
-    required int? codProprietario,
-    required bool? consignado,
+    DateTime? startDate,
+    DateTime? startTime,
+    DateTime? finalDate,
+    DateTime? finalTime,
+    int? codItemDescritor,
+    int? codItemConsignado,
+    String? idEtiquetaContem,
+    int? codProprietario,
+    bool? consignado,
     ItemDescritorDropDownSearchResponseDTO? itemDescritor,
     ItemModel? item,
   }) = _ConsultaProcessosConsignadoFilter;

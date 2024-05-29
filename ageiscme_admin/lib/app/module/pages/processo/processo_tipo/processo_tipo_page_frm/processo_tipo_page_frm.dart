@@ -345,6 +345,7 @@ class _ProcessoTipoPageFrmState extends State<ProcessoTipoPageFrm> {
       context: context,
       builder: (BuildContext context) {
         return ProcessoTipoFluxoPagePresenter(
+          canEdit: true,
           processoTipo: processoTipo,
         );
       },

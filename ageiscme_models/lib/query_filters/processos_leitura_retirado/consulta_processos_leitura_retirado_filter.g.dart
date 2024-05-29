@@ -12,9 +12,15 @@ _$ConsultaProcessosLeituraRetiradoFilterImpl
           startDate: json['startDate'] == null
               ? null
               : DateTime.parse(json['startDate'] as String),
+          startTime: json['startTime'] == null
+              ? null
+              : DateTime.parse(json['startTime'] as String),
           finalDate: json['finalDate'] == null
               ? null
               : DateTime.parse(json['finalDate'] as String),
+          finalTime: json['finalTime'] == null
+              ? null
+              : DateTime.parse(json['finalTime'] as String),
           codItem: json['codItem'] as int?,
           idEtiquetaContem: json['idEtiquetaContem'] as String?,
           codKit: json['codKit'] as int?,
@@ -31,7 +37,9 @@ Map<String, dynamic> _$$ConsultaProcessosLeituraRetiradoFilterImplToJson(
         _$ConsultaProcessosLeituraRetiradoFilterImpl instance) =>
     <String, dynamic>{
       'startDate': instance.startDate?.toIso8601String(),
+      'startTime': instance.startTime?.toIso8601String(),
       'finalDate': instance.finalDate?.toIso8601String(),
+      'finalTime': instance.finalTime?.toIso8601String(),
       'codItem': instance.codItem,
       'idEtiquetaContem': instance.idEtiquetaContem,
       'codKit': instance.codKit,

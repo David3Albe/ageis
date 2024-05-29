@@ -9,6 +9,9 @@ import 'package:ageiscme_data/services/item/item_service.dart';
 import 'package:ageiscme_data/services/item_consignado_processado/item_consignado_processado_service.dart';
 import 'package:ageiscme_data/services/item_descritor/item_descritor_service.dart';
 import 'package:ageiscme_data/stores/authentication/authentication_store.dart';
+import 'package:ageiscme_impressoes/dto/consignments_withdrawal/consignments/consignments_withdrawal_consignment_print_dto.dart';
+import 'package:ageiscme_impressoes/dto/consignments_withdrawal/consignments_withdrawal_print_dto.dart';
+import 'package:ageiscme_impressoes/prints/consignments_withdrawal_printer/consignments_withdrawal_printer_controller.dart';
 import 'package:ageiscme_models/dto/authentication_result/authentication_result_dto.dart';
 import 'package:ageiscme_models/dto/item_descritor/drop_down_search/item_descritor_drop_down_search_dto.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
@@ -23,8 +26,10 @@ import 'package:compartilhados/componentes/campos/custom_autocomplete/custom_aut
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_time_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
+import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
@@ -56,9 +61,13 @@ class _ConsultaProcessosConsignadoPageState
   late final UsuarioCubit usuarioCubit;
   late final ItemConsignadoProcessadoModel itemConsignadoProcessado;
   late final ConsultaProcessosConsignadoFilter filter;
+
   int? colaboradorEntrega;
+  String? nomeColaboradorEntrega;
   int? responsavelRetirada;
+  String? nomeResponsavelRetirada;
   int? medico;
+  String? nomeMedico;
   int? codUsuario;
   Future<AuthenticationResultDTO?> recuperaUsuario() async {
     return await Modular.get<AuthenticationStore>().GetAuthenticated();
@@ -112,7 +121,10 @@ class _ConsultaProcessosConsignadoPageState
         text: 'Material Consignado',
         field: 'materialConsignado',
       ),
-      CustomDataColumn(text: 'Proprietário', field: 'nomeProprietario'),
+      CustomDataColumn(
+        text: 'Proprietário',
+        field: 'nomeProprietario',
+      ),
       CustomDataColumn(
         text: 'Cód. Item Consignado',
         field: 'codItemConsignado',
@@ -130,6 +142,11 @@ class _ConsultaProcessosConsignadoPageState
       CustomDataColumn(
         text: 'Recebido',
         field: 'recebido',
+        type: CustomDataColumnType.Number,
+      ),
+      CustomDataColumn(
+        text: 'Preparado',
+        field: 'preparado',
         type: CustomDataColumnType.Number,
       ),
       CustomDataColumn(
@@ -256,9 +273,12 @@ class _ConsultaProcessosConsignadoPageState
                   }
                   List<UsuarioModel> usuarios = usuarioState.usuarios;
                   return DropDownSearchWidget<UsuarioModel>(
-                    textFunction: (usuario) => usuario.CodBarraNomeText(),
+                    textFunction: (usuario) => usuario.NomeText(),
                     sourceList: usuarios,
-                    onChanged: (value) => colaboradorEntrega = value?.cod,
+                    onChanged: (value) {
+                      colaboradorEntrega = value?.cod;
+                      nomeColaboradorEntrega = value?.nome;
+                    },
                     placeholder: 'Colaborador Entrega',
                   );
                 },
@@ -272,10 +292,13 @@ class _ConsultaProcessosConsignadoPageState
                   }
                   List<UsuarioModel> usuarios = usuarioState.usuarios;
                   return DropDownSearchWidget<UsuarioModel>(
-                    textFunction: (usuario) => usuario.CodBarraNomeText(),
+                    textFunction: (usuario) => usuario.NomeText(),
                     sourceList: usuarios,
-                    onChanged: (value) => responsavelRetirada = value?.cod,
-                    placeholder: 'resposável Retirada',
+                    onChanged: (value) {
+                      responsavelRetirada = value?.cod;
+                      nomeResponsavelRetirada = value?.nome;
+                    },
+                    placeholder: 'Resposável Retirada',
                   );
                 },
               ),
@@ -288,9 +311,12 @@ class _ConsultaProcessosConsignadoPageState
                   }
                   List<UsuarioModel> usuarios = usuarioState.usuarios;
                   return DropDownSearchWidget<UsuarioModel>(
-                    textFunction: (usuario) => usuario.CodBarraNomeText(),
+                    textFunction: (usuario) => usuario.NomeText(),
                     sourceList: usuarios,
-                    onChanged: (value) => medico = value?.cod,
+                    onChanged: (value) {
+                      medico = value?.cod;
+                      nomeMedico = value?.nome;
+                    },
                     placeholder: 'Médico / Equipe',
                   );
                 },
@@ -301,43 +327,86 @@ class _ConsultaProcessosConsignadoPageState
       },
     );
 
-    if (result == true) {
-      ConsultaProcessosConsignadoModel processosMarcados =
-          bloc.state.itensConsignados.firstWhere(
-        (entrada) => entrada.imprimir == true,
-      );
-
-      salvar(processosMarcados);
-    } else {
-      return ToastUtils.showCustomToastWarning(
+    if (result != true) {
+      ToastUtils.showCustomToastWarning(
         context,
         'Impressão cancelada',
       );
+      return;
     }
+
+    Iterable<ConsultaProcessosConsignadoModel> processosMarcados =
+        bloc.state.itensConsignados.where(
+      (entrada) => entrada.imprimir == true,
+    );
+
+    await salvar(processosMarcados);
   }
 
-  void salvar(ConsultaProcessosConsignadoModel processosMarcados) {
+  Future salvar(
+    Iterable<ConsultaProcessosConsignadoModel> processosMarcados,
+  ) async {
     if (colaboradorEntrega == null ||
         responsavelRetirada == null ||
         medico == null) {
-      ErrorUtils.showErrorDialog(
+      await ErrorUtils.showErrorDialog(
         context,
         ['Preencha todos os campos para realizar a impressão!'],
       );
       return;
     }
 
-    ItemConsignadoProcessadoModel itemConsginadoProcessado =
-        ItemConsignadoProcessadoModel(
-      DataHora: null,
-      codInstituicao: 2,
-      codRegistro: processosMarcados.codRegistroProcessoExpurgo,
-      medico: medico,
-      responsavelRetirada: responsavelRetirada,
-      responsavelEntrega: colaboradorEntrega,
-      codUsuario: codUsuario,
+    LoadingController loading = LoadingController(context: context);
+    Set<int> codRegistroProcessos = processosMarcados
+        .where((element) => element.codRegistroProcessoExpurgo != null)
+        .map(
+          (e) => e.codRegistroProcessoExpurgo!,
+        )
+        .toSet();
+
+    if (codRegistroProcessos.isNotEmpty) {
+      for (int codRegistro in codRegistroProcessos) {
+        ItemConsignadoProcessadoModel itemConsginadoProcessado =
+            ItemConsignadoProcessadoModel(
+          DataHora: null,
+          codInstituicao: 2,
+          codRegistro: codRegistro,
+          medico: medico,
+          responsavelRetirada: responsavelRetirada,
+          responsavelEntrega: colaboradorEntrega,
+          codUsuario: codUsuario,
+        );
+        itemConsignadoProcessadoBloc.save(itemConsginadoProcessado);
+      }
+    }
+
+    final AuthenticationStore store = Modular.get<AuthenticationStore>();
+    final AuthenticationResultDTO? authentication =
+        await store.GetAuthenticated();
+
+    ConsignmentsWithdrawalPrintDTO dto = ConsignmentsWithdrawalPrintDTO(
+      deliveryResponsibleName: nomeColaboradorEntrega!,
+      doctorName: nomeMedico!,
+      instituitionName: authentication?.instituicao?.nome ?? '',
+      withdrawalResponsibleName: nomeResponsavelRetirada!,
+      items: processosMarcados.map(
+        (e) => ConsignmentsWithdrawalConsignmentPrintDTO(
+          tagId: e.idEtiqueta!,
+          name: e.materialConsignado!,
+          consignedItemId: e.codItemConsignado!,
+          consignedItemDescription: e.descricaoItemConsignado!,
+          received: e.recebido!,
+          consumed: e.consumido!,
+          prontuary: e.prontuario,
+        ),
+      ),
     );
-    itemConsignadoProcessadoBloc.save(itemConsginadoProcessado);
+
+    await ConsignmentsWithdrawalPrinterController(
+      context: context,
+      dto: dto,
+    ).print();
+    loading.closeDefault();
 
     bloc.loadProcessosConsignado(filter);
   }
@@ -345,96 +414,163 @@ class _ConsultaProcessosConsignadoPageState
   void onError(ConsultaProcessosConsignadoPageState state) =>
       ErrorUtils.showErrorDialog(context, [state.error]);
 
-  void openModal(BuildContext context) {
-    showDialog<bool>(
+  Future openModal(BuildContext context) async {
+    bool? result = await showDialog<bool>(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return FilterDialogWidget(
-          child: Column(
-            children: [
-              DatePickerWidget(
-                placeholder: 'Data Inicio',
-                onDateSelected: (value) => filter.startDate = value,
-                initialValue: filter.startDate,
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              DatePickerWidget(
-                placeholder: 'Data Término',
-                onDateSelected: (value) => filter.finalDate = value,
-                initialValue: filter.finalDate,
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              DropDownSearchApiWidget<ItemDescritorDropDownSearchResponseDTO>(
-                search: (str) async =>
-                    (await ItemDescritorService().getDropDownSearch(
-                      ItemDescritorDropDownSearchDTO(
-                        numeroRegistros: 30,
-                        termoPesquisa: str,
-                        apenasAtivos: true,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      child: DatePickerWidget(
+                        placeholder: 'Data Inicio',
+                        onDateSelected: (value) => filter.startDate = value,
+                        initialValue: filter.startDate,
                       ),
-                    ))
-                        ?.$2 ??
-                    [],
-                textFunction: (itemDescritor) => itemDescritor.Nome(),
-                initialValue: filter.itemDescritor == null
-                    ? null
-                    : ItemDescritorDropDownSearchResponseDTO(
-                        cod: filter.itemDescritor!.cod,
-                        nome: filter.itemDescritor?.nome,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 40),
+                    ),
+                    Expanded(
+                      child: TimePickerWidget(
+                        placeholder: 'Hora Início',
+                        initialValue: filter.startTime == null
+                            ? null
+                            : TimeOfDay(
+                                hour: filter.startTime!.hour,
+                                minute: filter.startTime!.minute,
+                              ),
+                        onTimeSelected: (selectedTime) {
+                          if (selectedTime == null) {
+                            filter.startTime = null;
+                            return;
+                          }
+                          filter.startTime = DateTime(
+                            DateTime.now().year,
+                            DateTime.now().month,
+                            DateTime.now().day,
+                            selectedTime.hour,
+                            selectedTime.minute,
+                          );
+                        },
                       ),
-                onChanged: (value) {
-                  filter.codItemDescritor = value?.cod;
-                  filter.itemDescritor = value;
-                },
-                placeholder: 'Item Descritor',
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              CustomAutocompleteWidget<ItemModel>(
-                initialValue: filter.idEtiquetaContem,
-                onChange: (str) => filter.idEtiquetaContem = str,
-                onItemSelectedText: (item) => item.idEtiqueta ?? null,
-                label: 'Item',
-                title: (p0) => Text(p0.EtiquetaDescricaoText()),
-                suggestionsCallback: (str) => ItemService().Filter(
-                  ItemFilter(numeroRegistros: 30, termoPesquisa: str),
+                    ),
+                  ],
                 ),
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<ProprietarioCubit, ProprietarioState>(
-                bloc: proprietarioBloc,
-                builder: (context, proprietarioState) {
-                  if (proprietarioState.loading) return const LoadingWidget();
-                  List<ProprietarioModel> proprietarios =
-                      proprietarioState.proprietarios;
-                  proprietarios.sort(
-                    (a, b) => a.nome!.compareTo(b.nome!),
-                  );
-                  ProprietarioModel? proprietario = proprietarios
-                      .where(
-                        (element) => element.cod == filter.codProprietario,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<ProprietarioModel>(
-                    textFunction: (proprietario) =>
-                        proprietario.ProprietarioText(),
-                    initialValue: proprietario,
-                    sourceList: proprietarios
-                        .where((element) => element.ativo == true)
-                        .toList(),
-                    onChanged: (value) => filter.codProprietario = value?.cod,
-                    placeholder: 'Proprietário',
-                  );
-                },
-              ),
-            ],
+                const Padding(padding: EdgeInsets.only(top: 2)),
+                Row(
+                  children: [
+                    Expanded(
+                      child: DatePickerWidget(
+                        placeholder: 'Data Término',
+                        onDateSelected: (value) => filter.finalDate = value,
+                        initialValue: filter.finalDate,
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(left: 40),
+                    ),
+                    Expanded(
+                      child: TimePickerWidget(
+                        placeholder: 'Hora Fim',
+                        initialValue: filter.finalTime == null
+                            ? null
+                            : TimeOfDay(
+                                hour: filter.finalTime!.hour,
+                                minute: filter.finalTime!.minute,
+                              ),
+                        onTimeSelected: (selectedTime) {
+                          print(selectedTime);
+                          if (selectedTime == null) {
+                            filter.finalTime = null;
+                            return;
+                          }
+                          filter.finalTime = DateTime(
+                            DateTime.now().year,
+                            DateTime.now().month,
+                            DateTime.now().day,
+                            selectedTime.hour,
+                            selectedTime.minute,
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+                const Padding(padding: EdgeInsets.only(top: 2)),
+                DropDownSearchApiWidget<ItemDescritorDropDownSearchResponseDTO>(
+                  search: (str) async =>
+                      (await ItemDescritorService().getDropDownSearch(
+                        ItemDescritorDropDownSearchDTO(
+                          numeroRegistros: 30,
+                          termoPesquisa: str,
+                          apenasAtivos: true,
+                        ),
+                      ))
+                          ?.$2 ??
+                      [],
+                  textFunction: (itemDescritor) => itemDescritor.Nome(),
+                  initialValue: filter.itemDescritor == null
+                      ? null
+                      : ItemDescritorDropDownSearchResponseDTO(
+                          cod: filter.itemDescritor!.cod,
+                          nome: filter.itemDescritor?.nome,
+                        ),
+                  onChanged: (value) {
+                    filter.codItemDescritor = value?.cod;
+                    filter.itemDescritor = value;
+                  },
+                  placeholder: 'Item Descritor',
+                ),
+                const Padding(padding: EdgeInsets.only(top: 2)),
+                CustomAutocompleteWidget<ItemModel>(
+                  initialValue: filter.idEtiquetaContem,
+                  onChange: (str) => filter.idEtiquetaContem = str,
+                  onItemSelectedText: (item) => item.idEtiqueta ?? null,
+                  label: 'Item',
+                  title: (p0) => Text(p0.EtiquetaDescricaoText()),
+                  suggestionsCallback: (str) => ItemService().Filter(
+                    ItemFilter(numeroRegistros: 30, termoPesquisa: str),
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.only(top: 2)),
+                BlocBuilder<ProprietarioCubit, ProprietarioState>(
+                  bloc: proprietarioBloc,
+                  builder: (context, proprietarioState) {
+                    if (proprietarioState.loading) return const LoadingWidget();
+                    List<ProprietarioModel> proprietarios =
+                        proprietarioState.proprietarios;
+                    proprietarios.sort(
+                      (a, b) => a.nome!.compareTo(b.nome!),
+                    );
+                    ProprietarioModel? proprietario = proprietarios
+                        .where(
+                          (element) => element.cod == filter.codProprietario,
+                        )
+                        .firstOrNull;
+                    return DropDownSearchWidget<ProprietarioModel>(
+                      textFunction: (proprietario) =>
+                          proprietario.ProprietarioText(),
+                      initialValue: proprietario,
+                      sourceList: proprietarios
+                          .where((element) => element.ativo == true)
+                          .toList(),
+                      onChanged: (value) => filter.codProprietario = value?.cod,
+                      placeholder: 'Proprietário',
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
         );
       },
-    ).then((result) {
-      if (result == true) {
-        bloc.loadProcessosConsignado(filter);
-      }
-    });
+    );
+    if (result != true) return;
+    bloc.loadProcessosConsignado(filter);
   }
 }

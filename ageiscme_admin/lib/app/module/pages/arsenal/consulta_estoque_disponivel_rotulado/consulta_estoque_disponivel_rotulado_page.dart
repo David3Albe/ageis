@@ -321,7 +321,12 @@ class _ConsultaEstoqueDisponivelRotuladoPageState
         return QueryDialogWidget(
           child: ConsultaProcessosLeituraPage(
             filter: ConsultaProcessosLeituraFilter(
-              startDate: startDate?.add(const Duration(hours: -24)),
+              startDate: startDate?.add(const Duration(hours: -24)) ??
+                  DateTime.now().add(
+                    const Duration(
+                      hours: -24,
+                    ),
+                  ),
               finalDate: DateTime.now(),
               codKit: codKit,
               codItem: codItem,

@@ -1,13 +1,22 @@
+import 'package:ageiscme_data/shared/app_config.dart';
 import 'package:ageiscme_data/shared/custom_dio.dart';
 import 'package:ageiscme_models/filters/imagem/imagem_filter.dart';
 import 'package:ageiscme_models/models/imagem/imagem_model.dart';
 
 class ImagemService {
   final CustomDio _client = CustomDio();
+  static const String BASE_URL = '/imagem/';
 
   ImagemService();
 
-  Future<List<ImagemModel>> GetAll() async => (await _client.getList('/imagem'))
+  Future<String> getUrlImage({required String identificador}) async {
+    String urlBase = (await AppConfig.forEnvironment(false)).apiUrl;
+    urlBase += BASE_URL;
+    urlBase += 'get-one-by-identificador/$identificador/image';
+    return urlBase;
+  }
+
+  Future<List<ImagemModel>> GetAll() async => (await _client.getList(BASE_URL))
       .map((e) => ImagemModel.fromJson(e))
       .toList();
 
@@ -15,7 +24,7 @@ class ImagemService {
     ImagemFilter filter,
   ) async =>
       await _client.postFilter(
-        '/imagem/filter-one',
+        BASE_URL + 'filter-one',
         filter,
         (dynamic json) => ImagemModel.fromJson(json),
       );
@@ -24,10 +33,28 @@ class ImagemService {
     ImagemFilter obj,
   ) async {
     return await _client.postFilter<List<ImagemModel>>(
-      '/imagem/filter',
+      BASE_URL + 'filter',
       obj,
       (dynamic json) =>
           (json as List<dynamic>).map((e) => ImagemModel.fromJson(e)).toList(),
+    );
+  }
+
+  Future<ImagemModel?> getLogoIdentificador({
+    required String identificador,
+  }) async {
+    return ImagemModel.fromJson(
+      await _client.getOne(
+        BASE_URL + 'get-one-by-identificador/$identificador',
+      ),
+    );
+  }
+
+  Future<ImagemModel?> getLogoAgeis() async {
+    return ImagemModel.fromJson(
+      await _client.getOne(
+        BASE_URL + 'get-one-by-identificador/logo_ageis',
+      ),
     );
   }
 
@@ -35,7 +62,7 @@ class ImagemService {
     ImagemModel obj,
   ) async {
     return await _client.post(
-      '/imagem',
+      BASE_URL,
       obj,
       (dynamic json) => ImagemModel.fromJson(json),
     );
@@ -45,7 +72,7 @@ class ImagemService {
     ImagemModel obj,
   ) async {
     return await _client.delete(
-      '/imagem/${obj.cod}',
+      BASE_URL + '${obj.cod}',
       obj,
       (dynamic json) => ImagemModel.fromJson(json),
     );

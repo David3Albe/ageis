@@ -133,7 +133,6 @@ class _TreinamentoRegistroPageState extends State<TreinamentoRegistroPage> {
     if (!usuarioCubit.state.loaded) {
       usuarioCubit.loadFilter(
         UsuarioFilter(
-          apenasAtivos: true,
           ordenarPorNomeCrescente: true,
           apenasColaboradores: true,
           carregarFoto: false,

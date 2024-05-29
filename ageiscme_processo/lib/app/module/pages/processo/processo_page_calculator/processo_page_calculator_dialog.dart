@@ -15,6 +15,7 @@ import 'package:compartilhados/exceptions/custom_base_exception.dart';
 import 'package:compartilhados/functions/helper_functions.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class ProcessoPageCalculatorDialog extends StatefulWidget {
   const ProcessoPageCalculatorDialog({
@@ -76,6 +77,17 @@ class _ProcessoPageCalculatorDialogState
     }
   }
 
+  void handleCustomkey(RawKeyEvent key) {
+    if (key is RawKeyUpEvent) return;
+    String? keyChar = key.character;
+    if (keyChar != null) {
+      int? parseado = int.tryParse(keyChar);
+      if (parseado != null) cubit.addNumber(parseado);
+      return;
+    }
+    coletorHelper.handleKey(key);
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -95,7 +107,7 @@ class _ProcessoPageCalculatorDialogState
           }
         },
         child: RawKeyboardListener(
-          onKey: coletorHelper.handleKey,
+          onKey: handleCustomkey,
           autofocus: true,
           focusNode: _textNode,
           child: Container(

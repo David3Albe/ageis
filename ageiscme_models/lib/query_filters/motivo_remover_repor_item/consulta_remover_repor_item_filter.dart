@@ -12,14 +12,16 @@ sealed class ConsultaRemoverReporItemFilter
   const ConsultaRemoverReporItemFilter._();
 
   factory ConsultaRemoverReporItemFilter({
-    required DateTime? startDate,
-    required DateTime? finalDate,
-    required String? codBarraKit,
-    required String? codBarraKitContem,
-    required String? idEtiquetaContem,
-    required String? codBarraItem,
-    required int? codUsuarioAcao,
-    required int? codMotivo,
+    DateTime? startDate,
+    DateTime? startTime,
+    DateTime? finalDate,
+    DateTime? finalTime,
+    String? codBarraKit,
+    String? codBarraKitContem,
+    String? idEtiquetaContem,
+    String? codBarraItem,
+    int? codUsuarioAcao,
+    int? codMotivo,
     UsuarioDropDownSearchResponseDTO? usuario,
     ItemModel? item,
   }) = _ConsultaRemoverReporItemFilter;

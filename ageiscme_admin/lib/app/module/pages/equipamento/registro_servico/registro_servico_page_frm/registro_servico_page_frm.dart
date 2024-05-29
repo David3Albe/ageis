@@ -345,7 +345,7 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                                   ))
                                       ?.$2 ??
                                   [],
-                              textFunction: (usuario) => usuario.CodBarraNome(),
+                              textFunction: (usuario) => usuario.NomeText(),
                               initialValue: registroServico.usuario != null
                                   ? UsuarioDropDownSearchResponseDTO(
                                       cod: registroServico.codUsuario!,

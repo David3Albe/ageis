@@ -24,7 +24,7 @@ class HeaderWidget extends StatelessWidget {
             ),
           ],
         ),
-        Padding(padding: const EdgeInsets.only(top: 8)),
+        Padding(padding: const EdgeInsets.only(top: 14)),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -39,7 +39,7 @@ class HeaderWidget extends StatelessWidget {
             ),
           ],
         ),
-        Padding(padding: const EdgeInsets.only(top: 4)),
+        Padding(padding: const EdgeInsets.only(top: 6)),
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

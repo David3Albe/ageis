@@ -21,6 +21,7 @@ sealed class ConsultaProcessosConsignadoModel
     required String? descricaoItemConsignado,
     required int? qtdePadrao,
     required int? recebido,
+    required int? preparado,
     required int? consumido,
     required int? codRegistroProcessoExpurgo,
     required int? codItem,

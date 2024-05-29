@@ -24,8 +24,12 @@ ConsultaProcessosLeituraRetiradosDivLocalFilter
 mixin _$ConsultaProcessosLeituraRetiradosDivLocalFilter {
   DateTime? get startDate => throw _privateConstructorUsedError;
   set startDate(DateTime? value) => throw _privateConstructorUsedError;
+  DateTime? get startTime => throw _privateConstructorUsedError;
+  set startTime(DateTime? value) => throw _privateConstructorUsedError;
   DateTime? get finalDate => throw _privateConstructorUsedError;
   set finalDate(DateTime? value) => throw _privateConstructorUsedError;
+  DateTime? get finalTime => throw _privateConstructorUsedError;
+  set finalTime(DateTime? value) => throw _privateConstructorUsedError;
   int? get codLocal => throw _privateConstructorUsedError;
   set codLocal(int? value) => throw _privateConstructorUsedError;
   int? get codProprietario => throw _privateConstructorUsedError;
@@ -48,7 +52,9 @@ abstract class $ConsultaProcessosLeituraRetiradosDivLocalFilterCopyWith<$Res> {
   @useResult
   $Res call(
       {DateTime? startDate,
+      DateTime? startTime,
       DateTime? finalDate,
+      DateTime? finalTime,
       int? codLocal,
       int? codProprietario});
 }
@@ -69,7 +75,9 @@ class _$ConsultaProcessosLeituraRetiradosDivLocalFilterCopyWithImpl<$Res,
   @override
   $Res call({
     Object? startDate = freezed,
+    Object? startTime = freezed,
     Object? finalDate = freezed,
+    Object? finalTime = freezed,
     Object? codLocal = freezed,
     Object? codProprietario = freezed,
   }) {
@@ -78,9 +86,17 @@ class _$ConsultaProcessosLeituraRetiradosDivLocalFilterCopyWithImpl<$Res,
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      startTime: freezed == startTime
+          ? _value.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       finalDate: freezed == finalDate
           ? _value.finalDate
           : finalDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      finalTime: freezed == finalTime
+          ? _value.finalTime
+          : finalTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       codLocal: freezed == codLocal
           ? _value.codLocal
@@ -107,7 +123,9 @@ abstract class _$$ConsultaProcessosLeituraRetiradosDivLocalFilterImplCopyWith<
   @useResult
   $Res call(
       {DateTime? startDate,
+      DateTime? startTime,
       DateTime? finalDate,
+      DateTime? finalTime,
       int? codLocal,
       int? codProprietario});
 }
@@ -128,7 +146,9 @@ class __$$ConsultaProcessosLeituraRetiradosDivLocalFilterImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? startDate = freezed,
+    Object? startTime = freezed,
     Object? finalDate = freezed,
+    Object? finalTime = freezed,
     Object? codLocal = freezed,
     Object? codProprietario = freezed,
   }) {
@@ -137,9 +157,17 @@ class __$$ConsultaProcessosLeituraRetiradosDivLocalFilterImplCopyWithImpl<$Res>
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      startTime: freezed == startTime
+          ? _value.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       finalDate: freezed == finalDate
           ? _value.finalDate
           : finalDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      finalTime: freezed == finalTime
+          ? _value.finalTime
+          : finalTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       codLocal: freezed == codLocal
           ? _value.codLocal
@@ -158,10 +186,12 @@ class __$$ConsultaProcessosLeituraRetiradosDivLocalFilterImplCopyWithImpl<$Res>
 class _$ConsultaProcessosLeituraRetiradosDivLocalFilterImpl
     extends _ConsultaProcessosLeituraRetiradosDivLocalFilter {
   _$ConsultaProcessosLeituraRetiradosDivLocalFilterImpl(
-      {required this.startDate,
-      required this.finalDate,
-      required this.codLocal,
-      required this.codProprietario})
+      {this.startDate,
+      this.startTime,
+      this.finalDate,
+      this.finalTime,
+      this.codLocal,
+      this.codProprietario})
       : super._();
 
   factory _$ConsultaProcessosLeituraRetiradosDivLocalFilterImpl.fromJson(
@@ -171,7 +201,11 @@ class _$ConsultaProcessosLeituraRetiradosDivLocalFilterImpl
   @override
   DateTime? startDate;
   @override
+  DateTime? startTime;
+  @override
   DateTime? finalDate;
+  @override
+  DateTime? finalTime;
   @override
   int? codLocal;
   @override
@@ -179,7 +213,7 @@ class _$ConsultaProcessosLeituraRetiradosDivLocalFilterImpl
 
   @override
   String toString() {
-    return 'ConsultaProcessosLeituraRetiradosDivLocalFilter(startDate: $startDate, finalDate: $finalDate, codLocal: $codLocal, codProprietario: $codProprietario)';
+    return 'ConsultaProcessosLeituraRetiradosDivLocalFilter(startDate: $startDate, startTime: $startTime, finalDate: $finalDate, finalTime: $finalTime, codLocal: $codLocal, codProprietario: $codProprietario)';
   }
 
   @JsonKey(ignore: true)
@@ -203,10 +237,12 @@ class _$ConsultaProcessosLeituraRetiradosDivLocalFilterImpl
 abstract class _ConsultaProcessosLeituraRetiradosDivLocalFilter
     extends ConsultaProcessosLeituraRetiradosDivLocalFilter {
   factory _ConsultaProcessosLeituraRetiradosDivLocalFilter(
-          {required DateTime? startDate,
-          required DateTime? finalDate,
-          required int? codLocal,
-          required int? codProprietario}) =
+          {DateTime? startDate,
+          DateTime? startTime,
+          DateTime? finalDate,
+          DateTime? finalTime,
+          int? codLocal,
+          int? codProprietario}) =
       _$ConsultaProcessosLeituraRetiradosDivLocalFilterImpl;
   _ConsultaProcessosLeituraRetiradosDivLocalFilter._() : super._();
 
@@ -218,8 +254,14 @@ abstract class _ConsultaProcessosLeituraRetiradosDivLocalFilter
   DateTime? get startDate;
   set startDate(DateTime? value);
   @override
+  DateTime? get startTime;
+  set startTime(DateTime? value);
+  @override
   DateTime? get finalDate;
   set finalDate(DateTime? value);
+  @override
+  DateTime? get finalTime;
+  set finalTime(DateTime? value);
   @override
   int? get codLocal;
   set codLocal(int? value);

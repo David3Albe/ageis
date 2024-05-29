@@ -5,6 +5,7 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/servico_tipo/
 import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/processo_etapa/processo_etapa_page_frm/processo_etapa_page_frm_imprimir_funcoes/processo_etapa_page_frm_imprimir_funcoes_page.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/processo_etapa/processo_etapa_page_frm/processo_etapa_page_frm_state.dart';
+import 'package:ageiscme_admin/app/module/pages/processo/processo_etapa/processo_etapa_page_frm/quantidade_indicadores/quantidade_indicadores_page_frm.dart';
 import 'package:ageiscme_data/services/processo_etapa/processo_etapa_service.dart';
 import 'package:ageiscme_impressoes/dto/stage_indicator_print/stage_indicator_print_dto.dart';
 import 'package:ageiscme_impressoes/prints/stage_indicator_printer/stage_indicator_printer_controller.dart';
@@ -230,13 +231,13 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                     processoEtapa.codProcessoTipo,
                               )
                               .firstOrNull;
-                          return DropDownWidget<ProcessoTipoModel>(
+                          return DropDownSearchWidget<ProcessoTipoModel>(
                             initialValue: processoTipo,
                             sourceList: processosTipos
                                 .where((element) => element.ativo == true)
                                 .toList(),
                             onChanged: (value) =>
-                                processoEtapa.codProcessoTipo = value.cod!,
+                                processoEtapa.codProcessoTipo = value?.cod,
                             placeholder: 'Tipo Processo',
                           );
                         },
@@ -932,12 +933,39 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
       );
       return;
     }
+    (bool, int?)? result = await showDialog<(bool, int?)>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return const QuantidadeIndicadoresPageFrm();
+      },
+    );
+    if (result == null || !result.$1) return;
+    int? indicadores = result.$2;
+    print(indicadores);
+    if (indicadores == null || indicadores == 0) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'Informe a quantidade de indicadores que deseja imprimir',
+      );
+      return;
+    }
+
+    if (indicadores > 100) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'É possível imprimir até 100 indicadores por vez',
+      );
+      return;
+    }
+
     LoadingController loading = LoadingController(context: context);
     StageIndicatorPrinterController controller =
         StageIndicatorPrinterController(
       context: context,
       stageIndicatorPrint: StageIndicatorPrintDTO(
         instituitionCod: processoEtapa.codInstituicao!,
+        quantity: indicadores,
       ),
     );
     loading.close(context, mounted);

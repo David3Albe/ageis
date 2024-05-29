@@ -23,8 +23,12 @@ ConsultaMovimentacaoEstoqueFilter _$ConsultaMovimentacaoEstoqueFilterFromJson(
 mixin _$ConsultaMovimentacaoEstoqueFilter {
   DateTime? get startDate => throw _privateConstructorUsedError;
   set startDate(DateTime? value) => throw _privateConstructorUsedError;
+  DateTime? get startTime => throw _privateConstructorUsedError;
+  set startTime(DateTime? value) => throw _privateConstructorUsedError;
   DateTime? get finalDate => throw _privateConstructorUsedError;
   set finalDate(DateTime? value) => throw _privateConstructorUsedError;
+  DateTime? get finalTime => throw _privateConstructorUsedError;
+  set finalTime(DateTime? value) => throw _privateConstructorUsedError;
   int? get codDeposito => throw _privateConstructorUsedError;
   set codDeposito(int? value) => throw _privateConstructorUsedError;
   int? get codInsumo => throw _privateConstructorUsedError;
@@ -50,7 +54,9 @@ abstract class $ConsultaMovimentacaoEstoqueFilterCopyWith<$Res> {
   @useResult
   $Res call(
       {DateTime? startDate,
+      DateTime? startTime,
       DateTime? finalDate,
+      DateTime? finalTime,
       int? codDeposito,
       int? codInsumo,
       String? lote,
@@ -72,7 +78,9 @@ class _$ConsultaMovimentacaoEstoqueFilterCopyWithImpl<$Res,
   @override
   $Res call({
     Object? startDate = freezed,
+    Object? startTime = freezed,
     Object? finalDate = freezed,
+    Object? finalTime = freezed,
     Object? codDeposito = freezed,
     Object? codInsumo = freezed,
     Object? lote = freezed,
@@ -83,9 +91,17 @@ class _$ConsultaMovimentacaoEstoqueFilterCopyWithImpl<$Res,
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      startTime: freezed == startTime
+          ? _value.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       finalDate: freezed == finalDate
           ? _value.finalDate
           : finalDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      finalTime: freezed == finalTime
+          ? _value.finalTime
+          : finalTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       codDeposito: freezed == codDeposito
           ? _value.codDeposito
@@ -118,7 +134,9 @@ abstract class _$$ConsultaMovimentacaoEstoqueFilterImplCopyWith<$Res>
   @useResult
   $Res call(
       {DateTime? startDate,
+      DateTime? startTime,
       DateTime? finalDate,
+      DateTime? finalTime,
       int? codDeposito,
       int? codInsumo,
       String? lote,
@@ -139,7 +157,9 @@ class __$$ConsultaMovimentacaoEstoqueFilterImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? startDate = freezed,
+    Object? startTime = freezed,
     Object? finalDate = freezed,
+    Object? finalTime = freezed,
     Object? codDeposito = freezed,
     Object? codInsumo = freezed,
     Object? lote = freezed,
@@ -150,9 +170,17 @@ class __$$ConsultaMovimentacaoEstoqueFilterImplCopyWithImpl<$Res>
           ? _value.startDate
           : startDate // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      startTime: freezed == startTime
+          ? _value.startTime
+          : startTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
       finalDate: freezed == finalDate
           ? _value.finalDate
           : finalDate // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      finalTime: freezed == finalTime
+          ? _value.finalTime
+          : finalTime // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       codDeposito: freezed == codDeposito
           ? _value.codDeposito
@@ -179,12 +207,14 @@ class __$$ConsultaMovimentacaoEstoqueFilterImplCopyWithImpl<$Res>
 class _$ConsultaMovimentacaoEstoqueFilterImpl
     extends _ConsultaMovimentacaoEstoqueFilter {
   _$ConsultaMovimentacaoEstoqueFilterImpl(
-      {required this.startDate,
-      required this.finalDate,
-      required this.codDeposito,
-      required this.codInsumo,
-      required this.lote,
-      required this.nroNotaFiscal})
+      {this.startDate,
+      this.startTime,
+      this.finalDate,
+      this.finalTime,
+      this.codDeposito,
+      this.codInsumo,
+      this.lote,
+      this.nroNotaFiscal})
       : super._();
 
   factory _$ConsultaMovimentacaoEstoqueFilterImpl.fromJson(
@@ -194,7 +224,11 @@ class _$ConsultaMovimentacaoEstoqueFilterImpl
   @override
   DateTime? startDate;
   @override
+  DateTime? startTime;
+  @override
   DateTime? finalDate;
+  @override
+  DateTime? finalTime;
   @override
   int? codDeposito;
   @override
@@ -206,7 +240,7 @@ class _$ConsultaMovimentacaoEstoqueFilterImpl
 
   @override
   String toString() {
-    return 'ConsultaMovimentacaoEstoqueFilter(startDate: $startDate, finalDate: $finalDate, codDeposito: $codDeposito, codInsumo: $codInsumo, lote: $lote, nroNotaFiscal: $nroNotaFiscal)';
+    return 'ConsultaMovimentacaoEstoqueFilter(startDate: $startDate, startTime: $startTime, finalDate: $finalDate, finalTime: $finalTime, codDeposito: $codDeposito, codInsumo: $codInsumo, lote: $lote, nroNotaFiscal: $nroNotaFiscal)';
   }
 
   @JsonKey(ignore: true)
@@ -228,13 +262,14 @@ class _$ConsultaMovimentacaoEstoqueFilterImpl
 abstract class _ConsultaMovimentacaoEstoqueFilter
     extends ConsultaMovimentacaoEstoqueFilter {
   factory _ConsultaMovimentacaoEstoqueFilter(
-          {required DateTime? startDate,
-          required DateTime? finalDate,
-          required int? codDeposito,
-          required int? codInsumo,
-          required String? lote,
-          required String? nroNotaFiscal}) =
-      _$ConsultaMovimentacaoEstoqueFilterImpl;
+      {DateTime? startDate,
+      DateTime? startTime,
+      DateTime? finalDate,
+      DateTime? finalTime,
+      int? codDeposito,
+      int? codInsumo,
+      String? lote,
+      String? nroNotaFiscal}) = _$ConsultaMovimentacaoEstoqueFilterImpl;
   _ConsultaMovimentacaoEstoqueFilter._() : super._();
 
   factory _ConsultaMovimentacaoEstoqueFilter.fromJson(
@@ -245,8 +280,14 @@ abstract class _ConsultaMovimentacaoEstoqueFilter
   DateTime? get startDate;
   set startDate(DateTime? value);
   @override
+  DateTime? get startTime;
+  set startTime(DateTime? value);
+  @override
   DateTime? get finalDate;
   set finalDate(DateTime? value);
+  @override
+  DateTime? get finalTime;
+  set finalTime(DateTime? value);
   @override
   int? get codDeposito;
   set codDeposito(int? value);

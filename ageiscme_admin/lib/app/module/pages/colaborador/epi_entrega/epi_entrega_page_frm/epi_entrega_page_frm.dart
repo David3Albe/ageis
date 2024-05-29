@@ -3,6 +3,9 @@ import 'package:ageiscme_admin/app/module/pages/colaborador/epi_entrega/epi_entr
 import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_data/services/epi_entrega/epi_entrega_service.dart';
 import 'package:ageiscme_data/stores/authentication/authentication_store.dart';
+import 'package:ageiscme_impressoes/dto/epi_delivery/epi/epi_delivery_epi_print_dto.dart';
+import 'package:ageiscme_impressoes/dto/epi_delivery/epi_delivery_print_dto.dart';
+import 'package:ageiscme_impressoes/prints/epi_delivery/epi_delivery_printer_controller.dart';
 import 'package:ageiscme_models/dto/authentication_result/authentication_result_dto.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
@@ -16,6 +19,7 @@ import 'package:compartilhados/componentes/campos/text_field_string_widget.dart'
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/fontes/fontes.dart';
@@ -321,14 +325,7 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
                               List<EpiEntregaModel> epiEntreguesValidade = [];
                               if (episEntregas.isNotEmpty) {
                                 epiEntreguesValidade =
-                                    episEntregas.where((entrega) {
-                                  return entrega.codUsuario ==
-                                          epiEntrega.codUsuario &&
-                                      entrega.dataLimiteValidade != null &&
-                                      entrega.dataDescarte == null &&
-                                      entrega.dataLimiteValidade!
-                                          .isAfter(DateTime.now());
-                                }).toList();
+                                    getEpisValidade().toList();
                               }
 
                               return ListFieldWidget<EpiEntregaModel>(
@@ -448,9 +445,13 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
           actions: [
             Row(
               children: [
-                if (epiEntrega.cod != null && epiEntrega.cod != 0)
-                  CustomPopupMenuWidget(
-                    items: [
+                CustomPopupMenuWidget(
+                  items: [
+                    CustomPopupItemModel(
+                      text: 'Imprimir Documento Entrega',
+                      onTap: print,
+                    ),
+                    if (epiEntrega.cod != null && epiEntrega.cod != 0)
                       CustomPopupItemHistoryModel.getHistoryItem(
                         child: HistoricoPage(
                           pk: epiEntrega.cod!,
@@ -458,8 +459,8 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
                         ),
                         context: context,
                       ),
-                    ],
-                  ),
+                  ],
+                ),
                 const Spacer(),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
@@ -489,6 +490,54 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
         );
       },
     );
+  }
+
+  Iterable<EpiEntregaModel> getEpisValidade() {
+    List<EpiEntregaModel> epis = epiEntregaCubit.state.itens;
+    return epis.where((entrega) {
+      return entrega.codUsuario == epiEntrega.codUsuario &&
+          entrega.dataLimiteValidade != null &&
+          entrega.dataDescarte == null &&
+          entrega.dataLimiteValidade!.isAfter(DateTime.now());
+    });
+  }
+
+  void setDescritor(EpiEntregaModel epi) =>
+      epi.epiDescritor = widget.episDescritores
+          .where((element) => element.cod == epi.codDescritorEpi)
+          .firstOrNull;
+
+  Future print() async {
+    AuthenticationResultDTO? auth =
+        await Modular.get<AuthenticationStore>().GetAuthenticated();
+    int? codUsuario = epiEntrega.codUsuario;
+    UsuarioModel? usuario = widget.usuarios
+        .where((element) => element.cod == codUsuario)
+        .firstOrNull;
+
+    List<EpiEntregaModel> epis = getEpisValidade().toList();
+    epis.forEach((element) {
+      setDescritor(element);
+    });
+
+    EpiDeliveryPrintDTO dto = EpiDeliveryPrintDTO(
+      instituition: auth?.instituicao?.nome ?? '',
+      userName: usuario?.nome ?? '',
+      userDoc: usuario?.docClasse ?? '',
+      epis: epis
+          .map(
+            (e) => EpiDeliveryEpiPrintDTO(
+              description: e.epiDescritor?.descricao ?? '',
+              CANumber: e.epiDescritor?.numeroCA ?? '',
+              validity: e.dataLimiteValidade,
+            ),
+          )
+          .toList(),
+    );
+    await EpiDeliveryPrinterController(
+      context: context,
+      dto: dto,
+    ).print();
   }
 
   void salvar() {

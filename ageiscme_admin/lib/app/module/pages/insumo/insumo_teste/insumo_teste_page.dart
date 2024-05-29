@@ -1,5 +1,6 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_drop_down_search_cubit.dart';
 import 'package:ageiscme_models/dto/usuario/usuario_drop_down_search_dto.dart';
+import 'package:ageiscme_models/filters/insumo/insumo_filter.dart';
 import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
 import 'package:flutter/material.dart';
 
@@ -46,12 +47,16 @@ class _InsumoTestePageState extends State<InsumoTestePage> {
 
   @override
   void initState() {
+    depositoInsumoBloc = DepositoInsumoCubit();
+    depositoInsumoBloc.loadAll();
     usuarioCubit = UsuarioDropDownSearchCubit();
     usuarioCubit.loadDropDownSearch(
       UsuarioDropDownSearchDTO(
         numeroRegistros: 10000,
       ),
     );
+    insumoBloc = InsumoCubit();
+    insumoBloc.loadFilter(InsumoFilter());
     filter = InsumoTesteFilter.empty();
     service = InsumoTesteService();
     bloc = InsumoTestePageCubit(service: service);
@@ -247,6 +252,7 @@ class _InsumoTestePageState extends State<InsumoTestePage> {
           insumoReadOnly: false,
           depositoInsumoCubit: depositoInsumoBloc,
           insumoTeste: insumoTeste,
+          usuarioCubit: usuarioCubit,
         );
       },
     ).then((result) {

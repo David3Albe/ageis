@@ -49,18 +49,6 @@ class ProcessoPageObjectPreviewWidget extends StatelessWidget {
             Image? imagem;
             imagem = bytes != null ? Image.memory(bytes) : null;
 
-            // if (bytes != null) {
-            //   final originalImage = imgexp.decodeImage(bytes);
-            //   final height = originalImage?.height ?? 0;
-            //   final width = originalImage?.width ?? 0;
-            //   imgexp.Image? img = originalImage;
-            //   if (img != null) {
-            //     if (height < width) img = imgexp.copyRotate(img, angle: 90);
-            //     Uint8List imgToConvert = imgexp.encodePng(img);
-            //     imagem = Image.memory(imgToConvert);
-            //   }
-            // }
-
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -103,13 +91,11 @@ class ProcessoPageObjectPreviewWidget extends StatelessWidget {
     ItemProcessoModel? itemCurrent = current.processo.getItemSelecionado();
     if (itemPrevious?.cod != itemCurrent?.cod) return true;
 
-    KitProcessoModel? kitPrevious = previous.processo.leituraAtual.kits
-        .where((element) => element.selecionado == true)
-        .firstOrNull;
-    KitProcessoModel? kitCurrent = current.processo.leituraAtual.kits
-        .where((element) => element.selecionado == true)
-        .firstOrNull;
-    if (kitPrevious?.imagem != kitCurrent?.imagem) return true;
+    KitProcessoModel? kitPrevious = previous.processo.getKitSelecionado();
+    KitProcessoModel? kitCurrent = current.processo.getKitSelecionado();
+    if (kitPrevious?.descritor?.imagem != kitCurrent?.descritor?.imagem) {
+      return true;
+    }
     return false;
   }
 

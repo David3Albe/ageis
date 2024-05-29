@@ -134,6 +134,10 @@ abstract class Cores {
 
   static const Color corIconeToastWarning = Color(0xffE19D00);
 
+  static const Color corToastBackgroundNotice = Color.fromARGB(123, 131, 196, 250);
+
+  static const Color corIconeToastNotice = Color.fromARGB(255, 131, 196, 250);
+
   static const Color corIconeErro = Color(0xff9C160D);
 
   static const Color corFundoIconeErro = Color(0xffFFCCD2);
