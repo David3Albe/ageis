@@ -51,6 +51,8 @@ mixin _$ConsultaProcessosLeituraFilter {
   set codBarraKitContem(String? value) => throw _privateConstructorUsedError;
   ItemModel? get item => throw _privateConstructorUsedError;
   set item(ItemModel? value) => throw _privateConstructorUsedError;
+  PlutoGridApiModel? get gridModel => throw _privateConstructorUsedError;
+  set gridModel(PlutoGridApiModel? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -81,9 +83,11 @@ abstract class $ConsultaProcessosLeituraFilterCopyWith<$Res> {
       bool? implantavel,
       String? prontuario,
       String? codBarraKitContem,
-      ItemModel? item});
+      ItemModel? item,
+      PlutoGridApiModel? gridModel});
 
   $ItemModelCopyWith<$Res>? get item;
+  $PlutoGridApiModelCopyWith<$Res>? get gridModel;
 }
 
 /// @nodoc
@@ -115,6 +119,7 @@ class _$ConsultaProcessosLeituraFilterCopyWithImpl<$Res,
     Object? prontuario = freezed,
     Object? codBarraKitContem = freezed,
     Object? item = freezed,
+    Object? gridModel = freezed,
   }) {
     return _then(_value.copyWith(
       startDate: freezed == startDate
@@ -177,6 +182,10 @@ class _$ConsultaProcessosLeituraFilterCopyWithImpl<$Res,
           ? _value.item
           : item // ignore: cast_nullable_to_non_nullable
               as ItemModel?,
+      gridModel: freezed == gridModel
+          ? _value.gridModel
+          : gridModel // ignore: cast_nullable_to_non_nullable
+              as PlutoGridApiModel?,
     ) as $Val);
   }
 
@@ -189,6 +198,18 @@ class _$ConsultaProcessosLeituraFilterCopyWithImpl<$Res,
 
     return $ItemModelCopyWith<$Res>(_value.item!, (value) {
       return _then(_value.copyWith(item: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $PlutoGridApiModelCopyWith<$Res>? get gridModel {
+    if (_value.gridModel == null) {
+      return null;
+    }
+
+    return $PlutoGridApiModelCopyWith<$Res>(_value.gridModel!, (value) {
+      return _then(_value.copyWith(gridModel: value) as $Val);
     });
   }
 }
@@ -217,10 +238,13 @@ abstract class _$$ConsultaProcessosLeituraFilterImplCopyWith<$Res>
       bool? implantavel,
       String? prontuario,
       String? codBarraKitContem,
-      ItemModel? item});
+      ItemModel? item,
+      PlutoGridApiModel? gridModel});
 
   @override
   $ItemModelCopyWith<$Res>? get item;
+  @override
+  $PlutoGridApiModelCopyWith<$Res>? get gridModel;
 }
 
 /// @nodoc
@@ -251,6 +275,7 @@ class __$$ConsultaProcessosLeituraFilterImplCopyWithImpl<$Res>
     Object? prontuario = freezed,
     Object? codBarraKitContem = freezed,
     Object? item = freezed,
+    Object? gridModel = freezed,
   }) {
     return _then(_$ConsultaProcessosLeituraFilterImpl(
       startDate: freezed == startDate
@@ -313,6 +338,10 @@ class __$$ConsultaProcessosLeituraFilterImplCopyWithImpl<$Res>
           ? _value.item
           : item // ignore: cast_nullable_to_non_nullable
               as ItemModel?,
+      gridModel: freezed == gridModel
+          ? _value.gridModel
+          : gridModel // ignore: cast_nullable_to_non_nullable
+              as PlutoGridApiModel?,
     ));
   }
 }
@@ -336,7 +365,8 @@ class _$ConsultaProcessosLeituraFilterImpl
       required this.implantavel,
       required this.prontuario,
       required this.codBarraKitContem,
-      this.item})
+      this.item,
+      this.gridModel})
       : super._();
 
   factory _$ConsultaProcessosLeituraFilterImpl.fromJson(
@@ -373,10 +403,12 @@ class _$ConsultaProcessosLeituraFilterImpl
   String? codBarraKitContem;
   @override
   ItemModel? item;
+  @override
+  PlutoGridApiModel? gridModel;
 
   @override
   String toString() {
-    return 'ConsultaProcessosLeituraFilter(startDate: $startDate, finalDate: $finalDate, startTime: $startTime, finalTime: $finalTime, codKit: $codKit, codItem: $codItem, idEtiquetaContem: $idEtiquetaContem, codEtapaProcesso: $codEtapaProcesso, lote: $lote, indicador: $indicador, biologico: $biologico, implantavel: $implantavel, prontuario: $prontuario, codBarraKitContem: $codBarraKitContem, item: $item)';
+    return 'ConsultaProcessosLeituraFilter(startDate: $startDate, finalDate: $finalDate, startTime: $startTime, finalTime: $finalTime, codKit: $codKit, codItem: $codItem, idEtiquetaContem: $idEtiquetaContem, codEtapaProcesso: $codEtapaProcesso, lote: $lote, indicador: $indicador, biologico: $biologico, implantavel: $implantavel, prontuario: $prontuario, codBarraKitContem: $codBarraKitContem, item: $item, gridModel: $gridModel)';
   }
 
   @JsonKey(ignore: true)
@@ -412,7 +444,8 @@ abstract class _ConsultaProcessosLeituraFilter
       required bool? implantavel,
       required String? prontuario,
       required String? codBarraKitContem,
-      ItemModel? item}) = _$ConsultaProcessosLeituraFilterImpl;
+      ItemModel? item,
+      PlutoGridApiModel? gridModel}) = _$ConsultaProcessosLeituraFilterImpl;
   _ConsultaProcessosLeituraFilter._() : super._();
 
   factory _ConsultaProcessosLeituraFilter.fromJson(Map<String, dynamic> json) =
@@ -463,6 +496,9 @@ abstract class _ConsultaProcessosLeituraFilter
   @override
   ItemModel? get item;
   set item(ItemModel? value);
+  @override
+  PlutoGridApiModel? get gridModel;
+  set gridModel(PlutoGridApiModel? value);
   @override
   @JsonKey(ignore: true)
   _$$ConsultaProcessosLeituraFilterImplCopyWith<

@@ -27,32 +27,48 @@ mixin _$ConsultaProcessosLeituraModel {
   set data(DateTime? value) => throw _privateConstructorUsedError;
   String? get hora => throw _privateConstructorUsedError;
   set hora(String? value) => throw _privateConstructorUsedError;
+  String? get codBarraKit => throw _privateConstructorUsedError;
+  set codBarraKit(String? value) => throw _privateConstructorUsedError;
+  String? get nomeKit => throw _privateConstructorUsedError;
+  set nomeKit(String? value) => throw _privateConstructorUsedError;
   int? get nroItensFaltante => throw _privateConstructorUsedError;
   set nroItensFaltante(int? value) => throw _privateConstructorUsedError;
-  int? get codProprietario => throw _privateConstructorUsedError;
-  set codProprietario(int? value) => throw _privateConstructorUsedError;
+  String? get idEtiqueta => throw _privateConstructorUsedError;
+  set idEtiqueta(String? value) => throw _privateConstructorUsedError;
+  String? get descricaoItem => throw _privateConstructorUsedError;
+  set descricaoItem(String? value) => throw _privateConstructorUsedError;
+  String? get nomeProprietario => throw _privateConstructorUsedError;
+  set nomeProprietario(String? value) => throw _privateConstructorUsedError;
   String? get entradaSaida => throw _privateConstructorUsedError;
   set entradaSaida(String? value) => throw _privateConstructorUsedError;
-  String? get codPrioridade => throw _privateConstructorUsedError;
-  set codPrioridade(String? value) => throw _privateConstructorUsedError;
-  int? get codUsuario => throw _privateConstructorUsedError;
-  set codUsuario(int? value) => throw _privateConstructorUsedError;
+  String? get nomeEquipamento => throw _privateConstructorUsedError;
+  set nomeEquipamento(String? value) => throw _privateConstructorUsedError;
+  String? get nomeEtapaProcesso => throw _privateConstructorUsedError;
+  set nomeEtapaProcesso(String? value) => throw _privateConstructorUsedError;
+  String? get nomeTipoProcesso => throw _privateConstructorUsedError;
+  set nomeTipoProcesso(String? value) => throw _privateConstructorUsedError;
+  String? get prioridade => throw _privateConstructorUsedError;
+  set prioridade(String? value) => throw _privateConstructorUsedError;
+  int? get qtdeProcessos => throw _privateConstructorUsedError;
+  set qtdeProcessos(int? value) => throw _privateConstructorUsedError;
+  String? get nomeUsuario => throw _privateConstructorUsedError;
+  set nomeUsuario(String? value) => throw _privateConstructorUsedError;
   String? get prontuarioRetirada => throw _privateConstructorUsedError;
   set prontuarioRetirada(String? value) => throw _privateConstructorUsedError;
-  int? get codLocalOrigem => throw _privateConstructorUsedError;
-  set codLocalOrigem(int? value) => throw _privateConstructorUsedError;
-  int? get codLocalDestino => throw _privateConstructorUsedError;
-  set codLocalDestino(int? value) => throw _privateConstructorUsedError;
-  int? get codCirculante => throw _privateConstructorUsedError;
-  set codCirculante(int? value) => throw _privateConstructorUsedError;
+  String? get origem => throw _privateConstructorUsedError;
+  set origem(String? value) => throw _privateConstructorUsedError;
+  String? get destino => throw _privateConstructorUsedError;
+  set destino(String? value) => throw _privateConstructorUsedError;
+  String? get circulante => throw _privateConstructorUsedError;
+  set circulante(String? value) => throw _privateConstructorUsedError;
   String? get conferidoVisualmente => throw _privateConstructorUsedError;
   set conferidoVisualmente(String? value) => throw _privateConstructorUsedError;
-  int? get codRespKitIncomp => throw _privateConstructorUsedError;
-  set codRespKitIncomp(int? value) => throw _privateConstructorUsedError;
-  int? get codRespQuebFluxo => throw _privateConstructorUsedError;
-  set codRespQuebFluxo(int? value) => throw _privateConstructorUsedError;
-  int? get codRespDestinoNaoCompativel => throw _privateConstructorUsedError;
-  set codRespDestinoNaoCompativel(int? value) =>
+  String? get nomeRespKitIncomp => throw _privateConstructorUsedError;
+  set nomeRespKitIncomp(String? value) => throw _privateConstructorUsedError;
+  String? get nomeRespQuebFluxo => throw _privateConstructorUsedError;
+  set nomeRespQuebFluxo(String? value) => throw _privateConstructorUsedError;
+  String? get nomeRepDestinoNaoCompativel => throw _privateConstructorUsedError;
+  set nomeRepDestinoNaoCompativel(String? value) =>
       throw _privateConstructorUsedError;
   String? get indicador => throw _privateConstructorUsedError;
   set indicador(String? value) => throw _privateConstructorUsedError;
@@ -60,35 +76,35 @@ mixin _$ConsultaProcessosLeituraModel {
   set biologico(String? value) => throw _privateConstructorUsedError;
   String? get implantavel => throw _privateConstructorUsedError;
   set implantavel(String? value) => throw _privateConstructorUsedError;
+  String? get lote => throw _privateConstructorUsedError;
+  set lote(String? value) => throw _privateConstructorUsedError;
   String? get integradorKit => throw _privateConstructorUsedError;
   set integradorKit(String? value) => throw _privateConstructorUsedError;
-  int? get codEmbalagem => throw _privateConstructorUsedError;
-  set codEmbalagem(int? value) => throw _privateConstructorUsedError;
+  String? get embalagem => throw _privateConstructorUsedError;
+  set embalagem(String? value) => throw _privateConstructorUsedError;
   int? get codItem => throw _privateConstructorUsedError;
   set codItem(int? value) => throw _privateConstructorUsedError;
-  int? get codKit => throw _privateConstructorUsedError;
-  set codKit(int? value) => throw _privateConstructorUsedError;
+  int? get codKit2 => throw _privateConstructorUsedError;
+  set codKit2(int? value) => throw _privateConstructorUsedError;
   int? get codEtapaProcesso => throw _privateConstructorUsedError;
   set codEtapaProcesso(int? value) => throw _privateConstructorUsedError;
   int? get codLeitura => throw _privateConstructorUsedError;
   set codLeitura(int? value) => throw _privateConstructorUsedError;
-  int? get codMotivo => throw _privateConstructorUsedError;
-  set codMotivo(int? value) => throw _privateConstructorUsedError;
-  int? get codMotivoQuebraFluxo => throw _privateConstructorUsedError;
-  set codMotivoQuebraFluxo(int? value) => throw _privateConstructorUsedError;
-  int? get statusKit => throw _privateConstructorUsedError;
-  set statusKit(int? value) => throw _privateConstructorUsedError;
+  String? get motivo => throw _privateConstructorUsedError;
+  set motivo(String? value) => throw _privateConstructorUsedError;
+  String? get motivoQuebraFluxo => throw _privateConstructorUsedError;
+  set motivoQuebraFluxo(String? value) => throw _privateConstructorUsedError;
   String? get observacao => throw _privateConstructorUsedError;
   set observacao(String? value) => throw _privateConstructorUsedError;
+  int? get statusKit => throw _privateConstructorUsedError;
+  set statusKit(int? value) => throw _privateConstructorUsedError;
+  String? get restricaoKit => throw _privateConstructorUsedError;
+  set restricaoKit(String? value) => throw _privateConstructorUsedError;
   String? get kitLiberadoIncompleto => throw _privateConstructorUsedError;
   set kitLiberadoIncompleto(String? value) =>
       throw _privateConstructorUsedError;
-  int? get lote => throw _privateConstructorUsedError;
-  set lote(int? value) => throw _privateConstructorUsedError;
   int? get codRegistroProcesso => throw _privateConstructorUsedError;
   set codRegistroProcesso(int? value) => throw _privateConstructorUsedError;
-  DateTime? get dataHoraInicio => throw _privateConstructorUsedError;
-  set dataHoraInicio(DateTime? value) => throw _privateConstructorUsedError;
   bool? get cancelada => throw _privateConstructorUsedError;
   set cancelada(bool? value) => throw _privateConstructorUsedError;
 
@@ -110,36 +126,44 @@ abstract class $ConsultaProcessosLeituraModelCopyWith<$Res> {
       {DateTime? dataHora,
       DateTime? data,
       String? hora,
+      String? codBarraKit,
+      String? nomeKit,
       int? nroItensFaltante,
-      int? codProprietario,
+      String? idEtiqueta,
+      String? descricaoItem,
+      String? nomeProprietario,
       String? entradaSaida,
-      String? codPrioridade,
-      int? codUsuario,
+      String? nomeEquipamento,
+      String? nomeEtapaProcesso,
+      String? nomeTipoProcesso,
+      String? prioridade,
+      int? qtdeProcessos,
+      String? nomeUsuario,
       String? prontuarioRetirada,
-      int? codLocalOrigem,
-      int? codLocalDestino,
-      int? codCirculante,
+      String? origem,
+      String? destino,
+      String? circulante,
       String? conferidoVisualmente,
-      int? codRespKitIncomp,
-      int? codRespQuebFluxo,
-      int? codRespDestinoNaoCompativel,
+      String? nomeRespKitIncomp,
+      String? nomeRespQuebFluxo,
+      String? nomeRepDestinoNaoCompativel,
       String? indicador,
       String? biologico,
       String? implantavel,
+      String? lote,
       String? integradorKit,
-      int? codEmbalagem,
+      String? embalagem,
       int? codItem,
-      int? codKit,
+      int? codKit2,
       int? codEtapaProcesso,
       int? codLeitura,
-      int? codMotivo,
-      int? codMotivoQuebraFluxo,
-      int? statusKit,
+      String? motivo,
+      String? motivoQuebraFluxo,
       String? observacao,
+      int? statusKit,
+      String? restricaoKit,
       String? kitLiberadoIncompleto,
-      int? lote,
       int? codRegistroProcesso,
-      DateTime? dataHoraInicio,
       bool? cancelada});
 }
 
@@ -160,36 +184,44 @@ class _$ConsultaProcessosLeituraModelCopyWithImpl<$Res,
     Object? dataHora = freezed,
     Object? data = freezed,
     Object? hora = freezed,
+    Object? codBarraKit = freezed,
+    Object? nomeKit = freezed,
     Object? nroItensFaltante = freezed,
-    Object? codProprietario = freezed,
+    Object? idEtiqueta = freezed,
+    Object? descricaoItem = freezed,
+    Object? nomeProprietario = freezed,
     Object? entradaSaida = freezed,
-    Object? codPrioridade = freezed,
-    Object? codUsuario = freezed,
+    Object? nomeEquipamento = freezed,
+    Object? nomeEtapaProcesso = freezed,
+    Object? nomeTipoProcesso = freezed,
+    Object? prioridade = freezed,
+    Object? qtdeProcessos = freezed,
+    Object? nomeUsuario = freezed,
     Object? prontuarioRetirada = freezed,
-    Object? codLocalOrigem = freezed,
-    Object? codLocalDestino = freezed,
-    Object? codCirculante = freezed,
+    Object? origem = freezed,
+    Object? destino = freezed,
+    Object? circulante = freezed,
     Object? conferidoVisualmente = freezed,
-    Object? codRespKitIncomp = freezed,
-    Object? codRespQuebFluxo = freezed,
-    Object? codRespDestinoNaoCompativel = freezed,
+    Object? nomeRespKitIncomp = freezed,
+    Object? nomeRespQuebFluxo = freezed,
+    Object? nomeRepDestinoNaoCompativel = freezed,
     Object? indicador = freezed,
     Object? biologico = freezed,
     Object? implantavel = freezed,
+    Object? lote = freezed,
     Object? integradorKit = freezed,
-    Object? codEmbalagem = freezed,
+    Object? embalagem = freezed,
     Object? codItem = freezed,
-    Object? codKit = freezed,
+    Object? codKit2 = freezed,
     Object? codEtapaProcesso = freezed,
     Object? codLeitura = freezed,
-    Object? codMotivo = freezed,
-    Object? codMotivoQuebraFluxo = freezed,
-    Object? statusKit = freezed,
+    Object? motivo = freezed,
+    Object? motivoQuebraFluxo = freezed,
     Object? observacao = freezed,
+    Object? statusKit = freezed,
+    Object? restricaoKit = freezed,
     Object? kitLiberadoIncompleto = freezed,
-    Object? lote = freezed,
     Object? codRegistroProcesso = freezed,
-    Object? dataHoraInicio = freezed,
     Object? cancelada = freezed,
   }) {
     return _then(_value.copyWith(
@@ -205,58 +237,90 @@ class _$ConsultaProcessosLeituraModelCopyWithImpl<$Res,
           ? _value.hora
           : hora // ignore: cast_nullable_to_non_nullable
               as String?,
+      codBarraKit: freezed == codBarraKit
+          ? _value.codBarraKit
+          : codBarraKit // ignore: cast_nullable_to_non_nullable
+              as String?,
+      nomeKit: freezed == nomeKit
+          ? _value.nomeKit
+          : nomeKit // ignore: cast_nullable_to_non_nullable
+              as String?,
       nroItensFaltante: freezed == nroItensFaltante
           ? _value.nroItensFaltante
           : nroItensFaltante // ignore: cast_nullable_to_non_nullable
               as int?,
-      codProprietario: freezed == codProprietario
-          ? _value.codProprietario
-          : codProprietario // ignore: cast_nullable_to_non_nullable
-              as int?,
+      idEtiqueta: freezed == idEtiqueta
+          ? _value.idEtiqueta
+          : idEtiqueta // ignore: cast_nullable_to_non_nullable
+              as String?,
+      descricaoItem: freezed == descricaoItem
+          ? _value.descricaoItem
+          : descricaoItem // ignore: cast_nullable_to_non_nullable
+              as String?,
+      nomeProprietario: freezed == nomeProprietario
+          ? _value.nomeProprietario
+          : nomeProprietario // ignore: cast_nullable_to_non_nullable
+              as String?,
       entradaSaida: freezed == entradaSaida
           ? _value.entradaSaida
           : entradaSaida // ignore: cast_nullable_to_non_nullable
               as String?,
-      codPrioridade: freezed == codPrioridade
-          ? _value.codPrioridade
-          : codPrioridade // ignore: cast_nullable_to_non_nullable
+      nomeEquipamento: freezed == nomeEquipamento
+          ? _value.nomeEquipamento
+          : nomeEquipamento // ignore: cast_nullable_to_non_nullable
               as String?,
-      codUsuario: freezed == codUsuario
-          ? _value.codUsuario
-          : codUsuario // ignore: cast_nullable_to_non_nullable
+      nomeEtapaProcesso: freezed == nomeEtapaProcesso
+          ? _value.nomeEtapaProcesso
+          : nomeEtapaProcesso // ignore: cast_nullable_to_non_nullable
+              as String?,
+      nomeTipoProcesso: freezed == nomeTipoProcesso
+          ? _value.nomeTipoProcesso
+          : nomeTipoProcesso // ignore: cast_nullable_to_non_nullable
+              as String?,
+      prioridade: freezed == prioridade
+          ? _value.prioridade
+          : prioridade // ignore: cast_nullable_to_non_nullable
+              as String?,
+      qtdeProcessos: freezed == qtdeProcessos
+          ? _value.qtdeProcessos
+          : qtdeProcessos // ignore: cast_nullable_to_non_nullable
               as int?,
+      nomeUsuario: freezed == nomeUsuario
+          ? _value.nomeUsuario
+          : nomeUsuario // ignore: cast_nullable_to_non_nullable
+              as String?,
       prontuarioRetirada: freezed == prontuarioRetirada
           ? _value.prontuarioRetirada
           : prontuarioRetirada // ignore: cast_nullable_to_non_nullable
               as String?,
-      codLocalOrigem: freezed == codLocalOrigem
-          ? _value.codLocalOrigem
-          : codLocalOrigem // ignore: cast_nullable_to_non_nullable
-              as int?,
-      codLocalDestino: freezed == codLocalDestino
-          ? _value.codLocalDestino
-          : codLocalDestino // ignore: cast_nullable_to_non_nullable
-              as int?,
-      codCirculante: freezed == codCirculante
-          ? _value.codCirculante
-          : codCirculante // ignore: cast_nullable_to_non_nullable
-              as int?,
+      origem: freezed == origem
+          ? _value.origem
+          : origem // ignore: cast_nullable_to_non_nullable
+              as String?,
+      destino: freezed == destino
+          ? _value.destino
+          : destino // ignore: cast_nullable_to_non_nullable
+              as String?,
+      circulante: freezed == circulante
+          ? _value.circulante
+          : circulante // ignore: cast_nullable_to_non_nullable
+              as String?,
       conferidoVisualmente: freezed == conferidoVisualmente
           ? _value.conferidoVisualmente
           : conferidoVisualmente // ignore: cast_nullable_to_non_nullable
               as String?,
-      codRespKitIncomp: freezed == codRespKitIncomp
-          ? _value.codRespKitIncomp
-          : codRespKitIncomp // ignore: cast_nullable_to_non_nullable
-              as int?,
-      codRespQuebFluxo: freezed == codRespQuebFluxo
-          ? _value.codRespQuebFluxo
-          : codRespQuebFluxo // ignore: cast_nullable_to_non_nullable
-              as int?,
-      codRespDestinoNaoCompativel: freezed == codRespDestinoNaoCompativel
-          ? _value.codRespDestinoNaoCompativel
-          : codRespDestinoNaoCompativel // ignore: cast_nullable_to_non_nullable
-              as int?,
+      nomeRespKitIncomp: freezed == nomeRespKitIncomp
+          ? _value.nomeRespKitIncomp
+          : nomeRespKitIncomp // ignore: cast_nullable_to_non_nullable
+              as String?,
+      nomeRespQuebFluxo: freezed == nomeRespQuebFluxo
+          ? _value.nomeRespQuebFluxo
+          : nomeRespQuebFluxo // ignore: cast_nullable_to_non_nullable
+              as String?,
+      nomeRepDestinoNaoCompativel: freezed == nomeRepDestinoNaoCompativel
+          ? _value.nomeRepDestinoNaoCompativel
+          : nomeRepDestinoNaoCompativel // ignore: cast_nullable_to_non_nullable
+              as String?,
       indicador: freezed == indicador
           ? _value.indicador
           : indicador // ignore: cast_nullable_to_non_nullable
@@ -269,21 +333,25 @@ class _$ConsultaProcessosLeituraModelCopyWithImpl<$Res,
           ? _value.implantavel
           : implantavel // ignore: cast_nullable_to_non_nullable
               as String?,
+      lote: freezed == lote
+          ? _value.lote
+          : lote // ignore: cast_nullable_to_non_nullable
+              as String?,
       integradorKit: freezed == integradorKit
           ? _value.integradorKit
           : integradorKit // ignore: cast_nullable_to_non_nullable
               as String?,
-      codEmbalagem: freezed == codEmbalagem
-          ? _value.codEmbalagem
-          : codEmbalagem // ignore: cast_nullable_to_non_nullable
-              as int?,
+      embalagem: freezed == embalagem
+          ? _value.embalagem
+          : embalagem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codItem: freezed == codItem
           ? _value.codItem
           : codItem // ignore: cast_nullable_to_non_nullable
               as int?,
-      codKit: freezed == codKit
-          ? _value.codKit
-          : codKit // ignore: cast_nullable_to_non_nullable
+      codKit2: freezed == codKit2
+          ? _value.codKit2
+          : codKit2 // ignore: cast_nullable_to_non_nullable
               as int?,
       codEtapaProcesso: freezed == codEtapaProcesso
           ? _value.codEtapaProcesso
@@ -293,38 +361,34 @@ class _$ConsultaProcessosLeituraModelCopyWithImpl<$Res,
           ? _value.codLeitura
           : codLeitura // ignore: cast_nullable_to_non_nullable
               as int?,
-      codMotivo: freezed == codMotivo
-          ? _value.codMotivo
-          : codMotivo // ignore: cast_nullable_to_non_nullable
-              as int?,
-      codMotivoQuebraFluxo: freezed == codMotivoQuebraFluxo
-          ? _value.codMotivoQuebraFluxo
-          : codMotivoQuebraFluxo // ignore: cast_nullable_to_non_nullable
-              as int?,
+      motivo: freezed == motivo
+          ? _value.motivo
+          : motivo // ignore: cast_nullable_to_non_nullable
+              as String?,
+      motivoQuebraFluxo: freezed == motivoQuebraFluxo
+          ? _value.motivoQuebraFluxo
+          : motivoQuebraFluxo // ignore: cast_nullable_to_non_nullable
+              as String?,
+      observacao: freezed == observacao
+          ? _value.observacao
+          : observacao // ignore: cast_nullable_to_non_nullable
+              as String?,
       statusKit: freezed == statusKit
           ? _value.statusKit
           : statusKit // ignore: cast_nullable_to_non_nullable
               as int?,
-      observacao: freezed == observacao
-          ? _value.observacao
-          : observacao // ignore: cast_nullable_to_non_nullable
+      restricaoKit: freezed == restricaoKit
+          ? _value.restricaoKit
+          : restricaoKit // ignore: cast_nullable_to_non_nullable
               as String?,
       kitLiberadoIncompleto: freezed == kitLiberadoIncompleto
           ? _value.kitLiberadoIncompleto
           : kitLiberadoIncompleto // ignore: cast_nullable_to_non_nullable
               as String?,
-      lote: freezed == lote
-          ? _value.lote
-          : lote // ignore: cast_nullable_to_non_nullable
-              as int?,
       codRegistroProcesso: freezed == codRegistroProcesso
           ? _value.codRegistroProcesso
           : codRegistroProcesso // ignore: cast_nullable_to_non_nullable
               as int?,
-      dataHoraInicio: freezed == dataHoraInicio
-          ? _value.dataHoraInicio
-          : dataHoraInicio // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
       cancelada: freezed == cancelada
           ? _value.cancelada
           : cancelada // ignore: cast_nullable_to_non_nullable
@@ -346,36 +410,44 @@ abstract class _$$ConsultaProcessosLeituraModelImplCopyWith<$Res>
       {DateTime? dataHora,
       DateTime? data,
       String? hora,
+      String? codBarraKit,
+      String? nomeKit,
       int? nroItensFaltante,
-      int? codProprietario,
+      String? idEtiqueta,
+      String? descricaoItem,
+      String? nomeProprietario,
       String? entradaSaida,
-      String? codPrioridade,
-      int? codUsuario,
+      String? nomeEquipamento,
+      String? nomeEtapaProcesso,
+      String? nomeTipoProcesso,
+      String? prioridade,
+      int? qtdeProcessos,
+      String? nomeUsuario,
       String? prontuarioRetirada,
-      int? codLocalOrigem,
-      int? codLocalDestino,
-      int? codCirculante,
+      String? origem,
+      String? destino,
+      String? circulante,
       String? conferidoVisualmente,
-      int? codRespKitIncomp,
-      int? codRespQuebFluxo,
-      int? codRespDestinoNaoCompativel,
+      String? nomeRespKitIncomp,
+      String? nomeRespQuebFluxo,
+      String? nomeRepDestinoNaoCompativel,
       String? indicador,
       String? biologico,
       String? implantavel,
+      String? lote,
       String? integradorKit,
-      int? codEmbalagem,
+      String? embalagem,
       int? codItem,
-      int? codKit,
+      int? codKit2,
       int? codEtapaProcesso,
       int? codLeitura,
-      int? codMotivo,
-      int? codMotivoQuebraFluxo,
-      int? statusKit,
+      String? motivo,
+      String? motivoQuebraFluxo,
       String? observacao,
+      int? statusKit,
+      String? restricaoKit,
       String? kitLiberadoIncompleto,
-      int? lote,
       int? codRegistroProcesso,
-      DateTime? dataHoraInicio,
       bool? cancelada});
 }
 
@@ -395,36 +467,44 @@ class __$$ConsultaProcessosLeituraModelImplCopyWithImpl<$Res>
     Object? dataHora = freezed,
     Object? data = freezed,
     Object? hora = freezed,
+    Object? codBarraKit = freezed,
+    Object? nomeKit = freezed,
     Object? nroItensFaltante = freezed,
-    Object? codProprietario = freezed,
+    Object? idEtiqueta = freezed,
+    Object? descricaoItem = freezed,
+    Object? nomeProprietario = freezed,
     Object? entradaSaida = freezed,
-    Object? codPrioridade = freezed,
-    Object? codUsuario = freezed,
+    Object? nomeEquipamento = freezed,
+    Object? nomeEtapaProcesso = freezed,
+    Object? nomeTipoProcesso = freezed,
+    Object? prioridade = freezed,
+    Object? qtdeProcessos = freezed,
+    Object? nomeUsuario = freezed,
     Object? prontuarioRetirada = freezed,
-    Object? codLocalOrigem = freezed,
-    Object? codLocalDestino = freezed,
-    Object? codCirculante = freezed,
+    Object? origem = freezed,
+    Object? destino = freezed,
+    Object? circulante = freezed,
     Object? conferidoVisualmente = freezed,
-    Object? codRespKitIncomp = freezed,
-    Object? codRespQuebFluxo = freezed,
-    Object? codRespDestinoNaoCompativel = freezed,
+    Object? nomeRespKitIncomp = freezed,
+    Object? nomeRespQuebFluxo = freezed,
+    Object? nomeRepDestinoNaoCompativel = freezed,
     Object? indicador = freezed,
     Object? biologico = freezed,
     Object? implantavel = freezed,
+    Object? lote = freezed,
     Object? integradorKit = freezed,
-    Object? codEmbalagem = freezed,
+    Object? embalagem = freezed,
     Object? codItem = freezed,
-    Object? codKit = freezed,
+    Object? codKit2 = freezed,
     Object? codEtapaProcesso = freezed,
     Object? codLeitura = freezed,
-    Object? codMotivo = freezed,
-    Object? codMotivoQuebraFluxo = freezed,
-    Object? statusKit = freezed,
+    Object? motivo = freezed,
+    Object? motivoQuebraFluxo = freezed,
     Object? observacao = freezed,
+    Object? statusKit = freezed,
+    Object? restricaoKit = freezed,
     Object? kitLiberadoIncompleto = freezed,
-    Object? lote = freezed,
     Object? codRegistroProcesso = freezed,
-    Object? dataHoraInicio = freezed,
     Object? cancelada = freezed,
   }) {
     return _then(_$ConsultaProcessosLeituraModelImpl(
@@ -440,58 +520,90 @@ class __$$ConsultaProcessosLeituraModelImplCopyWithImpl<$Res>
           ? _value.hora
           : hora // ignore: cast_nullable_to_non_nullable
               as String?,
+      codBarraKit: freezed == codBarraKit
+          ? _value.codBarraKit
+          : codBarraKit // ignore: cast_nullable_to_non_nullable
+              as String?,
+      nomeKit: freezed == nomeKit
+          ? _value.nomeKit
+          : nomeKit // ignore: cast_nullable_to_non_nullable
+              as String?,
       nroItensFaltante: freezed == nroItensFaltante
           ? _value.nroItensFaltante
           : nroItensFaltante // ignore: cast_nullable_to_non_nullable
               as int?,
-      codProprietario: freezed == codProprietario
-          ? _value.codProprietario
-          : codProprietario // ignore: cast_nullable_to_non_nullable
-              as int?,
+      idEtiqueta: freezed == idEtiqueta
+          ? _value.idEtiqueta
+          : idEtiqueta // ignore: cast_nullable_to_non_nullable
+              as String?,
+      descricaoItem: freezed == descricaoItem
+          ? _value.descricaoItem
+          : descricaoItem // ignore: cast_nullable_to_non_nullable
+              as String?,
+      nomeProprietario: freezed == nomeProprietario
+          ? _value.nomeProprietario
+          : nomeProprietario // ignore: cast_nullable_to_non_nullable
+              as String?,
       entradaSaida: freezed == entradaSaida
           ? _value.entradaSaida
           : entradaSaida // ignore: cast_nullable_to_non_nullable
               as String?,
-      codPrioridade: freezed == codPrioridade
-          ? _value.codPrioridade
-          : codPrioridade // ignore: cast_nullable_to_non_nullable
+      nomeEquipamento: freezed == nomeEquipamento
+          ? _value.nomeEquipamento
+          : nomeEquipamento // ignore: cast_nullable_to_non_nullable
               as String?,
-      codUsuario: freezed == codUsuario
-          ? _value.codUsuario
-          : codUsuario // ignore: cast_nullable_to_non_nullable
+      nomeEtapaProcesso: freezed == nomeEtapaProcesso
+          ? _value.nomeEtapaProcesso
+          : nomeEtapaProcesso // ignore: cast_nullable_to_non_nullable
+              as String?,
+      nomeTipoProcesso: freezed == nomeTipoProcesso
+          ? _value.nomeTipoProcesso
+          : nomeTipoProcesso // ignore: cast_nullable_to_non_nullable
+              as String?,
+      prioridade: freezed == prioridade
+          ? _value.prioridade
+          : prioridade // ignore: cast_nullable_to_non_nullable
+              as String?,
+      qtdeProcessos: freezed == qtdeProcessos
+          ? _value.qtdeProcessos
+          : qtdeProcessos // ignore: cast_nullable_to_non_nullable
               as int?,
+      nomeUsuario: freezed == nomeUsuario
+          ? _value.nomeUsuario
+          : nomeUsuario // ignore: cast_nullable_to_non_nullable
+              as String?,
       prontuarioRetirada: freezed == prontuarioRetirada
           ? _value.prontuarioRetirada
           : prontuarioRetirada // ignore: cast_nullable_to_non_nullable
               as String?,
-      codLocalOrigem: freezed == codLocalOrigem
-          ? _value.codLocalOrigem
-          : codLocalOrigem // ignore: cast_nullable_to_non_nullable
-              as int?,
-      codLocalDestino: freezed == codLocalDestino
-          ? _value.codLocalDestino
-          : codLocalDestino // ignore: cast_nullable_to_non_nullable
-              as int?,
-      codCirculante: freezed == codCirculante
-          ? _value.codCirculante
-          : codCirculante // ignore: cast_nullable_to_non_nullable
-              as int?,
+      origem: freezed == origem
+          ? _value.origem
+          : origem // ignore: cast_nullable_to_non_nullable
+              as String?,
+      destino: freezed == destino
+          ? _value.destino
+          : destino // ignore: cast_nullable_to_non_nullable
+              as String?,
+      circulante: freezed == circulante
+          ? _value.circulante
+          : circulante // ignore: cast_nullable_to_non_nullable
+              as String?,
       conferidoVisualmente: freezed == conferidoVisualmente
           ? _value.conferidoVisualmente
           : conferidoVisualmente // ignore: cast_nullable_to_non_nullable
               as String?,
-      codRespKitIncomp: freezed == codRespKitIncomp
-          ? _value.codRespKitIncomp
-          : codRespKitIncomp // ignore: cast_nullable_to_non_nullable
-              as int?,
-      codRespQuebFluxo: freezed == codRespQuebFluxo
-          ? _value.codRespQuebFluxo
-          : codRespQuebFluxo // ignore: cast_nullable_to_non_nullable
-              as int?,
-      codRespDestinoNaoCompativel: freezed == codRespDestinoNaoCompativel
-          ? _value.codRespDestinoNaoCompativel
-          : codRespDestinoNaoCompativel // ignore: cast_nullable_to_non_nullable
-              as int?,
+      nomeRespKitIncomp: freezed == nomeRespKitIncomp
+          ? _value.nomeRespKitIncomp
+          : nomeRespKitIncomp // ignore: cast_nullable_to_non_nullable
+              as String?,
+      nomeRespQuebFluxo: freezed == nomeRespQuebFluxo
+          ? _value.nomeRespQuebFluxo
+          : nomeRespQuebFluxo // ignore: cast_nullable_to_non_nullable
+              as String?,
+      nomeRepDestinoNaoCompativel: freezed == nomeRepDestinoNaoCompativel
+          ? _value.nomeRepDestinoNaoCompativel
+          : nomeRepDestinoNaoCompativel // ignore: cast_nullable_to_non_nullable
+              as String?,
       indicador: freezed == indicador
           ? _value.indicador
           : indicador // ignore: cast_nullable_to_non_nullable
@@ -504,21 +616,25 @@ class __$$ConsultaProcessosLeituraModelImplCopyWithImpl<$Res>
           ? _value.implantavel
           : implantavel // ignore: cast_nullable_to_non_nullable
               as String?,
+      lote: freezed == lote
+          ? _value.lote
+          : lote // ignore: cast_nullable_to_non_nullable
+              as String?,
       integradorKit: freezed == integradorKit
           ? _value.integradorKit
           : integradorKit // ignore: cast_nullable_to_non_nullable
               as String?,
-      codEmbalagem: freezed == codEmbalagem
-          ? _value.codEmbalagem
-          : codEmbalagem // ignore: cast_nullable_to_non_nullable
-              as int?,
+      embalagem: freezed == embalagem
+          ? _value.embalagem
+          : embalagem // ignore: cast_nullable_to_non_nullable
+              as String?,
       codItem: freezed == codItem
           ? _value.codItem
           : codItem // ignore: cast_nullable_to_non_nullable
               as int?,
-      codKit: freezed == codKit
-          ? _value.codKit
-          : codKit // ignore: cast_nullable_to_non_nullable
+      codKit2: freezed == codKit2
+          ? _value.codKit2
+          : codKit2 // ignore: cast_nullable_to_non_nullable
               as int?,
       codEtapaProcesso: freezed == codEtapaProcesso
           ? _value.codEtapaProcesso
@@ -528,38 +644,34 @@ class __$$ConsultaProcessosLeituraModelImplCopyWithImpl<$Res>
           ? _value.codLeitura
           : codLeitura // ignore: cast_nullable_to_non_nullable
               as int?,
-      codMotivo: freezed == codMotivo
-          ? _value.codMotivo
-          : codMotivo // ignore: cast_nullable_to_non_nullable
-              as int?,
-      codMotivoQuebraFluxo: freezed == codMotivoQuebraFluxo
-          ? _value.codMotivoQuebraFluxo
-          : codMotivoQuebraFluxo // ignore: cast_nullable_to_non_nullable
-              as int?,
+      motivo: freezed == motivo
+          ? _value.motivo
+          : motivo // ignore: cast_nullable_to_non_nullable
+              as String?,
+      motivoQuebraFluxo: freezed == motivoQuebraFluxo
+          ? _value.motivoQuebraFluxo
+          : motivoQuebraFluxo // ignore: cast_nullable_to_non_nullable
+              as String?,
+      observacao: freezed == observacao
+          ? _value.observacao
+          : observacao // ignore: cast_nullable_to_non_nullable
+              as String?,
       statusKit: freezed == statusKit
           ? _value.statusKit
           : statusKit // ignore: cast_nullable_to_non_nullable
               as int?,
-      observacao: freezed == observacao
-          ? _value.observacao
-          : observacao // ignore: cast_nullable_to_non_nullable
+      restricaoKit: freezed == restricaoKit
+          ? _value.restricaoKit
+          : restricaoKit // ignore: cast_nullable_to_non_nullable
               as String?,
       kitLiberadoIncompleto: freezed == kitLiberadoIncompleto
           ? _value.kitLiberadoIncompleto
           : kitLiberadoIncompleto // ignore: cast_nullable_to_non_nullable
               as String?,
-      lote: freezed == lote
-          ? _value.lote
-          : lote // ignore: cast_nullable_to_non_nullable
-              as int?,
       codRegistroProcesso: freezed == codRegistroProcesso
           ? _value.codRegistroProcesso
           : codRegistroProcesso // ignore: cast_nullable_to_non_nullable
               as int?,
-      dataHoraInicio: freezed == dataHoraInicio
-          ? _value.dataHoraInicio
-          : dataHoraInicio // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
       cancelada: freezed == cancelada
           ? _value.cancelada
           : cancelada // ignore: cast_nullable_to_non_nullable
@@ -573,39 +685,47 @@ class __$$ConsultaProcessosLeituraModelImplCopyWithImpl<$Res>
 class _$ConsultaProcessosLeituraModelImpl
     extends _ConsultaProcessosLeituraModel {
   _$ConsultaProcessosLeituraModelImpl(
-      {this.dataHora,
-      this.data,
-      this.hora,
-      this.nroItensFaltante,
-      this.codProprietario,
-      this.entradaSaida,
-      this.codPrioridade,
-      this.codUsuario,
-      this.prontuarioRetirada,
-      this.codLocalOrigem,
-      this.codLocalDestino,
-      this.codCirculante,
-      this.conferidoVisualmente,
-      this.codRespKitIncomp,
-      this.codRespQuebFluxo,
-      this.codRespDestinoNaoCompativel,
-      this.indicador,
-      this.biologico,
-      this.implantavel,
-      this.integradorKit,
-      this.codEmbalagem,
-      this.codItem,
-      this.codKit,
-      this.codEtapaProcesso,
-      this.codLeitura,
-      this.codMotivo,
-      this.codMotivoQuebraFluxo,
-      this.statusKit,
-      this.observacao,
-      this.kitLiberadoIncompleto,
-      this.lote,
-      this.codRegistroProcesso,
-      this.dataHoraInicio,
+      {required this.dataHora,
+      required this.data,
+      required this.hora,
+      required this.codBarraKit,
+      required this.nomeKit,
+      required this.nroItensFaltante,
+      required this.idEtiqueta,
+      required this.descricaoItem,
+      required this.nomeProprietario,
+      required this.entradaSaida,
+      required this.nomeEquipamento,
+      required this.nomeEtapaProcesso,
+      required this.nomeTipoProcesso,
+      required this.prioridade,
+      required this.qtdeProcessos,
+      required this.nomeUsuario,
+      required this.prontuarioRetirada,
+      required this.origem,
+      required this.destino,
+      required this.circulante,
+      required this.conferidoVisualmente,
+      required this.nomeRespKitIncomp,
+      required this.nomeRespQuebFluxo,
+      required this.nomeRepDestinoNaoCompativel,
+      required this.indicador,
+      required this.biologico,
+      required this.implantavel,
+      required this.lote,
+      required this.integradorKit,
+      required this.embalagem,
+      required this.codItem,
+      required this.codKit2,
+      required this.codEtapaProcesso,
+      required this.codLeitura,
+      required this.motivo,
+      required this.motivoQuebraFluxo,
+      required this.observacao,
+      required this.statusKit,
+      required this.restricaoKit,
+      required this.kitLiberadoIncompleto,
+      required this.codRegistroProcesso,
       this.cancelada})
       : super._();
 
@@ -620,31 +740,47 @@ class _$ConsultaProcessosLeituraModelImpl
   @override
   String? hora;
   @override
+  String? codBarraKit;
+  @override
+  String? nomeKit;
+  @override
   int? nroItensFaltante;
   @override
-  int? codProprietario;
+  String? idEtiqueta;
+  @override
+  String? descricaoItem;
+  @override
+  String? nomeProprietario;
   @override
   String? entradaSaida;
   @override
-  String? codPrioridade;
+  String? nomeEquipamento;
   @override
-  int? codUsuario;
+  String? nomeEtapaProcesso;
+  @override
+  String? nomeTipoProcesso;
+  @override
+  String? prioridade;
+  @override
+  int? qtdeProcessos;
+  @override
+  String? nomeUsuario;
   @override
   String? prontuarioRetirada;
   @override
-  int? codLocalOrigem;
+  String? origem;
   @override
-  int? codLocalDestino;
+  String? destino;
   @override
-  int? codCirculante;
+  String? circulante;
   @override
   String? conferidoVisualmente;
   @override
-  int? codRespKitIncomp;
+  String? nomeRespKitIncomp;
   @override
-  int? codRespQuebFluxo;
+  String? nomeRespQuebFluxo;
   @override
-  int? codRespDestinoNaoCompativel;
+  String? nomeRepDestinoNaoCompativel;
   @override
   String? indicador;
   @override
@@ -652,39 +788,39 @@ class _$ConsultaProcessosLeituraModelImpl
   @override
   String? implantavel;
   @override
+  String? lote;
+  @override
   String? integradorKit;
   @override
-  int? codEmbalagem;
+  String? embalagem;
   @override
   int? codItem;
   @override
-  int? codKit;
+  int? codKit2;
   @override
   int? codEtapaProcesso;
   @override
   int? codLeitura;
   @override
-  int? codMotivo;
+  String? motivo;
   @override
-  int? codMotivoQuebraFluxo;
-  @override
-  int? statusKit;
+  String? motivoQuebraFluxo;
   @override
   String? observacao;
   @override
+  int? statusKit;
+  @override
+  String? restricaoKit;
+  @override
   String? kitLiberadoIncompleto;
   @override
-  int? lote;
-  @override
   int? codRegistroProcesso;
-  @override
-  DateTime? dataHoraInicio;
   @override
   bool? cancelada;
 
   @override
   String toString() {
-    return 'ConsultaProcessosLeituraModel(dataHora: $dataHora, data: $data, hora: $hora, nroItensFaltante: $nroItensFaltante, codProprietario: $codProprietario, entradaSaida: $entradaSaida, codPrioridade: $codPrioridade, codUsuario: $codUsuario, prontuarioRetirada: $prontuarioRetirada, codLocalOrigem: $codLocalOrigem, codLocalDestino: $codLocalDestino, codCirculante: $codCirculante, conferidoVisualmente: $conferidoVisualmente, codRespKitIncomp: $codRespKitIncomp, codRespQuebFluxo: $codRespQuebFluxo, codRespDestinoNaoCompativel: $codRespDestinoNaoCompativel, indicador: $indicador, biologico: $biologico, implantavel: $implantavel, integradorKit: $integradorKit, codEmbalagem: $codEmbalagem, codItem: $codItem, codKit: $codKit, codEtapaProcesso: $codEtapaProcesso, codLeitura: $codLeitura, codMotivo: $codMotivo, codMotivoQuebraFluxo: $codMotivoQuebraFluxo, statusKit: $statusKit, observacao: $observacao, kitLiberadoIncompleto: $kitLiberadoIncompleto, lote: $lote, codRegistroProcesso: $codRegistroProcesso, dataHoraInicio: $dataHoraInicio, cancelada: $cancelada)';
+    return 'ConsultaProcessosLeituraModel(dataHora: $dataHora, data: $data, hora: $hora, codBarraKit: $codBarraKit, nomeKit: $nomeKit, nroItensFaltante: $nroItensFaltante, idEtiqueta: $idEtiqueta, descricaoItem: $descricaoItem, nomeProprietario: $nomeProprietario, entradaSaida: $entradaSaida, nomeEquipamento: $nomeEquipamento, nomeEtapaProcesso: $nomeEtapaProcesso, nomeTipoProcesso: $nomeTipoProcesso, prioridade: $prioridade, qtdeProcessos: $qtdeProcessos, nomeUsuario: $nomeUsuario, prontuarioRetirada: $prontuarioRetirada, origem: $origem, destino: $destino, circulante: $circulante, conferidoVisualmente: $conferidoVisualmente, nomeRespKitIncomp: $nomeRespKitIncomp, nomeRespQuebFluxo: $nomeRespQuebFluxo, nomeRepDestinoNaoCompativel: $nomeRepDestinoNaoCompativel, indicador: $indicador, biologico: $biologico, implantavel: $implantavel, lote: $lote, integradorKit: $integradorKit, embalagem: $embalagem, codItem: $codItem, codKit2: $codKit2, codEtapaProcesso: $codEtapaProcesso, codLeitura: $codLeitura, motivo: $motivo, motivoQuebraFluxo: $motivoQuebraFluxo, observacao: $observacao, statusKit: $statusKit, restricaoKit: $restricaoKit, kitLiberadoIncompleto: $kitLiberadoIncompleto, codRegistroProcesso: $codRegistroProcesso, cancelada: $cancelada)';
   }
 
   @JsonKey(ignore: true)
@@ -706,39 +842,47 @@ class _$ConsultaProcessosLeituraModelImpl
 abstract class _ConsultaProcessosLeituraModel
     extends ConsultaProcessosLeituraModel {
   factory _ConsultaProcessosLeituraModel(
-      {DateTime? dataHora,
-      DateTime? data,
-      String? hora,
-      int? nroItensFaltante,
-      int? codProprietario,
-      String? entradaSaida,
-      String? codPrioridade,
-      int? codUsuario,
-      String? prontuarioRetirada,
-      int? codLocalOrigem,
-      int? codLocalDestino,
-      int? codCirculante,
-      String? conferidoVisualmente,
-      int? codRespKitIncomp,
-      int? codRespQuebFluxo,
-      int? codRespDestinoNaoCompativel,
-      String? indicador,
-      String? biologico,
-      String? implantavel,
-      String? integradorKit,
-      int? codEmbalagem,
-      int? codItem,
-      int? codKit,
-      int? codEtapaProcesso,
-      int? codLeitura,
-      int? codMotivo,
-      int? codMotivoQuebraFluxo,
-      int? statusKit,
-      String? observacao,
-      String? kitLiberadoIncompleto,
-      int? lote,
-      int? codRegistroProcesso,
-      DateTime? dataHoraInicio,
+      {required DateTime? dataHora,
+      required DateTime? data,
+      required String? hora,
+      required String? codBarraKit,
+      required String? nomeKit,
+      required int? nroItensFaltante,
+      required String? idEtiqueta,
+      required String? descricaoItem,
+      required String? nomeProprietario,
+      required String? entradaSaida,
+      required String? nomeEquipamento,
+      required String? nomeEtapaProcesso,
+      required String? nomeTipoProcesso,
+      required String? prioridade,
+      required int? qtdeProcessos,
+      required String? nomeUsuario,
+      required String? prontuarioRetirada,
+      required String? origem,
+      required String? destino,
+      required String? circulante,
+      required String? conferidoVisualmente,
+      required String? nomeRespKitIncomp,
+      required String? nomeRespQuebFluxo,
+      required String? nomeRepDestinoNaoCompativel,
+      required String? indicador,
+      required String? biologico,
+      required String? implantavel,
+      required String? lote,
+      required String? integradorKit,
+      required String? embalagem,
+      required int? codItem,
+      required int? codKit2,
+      required int? codEtapaProcesso,
+      required int? codLeitura,
+      required String? motivo,
+      required String? motivoQuebraFluxo,
+      required String? observacao,
+      required int? statusKit,
+      required String? restricaoKit,
+      required String? kitLiberadoIncompleto,
+      required int? codRegistroProcesso,
       bool? cancelada}) = _$ConsultaProcessosLeituraModelImpl;
   _ConsultaProcessosLeituraModel._() : super._();
 
@@ -755,44 +899,68 @@ abstract class _ConsultaProcessosLeituraModel
   String? get hora;
   set hora(String? value);
   @override
+  String? get codBarraKit;
+  set codBarraKit(String? value);
+  @override
+  String? get nomeKit;
+  set nomeKit(String? value);
+  @override
   int? get nroItensFaltante;
   set nroItensFaltante(int? value);
   @override
-  int? get codProprietario;
-  set codProprietario(int? value);
+  String? get idEtiqueta;
+  set idEtiqueta(String? value);
+  @override
+  String? get descricaoItem;
+  set descricaoItem(String? value);
+  @override
+  String? get nomeProprietario;
+  set nomeProprietario(String? value);
   @override
   String? get entradaSaida;
   set entradaSaida(String? value);
   @override
-  String? get codPrioridade;
-  set codPrioridade(String? value);
+  String? get nomeEquipamento;
+  set nomeEquipamento(String? value);
   @override
-  int? get codUsuario;
-  set codUsuario(int? value);
+  String? get nomeEtapaProcesso;
+  set nomeEtapaProcesso(String? value);
+  @override
+  String? get nomeTipoProcesso;
+  set nomeTipoProcesso(String? value);
+  @override
+  String? get prioridade;
+  set prioridade(String? value);
+  @override
+  int? get qtdeProcessos;
+  set qtdeProcessos(int? value);
+  @override
+  String? get nomeUsuario;
+  set nomeUsuario(String? value);
   @override
   String? get prontuarioRetirada;
   set prontuarioRetirada(String? value);
   @override
-  int? get codLocalOrigem;
-  set codLocalOrigem(int? value);
+  String? get origem;
+  set origem(String? value);
   @override
-  int? get codLocalDestino;
-  set codLocalDestino(int? value);
+  String? get destino;
+  set destino(String? value);
   @override
-  int? get codCirculante;
-  set codCirculante(int? value);
+  String? get circulante;
+  set circulante(String? value);
   @override
   String? get conferidoVisualmente;
   set conferidoVisualmente(String? value);
   @override
-  int? get codRespKitIncomp;
-  set codRespKitIncomp(int? value);
+  String? get nomeRespKitIncomp;
+  set nomeRespKitIncomp(String? value);
   @override
-  int? get codRespQuebFluxo;
-  set codRespQuebFluxo(int? value);
+  String? get nomeRespQuebFluxo;
+  set nomeRespQuebFluxo(String? value);
   @override
-  int? get codRespDestinoNaoCompativel;
-  set codRespDestinoNaoCompativel(int? value);
+  String? get nomeRepDestinoNaoCompativel;
+  set nomeRepDestinoNaoCompativel(String? value);
   @override
   String? get indicador;
   set indicador(String? value);
@@ -803,17 +971,20 @@ abstract class _ConsultaProcessosLeituraModel
   String? get implantavel;
   set implantavel(String? value);
   @override
+  String? get lote;
+  set lote(String? value);
+  @override
   String? get integradorKit;
   set integradorKit(String? value);
   @override
-  int? get codEmbalagem;
-  set codEmbalagem(int? value);
+  String? get embalagem;
+  set embalagem(String? value);
   @override
   int? get codItem;
   set codItem(int? value);
   @override
-  int? get codKit;
-  set codKit(int? value);
+  int? get codKit2;
+  set codKit2(int? value);
   @override
   int? get codEtapaProcesso;
   set codEtapaProcesso(int? value);
@@ -821,29 +992,26 @@ abstract class _ConsultaProcessosLeituraModel
   int? get codLeitura;
   set codLeitura(int? value);
   @override
-  int? get codMotivo;
-  set codMotivo(int? value);
+  String? get motivo;
+  set motivo(String? value);
   @override
-  int? get codMotivoQuebraFluxo;
-  set codMotivoQuebraFluxo(int? value);
-  @override
-  int? get statusKit;
-  set statusKit(int? value);
+  String? get motivoQuebraFluxo;
+  set motivoQuebraFluxo(String? value);
   @override
   String? get observacao;
   set observacao(String? value);
   @override
+  int? get statusKit;
+  set statusKit(int? value);
+  @override
+  String? get restricaoKit;
+  set restricaoKit(String? value);
+  @override
   String? get kitLiberadoIncompleto;
   set kitLiberadoIncompleto(String? value);
   @override
-  int? get lote;
-  set lote(int? value);
-  @override
   int? get codRegistroProcesso;
   set codRegistroProcesso(int? value);
-  @override
-  DateTime? get dataHoraInicio;
-  set dataHoraInicio(DateTime? value);
   @override
   bool? get cancelada;
   set cancelada(bool? value);

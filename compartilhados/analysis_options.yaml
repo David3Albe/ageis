@@ -1,5 +1,9 @@
 include: package:flutter_lints/flutter.yaml
 
+analyzer:
+  errors:
+    invalid_annotation_target: ignore
+
 linter:
   rules:
     avoid_empty_else: true
@@ -42,7 +46,7 @@ linter:
     use_full_hex_values_for_flutter_colors: true
     valid_regexps: true
     unnecessary_parenthesis: true
-    require_trailing_commas: true
+    require_trailing_commas: false
     avoid_unnecessary_containers: true
     prefer_contains: true
     prefer_final_parameters: false

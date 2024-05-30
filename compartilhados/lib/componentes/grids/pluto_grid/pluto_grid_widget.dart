@@ -90,10 +90,12 @@ class PlutoGridWidget<T> extends StatelessWidget {
   final List<void Function()> listeners = [];
   final PlutoGridMode mode;
   final void Function(T)? onSelected;
+  final bool showFilters;
   PlutoGridWidget({
     required this.items,
     required this.columns,
     this.smallRows = false,
+    this.showFilters = true,
     this.onDelete,
     this.onEdit,
     this.onOpen,
@@ -258,6 +260,11 @@ class PlutoGridWidget<T> extends StatelessWidget {
                 ),
                 buttonConfigs: [
                   ContextMenuButtonConfig(
+                    'Mostar/Ocultar Filtros',
+                    icon: const FaIcon(FontAwesomeIcons.filter),
+                    onPressed: mostrarOcultarFiltros,
+                  ),
+                  ContextMenuButtonConfig(
                     'XML',
                     icon: const FaIcon(FontAwesomeIcons.file),
                     onPressed: () => exportXml(
@@ -304,6 +311,7 @@ class PlutoGridWidget<T> extends StatelessWidget {
                 ),
                 rows: this.rows,
                 onLoaded: (event) {
+                  if (showFilters) event.stateManager.setShowColumnFilter(true);
                   this.setRows(
                     this.filterOnlyActives,
                     event.stateManager,
@@ -340,6 +348,12 @@ class PlutoGridWidget<T> extends StatelessWidget {
       columnsToIgnore: columnsToIgnore,
     );
     xmlExport.export();
+  }
+
+  void mostrarOcultarFiltros() {
+    gridCubit.state.stateManager?.setShowColumnFilter(
+      !(gridCubit.state.stateManager?.showColumnFilter ?? false),
+    );
   }
 
   void setRows(

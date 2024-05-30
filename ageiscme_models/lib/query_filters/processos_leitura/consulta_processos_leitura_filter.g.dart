@@ -35,6 +35,10 @@ _$ConsultaProcessosLeituraFilterImpl
               ? null
               : ItemModel.fromJson(
                   Map<String, Object?>.from(json['item'] as Map)),
+          gridModel: json['gridModel'] == null
+              ? null
+              : PlutoGridApiModel.fromJson(
+                  Map<String, Object?>.from(json['gridModel'] as Map)),
         );
 
 Map<String, dynamic> _$$ConsultaProcessosLeituraFilterImplToJson(
@@ -55,4 +59,5 @@ Map<String, dynamic> _$$ConsultaProcessosLeituraFilterImplToJson(
       'prontuario': instance.prontuario,
       'codBarraKitContem': instance.codBarraKitContem,
       'item': instance.item?.toJson(),
+      'gridModel': instance.gridModel?.toJson(),
     };

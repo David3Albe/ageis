@@ -1,4 +1,5 @@
 import 'package:ageiscme_models/models/item/item_model.dart';
+import 'package:compartilhados/componentes/grids/pluto_grid_api/models/pluto_grid_api_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'consulta_processos_leitura_filter.g.dart';
@@ -25,6 +26,7 @@ sealed class ConsultaProcessosLeituraFilter
     required String? prontuario,
     required String? codBarraKitContem,
     ItemModel? item,
+    PlutoGridApiModel? gridModel,
   }) = _ConsultaProcessosLeituraFilter;
 
   factory ConsultaProcessosLeituraFilter.fromJson(Map<String, Object?> json) =>
