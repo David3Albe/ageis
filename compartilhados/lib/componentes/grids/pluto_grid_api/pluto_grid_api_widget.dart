@@ -8,6 +8,7 @@ import 'package:compartilhados/componentes/grids/pluto_grid_api/models/filter/pl
 import 'package:compartilhados/componentes/grids/pluto_grid_api/models/pluto_grid_api_model.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid_api/models/sort/pluto_grid_api_sort_model.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid_api/response/pluto_grid_infinite_scroll_model.dart';
+import 'package:compartilhados/componentes/grids/state/grid_records_cubit.dart';
 import 'package:compartilhados/componentes/rows/custom_data_rows.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/exporters/pluto_grid_xml_export.dart';
@@ -158,6 +159,7 @@ class _PlutoGridApiWidgetState<T> extends State<PlutoGridApiWidget<T>> {
   final PlutoGridApiCubit gridCubit = PlutoGridApiCubit();
   final List<void Function()> listeners = [];
   int page = 1;
+  final GridRecordsCubit gridRecordsCubit = GridRecordsCubit();
 
   List<MapEntry<T, Map<CustomDataColumn, dynamic>>> getCellObjects(
     List<T> itemsSorted,
@@ -189,7 +191,8 @@ class _PlutoGridApiWidgetState<T> extends State<PlutoGridApiWidget<T>> {
   void resetarGrid() {
     page = 1;
     PlutoGridStateManager? stateManager = gridCubit.state.stateManager;
-    stateManager?.removeAllRows();
+    stateManager?.refRows.clear();
+    stateManager?.removeAllRows(notify: false);
     rowsObject.clear();
     final request = PlutoInfinityScrollRowsRequest(
       lastRow: null,
@@ -310,55 +313,91 @@ class _PlutoGridApiWidgetState<T> extends State<PlutoGridApiWidget<T>> {
                   ),
                 ],
               ),
-              child: PlutoGrid(
-                createFooter: (stateManager) => PlutoInfinityScrollRows(
-                  initialFetch: true,
-                  fetchWithSorting: true,
-                  fetchWithFiltering: true,
-                  fetch: fetch,
-                  stateManager: stateManager,
-                ),
-                onSelected: onSelectedBase,
-                mode: widget.mode,
-                onRowDoubleTap: (event) {
-                  T objeto = rowsObject[event.row]!;
-                  if (widget.onDetail != null) {
-                    widget.onDetail!(event, objeto);
-                  }
-                },
-                onChanged: widget.onChanged != null
-                    ? (event) => widget.onChanged!(event, rowsObject)
-                    : null,
-                rowColorCallback: widget.rowColorCallback,
-                columns: _getColumns(fontSize, context, gridState.stateManager),
-                noRowsWidget: const Center(child: Text('Sem registros')),
-                configuration: PlutoGridConfiguration(
-                  scrollbar: PlutoGridScrollbarConfig(
-                    scrollbarThickness: 10,
-                    dragDevices: [
-                      PointerDeviceKind.mouse,
-                      PointerDeviceKind.touch,
-                      PointerDeviceKind.trackpad,
-                    ].toSet(),
-                  ),
-                  localeText: const PlutoGridLocaleText.brazilianPortuguese(),
-                  style: PlutoGridStyleConfig(
-                    cellTextStyle: TextStyle(
-                      color: Colors.black,
-                      fontSize: fontSize,
+              child: Column(
+                children: [
+                  Expanded(
+                    child: PlutoGrid(
+                      createFooter: (stateManager) => PlutoInfinityScrollRows(
+                        initialFetch: true,
+                        fetchWithSorting: true,
+                        fetchWithFiltering: true,
+                        fetch: fetch,
+                        stateManager: stateManager,
+                      ),
+                      onSelected: onSelectedBase,
+                      mode: widget.mode,
+                      onRowDoubleTap: (event) {
+                        T objeto = rowsObject[event.row]!;
+                        if (widget.onDetail != null) {
+                          widget.onDetail!(event, objeto);
+                        }
+                      },
+                      onChanged: widget.onChanged != null
+                          ? (event) => widget.onChanged!(event, rowsObject)
+                          : null,
+                      rowColorCallback: widget.rowColorCallback,
+                      columns: _getColumns(
+                          fontSize, context, gridState.stateManager),
+                      noRowsWidget: const Center(child: Text('Sem registros')),
+                      configuration: PlutoGridConfiguration(
+                        scrollbar: PlutoGridScrollbarConfig(
+                          scrollbarThickness: 10,
+                          dragDevices: [
+                            PointerDeviceKind.mouse,
+                            PointerDeviceKind.touch,
+                            PointerDeviceKind.trackpad,
+                          ].toSet(),
+                        ),
+                        localeText:
+                            const PlutoGridLocaleText.brazilianPortuguese(),
+                        style: PlutoGridStyleConfig(
+                          cellTextStyle: TextStyle(
+                            color: Colors.black,
+                            fontSize: fontSize,
+                          ),
+                          columnTextStyle: TextStyle(fontSize: fontSize),
+                          rowHeight: rowsSize,
+                          rowColor: const Color(0xffF4F4F4),
+                        ),
+                      ),
+                      rows: [],
+                      onLoaded: (event) {
+                        event.stateManager.setShowColumnFilter(true);
+                        event.stateManager.addListener(() {
+                          gridCubit.changeStateManager(event.stateManager);
+                        });
+                      },
                     ),
-                    columnTextStyle: TextStyle(fontSize: fontSize),
-                    rowHeight: rowsSize,
-                    rowColor: const Color(0xffF4F4F4),
                   ),
-                ),
-                rows: [],
-                onLoaded: (event) {
-                  event.stateManager.setShowColumnFilter(true);
-                  event.stateManager.addListener(() {
-                    gridCubit.changeStateManager(event.stateManager);
-                  });
-                },
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          constraints: const BoxConstraints(
+                            minHeight: 25,
+                            maxHeight: 50,
+                          ),
+                          height: size.height < 700 ? 25 : 30,
+                          color: Colors.grey.shade300,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: BlocBuilder<GridRecordsCubit,
+                                      GridRecordsState>(
+                                  bloc: gridRecordsCubit,
+                                  builder: (context, state) {
+                                    return Text(
+                                      'Registros: ${state.records}',
+                                    );
+                                  }),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
               ),
             ),
           );
@@ -469,6 +508,7 @@ class _PlutoGridApiWidgetState<T> extends State<PlutoGridApiWidget<T>> {
     List<PlutoRow> newRows = _getRows(objects);
 
     final bool isLast = rows.$1;
+    gridRecordsCubit.setRecords(rows.$2.records);
 
     if (isLast) {
       BuildContext? context = ToastUtils.routerOutletContext;
@@ -481,7 +521,7 @@ class _PlutoGridApiWidgetState<T> extends State<PlutoGridApiWidget<T>> {
 
     page++;
     return PlutoInfinityScrollRowsResponse(
-      isLast: isLast,
+      isLast: false,
       rows: newRows,
     );
   }
