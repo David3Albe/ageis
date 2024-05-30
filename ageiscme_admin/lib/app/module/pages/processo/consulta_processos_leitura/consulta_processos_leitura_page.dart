@@ -17,7 +17,6 @@ import 'package:ageiscme_models/query_filters/processos_leitura/consulta_process
 import 'package:ageiscme_models/query_filters/processos_leitura_detalhe/consulta_processos_leitura_detalhe_filter.dart';
 import 'package:ageiscme_models/query_filters/processos_leitura_detalhe_kit/consulta_processos_leitura_detalhe_kit_filter.dart';
 import 'package:ageiscme_models/query_models/processos_leitura/consulta_processos_leitura/consulta_processos_leitura_model.dart';
-import 'package:ageiscme_models/query_models/processos_leitura/consulta_processos_leitura_response_model.dart';
 import 'package:ageiscme_models/response_dto/kit/drop_down_search/kit_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
 import 'package:compartilhados/componentes/campos/custom_autocomplete/custom_autocomplete_widget.dart';
@@ -28,7 +27,9 @@ import 'package:compartilhados/componentes/campos/text_field_string_widget.dart'
 import 'package:compartilhados/componentes/campos/text_field_time_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
-import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
+import 'package:compartilhados/componentes/grids/pluto_grid_api/models/pluto_grid_api_model.dart';
+import 'package:compartilhados/componentes/grids/pluto_grid_api/pluto_grid_api_widget.dart';
+import 'package:compartilhados/componentes/grids/pluto_grid_api/response/pluto_grid_infinite_scroll_model.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
@@ -80,10 +81,13 @@ class _ConsultaProcessosLeituraPageState
   }
 
   List<CustomDataColumn> _getColunas(BuildContext context) {
-    ConsultaProcessosLeituraPageCubit bloc =
-        context.read<ConsultaProcessosLeituraPageCubit>();
-    ConsultaProcessosLeituraResponseModel? response = bloc.state.response;
     return [
+      // CustomDataColumn(
+      //   text: 'Data',
+      //   field: 'dataHora',
+      //   type: CustomDataColumnType.DateTime,
+      //   width: 140,
+      // ),
       CustomDataColumn(
         text: 'Data',
         field: 'data',
@@ -98,18 +102,14 @@ class _ConsultaProcessosLeituraPageState
       ),
       CustomDataColumn(
         text: 'Etiqueta Kit',
-        field: 'codKit',
-        calculatedField: 'codBarraKit',
+        field: 'codBarraKit',
         customRenderer: getCustomRenderer,
         width: 160,
-        valueConverter: (value) => response?.kits[value]?.codBarra ?? '',
       ),
       CustomDataColumn(
         text: 'Kit',
-        field: 'codKit',
-        calculatedField: 'nomeKit',
+        field: 'nomeKit',
         customRenderer: getCustomRenderer,
-        valueConverter: (value) => response?.kits[value]?.nome ?? '',
       ),
       CustomDataColumn(
         text: 'Faltantes',
@@ -120,99 +120,35 @@ class _ConsultaProcessosLeituraPageState
       ),
       CustomDataColumn(
         text: 'Etiqueta',
-        field: 'codItem',
-        calculatedField: 'idEtiqueta',
+        field: 'idEtiqueta',
         width: 120,
-        valueConverter: (value) => response?.items[value]?.idEtiqueta ?? '',
       ),
-      CustomDataColumn(
-        text: 'Item',
-        field: 'codItem',
-        calculatedField: 'descricaoItem',
-        valueConverter: (value) => response?.items[value]?.descricao ?? '',
-      ),
-      CustomDataColumn(
-        text: 'Proprietário',
-        field: 'codItem',
-        calculatedField: 'nomeProprietario',
-        valueConverter: (value) {
-          int? codProprietario = response?.items[value]?.codProprietario;
-          return response?.proprietarios[codProprietario]?.nome ?? '';
-        },
-      ),
+      CustomDataColumn(text: 'Item', field: 'descricaoItem'),
+      CustomDataColumn(text: 'Proprietário', field: 'nomeProprietario'),
       CustomDataColumn(
         text: 'Entrada/Saída',
         field: 'entradaSaida',
         width: 130,
       ),
-      CustomDataColumn(
-        text: 'Equipamento',
-        field: 'codEtapaProcesso',
-        calculatedField: 'equipamento',
-        valueConverter: (value) {
-          int? codEtapaProcesso = response?.etapas[value]?.codEquipamento;
-          return response?.equipamentos[codEtapaProcesso]?.nome ?? '';
-        },
-      ),
-      CustomDataColumn(
-        text: 'Etapa Processo',
-        field: 'codEtapaProcesso',
-        calculatedField: 'nomeEtapaProcesso',
-        valueConverter: (value) {
-          return response?.etapas[value]?.nome ?? '';
-        },
-      ),
-      CustomDataColumn(
-        text: 'Tipo Processo',
-        field: 'codEtapaProcesso',
-        calculatedField: 'nomeTipoProcesso',
-        valueConverter: (value) {
-          int? codTipoProcesso = response?.etapas[value]?.codTipoProcesso;
-          return response?.tiposProcesso[codTipoProcesso]?.nome ?? '';
-        },
-      ),
+      CustomDataColumn(text: 'Equipamento', field: 'nomeEquipamento'),
+      CustomDataColumn(text: 'Etapa Processo', field: 'nomeEtapaProcesso'),
+      CustomDataColumn(text: 'Tipo Processo', field: 'nomeTipoProcesso'),
       CustomDataColumn(
         text: 'Prioridade',
-        field: 'codPrioridade',
+        field: 'prioridade',
         width: 130,
-        valueConverter: (value) {
-          if(value==null) return '';
-          return response?.prioridades[int.parse(value)]?.nome ?? '';
-        },
       ),
       CustomDataColumn(
         text: 'Qtde. Processos',
-        field: 'codItem',
+        field: 'qtdeProcessos',
         type: CustomDataColumnType.Number,
         width: 130,
-        calculatedField: 'qtdeProcessos',
-        valueConverter: (value) => response?.items[value]?.qtdeProcessos ?? '',
       ),
-      CustomDataColumn(
-        text: 'Usuário',
-        field: 'codUsuario',
-        calculatedField: 'nomeUsuario',
-        valueConverter: (value) => response?.usuarios[value]?.nome ?? '',
-      ),
+      CustomDataColumn(text: 'Usuário', field: 'nomeUsuario'),
       CustomDataColumn(text: 'Prontuário', field: 'prontuarioRetirada'),
-      CustomDataColumn(
-        text: 'Origem',
-        field: 'codLocalOrigem',
-        calculatedField: 'origem',
-        valueConverter: (value) => response?.locais[value]?.nome ?? '',
-      ),
-      CustomDataColumn(
-        text: 'Destino',
-        field: 'codLocalDestino',
-        calculatedField: 'destino',
-        valueConverter: (value) => response?.locais[value]?.nome ?? '',
-      ),
-      CustomDataColumn(
-        text: 'Circulante',
-        field: 'codCirculante',
-        calculatedField: 'circulante',
-        valueConverter: (value) => response?.usuarios[value]?.nome ?? '',
-      ),
+      CustomDataColumn(text: 'Origem', field: 'origem'),
+      CustomDataColumn(text: 'Destino', field: 'destino'),
+      CustomDataColumn(text: 'Circulante', field: 'circulante'),
       CustomDataColumn(
         text: 'Conf. Visual',
         field: 'conferidoVisualmente',
@@ -220,21 +156,15 @@ class _ConsultaProcessosLeituraPageState
       ),
       CustomDataColumn(
         text: 'Resp. Lib. Kit. Incompleto',
-        field: 'codRespKitIncomp',
-        calculatedField: 'nomeRespKitIncomp',
-        valueConverter: (value) => response?.usuarios[value]?.nome ?? '',
+        field: 'nomeRespKitIncomp',
       ),
       CustomDataColumn(
         text: 'Resp. Lib. Quebra Fluxo',
-        field: 'codRespQuebFluxo',
-        calculatedField: 'nomeRespQuebFluxo',
-        valueConverter: (value) => response?.usuarios[value]?.nome ?? '',
+        field: 'nomeRespQuebFluxo',
       ),
       CustomDataColumn(
         text: 'Resp. Destino Não Compatível',
-        field: 'codRespDestinoNaoCompativel',
-        calculatedField: 'nomeRepDestinoNaoCompativel',
-        valueConverter: (value) => response?.usuarios[value]?.nome ?? '',
+        field: 'nomeRepDestinoNaoCompativel',
       ),
       CustomDataColumn(
         text: 'Indicador',
@@ -260,12 +190,7 @@ class _ConsultaProcessosLeituraPageState
         width: 110,
       ),
       CustomDataColumn(text: 'Integrador Kit', field: 'integradorKit'),
-      CustomDataColumn(
-        text: 'Embalagem',
-        field: 'codEmbalagem',
-        calculatedField: 'embalagem',
-        valueConverter: (value) => response?.embalagens[value]?.nome ?? '',
-      ),
+      CustomDataColumn(text: 'Embalagem', field: 'embalagem'),
       CustomDataColumn(
         text: 'Cód. Item',
         field: 'codItem',
@@ -274,7 +199,7 @@ class _ConsultaProcessosLeituraPageState
       ),
       CustomDataColumn(
         text: 'Cód. Kit',
-        field: 'codKit',
+        field: 'codKit2',
         type: CustomDataColumnType.Number,
         width: 130,
       ),
@@ -290,31 +215,15 @@ class _ConsultaProcessosLeituraPageState
         type: CustomDataColumnType.Number,
         width: 130,
       ),
-      CustomDataColumn(
-        text: 'Motivo',
-        field: 'codMotivo',
-        calculatedField: 'motivo',
-        valueConverter: (value) => response?.motivos[value]?.nome ?? '',
-      ),
-      CustomDataColumn(
-        text: 'Motivo Quebra Fluxo',
-        field: 'codMotivoQuebraFluxo',
-        calculatedField: 'motivoQuebraFluxo',
-        valueConverter: (value) =>
-            response?.motivosQuebraFluxo[value]?.nome ?? '',
-      ),
+      CustomDataColumn(text: 'Motivo', field: 'motivo'),
+      CustomDataColumn(text: 'Motivo Quebra Fluxo', field: 'motivoQuebraFluxo'),
       CustomDataColumn(text: 'Observação', field: 'observacao'),
       CustomDataColumn(
         text: 'Status Kit',
         field: 'statusKit',
         width: 130,
       ),
-      CustomDataColumn(
-        text: 'Restrição Kit',
-        field: 'codKit',
-        calculatedField: 'restricaoKit',
-        valueConverter: (value) => response?.kits[value]?.restricao ?? '',
-      ),
+      CustomDataColumn(text: 'Restrição Kit', field: 'restricaoKit'),
       CustomDataColumn(
         text: 'Kit Liberado Incompleto',
         field: 'kitLiberadoIncompleto',
@@ -334,6 +243,7 @@ class _ConsultaProcessosLeituraPageState
   late final ProcessoEtapaCubit processoEtapaBloc;
   late final ConsultaProcessosLeituraFilter filter;
   final Map<int, Color> codRegistroProcessoColor = {};
+  late void Function() resetarPaginacaoGrid;
   Color ultimaCor = Colors.grey;
 
   @override
@@ -344,7 +254,7 @@ class _ConsultaProcessosLeituraPageState
 
     if (widget.filter != null) {
       filter = widget.filter!;
-      bloc.loadProcessoLeitura(filter);
+      // bloc.loadProcessoLeitura(filter);
     } else {
       filter = ConsultaProcessosLeituraFilter.empty();
       filter.startDate =
@@ -387,7 +297,9 @@ class _ConsultaProcessosLeituraPageState
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [BlocProvider.value(value: bloc)],
+      providers: [
+        BlocProvider.value(value: bloc),
+      ],
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -397,71 +309,70 @@ class _ConsultaProcessosLeituraPageState
               openModal(context),
             },
           ),
-          BlocListener<ConsultaProcessosLeituraPageCubit,
+          BlocConsumer<ConsultaProcessosLeituraPageCubit,
               ConsultaProcessosLeituraPageState>(
             bloc: bloc,
             listener: (context, state) {
               if (state.error.isNotEmpty) onError(state);
             },
-            child: BlocBuilder<ConsultaProcessosLeituraPageCubit,
-                ConsultaProcessosLeituraPageState>(
-              bloc: bloc,
-              builder: (context, state) {
-                if (state.loading) {
-                  return const Center(
-                    child: LoadingWidget(),
-                  );
-                }
-                List<ConsultaProcessosLeituraModel> leituras =
-                    state.response?.leituras ?? [];
-                return Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 16.0, bottom: 16),
-                    child: PlutoGridWidget(
-                      getObjectByRowMethod: (context, getObjectByRowMethod) =>
-                          getObjByRow = getObjectByRowMethod,
-                      rowColorCallback: rowColorCallback,
-                      smallRows: true,
-                      columns: _getColunas(context),
-                      items: leituras,
-                      onDetail: (event, obj) async {
-                        var isUserValid =
-                            await AccessUserService.validateUserHasRight(
-                          DireitoEnum.ProcessoLeituraConsulta,
-                        );
-
-                        if (isUserValid == false) {
-                          return ToastUtils.showCustomToastWarning(
-                            context,
-                            'O Seu usuário não tem permissão para esta tela!',
-                          );
-                        }
-
-                        var clickedColumnValue =
-                            event.row.cells['codBarraKit']?.value;
-
-                        if (clickedColumnValue != null &&
-                            clickedColumnValue is String &&
-                            clickedColumnValue.isNotEmpty) {
-                          openModalRedirectDetalheKit(
-                            context,
-                            obj.codKit,
-                            obj.codRegistroProcesso,
-                            obj.nroItensFaltante,
-                            obj.dataHora,
-                          );
-                        } else {
-                          openModalRedirectDetalhe(
-                            context,
-                            obj.codLeitura,
-                          );
-                        }
-                      },
-                    ),
-                  ),
+            builder: (context, state) {
+              if (state.loading) {
+                return const Center(
+                  child: LoadingWidget(),
                 );
-              },
-            ),
+              }
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 16.0, bottom: 16),
+                  child: PlutoGridApiWidget<ConsultaProcessosLeituraModel>(
+                    fromJson: (objectsSerialized) => objectsSerialized
+                        .map((e) => ConsultaProcessosLeituraModel.fromJson(e)),
+                    resetGridPagionationBuilder:
+                        (context, resetGridPaginationBuilder) =>
+                            resetarPaginacaoGrid = resetGridPaginationBuilder,
+                    onFetch: consultarComAlgoAlteradoGrid,
+                    getObjectByRowMethod: (context, getObjectByRowMethod) =>
+                        getObjByRow = getObjectByRowMethod,
+                    rowColorCallback: rowColorCallback,
+                    smallRows: true,
+                    columns: _getColunas(context),
+                    onDetail: (event, obj) async {
+                      var isUserValid =
+                          await AccessUserService.validateUserHasRight(
+                        DireitoEnum.ProcessoLeituraConsulta,
+                      );
+
+                      if (isUserValid == false) {
+                        return ToastUtils.showCustomToastWarning(
+                          context,
+                          'O Seu usuário não tem permissão para esta tela!',
+                        );
+                      }
+
+                      var clickedColumnValue =
+                          event.row.cells['codBarraKit']?.value;
+
+                      if (clickedColumnValue != null &&
+                          clickedColumnValue is String &&
+                          clickedColumnValue.isNotEmpty) {
+                        openModalRedirectDetalheKit(
+                          context,
+                          obj.codKit2,
+                          obj.codRegistroProcesso,
+                          obj.nroItensFaltante,
+                          obj.dataHora,
+                        );
+                      } else {
+                        openModalRedirectDetalhe(
+                          context,
+                          obj.codLeitura,
+                        );
+                      }
+                    },
+                  ),
+                ),
+              );
+            },
           ),
         ],
       ),
@@ -517,9 +428,9 @@ class _ConsultaProcessosLeituraPageState
   void onError(ConsultaProcessosLeituraPageState state) =>
       ErrorUtils.showErrorDialog(context, [state.error]);
 
-  void openModal(BuildContext context) {
+  Future openModal(BuildContext context) async {
     loadEtapaCubit();
-    showDialog<bool>(
+    bool? result = await showDialog<bool>(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
@@ -588,7 +499,6 @@ class _ConsultaProcessosLeituraPageState
                                 minute: filter.finalTime!.minute,
                               ),
                         onTimeSelected: (selectedTime) {
-                          print(selectedTime);
                           if (selectedTime == null) {
                             filter.finalTime = null;
                             return;
@@ -712,12 +622,25 @@ class _ConsultaProcessosLeituraPageState
           ),
         );
       },
-    ).then((result) {
-      if (result == true) {
-        codRegistroProcessoColor.clear();
-        CustomNavigationBarService.turnExpandedOff(context);
-        bloc.loadProcessoLeitura(filter);
-      }
-    });
+    );
+    if (result != true) return;
+    codRegistroProcessoColor.clear();
+    CustomNavigationBarService.turnExpandedOff(context);
+    consultar();
+  }
+
+  Future<(bool, PlutoGridInfiniteScrollModel)> consultarComAlgoAlteradoGrid(
+    PlutoGridApiModel gridModel,
+  ) async {
+    filter.gridModel = gridModel;
+    (String, PlutoGridInfiniteScrollModel)? response =
+        await ConsultaProcessosLeituraService().filter(
+      filter,
+    );
+    return (response!.$2.lastRow, response.$2);
+  }
+
+  void consultar() {
+    resetarPaginacaoGrid();
   }
 }

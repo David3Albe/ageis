@@ -28,6 +28,7 @@ class GridWidget extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(top: 16.0, bottom: 16),
         child: PlutoGridWidget<RegistrosExpirarSearchResponseDTO>(
+          showFilters: false,
           columns: colunas,
           smallRows: true,
           items: itens ?? [],
@@ -42,7 +43,7 @@ class GridWidget extends StatelessWidget {
     RegistrosExpirarSearchResponseDTO obj,
   ) async {
     onClose();
-     if (obj.codTipo == 5) {
+    if (obj.codTipo == 5) {
       NavigatorService.navigateToArguments(
         '/admin/equipamento/equipamento-manutencao',
         obj.codTabela,
