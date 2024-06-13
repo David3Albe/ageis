@@ -1,4 +1,5 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/deposito_insumo/deposito_insumo_cubit.dart';
+import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/destino_residuo/destino_residuo_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/fabricante/fabricante_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/fornecedor/fornecedor_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/unidade_medida/unidade_medida_cubit.dart';
@@ -150,6 +151,7 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
   );
 
   late final DepositoInsumoCubit depositoInsumoCubit;
+  late final DestinoResiduoCubit destinoResiduoCubit;
 
   void initState() {
     fabricanteCubit = FabricanteCubit();
@@ -159,6 +161,9 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
     unidadeMedidaCubit = UnidadeMedidaCubit();
     unidadeMedidaCubit.loadAll();
     depositoInsumoCubit = DepositoInsumoCubit();
+    destinoResiduoCubit = DestinoResiduoCubit();
+    destinoResiduoCubit.loadAll();
+
 
     txtCodBarra.addValidator((String str) {
       if (str.isEmpty) {
@@ -432,6 +437,39 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child:
+                          BlocBuilder<DestinoResiduoCubit, DestinoResiduoState>(
+                        bloc: destinoResiduoCubit,
+                        builder: (context, destinoState) {
+                          if (destinoState.loading) {
+                            return const LoadingWidget();
+                          }
+                          List<DestinoResiduoModel> destinos =
+                              destinoState.objs;
+
+                          destinos.sort(
+                            (a, b) => a.nome!.compareTo(b.nome!),
+                          );
+                          DestinoResiduoModel? destino = destinos
+                              .where(
+                                (element) =>
+                                    element.cod == insumo.codDestinoResiduo,
+                              )
+                              .firstOrNull;
+                          return DropDownSearchWidget<DestinoResiduoModel>(
+                            textFunction: (destino) =>
+                                destino.GetNomeDestinoText(),
+                            initialValue: destino,
+                            sourceList: destinos,
+                            onChanged: (value) =>
+                                insumo.codDestinoResiduo = value?.cod!,
+                            placeholder: 'Destino Resíduos',
+                          );
+                        },
                       ),
                     ),
                     Padding(

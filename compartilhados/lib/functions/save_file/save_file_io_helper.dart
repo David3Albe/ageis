@@ -12,12 +12,13 @@ import 'package:flutter/material.dart';
 SaveFileInterface getSaveFileInterface() => SaveFileIo();
 
 class SaveFileIo implements SaveFileInterface {
-  Future save(
-    BuildContext context,
-    String docString,
-    String docName,
-    bool openAfterSave,
-  ) async {
+  Future save({
+    required BuildContext context,
+    required String docString,
+    required String docName,
+    required bool openAfterSave,
+    bool encodeAsUtf8 = false,
+  }) async {
     String? path = await FilePicker.platform.saveFile(
       fileName: docName,
     );
@@ -29,7 +30,11 @@ class SaveFileIo implements SaveFileInterface {
       );
       return;
     }
-    final Uint8List bytes = base64.decode(docString);
+    Uint8List bytes = base64.decode(docString);
+    if (encodeAsUtf8) {
+      String decodedString = utf8.decode(bytes);
+      bytes = Uint8List.fromList(decodedString.codeUnits);
+    }
 
     final file = File(path);
     await file.writeAsBytes(bytes);

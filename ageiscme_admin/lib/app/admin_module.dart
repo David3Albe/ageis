@@ -70,7 +70,10 @@ import 'package:ageiscme_admin/app/module/pages/material/motivo_remover_repor_it
 import 'package:ageiscme_admin/app/module/pages/material/tamanho/tamanho_page.dart';
 import 'package:ageiscme_admin/app/module/pages/material/unidade_medida/unidade_medida_page.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/acao_ocorrencia/acao_ocorrencia_page.dart';
+import 'package:ageiscme_admin/app/module/pages/processo/anormalidade/anormalidade_page.dart';
+import 'package:ageiscme_admin/app/module/pages/processo/anormalidade_tipo/anormalidade_tipo_page.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/cancelamento_preparo/cancelamento_preparo_page.dart';
+import 'package:ageiscme_admin/app/module/pages/processo/consulta_anormalidade/consulta_anormalidade_page.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/consulta_processos_consignado/consulta_processos_consignado_page.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/consulta_processos_leitura/consulta_processos_leitura_page.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/consulta_processos_leitura_acao_ocorrencia/consulta_processos_leitura_acao_ocorrencia_page.dart';
@@ -477,6 +480,18 @@ class AdminModule extends Module {
         createParallelRoute(
           '/processo/processo-tipo-consulta',
           child: (context) => ProcessoTipoConsultaPage(),
+        ),
+        createParallelRoute(
+          '/processo/anormalidade-tipo',
+          child: (context) => const AnormalidadeTipoPage(),
+        ),
+        createParallelRoute(
+          '/processo/anormalidade',
+          child: (context) => const AnormalidadePage(),
+        ),
+        createParallelRoute(
+          '/processo/consulta-anormalidade',
+          child: (context) => const ConsultaAnormalidadePage(),
         ),
       ],
     );

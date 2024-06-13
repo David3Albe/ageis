@@ -211,7 +211,8 @@ class PlutoGridColumnHelper<T> {
     PlutoColumnRendererContext rendererContext,
     CustomDataColumn coluna,
   ) {
-    T obj = rowsObject[rendererContext.row]!;
+    T? obj = rowsObject[rendererContext.row];
+    if (obj == null) return const SizedBox();
     dynamic valueConverted =
         CustomDataRows.getCellContentValue(coluna, (obj as dynamic).toJson());
     CustomCheckboxWidget chkBox = CustomCheckboxWidget(
@@ -291,8 +292,9 @@ class PlutoGridColumnHelper<T> {
   List<Widget> _getActionsRow(
     PlutoColumnRendererContext rendererContext,
   ) {
-    T obj = rowsObject[rendererContext.row]!;
+    T? obj = rowsObject[rendererContext.row];
     List<Widget> actions = [];
+    if (obj == null) return actions;
     if (onEdit != null) {
       actions.add(
         EditButtonWidget(

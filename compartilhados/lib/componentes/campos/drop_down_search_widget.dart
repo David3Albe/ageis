@@ -155,10 +155,10 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
                   decoration: BoxDecoration(
                     border: Border(
                       bottom: BorderSide(
-                        width: 2.0,
+                        width: 2,
                         color: errorText != null && !errorText!.isEmpty
                             ? Colors.red
-                            : Colors.black12,
+                            : Colors.grey.shade500.withAlpha(200),
                       ),
                     ),
                   ),
@@ -323,18 +323,17 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
   double _getHeight(Size size) {
     double height = size.height;
     if (height > 800) {
-      return 60;
-    }
-    else if (height > 700) {
-      return 57;
-    } else if (height > 600) {
-      return 55;
-    } else if (height > 500) {
-      return 53;
-    } else if (height > 400) {
+      return 52;
+    } else if (height > 700) {
       return 50;
+    } else if (height > 600) {
+      return 49;
+    } else if (height > 500) {
+      return 48;
+    } else if (height > 400) {
+      return 46;
     }
-    return 48;
+    return 44;
   }
 
   Widget getSelectedItemText(T? item, BuildContext context) {
@@ -353,10 +352,11 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
                 child: Text(
                   widget.placeholder ?? '',
                   style: Fontes.getRoboto(
+                    
                     cor: errorText != null && !errorText!.isEmpty
                         ? Colors.red
                         : Cores.corPlaceholderTextField,
-                    fontSize: HelperFunctions.calculaFontSize(context, 12),
+                    fontSize: HelperFunctions.calculaFontSize(context, 14),
                   ),
                 ),
               ),
@@ -366,10 +366,12 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
                 Text(
                   item == null ? widget.placeholder ?? '' : text,
                   style: Fontes.getRoboto(
-                    cor: errorText != null && !errorText!.isEmpty
+                   cor: errorText != null && !errorText!.isEmpty
                         ? Colors.red
-                        : null,
-                    fontSize: HelperFunctions.calculaFontSize(context, 16),
+                        : widget.readOnly
+                            ? Colors.grey
+                            : null,
+                    fontSize: HelperFunctions.calculaFontSize(context, 14),
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),

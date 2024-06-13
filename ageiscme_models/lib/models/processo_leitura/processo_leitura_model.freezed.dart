@@ -78,6 +78,9 @@ mixin _$ProcessoLeituraModel {
   String? get tstamp => throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
   set tstamp(String? value) => throw _privateConstructorUsedError;
+  ProcessoEtapaModel? get processoEtapa => throw _privateConstructorUsedError;
+  set processoEtapa(ProcessoEtapaModel? value) =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -118,7 +121,10 @@ abstract class $ProcessoLeituraModelCopyWith<$Res> {
       int? statusKit,
       int? codInstituicao,
       DateTime? ultimaAlteracao,
-      @JsonKey(name: 'tStamp') String? tstamp});
+      @JsonKey(name: 'tStamp') String? tstamp,
+      ProcessoEtapaModel? processoEtapa});
+
+  $ProcessoEtapaModelCopyWith<$Res>? get processoEtapa;
 }
 
 /// @nodoc
@@ -162,6 +168,7 @@ class _$ProcessoLeituraModelCopyWithImpl<$Res,
     Object? codInstituicao = freezed,
     Object? ultimaAlteracao = freezed,
     Object? tstamp = freezed,
+    Object? processoEtapa = freezed,
   }) {
     return _then(_value.copyWith(
       cod: freezed == cod
@@ -272,7 +279,23 @@ class _$ProcessoLeituraModelCopyWithImpl<$Res,
           ? _value.tstamp
           : tstamp // ignore: cast_nullable_to_non_nullable
               as String?,
+      processoEtapa: freezed == processoEtapa
+          ? _value.processoEtapa
+          : processoEtapa // ignore: cast_nullable_to_non_nullable
+              as ProcessoEtapaModel?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ProcessoEtapaModelCopyWith<$Res>? get processoEtapa {
+    if (_value.processoEtapa == null) {
+      return null;
+    }
+
+    return $ProcessoEtapaModelCopyWith<$Res>(_value.processoEtapa!, (value) {
+      return _then(_value.copyWith(processoEtapa: value) as $Val);
+    });
   }
 }
 
@@ -311,7 +334,11 @@ abstract class _$$ProcessoLeituraModelImplCopyWith<$Res>
       int? statusKit,
       int? codInstituicao,
       DateTime? ultimaAlteracao,
-      @JsonKey(name: 'tStamp') String? tstamp});
+      @JsonKey(name: 'tStamp') String? tstamp,
+      ProcessoEtapaModel? processoEtapa});
+
+  @override
+  $ProcessoEtapaModelCopyWith<$Res>? get processoEtapa;
 }
 
 /// @nodoc
@@ -352,6 +379,7 @@ class __$$ProcessoLeituraModelImplCopyWithImpl<$Res>
     Object? codInstituicao = freezed,
     Object? ultimaAlteracao = freezed,
     Object? tstamp = freezed,
+    Object? processoEtapa = freezed,
   }) {
     return _then(_$ProcessoLeituraModelImpl(
       cod: freezed == cod
@@ -462,6 +490,10 @@ class __$$ProcessoLeituraModelImplCopyWithImpl<$Res>
           ? _value.tstamp
           : tstamp // ignore: cast_nullable_to_non_nullable
               as String?,
+      processoEtapa: freezed == processoEtapa
+          ? _value.processoEtapa
+          : processoEtapa // ignore: cast_nullable_to_non_nullable
+              as ProcessoEtapaModel?,
     ));
   }
 }
@@ -496,7 +528,8 @@ class _$ProcessoLeituraModelImpl extends _ProcessoLeituraModel {
       required this.statusKit,
       required this.codInstituicao,
       required this.ultimaAlteracao,
-      @JsonKey(name: 'tStamp') required this.tstamp})
+      @JsonKey(name: 'tStamp') required this.tstamp,
+      this.processoEtapa})
       : super._();
 
   factory _$ProcessoLeituraModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -557,10 +590,12 @@ class _$ProcessoLeituraModelImpl extends _ProcessoLeituraModel {
   @override
   @JsonKey(name: 'tStamp')
   String? tstamp;
+  @override
+  ProcessoEtapaModel? processoEtapa;
 
   @override
   String toString() {
-    return 'ProcessoLeituraModel(cod: $cod, codRegistroProcesso: $codRegistroProcesso, codItem: $codItem, codKit: $codKit, entradaSaida: $entradaSaida, codUsuario: $codUsuario, nroItensFaltantes: $nroItensFaltantes, kitLiberadoIncompleto: $kitLiberadoIncompleto, codUsuarioLiberacao: $codUsuarioLiberacao, conferidoVisualmente: $conferidoVisualmente, dataHora: $dataHora, codUsuarioQuebraSeq: $codUsuarioQuebraSeq, codEmbalagem: $codEmbalagem, dataValidade: $dataValidade, codEtapaProcesso: $codEtapaProcesso, codMotivo: $codMotivo, codMotivoQuebraFluxo: $codMotivoQuebraFluxo, codMotivoReporRemoverItem: $codMotivoReporRemoverItem, codAcaoOcorrencia: $codAcaoOcorrencia, entradaAutomatica: $entradaAutomatica, loteEquipamento: $loteEquipamento, codUsuarioResponsavelLocal: $codUsuarioResponsavelLocal, integradorKit: $integradorKit, statusKit: $statusKit, codInstituicao: $codInstituicao, ultimaAlteracao: $ultimaAlteracao, tstamp: $tstamp)';
+    return 'ProcessoLeituraModel(cod: $cod, codRegistroProcesso: $codRegistroProcesso, codItem: $codItem, codKit: $codKit, entradaSaida: $entradaSaida, codUsuario: $codUsuario, nroItensFaltantes: $nroItensFaltantes, kitLiberadoIncompleto: $kitLiberadoIncompleto, codUsuarioLiberacao: $codUsuarioLiberacao, conferidoVisualmente: $conferidoVisualmente, dataHora: $dataHora, codUsuarioQuebraSeq: $codUsuarioQuebraSeq, codEmbalagem: $codEmbalagem, dataValidade: $dataValidade, codEtapaProcesso: $codEtapaProcesso, codMotivo: $codMotivo, codMotivoQuebraFluxo: $codMotivoQuebraFluxo, codMotivoReporRemoverItem: $codMotivoReporRemoverItem, codAcaoOcorrencia: $codAcaoOcorrencia, entradaAutomatica: $entradaAutomatica, loteEquipamento: $loteEquipamento, codUsuarioResponsavelLocal: $codUsuarioResponsavelLocal, integradorKit: $integradorKit, statusKit: $statusKit, codInstituicao: $codInstituicao, ultimaAlteracao: $ultimaAlteracao, tstamp: $tstamp, processoEtapa: $processoEtapa)';
   }
 
   @JsonKey(ignore: true)
@@ -581,34 +616,34 @@ class _$ProcessoLeituraModelImpl extends _ProcessoLeituraModel {
 
 abstract class _ProcessoLeituraModel extends ProcessoLeituraModel {
   factory _ProcessoLeituraModel(
-          {required int? cod,
-          required int? codRegistroProcesso,
-          required int? codItem,
-          required int? codKit,
-          required String? entradaSaida,
-          required int? codUsuario,
-          required int? nroItensFaltantes,
-          required bool? kitLiberadoIncompleto,
-          required int? codUsuarioLiberacao,
-          required bool? conferidoVisualmente,
-          required DateTime? dataHora,
-          required int? codUsuarioQuebraSeq,
-          required int? codEmbalagem,
-          required DateTime? dataValidade,
-          required int? codEtapaProcesso,
-          required int? codMotivo,
-          required int? codMotivoQuebraFluxo,
-          required int? codMotivoReporRemoverItem,
-          required int? codAcaoOcorrencia,
-          required int? entradaAutomatica,
-          required String? loteEquipamento,
-          required int? codUsuarioResponsavelLocal,
-          required bool? integradorKit,
-          required int? statusKit,
-          required int? codInstituicao,
-          required DateTime? ultimaAlteracao,
-          @JsonKey(name: 'tStamp') required String? tstamp}) =
-      _$ProcessoLeituraModelImpl;
+      {required int? cod,
+      required int? codRegistroProcesso,
+      required int? codItem,
+      required int? codKit,
+      required String? entradaSaida,
+      required int? codUsuario,
+      required int? nroItensFaltantes,
+      required bool? kitLiberadoIncompleto,
+      required int? codUsuarioLiberacao,
+      required bool? conferidoVisualmente,
+      required DateTime? dataHora,
+      required int? codUsuarioQuebraSeq,
+      required int? codEmbalagem,
+      required DateTime? dataValidade,
+      required int? codEtapaProcesso,
+      required int? codMotivo,
+      required int? codMotivoQuebraFluxo,
+      required int? codMotivoReporRemoverItem,
+      required int? codAcaoOcorrencia,
+      required int? entradaAutomatica,
+      required String? loteEquipamento,
+      required int? codUsuarioResponsavelLocal,
+      required bool? integradorKit,
+      required int? statusKit,
+      required int? codInstituicao,
+      required DateTime? ultimaAlteracao,
+      @JsonKey(name: 'tStamp') required String? tstamp,
+      ProcessoEtapaModel? processoEtapa}) = _$ProcessoLeituraModelImpl;
   _ProcessoLeituraModel._() : super._();
 
   factory _ProcessoLeituraModel.fromJson(Map<String, dynamic> json) =
@@ -697,6 +732,9 @@ abstract class _ProcessoLeituraModel extends ProcessoLeituraModel {
   String? get tstamp;
   @JsonKey(name: 'tStamp')
   set tstamp(String? value);
+  @override
+  ProcessoEtapaModel? get processoEtapa;
+  set processoEtapa(ProcessoEtapaModel? value);
   @override
   @JsonKey(ignore: true)
   _$$ProcessoLeituraModelImplCopyWith<_$ProcessoLeituraModelImpl>

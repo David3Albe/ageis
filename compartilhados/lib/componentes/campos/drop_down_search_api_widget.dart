@@ -266,10 +266,27 @@ class DropDownSearchApiWidgetState<T>
     Navigator.of(context).pop();
   }
 
+  double _getHeight(Size size) {
+    double height = size.height;
+    if (height > 800) {
+      return 60;
+    } else if (height > 700) {
+      return 57;
+    } else if (height > 600) {
+      return 55;
+    } else if (height > 500) {
+      return 53;
+    } else if (height > 400) {
+      return 50;
+    }
+    return 48;
+  }
+
   Widget getSelectedItemText(T? item, BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     String text = getItemText(item);
     return Container(
-      height: 60,
+      height: _getHeight(size),
       child: Align(
         alignment: Alignment.centerLeft,
         child: Column(
@@ -284,7 +301,7 @@ class DropDownSearchApiWidgetState<T>
                     cor: errorText != null && !errorText!.isEmpty
                         ? Colors.red
                         : Cores.corPlaceholderTextField,
-                    fontSize: HelperFunctions.calculaFontSize(context, 12),
+                    fontSize: HelperFunctions.calculaFontSize(context, 14),
                   ),
                 ),
               ),
@@ -296,8 +313,10 @@ class DropDownSearchApiWidgetState<T>
                   style: Fontes.getRoboto(
                     cor: errorText != null && !errorText!.isEmpty
                         ? Colors.red
-                        : null,
-                    fontSize: HelperFunctions.calculaFontSize(context, 16),
+                        : widget.readOnly
+                            ? Colors.grey
+                            : null,
+                    fontSize: HelperFunctions.calculaFontSize(context, 14),
                   ),
                   overflow: TextOverflow.ellipsis,
                 ),

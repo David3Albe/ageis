@@ -13,6 +13,8 @@ dependencies:
     sdk: flutter
   ageiscme_models:
     path: '../ageiscme_models'
+  ageiscme_mixins:
+    path: '../ageiscme_mixins'
   dependencias_comuns:
     path: '../dependencias_comuns'
   compartilhados:

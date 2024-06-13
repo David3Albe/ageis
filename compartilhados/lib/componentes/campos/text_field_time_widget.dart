@@ -150,17 +150,19 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const SizedBox(height: 4.0),
         TextFormField(
           controller: textController,
           keyboardType: TextInputType.datetime,
           //inputFormatters: [maskFormatter],
+          style: Fontes.getRoboto(
+            fontSize: HelperFunctions.calculaFontSize(context, 14),
+          ),
           decoration: InputDecoration(
             label: Text(
               widget.placeholder,
               style: Fontes.getRoboto(
                 letterSpacing: 0,
-                fontSize: HelperFunctions.calculaFontSize(context, 16),
+                fontSize: HelperFunctions.calculaFontSize(context, 14),
                 cor: Cores.corPlaceholderTextField,
               ),
             ),

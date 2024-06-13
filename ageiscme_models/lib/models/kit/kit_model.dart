@@ -38,6 +38,7 @@ abstract class KitModel
     required KitCorModel? cor2,
     required KitCorModel? cor3,
     required KitCorModel? cor4,
+    DateTime? dataDescarte,
   }) = _KitModel;
 
   factory KitModel.fromJson(Map<String, Object?> json) =>

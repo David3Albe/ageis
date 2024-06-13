@@ -89,7 +89,7 @@ class _DefaultButtonWidgetState extends State<DefaultButtonWidget> {
                   widget.text,
                   style: TextStyle(
                     color: Cores.corTextoBranco,
-                    fontSize: HelperFunctions.calculaFontSize(context, 16),
+                    fontSize: HelperFunctions.calculaFontSize(context, 14),
                   ),
                 ),
               ),

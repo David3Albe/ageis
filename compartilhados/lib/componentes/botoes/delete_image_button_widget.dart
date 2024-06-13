@@ -77,7 +77,7 @@ class _DeleteImageButtonWidgetState extends State<DeleteImageButtonWidget> {
                   widget.placeholder,
                   style: TextStyle(
                     color: Cores.corTextoBranco,
-                    fontSize: HelperFunctions.calculaFontSize(context, 16),
+                    fontSize: HelperFunctions.calculaFontSize(context, 14),
                   ),
                 ),
               ),

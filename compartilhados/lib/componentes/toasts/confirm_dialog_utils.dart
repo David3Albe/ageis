@@ -43,8 +43,8 @@ class AlertConfirmDialog extends StatelessWidget {
     return Stack(
       children: <Widget>[
         Container(
-          width: size.width * 0.6,
-          height: size.height * 0.6,
+          width: size.width * 0.4,
+          height: size.height * 0.3,
           constraints: const BoxConstraints(
             minHeight: 400,
             maxHeight: 600,

@@ -81,7 +81,7 @@ class _OpenScreenButtonState extends State<OpenScreenButtonWidget> {
                         style: TextStyle(
                           color: Cores.corTextoBranco,
                           fontSize:
-                              HelperFunctions.calculaFontSize(context, 16),
+                              HelperFunctions.calculaFontSize(context, 14),
                         ),
                       ),
                     ),

@@ -44,6 +44,7 @@ abstract class InsumoModel
     required FabricanteModel? fabricanteItem,
     required FornecedorModel? fornecedorItem,
     required UnidadeMedidaModel? unidadeMedidaItem,
+    int? codDestinoResiduo,
   }) = _InsumoModel;
 
   factory InsumoModel.fromJson(Map<String, Object?> json) =>

@@ -77,7 +77,7 @@ class _UnmarkAllButtonWidgetState extends State<UnmarkAllButtonWidget> {
                   'Desmarcar Todos',
                   style: TextStyle(
                     color: Cores.corTextoBranco,
-                    fontSize: HelperFunctions.calculaFontSize(context, 16),
+                    fontSize: HelperFunctions.calculaFontSize(context, 14),
                   ),
                 ),
               ),

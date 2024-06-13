@@ -44,12 +44,12 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
     CustomDataColumn(
       text: 'Data Início',
       field: 'dataInicio',
-      type: CustomDataColumnType.Date,
+      type: CustomDataColumnType.DateTime,
     ),
     CustomDataColumn(
       text: 'Data Fim',
       field: 'dataTermino',
-      type: CustomDataColumnType.Date,
+      type: CustomDataColumnType.DateTime,
     ),
     CustomDataColumn(
       text: 'Temperatura',

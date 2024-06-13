@@ -28,6 +28,7 @@ _$ProcessoLeituraMontagemModelImpl _$$ProcessoLeituraMontagemModelImplFromJson(
           .map((e) =>
               ProcessoLeituraPassoModel.fromJson(e as Map<String, dynamic>))
           .toList(),
+      versao: json['versao'] as String,
     );
 
 Map<String, dynamic> _$$ProcessoLeituraMontagemModelImplToJson(
@@ -43,4 +44,5 @@ Map<String, dynamic> _$$ProcessoLeituraMontagemModelImplToJson(
       'filaLeituras': instance.filaLeituras,
       'automaticReadings': instance.automaticReadings,
       'passos': instance.passos,
+      'versao': instance.versao,
     };

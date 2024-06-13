@@ -10,6 +10,7 @@ sealed class PlutoGridApiModel with _$PlutoGridApiModel {
   factory PlutoGridApiModel({
     required int page,
     required List<PlutoGridApiFilterModel> filters,
+    required bool loadRemaining,
     PlutoGridApiSortModel? sort,
   }) = _PlutoGridApiModel;
 

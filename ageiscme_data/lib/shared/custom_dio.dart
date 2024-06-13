@@ -1,3 +1,4 @@
+import 'dart:convert';
 
 import 'package:ageiscme_data/shared/app_config.dart';
 import 'package:ageiscme_data/shared/exception_helper.dart';
@@ -9,6 +10,8 @@ import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/exceptions/custom_base_exception.dart';
+import 'package:compartilhados/functions/cryptography/cryptography_helper.dart';
+import 'package:compartilhados/version/version.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:dependencias_comuns/modular_export.dart';
 
@@ -19,21 +22,30 @@ class CustomDio {
     BaseOptions(
       connectTimeout: const Duration(seconds: 60),
       receiveTimeout: const Duration(seconds: 60),
+      validateStatus: (status) => true,
     ),
   );
 
   final options = Options(
     sendTimeout: const Duration(seconds: 60),
     receiveTimeout: const Duration(seconds: 60),
+    validateStatus: (status) => true,
   );
 
   bool _throwException = true;
+  bool _includeAuthorization = true;
+  bool _encryptPayload = false;
 
   LoadingController? loading;
 
   void DisableExceptionService() => _throwException = false;
-
   void EnableExceptionService() => _throwException = true;
+
+  void DisableAuthorization() => _includeAuthorization = false;
+  void EnableAuthorization() => _includeAuthorization = true;
+
+  void DisableEncryptPayload() => _encryptPayload = false;
+  void EnableEncryptPayload() => _encryptPayload = true;
 
   static const int retrys = 10;
 
@@ -44,9 +56,19 @@ class CustomDio {
     AuthenticationResultDTO? auth =
         await Modular.get<AuthenticationStore>().GetAuthenticated();
     options.headers = {};
-    if (auth?.token != null) {
+    options.headers!.addAll({'version': Version.ACTUAL});
+    if (auth?.token != null && _includeAuthorization) {
       options.headers!.addAll({'authorization': 'bearer ${auth!.token}'});
     }
+  }
+
+  Future<dynamic> getObject({required dynamic obj}) async {
+    if (!_encryptPayload) return obj.toJson();
+    options.headers!.addAll({'encrypt-payload': true});
+    (String content, String nonce) encryptedPayload =
+        await CryptographyHelper.encryptJson(jsonEncode(obj.toJson()));
+    options.headers!.addAll({'nonce-iv': encryptedPayload.$2});
+    return encryptedPayload.$1;
   }
 
   Future<List<dynamic>> getList(String route) async {
@@ -58,7 +80,7 @@ class CustomDio {
     );
     if (!resp.statusCode.toString().startsWith('2')) {
       bool throwed = await throwResponseError(resp);
-      if (!throwed) throw CustomBaseException(resp.data);
+      if (!throwed) throw CustomBaseException(resp.data.toString());
     }
     return resp.data;
   }
@@ -72,7 +94,7 @@ class CustomDio {
     );
     if (!resp.statusCode.toString().startsWith('2')) {
       bool throwed = await throwResponseError(resp);
-      if (!throwed) throw CustomBaseException(resp.data);
+      if (!throwed) throw CustomBaseException(resp.data.toString());
     }
     return resp.data;
   }
@@ -82,12 +104,12 @@ class CustomDio {
     await setHeaders();
     Response resp = await _dio.post(
       '$baseRoute$route',
-      data: objeto.toJson(),
+      data: await getObject(obj: objeto),
       options: options,
     );
     if (!resp.statusCode.toString().startsWith('2')) {
       bool throwed = await throwResponseError(resp);
-      if (!throwed) throw CustomBaseException(resp.data);
+      if (!throwed) throw CustomBaseException(resp.data.toString());
     }
     return resp.data;
   }
@@ -97,7 +119,7 @@ class CustomDio {
     await setHeaders();
     Response resp = await _dio.post(
       '$baseRoute$route',
-      data: objeto.toJson(),
+      data: await getObject(obj: objeto),
       options: options,
     );
     if (!resp.statusCode.toString().startsWith('2')) {
@@ -112,7 +134,7 @@ class CustomDio {
     await setHeaders();
     Response resp = await _dio.post(
       '$baseRoute$route',
-      data: objeto.toJson(),
+      data: await getObject(obj: objeto),
       options: options,
     );
     if (!resp.statusCode.toString().startsWith('2')) {
@@ -133,7 +155,7 @@ class CustomDio {
       await setHeaders();
       Response resp = await _dio.post(
         '$baseRoute$route',
-        data: objeto.toJson(),
+        data: await getObject(obj: objeto),
         options: options,
       );
       if (!resp.statusCode.toString().startsWith('2')) {
@@ -170,7 +192,7 @@ class CustomDio {
       await setHeaders();
       Response resp = await _dio.post(
         '$baseRoute$route',
-        data: objeto.toJson(),
+        data: await getObject(obj: objeto),
         options: options,
       );
 
@@ -213,7 +235,7 @@ class CustomDio {
       await setHeaders();
       Response resp = await _dio.post(
         '$baseRoute$route',
-        data: objeto.toJson(),
+        data: await getObject(obj: objeto),
         options: options,
       );
 
@@ -257,13 +279,13 @@ class CustomDio {
       await setHeaders();
       Response resp = await _dio.delete(
         '$baseRoute$route',
-        data: objeto.toJson(),
+        data: await getObject(obj: objeto),
         options: options,
       );
       if (!resp.statusCode.toString().startsWith('2')) {
         bool throwed = await throwResponseError(resp);
         if (throwed) return null;
-        if (!throwed) throw CustomBaseException(resp.data);
+        if (!throwed) throw CustomBaseException(resp.data.toString());
       }
       CommandResultModel result = CommandResultModel.fromJson(resp.data);
       if (!result.success) {
@@ -318,11 +340,33 @@ class CustomDio {
     if (ToastUtils.routerOutletContext == null) {
       throw CustomBaseException('Defina o context do ToastUtils');
     }
+    List<String> erros = [];
+    try {
+      ErroPadraoModel erroPadrao = ErroPadraoModel.fromJson(resp.data);
+      print(erroPadrao);
+      if (erroPadrao.data is List<String>) {
+        erros = erroPadrao.data;
+      } else if (erroPadrao.data is List<dynamic>) {
+        erros = (erroPadrao.data as List<dynamic>)
+            .map((e) => e.toString())
+            .toList();
+      } else if (erroPadrao.data is String) {
+        erros.add(erroPadrao.data);
+      } else if (erroPadrao.message is String) {
+        erros.add(erroPadrao.message ?? '');
+      } else if (erroPadrao.Data is String) {
+        erros.add(erroPadrao.Data);
+      } else if (erroPadrao.Message is String) {
+        erros.add(erroPadrao.Message ?? '');
+      }
+    } catch (ex) {
+      erros.add(resp.data.toString());
+    }
 
     try {
       await ErrorUtils.showErrorDialog(
         ToastUtils.routerOutletContext!,
-        [resp.data],
+        erros,
       ).then((value) {
         loading?.closeDefault();
       });

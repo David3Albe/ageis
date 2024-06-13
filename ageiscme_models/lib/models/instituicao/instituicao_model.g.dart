@@ -26,6 +26,24 @@ _$InstituicaoModelImpl _$$InstituicaoModelImplFromJson(Map json) =>
       tempoMin: json['tempoMin'] as int?,
       tstamp: json['tStamp'] as String?,
       escalaFonte: (json['escalaFonte'] as num?)?.toDouble(),
+      tempoDescartarItemEstoque: json['tempoDescartarItemEstoque'] as int?,
+      mensagemDescartarItemEstoque:
+          json['mensagemDescartarItemEstoque'] as String?,
+      mensagemDescartarItemKitEstoque:
+          json['mensagemDescartarItemKitEstoque'] as String?,
+      tempoDescartarKitEstoque: json['tempoDescartarKitEstoque'] as int?,
+      mensagemDescartarKitEstoque:
+          json['mensagemDescartarKitEstoque'] as String?,
+      tempoDescartarItemForaEstoque:
+          json['tempoDescartarItemForaEstoque'] as int?,
+      mensagemDescartarItemForaEstoque:
+          json['mensagemDescartarItemForaEstoque'] as String?,
+      mensagemDescartarItemKitForaEstoque:
+          json['mensagemDescartarItemKitForaEstoque'] as String?,
+      tempoDescartarKitForaEstoque:
+          json['tempoDescartarKitForaEstoque'] as int?,
+      mensagemDescartarKitForaEstoque:
+          json['mensagemDescartarKitForaEstoque'] as String?,
     );
 
 Map<String, dynamic> _$$InstituicaoModelImplToJson(
@@ -49,4 +67,18 @@ Map<String, dynamic> _$$InstituicaoModelImplToJson(
       'tempoMin': instance.tempoMin,
       'tStamp': instance.tstamp,
       'escalaFonte': instance.escalaFonte,
+      'tempoDescartarItemEstoque': instance.tempoDescartarItemEstoque,
+      'mensagemDescartarItemEstoque': instance.mensagemDescartarItemEstoque,
+      'mensagemDescartarItemKitEstoque':
+          instance.mensagemDescartarItemKitEstoque,
+      'tempoDescartarKitEstoque': instance.tempoDescartarKitEstoque,
+      'mensagemDescartarKitEstoque': instance.mensagemDescartarKitEstoque,
+      'tempoDescartarItemForaEstoque': instance.tempoDescartarItemForaEstoque,
+      'mensagemDescartarItemForaEstoque':
+          instance.mensagemDescartarItemForaEstoque,
+      'mensagemDescartarItemKitForaEstoque':
+          instance.mensagemDescartarItemKitForaEstoque,
+      'tempoDescartarKitForaEstoque': instance.tempoDescartarKitForaEstoque,
+      'mensagemDescartarKitForaEstoque':
+          instance.mensagemDescartarKitForaEstoque,
     };

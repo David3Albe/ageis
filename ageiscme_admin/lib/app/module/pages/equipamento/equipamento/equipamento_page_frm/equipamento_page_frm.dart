@@ -79,17 +79,17 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
     },
   );
 
-  late final TextFieldStringWidget txtAnoFabricacao = TextFieldStringWidget(
+  late final TextFieldNumberWidget txtAnoFabricacao = TextFieldNumberWidget(
     placeholder: 'Ano de Fabricação',
     onChanged: (String? str) {
-      equipamento.anoFabricacao = int.parse(txtAnoFabricacao.text);
+      equipamento.anoFabricacao = str == null ? null : int.parse(str);
     },
   );
 
   late final TextFieldNumberWidget txtCapacidadeLitro = TextFieldNumberWidget(
     placeholder: 'Capacidade (Litros)',
     onChanged: (String? str) {
-      equipamento.capacidadeLitro = int.parse(txtCapacidadeLitro.text);
+      equipamento.capacidadeLitro = str == null ? null : int.parse(str);
     },
   );
 
@@ -183,9 +183,9 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
   }
 
   void setFields() {
-    txtNome.text = equipamento.nome.toString();
-    txtStatus.text = equipamento.status.toString();
-    txtCodBarra.text = equipamento.codBarra.toString();
+    txtNome.text = equipamento.nome?.toString() ?? '';
+    txtStatus.text = equipamento.status?.toString() ?? '';
+    txtCodBarra.text = equipamento.codBarra?.toString() ?? '';
     txtFabricante.text = equipamento.fabricante?.toString() ?? '';
     txtAnoFabricacao.text = equipamento.anoFabricacao?.toString() ?? '';
     txtCapacidadeLitro.text = equipamento.capacidadeLitro?.toString() ?? '';

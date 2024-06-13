@@ -141,7 +141,7 @@ class _TextFieldStringWidgetState extends State<TextFieldStringWidget> {
                     ? Colors.grey
                     : null,
             letterSpacing: !visible && widget.password ? 5 : 0,
-            fontSize: HelperFunctions.calculaFontSize(context, 18),
+            fontSize: HelperFunctions.calculaFontSize(context, 14),
           ),
           decoration: InputDecoration(
             hoverColor: widget.readOnly ? Colors.grey : null,
@@ -160,12 +160,21 @@ class _TextFieldStringWidgetState extends State<TextFieldStringWidget> {
               widget.placeholder,
               style: Fontes.getRoboto(
                 letterSpacing: 0,
-                fontSize: HelperFunctions.calculaFontSize(context, 16),
+                fontSize: HelperFunctions.calculaFontSize(context, 14),
                 cor: errorText.isEmpty
                     ? Cores.corPlaceholderTextField
                     : Colors.red,
               ),
             ),
+            disabledBorder: errorText.isNotEmpty
+                ? const UnderlineInputBorder(
+                    borderSide: BorderSide(
+                      color: Colors.red,
+                      width: 1.0,
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(1)),
+                  )
+                : null,
             enabledBorder: errorText.isNotEmpty
                 ? const UnderlineInputBorder(
                     borderSide: BorderSide(

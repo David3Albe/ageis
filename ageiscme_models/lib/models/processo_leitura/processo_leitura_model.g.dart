@@ -41,6 +41,10 @@ _$ProcessoLeituraModelImpl _$$ProcessoLeituraModelImplFromJson(Map json) =>
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),
       tstamp: json['tStamp'] as String?,
+      processoEtapa: json['processoEtapa'] == null
+          ? null
+          : ProcessoEtapaModel.fromJson(
+              Map<String, Object?>.from(json['processoEtapa'] as Map)),
     );
 
 Map<String, dynamic> _$$ProcessoLeituraModelImplToJson(
@@ -73,4 +77,5 @@ Map<String, dynamic> _$$ProcessoLeituraModelImplToJson(
       'codInstituicao': instance.codInstituicao,
       'ultimaAlteracao': instance.ultimaAlteracao?.toIso8601String(),
       'tStamp': instance.tstamp,
+      'processoEtapa': instance.processoEtapa?.toJson(),
     };

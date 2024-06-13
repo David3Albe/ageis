@@ -6,6 +6,13 @@ import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
 class ErrorUtils {
+  static Future<bool> showOneErrorDialog(
+    BuildContext? context,
+    String error,
+  ) async {
+    return showErrorDialog(context, [error]);
+  }
+
   static Future<bool> showErrorDialog(
     BuildContext? context,
     List<String> errors,

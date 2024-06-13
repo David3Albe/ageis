@@ -48,10 +48,13 @@ class _TextFieldStringAreaWidgetState extends State<TextFieldStringAreaWidget> {
   bool focused = false;
   String textChanged = '';
   String errorText = '';
-  TextEditingController controller = TextEditingController();
+  TextEditingController? controller = TextEditingController();
   final void Function(String str)? onChanged;
 
-  _TextFieldStringAreaWidgetState({required Key key, this.onChanged});
+  _TextFieldStringAreaWidgetState({
+    required Key key,
+    this.onChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +66,7 @@ class _TextFieldStringAreaWidgetState extends State<TextFieldStringAreaWidget> {
           onEditingComplete: widget.onEditComplete,
           keyboardType: TextInputType.multiline,
           maxLines: 7,
+          minLines: 7,
           controller: widget._controller,
           onChanged: (String? str) {
             validate();
@@ -72,8 +76,12 @@ class _TextFieldStringAreaWidgetState extends State<TextFieldStringAreaWidget> {
           obscuringCharacter: '*',
           autocorrect: false,
           style: Fontes.getRoboto(
-            fontSize: HelperFunctions.calculaFontSize(context, 16),
-            cor: errorText.isNotEmpty ? Colors.red : null,
+            fontSize: HelperFunctions.calculaFontSize(context, 14),
+             cor: errorText.isNotEmpty
+                ? Colors.red
+                : widget.readOnly
+                    ? Colors.grey
+                    : null,
             letterSpacing: !visible && widget.password ? 5 : 0,
           ),
           decoration: InputDecoration(
@@ -91,7 +99,7 @@ class _TextFieldStringAreaWidgetState extends State<TextFieldStringAreaWidget> {
               widget.placeholder,
               style: Fontes.getRoboto(
                 letterSpacing: 0,
-                fontSize: HelperFunctions.calculaFontSize(context, 16),
+                fontSize: HelperFunctions.calculaFontSize(context, 14),
                 cor: errorText.isEmpty
                     ? Cores.corPlaceholderTextField
                     : Colors.red,

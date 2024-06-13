@@ -29,6 +29,7 @@ import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.da
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/list_field/list_field_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
@@ -93,6 +94,13 @@ class _KitPageFrmState extends State<KitPageFrm> {
     },
   );
 
+  late final DatePickerWidget dtpDataDescarte = DatePickerWidget(
+    setDateValueBuilder: (context, method) => setDateDescarte = method,
+    placeholder: 'Data Descarte',
+    onDateSelected: (value) => kit.dataDescarte = value,
+    initialValue: kit.dataDescarte,
+  );
+
   late final TextFieldNumberWidget txtCodEmbalagem = TextFieldNumberWidget(
     placeholder: 'Embalagem',
     readOnly: true,
@@ -134,6 +142,8 @@ class _KitPageFrmState extends State<KitPageFrm> {
       titulo = 'Edição do Kit: ${kit.cod} - ${kit.codBarra}';
     }
   }
+
+  void Function(DateTime?)? setDateDescarte;
 
   @override
   Widget build(BuildContext context) {
@@ -483,6 +493,7 @@ class _KitPageFrmState extends State<KitPageFrm> {
                       onPressed: () => {
                         setState(() {
                           kit = KitModel.empty();
+                          setDateDescarte?.call(null);
                         }),
                       },
                     ),

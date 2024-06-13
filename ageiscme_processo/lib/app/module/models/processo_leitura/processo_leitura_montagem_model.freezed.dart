@@ -47,6 +47,8 @@ mixin _$ProcessoLeituraMontagemModel {
       throw _privateConstructorUsedError;
   set passos(List<ProcessoLeituraPassoModel> value) =>
       throw _privateConstructorUsedError;
+  String get versao => throw _privateConstructorUsedError;
+  set versao(String value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -72,7 +74,8 @@ abstract class $ProcessoLeituraMontagemModelCopyWith<$Res> {
       ProcessoLeituraAtualModel leituraAtual,
       List<String>? filaLeituras,
       bool automaticReadings,
-      List<ProcessoLeituraPassoModel> passos});
+      List<ProcessoLeituraPassoModel> passos,
+      String versao});
 
   $ProcessoLeituraCodigoModelCopyWith<$Res> get leituraCodigo;
   $ProcessoLeituraAtualModelCopyWith<$Res> get leituraAtual;
@@ -102,6 +105,7 @@ class _$ProcessoLeituraMontagemModelCopyWithImpl<$Res,
     Object? filaLeituras = freezed,
     Object? automaticReadings = null,
     Object? passos = null,
+    Object? versao = null,
   }) {
     return _then(_value.copyWith(
       cancelado: freezed == cancelado
@@ -144,6 +148,10 @@ class _$ProcessoLeituraMontagemModelCopyWithImpl<$Res,
           ? _value.passos
           : passos // ignore: cast_nullable_to_non_nullable
               as List<ProcessoLeituraPassoModel>,
+      versao: null == versao
+          ? _value.versao
+          : versao // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 
@@ -185,7 +193,8 @@ abstract class _$$ProcessoLeituraMontagemModelImplCopyWith<$Res>
       ProcessoLeituraAtualModel leituraAtual,
       List<String>? filaLeituras,
       bool automaticReadings,
-      List<ProcessoLeituraPassoModel> passos});
+      List<ProcessoLeituraPassoModel> passos,
+      String versao});
 
   @override
   $ProcessoLeituraCodigoModelCopyWith<$Res> get leituraCodigo;
@@ -216,6 +225,7 @@ class __$$ProcessoLeituraMontagemModelImplCopyWithImpl<$Res>
     Object? filaLeituras = freezed,
     Object? automaticReadings = null,
     Object? passos = null,
+    Object? versao = null,
   }) {
     return _then(_$ProcessoLeituraMontagemModelImpl(
       cancelado: freezed == cancelado
@@ -258,6 +268,10 @@ class __$$ProcessoLeituraMontagemModelImplCopyWithImpl<$Res>
           ? _value.passos
           : passos // ignore: cast_nullable_to_non_nullable
               as List<ProcessoLeituraPassoModel>,
+      versao: null == versao
+          ? _value.versao
+          : versao // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -276,7 +290,8 @@ class _$ProcessoLeituraMontagemModelImpl extends _ProcessoLeituraMontagemModel
       required this.leituraAtual,
       required this.filaLeituras,
       required this.automaticReadings,
-      required this.passos})
+      required this.passos,
+      required this.versao})
       : super._();
 
   factory _$ProcessoLeituraMontagemModelImpl.fromJson(
@@ -303,10 +318,12 @@ class _$ProcessoLeituraMontagemModelImpl extends _ProcessoLeituraMontagemModel
   bool automaticReadings;
   @override
   List<ProcessoLeituraPassoModel> passos;
+  @override
+  String versao;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ProcessoLeituraMontagemModel(cancelado: $cancelado, maquina: $maquina, tstamp: $tstamp, cod: $cod, dataHora: $dataHora, leituraCodigo: $leituraCodigo, leituraAtual: $leituraAtual, filaLeituras: $filaLeituras, automaticReadings: $automaticReadings, passos: $passos)';
+    return 'ProcessoLeituraMontagemModel(cancelado: $cancelado, maquina: $maquina, tstamp: $tstamp, cod: $cod, dataHora: $dataHora, leituraCodigo: $leituraCodigo, leituraAtual: $leituraAtual, filaLeituras: $filaLeituras, automaticReadings: $automaticReadings, passos: $passos, versao: $versao)';
   }
 
   @override
@@ -323,7 +340,8 @@ class _$ProcessoLeituraMontagemModelImpl extends _ProcessoLeituraMontagemModel
       ..add(DiagnosticsProperty('leituraAtual', leituraAtual))
       ..add(DiagnosticsProperty('filaLeituras', filaLeituras))
       ..add(DiagnosticsProperty('automaticReadings', automaticReadings))
-      ..add(DiagnosticsProperty('passos', passos));
+      ..add(DiagnosticsProperty('passos', passos))
+      ..add(DiagnosticsProperty('versao', versao));
   }
 
   @JsonKey(ignore: true)
@@ -345,17 +363,17 @@ class _$ProcessoLeituraMontagemModelImpl extends _ProcessoLeituraMontagemModel
 abstract class _ProcessoLeituraMontagemModel
     extends ProcessoLeituraMontagemModel {
   factory _ProcessoLeituraMontagemModel(
-          {required bool? cancelado,
-          required String? maquina,
-          required String? tstamp,
-          required int? cod,
-          required DateTime? dataHora,
-          required ProcessoLeituraCodigoModel leituraCodigo,
-          required ProcessoLeituraAtualModel leituraAtual,
-          required List<String>? filaLeituras,
-          required bool automaticReadings,
-          required List<ProcessoLeituraPassoModel> passos}) =
-      _$ProcessoLeituraMontagemModelImpl;
+      {required bool? cancelado,
+      required String? maquina,
+      required String? tstamp,
+      required int? cod,
+      required DateTime? dataHora,
+      required ProcessoLeituraCodigoModel leituraCodigo,
+      required ProcessoLeituraAtualModel leituraAtual,
+      required List<String>? filaLeituras,
+      required bool automaticReadings,
+      required List<ProcessoLeituraPassoModel> passos,
+      required String versao}) = _$ProcessoLeituraMontagemModelImpl;
   _ProcessoLeituraMontagemModel._() : super._();
 
   factory _ProcessoLeituraMontagemModel.fromJson(Map<String, dynamic> json) =
@@ -391,6 +409,9 @@ abstract class _ProcessoLeituraMontagemModel
   @override
   List<ProcessoLeituraPassoModel> get passos;
   set passos(List<ProcessoLeituraPassoModel> value);
+  @override
+  String get versao;
+  set versao(String value);
   @override
   @JsonKey(ignore: true)
   _$$ProcessoLeituraMontagemModelImplCopyWith<

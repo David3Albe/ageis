@@ -27,6 +27,11 @@ mixin _$ParametroSistemaModel {
   set versaoSW(String? value) => throw _privateConstructorUsedError;
   DateTime? get dataVersaoSW => throw _privateConstructorUsedError;
   set dataVersaoSW(DateTime? value) => throw _privateConstructorUsedError;
+  String? get versaoSistemaV2 => throw _privateConstructorUsedError;
+  set versaoSistemaV2(String? value) => throw _privateConstructorUsedError;
+  DateTime? get dataVersaoSistemaV2 => throw _privateConstructorUsedError;
+  set dataVersaoSistemaV2(DateTime? value) =>
+      throw _privateConstructorUsedError;
   int? get qtdeMaxProcessosEtiqueta => throw _privateConstructorUsedError;
   set qtdeMaxProcessosEtiqueta(int? value) =>
       throw _privateConstructorUsedError;
@@ -63,6 +68,8 @@ abstract class $ParametroSistemaModelCopyWith<$Res> {
       {int? cod,
       String? versaoSW,
       DateTime? dataVersaoSW,
+      String? versaoSistemaV2,
+      DateTime? dataVersaoSistemaV2,
       int? qtdeMaxProcessosEtiqueta,
       int? codInstituicao,
       int? indicador,
@@ -90,6 +97,8 @@ class _$ParametroSistemaModelCopyWithImpl<$Res,
     Object? cod = freezed,
     Object? versaoSW = freezed,
     Object? dataVersaoSW = freezed,
+    Object? versaoSistemaV2 = freezed,
+    Object? dataVersaoSistemaV2 = freezed,
     Object? qtdeMaxProcessosEtiqueta = freezed,
     Object? codInstituicao = freezed,
     Object? indicador = freezed,
@@ -111,6 +120,14 @@ class _$ParametroSistemaModelCopyWithImpl<$Res,
       dataVersaoSW: freezed == dataVersaoSW
           ? _value.dataVersaoSW
           : dataVersaoSW // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      versaoSistemaV2: freezed == versaoSistemaV2
+          ? _value.versaoSistemaV2
+          : versaoSistemaV2 // ignore: cast_nullable_to_non_nullable
+              as String?,
+      dataVersaoSistemaV2: freezed == dataVersaoSistemaV2
+          ? _value.dataVersaoSistemaV2
+          : dataVersaoSistemaV2 // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       qtdeMaxProcessosEtiqueta: freezed == qtdeMaxProcessosEtiqueta
           ? _value.qtdeMaxProcessosEtiqueta
@@ -161,6 +178,8 @@ abstract class _$$ParametroSistemaModelImplCopyWith<$Res>
       {int? cod,
       String? versaoSW,
       DateTime? dataVersaoSW,
+      String? versaoSistemaV2,
+      DateTime? dataVersaoSistemaV2,
       int? qtdeMaxProcessosEtiqueta,
       int? codInstituicao,
       int? indicador,
@@ -186,6 +205,8 @@ class __$$ParametroSistemaModelImplCopyWithImpl<$Res>
     Object? cod = freezed,
     Object? versaoSW = freezed,
     Object? dataVersaoSW = freezed,
+    Object? versaoSistemaV2 = freezed,
+    Object? dataVersaoSistemaV2 = freezed,
     Object? qtdeMaxProcessosEtiqueta = freezed,
     Object? codInstituicao = freezed,
     Object? indicador = freezed,
@@ -207,6 +228,14 @@ class __$$ParametroSistemaModelImplCopyWithImpl<$Res>
       dataVersaoSW: freezed == dataVersaoSW
           ? _value.dataVersaoSW
           : dataVersaoSW // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      versaoSistemaV2: freezed == versaoSistemaV2
+          ? _value.versaoSistemaV2
+          : versaoSistemaV2 // ignore: cast_nullable_to_non_nullable
+              as String?,
+      dataVersaoSistemaV2: freezed == dataVersaoSistemaV2
+          ? _value.dataVersaoSistemaV2
+          : dataVersaoSistemaV2 // ignore: cast_nullable_to_non_nullable
               as DateTime?,
       qtdeMaxProcessosEtiqueta: freezed == qtdeMaxProcessosEtiqueta
           ? _value.qtdeMaxProcessosEtiqueta
@@ -250,17 +279,19 @@ class _$ParametroSistemaModelImpl
     with DiagnosticableTreeMixin
     implements _ParametroSistemaModel {
   _$ParametroSistemaModelImpl(
-      {required this.cod,
-      required this.versaoSW,
-      required this.dataVersaoSW,
-      required this.qtdeMaxProcessosEtiqueta,
-      required this.codInstituicao,
-      required this.indicador,
-      required this.letraConsignado,
-      required this.licenca,
-      required this.zeraEtiquetaRotulado,
-      required this.ultimaAlteracao,
-      @JsonKey(name: 'tStamp') required this.tstamp});
+      {this.cod,
+      this.versaoSW,
+      this.dataVersaoSW,
+      this.versaoSistemaV2,
+      this.dataVersaoSistemaV2,
+      this.qtdeMaxProcessosEtiqueta,
+      this.codInstituicao,
+      this.indicador,
+      this.letraConsignado,
+      this.licenca,
+      this.zeraEtiquetaRotulado,
+      this.ultimaAlteracao,
+      @JsonKey(name: 'tStamp') this.tstamp});
 
   factory _$ParametroSistemaModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ParametroSistemaModelImplFromJson(json);
@@ -271,6 +302,10 @@ class _$ParametroSistemaModelImpl
   String? versaoSW;
   @override
   DateTime? dataVersaoSW;
+  @override
+  String? versaoSistemaV2;
+  @override
+  DateTime? dataVersaoSistemaV2;
   @override
   int? qtdeMaxProcessosEtiqueta;
   @override
@@ -291,7 +326,7 @@ class _$ParametroSistemaModelImpl
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ParametroSistemaModel(cod: $cod, versaoSW: $versaoSW, dataVersaoSW: $dataVersaoSW, qtdeMaxProcessosEtiqueta: $qtdeMaxProcessosEtiqueta, codInstituicao: $codInstituicao, indicador: $indicador, letraConsignado: $letraConsignado, licenca: $licenca, zeraEtiquetaRotulado: $zeraEtiquetaRotulado, ultimaAlteracao: $ultimaAlteracao, tstamp: $tstamp)';
+    return 'ParametroSistemaModel(cod: $cod, versaoSW: $versaoSW, dataVersaoSW: $dataVersaoSW, versaoSistemaV2: $versaoSistemaV2, dataVersaoSistemaV2: $dataVersaoSistemaV2, qtdeMaxProcessosEtiqueta: $qtdeMaxProcessosEtiqueta, codInstituicao: $codInstituicao, indicador: $indicador, letraConsignado: $letraConsignado, licenca: $licenca, zeraEtiquetaRotulado: $zeraEtiquetaRotulado, ultimaAlteracao: $ultimaAlteracao, tstamp: $tstamp)';
   }
 
   @override
@@ -302,6 +337,8 @@ class _$ParametroSistemaModelImpl
       ..add(DiagnosticsProperty('cod', cod))
       ..add(DiagnosticsProperty('versaoSW', versaoSW))
       ..add(DiagnosticsProperty('dataVersaoSW', dataVersaoSW))
+      ..add(DiagnosticsProperty('versaoSistemaV2', versaoSistemaV2))
+      ..add(DiagnosticsProperty('dataVersaoSistemaV2', dataVersaoSistemaV2))
       ..add(DiagnosticsProperty(
           'qtdeMaxProcessosEtiqueta', qtdeMaxProcessosEtiqueta))
       ..add(DiagnosticsProperty('codInstituicao', codInstituicao))
@@ -330,18 +367,19 @@ class _$ParametroSistemaModelImpl
 
 abstract class _ParametroSistemaModel implements ParametroSistemaModel {
   factory _ParametroSistemaModel(
-          {required int? cod,
-          required String? versaoSW,
-          required DateTime? dataVersaoSW,
-          required int? qtdeMaxProcessosEtiqueta,
-          required int? codInstituicao,
-          required int? indicador,
-          required String? letraConsignado,
-          required String? licenca,
-          required bool? zeraEtiquetaRotulado,
-          required DateTime? ultimaAlteracao,
-          @JsonKey(name: 'tStamp') required String? tstamp}) =
-      _$ParametroSistemaModelImpl;
+      {int? cod,
+      String? versaoSW,
+      DateTime? dataVersaoSW,
+      String? versaoSistemaV2,
+      DateTime? dataVersaoSistemaV2,
+      int? qtdeMaxProcessosEtiqueta,
+      int? codInstituicao,
+      int? indicador,
+      String? letraConsignado,
+      String? licenca,
+      bool? zeraEtiquetaRotulado,
+      DateTime? ultimaAlteracao,
+      @JsonKey(name: 'tStamp') String? tstamp}) = _$ParametroSistemaModelImpl;
 
   factory _ParametroSistemaModel.fromJson(Map<String, dynamic> json) =
       _$ParametroSistemaModelImpl.fromJson;
@@ -355,6 +393,12 @@ abstract class _ParametroSistemaModel implements ParametroSistemaModel {
   @override
   DateTime? get dataVersaoSW;
   set dataVersaoSW(DateTime? value);
+  @override
+  String? get versaoSistemaV2;
+  set versaoSistemaV2(String? value);
+  @override
+  DateTime? get dataVersaoSistemaV2;
+  set dataVersaoSistemaV2(DateTime? value);
   @override
   int? get qtdeMaxProcessosEtiqueta;
   set qtdeMaxProcessosEtiqueta(int? value);

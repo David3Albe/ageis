@@ -3,6 +3,8 @@ import 'package:compartilhados/componentes/diagram/custom_diagram/model/custom_d
 import 'package:compartilhados/componentes/diagram/custom_diagram/model/custom_diagram_link_model.dart';
 import 'package:compartilhados/componentes/diagram/custom_diagram/model/custom_diagram_rect_model.dart';
 import 'package:compartilhados/componentes/diagram/custom_diagram/objects/custom_diagram_rect_widget.dart';
+import 'package:compartilhados/componentes/diagram/custom_diagram/selected_process_type_detail/cubits/selected_cubit.dart';
+import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -14,6 +16,7 @@ class CustomDiagramWidgetController {
   final void Function(void Function() fn) setState;
   final Color defaultAddedNewRectBackColor;
   final Color defaultAddedNewRectForeColor;
+  final bool canEdit;
 
   CustomDiagramWidgetController({
     required this.objects,
@@ -23,6 +26,7 @@ class CustomDiagramWidgetController {
     required this.defaultWidth,
     required this.defaultAddedNewRectBackColor,
     required this.defaultAddedNewRectForeColor,
+    required this.canEdit,
   });
 
   bool removeRect() {
@@ -96,7 +100,7 @@ class CustomDiagramWidgetController {
     setState(() {});
   }
 
-  void onSelected() {
+  void onSelected({required BuildContext context}) {
     for (CustomDiagramRectModel rect in objects) {
       if (rect.links == null) continue;
       for (CustomDiagramLinkModel link in rect.links!) {
@@ -107,10 +111,23 @@ class CustomDiagramWidgetController {
     }
     List<CustomDiagramRectModel> objetosSelecionados =
         objects.where((element) => element.selected == true).toList();
-    if (objetosSelecionados.length <= 1) return;
-
     objetosSelecionados
         .sort((a, b) => a.selectedTime!.compareTo(b.selectedTime!));
+    if (!canEdit) {
+      CustomDiagramRectModel? rect = objetosSelecionados.lastOrNull;
+      if (objetosSelecionados.length > 1) {
+        setState(() {
+          for (CustomDiagramRectModel recSel in objetosSelecionados) {
+            if (recSel.id == rect?.id) continue;
+            recSel.selected = false;
+          }
+        });
+      }
+      BlocProvider.of<SelectedCubit>(context).select(rect?.id);
+      return;
+    }
+    if (objetosSelecionados.length <= 1) return;
+
     CustomDiagramRectModel rectOrigin = objetosSelecionados[0];
     CustomDiagramRectModel rectDestiny = objetosSelecionados[1];
     if (rectOrigin.links == null) rectOrigin.links = [];
@@ -128,14 +145,14 @@ class CustomDiagramWidgetController {
     });
   }
 
-  List<Widget> getWidgets() {
+  List<Widget> getWidgets({required BuildContext context}) {
     List<Widget> widgets = [];
-    _addLinks(objects, widgets);
+    _addLinks(context, objects, widgets);
     for (CustomDiagramRectModel rect in objects) {
       Widget widget = CustomDiagramRectWidget(
         object: rect,
         onMove: updateStatus,
-        onSelected: onSelected,
+        onSelected: () => onSelected(context: context),
         defaultAddedNewRectBackColor: defaultAddedNewRectBackColor,
         defaultAddedNewRectForeColor: defaultAddedNewRectForeColor,
       );
@@ -144,7 +161,10 @@ class CustomDiagramWidgetController {
     return widgets;
   }
 
-  void onSelectedLink() {
+  void onSelectedLink({required BuildContext context}) {
+    if (!canEdit) {
+      BlocProvider.of<SelectedCubit>(context).clear();
+    }
     for (CustomDiagramRectModel rect in objects) {
       setState(() {
         rect.selected = null;
@@ -153,7 +173,8 @@ class CustomDiagramWidgetController {
     }
   }
 
-  void _addLinks(List<CustomDiagramRectModel> rects, List<Widget> widgets) {
+  void _addLinks(BuildContext context, List<CustomDiagramRectModel> rects,
+      List<Widget> widgets) {
     for (CustomDiagramRectModel rect in rects) {
       if (rect.links == null || rect.links!.isEmpty) continue;
       rect.links!
@@ -162,7 +183,7 @@ class CustomDiagramWidgetController {
     Widget widget = LinePainterWidget(
       rects: rects,
       updateState: updateStatus,
-      selectedLink: onSelectedLink,
+      selectedLink: () => onSelectedLink(context: context),
     );
     widgets.add(widget);
   }

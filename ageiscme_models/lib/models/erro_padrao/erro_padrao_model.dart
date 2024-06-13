@@ -11,8 +11,10 @@ sealed class ErroPadraoModel with _$ErroPadraoModel {
   factory ErroPadraoModel({
     required String? message,
     required dynamic data,
+    required String? Message,
+    required dynamic Data,
   }) = _ErroPadraoModel;
- 
+
   factory ErroPadraoModel.fromJson(Map<String, Object?> json) =>
       _$ErroPadraoModelFromJson(json);
 }

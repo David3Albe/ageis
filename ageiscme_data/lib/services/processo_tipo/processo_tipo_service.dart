@@ -1,6 +1,8 @@
 import 'package:ageiscme_data/shared/custom_dio.dart';
+import 'package:ageiscme_models/dto/processo_tipo/ultima_leitura/processo_tipo_ultima_leitura_item_kit_dto.dart';
 import 'package:ageiscme_models/filters/processo_tipo/processo_tipo_filter.dart';
 import 'package:ageiscme_models/models/processo_tipo/processo_tipo_model.dart';
+import 'package:ageiscme_models/response_dto/processo_tipo/ultima_leitura/processo_tipo_ultima_leitura_item_kit_response_dto.dart';
 
 class ProcessoTipoService {
   final CustomDio _client = CustomDio();
@@ -52,6 +54,16 @@ class ProcessoTipoService {
       '/processo-tipo/${obj.cod}',
       obj,
       (dynamic json) => ProcessoTipoModel.fromJson(json),
+    );
+  }
+
+  Future<(String message, ProcessoTipoUltimaLeituraItemKitResponseDTO dto)?> ultimoLocal(
+    ProcessoTipoUltimaLeituraItemKitDTO obj,
+  ) async {
+    return await _client.post(
+      '/processo-tipo/ultimo-local',
+      obj,
+      (dynamic json) => ProcessoTipoUltimaLeituraItemKitResponseDTO.fromJson(json),
     );
   }
 }

@@ -13,6 +13,10 @@ _$ParametroSistemaModelImpl _$$ParametroSistemaModelImplFromJson(Map json) =>
       dataVersaoSW: json['dataVersaoSW'] == null
           ? null
           : DateTime.parse(json['dataVersaoSW'] as String),
+      versaoSistemaV2: json['versaoSistemaV2'] as String?,
+      dataVersaoSistemaV2: json['dataVersaoSistemaV2'] == null
+          ? null
+          : DateTime.parse(json['dataVersaoSistemaV2'] as String),
       qtdeMaxProcessosEtiqueta: json['qtdeMaxProcessosEtiqueta'] as int?,
       codInstituicao: json['codInstituicao'] as int?,
       indicador: json['indicador'] as int?,
@@ -31,6 +35,8 @@ Map<String, dynamic> _$$ParametroSistemaModelImplToJson(
       'cod': instance.cod,
       'versaoSW': instance.versaoSW,
       'dataVersaoSW': instance.dataVersaoSW?.toIso8601String(),
+      'versaoSistemaV2': instance.versaoSistemaV2,
+      'dataVersaoSistemaV2': instance.dataVersaoSistemaV2?.toIso8601String(),
       'qtdeMaxProcessosEtiqueta': instance.qtdeMaxProcessosEtiqueta,
       'codInstituicao': instance.codInstituicao,
       'indicador': instance.indicador,

@@ -69,7 +69,7 @@ class _LoginButtonWidgetState extends State<LoginButtonWidget> {
                   'Login',
                   style: TextStyle(
                     color: Cores.corTextoBranco,
-                    fontSize: HelperFunctions.calculaFontSize(context, 16),
+                    fontSize: HelperFunctions.calculaFontSize(context, 14),
                   ),
                 ),
               ),

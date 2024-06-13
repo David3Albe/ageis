@@ -16,7 +16,12 @@ class CustomPopupItemSaveFileModel {
           if (docName == null || docString == null) {
             return;
           }
-          saveFile.save(context, docString, docName, true);
+          saveFile.save(
+            context: context,
+            docString: docString,
+            docName: docName,
+            openAfterSave: true,
+          );
         },
       );
 }

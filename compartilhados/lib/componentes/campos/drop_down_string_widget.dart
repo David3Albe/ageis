@@ -66,7 +66,7 @@ class _DropDownStringWidgetState<T> extends State<DropDownWidget> {
         child: Text(
           text,
           style: Fontes.getRoboto(
-            fontSize: HelperFunctions.calculaFontSize(context, 16),
+            fontSize: HelperFunctions.calculaFontSize(context, 14),
           ),
           overflow: TextOverflow.ellipsis,
         ),
@@ -80,64 +80,67 @@ class _DropDownStringWidgetState<T> extends State<DropDownWidget> {
       selectedItem = widget.initialValue;
     }
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Flexible(
-          child: SizedBox(
-            child: DropdownButtonFormField<T>(
-              iconSize: 20,
-              value: selectedItem,
-              items: dropdownItems,
-              onChanged: (value) {
-                if (onChanged != null) {
-                  onChanged!(value!);
-                }
-                setState(() {
-                  selectedItem = value!;
-                });
-              },
-              style: Fontes.getRoboto(
-                letterSpacing: 0,
-                cor: Colors.black,
-                fontSize: HelperFunctions.calculaFontSize(context, 16),
-              ),
-              decoration: InputDecoration(
-                label: Text(
-                  placeholder!,
-                  style: Fontes.getRoboto(
-                    letterSpacing: 0,
-                    fontSize: HelperFunctions.calculaFontSize(context, 16),
-                    cor: errorText.isEmpty
-                        ? Cores.corPlaceholderTextField
-                        : Colors.red,
-                  ),
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Flexible(
+            child: SizedBox(
+              child: DropdownButtonFormField<T>(
+                iconSize: 20,
+                value: selectedItem,
+                items: dropdownItems,
+                onChanged: (value) {
+                  if (onChanged != null) {
+                    onChanged!(value!);
+                  }
+                  setState(() {
+                    selectedItem = value!;
+                  });
+                },
+                style: Fontes.getRoboto(
+                  letterSpacing: 0,
+                  cor: Colors.black,
+                  fontSize: HelperFunctions.calculaFontSize(context, 14),
                 ),
-                enabled: !widget.readOnly,
-              ),
-            ),
-          ),
-        ),
-        const Visibility(
-          visible: false,
-          child: Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Text(
-                    'Error',
-                    style: const TextStyle(
-                      color: Colors.red,
-                      fontSize: 12,
+                decoration: InputDecoration(
+                  label: Text(
+                    placeholder!,
+                    style: Fontes.getRoboto(
+                      letterSpacing: 0,
+                      fontSize: HelperFunctions.calculaFontSize(context, 14),
+                      cor: errorText.isEmpty
+                          ? Cores.corPlaceholderTextField
+                          : Colors.red,
                     ),
                   ),
+                  enabled: !widget.readOnly,
                 ),
-              ],
+              ),
             ),
           ),
-        ),
-      ],
+          const Visibility(
+            visible: false,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 8.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      'Error',
+                      style: const TextStyle(
+                        color: Colors.red,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

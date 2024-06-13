@@ -70,7 +70,7 @@ class _PrintButtonWidgetState extends State<PrintButtonWidget> {
                         cor: hovered
                             ? Cores.corTextoBranco
                             : Cores.corBotaoImprimir,
-                        fontSize: HelperFunctions.calculaFontSize(context, 16),
+                        fontSize: HelperFunctions.calculaFontSize(context, 14),
                       ),
                     ),
                   ),

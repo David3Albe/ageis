@@ -26,6 +26,9 @@ mixin _$CommandResultModel {
   set message(String value) => throw _privateConstructorUsedError;
   dynamic get data => throw _privateConstructorUsedError;
   set data(dynamic value) => throw _privateConstructorUsedError;
+  CommandResultAlertType? get alertType => throw _privateConstructorUsedError;
+  set alertType(CommandResultAlertType? value) =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -39,7 +42,11 @@ abstract class $CommandResultModelCopyWith<$Res> {
           CommandResultModel value, $Res Function(CommandResultModel) then) =
       _$CommandResultModelCopyWithImpl<$Res, CommandResultModel>;
   @useResult
-  $Res call({bool success, String message, dynamic data});
+  $Res call(
+      {bool success,
+      String message,
+      dynamic data,
+      CommandResultAlertType? alertType});
 }
 
 /// @nodoc
@@ -58,6 +65,7 @@ class _$CommandResultModelCopyWithImpl<$Res, $Val extends CommandResultModel>
     Object? success = null,
     Object? message = null,
     Object? data = freezed,
+    Object? alertType = freezed,
   }) {
     return _then(_value.copyWith(
       success: null == success
@@ -72,6 +80,10 @@ class _$CommandResultModelCopyWithImpl<$Res, $Val extends CommandResultModel>
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
               as dynamic,
+      alertType: freezed == alertType
+          ? _value.alertType
+          : alertType // ignore: cast_nullable_to_non_nullable
+              as CommandResultAlertType?,
     ) as $Val);
   }
 }
@@ -84,7 +96,11 @@ abstract class _$$CommandResultModelImplCopyWith<$Res>
       __$$CommandResultModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({bool success, String message, dynamic data});
+  $Res call(
+      {bool success,
+      String message,
+      dynamic data,
+      CommandResultAlertType? alertType});
 }
 
 /// @nodoc
@@ -101,6 +117,7 @@ class __$$CommandResultModelImplCopyWithImpl<$Res>
     Object? success = null,
     Object? message = null,
     Object? data = freezed,
+    Object? alertType = freezed,
   }) {
     return _then(_$CommandResultModelImpl(
       success: null == success
@@ -115,6 +132,10 @@ class __$$CommandResultModelImplCopyWithImpl<$Res>
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
               as dynamic,
+      alertType: freezed == alertType
+          ? _value.alertType
+          : alertType // ignore: cast_nullable_to_non_nullable
+              as CommandResultAlertType?,
     ));
   }
 }
@@ -125,7 +146,10 @@ class _$CommandResultModelImpl
     with DiagnosticableTreeMixin
     implements _CommandResultModel {
   _$CommandResultModelImpl(
-      {required this.success, required this.message, required this.data});
+      {required this.success,
+      required this.message,
+      required this.data,
+      this.alertType});
 
   factory _$CommandResultModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$CommandResultModelImplFromJson(json);
@@ -136,10 +160,12 @@ class _$CommandResultModelImpl
   String message;
   @override
   dynamic data;
+  @override
+  CommandResultAlertType? alertType;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CommandResultModel(success: $success, message: $message, data: $data)';
+    return 'CommandResultModel(success: $success, message: $message, data: $data, alertType: $alertType)';
   }
 
   @override
@@ -149,7 +175,8 @@ class _$CommandResultModelImpl
       ..add(DiagnosticsProperty('type', 'CommandResultModel'))
       ..add(DiagnosticsProperty('success', success))
       ..add(DiagnosticsProperty('message', message))
-      ..add(DiagnosticsProperty('data', data));
+      ..add(DiagnosticsProperty('data', data))
+      ..add(DiagnosticsProperty('alertType', alertType));
   }
 
   @JsonKey(ignore: true)
@@ -171,7 +198,8 @@ abstract class _CommandResultModel implements CommandResultModel {
   factory _CommandResultModel(
       {required bool success,
       required String message,
-      required dynamic data}) = _$CommandResultModelImpl;
+      required dynamic data,
+      CommandResultAlertType? alertType}) = _$CommandResultModelImpl;
 
   factory _CommandResultModel.fromJson(Map<String, dynamic> json) =
       _$CommandResultModelImpl.fromJson;
@@ -185,6 +213,9 @@ abstract class _CommandResultModel implements CommandResultModel {
   @override
   dynamic get data;
   set data(dynamic value);
+  @override
+  CommandResultAlertType? get alertType;
+  set alertType(CommandResultAlertType? value);
   @override
   @JsonKey(ignore: true)
   _$$CommandResultModelImplCopyWith<_$CommandResultModelImpl> get copyWith =>

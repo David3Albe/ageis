@@ -55,6 +55,12 @@ class DireitoEnum {
   static const int EquipamentosConsulta = 240;
   static const int EquipamentosManutencao = 241;
 
+  static const int AnormalidadesRegistrosConsulta = 250;
+  static const int AnormalidadesRegistrosManutencao = 251;
+
+  static const int AnormalidadesTiposConsulta = 260;
+  static const int AnormalidadesTiposManutencao = 261;
+
   static const int ProcessosTipoConsulta = 270;
   static const int ProcessosTipoManutencao = 271;
 
@@ -120,7 +126,7 @@ class DireitoEnum {
   static const int ProcessoAutorizarReporRemoverItem = 908;
 
   static const int ProcessoLeituraConsulta = 910;
-  
+
   static const int AcoesOcorrencias = 1001;
   static const int AcoesOcorrenciasConsulta = 1002;
 

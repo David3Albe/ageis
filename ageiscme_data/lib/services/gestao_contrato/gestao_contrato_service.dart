@@ -3,11 +3,12 @@ import 'package:ageiscme_models/main.dart';
 
 class GestaoContratoService {
   final CustomDio _client = CustomDio();
+  static const BASE_URL = '/gestao-contrato/';
 
   GestaoContratoService();
 
   Future<List<GestaoContratoModel>> GetAll() async =>
-      (await _client.getList('/gestao-contrato'))
+      (await _client.getList(BASE_URL))
           .map((e) => GestaoContratoModel.fromJson(e))
           .toList();
 
@@ -15,7 +16,7 @@ class GestaoContratoService {
     GestaoContratoModel obj,
   ) async {
     return await _client.post(
-      '/gestao-contrato',
+      BASE_URL,
       obj,
       (dynamic json) => GestaoContratoModel.fromJson(json),
     );
@@ -25,7 +26,7 @@ class GestaoContratoService {
     GestaoContratoModel obj,
   ) async {
     return await _client.delete(
-      '/gestao-contrato/${obj.cod}',
+      BASE_URL + '${obj.cod}',
       obj,
       (dynamic json) => GestaoContratoModel.fromJson(json),
     );

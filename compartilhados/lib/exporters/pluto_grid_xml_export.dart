@@ -18,8 +18,7 @@ class PlutoGridXmlExport {
   });
 
   void export() {
-    LoadingController loading =
-        LoadingController(context: context);
+    LoadingController loading = LoadingController(context: context);
     Future.delayed(const Duration(milliseconds: 200)).then((value) {
       _export().then((value) => loading.closeDefault());
     });
@@ -78,6 +77,11 @@ class PlutoGridXmlExport {
     String strXml = await _getXmlString();
     String base64String = base64Encode(utf8.encode(strXml));
     SaveFileInterface saveFile = SaveFileInterface();
-    await saveFile.save(context, base64String, 'Consulta.xml', true);
+    await saveFile.save(
+      context: context,
+      docString: base64String,
+      docName: 'Consulta.xml',
+      openAfterSave: true,
+    );
   }
 }

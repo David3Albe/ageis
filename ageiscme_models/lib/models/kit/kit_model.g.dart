@@ -53,6 +53,9 @@ _$KitModelImpl _$$KitModelImplFromJson(Map json) => _$KitModelImpl(
           ? null
           : KitCorModel.fromJson(
               Map<String, Object?>.from(json['cor4'] as Map)),
+      dataDescarte: json['dataDescarte'] == null
+          ? null
+          : DateTime.parse(json['dataDescarte'] as String),
     );
 
 Map<String, dynamic> _$$KitModelImplToJson(_$KitModelImpl instance) =>
@@ -81,4 +84,5 @@ Map<String, dynamic> _$$KitModelImplToJson(_$KitModelImpl instance) =>
       'cor2': instance.cor2?.toJson(),
       'cor3': instance.cor3?.toJson(),
       'cor4': instance.cor4?.toJson(),
+      'dataDescarte': instance.dataDescarte?.toIso8601String(),
     };

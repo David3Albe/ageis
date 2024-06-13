@@ -1,3 +1,4 @@
+import 'package:ageiscme_models/enums/command_result_alert_type.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
 
@@ -10,6 +11,7 @@ sealed class CommandResultModel with _$CommandResultModel {
     required bool success,
     required String message,
     required dynamic data,
+    CommandResultAlertType? alertType,
   }) = _CommandResultModel;
 
   factory CommandResultModel.fromJson(Map<String, Object?> json) =>

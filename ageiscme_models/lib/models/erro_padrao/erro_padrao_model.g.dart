@@ -10,6 +10,8 @@ _$ErroPadraoModelImpl _$$ErroPadraoModelImplFromJson(Map json) =>
     _$ErroPadraoModelImpl(
       message: json['message'] as String?,
       data: json['data'],
+      Message: json['Message'] as String?,
+      Data: json['Data'],
     );
 
 Map<String, dynamic> _$$ErroPadraoModelImplToJson(
@@ -17,4 +19,6 @@ Map<String, dynamic> _$$ErroPadraoModelImplToJson(
     <String, dynamic>{
       'message': instance.message,
       'data': instance.data,
+      'Message': instance.Message,
+      'Data': instance.Data,
     };

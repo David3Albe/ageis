@@ -80,7 +80,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
                   'Confirmar',
                   style: TextStyle(
                     color: Cores.corTextoBranco,
-                    fontSize: HelperFunctions.calculaFontSize(context, 16),
+                    fontSize: HelperFunctions.calculaFontSize(context, 14),
                   ),
                 ),
               ),

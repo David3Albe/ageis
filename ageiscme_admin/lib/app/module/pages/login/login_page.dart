@@ -44,6 +44,8 @@ class _LoginPageState extends State<LoginPage> {
     );
     AuthenticationService service = AuthenticationService();
     service.DisableThrower();
+    service.DisableAuthorization();
+    service.EnableEncryptPayload();
     cubit = LoginPageCubit(service: service);
   }
 
@@ -68,107 +70,108 @@ class _LoginPageState extends State<LoginPage> {
                     bottom: MediaQuery.of(context).size.height * 0.2,
                   ),
                   child: Center(
-                    child: ConstrainedBox(
-                      constraints:
-                          const BoxConstraints(maxWidth: 420, maxHeight: 420),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Cores.corFundoBranco,
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                        width: MediaQuery.of(context).size.width * 0.95,
-                        height: MediaQuery.of(context).size.height * 0.60,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: 30, right: 30),
-                          child: Column(
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
+                    child: Container(
+                      constraints: const BoxConstraints(
+                        maxWidth: 420,
+                        maxHeight: 600,
+                        minHeight: 420,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Cores.corFundoBranco,
+                        borderRadius: BorderRadius.circular(5),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 30, right: 30),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                    top: MediaQuery.of(context).size.height *
+                                        0.02,
+                                  ),
+                                  child: const ImageWidget(
+                                    identificador: 'logo_menu_cima',
+                                    height: 50,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: MediaQuery.of(context).size.height * 0.05,
+                              ),
+                              child: txtUser,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: MediaQuery.of(context).size.height * 0.05,
+                              ),
+                              child: txtPassword,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                top: MediaQuery.of(context).size.height * 0.05,
+                              ),
+                              child: Wrap(
                                 children: [
                                   Padding(
-                                    padding: EdgeInsets.only(
-                                      top: MediaQuery.of(context).size.height *
-                                          0.02,
+                                    padding: const EdgeInsets.only(
+                                      top: 6.0,
+                                      left: 6.0,
                                     ),
-                                    child: const ImageWidget(
-                                      identificador: 'logo_menu_cima',
-                                      height: 50,
+                                    child: Container(
+                                      constraints: const BoxConstraints(
+                                        maxHeight: 30,
+                                        maxWidth: 165,
+                                      ),
+                                      child: const BackButtonSmallWidget(
+                                        onPressed: AdminNavigatorService
+                                            .navigateToModuleSelection,
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      left: 6,
+                                      top: 6,
+                                    ),
+                                    child: Container(
+                                      constraints: const BoxConstraints(
+                                        maxHeight: 30,
+                                        maxWidth: 165,
+                                      ),
+                                      child: LoginButtonWidget(
+                                        onPressed: Login,
+                                      ),
                                     ),
                                   ),
                                 ],
                               ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  top:
-                                      MediaQuery.of(context).size.height * 0.05,
-                                ),
-                                child: txtUser,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  top:
-                                      MediaQuery.of(context).size.height * 0.05,
-                                ),
-                                child: txtPassword,
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                  top:
-                                      MediaQuery.of(context).size.height * 0.05,
-                                ),
-                                child: Wrap(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        top: 6.0,
-                                        left: 6.0,
-                                      ),
-                                      child: Container(
-                                        constraints: const BoxConstraints(
-                                          maxHeight: 30,
-                                          maxWidth: 165,
-                                        ),
-                                        child: const BackButtonSmallWidget(
-                                          onPressed: AdminNavigatorService
-                                              .navigateToModuleSelection,
-                                        ),
-                                      ),
+                            ),
+                            Visibility(
+                              visible: state.error.isNotEmpty,
+                              child: Wrap(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      bottom: 16.0,
+                                      top: 16.0,
                                     ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(
-                                        left: 6,
-                                        top: 6,
-                                      ),
-                                      child: Container(
-                                        constraints: const BoxConstraints(
-                                          maxHeight: 30,
-                                          maxWidth: 165,
-                                        ),
-                                        child: LoginButtonWidget(
-                                          onPressed: Login,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const Spacer(),
-                              Visibility(
-                                visible: state.error.isNotEmpty,
-                                child: Wrap(
-                                  children: [
-                                    Text(
+                                    child: Text(
                                       state.error,
                                       style: const TextStyle(
                                         color: Cores.corFonteErro,
                                       ),
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                ],
                               ),
-                              const Spacer(),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -191,7 +194,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  void Redirect(UsuarioModel usuario) {
+  Future Redirect(UsuarioModel usuario) async {
     String senhaPadrao = '123456';
     if (txtPassword.text == senhaPadrao) {
       ToastUtils.showCustomToastNotice(

@@ -85,7 +85,7 @@ class _CleanButtonWidgetState extends State<CleanButtonWidget> {
                     color: Cores.corTextoBranco,
                     fontSize: HelperFunctions.calculaFontSize(
                       context,
-                      16,
+                      14,
                     ),
                   ),
                 ),

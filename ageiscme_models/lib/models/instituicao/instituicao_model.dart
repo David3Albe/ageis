@@ -27,6 +27,16 @@ abstract class InstituicaoModel with _$InstituicaoModel {
     required int? tempoMin,
     @JsonKey(name: 'tStamp') required String? tstamp,
     double? escalaFonte,
+    int? tempoDescartarItemEstoque,
+    String? mensagemDescartarItemEstoque,
+    String? mensagemDescartarItemKitEstoque,
+    int? tempoDescartarKitEstoque,
+    String? mensagemDescartarKitEstoque,
+    int? tempoDescartarItemForaEstoque,
+    String? mensagemDescartarItemForaEstoque,
+    String? mensagemDescartarItemKitForaEstoque,
+    int? tempoDescartarKitForaEstoque,
+    String? mensagemDescartarKitForaEstoque,
   }) = _InstituicaoModel;
 
   factory InstituicaoModel.fromJson(Map<String, Object?> json) =>

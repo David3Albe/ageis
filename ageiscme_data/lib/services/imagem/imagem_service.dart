@@ -1,9 +1,10 @@
 import 'package:ageiscme_data/shared/app_config.dart';
 import 'package:ageiscme_data/shared/custom_dio.dart';
+import 'package:ageiscme_mixins/mixins/image/image_service_mixin.dart';
 import 'package:ageiscme_models/filters/imagem/imagem_filter.dart';
 import 'package:ageiscme_models/models/imagem/imagem_model.dart';
 
-class ImagemService {
+class ImagemService with ImageServiceMixin {
   final CustomDio _client = CustomDio();
   static const String BASE_URL = '/imagem/';
 

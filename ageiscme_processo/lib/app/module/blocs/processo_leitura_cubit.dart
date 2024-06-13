@@ -1,4 +1,5 @@
 import 'package:ageiscme_data/services/processo_leitura_andamento/processo_leitura_andamento_service.dart';
+import 'package:ageiscme_models/enums/command_result_alert_type.dart';
 import 'package:ageiscme_models/enums/decisao_enum.dart';
 import 'package:ageiscme_models/mixins/local_mixin.dart';
 import 'package:ageiscme_models/models/instituicao/instituicao_model.dart';
@@ -16,7 +17,9 @@ import 'package:ageiscme_processo/app/module/services/processo_navigator_service
 import 'package:ageiscme_processo/app/module/web_sockets/processo_leitura/processo_leitura_web_socket.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
+import 'package:compartilhados/componentes/toasts/warning_dialog.dart';
 import 'package:compartilhados/functions/window_manager/window_manager_helper.dart';
+import 'package:compartilhados/version/version.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/foundation.dart';
@@ -143,6 +146,7 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
           cod: state.processo.cod,
           dataHora: state.processo.dataHora,
           tstamp: state.processo.tstamp,
+          versao: Version.ACTUAL,
           leituraCodigo: ProcessoLeituraCodigoModel(
             codigoLido: codigoLido,
             avisosSonoro: [],
@@ -169,11 +173,20 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
     }
   }
 
-  void setException(String error) {
+  void setException(String error, CommandResultAlertType? alertType) {
     closeLoading();
-    ErrorUtils.showErrorDialog(null, [
-      'ERRO: ' + error,
-    ]);
+    if (alertType == null || alertType == CommandResultAlertType.Error) {
+      ErrorUtils.showErrorDialog(null, [
+        'ERRO: ' + error,
+      ]);
+      return;
+    }
+    if (alertType == CommandResultAlertType.Warning) {
+      WarningUtils.showWarningDialog(
+        null,
+        error,
+      );
+    }
   }
 
   Future onMessage(

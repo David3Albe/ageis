@@ -45,7 +45,7 @@ class _CheckboxListWidgetState extends State<CheckboxListWidget> {
                 title: Text(
                   filteredItems[index],
                   style: TextStyle(
-                    fontSize: HelperFunctions.calculaFontSize(context, 16),
+                    fontSize: HelperFunctions.calculaFontSize(context, 14),
                   ),
                 ),
                 value: widget.checkedList[index],

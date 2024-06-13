@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:compartilhados/cores/cores.dart';
 import 'package:compartilhados/fontes/fontes.dart';
+import 'package:compartilhados/functions/helper_functions.dart';
 import 'package:dependencias_comuns/typeahed_export.dart';
 import 'package:flutter/material.dart';
 
@@ -47,10 +48,14 @@ class CustomAutocompleteWidget<T> extends StatelessWidget {
           validator: validator,
           controller: controller,
           focusNode: focusNode,
+          style: Fontes.getRoboto(
+            fontSize: HelperFunctions.calculaFontSize(context, 14),
+          ),
           decoration: InputDecoration(
             label: Text(
               label,
               style: Fontes.getRoboto(
+                fontSize: HelperFunctions.calculaFontSize(context, 14),
                 letterSpacing: 0,
                 cor: Cores.corPlaceholderTextField,
               ),

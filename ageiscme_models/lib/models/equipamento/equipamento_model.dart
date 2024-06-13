@@ -57,7 +57,7 @@ abstract class EquipamentoModel
         codBarra: '',
         status: '0',
         validadeInspecao: null,
-        anoFabricacao: 0,
+        anoFabricacao: null,
         capacidadeLitro: null,
         codInstituicao: 0,
         ativo: true,

@@ -23,6 +23,10 @@ _$ProcessoRegistroModelImpl _$$ProcessoRegistroModelImplFromJson(Map json) =>
           : DateTime.parse(json['ultimaAlteracao'] as String),
       indicador: json['indicador'] as String?,
       biologico: json['biologico'] as String?,
+      leitura: json['leitura'] == null
+          ? null
+          : ProcessoLeituraModel.fromJson(
+              Map<String, Object?>.from(json['leitura'] as Map)),
       tstamp: json['tStamp'] as String?,
     );
 
@@ -38,5 +42,6 @@ Map<String, dynamic> _$$ProcessoRegistroModelImplToJson(
       'ultimaAlteracao': instance.ultimaAlteracao?.toIso8601String(),
       'indicador': instance.indicador,
       'biologico': instance.biologico,
+      'leitura': instance.leitura?.toJson(),
       'tStamp': instance.tstamp,
     };

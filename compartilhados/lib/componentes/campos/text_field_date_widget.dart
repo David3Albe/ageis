@@ -186,23 +186,38 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
     return TextFormField(
       focusNode: focusNode,
       controller: textController,
+      enableInteractiveSelection: true,
       keyboardType: TextInputType.datetime,
       inputFormatters: [
         LengthLimitingTextInputFormatter(widget.formato?.pattern?.length ?? 10),
         _DateInputFormatter(),
       ],
       style: Fontes.getRoboto(
-        fontSize: HelperFunctions.calculaFontSize(context, 16),
+        fontSize: HelperFunctions.calculaFontSize(context, 14),
+        cor: widget.readOnly ? Colors.grey : null,
       ),
       decoration: InputDecoration(
         label: Text(
           widget.placeholder,
           style: Fontes.getRoboto(
             letterSpacing: 0,
-            fontSize: HelperFunctions.calculaFontSize(context, 18),
+            fontSize: HelperFunctions.calculaFontSize(context, 14),
             cor: Cores.corPlaceholderTextField,
           ),
         ),
+        disabledBorder: null,
+        enabledBorder: null,
+        focusedBorder: widget.readOnly
+            ? const UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Colors.grey,
+                  width: 1.0,
+                ),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(1),
+                ),
+              )
+            : null,
         // isDense: true,
         suffixIcon: InkWell(
           onTap: () => _selectDate(context),
@@ -211,12 +226,11 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
             child: Icon(
               Icons.calendar_today,
               color: Cores.corPlaceholderTextField,
-              size: HelperFunctions.calculaFontSize(context, 20),
+              size: HelperFunctions.calculaFontSize(context, 14),
             ),
           ),
         ),
       ),
-      enabled: readOnly == false,
       readOnly: readOnly == true,
     );
   }

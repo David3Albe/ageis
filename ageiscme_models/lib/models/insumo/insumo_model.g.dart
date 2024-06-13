@@ -50,6 +50,7 @@ _$InsumoModelImpl _$$InsumoModelImplFromJson(Map json) => _$InsumoModelImpl(
           ? null
           : UnidadeMedidaModel.fromJson(
               Map<String, Object?>.from(json['unidadeMedidaItem'] as Map)),
+      codDestinoResiduo: json['codDestinoResiduo'] as int?,
     );
 
 Map<String, dynamic> _$$InsumoModelImplToJson(_$InsumoModelImpl instance) =>
@@ -84,4 +85,5 @@ Map<String, dynamic> _$$InsumoModelImplToJson(_$InsumoModelImpl instance) =>
       'fabricanteItem': instance.fabricanteItem?.toJson(),
       'fornecedorItem': instance.fornecedorItem?.toJson(),
       'unidadeMedidaItem': instance.unidadeMedidaItem?.toJson(),
+      'codDestinoResiduo': instance.codDestinoResiduo,
     };

@@ -82,6 +82,90 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
     },
   );
 
+  late final TextFieldNumberWidget txtTempoDescartarItemEstoque =
+      TextFieldNumberWidget(
+    placeholder: 'Tempo Descartar Item no Estoque (Dias)',
+    onChanged: (String str) {
+      instituicao.tempoDescartarItemEstoque =
+          str.isEmpty ? null : int.parse(str);
+    },
+  );
+
+  late final TextFieldStringWidget txtMensagemDescartarItemEstoque =
+      TextFieldStringWidget(
+    placeholder: 'Mensagem Descartar Item no Estoque',
+    onChanged: (String? str) {
+      instituicao.mensagemDescartarItemEstoque = str;
+    },
+  );
+
+  late final TextFieldStringWidget txtMensagemDescartarItemKitEstoque =
+      TextFieldStringWidget(
+    placeholder: 'Mensagem Descartar Item de Kit no Estoque',
+    onChanged: (String? str) {
+      instituicao.mensagemDescartarItemKitEstoque = str;
+    },
+  );
+
+  late final TextFieldNumberWidget txtTempoDescartarKitEstoque =
+      TextFieldNumberWidget(
+    placeholder: 'Tempo Descartar Kit no Estoque (Dias)',
+    onChanged: (String str) {
+      instituicao.tempoDescartarKitEstoque =
+          str.isEmpty ? null : int.parse(str);
+    },
+  );
+
+  late final TextFieldStringWidget txtMensagemDescartarKitEstoque =
+      TextFieldStringWidget(
+    placeholder: 'Mensagem Descartar Kit no Estoque',
+    onChanged: (String? str) {
+      instituicao.mensagemDescartarKitEstoque = str;
+    },
+  );
+
+  late final TextFieldNumberWidget txtTempoDescartarItemForaEstoque =
+      TextFieldNumberWidget(
+    placeholder: 'Tempo Descartar Item Fora do Estoque (Dias)',
+    onChanged: (String str) {
+      instituicao.tempoDescartarItemForaEstoque =
+          str.isEmpty ? null : int.parse(str);
+    },
+  );
+
+  late final TextFieldStringWidget txtMensagemDescartarItemForaEstoque =
+      TextFieldStringWidget(
+    placeholder: 'Mensagem Descartar Item Fora do Estoque',
+    onChanged: (String? str) {
+      instituicao.mensagemDescartarItemForaEstoque = str;
+    },
+  );
+
+  late final TextFieldStringWidget txtMensagemDescartarItemKitForaEstoque =
+      TextFieldStringWidget(
+    placeholder: 'Mensagem Descartar Item de Kit Fora do Estoque',
+    onChanged: (String? str) {
+      instituicao.mensagemDescartarItemKitForaEstoque = str;
+    },
+  );
+
+  late final TextFieldNumberWidget txtTempoDescartarKitForaEstoque =
+      TextFieldNumberWidget(
+    placeholder: 'Tempo Descartar Kit Fora do Estoque (Dias)',
+    onChanged: (String str) {
+      instituicao.tempoDescartarKitForaEstoque =
+          str.isEmpty ? null : int.parse(str);
+    },
+  );
+
+  late final TextFieldStringWidget txtMensagemDescartarKitForaEstoque =
+      TextFieldStringWidget(
+    placeholder: 'Mensagem Descartar Kit Fora do Estoque',
+    onChanged: (String? str) {
+      instituicao.mensagemDescartarKitForaEstoque = str;
+    },
+  );
+
   late final TextFieldStringWidget txtResponsavel = TextFieldStringWidget(
     placeholder: 'Responsável',
     onChanged: (String? str) {
@@ -128,6 +212,48 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
       ),
     );
 
+    txtMensagemDescartarItemEstoque.addValidator((str) {
+      if (str.length > 200) {
+        return 'Pode ter no máximo 200 caracteres';
+      }
+      return '';
+    });
+
+    txtMensagemDescartarItemForaEstoque.addValidator((str) {
+      if (str.length > 200) {
+        return 'Pode ter no máximo 200 caracteres';
+      }
+      return '';
+    });
+
+    txtMensagemDescartarItemKitEstoque.addValidator((str) {
+      if (str.length > 200) {
+        return 'Pode ter no máximo 200 caracteres';
+      }
+      return '';
+    });
+
+    txtMensagemDescartarItemKitForaEstoque.addValidator((str) {
+      if (str.length > 200) {
+        return 'Pode ter no máximo 200 caracteres';
+      }
+      return '';
+    });
+
+    txtMensagemDescartarKitEstoque.addValidator((str) {
+      if (str.length > 200) {
+        return 'Pode ter no máximo 200 caracteres';
+      }
+      return '';
+    });
+
+    txtMensagemDescartarKitForaEstoque.addValidator((str) {
+      if (str.length > 200) {
+        return 'Pode ter no máximo 200 caracteres';
+      }
+      return '';
+    });
+
     txtNome.addValidator((String str) {
       if (str.isEmpty) {
         return 'Obrigatório';
@@ -157,16 +283,36 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
   }
 
   void setFields() {
-    txtNome.text = instituicao.nome.toString();
-    txtEndereco.text = instituicao.endereco.toString();
-    txtResponsavel.text = instituicao.responsavel.toString();
-    txtDebugLevel.text = instituicao.debugLevel.toString();
-    txtTempoMin.text = instituicao.tempoMin.toString();
-    txtCnpj.text = instituicao.cnpj.toString();
-    txtFoneCme.text = instituicao.foneCme.toString();
-    txtFoneResponsavel.text = instituicao.foneResponsavel.toString();
+    txtNome.text = instituicao.nome?.toString() ?? '';
+    txtEndereco.text = instituicao.endereco?.toString() ?? '';
+    txtResponsavel.text = instituicao.responsavel?.toString() ?? '';
+    txtDebugLevel.text = instituicao.debugLevel?.toString() ?? '';
+    txtTempoMin.text = instituicao.tempoMin?.toString() ?? '';
+    txtCnpj.text = instituicao.cnpj?.toString() ?? '';
+    txtFoneCme.text = instituicao.foneCme?.toString() ?? '';
+    txtFoneResponsavel.text = instituicao.foneResponsavel?.toString() ?? '';
     txtEscalaFonte.text =
-        instituicao.escalaFonte.toString().replaceAll('.', ',');
+        instituicao.escalaFonte?.toString().replaceAll('.', ',') ?? '';
+    txtTempoDescartarItemEstoque.text =
+        instituicao.tempoDescartarItemEstoque?.toString() ?? '';
+    txtTempoDescartarKitEstoque.text =
+        instituicao.tempoDescartarKitEstoque?.toString() ?? '';
+    txtTempoDescartarItemForaEstoque.text =
+        instituicao.tempoDescartarItemForaEstoque?.toString() ?? '';
+    txtTempoDescartarKitForaEstoque.text =
+        instituicao.tempoDescartarKitForaEstoque?.toString() ?? '';
+    txtMensagemDescartarItemEstoque.text =
+        instituicao.mensagemDescartarItemEstoque?.toString() ?? '';
+    txtMensagemDescartarItemKitEstoque.text =
+        instituicao.mensagemDescartarItemKitEstoque?.toString() ?? '';
+    txtMensagemDescartarKitEstoque.text =
+        instituicao.mensagemDescartarKitEstoque?.toString() ?? '';
+    txtMensagemDescartarItemForaEstoque.text =
+        instituicao.mensagemDescartarItemForaEstoque?.toString() ?? '';
+    txtMensagemDescartarItemKitForaEstoque.text =
+        instituicao.mensagemDescartarItemKitForaEstoque?.toString() ?? '';
+    txtMensagemDescartarKitForaEstoque.text =
+        instituicao.mensagemDescartarKitForaEstoque?.toString() ?? '';
 
     titulo = 'Cadastro de Instituições';
     if (instituicao.cod != 0) {
@@ -195,10 +341,8 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
             actionsPadding: const EdgeInsets.all(8.0),
             title: Row(
               children: [
-                Expanded(
-                  child: TitleWidget(
-                    text: titulo,
-                  ),
+                TitleWidget(
+                  text: titulo,
                 ),
                 const Spacer(),
                 CloseButtonWidget(
@@ -207,11 +351,14 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
               ],
             ),
             content: Container(
-              constraints: BoxConstraints(
-                minWidth: size.width * .5,
-                minHeight: size.height * .5,
-                maxHeight: size.height * .8,
+              constraints: const BoxConstraints(
+                minWidth: 400,
+                maxWidth: 1800,
+                minHeight: 600,
+                maxHeight: 1000,
               ),
+              height: size.height * 0.9,
+              width: size.width * 0.9,
               child: SingleChildScrollView(
                 padding: const EdgeInsets.only(right: 14),
                 child: Column(
@@ -343,6 +490,96 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
                         children: [
                           Expanded(
                             child: txtEscalaFonte,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: txtTempoDescartarItemEstoque,
+                          ),
+                          const SizedBox(width: 25.0),
+                          Expanded(
+                            flex: 6,
+                            child: txtMensagemDescartarItemEstoque,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child: Row(
+                        children: [
+                          const Spacer(flex: 2),
+                          const SizedBox(width: 25.0),
+                          Expanded(
+                            flex: 6,
+                            child: txtMensagemDescartarItemKitEstoque,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: txtTempoDescartarKitEstoque,
+                          ),
+                          const SizedBox(width: 25.0),
+                          Expanded(
+                            flex: 6,
+                            child: txtMensagemDescartarKitEstoque,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: txtTempoDescartarItemForaEstoque,
+                          ),
+                          const SizedBox(width: 25.0),
+                          Expanded(
+                            flex: 6,
+                            child: txtMensagemDescartarItemForaEstoque,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child: Row(
+                        children: [
+                          const Spacer(flex: 2),
+                          const SizedBox(width: 25.0),
+                          Expanded(
+                            flex: 6,
+                            child: txtMensagemDescartarItemKitForaEstoque,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            child: txtTempoDescartarKitForaEstoque,
+                          ),
+                          const SizedBox(width: 25.0),
+                          Expanded(
+                            flex: 6,
+                            child: txtMensagemDescartarKitForaEstoque,
                           ),
                         ],
                       ),

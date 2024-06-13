@@ -1,3 +1,4 @@
+import 'package:ageiscme_models/models/processo_leitura/processo_leitura_model.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
 
@@ -17,7 +18,8 @@ sealed class ProcessoRegistroModel with _$ProcessoRegistroModel {
     required int? codInstituicao,
     required DateTime? ultimaAlteracao,
     required String? indicador,
-    required String? biologico, 
+    required String? biologico,
+    required ProcessoLeituraModel? leitura,
     @JsonKey(name: 'tStamp') required String? tstamp,
   }) = _ProcessoRegistroModel;
 
@@ -25,7 +27,7 @@ sealed class ProcessoRegistroModel with _$ProcessoRegistroModel {
       _$ProcessoRegistroModelFromJson(json);
 
   static ProcessoRegistroModel copy(ProcessoRegistroModel processoRegistro) {
-    return ProcessoRegistroModel.fromJson(processoRegistro.toJson()); 
+    return ProcessoRegistroModel.fromJson(processoRegistro.toJson());
   }
 
   factory ProcessoRegistroModel.empty() => ProcessoRegistroModel(
@@ -39,5 +41,6 @@ sealed class ProcessoRegistroModel with _$ProcessoRegistroModel {
         codInstituicao: 0,
         ultimaAlteracao: null,
         tstamp: '',
+        leitura: null,
       );
 }

@@ -196,6 +196,11 @@ class _UsuarioPageState extends State<UsuarioPage> {
   void openModal(BuildContext context, UsuarioModel usuario) async {
     bool fullDataLoaded = await loadFullData(usuario);
     if (!fullDataLoaded) return;
+    if (usuario.cod == 0 || usuario.cod == null) {
+      usuario.senha = '123456';
+    } else {
+      usuario.senha = null;
+    }
 
     (bool, String)? result = await showDialog<(bool, String)>(
       barrierDismissible: false,

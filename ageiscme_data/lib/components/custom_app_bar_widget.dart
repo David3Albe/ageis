@@ -1,11 +1,10 @@
 import 'dart:convert';
 
+import 'package:ageiscme_data/components/image_widget.dart';
 import 'package:ageiscme_data/cubits/imagem_cubit/imagem_cubit.dart';
-import 'package:ageiscme_models/filters/imagem/imagem_filter.dart';
 import 'package:ageiscme_models/models/imagem/imagem_model.dart';
 import 'package:compartilhados/componentes/appbar/logout_widget.dart';
 import 'package:compartilhados/cores/cores.dart';
-import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBarWidget extends StatefulWidget {
@@ -26,23 +25,14 @@ class CustomAppBarWidget extends StatefulWidget {
 }
 
 class _CustomAppBarWidgetState extends State<CustomAppBarWidget> {
-  late final ImagemCubit cubit;
 
   @override
   void initState() {
-    cubit = ImagemCubit();
-    cubit.loadFilter(
-      ImagemFilter(
-        apenasAtivas: true,
-        identificadores: ['logo_esquerdo', 'logo_direito'],
-      ),
-    );
     super.initState();
   }
 
   @override
   void dispose() {
-    cubit.close();
     super.dispose();
   }
 
@@ -83,37 +73,29 @@ class _CustomAppBarWidgetState extends State<CustomAppBarWidget> {
         actions: [
           Padding(
             padding: EdgeInsets.only(left: resumeView ? 36.0 : 4.0),
-            child: BlocBuilder<ImagemCubit, ImagemState>(
-              bloc: cubit,
-              builder: (context, state) {
-                return SizedBox(
-                  width: veryMicroSizeImage
-                      ? 70
-                      : microSizeImage
-                          ? 100
-                          : smallSizeImage
-                              ? 150
-                              : null,
-                  child: loadImagem('logo_esquerdo', state) ?? const SizedBox(),
-                );
-              },
+            child: ImageWidget(
+              width: veryMicroSizeImage
+                  ? 70
+                  : microSizeImage
+                      ? 100
+                      : smallSizeImage
+                          ? 150
+                          : 200,
+              identificador: 'logo_esquerdo',
             ),
           ),
-          widget.title == null ? const Spacer() : Expanded(child: Center(child: widget.title!)),
-          BlocBuilder<ImagemCubit, ImagemState>(
-            bloc: cubit,
-            builder: (context, state) {
-              return SizedBox(
-                width: veryMicroSizeImage
-                    ? 70
-                    : microSizeImage
-                        ? 100
-                        : smallSizeImage
-                            ? 150
-                            : null,
-                child: loadImagem('logo_direito', state) ?? const SizedBox(),
-              );
-            },
+          widget.title == null
+              ? const Spacer()
+              : Expanded(child: Center(child: widget.title!)),
+          ImageWidget(
+            width: veryMicroSizeImage
+                ? 70
+                : microSizeImage
+                    ? 100
+                    : smallSizeImage
+                        ? 150
+                        : 200,
+            identificador: 'logo_direito',
           ),
           Center(child: LogoutWidget(onLogout: widget.onLogout)),
         ],

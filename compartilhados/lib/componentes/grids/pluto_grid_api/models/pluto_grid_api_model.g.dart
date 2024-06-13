@@ -13,6 +13,7 @@ _$PlutoGridApiModelImpl _$$PlutoGridApiModelImplFromJson(Map json) =>
           .map((e) => PlutoGridApiFilterModel.fromJson(
               Map<String, Object?>.from(e as Map)))
           .toList(),
+      loadRemaining: json['loadRemaining'] as bool,
       sort: json['sort'] == null
           ? null
           : PlutoGridApiSortModel.fromJson(
@@ -24,5 +25,6 @@ Map<String, dynamic> _$$PlutoGridApiModelImplToJson(
     <String, dynamic>{
       'page': instance.page,
       'filters': instance.filters.map((e) => e.toJson()).toList(),
+      'loadRemaining': instance.loadRemaining,
       'sort': instance.sort?.toJson(),
     };

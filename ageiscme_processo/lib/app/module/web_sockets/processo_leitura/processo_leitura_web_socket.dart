@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:ageiscme_data/shared/app_config.dart';
+import 'package:ageiscme_models/enums/command_result_alert_type.dart';
 import 'package:ageiscme_models/models/result/command_result_model.dart';
 import 'package:ageiscme_processo/app/module/models/processo_leitura/processo_leitura_montagem_model.dart';
 import 'package:dependencias_comuns/web_socket_export.dart';
@@ -13,7 +14,7 @@ class ProcessoLeituraWebSocket {
   static const String _webSocketRoute = '/ws/processo-leitura-montagem';
 
   Function((String, ProcessoLeituraMontagemModel)) onMessageReceived;
-  Function(String) onError;
+  Function(String, CommandResultAlertType?) onError;
   Function() handleKey;
   Function(String) onConnectionLost;
   Timer? TIMER;
@@ -56,6 +57,7 @@ class ProcessoLeituraWebSocket {
         if (closeCode == 1006 || closeCode == 1005) {
           onError(
             'A conexão com o servidor foi perdida, tente novamente e se o problema continuar entre em contato com o suporte. $closeCode',
+            null,
           );
         }
       },
@@ -64,7 +66,7 @@ class ProcessoLeituraWebSocket {
         CommandResultModel result =
             CommandResultModel.fromJson(jsonDecode(event));
         if (!result.success) {
-          onError(result.message);
+          onError(result.message, result.alertType);
           return;
         }
         (String, ProcessoLeituraMontagemModel)? leitura = (

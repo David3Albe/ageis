@@ -346,21 +346,6 @@ class ItemMenuService {
       );
     }
 
-    if (direitosUsuario.contains(DireitoEnum.UnidadesMedidasConsulta) ||
-        direitosUsuario.contains(DireitoEnum.UnidadesMedidasManutencao) ||
-        ignorarDireitos) {
-      menuItemInsumo.addChildren(
-        ItemMenuModel(
-          'Unidade de Medidas',
-          route: '/material/unidade-medida',
-          rights: [
-            DireitoEnum.UnidadesMedidasConsulta,
-            DireitoEnum.UnidadesMedidasManutencao,
-          ],
-        ),
-      );
-    }
-
     if (direitosUsuario.contains(DireitoEnum.InsumosDepositoConsulta) ||
         direitosUsuario.contains(DireitoEnum.InsumosDepositoManutencao) ||
         ignorarDireitos) {
@@ -482,6 +467,21 @@ class ItemMenuService {
           route: '/insumo/solicitacao-material-expedicoes',
           rights: [
             DireitoEnum.InsumosSolicitacaoMaterialExpedicoes,
+          ],
+        ),
+      );
+    }
+
+    if (direitosUsuario.contains(DireitoEnum.UnidadesMedidasConsulta) ||
+        direitosUsuario.contains(DireitoEnum.UnidadesMedidasManutencao) ||
+        ignorarDireitos) {
+      menuItemInsumo.addChildren(
+        ItemMenuModel(
+          'Unidade de Medidas',
+          route: '/material/unidade-medida',
+          rights: [
+            DireitoEnum.UnidadesMedidasConsulta,
+            DireitoEnum.UnidadesMedidasManutencao,
           ],
         ),
       );
@@ -713,6 +713,53 @@ class ItemMenuService {
           rights: [
             DireitoEnum.MotivosConsulta,
             DireitoEnum.MotivosManutencao,
+          ],
+        ),
+      );
+    }
+
+    if (direitosUsuario.contains(DireitoEnum.AnormalidadesTiposConsulta) ||
+        direitosUsuario.contains(DireitoEnum.AnormalidadesTiposManutencao) ||
+        ignorarDireitos) {
+      menuItemProcesso.addChildren(
+        ItemMenuModel(
+          'Tipos de Anormalidade',
+          route: '/processo/anormalidade-tipo',
+          rights: [
+            DireitoEnum.AnormalidadesTiposConsulta,
+            DireitoEnum.AnormalidadesTiposManutencao,
+          ],
+        ),
+      );
+    }
+
+    if (direitosUsuario.contains(DireitoEnum.AnormalidadesRegistrosConsulta) ||
+        direitosUsuario
+            .contains(DireitoEnum.AnormalidadesRegistrosManutencao) ||
+        ignorarDireitos) {
+      menuItemProcesso.addChildren(
+        ItemMenuModel(
+          'Registros de Anormalidade',
+          route: '/processo/anormalidade',
+          rights: [
+            DireitoEnum.AnormalidadesRegistrosConsulta,
+            DireitoEnum.AnormalidadesRegistrosManutencao,
+          ],
+        ),
+      );
+    }
+
+    if (direitosUsuario.contains(DireitoEnum.AnormalidadesRegistrosConsulta) ||
+        direitosUsuario
+            .contains(DireitoEnum.AnormalidadesRegistrosManutencao) ||
+        ignorarDireitos) {
+      menuItemProcesso.addChildren(
+        ItemMenuModel(
+          'Consulta de Anormalidades',
+          route: '/processo/consulta-anormalidade',
+          rights: [
+            DireitoEnum.AnormalidadesRegistrosConsulta,
+            DireitoEnum.AnormalidadesRegistrosManutencao,
           ],
         ),
       );

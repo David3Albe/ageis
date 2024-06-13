@@ -1,11 +1,12 @@
+import 'package:ageiscme_mixins/mixins/image/image_mixin.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'imagem_model.freezed.dart';
 part 'imagem_model.g.dart';
 
 @unfreezed
-abstract class ImagemModel with _$ImagemModel {
-  const ImagemModel._();
+abstract class ImagemModel with _$ImagemModel, ImagemMixin {
+  ImagemModel._();
 
   factory ImagemModel({
     required int? cod,

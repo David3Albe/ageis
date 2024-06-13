@@ -87,6 +87,8 @@ mixin _$InsumoModel {
       throw _privateConstructorUsedError;
   set unidadeMedidaItem(UnidadeMedidaModel? value) =>
       throw _privateConstructorUsedError;
+  int? get codDestinoResiduo => throw _privateConstructorUsedError;
+  set codDestinoResiduo(int? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -130,7 +132,8 @@ abstract class $InsumoModelCopyWith<$Res> {
       ItemModel? item,
       FabricanteModel? fabricanteItem,
       FornecedorModel? fornecedorItem,
-      UnidadeMedidaModel? unidadeMedidaItem});
+      UnidadeMedidaModel? unidadeMedidaItem,
+      int? codDestinoResiduo});
 
   $ItemModelCopyWith<$Res>? get item;
   $FabricanteModelCopyWith<$Res>? get fabricanteItem;
@@ -181,6 +184,7 @@ class _$InsumoModelCopyWithImpl<$Res, $Val extends InsumoModel>
     Object? fabricanteItem = freezed,
     Object? fornecedorItem = freezed,
     Object? unidadeMedidaItem = freezed,
+    Object? codDestinoResiduo = freezed,
   }) {
     return _then(_value.copyWith(
       cod: freezed == cod
@@ -303,6 +307,10 @@ class _$InsumoModelCopyWithImpl<$Res, $Val extends InsumoModel>
           ? _value.unidadeMedidaItem
           : unidadeMedidaItem // ignore: cast_nullable_to_non_nullable
               as UnidadeMedidaModel?,
+      codDestinoResiduo: freezed == codDestinoResiduo
+          ? _value.codDestinoResiduo
+          : codDestinoResiduo // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 
@@ -394,7 +402,8 @@ abstract class _$$InsumoModelImplCopyWith<$Res>
       ItemModel? item,
       FabricanteModel? fabricanteItem,
       FornecedorModel? fornecedorItem,
-      UnidadeMedidaModel? unidadeMedidaItem});
+      UnidadeMedidaModel? unidadeMedidaItem,
+      int? codDestinoResiduo});
 
   @override
   $ItemModelCopyWith<$Res>? get item;
@@ -447,6 +456,7 @@ class __$$InsumoModelImplCopyWithImpl<$Res>
     Object? fabricanteItem = freezed,
     Object? fornecedorItem = freezed,
     Object? unidadeMedidaItem = freezed,
+    Object? codDestinoResiduo = freezed,
   }) {
     return _then(_$InsumoModelImpl(
       cod: freezed == cod
@@ -569,6 +579,10 @@ class __$$InsumoModelImplCopyWithImpl<$Res>
           ? _value.unidadeMedidaItem
           : unidadeMedidaItem // ignore: cast_nullable_to_non_nullable
               as UnidadeMedidaModel?,
+      codDestinoResiduo: freezed == codDestinoResiduo
+          ? _value.codDestinoResiduo
+          : codDestinoResiduo // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -606,7 +620,8 @@ class _$InsumoModelImpl extends _InsumoModel with DiagnosticableTreeMixin {
       required this.item,
       required this.fabricanteItem,
       required this.fornecedorItem,
-      required this.unidadeMedidaItem})
+      required this.unidadeMedidaItem,
+      this.codDestinoResiduo})
       : super._();
 
   factory _$InsumoModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -673,10 +688,12 @@ class _$InsumoModelImpl extends _InsumoModel with DiagnosticableTreeMixin {
   FornecedorModel? fornecedorItem;
   @override
   UnidadeMedidaModel? unidadeMedidaItem;
+  @override
+  int? codDestinoResiduo;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'InsumoModel(cod: $cod, codErp3Albe: $codErp3Albe, nome: $nome, descricao: $descricao, unidadeMedida: $unidadeMedida, embalagem: $embalagem, fabricante: $fabricante, fornecedor: $fornecedor, registroAnvisa: $registroAnvisa, codBarra: $codBarra, qtdeEmbalagem: $qtdeEmbalagem, estoqueMaximo: $estoqueMaximo, estoqueMinimo: $estoqueMinimo, pontoReposicao: $pontoReposicao, codItem: $codItem, prazoEntregaDias: $prazoEntregaDias, validadeAposAtivacaoDias: $validadeAposAtivacaoDias, controleEstoque: $controleEstoque, testeInsumoObrigatorio: $testeInsumoObrigatorio, ativo: $ativo, codFabricante: $codFabricante, codFornecedor: $codFornecedor, codUnidadeMedida: $codUnidadeMedida, codInstituicao: $codInstituicao, ultimaAlteracao: $ultimaAlteracao, tstamp: $tstamp, item: $item, fabricanteItem: $fabricanteItem, fornecedorItem: $fornecedorItem, unidadeMedidaItem: $unidadeMedidaItem)';
+    return 'InsumoModel(cod: $cod, codErp3Albe: $codErp3Albe, nome: $nome, descricao: $descricao, unidadeMedida: $unidadeMedida, embalagem: $embalagem, fabricante: $fabricante, fornecedor: $fornecedor, registroAnvisa: $registroAnvisa, codBarra: $codBarra, qtdeEmbalagem: $qtdeEmbalagem, estoqueMaximo: $estoqueMaximo, estoqueMinimo: $estoqueMinimo, pontoReposicao: $pontoReposicao, codItem: $codItem, prazoEntregaDias: $prazoEntregaDias, validadeAposAtivacaoDias: $validadeAposAtivacaoDias, controleEstoque: $controleEstoque, testeInsumoObrigatorio: $testeInsumoObrigatorio, ativo: $ativo, codFabricante: $codFabricante, codFornecedor: $codFornecedor, codUnidadeMedida: $codUnidadeMedida, codInstituicao: $codInstituicao, ultimaAlteracao: $ultimaAlteracao, tstamp: $tstamp, item: $item, fabricanteItem: $fabricanteItem, fornecedorItem: $fornecedorItem, unidadeMedidaItem: $unidadeMedidaItem, codDestinoResiduo: $codDestinoResiduo)';
   }
 
   @override
@@ -715,7 +732,8 @@ class _$InsumoModelImpl extends _InsumoModel with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('item', item))
       ..add(DiagnosticsProperty('fabricanteItem', fabricanteItem))
       ..add(DiagnosticsProperty('fornecedorItem', fornecedorItem))
-      ..add(DiagnosticsProperty('unidadeMedidaItem', unidadeMedidaItem));
+      ..add(DiagnosticsProperty('unidadeMedidaItem', unidadeMedidaItem))
+      ..add(DiagnosticsProperty('codDestinoResiduo', codDestinoResiduo));
   }
 
   @JsonKey(ignore: true)
@@ -763,7 +781,8 @@ abstract class _InsumoModel extends InsumoModel {
       required ItemModel? item,
       required FabricanteModel? fabricanteItem,
       required FornecedorModel? fornecedorItem,
-      required UnidadeMedidaModel? unidadeMedidaItem}) = _$InsumoModelImpl;
+      required UnidadeMedidaModel? unidadeMedidaItem,
+      int? codDestinoResiduo}) = _$InsumoModelImpl;
   _InsumoModel._() : super._();
 
   factory _InsumoModel.fromJson(Map<String, dynamic> json) =
@@ -861,6 +880,9 @@ abstract class _InsumoModel extends InsumoModel {
   @override
   UnidadeMedidaModel? get unidadeMedidaItem;
   set unidadeMedidaItem(UnidadeMedidaModel? value);
+  @override
+  int? get codDestinoResiduo;
+  set codDestinoResiduo(int? value);
   @override
   @JsonKey(ignore: true)
   _$$InsumoModelImplCopyWith<_$InsumoModelImpl> get copyWith =>

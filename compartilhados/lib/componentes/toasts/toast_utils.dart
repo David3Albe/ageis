@@ -15,50 +15,66 @@ enum ToastType {
 class ToastUtils {
   static BuildContext? routerOutletContext;
   static const int SECONDS_DURATION = 7;
+  static const int SECONDS_DURATION_BIG = 12;
   static OverlayState? state;
 
   static void showCustomToastSucess(BuildContext? context, String message) =>
       insertToast(
-        routerOutletContext == null ? context! : routerOutletContext!,
-        _createOverlayEntry(
-          message,
-          ToastType.success,
+        context: routerOutletContext == null ? context! : routerOutletContext!,
+        overlay: _createOverlayEntry(
+          message: message,
+          type: ToastType.success,
         ),
       );
 
   static void showCustomToastError(BuildContext? context, String message) =>
       insertToast(
-        routerOutletContext == null ? context! : routerOutletContext!,
-        _createOverlayEntry(
-          message,
-          ToastType.error,
+        context: routerOutletContext == null ? context! : routerOutletContext!,
+        overlay: _createOverlayEntry(
+          message: message,
+          type: ToastType.error,
         ),
       );
 
   static void showCustomToastWarning(BuildContext? context, String message) =>
       insertToast(
-        routerOutletContext == null ? context! : routerOutletContext!,
-        _createOverlayEntry(
-          message,
-          ToastType.warning,
+        context: routerOutletContext == null ? context! : routerOutletContext!,
+        overlay: _createOverlayEntry(
+          message: message,
+          type: ToastType.warning,
         ),
       );
 
   static void showCustomToastNotice(BuildContext? context, String message) =>
       insertToast(
-        routerOutletContext == null ? context! : routerOutletContext!,
-        _createOverlayEntry(
-          message,
-          ToastType.notice,
+        context: routerOutletContext == null ? context! : routerOutletContext!,
+        overlay: _createOverlayEntry(
+          message: message,
+          type: ToastType.notice,
         ),
       );
 
-  static void insertToast(BuildContext context, OverlayEntry? overlay) {
+  static void showCustomToastNoticeBig(BuildContext? context, String message) =>
+      insertToast(
+        context: routerOutletContext == null ? context! : routerOutletContext!,
+        overlay: _createOverlayEntry(
+          message: message,
+          type: ToastType.notice,
+          big: true,
+        ),
+        big: true,
+      );
+
+  static void insertToast({
+    required BuildContext context,
+    required OverlayEntry? overlay,
+    bool big = false,
+  }) {
     OverlayState? state = Overlay.maybeOf(context);
     if (state != null) {
       if (overlay != null) state.insert(overlay);
       Timer(
-        const Duration(seconds: SECONDS_DURATION),
+         Duration(seconds: big ? SECONDS_DURATION_BIG : SECONDS_DURATION),
         () {
           if (overlay != null) overlay.remove();
         },
@@ -120,17 +136,18 @@ class ToastUtils {
     }
   }
 
-  static OverlayEntry _createOverlayEntry(
-    String message,
-    ToastType type,
-  ) {
+  static OverlayEntry _createOverlayEntry({
+    required String message,
+    required ToastType type,
+    bool big = false,
+  }) {
     OverlayEntry? entry;
     entry = OverlayEntry(
       maintainState: false,
       builder: (context) {
         return Positioned(
           top: 10,
-          width: 400,
+          width: big == true ? 700 : 400,
           right: 10,
           child: Material(
             elevation: 10.0,
@@ -171,7 +188,7 @@ class ToastUtils {
                         child: Wrap(
                           children: [
                             Container(
-                              width: 260,
+                              width: big == true ? 560 : 260,
                               child: Text(
                                 message,
                                 softWrap: true,

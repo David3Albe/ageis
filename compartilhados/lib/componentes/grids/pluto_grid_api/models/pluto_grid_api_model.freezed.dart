@@ -26,6 +26,8 @@ mixin _$PlutoGridApiModel {
       throw _privateConstructorUsedError;
   set filters(List<PlutoGridApiFilterModel> value) =>
       throw _privateConstructorUsedError;
+  bool get loadRemaining => throw _privateConstructorUsedError;
+  set loadRemaining(bool value) => throw _privateConstructorUsedError;
   PlutoGridApiSortModel? get sort => throw _privateConstructorUsedError;
   set sort(PlutoGridApiSortModel? value) => throw _privateConstructorUsedError;
 
@@ -44,6 +46,7 @@ abstract class $PlutoGridApiModelCopyWith<$Res> {
   $Res call(
       {int page,
       List<PlutoGridApiFilterModel> filters,
+      bool loadRemaining,
       PlutoGridApiSortModel? sort});
 
   $PlutoGridApiSortModelCopyWith<$Res>? get sort;
@@ -64,6 +67,7 @@ class _$PlutoGridApiModelCopyWithImpl<$Res, $Val extends PlutoGridApiModel>
   $Res call({
     Object? page = null,
     Object? filters = null,
+    Object? loadRemaining = null,
     Object? sort = freezed,
   }) {
     return _then(_value.copyWith(
@@ -75,6 +79,10 @@ class _$PlutoGridApiModelCopyWithImpl<$Res, $Val extends PlutoGridApiModel>
           ? _value.filters
           : filters // ignore: cast_nullable_to_non_nullable
               as List<PlutoGridApiFilterModel>,
+      loadRemaining: null == loadRemaining
+          ? _value.loadRemaining
+          : loadRemaining // ignore: cast_nullable_to_non_nullable
+              as bool,
       sort: freezed == sort
           ? _value.sort
           : sort // ignore: cast_nullable_to_non_nullable
@@ -106,6 +114,7 @@ abstract class _$$PlutoGridApiModelImplCopyWith<$Res>
   $Res call(
       {int page,
       List<PlutoGridApiFilterModel> filters,
+      bool loadRemaining,
       PlutoGridApiSortModel? sort});
 
   @override
@@ -125,6 +134,7 @@ class __$$PlutoGridApiModelImplCopyWithImpl<$Res>
   $Res call({
     Object? page = null,
     Object? filters = null,
+    Object? loadRemaining = null,
     Object? sort = freezed,
   }) {
     return _then(_$PlutoGridApiModelImpl(
@@ -136,6 +146,10 @@ class __$$PlutoGridApiModelImplCopyWithImpl<$Res>
           ? _value.filters
           : filters // ignore: cast_nullable_to_non_nullable
               as List<PlutoGridApiFilterModel>,
+      loadRemaining: null == loadRemaining
+          ? _value.loadRemaining
+          : loadRemaining // ignore: cast_nullable_to_non_nullable
+              as bool,
       sort: freezed == sort
           ? _value.sort
           : sort // ignore: cast_nullable_to_non_nullable
@@ -148,7 +162,10 @@ class __$$PlutoGridApiModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$PlutoGridApiModelImpl implements _PlutoGridApiModel {
   _$PlutoGridApiModelImpl(
-      {required this.page, required this.filters, this.sort});
+      {required this.page,
+      required this.filters,
+      required this.loadRemaining,
+      this.sort});
 
   factory _$PlutoGridApiModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$PlutoGridApiModelImplFromJson(json);
@@ -158,11 +175,13 @@ class _$PlutoGridApiModelImpl implements _PlutoGridApiModel {
   @override
   List<PlutoGridApiFilterModel> filters;
   @override
+  bool loadRemaining;
+  @override
   PlutoGridApiSortModel? sort;
 
   @override
   String toString() {
-    return 'PlutoGridApiModel(page: $page, filters: $filters, sort: $sort)';
+    return 'PlutoGridApiModel(page: $page, filters: $filters, loadRemaining: $loadRemaining, sort: $sort)';
   }
 
   @JsonKey(ignore: true)
@@ -184,6 +203,7 @@ abstract class _PlutoGridApiModel implements PlutoGridApiModel {
   factory _PlutoGridApiModel(
       {required int page,
       required List<PlutoGridApiFilterModel> filters,
+      required bool loadRemaining,
       PlutoGridApiSortModel? sort}) = _$PlutoGridApiModelImpl;
 
   factory _PlutoGridApiModel.fromJson(Map<String, dynamic> json) =
@@ -195,6 +215,9 @@ abstract class _PlutoGridApiModel implements PlutoGridApiModel {
   @override
   List<PlutoGridApiFilterModel> get filters;
   set filters(List<PlutoGridApiFilterModel> value);
+  @override
+  bool get loadRemaining;
+  set loadRemaining(bool value);
   @override
   PlutoGridApiSortModel? get sort;
   set sort(PlutoGridApiSortModel? value);

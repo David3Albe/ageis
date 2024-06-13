@@ -1,4 +1,5 @@
 import 'package:ageiscme_data/shared/custom_dio.dart';
+import 'package:ageiscme_models/dto/item/drop_down_search/item_drop_down_search_dto.dart';
 import 'package:ageiscme_models/dto/item/inserir_rapido/gerar_inserir/item_inserir_rapido_gerar_inserir_dto.dart';
 import 'package:ageiscme_models/dto/item/inserir_rapido/search/item_inserir_rapido_search_dto.dart';
 import 'package:ageiscme_models/dto/item/item_etiqueta/item_etiqueta_dto.dart';
@@ -7,6 +8,7 @@ import 'package:ageiscme_models/dto/item/trocar_etiqueta/item_trocar_etiqueta_dt
 import 'package:ageiscme_models/dto/item_save_result/item_save_result_dto.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/response_dto/item/drop_down_search/item_drop_down_search_response_dto.dart';
 import 'package:ageiscme_models/response_dto/item/inserir_rapido/gerar_inserir/item_inserir_rapido_gerar_inserir_response_dto.dart';
 import 'package:ageiscme_models/response_dto/item/inserir_rapido/search/item_inserir_rapido_search_response_dto.dart';
 import 'package:ageiscme_models/response_dto/item/trocar_etiqueta/item_trocar_etiqueta_response_dto.dart';
@@ -119,4 +121,15 @@ class ItemService {
       (dynamic json) => ItemTrocarEtiquetaResponseDTO.fromJson(json),
     );
   }
+
+    Future<(String, List<ItemDropDownSearchResponseDTO>)?> dropDownSearch(
+    ItemDropDownSearchDTO dto,
+  ) async =>
+      await _client.post(
+        _baseRoute + 'drop-down-search',
+        dto,
+        (dynamic json) => (json as List<dynamic>)
+            .map((e) => ItemDropDownSearchResponseDTO.fromJson(e))
+            .toList(),
+      );
 }

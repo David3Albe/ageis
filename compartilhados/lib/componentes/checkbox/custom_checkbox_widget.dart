@@ -27,8 +27,10 @@ class CustomCheckboxWidget extends StatefulWidget {
   final SetValueBuilder? setValue;
 
   @override
-  State<CustomCheckboxWidget> createState() =>
-      _CustomCheckboxWidgetState(checked: checked, onClick: onClick);
+  State<CustomCheckboxWidget> createState() => _CustomCheckboxWidgetState(
+        checked: checked,
+        onClick: onClick,
+      );
 }
 
 class _CustomCheckboxWidgetState extends State<CustomCheckboxWidget> {
@@ -48,9 +50,7 @@ class _CustomCheckboxWidgetState extends State<CustomCheckboxWidget> {
       context,
       setValueFunction,
     );
-    if (checked == null) {
-      checked = false;
-    }
+    if (checked == null) checked = false;
     return Row(
       mainAxisAlignment: widget.align,
       children: [
@@ -89,7 +89,7 @@ class _CustomCheckboxWidgetState extends State<CustomCheckboxWidget> {
             widget.text,
             style: TextStyle(
               fontSize: widget.fontSize ??
-                  HelperFunctions.calculaFontSize(context, 16),
+                  HelperFunctions.calculaFontSize(context, 14),
             ),
           ),
         ),

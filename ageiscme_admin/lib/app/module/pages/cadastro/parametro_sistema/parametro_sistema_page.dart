@@ -97,8 +97,11 @@ class _ParametroSistemaPageState extends State<ParametroSistemaPage> {
     );
   }
 
-  void openModal(BuildContext context, ParametroSistemaModel parametroSistema) {
-    showDialog<(bool, String)>(
+  Future openModal(
+    BuildContext context,
+    ParametroSistemaModel parametroSistema,
+  ) async {
+    (bool, String)? result = await showDialog<(bool, String)>(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
@@ -106,11 +109,10 @@ class _ParametroSistemaPageState extends State<ParametroSistemaPage> {
           parametroSistema: parametroSistema,
         );
       },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadParametroSistema();
-    });
+    );
+    if (result == null || !result.$1) return;
+    ToastUtils.showCustomToastSucess(context, result.$2);
+    bloc.loadParametroSistema();
   }
 
   void onError(ParametroSistemaPageState state) {

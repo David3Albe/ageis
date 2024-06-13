@@ -1,5 +1,5 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/deposito_insumo/deposito_insumo_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/destino_residuo/destino_residuo_cubit.dart';
+// import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/destino_residuo/destino_residuo_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/equipamento/equipamento_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/equipamento_insumo/equipamento_insumo_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/insumo/insumo_cubit.dart';
@@ -77,7 +77,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
   late final EquipamentoCubit equipamentoCubit;
   late final InsumoCubit insumoCubit;
   late final DepositoInsumoCubit depositoInsumoCubit;
-  late final DestinoResiduoCubit destinoResiduoCubit;
+  // late final DestinoResiduoCubit destinoResiduoCubit;
   late String titulo;
   InsumoMovimentoModel insumoMovimento;
   final GlobalKey<DropDownSearchWidgetState<InsumoModel>> cbxInsumoKey =
@@ -234,8 +234,8 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
     insumoCubit.loadAll();
     equipamentoCubit = EquipamentoCubit();
     equipamentoCubit.loadAll();
-    destinoResiduoCubit = DestinoResiduoCubit();
-    destinoResiduoCubit.loadAll();
+    // destinoResiduoCubit = DestinoResiduoCubit();
+    // destinoResiduoCubit.loadAll();
 
     txtQuantidade.addValidator((String str) {
       if (str.isEmpty) {
@@ -807,42 +807,42 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
                       },
                     ],
                   ),
-                  if (insumoMovimento.flagEntradaSaida == '2') ...{
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child:
-                          BlocBuilder<DestinoResiduoCubit, DestinoResiduoState>(
-                        bloc: destinoResiduoCubit,
-                        builder: (context, destinoState) {
-                          if (destinoState.loading) {
-                            return const LoadingWidget();
-                          }
-                          List<DestinoResiduoModel> destinos =
-                              destinoState.objs;
+                  // if (insumoMovimento.flagEntradaSaida == '2') ...{
+                  //   Padding(
+                  //     padding: const EdgeInsets.only(top: 5.0),
+                  //     child:
+                  //         BlocBuilder<DestinoResiduoCubit, DestinoResiduoState>(
+                  //       bloc: destinoResiduoCubit,
+                  //       builder: (context, destinoState) {
+                  //         if (destinoState.loading) {
+                  //           return const LoadingWidget();
+                  //         }
+                  //         List<DestinoResiduoModel> destinos =
+                  //             destinoState.objs;
 
-                          destinos.sort(
-                            (a, b) => a.nome!.compareTo(b.nome!),
-                          );
-                          DestinoResiduoModel? destino = destinos
-                              .where(
-                                (element) =>
-                                    element.cod ==
-                                    insumoMovimento.codDestinoResiduos,
-                              )
-                              .firstOrNull;
-                          return DropDownSearchWidget<DestinoResiduoModel>(
-                            textFunction: (destino) =>
-                                destino.GetNomeDestinoText(),
-                            initialValue: destino,
-                            sourceList: destinos,
-                            onChanged: (value) => insumoMovimento
-                                .codDestinoResiduos = value?.cod!,
-                            placeholder: 'Destino Resíduos',
-                          );
-                        },
-                      ),
-                    ),
-                  },
+                  //         destinos.sort(
+                  //           (a, b) => a.nome!.compareTo(b.nome!),
+                  //         );
+                  //         DestinoResiduoModel? destino = destinos
+                  //             .where(
+                  //               (element) =>
+                  //                   element.cod ==
+                  //                   insumoMovimento.codDestinoResiduos,
+                  //             )
+                  //             .firstOrNull;
+                  //         return DropDownSearchWidget<DestinoResiduoModel>(
+                  //           textFunction: (destino) =>
+                  //               destino.GetNomeDestinoText(),
+                  //           initialValue: destino,
+                  //           sourceList: destinos,
+                  //           onChanged: (value) => insumoMovimento
+                  //               .codDestinoResiduos = value?.cod!,
+                  //           placeholder: 'Destino Resíduos',
+                  //         );
+                  //       },
+                  //     ),
+                  //   ),
+                  // },
                   if (insumoMovimento.flagEntradaSaida == '1') ...{
                     Row(
                       children: [
@@ -1049,15 +1049,15 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
       }
     }
 
-    if (insumoMovimento.flagEntradaSaida == '2') {
-      if (!txtQuantidade.valid || insumoMovimento.codDestinoResiduos == null) {
-        await ErrorUtils.showErrorDialog(
-          context,
-          ['Destino de resíduos precisa ser informado'],
-        );
-        return;
-      }
-    }
+    // if (insumoMovimento.flagEntradaSaida == '2') {
+    //   if (!txtQuantidade.valid || insumoMovimento.codDestinoResiduos == null) {
+    //     await ErrorUtils.showErrorDialog(
+    //       context,
+    //       ['Destino de resíduos precisa ser informado'],
+    //     );
+    //     return;
+    //   }
+    // }
 
     if (insumoMovimento.flagEntradaSaida == '0') {
       if (insumoMovimento.lote == null || !txtQuantidade.valid) {

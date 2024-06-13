@@ -31,9 +31,9 @@ class HelperFunctions {
   static double calculaTransformSize(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     if (screenWidth < 800) {
-      return 0.6;
-    } else if (screenWidth < 1000) {
       return 0.7;
+    } else if (screenWidth < 1000) {
+      return 0.75;
     } else if (screenWidth < 1300) {
       return 0.8;
     } else if (screenWidth < 1600) {

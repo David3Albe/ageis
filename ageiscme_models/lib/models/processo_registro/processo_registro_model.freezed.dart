@@ -39,6 +39,9 @@ mixin _$ProcessoRegistroModel {
   set indicador(String? value) => throw _privateConstructorUsedError;
   String? get biologico => throw _privateConstructorUsedError;
   set biologico(String? value) => throw _privateConstructorUsedError;
+  ProcessoLeituraModel? get leitura => throw _privateConstructorUsedError;
+  set leitura(ProcessoLeituraModel? value) =>
+      throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
   String? get tstamp => throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
@@ -66,7 +69,10 @@ abstract class $ProcessoRegistroModelCopyWith<$Res> {
       DateTime? ultimaAlteracao,
       String? indicador,
       String? biologico,
+      ProcessoLeituraModel? leitura,
       @JsonKey(name: 'tStamp') String? tstamp});
+
+  $ProcessoLeituraModelCopyWith<$Res>? get leitura;
 }
 
 /// @nodoc
@@ -92,6 +98,7 @@ class _$ProcessoRegistroModelCopyWithImpl<$Res,
     Object? ultimaAlteracao = freezed,
     Object? indicador = freezed,
     Object? biologico = freezed,
+    Object? leitura = freezed,
     Object? tstamp = freezed,
   }) {
     return _then(_value.copyWith(
@@ -131,11 +138,27 @@ class _$ProcessoRegistroModelCopyWithImpl<$Res,
           ? _value.biologico
           : biologico // ignore: cast_nullable_to_non_nullable
               as String?,
+      leitura: freezed == leitura
+          ? _value.leitura
+          : leitura // ignore: cast_nullable_to_non_nullable
+              as ProcessoLeituraModel?,
       tstamp: freezed == tstamp
           ? _value.tstamp
           : tstamp // ignore: cast_nullable_to_non_nullable
               as String?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ProcessoLeituraModelCopyWith<$Res>? get leitura {
+    if (_value.leitura == null) {
+      return null;
+    }
+
+    return $ProcessoLeituraModelCopyWith<$Res>(_value.leitura!, (value) {
+      return _then(_value.copyWith(leitura: value) as $Val);
+    });
   }
 }
 
@@ -158,7 +181,11 @@ abstract class _$$ProcessoRegistroModelImplCopyWith<$Res>
       DateTime? ultimaAlteracao,
       String? indicador,
       String? biologico,
+      ProcessoLeituraModel? leitura,
       @JsonKey(name: 'tStamp') String? tstamp});
+
+  @override
+  $ProcessoLeituraModelCopyWith<$Res>? get leitura;
 }
 
 /// @nodoc
@@ -182,6 +209,7 @@ class __$$ProcessoRegistroModelImplCopyWithImpl<$Res>
     Object? ultimaAlteracao = freezed,
     Object? indicador = freezed,
     Object? biologico = freezed,
+    Object? leitura = freezed,
     Object? tstamp = freezed,
   }) {
     return _then(_$ProcessoRegistroModelImpl(
@@ -221,6 +249,10 @@ class __$$ProcessoRegistroModelImplCopyWithImpl<$Res>
           ? _value.biologico
           : biologico // ignore: cast_nullable_to_non_nullable
               as String?,
+      leitura: freezed == leitura
+          ? _value.leitura
+          : leitura // ignore: cast_nullable_to_non_nullable
+              as ProcessoLeituraModel?,
       tstamp: freezed == tstamp
           ? _value.tstamp
           : tstamp // ignore: cast_nullable_to_non_nullable
@@ -243,6 +275,7 @@ class _$ProcessoRegistroModelImpl extends _ProcessoRegistroModel
       required this.ultimaAlteracao,
       required this.indicador,
       required this.biologico,
+      required this.leitura,
       @JsonKey(name: 'tStamp') required this.tstamp})
       : super._();
 
@@ -268,12 +301,14 @@ class _$ProcessoRegistroModelImpl extends _ProcessoRegistroModel
   @override
   String? biologico;
   @override
+  ProcessoLeituraModel? leitura;
+  @override
   @JsonKey(name: 'tStamp')
   String? tstamp;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ProcessoRegistroModel(cod: $cod, codEtapaProcesso: $codEtapaProcesso, dataHoraInicio: $dataHoraInicio, dataHoraTermino: $dataHoraTermino, codUsuario: $codUsuario, codInstituicao: $codInstituicao, ultimaAlteracao: $ultimaAlteracao, indicador: $indicador, biologico: $biologico, tstamp: $tstamp)';
+    return 'ProcessoRegistroModel(cod: $cod, codEtapaProcesso: $codEtapaProcesso, dataHoraInicio: $dataHoraInicio, dataHoraTermino: $dataHoraTermino, codUsuario: $codUsuario, codInstituicao: $codInstituicao, ultimaAlteracao: $ultimaAlteracao, indicador: $indicador, biologico: $biologico, leitura: $leitura, tstamp: $tstamp)';
   }
 
   @override
@@ -290,6 +325,7 @@ class _$ProcessoRegistroModelImpl extends _ProcessoRegistroModel
       ..add(DiagnosticsProperty('ultimaAlteracao', ultimaAlteracao))
       ..add(DiagnosticsProperty('indicador', indicador))
       ..add(DiagnosticsProperty('biologico', biologico))
+      ..add(DiagnosticsProperty('leitura', leitura))
       ..add(DiagnosticsProperty('tstamp', tstamp));
   }
 
@@ -319,6 +355,7 @@ abstract class _ProcessoRegistroModel extends ProcessoRegistroModel {
           required DateTime? ultimaAlteracao,
           required String? indicador,
           required String? biologico,
+          required ProcessoLeituraModel? leitura,
           @JsonKey(name: 'tStamp') required String? tstamp}) =
       _$ProcessoRegistroModelImpl;
   _ProcessoRegistroModel._() : super._();
@@ -353,6 +390,9 @@ abstract class _ProcessoRegistroModel extends ProcessoRegistroModel {
   @override
   String? get biologico;
   set biologico(String? value);
+  @override
+  ProcessoLeituraModel? get leitura;
+  set leitura(ProcessoLeituraModel? value);
   @override
   @JsonKey(name: 'tStamp')
   String? get tstamp;

@@ -24,6 +24,10 @@ mixin _$ErroPadraoModel {
   set message(String? value) => throw _privateConstructorUsedError;
   dynamic get data => throw _privateConstructorUsedError;
   set data(dynamic value) => throw _privateConstructorUsedError;
+  String? get Message => throw _privateConstructorUsedError;
+  set Message(String? value) => throw _privateConstructorUsedError;
+  dynamic get Data => throw _privateConstructorUsedError;
+  set Data(dynamic value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -37,7 +41,7 @@ abstract class $ErroPadraoModelCopyWith<$Res> {
           ErroPadraoModel value, $Res Function(ErroPadraoModel) then) =
       _$ErroPadraoModelCopyWithImpl<$Res, ErroPadraoModel>;
   @useResult
-  $Res call({String? message, dynamic data});
+  $Res call({String? message, dynamic data, String? Message, dynamic Data});
 }
 
 /// @nodoc
@@ -55,6 +59,8 @@ class _$ErroPadraoModelCopyWithImpl<$Res, $Val extends ErroPadraoModel>
   $Res call({
     Object? message = freezed,
     Object? data = freezed,
+    Object? Message = freezed,
+    Object? Data = freezed,
   }) {
     return _then(_value.copyWith(
       message: freezed == message
@@ -64,6 +70,14 @@ class _$ErroPadraoModelCopyWithImpl<$Res, $Val extends ErroPadraoModel>
       data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
+              as dynamic,
+      Message: freezed == Message
+          ? _value.Message
+          : Message // ignore: cast_nullable_to_non_nullable
+              as String?,
+      Data: freezed == Data
+          ? _value.Data
+          : Data // ignore: cast_nullable_to_non_nullable
               as dynamic,
     ) as $Val);
   }
@@ -77,7 +91,7 @@ abstract class _$$ErroPadraoModelImplCopyWith<$Res>
       __$$ErroPadraoModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? message, dynamic data});
+  $Res call({String? message, dynamic data, String? Message, dynamic Data});
 }
 
 /// @nodoc
@@ -93,6 +107,8 @@ class __$$ErroPadraoModelImplCopyWithImpl<$Res>
   $Res call({
     Object? message = freezed,
     Object? data = freezed,
+    Object? Message = freezed,
+    Object? Data = freezed,
   }) {
     return _then(_$ErroPadraoModelImpl(
       message: freezed == message
@@ -103,6 +119,14 @@ class __$$ErroPadraoModelImplCopyWithImpl<$Res>
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
               as dynamic,
+      Message: freezed == Message
+          ? _value.Message
+          : Message // ignore: cast_nullable_to_non_nullable
+              as String?,
+      Data: freezed == Data
+          ? _value.Data
+          : Data // ignore: cast_nullable_to_non_nullable
+              as dynamic,
     ));
   }
 }
@@ -111,7 +135,11 @@ class __$$ErroPadraoModelImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ErroPadraoModelImpl extends _ErroPadraoModel
     with DiagnosticableTreeMixin {
-  _$ErroPadraoModelImpl({required this.message, required this.data})
+  _$ErroPadraoModelImpl(
+      {required this.message,
+      required this.data,
+      required this.Message,
+      required this.Data})
       : super._();
 
   factory _$ErroPadraoModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -121,10 +149,14 @@ class _$ErroPadraoModelImpl extends _ErroPadraoModel
   String? message;
   @override
   dynamic data;
+  @override
+  String? Message;
+  @override
+  dynamic Data;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ErroPadraoModel(message: $message, data: $data)';
+    return 'ErroPadraoModel(message: $message, data: $data, Message: $Message, Data: $Data)';
   }
 
   @override
@@ -133,7 +165,9 @@ class _$ErroPadraoModelImpl extends _ErroPadraoModel
     properties
       ..add(DiagnosticsProperty('type', 'ErroPadraoModel'))
       ..add(DiagnosticsProperty('message', message))
-      ..add(DiagnosticsProperty('data', data));
+      ..add(DiagnosticsProperty('data', data))
+      ..add(DiagnosticsProperty('Message', Message))
+      ..add(DiagnosticsProperty('Data', Data));
   }
 
   @JsonKey(ignore: true)
@@ -152,8 +186,11 @@ class _$ErroPadraoModelImpl extends _ErroPadraoModel
 }
 
 abstract class _ErroPadraoModel extends ErroPadraoModel {
-  factory _ErroPadraoModel({required String? message, required dynamic data}) =
-      _$ErroPadraoModelImpl;
+  factory _ErroPadraoModel(
+      {required String? message,
+      required dynamic data,
+      required String? Message,
+      required dynamic Data}) = _$ErroPadraoModelImpl;
   _ErroPadraoModel._() : super._();
 
   factory _ErroPadraoModel.fromJson(Map<String, dynamic> json) =
@@ -165,6 +202,12 @@ abstract class _ErroPadraoModel extends ErroPadraoModel {
   @override
   dynamic get data;
   set data(dynamic value);
+  @override
+  String? get Message;
+  set Message(String? value);
+  @override
+  dynamic get Data;
+  set Data(dynamic value);
   @override
   @JsonKey(ignore: true)
   _$$ErroPadraoModelImplCopyWith<_$ErroPadraoModelImpl> get copyWith =>

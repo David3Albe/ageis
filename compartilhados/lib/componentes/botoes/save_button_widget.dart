@@ -77,7 +77,7 @@ class _SaveButtonWidgetState extends State<SaveButtonWidget> {
                   'Salvar',
                   style: TextStyle(
                     color: Cores.corTextoBranco,
-                    fontSize: HelperFunctions.calculaFontSize(context, 16),
+                    fontSize: HelperFunctions.calculaFontSize(context, 14),
                   ),
                 ),
               ),

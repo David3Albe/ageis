@@ -559,13 +559,19 @@ class _ConsultaProcessosLeituraPageState
 
                     return DropDownSearchWidget<ProcessoEtapaModel>(
                       maxItems: 200,
+                      initialValue: processosEtapas
+                          .where(
+                            (element) => element.cod == filter.codEtapaProcesso,
+                          )
+                          .firstOrNull,
                       textFunction: (processoEtapa) =>
                           processoEtapa.GetNomeEtapaTipoText(),
                       sourceList: processosEtapas
                           .where((element) => element.ativo == true)
                           .toList(),
-                      onChanged: (value) =>
-                          filter.codEtapaProcesso = value?.cod,
+                      onChanged: (value) {
+                        filter.codEtapaProcesso = value?.cod;
+                      },
                       placeholder: 'Etapa do Processo',
                     );
                   },
@@ -629,7 +635,7 @@ class _ConsultaProcessosLeituraPageState
     consultar();
   }
 
-  Future<(bool, PlutoGridInfiniteScrollModel)> consultarComAlgoAlteradoGrid(
+  Future<PlutoGridInfiniteScrollModel?> consultarComAlgoAlteradoGrid(
     PlutoGridApiModel gridModel,
   ) async {
     filter.gridModel = gridModel;
@@ -637,7 +643,7 @@ class _ConsultaProcessosLeituraPageState
         await ConsultaProcessosLeituraService().filter(
       filter,
     );
-    return (response!.$2.lastRow, response.$2);
+    return response?.$2;
   }
 
   void consultar() {

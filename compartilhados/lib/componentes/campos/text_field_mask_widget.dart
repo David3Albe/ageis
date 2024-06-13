@@ -84,7 +84,7 @@ class _TextFieldMaskWidgetState extends State<TextFieldMaskWidget> {
           style: Fontes.getRoboto(
             cor: errorText.isNotEmpty ? Colors.red : null,
             letterSpacing: !visible && widget.password ? 5 : 0,
-            fontSize: HelperFunctions.calculaFontSize(context, 18),
+            fontSize: HelperFunctions.calculaFontSize(context, 14),
           ),
           decoration: InputDecoration(
             suffixIcon: widget.password
@@ -101,7 +101,7 @@ class _TextFieldMaskWidgetState extends State<TextFieldMaskWidget> {
               widget.placeholder,
               style: Fontes.getRoboto(
                 letterSpacing: 0,
-                fontSize: HelperFunctions.calculaFontSize(context, 16),
+                fontSize: HelperFunctions.calculaFontSize(context, 14),
                 cor: errorText.isEmpty
                     ? Cores.corPlaceholderTextField
                     : Colors.red,

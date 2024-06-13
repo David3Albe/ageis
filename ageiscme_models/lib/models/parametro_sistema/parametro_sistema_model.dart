@@ -7,17 +7,19 @@ part 'parametro_sistema_model.g.dart';
 @unfreezed
 abstract class ParametroSistemaModel with _$ParametroSistemaModel {
   factory ParametroSistemaModel({
-    required int? cod,
-    required String? versaoSW,
-    required DateTime? dataVersaoSW,
-    required int? qtdeMaxProcessosEtiqueta,
-    required int? codInstituicao,
-    required int? indicador,
-    required String? letraConsignado,
-    required String? licenca,
-    required bool? zeraEtiquetaRotulado,
-    required DateTime? ultimaAlteracao,
-    @JsonKey(name: 'tStamp') required String? tstamp,
+     int? cod,
+     String? versaoSW,
+     DateTime? dataVersaoSW,
+     String? versaoSistemaV2,
+     DateTime? dataVersaoSistemaV2,
+     int? qtdeMaxProcessosEtiqueta,
+     int? codInstituicao,
+     int? indicador,
+     String? letraConsignado,
+     String? licenca,
+     bool? zeraEtiquetaRotulado,
+     DateTime? ultimaAlteracao,
+    @JsonKey(name: 'tStamp')  String? tstamp,
   }) = _ParametroSistemaModel;
 
   factory ParametroSistemaModel.fromJson(Map<String, Object?> json) =>

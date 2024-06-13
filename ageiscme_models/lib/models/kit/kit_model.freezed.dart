@@ -70,6 +70,8 @@ mixin _$KitModel {
   set cor3(KitCorModel? value) => throw _privateConstructorUsedError;
   KitCorModel? get cor4 => throw _privateConstructorUsedError;
   set cor4(KitCorModel? value) => throw _privateConstructorUsedError;
+  DateTime? get dataDescarte => throw _privateConstructorUsedError;
+  set dataDescarte(DateTime? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -106,7 +108,8 @@ abstract class $KitModelCopyWith<$Res> {
       KitCorModel? cor1,
       KitCorModel? cor2,
       KitCorModel? cor3,
-      KitCorModel? cor4});
+      KitCorModel? cor4,
+      DateTime? dataDescarte});
 
   $EmbalagemModelCopyWith<$Res>? get embalagem;
   $KitDescritorModelCopyWith<$Res>? get descritor;
@@ -153,6 +156,7 @@ class _$KitModelCopyWithImpl<$Res, $Val extends KitModel>
     Object? cor2 = freezed,
     Object? cor3 = freezed,
     Object? cor4 = freezed,
+    Object? dataDescarte = freezed,
   }) {
     return _then(_value.copyWith(
       cod: freezed == cod
@@ -251,6 +255,10 @@ class _$KitModelCopyWithImpl<$Res, $Val extends KitModel>
           ? _value.cor4
           : cor4 // ignore: cast_nullable_to_non_nullable
               as KitCorModel?,
+      dataDescarte: freezed == dataDescarte
+          ? _value.dataDescarte
+          : dataDescarte // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ) as $Val);
   }
 
@@ -359,7 +367,8 @@ abstract class _$$KitModelImplCopyWith<$Res>
       KitCorModel? cor1,
       KitCorModel? cor2,
       KitCorModel? cor3,
-      KitCorModel? cor4});
+      KitCorModel? cor4,
+      DateTime? dataDescarte});
 
   @override
   $EmbalagemModelCopyWith<$Res>? get embalagem;
@@ -410,6 +419,7 @@ class __$$KitModelImplCopyWithImpl<$Res>
     Object? cor2 = freezed,
     Object? cor3 = freezed,
     Object? cor4 = freezed,
+    Object? dataDescarte = freezed,
   }) {
     return _then(_$KitModelImpl(
       cod: freezed == cod
@@ -508,6 +518,10 @@ class __$$KitModelImplCopyWithImpl<$Res>
           ? _value.cor4
           : cor4 // ignore: cast_nullable_to_non_nullable
               as KitCorModel?,
+      dataDescarte: freezed == dataDescarte
+          ? _value.dataDescarte
+          : dataDescarte // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
     ));
   }
 }
@@ -539,7 +553,8 @@ class _$KitModelImpl extends _KitModel {
       required this.cor1,
       required this.cor2,
       required this.cor3,
-      required this.cor4})
+      required this.cor4,
+      this.dataDescarte})
       : super._();
 
   factory _$KitModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -594,10 +609,12 @@ class _$KitModelImpl extends _KitModel {
   KitCorModel? cor3;
   @override
   KitCorModel? cor4;
+  @override
+  DateTime? dataDescarte;
 
   @override
   String toString() {
-    return 'KitModel(cod: $cod, codBarra: $codBarra, codCor1: $codCor1, codCor2: $codCor2, codCor3: $codCor3, codCor4: $codCor4, status: $status, restricao: $restricao, codDescritorKit: $codDescritorKit, codConjunto: $codConjunto, codInstituicao: $codInstituicao, preparo: $preparo, codProcessoLeitura: $codProcessoLeitura, codEmbalagem: $codEmbalagem, embalagem: $embalagem, imagem: $imagem, ultimaAlteracao: $ultimaAlteracao, tStamp: $tStamp, descritor: $descritor, itens: $itens, cor1: $cor1, cor2: $cor2, cor3: $cor3, cor4: $cor4)';
+    return 'KitModel(cod: $cod, codBarra: $codBarra, codCor1: $codCor1, codCor2: $codCor2, codCor3: $codCor3, codCor4: $codCor4, status: $status, restricao: $restricao, codDescritorKit: $codDescritorKit, codConjunto: $codConjunto, codInstituicao: $codInstituicao, preparo: $preparo, codProcessoLeitura: $codProcessoLeitura, codEmbalagem: $codEmbalagem, embalagem: $embalagem, imagem: $imagem, ultimaAlteracao: $ultimaAlteracao, tStamp: $tStamp, descritor: $descritor, itens: $itens, cor1: $cor1, cor2: $cor2, cor3: $cor3, cor4: $cor4, dataDescarte: $dataDescarte)';
   }
 
   @JsonKey(ignore: true)
@@ -639,7 +656,8 @@ abstract class _KitModel extends KitModel {
       required KitCorModel? cor1,
       required KitCorModel? cor2,
       required KitCorModel? cor3,
-      required KitCorModel? cor4}) = _$KitModelImpl;
+      required KitCorModel? cor4,
+      DateTime? dataDescarte}) = _$KitModelImpl;
   _KitModel._() : super._();
 
   factory _KitModel.fromJson(Map<String, dynamic> json) =
@@ -719,6 +737,9 @@ abstract class _KitModel extends KitModel {
   @override
   KitCorModel? get cor4;
   set cor4(KitCorModel? value);
+  @override
+  DateTime? get dataDescarte;
+  set dataDescarte(DateTime? value);
   @override
   @JsonKey(ignore: true)
   _$$KitModelImplCopyWith<_$KitModelImpl> get copyWith =>

@@ -72,7 +72,7 @@ class _CancelButtonUnfilledWidgetState
                         cor: hovered
                             ? Cores.corTextoBranco
                             : Cores.corBotaoCancelar,
-                        fontSize: HelperFunctions.calculaFontSize(context, 16),
+                        fontSize: HelperFunctions.calculaFontSize(context, 14),
                       ),
                     ),
                   ),

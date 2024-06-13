@@ -10,6 +10,7 @@ class ListFieldWidget<T> extends StatefulWidget {
   final bool removeButton;
   final bool? disableUnselect;
   final bool? permitReselect;
+  final double fontSize;
 
   ListFieldWidget({
     required this.sourceList,
@@ -19,6 +20,7 @@ class ListFieldWidget<T> extends StatefulWidget {
     this.disableUnselect,
     this.permitReselect,
     this.onDoubleTap,
+    this.fontSize = 14,
   });
 
   @override
@@ -56,7 +58,7 @@ class _ListFieldWidgetState<T> extends State<ListFieldWidget<T>> {
         minHeight: 300,
         maxHeight: 500,
         minWidth: 300,
-        maxWidth: 500,
+        maxWidth: 600,
       ),
       child: Column(
         children: [
@@ -81,17 +83,27 @@ class _ListFieldWidgetState<T> extends State<ListFieldWidget<T>> {
                               isSelected ? Colors.blue.withOpacity(0.8) : null,
                           child: ListTile(
                             title: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text(
-                                  widget.itemText(item),
-                                  style: TextStyle(
-                                    fontSize: HelperFunctions.calculaFontSize(
-                                      context,
-                                      16,
+                                Expanded(
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: FittedBox(
+                                      fit: BoxFit.scaleDown,
+                                      child: Text(
+                                        widget.itemText(item),
+                                        style: TextStyle(
+                                          fontSize:
+                                              HelperFunctions.calculaFontSize(
+                                            context,
+                                            widget.fontSize,
+                                          ),
+                                          color: isSelected
+                                              ? Colors.white
+                                              : Colors.black,
+                                        ),
+                                      ),
                                     ),
-                                    color: isSelected
-                                        ? Colors.white
-                                        : Colors.black,
                                   ),
                                 ),
                                 if (widget.removeButton) ...{

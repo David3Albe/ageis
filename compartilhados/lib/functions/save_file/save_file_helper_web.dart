@@ -8,13 +8,13 @@ import 'package:flutter/material.dart';
 SaveFileInterface getSaveFileInterface() => SaveFileHelperWeb();
 
 class SaveFileHelperWeb implements SaveFileInterface {
-  Future save(
-    BuildContext context,
-    String docString,
-    String docName,
-    bool openAfterSave,
-  ) async {
-
+  Future save({
+    required BuildContext context,
+    required String docString,
+    required String docName,
+    required bool openAfterSave,
+    bool encodeAsUtf8 = false,
+  }) async {
     final Uint8List bytes = base64.decode(docString);
     final Blob blob = Blob([bytes]);
     final url = Url.createObjectUrlFromBlob(blob);

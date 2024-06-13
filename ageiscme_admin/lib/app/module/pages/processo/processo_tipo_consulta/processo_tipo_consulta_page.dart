@@ -2,9 +2,21 @@
 
 import 'package:ageiscme_admin/app/module/pages/processo/processo_tipo_consulta/processo_tipo_consulta_page_state.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/processo_tipo_fluxo/presenter/processo_tipo_fluxo_page_presenter.dart';
+import 'package:ageiscme_data/services/item/item_service.dart';
+import 'package:ageiscme_data/services/kit/kit_service.dart';
+import 'package:ageiscme_data/services/processo_etapa/processo_etapa_service.dart';
 import 'package:ageiscme_data/services/processo_tipo/processo_tipo_service.dart';
+import 'package:ageiscme_models/dto/kit/drop_down_search/kit_drop_down_search_dto.dart';
+import 'package:ageiscme_models/dto/processo_etapa/search_materials/processo_etapa_search_materials_dto.dart';
+import 'package:ageiscme_models/dto/processo_tipo/ultima_leitura/processo_tipo_ultima_leitura_item_kit_dto.dart';
+import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/filters/processo_tipo/processo_tipo_filter.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/response_dto/kit/drop_down_search/kit_drop_down_search_response_dto.dart';
+import 'package:ageiscme_models/response_dto/processo_etapa/search_materials/processo_etapa_search_materials_response_dto.dart';
+import 'package:ageiscme_models/response_dto/processo_tipo/ultima_leitura/processo_tipo_ultima_leitura_item_kit_response_dto.dart';
+import 'package:compartilhados/componentes/botoes/default_button_widget.dart';
+import 'package:compartilhados/componentes/campos/custom_autocomplete/custom_autocomplete_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
@@ -57,6 +69,8 @@ class _ProcessoTipoConsultaPageState extends State<ProcessoTipoConsultaPage> {
 
   late final ProcessoTipoConsultaPageCubit bloc;
   late final ProcessoTipoService service;
+  String? kit;
+  String? item;
 
   @override
   void initState() {
@@ -72,6 +86,52 @@ class _ProcessoTipoConsultaPageState extends State<ProcessoTipoConsultaPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Row(
+          children: [
+            Flexible(
+              child: CustomAutocompleteWidget<KitDropDownSearchResponseDTO>(
+                initialValue: kit,
+                onChange: (str) => kit = str,
+                onItemSelectedText: (kit) => kit.codBarra,
+                label: 'Kit',
+                title: (p0) => Text(p0.CodBarraDescritorText()),
+                suggestionsCallback: (str) async {
+                  return (await KitService().getDropDownSearchKits(
+                        KitDropDownSearchDTO(
+                          search: str,
+                          numeroRegistros: 30,
+                        ),
+                      ))
+                          ?.$2 ??
+                      [];
+                },
+              ),
+            ),
+            const Padding(padding: EdgeInsets.only(left: 24)),
+            Flexible(
+              child: CustomAutocompleteWidget<ItemModel>(
+                initialValue: item,
+                onChange: (str) => item = str,
+                onItemSelectedText: (item) => item.idEtiqueta ?? null,
+                label: 'Item',
+                title: (p0) => Text(p0.EtiquetaDescricaoText()),
+                suggestionsCallback: (str) => ItemService().Filter(
+                  ItemFilter(numeroRegistros: 30, termoPesquisa: str),
+                ),
+              ),
+            ),
+            const Spacer(),
+            Flexible(
+              child: DefaultButtonWidget(
+                text: 'Consultar',
+                onPressed: _consultar,
+                cor: Colors.blue.shade400,
+                corHovered: Colors.blue.shade600,
+                icon: Icons.search,
+              ),
+            ),
+          ],
+        ),
         BlocConsumer<ProcessoTipoConsultaPageCubit,
             ProcessoTipoConsultaPageState>(
           bloc: bloc,
@@ -90,10 +150,7 @@ class _ProcessoTipoConsultaPageState extends State<ProcessoTipoConsultaPage> {
                 child: PlutoGridWidget(
                   filterOnlyActives: true,
                   onOpen: (ProcessoTipoModel objeto) => {
-                    openModal(
-                      context,
-                      ProcessoTipoModel.copy(objeto),
-                    ),
+                    openModal(context, ProcessoTipoModel.copy(objeto), null),
                   },
                   columns: colunas,
                   items: state.processosTipos,
@@ -104,6 +161,44 @@ class _ProcessoTipoConsultaPageState extends State<ProcessoTipoConsultaPage> {
         ),
       ],
     );
+  }
+
+  Future _consultar() async {
+    if (kit == null && item == null) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'Não é possível consultar sem filtrar item e kit, filtre um dos dois',
+      );
+      return;
+    }
+    if (kit != null && item != null) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'Não é possível consultar filtrando item e kit, filtre apenas um deles',
+      );
+      return;
+    }
+    LoadingController loading = LoadingController(context: context);
+    (String, ProcessoTipoUltimaLeituraItemKitResponseDTO)? result =
+        await ProcessoTipoService().ultimoLocal(
+      ProcessoTipoUltimaLeituraItemKitDTO(
+        codBarraKit: kit,
+        idEtiqueta: item,
+      ),
+    );
+    loading.closeDefault();
+    if (result == null) {
+      return;
+    }
+    if (result.$2.ultimoLocal != null) {
+      ToastUtils.showCustomToastNoticeBig(context, result.$2.ultimoLocal!);
+    }
+    if (result.$2.codTipoProcesso == null) return;
+    ProcessoTipoModel? tipoProcesso = bloc.state.processosTipos
+        .where((element) => element.cod == result.$2.codTipoProcesso)
+        .firstOrNull;
+    if (tipoProcesso == null) return;
+    openModal(context, tipoProcesso, result.$2.codEtapaProcesso);
   }
 
   Future<bool?> _carregarFluxoEtapas(ProcessoTipoModel processoTipo) async {
@@ -130,7 +225,11 @@ class _ProcessoTipoConsultaPageState extends State<ProcessoTipoConsultaPage> {
     return true;
   }
 
-  void openModal(BuildContext context, ProcessoTipoModel processoTipo) async {
+  void openModal(
+    BuildContext context,
+    ProcessoTipoModel processoTipo,
+    int? codEtapa,
+  ) async {
     if (processoTipo.cod == 0 || processoTipo.cod == null) {
       ToastUtils.showCustomToastWarning(
         context,
@@ -154,6 +253,8 @@ class _ProcessoTipoConsultaPageState extends State<ProcessoTipoConsultaPage> {
         return ProcessoTipoFluxoPagePresenter(
           canEdit: false,
           processoTipo: processoTipo,
+          initialClickOn: codEtapa,
+          onDetailSearchItems: findMaterials,
         );
       },
     );
@@ -161,6 +262,16 @@ class _ProcessoTipoConsultaPageState extends State<ProcessoTipoConsultaPage> {
 
   void onError(ProcessoTipoConsultaPageState state) {
     ErrorUtils.showErrorDialog(context, [state.error]);
+  }
+
+  Future<List<String>> findMaterials({required int id}) async {
+    LoadingController loading = LoadingController(context: context);
+    (String, ProcessoEtapaSearchMaterialsResponseDTO)? result =
+        await ProcessoEtapaService().searchMaterials(
+      ProcessoEtapaSearchMaterialsDTO(codEtapaProcesso: id),
+    );
+    loading.closeDefault();
+    return result?.$2.materiais ?? [];
   }
 
   void notFoundError() {

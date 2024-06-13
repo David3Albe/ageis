@@ -11,6 +11,8 @@ _$CommandResultModelImpl _$$CommandResultModelImplFromJson(Map json) =>
       success: json['success'] as bool,
       message: json['message'] as String,
       data: json['data'],
+      alertType: $enumDecodeNullable(
+          _$CommandResultAlertTypeEnumMap, json['alertType']),
     );
 
 Map<String, dynamic> _$$CommandResultModelImplToJson(
@@ -19,4 +21,12 @@ Map<String, dynamic> _$$CommandResultModelImplToJson(
       'success': instance.success,
       'message': instance.message,
       'data': instance.data,
+      'alertType': _$CommandResultAlertTypeEnumMap[instance.alertType],
     };
+
+const _$CommandResultAlertTypeEnumMap = {
+  CommandResultAlertType.Error: 1,
+  CommandResultAlertType.Warning: 2,
+  CommandResultAlertType.Notice: 3,
+  CommandResultAlertType.Success: 4,
+};

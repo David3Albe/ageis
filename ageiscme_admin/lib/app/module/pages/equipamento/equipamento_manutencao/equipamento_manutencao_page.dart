@@ -49,12 +49,12 @@ class _EquipamentoManutencaoPageState extends State<EquipamentoManutencaoPage> {
     CustomDataColumn(
       text: 'Data Início',
       field: 'dataInicio',
-      type: CustomDataColumnType.Date,
+      type: CustomDataColumnType.DateTime,
     ),
     CustomDataColumn(
       text: 'Data Término',
       field: 'dataTermino',
-      type: CustomDataColumnType.Date,
+      type: CustomDataColumnType.DateTime,
     ),
     CustomDataColumn(
       text: 'Usuário Registro',
@@ -93,7 +93,7 @@ class _EquipamentoManutencaoPageState extends State<EquipamentoManutencaoPage> {
     super.initState();
   }
 
-  Future consultar()async{
+  Future consultar() async {
     await bloc.getScreenData(filter);
   }
 
@@ -231,7 +231,7 @@ class _EquipamentoManutencaoPageState extends State<EquipamentoManutencaoPage> {
     if (confirmacao) bloc.delete(equipamentoManutencao);
   }
 
-  Future deleted(EquipamentoManutencaoPageState state) async{
+  Future deleted(EquipamentoManutencaoPageState state) async {
     ToastUtils.showCustomToastSucess(
       context,
       state.message,

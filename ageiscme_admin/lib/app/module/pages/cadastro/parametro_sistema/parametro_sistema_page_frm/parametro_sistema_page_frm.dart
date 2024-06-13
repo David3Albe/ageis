@@ -1,3 +1,4 @@
+import 'package:ageiscme_admin/app/module/pages/cadastro/parametro_sistema/parametro_sistema_page_frm/gerar_licenca/gerar_licenca_page.dart';
 import 'package:ageiscme_admin/app/module/pages/cadastro/parametro_sistema/parametro_sistema_page_frm/parametro_sistema_page_frm_state.dart';
 import 'package:ageiscme_data/services/parametro_sistema/parametro_sistema_service.dart';
 import 'package:ageiscme_models/main.dart';
@@ -9,6 +10,8 @@ import 'package:compartilhados/componentes/campos/text_field_number_widget.dart'
 import 'package:compartilhados/componentes/campos/text_field_string_area_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
@@ -34,11 +37,28 @@ class _ParametroSistemaPageFrmState extends State<ParametroSistemaPageFrm> {
     parametroSistemaModel: parametroSistema,
     service: ParametroSistemaService(),
   );
-
+  late final TextFieldStringWidget txtVersaoAtual = TextFieldStringWidget(
+    placeholder: 'Versão Atual da Aplicação',
+    onChanged: (String? str) {
+      parametroSistema.versaoSW = txtVersaoAtual.text;
+    },
+  );
   late final DatePickerWidget txtDataVersaoAtual = DatePickerWidget(
     placeholder: 'Data da Versão Atual',
     onDateSelected: (value) => parametroSistema.dataVersaoSW = value,
     initialValue: parametroSistema.dataVersaoSW!,
+  );
+
+  late final TextFieldStringWidget txtVersaoV2 = TextFieldStringWidget(
+    placeholder: 'Versão 2 da Aplicação',
+    onChanged: (String? str) {
+      parametroSistema.versaoSistemaV2 = str;
+    },
+  );
+  late final DatePickerWidget txtDataVersaoV2 = DatePickerWidget(
+    placeholder: 'Data da Versão 2 da Aplicação',
+    onDateSelected: (value) => parametroSistema.dataVersaoSistemaV2 = value,
+    initialValue: parametroSistema.dataVersaoSistemaV2,
   );
 
   late final TextFieldNumberWidget txtQtdeMaxProcessosEtiqueta =
@@ -49,12 +69,7 @@ class _ParametroSistemaPageFrmState extends State<ParametroSistemaPageFrm> {
           str.isEmpty ? null : int.parse(txtQtdeMaxProcessosEtiqueta.text);
     },
   );
-  late final TextFieldStringWidget txtVersaoAtual = TextFieldStringWidget(
-    placeholder: 'Versão Atual da Aplicação',
-    onChanged: (String? str) {
-      parametroSistema.versaoSW = txtVersaoAtual.text;
-    },
-  );
+
   late final TextFieldStringWidget txtControleImpressaoIndicador =
       TextFieldStringWidget(
     placeholder: 'Nr. Controle Impressão Indicador',
@@ -125,6 +140,7 @@ class _ParametroSistemaPageFrmState extends State<ParametroSistemaPageFrm> {
 
   void setFields() {
     txtVersaoAtual.text = parametroSistema.versaoSW.toString();
+    txtVersaoV2.text = parametroSistema.versaoSistemaV2?.toString() ?? '';
     txtQtdeMaxProcessosEtiqueta.text =
         parametroSistema.qtdeMaxProcessosEtiqueta.toString();
     txtControleImpressaoIndicador.text = parametroSistema.indicador.toString();
@@ -141,7 +157,7 @@ class _ParametroSistemaPageFrmState extends State<ParametroSistemaPageFrm> {
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<ParametroSistemaPageFrmCubit,
+    return BlocConsumer<ParametroSistemaPageFrmCubit,
         ParametroSistemaPageFrmState>(
       bloc: cubit,
       listener: (context, state) {
@@ -149,102 +165,127 @@ class _ParametroSistemaPageFrmState extends State<ParametroSistemaPageFrm> {
           Navigator.of(context).pop((state.saved, state.message));
         }
       },
-      child: BlocBuilder<ParametroSistemaPageFrmCubit,
-          ParametroSistemaPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return AlertDialog(
-            contentPadding: const EdgeInsets.all(8.0),
-            titlePadding: const EdgeInsets.all(8.0),
-            actionsPadding: const EdgeInsets.all(8.0),
-            title: Row(
+      builder: (context, state) {
+        return AlertDialog(
+          contentPadding: const EdgeInsets.all(8.0),
+          titlePadding: const EdgeInsets.all(8.0),
+          actionsPadding: const EdgeInsets.all(8.0),
+          title: Row(
+            children: [
+              Expanded(
+                child: TitleWidget(
+                  text: titulo,
+                ),
+              ),
+              const Spacer(),
+              CloseButtonWidget(
+                onPressed: () => Navigator.of(context).pop((false, '')),
+              ),
+            ],
+          ),
+          content: Container(
+            constraints: BoxConstraints(
+              minWidth: size.width * .5,
+              minHeight: size.height * .5,
+              maxHeight: size.height * .8,
+            ),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.only(right: 14),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: txtVersaoAtual,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: txtDataVersaoAtual,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: txtVersaoV2,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: txtDataVersaoV2,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: txtQtdeMaxProcessosEtiqueta,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: txtControleImpressaoIndicador,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: txtLetraConsignado,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: Row(
+                      children: [
+                        CustomCheckboxWidget(
+                          checked: parametroSistema.zeraEtiquetaRotulado,
+                          onClick: (value) =>
+                              parametroSistema.zeraEtiquetaRotulado = value,
+                          text: 'Zera Etiqueta Rotulado',
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: txtLicenca,
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 24)),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            Row(
               children: [
-                Expanded(
-                  child: TitleWidget(
-                    text: titulo,
+                if (parametroSistema.cod != 0 && parametroSistema.cod != null)
+                  CustomPopupMenuWidget(
+                    items: [
+                      CustomPopupItemModel(
+                        text: 'Gerar Licença',
+                        onTap: gerarLicenca,
+                      ),
+                    ],
+                  ),
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: SaveButtonWidget(
+                    onPressed: () => {salvar()},
                   ),
                 ),
-                const Spacer(),
-                CloseButtonWidget(
-                  onPressed: () => Navigator.of(context).pop((false, '')),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: CancelButtonUnfilledWidget(
+                    onPressed: () => {Navigator.of(context).pop((false, ''))},
+                  ),
                 ),
               ],
             ),
-            content: Container(
-              constraints: BoxConstraints(
-                minWidth: size.width * .5,
-                minHeight: size.height * .5,
-                maxHeight: size.height * .8,
-              ),
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.only(right: 14),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtVersaoAtual,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtQtdeMaxProcessosEtiqueta,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtControleImpressaoIndicador,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtLetraConsignado,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtDataVersaoAtual,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: Row(
-                        children: [
-                          CustomCheckboxWidget(
-                            checked: parametroSistema.zeraEtiquetaRotulado,
-                            onClick: (value) =>
-                                parametroSistema.zeraEtiquetaRotulado = value,
-                            text: 'Zera Etiqueta Rotulado',
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtLicenca,
-                    ),
-                    const Padding(padding: EdgeInsets.only(top: 24)),
-                  ],
-                ),
-              ),
-            ),
-            actions: [
-              Row(
-                children: [
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: SaveButtonWidget(
-                      onPressed: () => {salvar()},
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: CancelButtonUnfilledWidget(
-                      onPressed: () => {Navigator.of(context).pop((false, ''))},
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          );
-        },
-      ),
+          ],
+        );
+      },
     );
+  }
+
+  Future gerarLicenca() async {
+    (bool, String)? result = await showDialog<(bool, String)>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return const GerarLicencaPage();
+      },
+    );
+    if (result == null || result.$1 != true) return;
+    Navigator.of(context).pop(result);
   }
 
   void salvar() {

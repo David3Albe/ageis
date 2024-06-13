@@ -97,8 +97,8 @@ class _CentroCustoPageState extends State<CentroCustoPage> {
     );
   }
 
-  void openModal(BuildContext context, CentroCustoModel centroCusto) {
-    showDialog<(bool, String)>(
+  Future openModal(BuildContext context, CentroCustoModel centroCusto) async {
+    (bool, String)? result = await showDialog<(bool, String)>(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
@@ -108,11 +108,10 @@ class _CentroCustoPageState extends State<CentroCustoPage> {
           ),
         );
       },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadCentroCusto();
-    });
+    );
+    if (result == null || result.$1 != true) return;
+    ToastUtils.showCustomToastSucess(context, result.$2);
+    bloc.loadCentroCusto();
   }
 
   void delete(BuildContext context, CentroCustoModel centroCusto) async {

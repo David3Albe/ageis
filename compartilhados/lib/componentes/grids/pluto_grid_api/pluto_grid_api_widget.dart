@@ -2,15 +2,19 @@ import 'dart:ui';
 
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_column_helper.dart';
+import 'package:compartilhados/componentes/grids/pluto_grid_api/enums/export_type.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid_api/enums/pluto_grid_filter_type.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid_api/enums/pluto_grid_order_type.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid_api/models/filter/pluto_grid_api_filter_model.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid_api/models/pluto_grid_api_model.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid_api/models/sort/pluto_grid_api_sort_model.dart';
+import 'package:compartilhados/componentes/grids/pluto_grid_api/request/custom_infinity_scroll_rows_request.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid_api/response/pluto_grid_infinite_scroll_model.dart';
 import 'package:compartilhados/componentes/grids/state/grid_records_cubit.dart';
 import 'package:compartilhados/componentes/rows/custom_data_rows.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
+import 'package:compartilhados/exporters/pluto_grid_csv_export.dart';
+import 'package:compartilhados/exporters/pluto_grid_pdf_export.dart';
 import 'package:compartilhados/exporters/pluto_grid_xml_export.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/font_awesome_export.dart';
@@ -87,7 +91,7 @@ class PlutoGridApiWidget<T> extends StatefulWidget {
   late final RefreshWidgetBuilder? refreshWidgetBuilder;
   late final SubmitBuilder? submitBuilder;
   late final GetObjectByRowBuilder<T>? getObjectByRowMethod;
-  final Future<(bool last, PlutoGridInfiniteScrollModel)> Function(
+  final Future<PlutoGridInfiniteScrollModel?> Function(
     PlutoGridApiModel filter,
   ) onFetch;
   final Iterable<T> Function(List<dynamic> objectsSerialized) fromJson;
@@ -299,16 +303,35 @@ class _PlutoGridApiWidgetState<T> extends State<PlutoGridApiWidget<T>> {
                 ),
                 buttonConfigs: [
                   ContextMenuButtonConfig(
-                    'Mostar/Ocultar Filtros',
+                    'Mostrar/Ocultar Filtros',
                     icon: const FaIcon(FontAwesomeIcons.filter),
                     onPressed: mostrarOcultarFiltros,
                   ),
                   ContextMenuButtonConfig(
                     'XML',
                     icon: const FaIcon(FontAwesomeIcons.file),
-                    onPressed: () => exportXml(
+                    onPressed: () => export(
                       context: context,
                       gridState: gridState,
+                      exportType: ExportType.xml,
+                    ),
+                  ),
+                  ContextMenuButtonConfig(
+                    'CSV',
+                    icon: const FaIcon(FontAwesomeIcons.fileCsv),
+                    onPressed: () => export(
+                      context: context,
+                      gridState: gridState,
+                      exportType: ExportType.csv,
+                    ),
+                  ),
+                  ContextMenuButtonConfig(
+                    'PDF',
+                    icon: const FaIcon(FontAwesomeIcons.filePdf),
+                    onPressed: () => export(
+                      context: context,
+                      gridState: gridState,
+                      exportType: ExportType.pdf,
                     ),
                   ),
                 ],
@@ -486,15 +509,18 @@ class _PlutoGridApiWidgetState<T> extends State<PlutoGridApiWidget<T>> {
         );
       }
     }
-
+    bool loadRemaining = false;
+    if (request is CustomPlutoInfinityScrollRowsRequest) {
+      loadRemaining = request.loadRemaining;
+    }
     PlutoGridApiModel gridModel = PlutoGridApiModel(
       filters: filters,
       page: page,
       sort: sort,
+      loadRemaining: loadRemaining,
     );
 
-    final (bool, PlutoGridInfiniteScrollModel)? rows =
-        await widget.onFetch(gridModel);
+    final PlutoGridInfiniteScrollModel? rows = await widget.onFetch(gridModel);
     if (rows == null) {
       ToastUtils.showCustomToastError(context, 'Falha ao carregar mais linhas');
       return PlutoInfinityScrollRowsResponse(
@@ -502,15 +528,15 @@ class _PlutoGridApiWidgetState<T> extends State<PlutoGridApiWidget<T>> {
         rows: [],
       );
     }
-    List<T> items = widget.fromJson(rows.$2.data).toList();
+    List<T> items = widget.fromJson(rows.data).toList();
     List<MapEntry<T, Map<CustomDataColumn, dynamic>>> objects =
         getCellObjects(items);
     List<PlutoRow> newRows = _getRows(objects);
 
-    final bool isLast = rows.$1;
-    gridRecordsCubit.setRecords(rows.$2.records);
+    final bool isLast = rows.lastRow;
+    gridRecordsCubit.setRecords(rows.records);
 
-    if (isLast) {
+    if (isLast && rows.records > 0) {
       BuildContext? context = ToastUtils.routerOutletContext;
       if (context != null) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -541,6 +567,72 @@ class _PlutoGridApiWidgetState<T> extends State<PlutoGridApiWidget<T>> {
       columnsToIgnore: columnsToIgnore,
     );
     xmlExport.export();
+  }
+
+  void exportCSV({
+    required BuildContext context,
+    required PlutoGridApiState gridState,
+  }) {
+    PlutoGridCsvExport csvExport = PlutoGridCsvExport(
+      context: context,
+      stateManager: gridState.stateManager!,
+    );
+    csvExport.export();
+  }
+
+  Future exportPDF({
+    required BuildContext context,
+    required PlutoGridApiState gridState,
+  }) async {
+    PlutoGridPdfExport pdfExport = PlutoGridPdfExport(
+      context: context,
+      stateManager: gridState.stateManager!,
+    );
+    await pdfExport.export();
+  }
+
+  Future export({
+    required BuildContext context,
+    required PlutoGridApiState gridState,
+    required ExportType exportType,
+  }) async {
+    if (gridRecordsCubit.state.records > 1000 && exportType == ExportType.pdf) {
+      ToastUtils.showCustomToastNotice(
+        context,
+        'Não é possível realizar a exportação de dados que contém mais de 1000 linhas para um PDF, faça alguns filtros para reduzir a busca e tente novamente',
+      );
+      return;
+    }
+    if (gridRecordsCubit.state.records > 10000) {
+      ToastUtils.showCustomToastNotice(
+        context,
+        'Não é possível realizar a exportação de dados que contém mais de 10000 linhas, faça alguns filtros para reduzir a busca e tente novamente',
+      );
+      return;
+    }
+
+    gridState.stateManager!.setShowLoading(true);
+    final request = CustomPlutoInfinityScrollRowsRequest(
+      lastRow: gridState.stateManager!.refRows.last,
+      sortColumn: gridState.stateManager!.getSortedColumn,
+      filterRows: gridState.stateManager!.filterRows,
+      loadRemaining: true,
+    );
+    PlutoInfinityScrollRowsResponse value = await fetch(request);
+    gridState.stateManager!.appendRows(value.rows);
+
+    switch (exportType) {
+      case ExportType.csv:
+        exportCSV(context: context, gridState: gridState);
+        break;
+      case ExportType.pdf:
+        await exportPDF(context: context, gridState: gridState);
+        break;
+      case ExportType.xml:
+        exportXml(context: context, gridState: gridState);
+        break;
+    }
+    gridState.stateManager!.setShowLoading(false);
   }
 
   List<PlutoColumn> _getColumns(

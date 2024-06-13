@@ -6,6 +6,7 @@ import 'package:ageiscme_processo/app/module/models/kit_processo/kit_processo_mo
 import 'package:ageiscme_processo/app/module/models/processo_leitura/processo_leitura_atual/processo_leitura_atual_model.dart';
 import 'package:ageiscme_processo/app/module/models/processo_leitura/processo_leitura_codigo/processo_leitura_codigo_model.dart';
 import 'package:ageiscme_processo/app/module/models/processo_leitura/processo_leitura_passos/processo_leitura_passo_model.dart';
+import 'package:compartilhados/version/version.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
 
@@ -27,6 +28,7 @@ sealed class ProcessoLeituraMontagemModel with _$ProcessoLeituraMontagemModel {
     required List<String>? filaLeituras,
     required bool automaticReadings,
     required List<ProcessoLeituraPassoModel> passos,
+    required String versao,
   }) = _ProcessoLeituraMontagemModel;
 
   factory ProcessoLeituraMontagemModel.fromJson(Map<String, Object?> json) =>
@@ -48,6 +50,7 @@ sealed class ProcessoLeituraMontagemModel with _$ProcessoLeituraMontagemModel {
         filaLeituras: [],
         automaticReadings: false,
         passos: ProcessoLeituraPassoModel.getDefaultSteps(),
+        versao: Version.ACTUAL,
       );
 
   ItemProcessoModel getItemLido() {

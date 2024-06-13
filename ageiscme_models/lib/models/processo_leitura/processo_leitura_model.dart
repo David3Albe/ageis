@@ -1,3 +1,4 @@
+import 'package:ageiscme_models/models/processo_etapa/processo_etapa_model.dart';
 import 'package:compartilhados/mixins/drop_down_text.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -36,6 +37,7 @@ sealed class ProcessoLeituraModel with _$ProcessoLeituraModel, DropDownText {
     required int? codInstituicao,
     required DateTime? ultimaAlteracao,
     @JsonKey(name: 'tStamp') required String? tstamp,
+    ProcessoEtapaModel? processoEtapa,
   }) = _ProcessoLeituraModel;
 
   factory ProcessoLeituraModel.fromJson(Map<String, Object?> json) =>

@@ -2,6 +2,9 @@ import 'package:compartilhados/componentes/diagram/custom_diagram/custom_diagram
 import 'package:compartilhados/componentes/diagram/custom_diagram/custom_diagram_widget_controller/custom_diagram_widget_controller.dart';
 import 'package:compartilhados/componentes/diagram/custom_diagram/model/custom_diagram_item_add_model.dart';
 import 'package:compartilhados/componentes/diagram/custom_diagram/model/custom_diagram_rect_model.dart';
+import 'package:compartilhados/componentes/diagram/custom_diagram/selected_process_type_detail/cubits/selected_cubit.dart';
+import 'package:compartilhados/componentes/diagram/custom_diagram/selected_process_type_detail/selected_process_type_detail_widget.dart';
+import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class CustomDiagramWidgetPresenter extends StatefulWidget {
@@ -12,7 +15,10 @@ class CustomDiagramWidgetPresenter extends StatefulWidget {
   final CustomDiagramWidgetClearBuilder clearWidgetBuilder;
   final Color defaultAddedNewRectBackColor;
   final Color defaultAddedNewRectForeColor;
+  final int? initialClickOn;
+  final bool canEdit;
   const CustomDiagramWidgetPresenter({
+    required this.canEdit,
     required this.objects,
     required this.itemsAddable,
     required this.defaultHeight,
@@ -20,6 +26,7 @@ class CustomDiagramWidgetPresenter extends StatefulWidget {
     required this.clearWidgetBuilder,
     required this.defaultAddedNewRectBackColor,
     required this.defaultAddedNewRectForeColor,
+    required this.initialClickOn,
   });
 
   @override
@@ -36,7 +43,16 @@ class _CustomDiagramWidgetState extends State<CustomDiagramWidgetPresenter> {
   void initState() {
     focus = FocusNode();
     scrollController = ScrollController();
+    if (widget.initialClickOn != null) {
+      CustomDiagramRectModel? rect = widget.objects
+          .where((element) => element.id == widget.initialClickOn)
+          .firstOrNull;
+      if (rect == null) return;
+      rect.selected = true;
+      rect.selectedTime = DateTime.now();
+    }
     controller = CustomDiagramWidgetController(
+      canEdit: widget.canEdit,
       defaultAddedNewRectBackColor: widget.defaultAddedNewRectBackColor,
       defaultAddedNewRectForeColor: widget.defaultAddedNewRectForeColor,
       defaultHeight: widget.defaultHeight,
@@ -46,6 +62,9 @@ class _CustomDiagramWidgetState extends State<CustomDiagramWidgetPresenter> {
       setState: setState,
     );
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      BlocProvider.of<SelectedCubit>(context).select(widget.initialClickOn);
+    });
   }
 
   @override
@@ -59,36 +78,61 @@ class _CustomDiagramWidgetState extends State<CustomDiagramWidgetPresenter> {
       autofocus: true,
       focusNode: focus,
       child: Container(
-        height: 850,
-        width: 2000,
+        constraints: const BoxConstraints(minWidth: 500, minHeight: 600),
+        height: MediaQuery.sizeOf(context).height - 100,
         child: Row(
           children: [
             widget.itemsAddable.isNotEmpty
                 ? Expanded(
-                    child: Material(
-                      elevation: 5,
-                      child: Column(
-                        children: controller.getWidgetsToAdd(context),
-                      ),
+                    flex: 2,
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: Material(
+                            elevation: 5,
+                            child: SingleChildScrollView(
+                              controller: ScrollController(),
+                              child: Column(
+                                children: controller.getWidgetsToAdd(context),
+                              ),
+                            ),
+                          ),
+                        ),
+                        if (!widget.canEdit) ...[
+                          const Padding(padding: EdgeInsets.only(top: 16)),
+                          const Expanded(
+                            child: SelectedProcessTypeDetailWidget(),
+                          ),
+                        ]
+                      ],
                     ),
                   )
                 : const SizedBox(),
             Expanded(
-              flex: 5,
-              child: Column(
-                children: [
-                  Expanded(
-                    child: DragTarget(
-                      builder: (context, candidateData, rejectedData) {
-                        return Stack(
-                          children: controller.getWidgets(),
-                        );
-                      },
-                      onAcceptWithDetails: (details) =>
-                          controller.addDragabledItem(details, context),
-                    ),
+              flex: 7,
+              child: InteractiveViewer(
+                constrained: false,
+                minScale: 0.1,
+                maxScale: 3,
+                child: Container(
+                  width: 2000,
+                  height: 1200,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: DragTarget(
+                          builder: (context, candidateData, rejectedData) {
+                            return Stack(
+                              children: controller.getWidgets(context: context),
+                            );
+                          },
+                          onAcceptWithDetails: (details) =>
+                              controller.addDragabledItem(details, context),
+                        ),
+                      ),
+                    ],
                   ),
-                ],
+                ),
               ),
             ),
           ],

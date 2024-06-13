@@ -7,13 +7,13 @@ import 'package:flutter/material.dart';
 
 class WarningUtils {
   static Future<bool> showWarningDialog(
-    BuildContext context,
+    BuildContext? context,
     String warning,
   ) async {
     bool? confirmacao = await showDialog<bool>(
       barrierDismissible: false,
       context: ToastUtils.routerOutletContext == null
-          ? context
+          ? context!
           : ToastUtils.routerOutletContext!,
       builder: (BuildContext context) {
         return AlertDialog(

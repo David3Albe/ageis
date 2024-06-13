@@ -1,5 +1,6 @@
 import 'package:compartilhados/cores/cores.dart';
 import 'package:compartilhados/fontes/fontes.dart';
+import 'package:compartilhados/functions/helper_functions.dart';
 import 'package:compartilhados/icones/icones.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -77,6 +78,7 @@ class _TextFieldNumberFloatWidgetState
           style: Fontes.getRoboto(
             cor: errorText.isNotEmpty ? Colors.red : null,
             letterSpacing: !visible && widget.password ? 5 : 0,
+            fontSize: HelperFunctions.calculaFontSize(context, 14),
           ),
           decoration: InputDecoration(
             suffixIcon: widget.password
@@ -92,6 +94,7 @@ class _TextFieldNumberFloatWidgetState
             label: Text(
               widget.placeholder,
               style: Fontes.getRoboto(
+                fontSize: HelperFunctions.calculaFontSize(context, 14),
                 letterSpacing: 0,
                 cor: errorText.isEmpty
                     ? Cores.corPlaceholderTextField

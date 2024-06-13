@@ -985,7 +985,7 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
       },
     );
     if (result == null || !result.$1) return;
-    Navigator.of(context).pop(result);
+    Navigator.of(context).pop((true, result.$2, item.cod));
   }
 
   Future _trocarEtiqueta() async {

@@ -10,10 +10,14 @@ import 'package:flutter/material.dart';
 class ProcessoTipoFluxoPagePresenter extends StatefulWidget {
   final ProcessoTipoModel processoTipo;
   final bool canEdit;
+  final int? initialClickOn;
+  final Future<List<String>> Function({required int id})? onDetailSearchItems;
 
   const ProcessoTipoFluxoPagePresenter({
     required this.processoTipo,
     required this.canEdit,
+    this.initialClickOn,
+    this.onDetailSearchItems,
   });
 
   @override
@@ -56,22 +60,20 @@ class _ProcessoTipoFluxoPagePresenterState
           ),
         ],
       ),
-      content: InteractiveViewer(
-        constrained: false,
-        minScale: 0.1,
-        maxScale: 3,
-        child: Column(
-          children: [
-            CustomDiagramWidget(
-              objects: controller.getRects,
-              defaultHeight: 40,
-              defaultWidth: 70,
-              itemsAddable: controller.getItemAddable,
-              clearWidgetBuilder: (context, clearMethod) =>
-                  controller.clearMethod = clearMethod,
-            ),
-          ],
-        ),
+      content: Column(
+        children: [
+          CustomDiagramWidget(
+            onDetailSearchItems: widget.onDetailSearchItems,
+            canEdit: widget.canEdit,
+            objects: controller.getRects,
+            defaultHeight: 40,
+            defaultWidth: 70,
+            initialClickOn: widget.initialClickOn,
+            itemsAddable: controller.getItemAddable,
+            clearWidgetBuilder: (context, clearMethod) =>
+                controller.clearMethod = clearMethod,
+          ),
+        ],
       ),
       actions: [
         CustomDefaultButtonWidget(

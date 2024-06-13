@@ -5,6 +5,8 @@ import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart'
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_column_helper.dart';
 import 'package:compartilhados/componentes/rows/custom_data_rows.dart';
+import 'package:compartilhados/exporters/pluto_grid_csv_export.dart';
+import 'package:compartilhados/exporters/pluto_grid_pdf_export.dart';
 import 'package:compartilhados/exporters/pluto_grid_xml_export.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/font_awesome_export.dart';
@@ -260,7 +262,7 @@ class PlutoGridWidget<T> extends StatelessWidget {
                 ),
                 buttonConfigs: [
                   ContextMenuButtonConfig(
-                    'Mostar/Ocultar Filtros',
+                    'Mostrar/Ocultar Filtros',
                     icon: const FaIcon(FontAwesomeIcons.filter),
                     onPressed: mostrarOcultarFiltros,
                   ),
@@ -268,6 +270,22 @@ class PlutoGridWidget<T> extends StatelessWidget {
                     'XML',
                     icon: const FaIcon(FontAwesomeIcons.file),
                     onPressed: () => exportXml(
+                      context: context,
+                      gridState: gridState,
+                    ),
+                  ),
+                  ContextMenuButtonConfig(
+                    'CSV',
+                    icon: const FaIcon(FontAwesomeIcons.fileCsv),
+                    onPressed: () => exportCSV(
+                      context: context,
+                      gridState: gridState,
+                    ),
+                  ),
+                  ContextMenuButtonConfig(
+                    'PDF',
+                    icon: const FaIcon(FontAwesomeIcons.filePdf),
+                    onPressed: () => exportPDF(
                       context: context,
                       gridState: gridState,
                     ),
@@ -348,6 +366,28 @@ class PlutoGridWidget<T> extends StatelessWidget {
       columnsToIgnore: columnsToIgnore,
     );
     xmlExport.export();
+  }
+
+  void exportCSV({
+    required BuildContext context,
+    required PlutoGridState gridState,
+  }) {
+    PlutoGridCsvExport csvExport = PlutoGridCsvExport(
+      context: context,
+      stateManager: gridState.stateManager!,
+    );
+    csvExport.export();
+  }
+
+  void exportPDF({
+    required BuildContext context,
+    required PlutoGridState gridState,
+  }) {
+    PlutoGridPdfExport pdfExport = PlutoGridPdfExport(
+      context: context,
+      stateManager: gridState.stateManager!,
+    );
+    pdfExport.export();
   }
 
   void mostrarOcultarFiltros() {

@@ -119,7 +119,6 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
     perfilAcessoCubit = PerfilAcessoCubit();
     perfilAcessoCubit.loadAll();
 
-    usuario.senha = '';
     txtNome.addValidator((String str) {
       if (str.isEmpty) {
         return 'Obrigatório';
@@ -187,8 +186,9 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
   }
 
   void setFields() {
-    txtLogin.text = usuario.login.toString();
-    txtNome.text = usuario.nome.toString();
+    txtLogin.text = usuario.login?.toString() ?? '';
+    txtNome.text = usuario.nome?.toString() ?? '';
+    txtSenha.text = usuario.senha?.toString() ?? '';
     txtCodBarra.text = usuario.codBarra == null || usuario.codBarra == 0
         ? ''
         : usuario.codBarra.toString();
@@ -533,10 +533,11 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
                       text: 'Excluir Foto',
                       onTap: usuario.foto != null ? excluirFoto : null,
                     ),
-                    CustomPopupItemModel(
-                      text: 'Imprimir Etiqueta',
-                      onTap: printTag,
-                    ),
+                    if (usuario.cod != null && usuario.cod != 0)
+                      CustomPopupItemModel(
+                        text: 'Imprimir Etiqueta',
+                        onTap: printTag,
+                      ),
                     if (usuario.cod != null && usuario.cod != 0)
                       CustomPopupItemModel(
                         text: 'Resetar Senha',
@@ -602,8 +603,10 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
 
   void alterarSenhaParaPadrao() async {
     if (usuario.cod == 0 || usuario.cod == null) {
-      ToastUtils.showCustomToastWarning(context,
-          'Usuário precisa estar criado para alterar a senha para a padrão',);
+      ToastUtils.showCustomToastWarning(
+        context,
+        'Usuário precisa estar criado para alterar a senha para a padrão',
+      );
       return;
     }
     bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
