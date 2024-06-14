@@ -1,10 +1,10 @@
-import 'package:ageiscme_admin/app/module/pages/colaborador/sigla/frm/sigla_frm_page.dart';
-import 'package:ageiscme_data/services/sigla/sigla_service.dart';
-import 'package:ageiscme_models/dto/sigla/query/sigla_query_dto.dart';
-import 'package:ageiscme_models/dto/sigla/remove/sigla_remove_dto.dart';
-import 'package:ageiscme_models/response_dto/sigla/query/item/sigla_query_item_response_dto.dart';
-import 'package:ageiscme_models/response_dto/sigla/query/sigla_query_response_dto.dart';
-import 'package:ageiscme_models/response_dto/sigla/remove/sigla_remove_response_dto.dart';
+import 'package:ageiscme_admin/app/module/pages/colaborador/turno/frm/turno_frm_page.dart';
+import 'package:ageiscme_data/services/turno/sigla_service.dart';
+import 'package:ageiscme_models/dto/turno/query/turno_query_dto.dart';
+import 'package:ageiscme_models/dto/turno/remove/turno_remove_dto.dart';
+import 'package:ageiscme_models/response_dto/turno/query/item/turno_query_item_response_dto.dart';
+import 'package:ageiscme_models/response_dto/turno/query/turno_query_response_dto.dart';
+import 'package:ageiscme_models/response_dto/turno/remove/turno_remove_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid_api/models/pluto_grid_api_model.dart';
@@ -17,14 +17,10 @@ import 'package:compartilhados/enums/custom_data_column_type.dart';
 import 'package:dependencias_comuns/modular_export.dart';
 import 'package:flutter/material.dart';
 
-class SiglaPageWidget extends StatelessWidget {
-  const SiglaPageWidget({super.key});
+class TurnoPageWidget extends StatelessWidget {
+  const TurnoPageWidget({super.key});
 
   List<CustomDataColumn> _getColunas() => [
-        CustomDataColumn(
-          text: 'Sigla',
-          field: 'sigla',
-        ),
         CustomDataColumn(
           text: 'Descrição',
           field: 'descricao',
@@ -53,7 +49,7 @@ class SiglaPageWidget extends StatelessWidget {
         Expanded(
           child: Padding(
             padding: const EdgeInsets.only(top: 16.0, bottom: 16),
-            child: PlutoGridApiWidget<SiglaQueryItemResponseDTO>(
+            child: PlutoGridApiWidget<TurnoQueryItemResponseDTO>(
               onEdit: (objeto) => openModalGrid(
                 context: context,
                 resetarGrid: resetarGrid,
@@ -65,7 +61,7 @@ class SiglaPageWidget extends StatelessWidget {
                 resetarGrid: resetarGrid,
               ),
               fromJson: (objectsSerialized) => objectsSerialized.map(
-                (json) => SiglaQueryItemResponseDTO.fromJson(json),
+                (json) => TurnoQueryItemResponseDTO.fromJson(json),
               ),
               resetGridPagionationBuilder:
                   (context, resetGridPaginationBuilder) =>
@@ -84,31 +80,30 @@ class SiglaPageWidget extends StatelessWidget {
     required PlutoGridApiModel filter,
     required BuildContext context,
   }) async {
-    SiglaQueryDTO dto = SiglaQueryDTO(gridFilter: filter);
+    TurnoQueryDTO dto = TurnoQueryDTO(gridFilter: filter);
     LoadingController loading = LoadingController(context: context);
-    (String, SiglaQueryResponseDTO)? result =
-        await Modular.get<SiglaService>().query(dto: dto);
+    (String, TurnoQueryResponseDTO)? result =
+        await Modular.get<TurnoService>().query(dto: dto);
     loading.closeDefault();
     return result?.$2.plutoData;
   }
 
   Future remover({
-    required SiglaQueryItemResponseDTO item,
+    required TurnoQueryItemResponseDTO item,
     required BuildContext context,
     required Function() resetarGrid,
   }) async {
     bool confirma = await ConfirmDialogUtils.showConfirmAlertDialog(
       context,
-      'Confirma a exclusão da Sigla: \n${item.cod} - ${item.sigla}',
+      'Confirma a exclusão do Turno: \n${item.cod} - ${item.descricao}',
     );
     if (confirma != true) return;
 
-    SiglaRemoveDTO dto =
-        SiglaRemoveDTO(cod: item.cod, tstamp: item.tstamp);
+    TurnoRemoveDTO dto = TurnoRemoveDTO(cod: item.cod, tstamp: item.tstamp);
 
     LoadingController loading = LoadingController(context: context);
-    (String, SiglaRemoveResponseDTO)? result =
-        await Modular.get<SiglaService>().delete(dto);
+    (String, TurnoRemoveResponseDTO)? result =
+        await Modular.get<TurnoService>().delete(dto);
     loading.closeDefault();
     if (result == null) return;
     ToastUtils.showCustomToastSucess(context, result.$1);
@@ -118,7 +113,7 @@ class SiglaPageWidget extends StatelessWidget {
   Future openModalGrid({
     required BuildContext context,
     required Function() resetarGrid,
-    required SiglaQueryItemResponseDTO item,
+    required TurnoQueryItemResponseDTO item,
   }) async =>
       await openModal(
         context: context,
@@ -136,7 +131,7 @@ class SiglaPageWidget extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          content: SiglaFrmPage(
+          content: TurnoFrmPage(
             cod: cod,
           ),
         );

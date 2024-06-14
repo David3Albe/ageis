@@ -11,7 +11,10 @@ _$SiglaShortResponseDTOImpl _$$SiglaShortResponseDTOImplFromJson(Map json) =>
       cod: json['cod'] as int,
       descricao: json['descricao'] as String,
       sigla: json['sigla'] as String,
-      corRGB: json['corRGB'] as int?,
+      r: json['r'] as int?,
+      g: json['g'] as int?,
+      b: json['b'] as int?,
+      o: (json['o'] as num?)?.toDouble(),
     );
 
 Map<String, dynamic> _$$SiglaShortResponseDTOImplToJson(
@@ -20,5 +23,8 @@ Map<String, dynamic> _$$SiglaShortResponseDTOImplToJson(
       'cod': instance.cod,
       'descricao': instance.descricao,
       'sigla': instance.sigla,
-      'corRGB': instance.corRGB,
+      'r': instance.r,
+      'g': instance.g,
+      'b': instance.b,
+      'o': instance.o,
     };

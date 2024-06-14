@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'sigla_save_dto.dart';
+part of 'turno_save_dto.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,28 +14,18 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-SiglaSaveDTO _$SiglaSaveDTOFromJson(Map<String, dynamic> json) {
-  return _SiglaSaveDTO.fromJson(json);
+TurnoSaveDTO _$TurnoSaveDTOFromJson(Map<String, dynamic> json) {
+  return _TurnoSaveDTO.fromJson(json);
 }
 
 /// @nodoc
-mixin _$SiglaSaveDTO {
+mixin _$TurnoSaveDTO {
   int get cod => throw _privateConstructorUsedError;
   set cod(int value) => throw _privateConstructorUsedError;
   String get descricao => throw _privateConstructorUsedError;
   set descricao(String value) => throw _privateConstructorUsedError;
-  String get sigla => throw _privateConstructorUsedError;
-  set sigla(String value) => throw _privateConstructorUsedError;
   bool get ativo => throw _privateConstructorUsedError;
   set ativo(bool value) => throw _privateConstructorUsedError;
-  int? get r => throw _privateConstructorUsedError;
-  set r(int? value) => throw _privateConstructorUsedError;
-  int? get g => throw _privateConstructorUsedError;
-  set g(int? value) => throw _privateConstructorUsedError;
-  int? get b => throw _privateConstructorUsedError;
-  set b(int? value) => throw _privateConstructorUsedError;
-  double? get o => throw _privateConstructorUsedError;
-  set o(double? value) => throw _privateConstructorUsedError;
   DateTime? get ultimaAlteracao => throw _privateConstructorUsedError;
   set ultimaAlteracao(DateTime? value) => throw _privateConstructorUsedError;
   String? get tstamp => throw _privateConstructorUsedError;
@@ -45,34 +35,29 @@ mixin _$SiglaSaveDTO {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $SiglaSaveDTOCopyWith<SiglaSaveDTO> get copyWith =>
+  $TurnoSaveDTOCopyWith<TurnoSaveDTO> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $SiglaSaveDTOCopyWith<$Res> {
-  factory $SiglaSaveDTOCopyWith(
-          SiglaSaveDTO value, $Res Function(SiglaSaveDTO) then) =
-      _$SiglaSaveDTOCopyWithImpl<$Res, SiglaSaveDTO>;
+abstract class $TurnoSaveDTOCopyWith<$Res> {
+  factory $TurnoSaveDTOCopyWith(
+          TurnoSaveDTO value, $Res Function(TurnoSaveDTO) then) =
+      _$TurnoSaveDTOCopyWithImpl<$Res, TurnoSaveDTO>;
   @useResult
   $Res call(
       {int cod,
       String descricao,
-      String sigla,
       bool ativo,
-      int? r,
-      int? g,
-      int? b,
-      double? o,
       DateTime? ultimaAlteracao,
       String? tstamp,
       int? codInstituicao});
 }
 
 /// @nodoc
-class _$SiglaSaveDTOCopyWithImpl<$Res, $Val extends SiglaSaveDTO>
-    implements $SiglaSaveDTOCopyWith<$Res> {
-  _$SiglaSaveDTOCopyWithImpl(this._value, this._then);
+class _$TurnoSaveDTOCopyWithImpl<$Res, $Val extends TurnoSaveDTO>
+    implements $TurnoSaveDTOCopyWith<$Res> {
+  _$TurnoSaveDTOCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -84,12 +69,7 @@ class _$SiglaSaveDTOCopyWithImpl<$Res, $Val extends SiglaSaveDTO>
   $Res call({
     Object? cod = null,
     Object? descricao = null,
-    Object? sigla = null,
     Object? ativo = null,
-    Object? r = freezed,
-    Object? g = freezed,
-    Object? b = freezed,
-    Object? o = freezed,
     Object? ultimaAlteracao = freezed,
     Object? tstamp = freezed,
     Object? codInstituicao = freezed,
@@ -103,30 +83,10 @@ class _$SiglaSaveDTOCopyWithImpl<$Res, $Val extends SiglaSaveDTO>
           ? _value.descricao
           : descricao // ignore: cast_nullable_to_non_nullable
               as String,
-      sigla: null == sigla
-          ? _value.sigla
-          : sigla // ignore: cast_nullable_to_non_nullable
-              as String,
       ativo: null == ativo
           ? _value.ativo
           : ativo // ignore: cast_nullable_to_non_nullable
               as bool,
-      r: freezed == r
-          ? _value.r
-          : r // ignore: cast_nullable_to_non_nullable
-              as int?,
-      g: freezed == g
-          ? _value.g
-          : g // ignore: cast_nullable_to_non_nullable
-              as int?,
-      b: freezed == b
-          ? _value.b
-          : b // ignore: cast_nullable_to_non_nullable
-              as int?,
-      o: freezed == o
-          ? _value.o
-          : o // ignore: cast_nullable_to_non_nullable
-              as double?,
       ultimaAlteracao: freezed == ultimaAlteracao
           ? _value.ultimaAlteracao
           : ultimaAlteracao // ignore: cast_nullable_to_non_nullable
@@ -144,33 +104,28 @@ class _$SiglaSaveDTOCopyWithImpl<$Res, $Val extends SiglaSaveDTO>
 }
 
 /// @nodoc
-abstract class _$$SiglaSaveDTOImplCopyWith<$Res>
-    implements $SiglaSaveDTOCopyWith<$Res> {
-  factory _$$SiglaSaveDTOImplCopyWith(
-          _$SiglaSaveDTOImpl value, $Res Function(_$SiglaSaveDTOImpl) then) =
-      __$$SiglaSaveDTOImplCopyWithImpl<$Res>;
+abstract class _$$TurnoSaveDTOImplCopyWith<$Res>
+    implements $TurnoSaveDTOCopyWith<$Res> {
+  factory _$$TurnoSaveDTOImplCopyWith(
+          _$TurnoSaveDTOImpl value, $Res Function(_$TurnoSaveDTOImpl) then) =
+      __$$TurnoSaveDTOImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
       {int cod,
       String descricao,
-      String sigla,
       bool ativo,
-      int? r,
-      int? g,
-      int? b,
-      double? o,
       DateTime? ultimaAlteracao,
       String? tstamp,
       int? codInstituicao});
 }
 
 /// @nodoc
-class __$$SiglaSaveDTOImplCopyWithImpl<$Res>
-    extends _$SiglaSaveDTOCopyWithImpl<$Res, _$SiglaSaveDTOImpl>
-    implements _$$SiglaSaveDTOImplCopyWith<$Res> {
-  __$$SiglaSaveDTOImplCopyWithImpl(
-      _$SiglaSaveDTOImpl _value, $Res Function(_$SiglaSaveDTOImpl) _then)
+class __$$TurnoSaveDTOImplCopyWithImpl<$Res>
+    extends _$TurnoSaveDTOCopyWithImpl<$Res, _$TurnoSaveDTOImpl>
+    implements _$$TurnoSaveDTOImplCopyWith<$Res> {
+  __$$TurnoSaveDTOImplCopyWithImpl(
+      _$TurnoSaveDTOImpl _value, $Res Function(_$TurnoSaveDTOImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -178,17 +133,12 @@ class __$$SiglaSaveDTOImplCopyWithImpl<$Res>
   $Res call({
     Object? cod = null,
     Object? descricao = null,
-    Object? sigla = null,
     Object? ativo = null,
-    Object? r = freezed,
-    Object? g = freezed,
-    Object? b = freezed,
-    Object? o = freezed,
     Object? ultimaAlteracao = freezed,
     Object? tstamp = freezed,
     Object? codInstituicao = freezed,
   }) {
-    return _then(_$SiglaSaveDTOImpl(
+    return _then(_$TurnoSaveDTOImpl(
       cod: null == cod
           ? _value.cod
           : cod // ignore: cast_nullable_to_non_nullable
@@ -197,30 +147,10 @@ class __$$SiglaSaveDTOImplCopyWithImpl<$Res>
           ? _value.descricao
           : descricao // ignore: cast_nullable_to_non_nullable
               as String,
-      sigla: null == sigla
-          ? _value.sigla
-          : sigla // ignore: cast_nullable_to_non_nullable
-              as String,
       ativo: null == ativo
           ? _value.ativo
           : ativo // ignore: cast_nullable_to_non_nullable
               as bool,
-      r: freezed == r
-          ? _value.r
-          : r // ignore: cast_nullable_to_non_nullable
-              as int?,
-      g: freezed == g
-          ? _value.g
-          : g // ignore: cast_nullable_to_non_nullable
-              as int?,
-      b: freezed == b
-          ? _value.b
-          : b // ignore: cast_nullable_to_non_nullable
-              as int?,
-      o: freezed == o
-          ? _value.o
-          : o // ignore: cast_nullable_to_non_nullable
-              as double?,
       ultimaAlteracao: freezed == ultimaAlteracao
           ? _value.ultimaAlteracao
           : ultimaAlteracao // ignore: cast_nullable_to_non_nullable
@@ -239,39 +169,24 @@ class __$$SiglaSaveDTOImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$SiglaSaveDTOImpl implements _SiglaSaveDTO {
-  _$SiglaSaveDTOImpl(
+class _$TurnoSaveDTOImpl implements _TurnoSaveDTO {
+  _$TurnoSaveDTOImpl(
       {required this.cod,
       required this.descricao,
-      required this.sigla,
       required this.ativo,
-      this.r,
-      this.g,
-      this.b,
-      this.o,
       this.ultimaAlteracao,
       this.tstamp,
       this.codInstituicao});
 
-  factory _$SiglaSaveDTOImpl.fromJson(Map<String, dynamic> json) =>
-      _$$SiglaSaveDTOImplFromJson(json);
+  factory _$TurnoSaveDTOImpl.fromJson(Map<String, dynamic> json) =>
+      _$$TurnoSaveDTOImplFromJson(json);
 
   @override
   int cod;
   @override
   String descricao;
   @override
-  String sigla;
-  @override
   bool ativo;
-  @override
-  int? r;
-  @override
-  int? g;
-  @override
-  int? b;
-  @override
-  double? o;
   @override
   DateTime? ultimaAlteracao;
   @override
@@ -281,39 +196,34 @@ class _$SiglaSaveDTOImpl implements _SiglaSaveDTO {
 
   @override
   String toString() {
-    return 'SiglaSaveDTO(cod: $cod, descricao: $descricao, sigla: $sigla, ativo: $ativo, r: $r, g: $g, b: $b, o: $o, ultimaAlteracao: $ultimaAlteracao, tstamp: $tstamp, codInstituicao: $codInstituicao)';
+    return 'TurnoSaveDTO(cod: $cod, descricao: $descricao, ativo: $ativo, ultimaAlteracao: $ultimaAlteracao, tstamp: $tstamp, codInstituicao: $codInstituicao)';
   }
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$SiglaSaveDTOImplCopyWith<_$SiglaSaveDTOImpl> get copyWith =>
-      __$$SiglaSaveDTOImplCopyWithImpl<_$SiglaSaveDTOImpl>(this, _$identity);
+  _$$TurnoSaveDTOImplCopyWith<_$TurnoSaveDTOImpl> get copyWith =>
+      __$$TurnoSaveDTOImplCopyWithImpl<_$TurnoSaveDTOImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$SiglaSaveDTOImplToJson(
+    return _$$TurnoSaveDTOImplToJson(
       this,
     );
   }
 }
 
-abstract class _SiglaSaveDTO implements SiglaSaveDTO {
-  factory _SiglaSaveDTO(
+abstract class _TurnoSaveDTO implements TurnoSaveDTO {
+  factory _TurnoSaveDTO(
       {required int cod,
       required String descricao,
-      required String sigla,
       required bool ativo,
-      int? r,
-      int? g,
-      int? b,
-      double? o,
       DateTime? ultimaAlteracao,
       String? tstamp,
-      int? codInstituicao}) = _$SiglaSaveDTOImpl;
+      int? codInstituicao}) = _$TurnoSaveDTOImpl;
 
-  factory _SiglaSaveDTO.fromJson(Map<String, dynamic> json) =
-      _$SiglaSaveDTOImpl.fromJson;
+  factory _TurnoSaveDTO.fromJson(Map<String, dynamic> json) =
+      _$TurnoSaveDTOImpl.fromJson;
 
   @override
   int get cod;
@@ -322,23 +232,8 @@ abstract class _SiglaSaveDTO implements SiglaSaveDTO {
   String get descricao;
   set descricao(String value);
   @override
-  String get sigla;
-  set sigla(String value);
-  @override
   bool get ativo;
   set ativo(bool value);
-  @override
-  int? get r;
-  set r(int? value);
-  @override
-  int? get g;
-  set g(int? value);
-  @override
-  int? get b;
-  set b(int? value);
-  @override
-  double? get o;
-  set o(double? value);
   @override
   DateTime? get ultimaAlteracao;
   set ultimaAlteracao(DateTime? value);
@@ -350,6 +245,6 @@ abstract class _SiglaSaveDTO implements SiglaSaveDTO {
   set codInstituicao(int? value);
   @override
   @JsonKey(ignore: true)
-  _$$SiglaSaveDTOImplCopyWith<_$SiglaSaveDTOImpl> get copyWith =>
+  _$$TurnoSaveDTOImplCopyWith<_$TurnoSaveDTOImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

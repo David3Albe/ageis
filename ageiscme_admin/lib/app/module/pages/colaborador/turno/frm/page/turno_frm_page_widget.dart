@@ -1,6 +1,6 @@
-import 'package:ageiscme_admin/app/module/pages/colaborador/sigla/cubits/sigla_frm_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/colaborador/turno/cubits/sigla_frm_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
-import 'package:ageiscme_models/dto/sigla/save/sigla_save_dto.dart';
+import 'package:ageiscme_models/dto/turno/save/turno_save_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
@@ -10,14 +10,13 @@ import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_pop
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/reactive_forms_component/reactive_checkbox_form/reactive_checkbox_form_widget.dart';
-import 'package:compartilhados/reactive_forms_component/reactive_color_picker_form/reactive_color_picker_form_widget.dart';
 import 'package:compartilhados/reactive_forms_component/reactive_string_form/reactive_string_form_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/reactive_forms_export.dart';
 import 'package:flutter/material.dart';
 
-class SiglaFrmPageWidget extends StatelessWidget {
-  const SiglaFrmPageWidget({
+class TurnoFrmPageWidget extends StatelessWidget {
+  const TurnoFrmPageWidget({
     super.key,
   });
 
@@ -25,7 +24,7 @@ class SiglaFrmPageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     double scalePadding = size.width / 1920;
-    bool loading = context.select((SiglaFrmCubit cubit) => cubit.state.loading);
+    bool loading = context.select((TurnoFrmCubit cubit) => cubit.state.loading);
     if (loading == true) {
       return Container(
         constraints: BoxConstraints(
@@ -48,7 +47,7 @@ class SiglaFrmPageWidget extends StatelessWidget {
       child: Stack(
         children: <Widget>[
           ReactiveFormBuilder(
-            form: () => context.read<SiglaFrmCubit>().form,
+            form: () => context.read<TurnoFrmCubit>().form,
             builder: (context, form, child) {
               return Column(
                 children: <Widget>[
@@ -56,13 +55,13 @@ class SiglaFrmPageWidget extends StatelessWidget {
                     children: [
                       Builder(
                         builder: (context) {
-                          SiglaSaveDTO? dto = context.select(
-                            (SiglaFrmCubit cubit) => cubit.state.dtoOriginal,
+                          TurnoSaveDTO? dto = context.select(
+                            (TurnoFrmCubit cubit) => cubit.state.dtoOriginal,
                           );
                           return TitleWidget(
                             text: dto?.cod != -1 && dto?.cod != null
-                                ? 'Edição de Sigla : ${dto!.cod} - ${dto.sigla}'
-                                : 'Criação de nova Sigla',
+                                ? 'Edição de Turno : ${dto!.cod} - ${dto.descricao}'
+                                : 'Criação de novo Turno',
                           );
                         },
                       ),
@@ -75,18 +74,6 @@ class SiglaFrmPageWidget extends StatelessWidget {
                   Padding(
                     padding: EdgeInsets.only(top: 24.0 * scalePadding),
                     child: ReactiveStringFormWidget(
-                      controlName: 'sigla',
-                      placeholder: 'Sigla',
-                      validationMessages: {
-                        ValidationMessage.required: (_) => 'Obrigatório',
-                        ValidationMessage.maxLength: (_) =>
-                            'Número de letras permitidas são no máximo 5',
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 24.0 * scalePadding),
-                    child: ReactiveStringFormWidget(
                       controlName: 'descricao',
                       placeholder: 'Descrição',
                       validationMessages: {
@@ -94,20 +81,6 @@ class SiglaFrmPageWidget extends StatelessWidget {
                         ValidationMessage.maxLength: (_) =>
                             'Número de letras permitidas são no máximo 50',
                       },
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 24.0 * scalePadding),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: ReactiveColorPickerFormWidget(
-                            controlName: 'corRGB',
-                            placeholder: 'Cor',
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                   Padding(
@@ -129,8 +102,8 @@ class SiglaFrmPageWidget extends StatelessWidget {
                     children: [
                       Builder(
                         builder: (context) {
-                          SiglaSaveDTO? dto = context.select(
-                            (SiglaFrmCubit cubit) => cubit.state.dtoOriginal,
+                          TurnoSaveDTO? dto = context.select(
+                            (TurnoFrmCubit cubit) => cubit.state.dtoOriginal,
                           );
                           return CustomPopupMenuWidget(
                             items: [
@@ -138,7 +111,7 @@ class SiglaFrmPageWidget extends StatelessWidget {
                                 CustomPopupItemHistoryModel.getHistoryItem(
                                   child: HistoricoPage(
                                     pk: dto!.cod,
-                                    termo: 'SIGLA',
+                                    termo: 'TURNO',
                                   ),
                                   context: context,
                                 ),
@@ -154,11 +127,11 @@ class SiglaFrmPageWidget extends StatelessWidget {
                           children: [
                             SaveButtonWidget(
                               onPressed: () => context
-                                  .read<SiglaFrmCubit>()
+                                  .read<TurnoFrmCubit>()
                                   .salvar(context: context),
                             ),
                             CleanButtonWidget(
-                              onPressed: context.read<SiglaFrmCubit>().clear,
+                              onPressed: context.read<TurnoFrmCubit>().clear,
                             ),
                             CancelButtonUnfilledWidget(
                               onPressed: () => Navigator.of(context).pop(false),

@@ -11,7 +11,10 @@ sealed class SiglaShortResponseDTO with _$SiglaShortResponseDTO {
     required int cod,
     required String descricao,
     required String sigla,
-    int? corRGB,
+    int? r,
+    int? g,
+    int? b,
+    double? o,
   }) = _SiglaShortResponseDTO;
 
   factory SiglaShortResponseDTO.fromJson(Map<String, Object?> json) =>

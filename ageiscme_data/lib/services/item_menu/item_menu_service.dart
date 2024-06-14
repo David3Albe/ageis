@@ -204,6 +204,36 @@ class ItemMenuService {
       Symbols.group,
     );
 
+    if (direitosUsuario.contains(DireitoEnum.SiglasConsulta) ||
+        direitosUsuario.contains(DireitoEnum.SiglasManutencao) ||
+        ignorarDireitos) {
+      menuItemColaborador.addChildren(
+        ItemMenuModel(
+          'Siglas',
+          route: '/colaborador/sigla',
+          rights: [
+            DireitoEnum.SiglasConsulta,
+            DireitoEnum.SiglasManutencao,
+          ],
+        ),
+      );
+    }
+
+    if (direitosUsuario.contains(DireitoEnum.TurnosConsulta) ||
+        direitosUsuario.contains(DireitoEnum.TurnosManutencao) ||
+        ignorarDireitos) {
+      menuItemColaborador.addChildren(
+        ItemMenuModel(
+          'Turnos',
+          route: '/colaborador/turno',
+          rights: [
+            DireitoEnum.TurnosConsulta,
+            DireitoEnum.TurnosManutencao,
+          ],
+        ),
+      );
+    }
+
     // if (direitosUsuario.contains(DireitoEnum.Desativado) || ignorarDireitos) {
     menuItemColaborador.addChildren(
       ItemMenuModel(

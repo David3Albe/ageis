@@ -27,8 +27,14 @@ mixin _$SiglaShortResponseDTO {
   set descricao(String value) => throw _privateConstructorUsedError;
   String get sigla => throw _privateConstructorUsedError;
   set sigla(String value) => throw _privateConstructorUsedError;
-  int? get corRGB => throw _privateConstructorUsedError;
-  set corRGB(int? value) => throw _privateConstructorUsedError;
+  int? get r => throw _privateConstructorUsedError;
+  set r(int? value) => throw _privateConstructorUsedError;
+  int? get g => throw _privateConstructorUsedError;
+  set g(int? value) => throw _privateConstructorUsedError;
+  int? get b => throw _privateConstructorUsedError;
+  set b(int? value) => throw _privateConstructorUsedError;
+  double? get o => throw _privateConstructorUsedError;
+  set o(double? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -42,7 +48,14 @@ abstract class $SiglaShortResponseDTOCopyWith<$Res> {
           $Res Function(SiglaShortResponseDTO) then) =
       _$SiglaShortResponseDTOCopyWithImpl<$Res, SiglaShortResponseDTO>;
   @useResult
-  $Res call({int cod, String descricao, String sigla, int? corRGB});
+  $Res call(
+      {int cod,
+      String descricao,
+      String sigla,
+      int? r,
+      int? g,
+      int? b,
+      double? o});
 }
 
 /// @nodoc
@@ -62,7 +75,10 @@ class _$SiglaShortResponseDTOCopyWithImpl<$Res,
     Object? cod = null,
     Object? descricao = null,
     Object? sigla = null,
-    Object? corRGB = freezed,
+    Object? r = freezed,
+    Object? g = freezed,
+    Object? b = freezed,
+    Object? o = freezed,
   }) {
     return _then(_value.copyWith(
       cod: null == cod
@@ -77,10 +93,22 @@ class _$SiglaShortResponseDTOCopyWithImpl<$Res,
           ? _value.sigla
           : sigla // ignore: cast_nullable_to_non_nullable
               as String,
-      corRGB: freezed == corRGB
-          ? _value.corRGB
-          : corRGB // ignore: cast_nullable_to_non_nullable
+      r: freezed == r
+          ? _value.r
+          : r // ignore: cast_nullable_to_non_nullable
               as int?,
+      g: freezed == g
+          ? _value.g
+          : g // ignore: cast_nullable_to_non_nullable
+              as int?,
+      b: freezed == b
+          ? _value.b
+          : b // ignore: cast_nullable_to_non_nullable
+              as int?,
+      o: freezed == o
+          ? _value.o
+          : o // ignore: cast_nullable_to_non_nullable
+              as double?,
     ) as $Val);
   }
 }
@@ -94,7 +122,14 @@ abstract class _$$SiglaShortResponseDTOImplCopyWith<$Res>
       __$$SiglaShortResponseDTOImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int cod, String descricao, String sigla, int? corRGB});
+  $Res call(
+      {int cod,
+      String descricao,
+      String sigla,
+      int? r,
+      int? g,
+      int? b,
+      double? o});
 }
 
 /// @nodoc
@@ -112,7 +147,10 @@ class __$$SiglaShortResponseDTOImplCopyWithImpl<$Res>
     Object? cod = null,
     Object? descricao = null,
     Object? sigla = null,
-    Object? corRGB = freezed,
+    Object? r = freezed,
+    Object? g = freezed,
+    Object? b = freezed,
+    Object? o = freezed,
   }) {
     return _then(_$SiglaShortResponseDTOImpl(
       cod: null == cod
@@ -127,10 +165,22 @@ class __$$SiglaShortResponseDTOImplCopyWithImpl<$Res>
           ? _value.sigla
           : sigla // ignore: cast_nullable_to_non_nullable
               as String,
-      corRGB: freezed == corRGB
-          ? _value.corRGB
-          : corRGB // ignore: cast_nullable_to_non_nullable
+      r: freezed == r
+          ? _value.r
+          : r // ignore: cast_nullable_to_non_nullable
               as int?,
+      g: freezed == g
+          ? _value.g
+          : g // ignore: cast_nullable_to_non_nullable
+              as int?,
+      b: freezed == b
+          ? _value.b
+          : b // ignore: cast_nullable_to_non_nullable
+              as int?,
+      o: freezed == o
+          ? _value.o
+          : o // ignore: cast_nullable_to_non_nullable
+              as double?,
     ));
   }
 }
@@ -142,7 +192,10 @@ class _$SiglaShortResponseDTOImpl extends _SiglaShortResponseDTO {
       {required this.cod,
       required this.descricao,
       required this.sigla,
-      this.corRGB})
+      this.r,
+      this.g,
+      this.b,
+      this.o})
       : super._();
 
   factory _$SiglaShortResponseDTOImpl.fromJson(Map<String, dynamic> json) =>
@@ -155,11 +208,17 @@ class _$SiglaShortResponseDTOImpl extends _SiglaShortResponseDTO {
   @override
   String sigla;
   @override
-  int? corRGB;
+  int? r;
+  @override
+  int? g;
+  @override
+  int? b;
+  @override
+  double? o;
 
   @override
   String toString() {
-    return 'SiglaShortResponseDTO(cod: $cod, descricao: $descricao, sigla: $sigla, corRGB: $corRGB)';
+    return 'SiglaShortResponseDTO(cod: $cod, descricao: $descricao, sigla: $sigla, r: $r, g: $g, b: $b, o: $o)';
   }
 
   @JsonKey(ignore: true)
@@ -182,7 +241,10 @@ abstract class _SiglaShortResponseDTO extends SiglaShortResponseDTO {
       {required int cod,
       required String descricao,
       required String sigla,
-      int? corRGB}) = _$SiglaShortResponseDTOImpl;
+      int? r,
+      int? g,
+      int? b,
+      double? o}) = _$SiglaShortResponseDTOImpl;
   _SiglaShortResponseDTO._() : super._();
 
   factory _SiglaShortResponseDTO.fromJson(Map<String, dynamic> json) =
@@ -198,8 +260,17 @@ abstract class _SiglaShortResponseDTO extends SiglaShortResponseDTO {
   String get sigla;
   set sigla(String value);
   @override
-  int? get corRGB;
-  set corRGB(int? value);
+  int? get r;
+  set r(int? value);
+  @override
+  int? get g;
+  set g(int? value);
+  @override
+  int? get b;
+  set b(int? value);
+  @override
+  double? get o;
+  set o(double? value);
   @override
   @JsonKey(ignore: true)
   _$$SiglaShortResponseDTOImplCopyWith<_$SiglaShortResponseDTOImpl>

@@ -46,6 +46,7 @@ dependencies:
   pluto_grid_export: ^1.0.6
   cryptography: ^2.7.0
   reactive_forms: ^17.0.1
+  reactive_color_picker: ^2.0.1
   
 dev_dependencies:
   flutter_test:

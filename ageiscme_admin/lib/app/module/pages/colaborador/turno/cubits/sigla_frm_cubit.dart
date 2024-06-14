@@ -1,8 +1,8 @@
-import 'package:ageiscme_admin/app/module/pages/colaborador/sigla/states/sigla_frm_state.dart';
-import 'package:ageiscme_data/services/sigla/sigla_service.dart';
-import 'package:ageiscme_models/dto/sigla/query_one/sigla_query_one_dto.dart';
-import 'package:ageiscme_models/dto/sigla/save/sigla_save_dto.dart';
-import 'package:ageiscme_models/response_dto/sigla/save/sigla_save_response_dto.dart';
+import 'package:ageiscme_admin/app/module/pages/colaborador/turno/states/turno_frm_state.dart';
+import 'package:ageiscme_data/services/turno/sigla_service.dart';
+import 'package:ageiscme_models/dto/turno/query_one/turno_query_one_dto.dart';
+import 'package:ageiscme_models/dto/turno/save/turno_save_dto.dart';
+import 'package:ageiscme_models/response_dto/turno/save/turno_save_response_dto.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
@@ -10,23 +10,21 @@ import 'package:dependencias_comuns/modular_export.dart';
 import 'package:dependencias_comuns/reactive_forms_export.dart';
 import 'package:flutter/material.dart';
 
-class SiglaFrmCubit extends Cubit<SiglaFrmState> {
-  SiglaFrmCubit() : super(SiglaFrmState());
+class TurnoFrmCubit extends Cubit<TurnoFrmState> {
+  TurnoFrmCubit() : super(TurnoFrmState());
 
   FormGroup form = fb.group(
     <String, Object>{
       'descricao': ['', Validators.required, Validators.maxLength(50)],
-      'sigla': ['', Validators.required, Validators.maxLength(5)],
-      'corRGB': FormControl<Color>(value: null),
       'ativo': [true],
     },
   );
 
   void _loadEmpty() {
-    SiglaSaveDTO dto = SiglaSaveDTO.empty();
+    TurnoSaveDTO dto = TurnoSaveDTO.empty();
     setForm(dto: dto);
     emit(
-      SiglaFrmState(
+      TurnoFrmState(
         dto: dto,
         dtoOriginal: dto,
       ),
@@ -34,42 +32,37 @@ class SiglaFrmCubit extends Cubit<SiglaFrmState> {
   }
 
   void setForm({
-    required SiglaSaveDTO dto,
+    required TurnoSaveDTO dto,
   }) {
     form.controls['descricao']!.value = dto.descricao;
-    form.controls['sigla']!.value = dto.sigla;
     form.controls['ativo']!.value = dto.ativo;
-    form.controls['corRGB']!.value =
-        dto.r != null && dto.b != null && dto.g != null && dto.o!=null
-            ? Color.fromRGBO(dto.r!, dto.g!, dto.b!, dto.o!)
-            : null;
   }
 
   void load({
     required int? cod,
     required BuildContext context,
   }) async {
-    emit(SiglaFrmState(loading: true));
+    emit(TurnoFrmState(loading: true));
     if (cod == null || cod == -1) {
       _loadEmpty();
       return;
     }
-    SiglaService service = Modular.get<SiglaService>();
-    (String, SiglaSaveDTO)? result =
-        await service.queryOne(dto: SiglaQueryOneDTO(cod: cod));
+    TurnoService service = Modular.get<TurnoService>();
+    (String, TurnoSaveDTO)? result =
+        await service.queryOne(dto: TurnoQueryOneDTO(cod: cod));
     if (result == null) {
-      emit(SiglaFrmState());
+      emit(TurnoFrmState());
       return;
     }
-    emit(SiglaFrmState(dto: result.$2, dtoOriginal: result.$2));
+    emit(TurnoFrmState(dto: result.$2, dtoOriginal: result.$2));
     setForm(dto: result.$2);
   }
 
   void clear() {
-    SiglaSaveDTO saveDTO = SiglaSaveDTO.empty();
+    TurnoSaveDTO saveDTO = TurnoSaveDTO.empty();
     setForm(dto: saveDTO);
     emit(
-      SiglaFrmState(
+      TurnoFrmState(
         dto: saveDTO,
         dtoOriginal: saveDTO,
       ),
@@ -85,8 +78,8 @@ class SiglaFrmCubit extends Cubit<SiglaFrmState> {
     _setDTO();
     if (state.dto == null) return;
     LoadingController loading = LoadingController(context: context);
-    (String, SiglaSaveResponseDTO)? result =
-        await Modular.get<SiglaService>().save(state.dto!);
+    (String, TurnoSaveResponseDTO)? result =
+        await Modular.get<TurnoService>().save(state.dto!);
     loading.closeDefault();
     if (result == null) return;
     ToastUtils.showCustomToastSucess(context, result.$1);
@@ -94,17 +87,9 @@ class SiglaFrmCubit extends Cubit<SiglaFrmState> {
   }
 
   void _setDTO() {
-    SiglaSaveDTO? dto = state.dto;
+    TurnoSaveDTO? dto = state.dto;
     if (dto == null) return;
     dto.ativo = form.controls['ativo']!.value as bool;
     dto.descricao = form.controls['descricao']!.value as String;
-    dto.sigla = form.controls['sigla']!.value as String;
-    Color? cor = form.controls['corRGB']!.value as Color?;
-    if (cor != null) {
-      dto.r = cor.red;
-      dto.g = cor.green;
-      dto.b = cor.blue;
-      dto.o = cor.opacity;
-    }
   }
 }

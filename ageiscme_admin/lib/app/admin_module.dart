@@ -27,8 +27,10 @@ import 'package:ageiscme_admin/app/module/pages/colaborador/consulta_historico_c
 import 'package:ageiscme_admin/app/module/pages/colaborador/consulta_processo_resposta_epcepi/consulta_processo_resposta_epcepi_page.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/epi_descritor/epi_descritor_page.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/epi_entrega/epi_entrega_page.dart';
+import 'package:ageiscme_admin/app/module/pages/colaborador/sigla/sigla_page.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/tipo_afastamento/tipo_afastamento_page.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/treinamento_registro/treinamento_registro_page.dart';
+import 'package:ageiscme_admin/app/module/pages/colaborador/turno/turno_page.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/consulta_manutencao/consulta_manutencao_page.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/consulta_registro_servico/consulta_registro_servico_page.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento/equipamento_page.dart';
@@ -492,6 +494,14 @@ class AdminModule extends Module {
         createParallelRoute(
           '/processo/consulta-anormalidade',
           child: (context) => const ConsultaAnormalidadePage(),
+        ),
+        createParallelRoute(
+          '/colaborador/sigla',
+          child: (context) => const SiglaPage(),
+        ),
+        createParallelRoute(
+          '/colaborador/turno',
+          child: (context) => const TurnoPage(),
         ),
       ],
     );

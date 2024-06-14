@@ -175,5 +175,11 @@ class DireitoEnum {
   static const int ConsultaLiberacaoLeituras = 2701;
   static const int ManutencaoLiberacaoLeituras = 2702;
 
+  static const int SiglasConsulta = 2801;
+  static const int SiglasManutencao = 2802;
+
+  static const int TurnosConsulta = 2901;
+  static const int TurnosManutencao = 2902;
+
   static const int Desativado = 9999;
 }
