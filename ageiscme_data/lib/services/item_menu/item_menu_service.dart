@@ -234,15 +234,20 @@ class ItemMenuService {
       );
     }
 
-    // if (direitosUsuario.contains(DireitoEnum.Desativado) || ignorarDireitos) {
-    menuItemColaborador.addChildren(
-      ItemMenuModel(
-        'Escala',
-        route: '/colaborador/escala',
-        rights: [DireitoEnum.Desativado],
-      ),
-    );
-    // }
+    if (direitosUsuario.contains(DireitoEnum.EscalasConsulta) ||
+        direitosUsuario.contains(DireitoEnum.EscalasManutencao) ||
+        ignorarDireitos) {
+      menuItemColaborador.addChildren(
+        ItemMenuModel(
+          'Escala',
+          route: '/colaborador/escala',
+          rights: [
+            DireitoEnum.EscalasConsulta,
+            DireitoEnum.EscalasManutencao,
+          ],
+        ),
+      );
+    }
 
     if (direitosUsuario.contains(DireitoEnum.ASOsUsuariosConsulta) ||
         direitosUsuario.contains(DireitoEnum.ASOsUsuariosManutencao) ||

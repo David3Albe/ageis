@@ -1,5 +1,5 @@
 import 'package:ageiscme_admin/app/module/pages/colaborador/turno/states/turno_frm_state.dart';
-import 'package:ageiscme_data/services/turno/sigla_service.dart';
+import 'package:ageiscme_data/services/turno/turno_service.dart';
 import 'package:ageiscme_models/dto/turno/query_one/turno_query_one_dto.dart';
 import 'package:ageiscme_models/dto/turno/save/turno_save_dto.dart';
 import 'package:ageiscme_models/response_dto/turno/save/turno_save_response_dto.dart';

@@ -1,5 +1,5 @@
 import 'package:ageiscme_admin/app/module/pages/colaborador/turno/frm/turno_frm_page.dart';
-import 'package:ageiscme_data/services/turno/sigla_service.dart';
+import 'package:ageiscme_data/services/turno/turno_service.dart';
 import 'package:ageiscme_models/dto/turno/query/turno_query_dto.dart';
 import 'package:ageiscme_models/dto/turno/remove/turno_remove_dto.dart';
 import 'package:ageiscme_models/response_dto/turno/query/item/turno_query_item_response_dto.dart';
