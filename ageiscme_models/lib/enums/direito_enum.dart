@@ -91,6 +91,9 @@ class DireitoEnum {
   static const int InsumosSolicitacaoMaterial = 343;
   static const int InsumosSolicitacaoMaterialExpedicoes = 344;
 
+  static const int EscalasConsulta = 350;
+  static const int EscalasManutencao = 351;
+
   static const int ASOsUsuariosConsulta = 370;
   static const int ASOsUsuariosManutencao = 371;
 
