@@ -9,7 +9,7 @@ part of 'registros_expirar_remover_registro_dto.dart';
 _$RegistrosExpirarRemoverRegistroDTOImpl
     _$$RegistrosExpirarRemoverRegistroDTOImplFromJson(Map json) =>
         _$RegistrosExpirarRemoverRegistroDTOImpl(
-          codTabela: json['codTabela'] as int,
+          codTabela: (json['codTabela'] as num).toInt(),
           nomeTabela: json['nomeTabela'] as String,
         );
 

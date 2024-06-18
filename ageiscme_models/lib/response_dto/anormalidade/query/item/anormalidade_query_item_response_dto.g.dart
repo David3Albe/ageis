@@ -9,7 +9,7 @@ part of 'anormalidade_query_item_response_dto.dart';
 _$AnormalidadeQueryItemResponseDTOImpl
     _$$AnormalidadeQueryItemResponseDTOImplFromJson(Map json) =>
         _$AnormalidadeQueryItemResponseDTOImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           dataHora: DateTime.parse(json['dataHora'] as String),
           descricao: json['descricao'] as String,
           tstamp: json['tstamp'] as String?,

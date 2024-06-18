@@ -9,10 +9,10 @@ part of 'equipamento_manutencao_filter.dart';
 _$EquipamentoManutencaoFilterImpl _$$EquipamentoManutencaoFilterImplFromJson(
         Map json) =>
     _$EquipamentoManutencaoFilterImpl(
-      cod: json['cod'] as int?,
-      numeroRegistros: json['numeroRegistros'] as int?,
-      codEquipamento: json['codEquipamento'] as int?,
-      codTipoServico: json['codTipoServico'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      numeroRegistros: (json['numeroRegistros'] as num?)?.toInt(),
+      codEquipamento: (json['codEquipamento'] as num?)?.toInt(),
+      codTipoServico: (json['codTipoServico'] as num?)?.toInt(),
       tStamp: json['tStamp'] as String?,
     );
 

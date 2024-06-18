@@ -8,11 +8,11 @@ part of 'estoque_disponivel_model.dart';
 
 _$EstoqueDisponivelModelImpl _$$EstoqueDisponivelModelImplFromJson(Map json) =>
     _$EstoqueDisponivelModelImpl(
-      cod: json['cod'] as int?,
-      codEstoque: json['codEstoque'] as int?,
-      codLocalEstoque: json['codLocalEstoque'] as int?,
-      codKit: json['codKit'] as int?,
-      codItem: json['codItem'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codEstoque: (json['codEstoque'] as num?)?.toInt(),
+      codLocalEstoque: (json['codLocalEstoque'] as num?)?.toInt(),
+      codKit: (json['codKit'] as num?)?.toInt(),
+      codItem: (json['codItem'] as num?)?.toInt(),
       removido: json['removido'] as bool?,
       dataEntrada: json['dataEntrada'] == null
           ? null
@@ -20,7 +20,7 @@ _$EstoqueDisponivelModelImpl _$$EstoqueDisponivelModelImplFromJson(Map json) =>
       dataValidade: json['dataValidade'] == null
           ? null
           : DateTime.parse(json['dataValidade'] as String),
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),

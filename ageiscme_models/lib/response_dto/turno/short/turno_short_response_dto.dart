@@ -19,4 +19,7 @@ sealed class TurnoShortResponseDTO with _$TurnoShortResponseDTO {
       TurnoShortResponseDTO.fromJson(obj.toJson());
 
   String Descricao() => descricao;
+
+  @override
+  String toString() => descricao;
 }

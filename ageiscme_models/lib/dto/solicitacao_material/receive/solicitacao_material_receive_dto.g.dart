@@ -9,9 +9,9 @@ part of 'solicitacao_material_receive_dto.dart';
 _$SolicitacaoMaterialReceiveDTOImpl
     _$$SolicitacaoMaterialReceiveDTOImplFromJson(Map json) =>
         _$SolicitacaoMaterialReceiveDTOImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           codBarraUsuarioRecebedor: json['codBarraUsuarioRecebedor'] as String,
-          codUsuarioEntrega: json['codUsuarioEntrega'] as int,
+          codUsuarioEntrega: (json['codUsuarioEntrega'] as num).toInt(),
         );
 
 Map<String, dynamic> _$$SolicitacaoMaterialReceiveDTOImplToJson(

@@ -7,7 +7,7 @@ part of 'insumo_model.dart';
 // **************************************************************************
 
 _$InsumoModelImpl _$$InsumoModelImplFromJson(Map json) => _$InsumoModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       codErp3Albe: json['codErp3Albe'] as String?,
       nome: json['nome'] as String?,
       descricao: json['descricao'] as String?,
@@ -16,21 +16,22 @@ _$InsumoModelImpl _$$InsumoModelImplFromJson(Map json) => _$InsumoModelImpl(
       fabricante: json['fabricante'] as String?,
       fornecedor: json['fornecedor'] as String?,
       registroAnvisa: json['registroAnvisa'] as String?,
-      codBarra: json['codBarra'] as int?,
+      codBarra: (json['codBarra'] as num?)?.toInt(),
       qtdeEmbalagem: (json['qtdeEmbalagem'] as num?)?.toDouble(),
       estoqueMaximo: (json['estoqueMaximo'] as num?)?.toDouble(),
       estoqueMinimo: (json['estoqueMinimo'] as num?)?.toDouble(),
       pontoReposicao: (json['pontoReposicao'] as num?)?.toDouble(),
-      codItem: json['codItem'] as int?,
-      prazoEntregaDias: json['prazoEntregaDias'] as int?,
-      validadeAposAtivacaoDias: json['validadeAposAtivacaoDias'] as int?,
+      codItem: (json['codItem'] as num?)?.toInt(),
+      prazoEntregaDias: (json['prazoEntregaDias'] as num?)?.toInt(),
+      validadeAposAtivacaoDias:
+          (json['validadeAposAtivacaoDias'] as num?)?.toInt(),
       controleEstoque: json['controleEstoque'] as bool?,
       testeInsumoObrigatorio: json['testeInsumoObrigatorio'] as bool?,
       ativo: json['ativo'] as bool?,
-      codFabricante: json['codFabricante'] as int?,
-      codFornecedor: json['codFornecedor'] as int?,
-      codUnidadeMedida: json['codUnidadeMedida'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codFabricante: (json['codFabricante'] as num?)?.toInt(),
+      codFornecedor: (json['codFornecedor'] as num?)?.toInt(),
+      codUnidadeMedida: (json['codUnidadeMedida'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),
@@ -50,7 +51,7 @@ _$InsumoModelImpl _$$InsumoModelImplFromJson(Map json) => _$InsumoModelImpl(
           ? null
           : UnidadeMedidaModel.fromJson(
               Map<String, Object?>.from(json['unidadeMedidaItem'] as Map)),
-      codDestinoResiduo: json['codDestinoResiduo'] as int?,
+      codDestinoResiduo: (json['codDestinoResiduo'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$InsumoModelImplToJson(_$InsumoModelImpl instance) =>

@@ -8,22 +8,22 @@ part of 'epi_descritor_model.dart';
 
 _$EpiDescritorModelImpl _$$EpiDescritorModelImplFromJson(Map json) =>
     _$EpiDescritorModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       descricao: json['descricao'] as String?,
       numeroCA: json['numeroCA'] as String?,
-      tipoEpi: json['tipoEpi'] as int?,
+      tipoEpi: (json['tipoEpi'] as num?)?.toInt(),
       prazoValidade: json['prazoValidade'] == null
           ? null
           : DateTime.parse(json['prazoValidade'] as String),
       conferenciaVisual: json['conferenciaVisual'] as bool?,
       ativo: json['ativo'] as bool?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       imagem: json['imagem'] as String?,
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),
       tstamp: json['tStamp'] as String?,
-      codFornecedor: json['codFornecedor'] as int?,
+      codFornecedor: (json['codFornecedor'] as num?)?.toInt(),
       fornecedor: json['fornecedor'] == null
           ? null
           : FornecedorModel.fromJson(

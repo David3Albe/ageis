@@ -17,8 +17,8 @@ _$ConsultaRegistroServicoFilterImpl
               : DateTime.parse(json['finalDate'] as String),
           codBarraItem: json['codBarraItem'] as String?,
           idEtiquetaContem: json['idEtiquetaContem'] as String?,
-          codEquipamento: json['codEquipamento'] as int?,
-          codServicoTipo: json['codServicoTipo'] as int?,
+          codEquipamento: (json['codEquipamento'] as num?)?.toInt(),
+          codServicoTipo: (json['codServicoTipo'] as num?)?.toInt(),
           item: json['item'] == null
               ? null
               : ItemModel.fromJson(

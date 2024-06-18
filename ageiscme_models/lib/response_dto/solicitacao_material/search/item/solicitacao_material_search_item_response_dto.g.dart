@@ -9,17 +9,19 @@ part of 'solicitacao_material_search_item_response_dto.dart';
 _$SolicitacaoMaterialSearchItemResponseDTOImpl
     _$$SolicitacaoMaterialSearchItemResponseDTOImplFromJson(Map json) =>
         _$SolicitacaoMaterialSearchItemResponseDTOImpl(
-          cod: json['cod'] as int,
-          itensSolicitados: json['itensSolicitados'] as int,
-          itensEntregues: json['itensEntregues'] as int,
+          cod: (json['cod'] as num).toInt(),
+          itensSolicitados: (json['itensSolicitados'] as num).toInt(),
+          itensEntregues: (json['itensEntregues'] as num).toInt(),
           dataSolicitacao: DateTime.parse(json['dataSolicitacao'] as String),
-          codUsuarioSolicitacao: json['codUsuarioSolicitacao'] as int,
-          codUsuarioRecebimento: json['codUsuarioRecebimento'] as int?,
-          codUsuarioEntrega: json['codUsuarioEntrega'] as int?,
+          codUsuarioSolicitacao: (json['codUsuarioSolicitacao'] as num).toInt(),
+          codUsuarioRecebimento:
+              (json['codUsuarioRecebimento'] as num?)?.toInt(),
+          codUsuarioEntrega: (json['codUsuarioEntrega'] as num?)?.toInt(),
           dataEntrega: json['dataEntrega'] == null
               ? null
               : DateTime.parse(json['dataEntrega'] as String),
-          codUsuarioAutorizacao: json['codUsuarioAutorizacao'] as int?,
+          codUsuarioAutorizacao:
+              (json['codUsuarioAutorizacao'] as num?)?.toInt(),
           dataAutorizacao: json['dataAutorizacao'] == null
               ? null
               : DateTime.parse(json['dataAutorizacao'] as String),

@@ -13,7 +13,7 @@ _$ItemFilterImpl _$$ItemFilterImplFromJson(Map json) => _$ItemFilterImpl(
       finalDate: json['finalDate'] == null
           ? null
           : DateTime.parse(json['finalDate'] as String),
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       apenasAtivos: json['apenasAtivos'] as bool?,
       ordenarPorNomeCrescente: json['ordenarPorNomeCrescente'] as bool?,
       carregarKit: json['carregarKit'] as bool?,
@@ -24,7 +24,7 @@ _$ItemFilterImpl _$$ItemFilterImplFromJson(Map json) => _$ItemFilterImpl(
       apenasItensConsignados: json['apenasItensConsignados'] as bool?,
       apenasItensNaoConsignados: json['apenasItensNaoConsignados'] as bool?,
       carregarItensConsignado: json['carregarItensConsignado'] as bool?,
-      numeroRegistros: json['numeroRegistros'] as int?,
+      numeroRegistros: (json['numeroRegistros'] as num?)?.toInt(),
       termoPesquisa: json['termoPesquisa'] as String?,
       idEtiquetaComecaCom: json['idEtiquetaComecaCom'] as String?,
       idEtiquetaContem: json['idEtiquetaContem'] as String?,
@@ -38,7 +38,7 @@ _$ItemFilterImpl _$$ItemFilterImplFromJson(Map json) => _$ItemFilterImpl(
           ? null
           : KitModel.fromJson(
               Map<String, Object?>.from(json['kitFilter'] as Map)),
-      codKit: json['codKit'] as int?,
+      codKit: (json['codKit'] as num?)?.toInt(),
       iDEtiqueta: json['iDEtiqueta'] as String?,
     );
 

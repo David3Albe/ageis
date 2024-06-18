@@ -9,7 +9,7 @@ part of 'consulta_manutencao_model.dart';
 _$ConsultaManutencaoModelImpl _$$ConsultaManutencaoModelImplFromJson(
         Map json) =>
     _$ConsultaManutencaoModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       dataInicio: json['dataInicio'] == null
           ? null
           : DateTime.parse(json['dataInicio'] as String),

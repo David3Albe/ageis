@@ -8,9 +8,9 @@ part of 'fornecedor_model.dart';
 
 _$FornecedorModelImpl _$$FornecedorModelImplFromJson(Map json) =>
     _$FornecedorModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       nome: json['nome'] as String?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),

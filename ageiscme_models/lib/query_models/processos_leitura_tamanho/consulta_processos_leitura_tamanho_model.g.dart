@@ -12,8 +12,8 @@ _$ConsultaProcessosLeituraTamanhoModelImpl
           nomeCentroCusto: json['nomeCentroCusto'] as String?,
           nomeLocal: json['nomeLocal'] as String?,
           tamanho: json['tamanho'] as String?,
-          qtde: json['qtde'] as int?,
-          codLocal: json['codLocal'] as int?,
+          qtde: (json['qtde'] as num?)?.toInt(),
+          codLocal: (json['codLocal'] as num?)?.toInt(),
         );
 
 Map<String, dynamic> _$$ConsultaProcessosLeituraTamanhoModelImplToJson(

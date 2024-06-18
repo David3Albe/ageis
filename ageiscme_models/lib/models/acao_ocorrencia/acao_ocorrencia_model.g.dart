@@ -8,9 +8,9 @@ part of 'acao_ocorrencia_model.dart';
 
 _$AcaoOcorrenciaModelImpl _$$AcaoOcorrenciaModelImplFromJson(Map json) =>
     _$AcaoOcorrenciaModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       descricao: json['descricao'] as String?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       acaoCorretiva: json['acaoCorretiva'] as bool?,
       motivoNaoCorrecao: json['motivoNaoCorrecao'] as bool?,
       ativo: json['ativo'] as bool?,

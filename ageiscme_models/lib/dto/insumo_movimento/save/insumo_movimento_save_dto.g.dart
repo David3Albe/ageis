@@ -10,7 +10,7 @@ _$InsumoMovimentoSaveDTOImpl _$$InsumoMovimentoSaveDTOImplFromJson(Map json) =>
     _$InsumoMovimentoSaveDTOImpl(
       insumoMovimento: InsumoMovimentoModel.fromJson(
           Map<String, Object?>.from(json['insumoMovimento'] as Map)),
-      numeroSolicitacaoItem: json['numeroSolicitacaoItem'] as int?,
+      numeroSolicitacaoItem: (json['numeroSolicitacaoItem'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$InsumoMovimentoSaveDTOImplToJson(

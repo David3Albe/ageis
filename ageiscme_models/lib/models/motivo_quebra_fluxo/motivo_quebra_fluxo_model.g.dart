@@ -8,9 +8,9 @@ part of 'motivo_quebra_fluxo_model.dart';
 
 _$MotivoQuebraFluxoModelImpl _$$MotivoQuebraFluxoModelImplFromJson(Map json) =>
     _$MotivoQuebraFluxoModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       descricao: json['descricao'] as String?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ativo: json['ativo'] as bool?,
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null

@@ -9,7 +9,7 @@ part of 'atestado_saude_ocupacional_filter.dart';
 _$AtestadoSaudeOcupacionalFilterImpl
     _$$AtestadoSaudeOcupacionalFilterImplFromJson(Map json) =>
         _$AtestadoSaudeOcupacionalFilterImpl(
-          cod: json['cod'] as int?,
+          cod: (json['cod'] as num?)?.toInt(),
           carregarUsuario: json['carregarUsuario'] as bool?,
           tStamp: json['tStamp'] as String?,
         );

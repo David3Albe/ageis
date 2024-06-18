@@ -9,22 +9,22 @@ part of 'processo_detalhe_registro_model.dart';
 _$ProcessoDetalheRegistroModelImpl _$$ProcessoDetalheRegistroModelImplFromJson(
         Map json) =>
     _$ProcessoDetalheRegistroModelImpl(
-      cod: json['cod'] as int?,
-      codRegistroProcesso: json['codRegistroProcesso'] as int?,
-      codUsuarioEntrega: json['codUsuarioEntrega'] as int?,
-      codLocalEntrega: json['codLocalEntrega'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codRegistroProcesso: (json['codRegistroProcesso'] as num?)?.toInt(),
+      codUsuarioEntrega: (json['codUsuarioEntrega'] as num?)?.toInt(),
+      codLocalEntrega: (json['codLocalEntrega'] as num?)?.toInt(),
       entregaRetirada: json['entregaRetirada'] as String?,
-      codUsuarioRetirada: json['codUsuarioRetirada'] as int?,
-      codLocalRetirada: json['codLocalRetirada'] as int?,
+      codUsuarioRetirada: (json['codUsuarioRetirada'] as num?)?.toInt(),
+      codLocalRetirada: (json['codLocalRetirada'] as num?)?.toInt(),
       prontuarioRetirada: json['prontuarioRetirada'] as String?,
       conferidoVisualmente: json['conferidoVisualmente'] as bool?,
       nivelPrioridade: json['nivelPrioridade'] as String?,
       observacao: json['observacao'] as String?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),
-      codCirurgiao: json['codCirurgiao'] as int?,
+      codCirurgiao: (json['codCirurgiao'] as num?)?.toInt(),
       nomePaciente: json['nomePaciente'] as String?,
       medico: json['medico'] as String?,
       loteIndicadorAutoclave: json['loteIndicadorAutoclave'] as String?,

@@ -8,19 +8,21 @@ part of 'item_descritor_model.dart';
 
 _$ItemDescritorModelImpl _$$ItemDescritorModelImplFromJson(Map json) =>
     _$ItemDescritorModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       descricaoCurta: json['descricaoCurta'] as String?,
       descricaoCompleta: json['descricaoCompleta'] as String?,
       foto: json['foto'] as String?,
       tamanhoSigla: json['tamanhoSigla'] as String?,
-      codTipoProcessoNormal: json['codTipoProcessoNormal'] as int?,
-      codTipoProcessoUrgencia: json['codTipoProcessoUrgencia'] as int?,
-      codTipoProcessoEmergencia: json['codTipoProcessoEmergencia'] as int?,
-      codGrupoItem: json['codGrupoItem'] as int?,
-      codEmbalagem: json['codEmbalagem'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
-      limiteProcessos: json['limiteProcessos'] as int?,
-      codCusto: json['codCusto'] as int?,
+      codTipoProcessoNormal: (json['codTipoProcessoNormal'] as num?)?.toInt(),
+      codTipoProcessoUrgencia:
+          (json['codTipoProcessoUrgencia'] as num?)?.toInt(),
+      codTipoProcessoEmergencia:
+          (json['codTipoProcessoEmergencia'] as num?)?.toInt(),
+      codGrupoItem: (json['codGrupoItem'] as num?)?.toInt(),
+      codEmbalagem: (json['codEmbalagem'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
+      limiteProcessos: (json['limiteProcessos'] as num?)?.toInt(),
+      codCusto: (json['codCusto'] as num?)?.toInt(),
       cm: (json['cm'] as num?)?.toDouble(),
       peso: (json['peso'] as num?)?.toDouble(),
       volume: (json['volume'] as num?)?.toDouble(),

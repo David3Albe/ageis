@@ -8,9 +8,9 @@ part of 'escala_save_dto.dart';
 
 _$EscalaSaveDTOImpl _$$EscalaSaveDTOImplFromJson(Map json) =>
     _$EscalaSaveDTOImpl(
-      AnoMes: DateTime.parse(json['AnoMes'] as String),
-      Tstamp: json['Tstamp'] as String?,
-      Turnos: (json['Turnos'] as List<dynamic>?)
+      anoMes: DateTime.parse(json['anoMes'] as String),
+      tstamp: json['tstamp'] as String?,
+      turnos: (json['turnos'] as List<dynamic>?)
           ?.map((e) =>
               EscalaTurnoSaveDTO.fromJson(Map<String, Object?>.from(e as Map)))
           .toList(),
@@ -18,7 +18,7 @@ _$EscalaSaveDTOImpl _$$EscalaSaveDTOImplFromJson(Map json) =>
 
 Map<String, dynamic> _$$EscalaSaveDTOImplToJson(_$EscalaSaveDTOImpl instance) =>
     <String, dynamic>{
-      'AnoMes': instance.AnoMes.toIso8601String(),
-      'Tstamp': instance.Tstamp,
-      'Turnos': instance.Turnos?.map((e) => e.toJson()).toList(),
+      'anoMes': instance.anoMes.toIso8601String(),
+      'tstamp': instance.tstamp,
+      'turnos': instance.turnos?.map((e) => e.toJson()).toList(),
     };

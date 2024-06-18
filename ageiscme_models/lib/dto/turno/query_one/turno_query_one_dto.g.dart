@@ -8,7 +8,7 @@ part of 'turno_query_one_dto.dart';
 
 _$TurnoQueryOneDTOImpl _$$TurnoQueryOneDTOImplFromJson(Map json) =>
     _$TurnoQueryOneDTOImpl(
-      cod: json['cod'] as int,
+      cod: (json['cod'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$TurnoQueryOneDTOImplToJson(

@@ -9,7 +9,7 @@ part of 'consulta_documento_filter.dart';
 _$ConsultaDocumentoFilterImpl _$$ConsultaDocumentoFilterImplFromJson(
         Map json) =>
     _$ConsultaDocumentoFilterImpl(
-      codTipo: json['codTipo'] as int?,
+      codTipo: (json['codTipo'] as num?)?.toInt(),
       descricao: json['descricao'] as String?,
       validade: json['validade'] as bool?,
     );

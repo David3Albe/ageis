@@ -9,10 +9,10 @@ part of 'consulta_processos_leitura_etapa_model.dart';
 _$ConsultaProcessosLeituraEtapaModelImpl
     _$$ConsultaProcessosLeituraEtapaModelImplFromJson(Map json) =>
         _$ConsultaProcessosLeituraEtapaModelImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           nome: json['nome'] as String?,
-          codEquipamento: json['codEquipamento'] as int?,
-          codTipoProcesso: json['codTipoProcesso'] as int?,
+          codEquipamento: (json['codEquipamento'] as num?)?.toInt(),
+          codTipoProcesso: (json['codTipoProcesso'] as num?)?.toInt(),
           imprimirEtiquetaLote: json['imprimirEtiquetaLote'] as bool?,
         );
 

@@ -9,11 +9,11 @@ part of 'solicitacao_material_model.dart';
 _$SolicitacaoMaterialModelImpl _$$SolicitacaoMaterialModelImplFromJson(
         Map json) =>
     _$SolicitacaoMaterialModelImpl(
-      cod: json['cod'] as int?,
-      codUsuarioSolicitante: json['codUsuarioSolicitante'] as int?,
-      codUsuarioAutorizacao: json['codUsuarioAutorizacao'] as int?,
-      codUsuarioEntrega: json['codUsuarioEntrega'] as int?,
-      codUsuarioRecebimento: json['codUsuarioRecebimento'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codUsuarioSolicitante: (json['codUsuarioSolicitante'] as num?)?.toInt(),
+      codUsuarioAutorizacao: (json['codUsuarioAutorizacao'] as num?)?.toInt(),
+      codUsuarioEntrega: (json['codUsuarioEntrega'] as num?)?.toInt(),
+      codUsuarioRecebimento: (json['codUsuarioRecebimento'] as num?)?.toInt(),
       dataHoraSolicitacao: json['dataHoraSolicitacao'] == null
           ? null
           : DateTime.parse(json['dataHoraSolicitacao'] as String),
@@ -23,8 +23,8 @@ _$SolicitacaoMaterialModelImpl _$$SolicitacaoMaterialModelImplFromJson(
       dataHoraEntrega: json['dataHoraEntrega'] == null
           ? null
           : DateTime.parse(json['dataHoraEntrega'] as String),
-      situacao: json['situacao'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      situacao: (json['situacao'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),

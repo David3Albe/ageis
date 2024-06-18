@@ -9,10 +9,10 @@ part of 'consulta_kit_inventario_model.dart';
 _$ConsultaKitInventarioModelImpl _$$ConsultaKitInventarioModelImplFromJson(
         Map json) =>
     _$ConsultaKitInventarioModelImpl(
-      codDescritorKit: json['codDescritorKit'] as int?,
-      qtdeKits: json['qtdeKits'] as int?,
-      qtdeItensPadrao: json['qtdeItensPadrao'] as int?,
-      qtdeItensFisico: json['qtdeItensFisico'] as int?,
+      codDescritorKit: (json['codDescritorKit'] as num?)?.toInt(),
+      qtdeKits: (json['qtdeKits'] as num?)?.toInt(),
+      qtdeItensPadrao: (json['qtdeItensPadrao'] as num?)?.toInt(),
+      qtdeItensFisico: (json['qtdeItensFisico'] as num?)?.toInt(),
       kitDescritor: json['kitDescritor'] == null
           ? null
           : KitDescritorModel.fromJson(

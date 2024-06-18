@@ -12,7 +12,7 @@ _$ConsultaHistoricoColaboradorModelImpl
           dataHora: json['dataHora'] == null
               ? null
               : DateTime.parse(json['dataHora'] as String),
-          cod: json['cod'] as int?,
+          cod: (json['cod'] as num?)?.toInt(),
           colaborador: json['colaborador'] as String?,
           tipo: json['tipo'] as String?,
           descricao: json['descricao'] as String?,

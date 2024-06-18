@@ -9,7 +9,7 @@ part of 'turno_query_item_response_dto.dart';
 _$TurnoQueryItemResponseDTOImpl _$$TurnoQueryItemResponseDTOImplFromJson(
         Map json) =>
     _$TurnoQueryItemResponseDTOImpl(
-      cod: json['cod'] as int,
+      cod: (json['cod'] as num).toInt(),
       descricao: json['descricao'] as String,
       ativo: json['ativo'] as bool,
       tstamp: json['tstamp'] as String,

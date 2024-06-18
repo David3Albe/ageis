@@ -8,7 +8,7 @@ part of 'anormalidade_liberar_dto.dart';
 
 _$AnormalidadeLiberarDTOImpl _$$AnormalidadeLiberarDTOImplFromJson(Map json) =>
     _$AnormalidadeLiberarDTOImpl(
-      cod: json['cod'] as int,
+      cod: (json['cod'] as num).toInt(),
       tstamp: json['tstamp'] as String,
       observacaoLiberacao: json['observacaoLiberacao'] as String,
     );

@@ -8,7 +8,7 @@ part of 'direito_filter.dart';
 
 _$DireitoFilterImpl _$$DireitoFilterImplFromJson(Map json) =>
     _$DireitoFilterImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       ordenarPorNomeCrescente: json['ordenarPorNomeCrescente'] as bool?,
       tStamp: json['tStamp'] as String?,
     );

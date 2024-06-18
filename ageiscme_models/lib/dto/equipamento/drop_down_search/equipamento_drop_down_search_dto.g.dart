@@ -9,7 +9,7 @@ part of 'equipamento_drop_down_search_dto.dart';
 _$EquipamentoDropDownSearchDTOImpl _$$EquipamentoDropDownSearchDTOImplFromJson(
         Map json) =>
     _$EquipamentoDropDownSearchDTOImpl(
-      numeroRegistros: json['numeroRegistros'] as int,
+      numeroRegistros: (json['numeroRegistros'] as num).toInt(),
       search: json['search'] as String?,
     );
 

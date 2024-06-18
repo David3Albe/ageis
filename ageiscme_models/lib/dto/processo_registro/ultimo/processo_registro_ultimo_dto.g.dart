@@ -9,8 +9,8 @@ part of 'processo_registro_ultimo_dto.dart';
 _$ProcessoRegistroUltimoDTOImpl _$$ProcessoRegistroUltimoDTOImplFromJson(
         Map json) =>
     _$ProcessoRegistroUltimoDTOImpl(
-      codItem: json['codItem'] as int?,
-      codEtapa: json['codEtapa'] as int?,
+      codItem: (json['codItem'] as num?)?.toInt(),
+      codEtapa: (json['codEtapa'] as num?)?.toInt(),
       incluirEstoque: json['incluirEstoque'] as bool?,
       carregarEtapa: json['carregarEtapa'] as bool?,
     );

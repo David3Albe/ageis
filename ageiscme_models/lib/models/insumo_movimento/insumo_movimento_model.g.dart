@@ -8,12 +8,12 @@ part of 'insumo_movimento_model.dart';
 
 _$InsumoMovimentoModelImpl _$$InsumoMovimentoModelImplFromJson(Map json) =>
     _$InsumoMovimentoModelImpl(
-      cod: json['cod'] as int?,
-      codInsumo: json['codInsumo'] as int?,
-      codBarra: json['codBarra'] as int?,
-      codUsuario: json['codUsuario'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codInsumo: (json['codInsumo'] as num?)?.toInt(),
+      codBarra: (json['codBarra'] as num?)?.toInt(),
+      codUsuario: (json['codUsuario'] as num?)?.toInt(),
       flagEntradaSaida: json['flagEntradaSaida'] as String?,
-      codDeposito: json['codDeposito'] as int?,
+      codDeposito: (json['codDeposito'] as num?)?.toInt(),
       dataHora: json['dataHora'] == null
           ? null
           : DateTime.parse(json['dataHora'] as String),
@@ -29,9 +29,9 @@ _$InsumoMovimentoModelImpl _$$InsumoMovimentoModelImplFromJson(Map json) =>
       precoNotaFiscal: (json['precoNotaFiscal'] as num?)?.toDouble(),
       precoCusto3Albe: (json['precoCusto3Albe'] as num?)?.toDouble(),
       precoVenda3Albe: (json['precoVenda3Albe'] as num?)?.toDouble(),
-      codEquipamentoInsumo: json['codEquipamentoInsumo'] as int?,
-      codDestinoResiduos: json['codDestinoResiduos'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codEquipamentoInsumo: (json['codEquipamentoInsumo'] as num?)?.toInt(),
+      codDestinoResiduos: (json['codDestinoResiduos'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),

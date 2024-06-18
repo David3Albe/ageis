@@ -8,12 +8,12 @@ part of 'insumo_saldo_filter.dart';
 
 _$InsumoSaldoFilterImpl _$$InsumoSaldoFilterImplFromJson(Map json) =>
     _$InsumoSaldoFilterImpl(
-      codInsumo: json['codInsumo'] as int?,
+      codInsumo: (json['codInsumo'] as num?)?.toInt(),
       lote: json['lote'] as String?,
-      codDeposito: json['codDeposito'] as int?,
+      codDeposito: (json['codDeposito'] as num?)?.toInt(),
       qtdeMaiorQueZero: json['qtdeMaiorQueZero'] as bool?,
       dataVaidadeMaiorQueAtual: json['dataVaidadeMaiorQueAtual'] as bool?,
-      numeroRegistros: json['numeroRegistros'] as int?,
+      numeroRegistros: (json['numeroRegistros'] as num?)?.toInt(),
       ordenarPorDataValidadeAscendente:
           json['ordenarPorDataValidadeAscendente'] as bool?,
     );

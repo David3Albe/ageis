@@ -9,14 +9,14 @@ part of 'consulta_item_inventario_filter.dart';
 _$ConsultaItemInventarioFilterImpl _$$ConsultaItemInventarioFilterImplFromJson(
         Map json) =>
     _$ConsultaItemInventarioFilterImpl(
-      codItemDescritor: json['codItemDescritor'] as int?,
+      codItemDescritor: (json['codItemDescritor'] as num?)?.toInt(),
       repositorio: json['repositorio'] as bool?,
       descartado: json['descartado'] as bool?,
       implantavel: json['implantavel'] as bool?,
       complementar: json['complementar'] as bool?,
       situacao: json['situacao'] as String?,
-      codGrupoItem: json['codGrupoItem'] as int?,
-      codProprietario: json['codProprietario'] as int?,
+      codGrupoItem: (json['codGrupoItem'] as num?)?.toInt(),
+      codProprietario: (json['codProprietario'] as num?)?.toInt(),
       cmInicio: (json['cmInicio'] as num?)?.toDouble(),
       cmFinal: (json['cmFinal'] as num?)?.toDouble(),
       itemDescritor: json['itemDescritor'] == null

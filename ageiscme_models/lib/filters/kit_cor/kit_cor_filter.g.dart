@@ -7,7 +7,7 @@ part of 'kit_cor_filter.dart';
 // **************************************************************************
 
 _$KitCorFilterImpl _$$KitCorFilterImplFromJson(Map json) => _$KitCorFilterImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       apenasAtivos: json['apenasAtivos'] as bool?,
       ordernarPorNomeCrescente: json['ordernarPorNomeCrescente'] as bool?,
       tStamp: json['tStamp'] as String?,

@@ -10,10 +10,10 @@ _$ItemInserirRapidoGerarInserirDTOImpl
     _$$ItemInserirRapidoGerarInserirDTOImplFromJson(Map json) =>
         _$ItemInserirRapidoGerarInserirDTOImpl(
           idEtiqueta: json['idEtiqueta'] as String?,
-          quantidade: json['quantidade'] as int?,
-          quantidadeExistente: json['quantidadeExistente'] as int?,
-          quantidadeMaxima: json['quantidadeMaxima'] as int?,
-          tamanho: json['tamanho'] as int?,
+          quantidade: (json['quantidade'] as num?)?.toInt(),
+          quantidadeExistente: (json['quantidadeExistente'] as num?)?.toInt(),
+          quantidadeMaxima: (json['quantidadeMaxima'] as num?)?.toInt(),
+          tamanho: (json['tamanho'] as num?)?.toInt(),
           idEtiquetaBase: json['idEtiquetaBase'] as String?,
         );
 

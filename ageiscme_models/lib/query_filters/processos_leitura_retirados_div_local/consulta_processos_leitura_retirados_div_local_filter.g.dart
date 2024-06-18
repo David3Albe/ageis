@@ -21,8 +21,8 @@ _$ConsultaProcessosLeituraRetiradosDivLocalFilterImpl
           finalTime: json['finalTime'] == null
               ? null
               : DateTime.parse(json['finalTime'] as String),
-          codLocal: json['codLocal'] as int?,
-          codProprietario: json['codProprietario'] as int?,
+          codLocal: (json['codLocal'] as num?)?.toInt(),
+          codProprietario: (json['codProprietario'] as num?)?.toInt(),
         );
 
 Map<String, dynamic>

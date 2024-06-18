@@ -10,7 +10,7 @@ _$ItemTrocarEtiquetaDTOImpl _$$ItemTrocarEtiquetaDTOImplFromJson(Map json) =>
     _$ItemTrocarEtiquetaDTOImpl(
       codBarraOriginal: json['codBarraOriginal'] as String,
       codBarraNovo: json['codBarraNovo'] as String,
-      codUsuario: json['codUsuario'] as int,
+      codUsuario: (json['codUsuario'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$ItemTrocarEtiquetaDTOImplToJson(

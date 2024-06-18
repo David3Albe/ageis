@@ -12,13 +12,13 @@ _$ConsultaProcessosLeituraDispensadoModelImpl
           dataHora: json['dataHora'] == null
               ? null
               : DateTime.parse(json['dataHora'] as String),
-          codKit: json['codKit'] as int?,
-          nroItensFaltantes: json['nroItensFaltantes'] as int?,
+          codKit: (json['codKit'] as num?)?.toInt(),
+          nroItensFaltantes: (json['nroItensFaltantes'] as num?)?.toInt(),
           entradaSaida: json['entradaSaida'] as String?,
           dataValidade: json['dataValidade'] == null
               ? null
               : DateTime.parse(json['dataValidade'] as String),
-          codRegistroProcesso: json['codRegistroProcesso'] as int?,
+          codRegistroProcesso: (json['codRegistroProcesso'] as num?)?.toInt(),
           kitDescritorNome: json['kitDescritorNome'] as String?,
           idEtiqueta: json['idEtiqueta'] as String?,
           descricaoItem: json['descricaoItem'] as String?,

@@ -9,7 +9,7 @@ part of 'processo_registro_ultimo_response_dto.dart';
 _$ProcessoRegistroUltimoResponseDTOImpl
     _$$ProcessoRegistroUltimoResponseDTOImplFromJson(Map json) =>
         _$ProcessoRegistroUltimoResponseDTOImpl(
-          cod: json['cod'] as int?,
+          cod: (json['cod'] as num?)?.toInt(),
           dataHoraInicio: json['dataHoraInicio'] == null
               ? null
               : DateTime.parse(json['dataHoraInicio'] as String),

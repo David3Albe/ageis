@@ -11,7 +11,7 @@ _$InsumosPorEquipamentoSimplificadoResponseDTOImpl
         _$InsumosPorEquipamentoSimplificadoResponseDTOImpl(
           equipamentoInsumos: (json['equipamentoInsumos'] as Map).map(
             (k, e) => MapEntry(int.parse(k as String),
-                (e as List<dynamic>).map((e) => e as int).toList()),
+                (e as List<dynamic>).map((e) => (e as num).toInt()).toList()),
           ),
         );
 

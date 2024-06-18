@@ -9,7 +9,7 @@ part of 'equipamento_insumo_equipamento_response_dto.dart';
 _$EquipamentoInsumoEquipamentoResponseDTOImpl
     _$$EquipamentoInsumoEquipamentoResponseDTOImplFromJson(Map json) =>
         _$EquipamentoInsumoEquipamentoResponseDTOImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           nome: json['nome'] as String?,
         );
 

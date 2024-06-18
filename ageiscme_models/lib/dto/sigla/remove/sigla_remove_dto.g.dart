@@ -8,7 +8,7 @@ part of 'sigla_remove_dto.dart';
 
 _$SiglaRemoveDTOImpl _$$SiglaRemoveDTOImplFromJson(Map json) =>
     _$SiglaRemoveDTOImpl(
-      cod: json['cod'] as int,
+      cod: (json['cod'] as num).toInt(),
       tstamp: json['tstamp'] as String,
     );
 

@@ -26,9 +26,9 @@ mixin _$EscalaTurnoSaveDTO {
   set codTurno(int value) => throw _privateConstructorUsedError;
   TurnoShortResponseDTO? get turno => throw _privateConstructorUsedError;
   set turno(TurnoShortResponseDTO? value) => throw _privateConstructorUsedError;
-  List<EscalaTurnoUsuarioSaveDTO>? get Usuarios =>
+  List<EscalaTurnoUsuarioSaveDTO>? get usuarios =>
       throw _privateConstructorUsedError;
-  set Usuarios(List<EscalaTurnoUsuarioSaveDTO>? value) =>
+  set usuarios(List<EscalaTurnoUsuarioSaveDTO>? value) =>
       throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -47,7 +47,7 @@ abstract class $EscalaTurnoSaveDTOCopyWith<$Res> {
       {DateTime anoMes,
       int codTurno,
       TurnoShortResponseDTO? turno,
-      List<EscalaTurnoUsuarioSaveDTO>? Usuarios});
+      List<EscalaTurnoUsuarioSaveDTO>? usuarios});
 
   $TurnoShortResponseDTOCopyWith<$Res>? get turno;
 }
@@ -68,7 +68,7 @@ class _$EscalaTurnoSaveDTOCopyWithImpl<$Res, $Val extends EscalaTurnoSaveDTO>
     Object? anoMes = null,
     Object? codTurno = null,
     Object? turno = freezed,
-    Object? Usuarios = freezed,
+    Object? usuarios = freezed,
   }) {
     return _then(_value.copyWith(
       anoMes: null == anoMes
@@ -83,9 +83,9 @@ class _$EscalaTurnoSaveDTOCopyWithImpl<$Res, $Val extends EscalaTurnoSaveDTO>
           ? _value.turno
           : turno // ignore: cast_nullable_to_non_nullable
               as TurnoShortResponseDTO?,
-      Usuarios: freezed == Usuarios
-          ? _value.Usuarios
-          : Usuarios // ignore: cast_nullable_to_non_nullable
+      usuarios: freezed == usuarios
+          ? _value.usuarios
+          : usuarios // ignore: cast_nullable_to_non_nullable
               as List<EscalaTurnoUsuarioSaveDTO>?,
     ) as $Val);
   }
@@ -115,7 +115,7 @@ abstract class _$$EscalaTurnoSaveDTOImplCopyWith<$Res>
       {DateTime anoMes,
       int codTurno,
       TurnoShortResponseDTO? turno,
-      List<EscalaTurnoUsuarioSaveDTO>? Usuarios});
+      List<EscalaTurnoUsuarioSaveDTO>? usuarios});
 
   @override
   $TurnoShortResponseDTOCopyWith<$Res>? get turno;
@@ -135,7 +135,7 @@ class __$$EscalaTurnoSaveDTOImplCopyWithImpl<$Res>
     Object? anoMes = null,
     Object? codTurno = null,
     Object? turno = freezed,
-    Object? Usuarios = freezed,
+    Object? usuarios = freezed,
   }) {
     return _then(_$EscalaTurnoSaveDTOImpl(
       anoMes: null == anoMes
@@ -150,9 +150,9 @@ class __$$EscalaTurnoSaveDTOImplCopyWithImpl<$Res>
           ? _value.turno
           : turno // ignore: cast_nullable_to_non_nullable
               as TurnoShortResponseDTO?,
-      Usuarios: freezed == Usuarios
-          ? _value.Usuarios
-          : Usuarios // ignore: cast_nullable_to_non_nullable
+      usuarios: freezed == usuarios
+          ? _value.usuarios
+          : usuarios // ignore: cast_nullable_to_non_nullable
               as List<EscalaTurnoUsuarioSaveDTO>?,
     ));
   }
@@ -165,7 +165,7 @@ class _$EscalaTurnoSaveDTOImpl implements _EscalaTurnoSaveDTO {
       {required this.anoMes,
       required this.codTurno,
       this.turno,
-      this.Usuarios});
+      this.usuarios});
 
   factory _$EscalaTurnoSaveDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$EscalaTurnoSaveDTOImplFromJson(json);
@@ -177,11 +177,11 @@ class _$EscalaTurnoSaveDTOImpl implements _EscalaTurnoSaveDTO {
   @override
   TurnoShortResponseDTO? turno;
   @override
-  List<EscalaTurnoUsuarioSaveDTO>? Usuarios;
+  List<EscalaTurnoUsuarioSaveDTO>? usuarios;
 
   @override
   String toString() {
-    return 'EscalaTurnoSaveDTO(anoMes: $anoMes, codTurno: $codTurno, turno: $turno, Usuarios: $Usuarios)';
+    return 'EscalaTurnoSaveDTO(anoMes: $anoMes, codTurno: $codTurno, turno: $turno, usuarios: $usuarios)';
   }
 
   @JsonKey(ignore: true)
@@ -204,7 +204,7 @@ abstract class _EscalaTurnoSaveDTO implements EscalaTurnoSaveDTO {
       {required DateTime anoMes,
       required int codTurno,
       TurnoShortResponseDTO? turno,
-      List<EscalaTurnoUsuarioSaveDTO>? Usuarios}) = _$EscalaTurnoSaveDTOImpl;
+      List<EscalaTurnoUsuarioSaveDTO>? usuarios}) = _$EscalaTurnoSaveDTOImpl;
 
   factory _EscalaTurnoSaveDTO.fromJson(Map<String, dynamic> json) =
       _$EscalaTurnoSaveDTOImpl.fromJson;
@@ -219,8 +219,8 @@ abstract class _EscalaTurnoSaveDTO implements EscalaTurnoSaveDTO {
   TurnoShortResponseDTO? get turno;
   set turno(TurnoShortResponseDTO? value);
   @override
-  List<EscalaTurnoUsuarioSaveDTO>? get Usuarios;
-  set Usuarios(List<EscalaTurnoUsuarioSaveDTO>? value);
+  List<EscalaTurnoUsuarioSaveDTO>? get usuarios;
+  set usuarios(List<EscalaTurnoUsuarioSaveDTO>? value);
   @override
   @JsonKey(ignore: true)
   _$$EscalaTurnoSaveDTOImplCopyWith<_$EscalaTurnoSaveDTOImpl> get copyWith =>

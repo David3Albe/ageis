@@ -9,7 +9,7 @@ part of 'consulta_processos_leitura_motivo_model.dart';
 _$ConsultaProcessosLeituraMotivoModelImpl
     _$$ConsultaProcessosLeituraMotivoModelImplFromJson(Map json) =>
         _$ConsultaProcessosLeituraMotivoModelImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           nome: json['nome'] as String,
         );
 

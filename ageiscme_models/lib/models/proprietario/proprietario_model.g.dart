@@ -8,12 +8,12 @@ part of 'proprietario_model.dart';
 
 _$ProprietarioModelImpl _$$ProprietarioModelImplFromJson(Map json) =>
     _$ProprietarioModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       nome: json['nome'] as String?,
       contato: json['contato'] as String?,
-      codBarra: json['codBarra'] as int?,
+      codBarra: (json['codBarra'] as num?)?.toInt(),
       manutencaoLiberada: json['manutencaoLiberada'] as bool?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ativo: json['ativo'] as bool?,
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null

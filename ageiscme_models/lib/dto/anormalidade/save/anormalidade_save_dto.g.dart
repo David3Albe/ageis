@@ -8,26 +8,26 @@ part of 'anormalidade_save_dto.dart';
 
 _$AnormalidadeSaveDTOImpl _$$AnormalidadeSaveDTOImplFromJson(Map json) =>
     _$AnormalidadeSaveDTOImpl(
-      cod: json['cod'] as int,
+      cod: (json['cod'] as num).toInt(),
       dataHora: json['dataHora'] == null
           ? null
           : DateTime.parse(json['dataHora'] as String),
       descricao: json['descricao'] as String?,
-      codUsuario: json['codUsuario'] as int?,
-      codAnormalidadeTipo: json['codAnormalidadeTipo'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codUsuario: (json['codUsuario'] as num?)?.toInt(),
+      codAnormalidadeTipo: (json['codAnormalidadeTipo'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),
       tstamp: json['tstamp'] as String?,
-      codItem: json['codItem'] as int?,
-      codRegistroProcesso: json['codRegistroProcesso'] as int?,
-      codUsuarioLiberacao: json['codUsuarioLiberacao'] as int?,
+      codItem: (json['codItem'] as num?)?.toInt(),
+      codRegistroProcesso: (json['codRegistroProcesso'] as num?)?.toInt(),
+      codUsuarioLiberacao: (json['codUsuarioLiberacao'] as num?)?.toInt(),
       observacaoLiberacao: json['observacaoLiberacao'] as String?,
       dataLiberacao: json['dataLiberacao'] == null
           ? null
           : DateTime.parse(json['dataLiberacao'] as String),
-      codProcessoEtapa: json['codProcessoEtapa'] as int?,
+      codProcessoEtapa: (json['codProcessoEtapa'] as num?)?.toInt(),
       processoRegistro: json['processoRegistro'] == null
           ? null
           : ProcessoRegistroUltimoResponseDTO.fromJson(

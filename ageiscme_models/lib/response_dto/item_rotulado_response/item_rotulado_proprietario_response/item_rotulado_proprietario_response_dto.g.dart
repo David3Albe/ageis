@@ -9,7 +9,7 @@ part of 'item_rotulado_proprietario_response_dto.dart';
 _$ItemRotuladoProprietarioResponseDTOImpl
     _$$ItemRotuladoProprietarioResponseDTOImplFromJson(Map json) =>
         _$ItemRotuladoProprietarioResponseDTOImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           nome: json['nome'] as String,
         );
 

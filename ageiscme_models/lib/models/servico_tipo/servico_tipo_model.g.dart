@@ -8,9 +8,9 @@ part of 'servico_tipo_model.dart';
 
 _$ServicoTipoModelImpl _$$ServicoTipoModelImplFromJson(Map json) =>
     _$ServicoTipoModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       nome: json['nome'] as String?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ativo: json['ativo'] as bool?,
       monitoramento: json['monitoramento'] as bool?,
       servicosEquipamentos: json['servicosEquipamentos'] as bool?,

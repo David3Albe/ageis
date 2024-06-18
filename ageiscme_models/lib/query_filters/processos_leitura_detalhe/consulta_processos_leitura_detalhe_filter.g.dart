@@ -9,7 +9,7 @@ part of 'consulta_processos_leitura_detalhe_filter.dart';
 _$ConsultaProcessosLeituraDetalheFilterImpl
     _$$ConsultaProcessosLeituraDetalheFilterImplFromJson(Map json) =>
         _$ConsultaProcessosLeituraDetalheFilterImpl(
-          codLeitura: json['codLeitura'] as int?,
+          codLeitura: (json['codLeitura'] as num?)?.toInt(),
         );
 
 Map<String, dynamic> _$$ConsultaProcessosLeituraDetalheFilterImplToJson(

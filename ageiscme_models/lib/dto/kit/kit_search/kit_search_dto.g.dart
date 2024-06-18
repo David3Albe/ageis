@@ -7,7 +7,7 @@ part of 'kit_search_dto.dart';
 // **************************************************************************
 
 _$KitSearchDTOImpl _$$KitSearchDTOImplFromJson(Map json) => _$KitSearchDTOImpl(
-      numeroRegistros: json['numeroRegistros'] as int?,
+      numeroRegistros: (json['numeroRegistros'] as num?)?.toInt(),
       codBarraContem: json['codBarraContem'] as String?,
       nomeContem: json['nomeContem'] as String?,
       ordenarCod: json['ordenarCod'] as bool?,

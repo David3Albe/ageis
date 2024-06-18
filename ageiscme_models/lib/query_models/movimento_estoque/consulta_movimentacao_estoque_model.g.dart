@@ -9,7 +9,7 @@ part of 'consulta_movimentacao_estoque_model.dart';
 _$ConsultaMovimentacaoEstoqueModelImpl
     _$$ConsultaMovimentacaoEstoqueModelImplFromJson(Map json) =>
         _$ConsultaMovimentacaoEstoqueModelImpl(
-          cod: json['cod'] as int?,
+          cod: (json['cod'] as num?)?.toInt(),
           dataHora: json['dataHora'] == null
               ? null
               : DateTime.parse(json['dataHora'] as String),

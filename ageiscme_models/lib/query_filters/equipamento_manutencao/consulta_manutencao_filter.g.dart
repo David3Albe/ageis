@@ -21,9 +21,9 @@ _$ConsultaManutencaoFilterImpl _$$ConsultaManutencaoFilterImplFromJson(
       finalTime: json['finalTime'] == null
           ? null
           : DateTime.parse(json['finalTime'] as String),
-      codEquipamento: json['codEquipamento'] as int?,
-      codServicosTipo: json['codServicosTipo'] as int?,
-      codPeca: json['codPeca'] as int?,
+      codEquipamento: (json['codEquipamento'] as num?)?.toInt(),
+      codServicosTipo: (json['codServicosTipo'] as num?)?.toInt(),
+      codPeca: (json['codPeca'] as num?)?.toInt(),
       numNF: json['numNF'] as String?,
       numSerie: json['numSerie'] as String?,
       codResultado: json['codResultado'] as String?,

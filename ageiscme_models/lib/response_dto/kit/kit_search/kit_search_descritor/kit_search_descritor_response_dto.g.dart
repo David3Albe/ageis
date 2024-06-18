@@ -9,7 +9,7 @@ part of 'kit_search_descritor_response_dto.dart';
 _$KitSearchDescritorResponseDTOImpl
     _$$KitSearchDescritorResponseDTOImplFromJson(Map json) =>
         _$KitSearchDescritorResponseDTOImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           descricao: json['descricao'] as String,
         );
 

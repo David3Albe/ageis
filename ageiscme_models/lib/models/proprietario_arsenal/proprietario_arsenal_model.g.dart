@@ -9,10 +9,10 @@ part of 'proprietario_arsenal_model.dart';
 _$ProprietarioArsenalModelImpl _$$ProprietarioArsenalModelImplFromJson(
         Map json) =>
     _$ProprietarioArsenalModelImpl(
-      cod: json['cod'] as int?,
-      codProprietario: json['codProprietario'] as int?,
-      codEstoque: json['codEstoque'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codProprietario: (json['codProprietario'] as num?)?.toInt(),
+      codEstoque: (json['codEstoque'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),

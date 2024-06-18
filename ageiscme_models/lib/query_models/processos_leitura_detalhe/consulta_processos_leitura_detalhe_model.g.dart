@@ -10,21 +10,21 @@ _$ConsultaProcessosLeituraDetalheModelImpl
     _$$ConsultaProcessosLeituraDetalheModelImplFromJson(Map json) =>
         _$ConsultaProcessosLeituraDetalheModelImpl(
           entregaRetirada: json['entregaRetirada'] as String?,
-          codUsuarioEntrega: json['codUsuarioEntrega'] as int?,
+          codUsuarioEntrega: (json['codUsuarioEntrega'] as num?)?.toInt(),
           nomeUsuarioEntrega: json['nomeUsuarioEntrega'] as String?,
-          codUsuarioRetirada: json['codUsuarioRetirada'] as int?,
+          codUsuarioRetirada: (json['codUsuarioRetirada'] as num?)?.toInt(),
           nomeUsuarioRetirada: json['nomeUsuarioRetirada'] as String?,
-          codLocalEntrega: json['codLocalEntrega'] as int?,
+          codLocalEntrega: (json['codLocalEntrega'] as num?)?.toInt(),
           nomeLocalEntrega: json['nomeLocalEntrega'] as String?,
-          codLocalRetirada: json['codLocalRetirada'] as int?,
+          codLocalRetirada: (json['codLocalRetirada'] as num?)?.toInt(),
           nomeLocalRetirada: json['nomeLocalRetirada'] as String?,
-          codCirurgiao: json['codCirurgiao'] as int?,
+          codCirurgiao: (json['codCirurgiao'] as num?)?.toInt(),
           nomeCirurgiao: json['nomeCirurgiao'] as String?,
           prontuarioRetirada: json['prontuarioRetirada'] as String?,
           conferidoVisualmente: json['conferidoVisualmente'] as bool?,
           nivelPrioridade: json['nivelPrioridade'] as String?,
           observacao: json['observacao'] as String?,
-          codRegistroProcesso: json['codRegistroProcesso'] as int?,
+          codRegistroProcesso: (json['codRegistroProcesso'] as num?)?.toInt(),
         );
 
 Map<String, dynamic> _$$ConsultaProcessosLeituraDetalheModelImplToJson(

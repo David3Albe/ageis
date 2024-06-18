@@ -12,7 +12,7 @@ _$ConsultaProcessosLeituraRetiradosDivLocalModelImpl
           dataHora: json['dataHora'] == null
               ? null
               : DateTime.parse(json['dataHora'] as String),
-          codKit: json['codKit'] as int?,
+          codKit: (json['codKit'] as num?)?.toInt(),
           nomeKit: json['nomeKit'] as String?,
           idEtiqueta: json['idEtiqueta'] as String?,
           nomeDescritorItem: json['nomeDescritorItem'] as String?,

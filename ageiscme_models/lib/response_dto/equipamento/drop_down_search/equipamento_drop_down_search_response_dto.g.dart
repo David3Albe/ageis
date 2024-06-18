@@ -9,7 +9,7 @@ part of 'equipamento_drop_down_search_response_dto.dart';
 _$EquipamentoDropDownSearchResponseDTOImpl
     _$$EquipamentoDropDownSearchResponseDTOImplFromJson(Map json) =>
         _$EquipamentoDropDownSearchResponseDTOImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           nome: json['nome'] as String,
         );
 

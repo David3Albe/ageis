@@ -8,9 +8,9 @@ part of 'epi_entrega_filter.dart';
 
 _$EpiEntregaFilterImpl _$$EpiEntregaFilterImplFromJson(Map json) =>
     _$EpiEntregaFilterImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       carregarUsuario: json['carregarUsuario'] as bool?,
-      numeroRegistros: json['numeroRegistros'] as int?,
+      numeroRegistros: (json['numeroRegistros'] as num?)?.toInt(),
       nomeContem: json['nomeContem'] as String?,
       tStamp: json['tStamp'] as String?,
     );

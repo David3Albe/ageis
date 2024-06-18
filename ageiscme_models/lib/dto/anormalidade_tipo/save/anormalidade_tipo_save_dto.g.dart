@@ -9,7 +9,7 @@ part of 'anormalidade_tipo_save_dto.dart';
 _$AnormalidadeTipoSaveDTOImpl _$$AnormalidadeTipoSaveDTOImplFromJson(
         Map json) =>
     _$AnormalidadeTipoSaveDTOImpl(
-      cod: json['cod'] as int,
+      cod: (json['cod'] as num).toInt(),
       nome: json['nome'] as String,
       ativo: json['ativo'] as bool,
       bloqueioEtapa: json['bloqueioEtapa'] as bool,
@@ -19,7 +19,7 @@ _$AnormalidadeTipoSaveDTOImpl _$$AnormalidadeTipoSaveDTOImplFromJson(
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),
       tstamp: json['tstamp'] as String?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$AnormalidadeTipoSaveDTOImplToJson(

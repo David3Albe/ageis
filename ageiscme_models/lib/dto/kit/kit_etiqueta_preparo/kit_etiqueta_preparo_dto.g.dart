@@ -8,7 +8,7 @@ part of 'kit_etiqueta_preparo_dto.dart';
 
 _$KitEtiquetaPreparoDTOImpl _$$KitEtiquetaPreparoDTOImplFromJson(Map json) =>
     _$KitEtiquetaPreparoDTOImpl(
-      codKit: json['codKit'] as int,
+      codKit: (json['codKit'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$KitEtiquetaPreparoDTOImplToJson(

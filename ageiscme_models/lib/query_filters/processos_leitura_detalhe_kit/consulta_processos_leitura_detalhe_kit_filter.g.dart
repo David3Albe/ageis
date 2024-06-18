@@ -9,9 +9,9 @@ part of 'consulta_processos_leitura_detalhe_kit_filter.dart';
 _$ConsultaProcessosLeituraDetalheKitFilterImpl
     _$$ConsultaProcessosLeituraDetalheKitFilterImplFromJson(Map json) =>
         _$ConsultaProcessosLeituraDetalheKitFilterImpl(
-          codKit: json['codKit'] as int?,
-          codRegistroProcesso: json['codRegistroProcesso'] as int?,
-          faltantes: json['faltantes'] as int?,
+          codKit: (json['codKit'] as num?)?.toInt(),
+          codRegistroProcesso: (json['codRegistroProcesso'] as num?)?.toInt(),
+          faltantes: (json['faltantes'] as num?)?.toInt(),
           dataHora: json['dataHora'] == null
               ? null
               : DateTime.parse(json['dataHora'] as String),

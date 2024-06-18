@@ -8,14 +8,14 @@ part of 'processo_etapa_model.dart';
 
 _$ProcessoEtapaModelImpl _$$ProcessoEtapaModelImplFromJson(Map json) =>
     _$ProcessoEtapaModelImpl(
-      cod: json['cod'] as int?,
-      codProcessoTipo: json['codProcessoTipo'] as int?,
-      codEquipamento: json['codEquipamento'] as int?,
-      codEstoque: json['codEstoque'] as int?,
-      tempoCicloProcesso: json['tempoCicloProcesso'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
-      codServicoTipo: json['codServicoTipo'] as int?,
-      codEstoqueAut: json['codEstoqueAut'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codProcessoTipo: (json['codProcessoTipo'] as num?)?.toInt(),
+      codEquipamento: (json['codEquipamento'] as num?)?.toInt(),
+      codEstoque: (json['codEstoque'] as num?)?.toInt(),
+      tempoCicloProcesso: (json['tempoCicloProcesso'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
+      codServicoTipo: (json['codServicoTipo'] as num?)?.toInt(),
+      codEstoqueAut: (json['codEstoqueAut'] as num?)?.toInt(),
       nome: json['nome'] as String?,
       descricao: json['descricao'] as String?,
       descricaoEtiquetaPreparo: json['descricaoEtiquetaPreparo'] as String?,

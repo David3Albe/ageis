@@ -9,11 +9,11 @@ part of 'localizacao_arsenal_model.dart';
 _$LocalizacaoArsenalModelImpl _$$LocalizacaoArsenalModelImplFromJson(
         Map json) =>
     _$LocalizacaoArsenalModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       local: json['local'] as String?,
-      codEstoque: json['codEstoque'] as int?,
-      codBarra: json['codBarra'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codEstoque: (json['codEstoque'] as num?)?.toInt(),
+      codBarra: (json['codBarra'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ativo: json['ativo'] as bool?,
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null

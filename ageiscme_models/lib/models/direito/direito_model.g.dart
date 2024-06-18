@@ -7,10 +7,10 @@ part of 'direito_model.dart';
 // **************************************************************************
 
 _$DireitoModelImpl _$$DireitoModelImplFromJson(Map json) => _$DireitoModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       descricao: json['descricao'] as String?,
       tipo: json['tipo'] as String?,
-      codEtapaProcesso: json['codEtapaProcesso'] as int?,
+      codEtapaProcesso: (json['codEtapaProcesso'] as num?)?.toInt(),
       tstamp: json['tStamp'] as String?,
     );
 

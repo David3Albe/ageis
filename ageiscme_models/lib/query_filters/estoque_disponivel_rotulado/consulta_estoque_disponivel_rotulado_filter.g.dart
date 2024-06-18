@@ -15,11 +15,11 @@ _$ConsultaEstoqueDisponivelRotuladoFilterImpl
           finalDate: json['finalDate'] == null
               ? null
               : DateTime.parse(json['finalDate'] as String),
-          codEstoque: json['codEstoque'] as int?,
-          codItem: json['codItem'] as int?,
+          codEstoque: (json['codEstoque'] as num?)?.toInt(),
+          codItem: (json['codItem'] as num?)?.toInt(),
           idEtiquetaContem: json['idEtiquetaContem'] as String?,
           idEtiqueta: json['idEtiqueta'] as String?,
-          codProprietario: json['codProprietario'] as int?,
+          codProprietario: (json['codProprietario'] as num?)?.toInt(),
           entrada: json['entrada'] as bool?,
           saida: json['saida'] as bool?,
           item: json['item'] == null

@@ -8,10 +8,10 @@ part of 'etiqueta_model.dart';
 
 _$EtiquetaModelImpl _$$EtiquetaModelImplFromJson(Map json) =>
     _$EtiquetaModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       descricao: json['descricao'] as String?,
-      limiteProcessos: json['limiteProcessos'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      limiteProcessos: (json['limiteProcessos'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ativo: json['ativo'] as bool?,
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null

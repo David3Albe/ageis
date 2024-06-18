@@ -8,9 +8,9 @@ part of 'fabricante_model.dart';
 
 _$FabricanteModelImpl _$$FabricanteModelImplFromJson(Map json) =>
     _$FabricanteModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       nome: json['nome'] as String?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),

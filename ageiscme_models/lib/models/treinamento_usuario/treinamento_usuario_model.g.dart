@@ -9,10 +9,10 @@ part of 'treinamento_usuario_model.dart';
 _$TreinamentoUsuarioModelImpl _$$TreinamentoUsuarioModelImplFromJson(
         Map json) =>
     _$TreinamentoUsuarioModelImpl(
-      cod: json['cod'] as int?,
-      codRegistroTreinamento: json['codRegistroTreinamento'] as int?,
-      codUsuario: json['codUsuario'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codRegistroTreinamento: (json['codRegistroTreinamento'] as num?)?.toInt(),
+      codUsuario: (json['codUsuario'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),

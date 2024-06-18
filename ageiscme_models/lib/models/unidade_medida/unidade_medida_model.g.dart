@@ -8,9 +8,9 @@ part of 'unidade_medida_model.dart';
 
 _$UnidadeMedidaModelImpl _$$UnidadeMedidaModelImplFromJson(Map json) =>
     _$UnidadeMedidaModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       nome: json['nome'] as String?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),

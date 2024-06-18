@@ -9,8 +9,8 @@ part of 'solicitacao_material_add_dto.dart';
 _$SolicitacaoMaterialAddDTOImpl _$$SolicitacaoMaterialAddDTOImplFromJson(
         Map json) =>
     _$SolicitacaoMaterialAddDTOImpl(
-      codUsuarioSolicitante: json['codUsuarioSolicitante'] as int,
-      situacao: json['situacao'] as int,
+      codUsuarioSolicitante: (json['codUsuarioSolicitante'] as num).toInt(),
+      situacao: (json['situacao'] as num).toInt(),
       solicitacoesMateriais: (json['solicitacoesMateriais'] as List<dynamic>)
           .map((e) => SolicitacaoMaterialItemModel.fromJson(
               Map<String, Object?>.from(e as Map)))

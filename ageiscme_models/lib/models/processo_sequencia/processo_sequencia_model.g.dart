@@ -8,18 +8,18 @@ part of 'processo_sequencia_model.dart';
 
 _$ProcessoSequenciaModelImpl _$$ProcessoSequenciaModelImplFromJson(Map json) =>
     _$ProcessoSequenciaModelImpl(
-      cod: json['cod'] as int?,
-      codEtapaProcesso: json['codEtapaProcesso'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codEtapaProcesso: (json['codEtapaProcesso'] as num?)?.toInt(),
       etapa: json['etapa'] == null
           ? null
           : ProcessoEtapaModel.fromJson(
               Map<String, Object?>.from(json['etapa'] as Map)),
-      codEtapaSeguinte: json['codEtapaSeguinte'] as int?,
+      codEtapaSeguinte: (json['codEtapaSeguinte'] as num?)?.toInt(),
       etapaSequinte: json['etapaSequinte'] == null
           ? null
           : ProcessoEtapaModel.fromJson(
               Map<String, Object?>.from(json['etapaSequinte'] as Map)),
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       instituicao: json['instituicao'] == null
           ? null
           : InstituicaoModel.fromJson(

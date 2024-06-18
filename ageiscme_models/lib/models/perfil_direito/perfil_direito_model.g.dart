@@ -8,10 +8,10 @@ part of 'perfil_direito_model.dart';
 
 _$PerfilDireitoModelImpl _$$PerfilDireitoModelImplFromJson(Map json) =>
     _$PerfilDireitoModelImpl(
-      cod: json['cod'] as int?,
-      codDireito: json['codDireito'] as int?,
-      codPerfil: json['codPerfil'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codDireito: (json['codDireito'] as num?)?.toInt(),
+      codPerfil: (json['codPerfil'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),

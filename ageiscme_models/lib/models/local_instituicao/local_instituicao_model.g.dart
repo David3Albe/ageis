@@ -8,14 +8,14 @@ part of 'local_instituicao_model.dart';
 
 _$LocalInstituicaoModelImpl _$$LocalInstituicaoModelImplFromJson(Map json) =>
     _$LocalInstituicaoModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       nome: json['nome'] as String,
       localizacao: json['localizacao'] as String?,
       responsavel: json['responsavel'] as String?,
       contato: json['contato'] as String?,
       codBarra: json['codBarra'] as String?,
-      codInstituicao: json['codInstituicao'] as int?,
-      codCentroCusto: json['codCentroCusto'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
+      codCentroCusto: (json['codCentroCusto'] as num?)?.toInt(),
       ativo: json['ativo'] as bool?,
       exigeProntuario: json['exigeProntuario'] as bool?,
       localConferencia: json['localConferencia'] as bool?,

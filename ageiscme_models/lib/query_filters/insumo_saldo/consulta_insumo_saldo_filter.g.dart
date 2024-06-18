@@ -9,8 +9,8 @@ part of 'consulta_insumo_saldo_filter.dart';
 _$ConsultaInsumoSaldoFilterImpl _$$ConsultaInsumoSaldoFilterImplFromJson(
         Map json) =>
     _$ConsultaInsumoSaldoFilterImpl(
-      codInsumo: json['codInsumo'] as int?,
-      codDeposito: json['codDeposito'] as int?,
+      codInsumo: (json['codInsumo'] as num?)?.toInt(),
+      codDeposito: (json['codDeposito'] as num?)?.toInt(),
       semSaldo: json['semSaldo'] as bool?,
       situacao: json['situacao'] as String?,
     );

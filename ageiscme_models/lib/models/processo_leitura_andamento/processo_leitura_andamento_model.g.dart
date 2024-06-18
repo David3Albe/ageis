@@ -9,8 +9,8 @@ part of 'processo_leitura_andamento_model.dart';
 _$ProcessoLeituraAndamentoModelImpl
     _$$ProcessoLeituraAndamentoModelImplFromJson(Map json) =>
         _$ProcessoLeituraAndamentoModelImpl(
-          cod: json['cod'] as int?,
-          codUsuario: json['codUsuario'] as int?,
+          cod: (json['cod'] as num?)?.toInt(),
+          codUsuario: (json['codUsuario'] as num?)?.toInt(),
           dataHora: json['dataHora'] == null
               ? null
               : DateTime.parse(json['dataHora'] as String),

@@ -9,9 +9,9 @@ part of 'equipamento_manutencao_model.dart';
 _$EquipamentoManutencaoModelImpl _$$EquipamentoManutencaoModelImplFromJson(
         Map json) =>
     _$EquipamentoManutencaoModelImpl(
-      cod: json['cod'] as int?,
-      codEquipamento: json['codEquipamento'] as int?,
-      codServicosTipo: json['codServicosTipo'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codEquipamento: (json['codEquipamento'] as num?)?.toInt(),
+      codServicosTipo: (json['codServicosTipo'] as num?)?.toInt(),
       resultado: json['resultado'] as String?,
       descricao: json['descricao'] as String?,
       dataInicio: json['dataInicio'] == null
@@ -24,8 +24,8 @@ _$EquipamentoManutencaoModelImpl _$$EquipamentoManutencaoModelImplFromJson(
           ? null
           : DateTime.parse(json['dataParada'] as String),
       imagemDoAnexo: json['imagemDoAnexo'] as String?,
-      codUsuario: json['codUsuario'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codUsuario: (json['codUsuario'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       tecnico: json['tecnico'] as String?,
       usuarioRegistro: json['usuarioRegistro'] as String?,
       dataRegistro: json['dataRegistro'] == null
@@ -34,11 +34,11 @@ _$EquipamentoManutencaoModelImpl _$$EquipamentoManutencaoModelImplFromJson(
       numNF: json['numNF'] as String?,
       problema: json['problema'] as String?,
       detectadoPor: json['detectadoPor'] as String?,
-      codPeca1: json['codPeca1'] as int?,
-      codPeca2: json['codPeca2'] as int?,
-      codPeca3: json['codPeca3'] as int?,
-      codPeca4: json['codPeca4'] as int?,
-      codPeca5: json['codPeca5'] as int?,
+      codPeca1: (json['codPeca1'] as num?)?.toInt(),
+      codPeca2: (json['codPeca2'] as num?)?.toInt(),
+      codPeca3: (json['codPeca3'] as num?)?.toInt(),
+      codPeca4: (json['codPeca4'] as num?)?.toInt(),
+      codPeca5: (json['codPeca5'] as num?)?.toInt(),
       qtde1: (json['qtde1'] as num?)?.toDouble(),
       qtde2: (json['qtde2'] as num?)?.toDouble(),
       qtde3: (json['qtde3'] as num?)?.toDouble(),

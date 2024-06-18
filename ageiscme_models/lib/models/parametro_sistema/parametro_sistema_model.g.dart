@@ -8,7 +8,7 @@ part of 'parametro_sistema_model.dart';
 
 _$ParametroSistemaModelImpl _$$ParametroSistemaModelImplFromJson(Map json) =>
     _$ParametroSistemaModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       versaoSW: json['versaoSW'] as String?,
       dataVersaoSW: json['dataVersaoSW'] == null
           ? null
@@ -17,9 +17,10 @@ _$ParametroSistemaModelImpl _$$ParametroSistemaModelImplFromJson(Map json) =>
       dataVersaoSistemaV2: json['dataVersaoSistemaV2'] == null
           ? null
           : DateTime.parse(json['dataVersaoSistemaV2'] as String),
-      qtdeMaxProcessosEtiqueta: json['qtdeMaxProcessosEtiqueta'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
-      indicador: json['indicador'] as int?,
+      qtdeMaxProcessosEtiqueta:
+          (json['qtdeMaxProcessosEtiqueta'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
+      indicador: (json['indicador'] as num?)?.toInt(),
       letraConsignado: json['letraConsignado'] as String?,
       licenca: json['licenca'] as String?,
       zeraEtiquetaRotulado: json['zeraEtiquetaRotulado'] as bool?,

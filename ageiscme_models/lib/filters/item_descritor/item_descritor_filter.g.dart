@@ -8,14 +8,14 @@ part of 'item_descritor_filter.dart';
 
 _$ItemDescritorFilterImpl _$$ItemDescritorFilterImplFromJson(Map json) =>
     _$ItemDescritorFilterImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       apenasAtivos: json['apenasAtivos'] as bool?,
       ordenarPorNomeCrescente: json['ordenarPorNomeCrescente'] as bool?,
       carregarItensConsignados: json['carregarItensConsignados'] as bool?,
       apenasConsignados: json['apenasConsignados'] as bool?,
       apenasNaoConsignados: json['apenasNaoConsignados'] as bool?,
       carregarImagem: json['carregarImagem'] as bool?,
-      numeroMaximoRegistros: json['numeroMaximoRegistros'] as int?,
+      numeroMaximoRegistros: (json['numeroMaximoRegistros'] as num?)?.toInt(),
       termoPesquisa: json['termoPesquisa'] as String?,
       nomeContem: json['nomeContem'] as String?,
       ordenarAtivosPrimeiro: json['ordenarAtivosPrimeiro'] as bool?,

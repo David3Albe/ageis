@@ -9,7 +9,7 @@ part of 'equipamento_insumo_delete_dto.dart';
 _$EquipamentoInsumoDeleteDTOImpl _$$EquipamentoInsumoDeleteDTOImplFromJson(
         Map json) =>
     _$EquipamentoInsumoDeleteDTOImpl(
-      cod: json['cod'] as int,
+      cod: (json['cod'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$EquipamentoInsumoDeleteDTOImplToJson(

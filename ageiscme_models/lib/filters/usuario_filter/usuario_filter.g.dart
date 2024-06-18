@@ -8,7 +8,7 @@ part of 'usuario_filter.dart';
 
 _$UsuarioFilterImpl _$$UsuarioFilterImplFromJson(Map json) =>
     _$UsuarioFilterImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       codBarra: json['codBarra'] as String?,
       login: json['login'] as String?,
       tStamp: json['tStamp'] as String?,
@@ -16,10 +16,10 @@ _$UsuarioFilterImpl _$$UsuarioFilterImplFromJson(Map json) =>
       apenasAtivos: json['apenasAtivos'] as bool?,
       ordenarPorNomeCrescente: json['ordenarPorNomeCrescente'] as bool?,
       apenasColaboradores: json['apenasColaboradores'] as bool?,
-      tipoQuery: json['tipoQuery'] as int?,
+      tipoQuery: (json['tipoQuery'] as num?)?.toInt(),
       carregarFoto: json['carregarFoto'] as bool?,
       nomeContem: json['nomeContem'] as String?,
-      numeroRegistros: json['numeroRegistros'] as int?,
+      numeroRegistros: (json['numeroRegistros'] as num?)?.toInt(),
       ordenarPorAtivosPrimeiro: json['ordenarPorAtivosPrimeiro'] as bool?,
       termoPesquisa: json['termoPesquisa'] as String?,
     );

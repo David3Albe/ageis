@@ -21,13 +21,13 @@ _$ConsultaProcessosLeituraEntradaAutomaticaFilterImpl
           finalTime: json['finalTime'] == null
               ? null
               : DateTime.parse(json['finalTime'] as String),
-          codSituacao: json['codSituacao'] as int?,
-          codKit: json['codKit'] as int?,
+          codSituacao: (json['codSituacao'] as num?)?.toInt(),
+          codKit: (json['codKit'] as num?)?.toInt(),
           codBarraKitContem: json['codBarraKitContem'] as String?,
-          codItem: json['codItem'] as int?,
+          codItem: (json['codItem'] as num?)?.toInt(),
           idEtiquetaContem: json['idEtiquetaContem'] as String?,
-          codEtapaProcesso: json['codEtapaProcesso'] as int?,
-          codRegistroProcesso: json['codRegistroProcesso'] as int?,
+          codEtapaProcesso: (json['codEtapaProcesso'] as num?)?.toInt(),
+          codRegistroProcesso: (json['codRegistroProcesso'] as num?)?.toInt(),
           indicador: json['indicador'] as String?,
           prontuarioRetirada: json['prontuarioRetirada'] as String?,
           item: json['item'] == null

@@ -9,15 +9,15 @@ part of 'kit_search_kit_response_dto.dart';
 _$KitSearchKitResponseDTOImpl _$$KitSearchKitResponseDTOImplFromJson(
         Map json) =>
     _$KitSearchKitResponseDTOImpl(
-      cod: json['cod'] as int,
+      cod: (json['cod'] as num).toInt(),
       codBarra: json['codBarra'] as String,
       status: json['status'] as String,
       tStamp: json['tStamp'] as String,
-      codDescritor: json['codDescritor'] as int?,
-      codCor1: json['codCor1'] as int?,
-      codCor2: json['codCor2'] as int?,
-      codCor3: json['codCor3'] as int?,
-      codCor4: json['codCor4'] as int?,
+      codDescritor: (json['codDescritor'] as num?)?.toInt(),
+      codCor1: (json['codCor1'] as num?)?.toInt(),
+      codCor2: (json['codCor2'] as num?)?.toInt(),
+      codCor3: (json['codCor3'] as num?)?.toInt(),
+      codCor4: (json['codCor4'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$KitSearchKitResponseDTOImplToJson(

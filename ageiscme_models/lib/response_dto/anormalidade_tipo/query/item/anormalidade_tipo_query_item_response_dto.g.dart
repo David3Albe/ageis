@@ -9,7 +9,7 @@ part of 'anormalidade_tipo_query_item_response_dto.dart';
 _$AnormalidadeTipoQueryItemResponseDTOImpl
     _$$AnormalidadeTipoQueryItemResponseDTOImplFromJson(Map json) =>
         _$AnormalidadeTipoQueryItemResponseDTOImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           nome: json['nome'] as String,
           ativo: json['ativo'] as bool,
           bloqueioEtapa: json['bloqueioEtapa'] as bool,

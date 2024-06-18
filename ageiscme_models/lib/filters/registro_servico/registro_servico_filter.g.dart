@@ -8,18 +8,18 @@ part of 'registro_servico_filter.dart';
 
 _$RegistroServicoFilterImpl _$$RegistroServicoFilterImplFromJson(Map json) =>
     _$RegistroServicoFilterImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       startDate: json['startDate'] == null
           ? null
           : DateTime.parse(json['startDate'] as String),
       finalDate: json['finalDate'] == null
           ? null
           : DateTime.parse(json['finalDate'] as String),
-      codEquipamento: json['codEquipamento'] as int?,
+      codEquipamento: (json['codEquipamento'] as num?)?.toInt(),
       carregarImagens: json['carregarImagens'] as bool?,
       carregarUsuario: json['carregarUsuario'] as bool?,
       carregarItem: json['carregarItem'] as bool?,
-      numeroRegistros: json['numeroRegistros'] as int?,
+      numeroRegistros: (json['numeroRegistros'] as num?)?.toInt(),
       tStamp: json['tStamp'] as String?,
     );
 

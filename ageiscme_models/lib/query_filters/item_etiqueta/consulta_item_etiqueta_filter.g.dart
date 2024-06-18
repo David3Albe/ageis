@@ -15,9 +15,9 @@ _$ConsultaItemEtiquetaFilterImpl _$$ConsultaItemEtiquetaFilterImplFromJson(
       finalDate: json['finalDate'] == null
           ? null
           : DateTime.parse(json['finalDate'] as String),
-      codProprietario: json['codProprietario'] as int?,
-      codItemDescritor: json['codItemDescritor'] as int?,
-      codKit: json['codKit'] as int?,
+      codProprietario: (json['codProprietario'] as num?)?.toInt(),
+      codItemDescritor: (json['codItemDescritor'] as num?)?.toInt(),
+      codKit: (json['codKit'] as num?)?.toInt(),
       idEtiqueta: json['idEtiqueta'] as String?,
       descartar: json['descartar'] as bool?,
       codBarraKitContem: json['codBarraKitContem'] as String?,
@@ -25,7 +25,7 @@ _$ConsultaItemEtiquetaFilterImpl _$$ConsultaItemEtiquetaFilterImplFromJson(
           ? null
           : ItemDescritorDropDownSearchResponseDTO.fromJson(
               Map<String, Object?>.from(json['itemDescritor'] as Map)),
-      numeroRegistros: json['numeroRegistros'] as int?,
+      numeroRegistros: (json['numeroRegistros'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$ConsultaItemEtiquetaFilterImplToJson(

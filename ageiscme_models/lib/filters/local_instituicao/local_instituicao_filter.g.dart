@@ -8,8 +8,8 @@ part of 'local_instituicao_filter.dart';
 
 _$LocalInstituicaoFilterImpl _$$LocalInstituicaoFilterImplFromJson(Map json) =>
     _$LocalInstituicaoFilterImpl(
-      cod: json['cod'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       apenasAtivos: json['apenasAtivos'] as bool?,
       ordenarPorNomeCrescente: json['ordenarPorNomeCrescente'] as bool?,
       tStamp: json['tStamp'] as String?,

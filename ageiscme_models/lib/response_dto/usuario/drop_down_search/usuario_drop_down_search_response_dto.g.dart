@@ -9,8 +9,8 @@ part of 'usuario_drop_down_search_response_dto.dart';
 _$UsuarioDropDownSearchResponseDTOImpl
     _$$UsuarioDropDownSearchResponseDTOImplFromJson(Map json) =>
         _$UsuarioDropDownSearchResponseDTOImpl(
-          cod: json['cod'] as int,
-          codBarra: json['codBarra'] as int,
+          cod: (json['cod'] as num).toInt(),
+          codBarra: (json['codBarra'] as num).toInt(),
           nome: json['nome'] as String?,
         );
 

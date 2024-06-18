@@ -15,7 +15,7 @@ _$ConsultaHistoricoColaboradorFilterImpl
           finalDate: json['finalDate'] == null
               ? null
               : DateTime.parse(json['finalDate'] as String),
-          codUsuario: json['codUsuario'] as int?,
+          codUsuario: (json['codUsuario'] as num?)?.toInt(),
           usuario: json['usuario'] == null
               ? null
               : UsuarioDropDownSearchResponseDTO.fromJson(

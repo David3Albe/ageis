@@ -9,7 +9,7 @@ part of 'sigla_short_dto.dart';
 _$SiglaShortDTOImpl _$$SiglaShortDTOImplFromJson(Map json) =>
     _$SiglaShortDTOImpl(
       termoPesquisa: json['termoPesquisa'] as String?,
-      numeroRegistros: json['numeroRegistros'] as int,
+      numeroRegistros: (json['numeroRegistros'] as num).toInt(),
       ativosApenas: json['ativosApenas'] as bool?,
     );
 

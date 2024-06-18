@@ -8,7 +8,7 @@ part of 'epi_descritor_filter.dart';
 
 _$EpiDescritorFilterImpl _$$EpiDescritorFilterImplFromJson(Map json) =>
     _$EpiDescritorFilterImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       carregarTipo: json['carregarTipo'] as bool?,
       tStamp: json['tStamp'] as String?,
     );

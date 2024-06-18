@@ -8,17 +8,18 @@ part of 'processo_tipo_model.dart';
 
 _$ProcessoTipoModelImpl _$$ProcessoTipoModelImplFromJson(Map json) =>
     _$ProcessoTipoModelImpl(
-      cod: json['cod'] as int?,
-      codEtapaProcessoInicial: json['codEtapaProcessoInicial'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codEtapaProcessoInicial:
+          (json['codEtapaProcessoInicial'] as num?)?.toInt(),
       nome: json['nome'] as String,
       descricao: json['descricao'] as String?,
-      prazoValidade: json['prazoValidade'] as int?,
+      prazoValidade: (json['prazoValidade'] as num?)?.toInt(),
       tipoValidade: json['tipoValidade'] as String,
       nivelPrioridade: json['nivelPrioridade'] as String,
       limiteVigencia: json['limiteVigencia'] == null
           ? null
           : DateTime.parse(json['limiteVigencia'] as String),
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ativo: json['ativo'] as bool?,
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null

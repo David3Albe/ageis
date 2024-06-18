@@ -10,21 +10,21 @@ _$ProcessoLeituraCancelamentoPreparoSearchLeituraResponseDTOImpl
     _$$ProcessoLeituraCancelamentoPreparoSearchLeituraResponseDTOImplFromJson(
             Map json) =>
         _$ProcessoLeituraCancelamentoPreparoSearchLeituraResponseDTOImpl(
-          codRegistroProcesso: json['codRegistroProcesso'] as int,
-          codProcessoLeitura: json['codProcessoLeitura'] as int,
+          codRegistroProcesso: (json['codRegistroProcesso'] as num).toInt(),
+          codProcessoLeitura: (json['codProcessoLeitura'] as num).toInt(),
           preparo: json['preparo'] as bool,
           dataHora: json['dataHora'] == null
               ? null
               : DateTime.parse(json['dataHora'] as String),
-          codItem: json['codItem'] as int?,
+          codItem: (json['codItem'] as num?)?.toInt(),
           nomeItem: json['nomeItem'] as String?,
           codBarraItem: json['codBarraItem'] as String?,
-          codKit: json['codKit'] as int?,
+          codKit: (json['codKit'] as num?)?.toInt(),
           nomeKit: json['nomeKit'] as String?,
           codBarraKit: json['codBarraKit'] as String?,
           nomeUsuario: json['nomeUsuario'] as String?,
           nomeEmbalagem: json['nomeEmbalagem'] as String?,
-          codEtapa: json['codEtapa'] as int?,
+          codEtapa: (json['codEtapa'] as num?)?.toInt(),
           nomeEtapa: json['nomeEtapa'] as String?,
         );
 

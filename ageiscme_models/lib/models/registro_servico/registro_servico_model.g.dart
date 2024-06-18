@@ -8,7 +8,7 @@ part of 'registro_servico_model.dart';
 
 _$RegistroServicoModelImpl _$$RegistroServicoModelImplFromJson(Map json) =>
     _$RegistroServicoModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       indicador: json['indicador'] as String?,
       resultado: json['resultado'] as String?,
       descricao: json['descricao'] as String?,
@@ -39,13 +39,13 @@ _$RegistroServicoModelImpl _$$RegistroServicoModelImplFromJson(Map json) =>
       dataRegistro: json['dataRegistro'] == null
           ? null
           : DateTime.parse(json['dataRegistro'] as String),
-      codUsuario: json['codUsuario'] as int?,
-      codEquipamento: json['codEquipamento'] as int?,
-      codItem: json['codItem'] as int?,
-      codEstoque: json['codEstoque'] as int?,
-      codUsuarioLiberado: json['codUsuarioLiberado'] as int?,
-      codServicosTipos: json['codServicosTipos'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codUsuario: (json['codUsuario'] as num?)?.toInt(),
+      codEquipamento: (json['codEquipamento'] as num?)?.toInt(),
+      codItem: (json['codItem'] as num?)?.toInt(),
+      codEstoque: (json['codEstoque'] as num?)?.toInt(),
+      codUsuarioLiberado: (json['codUsuarioLiberado'] as num?)?.toInt(),
+      codServicosTipos: (json['codServicosTipos'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       temperatura: (json['temperatura'] as num?)?.toDouble(),
       umidade: (json['umidade'] as num?)?.toDouble(),
       temperaturaMax: (json['temperaturaMax'] as num?)?.toDouble(),

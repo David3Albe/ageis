@@ -10,7 +10,7 @@ _$AnormalidadeTipoShortDTOImpl _$$AnormalidadeTipoShortDTOImplFromJson(
         Map json) =>
     _$AnormalidadeTipoShortDTOImpl(
       termoPesquisa: json['termoPesquisa'] as String?,
-      numeroRegistros: json['numeroRegistros'] as int,
+      numeroRegistros: (json['numeroRegistros'] as num).toInt(),
       ativosApenas: json['ativosApenas'] as bool?,
     );
 

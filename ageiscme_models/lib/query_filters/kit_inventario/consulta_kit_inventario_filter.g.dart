@@ -9,7 +9,7 @@ part of 'consulta_kit_inventario_filter.dart';
 _$ConsultaKitInventarioFilterImpl _$$ConsultaKitInventarioFilterImplFromJson(
         Map json) =>
     _$ConsultaKitInventarioFilterImpl(
-      codKitDescritor: json['codKitDescritor'] as int?,
+      codKitDescritor: (json['codKitDescritor'] as num?)?.toInt(),
       kitDescritor: json['kitDescritor'] == null
           ? null
           : KitDescritorDropDownSearchResponseDTO.fromJson(

@@ -9,7 +9,7 @@ part of 'consulta_processos_leitura_embalagem_model.dart';
 _$ConsultaProcessosLeituraEmbalagemModelImpl
     _$$ConsultaProcessosLeituraEmbalagemModelImplFromJson(Map json) =>
         _$ConsultaProcessosLeituraEmbalagemModelImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           nome: json['nome'] as String,
         );
 

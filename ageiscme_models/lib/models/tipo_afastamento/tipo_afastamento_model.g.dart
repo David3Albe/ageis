@@ -8,11 +8,11 @@ part of 'tipo_afastamento_model.dart';
 
 _$TipoAfastamentoModelImpl _$$TipoAfastamentoModelImplFromJson(Map json) =>
     _$TipoAfastamentoModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       motivo: json['motivo'] as String?,
-      diasConcedido: json['diasConcedido'] as int?,
+      diasConcedido: (json['diasConcedido'] as num?)?.toInt(),
       cat: json['cat'] as bool?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),

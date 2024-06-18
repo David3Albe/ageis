@@ -9,7 +9,7 @@ part of 'item_rotulado_tipos_processo_normal_response_dto.dart';
 _$ItemRotuladoTiposProcessoNormalResponseDTOImpl
     _$$ItemRotuladoTiposProcessoNormalResponseDTOImplFromJson(Map json) =>
         _$ItemRotuladoTiposProcessoNormalResponseDTOImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           nome: json['nome'] as String,
         );
 

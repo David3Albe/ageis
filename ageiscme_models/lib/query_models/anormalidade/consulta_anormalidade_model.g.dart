@@ -12,15 +12,15 @@ _$ConsultaAnormalidadeModelImpl _$$ConsultaAnormalidadeModelImplFromJson(
       dataHora: json['dataHora'] == null
           ? null
           : DateTime.parse(json['dataHora'] as String),
-      codItem: json['codItem'] as int?,
+      codItem: (json['codItem'] as num?)?.toInt(),
       idEtiqueta: json['idEtiqueta'] as String?,
       nomeItem: json['nomeItem'] as String?,
       tipoAnormalidadeNome: json['tipoAnormalidadeNome'] as String?,
-      codAnormalidadeTipo: json['codAnormalidadeTipo'] as int?,
-      codRegistroProcesso: json['codRegistroProcesso'] as int?,
-      cod: json['cod'] as int?,
+      codAnormalidadeTipo: (json['codAnormalidadeTipo'] as num?)?.toInt(),
+      codRegistroProcesso: (json['codRegistroProcesso'] as num?)?.toInt(),
+      cod: (json['cod'] as num?)?.toInt(),
       etapaProcessoNome: json['etapaProcessoNome'] as String?,
-      etapaProcessoCod: json['etapaProcessoCod'] as int?,
+      etapaProcessoCod: (json['etapaProcessoCod'] as num?)?.toInt(),
       nomeUsuario: json['nomeUsuario'] as String?,
       dataHoraLiberacao: json['dataHoraLiberacao'] == null
           ? null

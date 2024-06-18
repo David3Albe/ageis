@@ -12,7 +12,7 @@ part of 'usuario_drop_down_search_response_dto.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 UsuarioDropDownSearchResponseDTO _$UsuarioDropDownSearchResponseDTOFromJson(
     Map<String, dynamic> json) {
@@ -129,7 +129,7 @@ class __$$UsuarioDropDownSearchResponseDTOImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$UsuarioDropDownSearchResponseDTOImpl
-    extends _UsuarioDropDownSearchResponseDTO with DiagnosticableTreeMixin {
+    extends _UsuarioDropDownSearchResponseDTO {
   _$UsuarioDropDownSearchResponseDTOImpl(
       {required this.cod, required this.codBarra, this.nome})
       : super._();
@@ -144,21 +144,6 @@ class _$UsuarioDropDownSearchResponseDTOImpl
   int codBarra;
   @override
   String? nome;
-
-  @override
-  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UsuarioDropDownSearchResponseDTO(cod: $cod, codBarra: $codBarra, nome: $nome)';
-  }
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties
-      ..add(DiagnosticsProperty('type', 'UsuarioDropDownSearchResponseDTO'))
-      ..add(DiagnosticsProperty('cod', cod))
-      ..add(DiagnosticsProperty('codBarra', codBarra))
-      ..add(DiagnosticsProperty('nome', nome));
-  }
 
   @JsonKey(ignore: true)
   @override

@@ -7,7 +7,7 @@ part of 'imagem_filter.dart';
 // **************************************************************************
 
 _$ImagemFilterImpl _$$ImagemFilterImplFromJson(Map json) => _$ImagemFilterImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       identificadores: (json['identificadores'] as List<dynamic>?)
           ?.map((e) => e as String)
           .toList(),

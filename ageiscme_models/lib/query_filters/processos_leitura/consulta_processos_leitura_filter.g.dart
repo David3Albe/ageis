@@ -21,11 +21,11 @@ _$ConsultaProcessosLeituraFilterImpl
           finalTime: json['finalTime'] == null
               ? null
               : DateTime.parse(json['finalTime'] as String),
-          codKit: json['codKit'] as int?,
-          codItem: json['codItem'] as int?,
+          codKit: (json['codKit'] as num?)?.toInt(),
+          codItem: (json['codItem'] as num?)?.toInt(),
           idEtiquetaContem: json['idEtiquetaContem'] as String?,
-          codEtapaProcesso: json['codEtapaProcesso'] as int?,
-          lote: json['lote'] as int?,
+          codEtapaProcesso: (json['codEtapaProcesso'] as num?)?.toInt(),
+          lote: (json['lote'] as num?)?.toInt(),
           indicador: json['indicador'] as String?,
           biologico: json['biologico'] as String?,
           implantavel: json['implantavel'] as bool?,

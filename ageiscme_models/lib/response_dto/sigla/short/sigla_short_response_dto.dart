@@ -26,4 +26,7 @@ sealed class SiglaShortResponseDTO with _$SiglaShortResponseDTO {
   String Sigla() => sigla;
   String Descricao() => descricao;
   String SiglaDescricao() => '$sigla - $descricao';
+
+  @override
+  String toString() => sigla;
 }

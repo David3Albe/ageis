@@ -8,7 +8,7 @@ part of 'consulta_documento_model.dart';
 
 _$ConsultaDocumentoModelImpl _$$ConsultaDocumentoModelImplFromJson(Map json) =>
     _$ConsultaDocumentoModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       nome: json['nome'] as String?,
       validade: json['validade'] == null
           ? null

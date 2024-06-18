@@ -8,7 +8,7 @@ part of 'turno_remove_dto.dart';
 
 _$TurnoRemoveDTOImpl _$$TurnoRemoveDTOImplFromJson(Map json) =>
     _$TurnoRemoveDTOImpl(
-      cod: json['cod'] as int,
+      cod: (json['cod'] as num).toInt(),
       tstamp: json['tstamp'] as String,
     );
 

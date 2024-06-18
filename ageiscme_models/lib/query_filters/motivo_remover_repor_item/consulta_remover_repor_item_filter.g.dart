@@ -25,8 +25,8 @@ _$ConsultaRemoverReporItemFilterImpl
           codBarraKitContem: json['codBarraKitContem'] as String?,
           idEtiquetaContem: json['idEtiquetaContem'] as String?,
           codBarraItem: json['codBarraItem'] as String?,
-          codUsuarioAcao: json['codUsuarioAcao'] as int?,
-          codMotivo: json['codMotivo'] as int?,
+          codUsuarioAcao: (json['codUsuarioAcao'] as num?)?.toInt(),
+          codMotivo: (json['codMotivo'] as num?)?.toInt(),
           usuario: json['usuario'] == null
               ? null
               : UsuarioDropDownSearchResponseDTO.fromJson(

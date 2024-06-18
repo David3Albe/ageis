@@ -9,9 +9,9 @@ part of 'treinamento_registro_filter.dart';
 _$TreinamentoRegistroFilterImpl _$$TreinamentoRegistroFilterImplFromJson(
         Map json) =>
     _$TreinamentoRegistroFilterImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       carregarUsuario: json['carregarUsuario'] as bool?,
-      numeroRegistros: json['numeroRegistros'] as int?,
+      numeroRegistros: (json['numeroRegistros'] as num?)?.toInt(),
       nomeContem: json['nomeContem'] as String?,
       tStamp: json['tStamp'] as String?,
     );

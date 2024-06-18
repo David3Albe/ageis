@@ -9,9 +9,9 @@ part of 'solicitacao_material_find_one_insumo_response_dto.dart';
 _$SolicitacaoMaterialFindOneInsumoResponseDTOImpl
     _$$SolicitacaoMaterialFindOneInsumoResponseDTOImplFromJson(Map json) =>
         _$SolicitacaoMaterialFindOneInsumoResponseDTOImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           nome: json['nome'] as String,
-          codBarra: json['codBarra'] as int,
+          codBarra: (json['codBarra'] as num).toInt(),
           unidadeMedida: json['unidadeMedida'] as String?,
         );
 

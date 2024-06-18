@@ -9,7 +9,7 @@ part of 'sigla_query_item_response_dto.dart';
 _$SiglaQueryItemResponseDTOImpl _$$SiglaQueryItemResponseDTOImplFromJson(
         Map json) =>
     _$SiglaQueryItemResponseDTOImpl(
-      cod: json['cod'] as int,
+      cod: (json['cod'] as num).toInt(),
       sigla: json['sigla'] as String,
       descricao: json['descricao'] as String,
       ativo: json['ativo'] as bool,

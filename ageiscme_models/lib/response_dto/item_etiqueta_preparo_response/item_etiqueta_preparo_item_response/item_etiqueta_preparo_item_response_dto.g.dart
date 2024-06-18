@@ -9,7 +9,7 @@ part of 'item_etiqueta_preparo_item_response_dto.dart';
 _$ItemEtiquetaPreparoItemResponseDTOImpl
     _$$ItemEtiquetaPreparoItemResponseDTOImplFromJson(Map json) =>
         _$ItemEtiquetaPreparoItemResponseDTOImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           nome: json['nome'] as String,
           idEtiqueta: json['idEtiqueta'] as String,
           nomeTipoProcesso: json['nomeTipoProcesso'] as String,

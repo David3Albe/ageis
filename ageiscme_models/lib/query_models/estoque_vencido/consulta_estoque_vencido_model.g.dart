@@ -15,8 +15,8 @@ _$ConsultaEstoqueVencidoModelImpl _$$ConsultaEstoqueVencidoModelImplFromJson(
       dataEntrada: json['dataEntrada'] == null
           ? null
           : DateTime.parse(json['dataEntrada'] as String),
-      codKit: json['codKit'] as int?,
-      codItem: json['codItem'] as int?,
+      codKit: (json['codKit'] as num?)?.toInt(),
+      codItem: (json['codItem'] as num?)?.toInt(),
       nomeArsenalEstoque: json['nomeArsenalEstoque'] as String?,
       nomeLocalEstoque: json['nomeLocalEstoque'] as String?,
       nomeKit: json['nomeKit'] as String?,

@@ -8,9 +8,9 @@ part of 'destino_residuo_model.dart';
 
 _$DestinoResiduoModelImpl _$$DestinoResiduoModelImplFromJson(Map json) =>
     _$DestinoResiduoModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       nome: json['nome'] as String?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ativo: json['ativo'] as bool?,
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null

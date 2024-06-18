@@ -9,8 +9,8 @@ part of 'consulta_estoque_disponivel_rotulado_model.dart';
 _$ConsultaEstoqueDisponivelRotuladoModelImpl
     _$$ConsultaEstoqueDisponivelRotuladoModelImplFromJson(Map json) =>
         _$ConsultaEstoqueDisponivelRotuladoModelImpl(
-          codItem: json['codItem'] as int?,
-          quantidade: json['quantidade'] as int?,
+          codItem: (json['codItem'] as num?)?.toInt(),
+          quantidade: (json['quantidade'] as num?)?.toInt(),
           proprietario: json['proprietario'] as String?,
           arsenalEstoque: json['arsenalEstoque'] == null
               ? null
@@ -36,11 +36,11 @@ _$ConsultaEstoqueDisponivelRotuladoModelImpl
           origem: json['origem'] as String?,
           destino: json['destino'] as String?,
           circulante: json['circulante'] as String?,
-          codItemRotulo: json['codItemRotulo'] as int?,
+          codItemRotulo: (json['codItemRotulo'] as num?)?.toInt(),
           motivo: json['motivo'] as String?,
           motivoQuebraFluxo: json['motivoQuebraFluxo'] as String?,
           observacao: json['observacao'] as String?,
-          codKit: json['codKit'] as int?,
+          codKit: (json['codKit'] as num?)?.toInt(),
         );
 
 Map<String, dynamic> _$$ConsultaEstoqueDisponivelRotuladoModelImplToJson(

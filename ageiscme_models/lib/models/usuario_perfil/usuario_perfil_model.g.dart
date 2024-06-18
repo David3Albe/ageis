@@ -8,10 +8,10 @@ part of 'usuario_perfil_model.dart';
 
 _$UsuarioPerfilModelImpl _$$UsuarioPerfilModelImplFromJson(Map json) =>
     _$UsuarioPerfilModelImpl(
-      cod: json['cod'] as int?,
-      codUsuario: json['codUsuario'] as int?,
-      codPerfil: json['codPerfil'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codUsuario: (json['codUsuario'] as num?)?.toInt(),
+      codPerfil: (json['codPerfil'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),

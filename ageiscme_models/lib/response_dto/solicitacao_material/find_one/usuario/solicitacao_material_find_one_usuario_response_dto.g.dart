@@ -9,7 +9,7 @@ part of 'solicitacao_material_find_one_usuario_response_dto.dart';
 _$SolicitacaoMaterialFindOneUsuarioResponseDTOImpl
     _$$SolicitacaoMaterialFindOneUsuarioResponseDTOImplFromJson(Map json) =>
         _$SolicitacaoMaterialFindOneUsuarioResponseDTOImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           nome: json['nome'] as String,
         );
 

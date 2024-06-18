@@ -9,12 +9,12 @@ part of 'item_consignado_processado_model.dart';
 _$ItemConsignadoProcessadoModelImpl
     _$$ItemConsignadoProcessadoModelImplFromJson(Map json) =>
         _$ItemConsignadoProcessadoModelImpl(
-          codInstituicao: json['codInstituicao'] as int?,
-          codRegistro: json['codRegistro'] as int?,
-          medico: json['medico'] as int?,
-          responsavelEntrega: json['responsavelEntrega'] as int?,
-          responsavelRetirada: json['responsavelRetirada'] as int?,
-          codUsuario: json['codUsuario'] as int?,
+          codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
+          codRegistro: (json['codRegistro'] as num?)?.toInt(),
+          medico: (json['medico'] as num?)?.toInt(),
+          responsavelEntrega: (json['responsavelEntrega'] as num?)?.toInt(),
+          responsavelRetirada: (json['responsavelRetirada'] as num?)?.toInt(),
+          codUsuario: (json['codUsuario'] as num?)?.toInt(),
           DataHora: json['DataHora'] == null
               ? null
               : DateTime.parse(json['DataHora'] as String),

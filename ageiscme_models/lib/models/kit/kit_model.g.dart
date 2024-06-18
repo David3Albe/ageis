@@ -7,20 +7,20 @@ part of 'kit_model.dart';
 // **************************************************************************
 
 _$KitModelImpl _$$KitModelImplFromJson(Map json) => _$KitModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       codBarra: json['codBarra'] as String?,
-      codCor1: json['codCor1'] as int?,
-      codCor2: json['codCor2'] as int?,
-      codCor3: json['codCor3'] as int?,
-      codCor4: json['codCor4'] as int?,
+      codCor1: (json['codCor1'] as num?)?.toInt(),
+      codCor2: (json['codCor2'] as num?)?.toInt(),
+      codCor3: (json['codCor3'] as num?)?.toInt(),
+      codCor4: (json['codCor4'] as num?)?.toInt(),
       status: json['status'] as String?,
       restricao: json['restricao'] as String?,
-      codDescritorKit: json['codDescritorKit'] as int?,
-      codConjunto: json['codConjunto'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codDescritorKit: (json['codDescritorKit'] as num?)?.toInt(),
+      codConjunto: (json['codConjunto'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       preparo: json['preparo'] as String?,
-      codProcessoLeitura: json['codProcessoLeitura'] as int?,
-      codEmbalagem: json['codEmbalagem'] as int?,
+      codProcessoLeitura: (json['codProcessoLeitura'] as num?)?.toInt(),
+      codEmbalagem: (json['codEmbalagem'] as num?)?.toInt(),
       embalagem: json['embalagem'] == null
           ? null
           : EmbalagemModel.fromJson(

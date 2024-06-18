@@ -9,7 +9,7 @@ part of 'solicitacao_material_authorize_dto.dart';
 _$SolicitacaoMaterialAuthorizeDTOImpl
     _$$SolicitacaoMaterialAuthorizeDTOImplFromJson(Map json) =>
         _$SolicitacaoMaterialAuthorizeDTOImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           codBarraUsuario: json['codBarraUsuario'] as String,
         );
 

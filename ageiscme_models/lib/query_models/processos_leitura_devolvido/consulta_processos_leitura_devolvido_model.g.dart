@@ -9,9 +9,9 @@ part of 'consulta_processos_leitura_devolvido_model.dart';
 _$ConsultaProcessosLeituraDevolvidoModelImpl
     _$$ConsultaProcessosLeituraDevolvidoModelImplFromJson(Map json) =>
         _$ConsultaProcessosLeituraDevolvidoModelImpl(
-          codLocal: json['codLocal'] as int?,
+          codLocal: (json['codLocal'] as num?)?.toInt(),
           nomeLocal: json['nomeLocal'] as String?,
-          qtde: json['qtde'] as int?,
+          qtde: (json['qtde'] as num?)?.toInt(),
         );
 
 Map<String, dynamic> _$$ConsultaProcessosLeituraDevolvidoModelImplToJson(

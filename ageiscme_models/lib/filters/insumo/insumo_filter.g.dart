@@ -7,8 +7,9 @@ part of 'insumo_filter.dart';
 // **************************************************************************
 
 _$InsumoFilterImpl _$$InsumoFilterImplFromJson(Map json) => _$InsumoFilterImpl(
-      codigos:
-          (json['codigos'] as List<dynamic>?)?.map((e) => e as int).toList(),
+      codigos: (json['codigos'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList(),
       apenasAtivos: json['apenasAtivos'] as bool?,
       ordenarPorNomeAsc: json['ordenarPorNomeAsc'] as bool?,
     );

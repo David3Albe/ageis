@@ -9,7 +9,7 @@ part of 'consulta_processos_leitura_equipamento_model.dart';
 _$ConsultaProcessosLeituraEquipamentoModelImpl
     _$$ConsultaProcessosLeituraEquipamentoModelImplFromJson(Map json) =>
         _$ConsultaProcessosLeituraEquipamentoModelImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           nome: json['nome'] as String,
         );
 

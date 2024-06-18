@@ -8,10 +8,10 @@ part of 'embalagem_model.dart';
 
 _$EmbalagemModelImpl _$$EmbalagemModelImplFromJson(Map json) =>
     _$EmbalagemModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       nome: json['nome'] as String?,
-      validadeProcessosDias: json['validadeProcessosDias'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      validadeProcessosDias: (json['validadeProcessosDias'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ativo: json['ativo'] as bool?,
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null

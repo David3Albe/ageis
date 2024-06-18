@@ -9,11 +9,11 @@ part of 'estoque_disponivel_rotulado_model.dart';
 _$EstoqueDisponivelRotuladoModelImpl
     _$$EstoqueDisponivelRotuladoModelImplFromJson(Map json) =>
         _$EstoqueDisponivelRotuladoModelImpl(
-          cod: json['cod'] as int?,
-          codEstoque: json['codEstoque'] as int?,
-          codItem: json['codItem'] as int?,
-          quantidade: json['quantidade'] as int,
-          codInstituicao: json['codInstituicao'] as int?,
+          cod: (json['cod'] as num?)?.toInt(),
+          codEstoque: (json['codEstoque'] as num?)?.toInt(),
+          codItem: (json['codItem'] as num?)?.toInt(),
+          quantidade: (json['quantidade'] as num).toInt(),
+          codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
           ultimaAlteracao: json['ultimaAlteracao'] == null
               ? null
               : DateTime.parse(json['ultimaAlteracao'] as String),

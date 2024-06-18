@@ -7,14 +7,14 @@ part of 'turno_save_dto.dart';
 // **************************************************************************
 
 _$TurnoSaveDTOImpl _$$TurnoSaveDTOImplFromJson(Map json) => _$TurnoSaveDTOImpl(
-      cod: json['cod'] as int,
+      cod: (json['cod'] as num).toInt(),
       descricao: json['descricao'] as String,
       ativo: json['ativo'] as bool,
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),
       tstamp: json['tstamp'] as String?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$TurnoSaveDTOImplToJson(_$TurnoSaveDTOImpl instance) =>

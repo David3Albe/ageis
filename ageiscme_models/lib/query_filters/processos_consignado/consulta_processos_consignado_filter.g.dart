@@ -21,10 +21,10 @@ _$ConsultaProcessosConsignadoFilterImpl
           finalTime: json['finalTime'] == null
               ? null
               : DateTime.parse(json['finalTime'] as String),
-          codItemDescritor: json['codItemDescritor'] as int?,
-          codItemConsignado: json['codItemConsignado'] as int?,
+          codItemDescritor: (json['codItemDescritor'] as num?)?.toInt(),
+          codItemConsignado: (json['codItemConsignado'] as num?)?.toInt(),
           idEtiquetaContem: json['idEtiquetaContem'] as String?,
-          codProprietario: json['codProprietario'] as int?,
+          codProprietario: (json['codProprietario'] as num?)?.toInt(),
           consignado: json['consignado'] as bool?,
           itemDescritor: json['itemDescritor'] == null
               ? null

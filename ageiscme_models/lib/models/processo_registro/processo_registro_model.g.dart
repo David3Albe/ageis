@@ -8,16 +8,16 @@ part of 'processo_registro_model.dart';
 
 _$ProcessoRegistroModelImpl _$$ProcessoRegistroModelImplFromJson(Map json) =>
     _$ProcessoRegistroModelImpl(
-      cod: json['cod'] as int?,
-      codEtapaProcesso: json['codEtapaProcesso'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codEtapaProcesso: (json['codEtapaProcesso'] as num?)?.toInt(),
       dataHoraInicio: json['dataHoraInicio'] == null
           ? null
           : DateTime.parse(json['dataHoraInicio'] as String),
       dataHoraTermino: json['dataHoraTermino'] == null
           ? null
           : DateTime.parse(json['dataHoraTermino'] as String),
-      codUsuario: json['codUsuario'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codUsuario: (json['codUsuario'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),

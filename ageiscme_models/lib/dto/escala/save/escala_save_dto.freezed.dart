@@ -20,12 +20,12 @@ EscalaSaveDTO _$EscalaSaveDTOFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$EscalaSaveDTO {
-  DateTime get AnoMes => throw _privateConstructorUsedError;
-  set AnoMes(DateTime value) => throw _privateConstructorUsedError;
-  String? get Tstamp => throw _privateConstructorUsedError;
-  set Tstamp(String? value) => throw _privateConstructorUsedError;
-  List<EscalaTurnoSaveDTO>? get Turnos => throw _privateConstructorUsedError;
-  set Turnos(List<EscalaTurnoSaveDTO>? value) =>
+  DateTime get anoMes => throw _privateConstructorUsedError;
+  set anoMes(DateTime value) => throw _privateConstructorUsedError;
+  String? get tstamp => throw _privateConstructorUsedError;
+  set tstamp(String? value) => throw _privateConstructorUsedError;
+  List<EscalaTurnoSaveDTO>? get turnos => throw _privateConstructorUsedError;
+  set turnos(List<EscalaTurnoSaveDTO>? value) =>
       throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -41,7 +41,7 @@ abstract class $EscalaSaveDTOCopyWith<$Res> {
       _$EscalaSaveDTOCopyWithImpl<$Res, EscalaSaveDTO>;
   @useResult
   $Res call(
-      {DateTime AnoMes, String? Tstamp, List<EscalaTurnoSaveDTO>? Turnos});
+      {DateTime anoMes, String? tstamp, List<EscalaTurnoSaveDTO>? turnos});
 }
 
 /// @nodoc
@@ -57,22 +57,22 @@ class _$EscalaSaveDTOCopyWithImpl<$Res, $Val extends EscalaSaveDTO>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? AnoMes = null,
-    Object? Tstamp = freezed,
-    Object? Turnos = freezed,
+    Object? anoMes = null,
+    Object? tstamp = freezed,
+    Object? turnos = freezed,
   }) {
     return _then(_value.copyWith(
-      AnoMes: null == AnoMes
-          ? _value.AnoMes
-          : AnoMes // ignore: cast_nullable_to_non_nullable
+      anoMes: null == anoMes
+          ? _value.anoMes
+          : anoMes // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      Tstamp: freezed == Tstamp
-          ? _value.Tstamp
-          : Tstamp // ignore: cast_nullable_to_non_nullable
+      tstamp: freezed == tstamp
+          ? _value.tstamp
+          : tstamp // ignore: cast_nullable_to_non_nullable
               as String?,
-      Turnos: freezed == Turnos
-          ? _value.Turnos
-          : Turnos // ignore: cast_nullable_to_non_nullable
+      turnos: freezed == turnos
+          ? _value.turnos
+          : turnos // ignore: cast_nullable_to_non_nullable
               as List<EscalaTurnoSaveDTO>?,
     ) as $Val);
   }
@@ -87,7 +87,7 @@ abstract class _$$EscalaSaveDTOImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {DateTime AnoMes, String? Tstamp, List<EscalaTurnoSaveDTO>? Turnos});
+      {DateTime anoMes, String? tstamp, List<EscalaTurnoSaveDTO>? turnos});
 }
 
 /// @nodoc
@@ -101,22 +101,22 @@ class __$$EscalaSaveDTOImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? AnoMes = null,
-    Object? Tstamp = freezed,
-    Object? Turnos = freezed,
+    Object? anoMes = null,
+    Object? tstamp = freezed,
+    Object? turnos = freezed,
   }) {
     return _then(_$EscalaSaveDTOImpl(
-      AnoMes: null == AnoMes
-          ? _value.AnoMes
-          : AnoMes // ignore: cast_nullable_to_non_nullable
+      anoMes: null == anoMes
+          ? _value.anoMes
+          : anoMes // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      Tstamp: freezed == Tstamp
-          ? _value.Tstamp
-          : Tstamp // ignore: cast_nullable_to_non_nullable
+      tstamp: freezed == tstamp
+          ? _value.tstamp
+          : tstamp // ignore: cast_nullable_to_non_nullable
               as String?,
-      Turnos: freezed == Turnos
-          ? _value.Turnos
-          : Turnos // ignore: cast_nullable_to_non_nullable
+      turnos: freezed == turnos
+          ? _value.turnos
+          : turnos // ignore: cast_nullable_to_non_nullable
               as List<EscalaTurnoSaveDTO>?,
     ));
   }
@@ -125,21 +125,21 @@ class __$$EscalaSaveDTOImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$EscalaSaveDTOImpl implements _EscalaSaveDTO {
-  _$EscalaSaveDTOImpl({required this.AnoMes, this.Tstamp, this.Turnos});
+  _$EscalaSaveDTOImpl({required this.anoMes, this.tstamp, this.turnos});
 
   factory _$EscalaSaveDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$EscalaSaveDTOImplFromJson(json);
 
   @override
-  DateTime AnoMes;
+  DateTime anoMes;
   @override
-  String? Tstamp;
+  String? tstamp;
   @override
-  List<EscalaTurnoSaveDTO>? Turnos;
+  List<EscalaTurnoSaveDTO>? turnos;
 
   @override
   String toString() {
-    return 'EscalaSaveDTO(AnoMes: $AnoMes, Tstamp: $Tstamp, Turnos: $Turnos)';
+    return 'EscalaSaveDTO(anoMes: $anoMes, tstamp: $tstamp, turnos: $turnos)';
   }
 
   @JsonKey(ignore: true)
@@ -158,22 +158,22 @@ class _$EscalaSaveDTOImpl implements _EscalaSaveDTO {
 
 abstract class _EscalaSaveDTO implements EscalaSaveDTO {
   factory _EscalaSaveDTO(
-      {required DateTime AnoMes,
-      String? Tstamp,
-      List<EscalaTurnoSaveDTO>? Turnos}) = _$EscalaSaveDTOImpl;
+      {required DateTime anoMes,
+      String? tstamp,
+      List<EscalaTurnoSaveDTO>? turnos}) = _$EscalaSaveDTOImpl;
 
   factory _EscalaSaveDTO.fromJson(Map<String, dynamic> json) =
       _$EscalaSaveDTOImpl.fromJson;
 
   @override
-  DateTime get AnoMes;
-  set AnoMes(DateTime value);
+  DateTime get anoMes;
+  set anoMes(DateTime value);
   @override
-  String? get Tstamp;
-  set Tstamp(String? value);
+  String? get tstamp;
+  set tstamp(String? value);
   @override
-  List<EscalaTurnoSaveDTO>? get Turnos;
-  set Turnos(List<EscalaTurnoSaveDTO>? value);
+  List<EscalaTurnoSaveDTO>? get turnos;
+  set turnos(List<EscalaTurnoSaveDTO>? value);
   @override
   @JsonKey(ignore: true)
   _$$EscalaSaveDTOImplCopyWith<_$EscalaSaveDTOImpl> get copyWith =>

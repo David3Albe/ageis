@@ -9,13 +9,13 @@ part of 'consulta_estoque_disponivel_filter.dart';
 _$ConsultaEstoqueDisponivelFilterImpl
     _$$ConsultaEstoqueDisponivelFilterImplFromJson(Map json) =>
         _$ConsultaEstoqueDisponivelFilterImpl(
-          codEstoque: json['codEstoque'] as int?,
-          codEstoqueLocal: json['codEstoqueLocal'] as int?,
-          codKit: json['codKit'] as int?,
+          codEstoque: (json['codEstoque'] as num?)?.toInt(),
+          codEstoqueLocal: (json['codEstoqueLocal'] as num?)?.toInt(),
+          codKit: (json['codKit'] as num?)?.toInt(),
           codBarraKitContem: json['codBarraKitContem'] as String?,
-          codItem: json['codItem'] as int?,
+          codItem: (json['codItem'] as num?)?.toInt(),
           idEtiquetaContem: json['idEtiquetaContem'] as String?,
-          codProprietario: json['codProprietario'] as int?,
+          codProprietario: (json['codProprietario'] as num?)?.toInt(),
           ignorarRemovidos: json['ignorarRemovidos'] as bool?,
           item: json['item'] == null
               ? null

@@ -10,11 +10,11 @@ _$HistoricoSearchItemResponseDTOImpl
     _$$HistoricoSearchItemResponseDTOImplFromJson(Map json) =>
         _$HistoricoSearchItemResponseDTOImpl(
           data: DateTime.parse(json['data'] as String),
-          codUsuario: json['codUsuario'] as int,
+          codUsuario: (json['codUsuario'] as num).toInt(),
           operacao: json['operacao'] as String,
           tipo: json['tipo'] as String,
           termo: json['termo'] as String,
-          pk: json['pk'] as int,
+          pk: (json['pk'] as num).toInt(),
           dados: json['dados'] as String,
         );
 

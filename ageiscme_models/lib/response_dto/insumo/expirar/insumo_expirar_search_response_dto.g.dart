@@ -9,7 +9,7 @@ part of 'insumo_expirar_search_response_dto.dart';
 _$InsumoExpirarSearchResponseDTOImpl
     _$$InsumoExpirarSearchResponseDTOImplFromJson(Map json) =>
         _$InsumoExpirarSearchResponseDTOImpl(
-          codInsumo: json['codInsumo'] as int?,
+          codInsumo: (json['codInsumo'] as num?)?.toInt(),
           nome: json['nome'] as String,
           lote: json['lote'] as String?,
           dataValidade: json['dataValidade'] == null

@@ -9,7 +9,7 @@ part of 'kit_descritor_drop_down_search_dto.dart';
 _$KitDescritorDropDownSearchDTOImpl
     _$$KitDescritorDropDownSearchDTOImplFromJson(Map json) =>
         _$KitDescritorDropDownSearchDTOImpl(
-          numeroRegistros: json['numeroRegistros'] as int,
+          numeroRegistros: (json['numeroRegistros'] as num).toInt(),
           termoPesquisa: json['termoPesquisa'] as String?,
           apenasAtivos: json['apenasAtivos'] as bool?,
         );

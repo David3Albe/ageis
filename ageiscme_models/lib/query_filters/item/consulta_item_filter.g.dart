@@ -8,15 +8,15 @@ part of 'consulta_item_filter.dart';
 
 _$ConsultaItemFilterImpl _$$ConsultaItemFilterImplFromJson(Map json) =>
     _$ConsultaItemFilterImpl(
-      codItemDescritor: json['codItemDescritor'] as int?,
-      codItem: json['codItem'] as int?,
+      codItemDescritor: (json['codItemDescritor'] as num?)?.toInt(),
+      codItem: (json['codItem'] as num?)?.toInt(),
       idEtiquetaContem: json['idEtiquetaContem'] as String?,
       codSituacao: json['codSituacao'] as String?,
-      codGrupo: json['codGrupo'] as int?,
+      codGrupo: (json['codGrupo'] as num?)?.toInt(),
       codBarraKitContem: json['codBarraKitContem'] as String?,
-      codKit: json['codKit'] as int?,
-      codProprietario: json['codProprietario'] as int?,
-      numeroPatrimonio: json['numeroPatrimonio'] as int?,
+      codKit: (json['codKit'] as num?)?.toInt(),
+      codProprietario: (json['codProprietario'] as num?)?.toInt(),
+      numeroPatrimonio: (json['numeroPatrimonio'] as num?)?.toInt(),
       descricaoCurtaItem: json['descricaoCurtaItem'] as String?,
       cmInicio: (json['cmInicio'] as num?)?.toDouble(),
       cmTermino: (json['cmTermino'] as num?)?.toDouble(),
@@ -25,7 +25,7 @@ _$ConsultaItemFilterImpl _$$ConsultaItemFilterImplFromJson(Map json) =>
       descarte: json['descarte'] as bool?,
       rotulado: json['rotulado'] as bool?,
       implantavel: json['implantavel'] as bool?,
-      numeroRegistros: json['numeroRegistros'] as int?,
+      numeroRegistros: (json['numeroRegistros'] as num?)?.toInt(),
       item: json['item'] == null
           ? null
           : ItemModel.fromJson(Map<String, Object?>.from(json['item'] as Map)),

@@ -21,13 +21,14 @@ _$ConsultaProcessosLeituraAcaoOcorrenciaFilterImpl
           finalTime: json['finalTime'] == null
               ? null
               : DateTime.parse(json['finalTime'] as String),
-          codKit: json['codKit'] as int?,
+          codKit: (json['codKit'] as num?)?.toInt(),
           codBarraKitContem: json['codBarraKitContem'] as String?,
-          codItem: json['codItem'] as int?,
+          codItem: (json['codItem'] as num?)?.toInt(),
           idEtiquetaContem: json['idEtiquetaContem'] as String?,
-          codUsuarioAcao: json['codUsuarioAcao'] as int?,
-          codUsuarioAutorizacao: json['codUsuarioAutorizacao'] as int?,
-          codAcaoOcorrencia: json['codAcaoOcorrencia'] as int?,
+          codUsuarioAcao: (json['codUsuarioAcao'] as num?)?.toInt(),
+          codUsuarioAutorizacao:
+              (json['codUsuarioAutorizacao'] as num?)?.toInt(),
+          codAcaoOcorrencia: (json['codAcaoOcorrencia'] as num?)?.toInt(),
           item: json['item'] == null
               ? null
               : ItemModel.fromJson(

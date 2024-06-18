@@ -8,9 +8,9 @@ part of 'perfil_acesso_model.dart';
 
 _$PerfilAcessoModelImpl _$$PerfilAcessoModelImplFromJson(Map json) =>
     _$PerfilAcessoModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       descricao: json['descricao'] as String?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ativo: json['ativo'] as bool?,
       perfilRestrito: json['perfilRestrito'] as bool?,
       ultimaAlteracao: json['ultimaAlteracao'] == null

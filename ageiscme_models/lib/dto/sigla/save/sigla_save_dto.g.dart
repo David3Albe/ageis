@@ -7,19 +7,19 @@ part of 'sigla_save_dto.dart';
 // **************************************************************************
 
 _$SiglaSaveDTOImpl _$$SiglaSaveDTOImplFromJson(Map json) => _$SiglaSaveDTOImpl(
-      cod: json['cod'] as int,
+      cod: (json['cod'] as num).toInt(),
       descricao: json['descricao'] as String,
       sigla: json['sigla'] as String,
       ativo: json['ativo'] as bool,
-      r: json['r'] as int?,
-      g: json['g'] as int?,
-      b: json['b'] as int?,
+      r: (json['r'] as num?)?.toInt(),
+      g: (json['g'] as num?)?.toInt(),
+      b: (json['b'] as num?)?.toInt(),
       o: (json['o'] as num?)?.toDouble(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),
       tstamp: json['tstamp'] as String?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$SiglaSaveDTOImplToJson(_$SiglaSaveDTOImpl instance) =>

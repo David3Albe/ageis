@@ -21,8 +21,8 @@ _$ConsultaMovimentacaoEstoqueFilterImpl
           finalTime: json['finalTime'] == null
               ? null
               : DateTime.parse(json['finalTime'] as String),
-          codDeposito: json['codDeposito'] as int?,
-          codInsumo: json['codInsumo'] as int?,
+          codDeposito: (json['codDeposito'] as num?)?.toInt(),
+          codInsumo: (json['codInsumo'] as num?)?.toInt(),
           lote: json['lote'] as String?,
           nroNotaFiscal: json['nroNotaFiscal'] as String?,
         );

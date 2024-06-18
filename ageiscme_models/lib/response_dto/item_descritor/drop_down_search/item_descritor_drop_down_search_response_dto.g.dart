@@ -9,7 +9,7 @@ part of 'item_descritor_drop_down_search_response_dto.dart';
 _$ItemDescritorDropDownSearchResponseDTOImpl
     _$$ItemDescritorDropDownSearchResponseDTOImplFromJson(Map json) =>
         _$ItemDescritorDropDownSearchResponseDTOImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           nome: json['nome'] as String?,
         );
 

@@ -12,9 +12,9 @@ _$ConsultaProcessosLeituraRetiradoModelImpl
           dataHora: json['dataHora'] == null
               ? null
               : DateTime.parse(json['dataHora'] as String),
-          codKit: json['codKit'] as int?,
+          codKit: (json['codKit'] as num?)?.toInt(),
           nomeKit: json['nomeKit'] as String?,
-          nroItemFaltantes: json['nroItemFaltantes'] as int?,
+          nroItemFaltantes: (json['nroItemFaltantes'] as num?)?.toInt(),
           idEtiqueta: json['idEtiqueta'] as String?,
           nomeItem: json['nomeItem'] as String?,
           entradaSaida: json['entradaSaida'] as String?,
@@ -27,7 +27,7 @@ _$ConsultaProcessosLeituraRetiradoModelImpl
           dataValidade: json['dataValidade'] == null
               ? null
               : DateTime.parse(json['dataValidade'] as String),
-          codRegistroProcesso: json['codRegistroProcesso'] as int?,
+          codRegistroProcesso: (json['codRegistroProcesso'] as num?)?.toInt(),
         );
 
 Map<String, dynamic> _$$ConsultaProcessosLeituraRetiradoModelImplToJson(

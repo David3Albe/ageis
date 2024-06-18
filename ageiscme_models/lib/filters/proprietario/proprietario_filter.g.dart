@@ -8,7 +8,7 @@ part of 'proprietario_filter.dart';
 
 _$ProprietarioFilterImpl _$$ProprietarioFilterImplFromJson(Map json) =>
     _$ProprietarioFilterImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       apenasAtivos: json['apenasAtivos'] as bool?,
       ordenarPorNomeCrescente: json['ordenarPorNomeCrescente'] as bool?,
       comecaCom: json['comecaCom'] as String?,

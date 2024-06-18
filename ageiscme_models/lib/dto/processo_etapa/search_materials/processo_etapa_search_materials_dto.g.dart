@@ -9,7 +9,7 @@ part of 'processo_etapa_search_materials_dto.dart';
 _$ProcessoEtapaSearchMaterialsDTOImpl
     _$$ProcessoEtapaSearchMaterialsDTOImplFromJson(Map json) =>
         _$ProcessoEtapaSearchMaterialsDTOImpl(
-          codEtapaProcesso: json['codEtapaProcesso'] as int,
+          codEtapaProcesso: (json['codEtapaProcesso'] as num).toInt(),
         );
 
 Map<String, dynamic> _$$ProcessoEtapaSearchMaterialsDTOImplToJson(

@@ -8,7 +8,7 @@ part of 'processo_tipo_filter.dart';
 
 _$ProcessoTipoFilterImpl _$$ProcessoTipoFilterImplFromJson(Map json) =>
     _$ProcessoTipoFilterImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       carregarEtapaProcesso: json['carregarEtapaProcesso'] as bool?,
       apenasAtivos: json['apenasAtivos'] as bool?,
       ordenarPorNomeCrescente: json['ordenarPorNomeCrescente'] as bool?,

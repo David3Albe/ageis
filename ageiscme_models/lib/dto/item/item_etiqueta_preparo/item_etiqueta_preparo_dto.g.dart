@@ -8,7 +8,7 @@ part of 'item_etiqueta_preparo_dto.dart';
 
 _$ItemEtiquetaPreparoDTOImpl _$$ItemEtiquetaPreparoDTOImplFromJson(Map json) =>
     _$ItemEtiquetaPreparoDTOImpl(
-      codItem: json['codItem'] as int,
+      codItem: (json['codItem'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$ItemEtiquetaPreparoDTOImplToJson(

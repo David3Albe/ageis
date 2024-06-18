@@ -7,12 +7,12 @@ part of 'kit_cor_model.dart';
 // **************************************************************************
 
 _$KitCorModelImpl _$$KitCorModelImplFromJson(Map json) => _$KitCorModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       nome: json['nome'] as String?,
-      red: json['red'] as int?,
-      green: json['green'] as int?,
-      blue: json['blue'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      red: (json['red'] as num?)?.toInt(),
+      green: (json['green'] as num?)?.toInt(),
+      blue: (json['blue'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ativo: json['ativo'] as bool?,
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null

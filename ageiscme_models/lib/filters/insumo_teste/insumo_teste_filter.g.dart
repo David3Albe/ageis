@@ -8,9 +8,9 @@ part of 'insumo_teste_filter.dart';
 
 _$InsumoTesteFilterImpl _$$InsumoTesteFilterImplFromJson(Map json) =>
     _$InsumoTesteFilterImpl(
-      cod: json['cod'] as int?,
-      codInsumo: json['codInsumo'] as int?,
-      codMovimentoInsumo: json['codMovimentoInsumo'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codInsumo: (json['codInsumo'] as num?)?.toInt(),
+      codMovimentoInsumo: (json['codMovimentoInsumo'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$InsumoTesteFilterImplToJson(

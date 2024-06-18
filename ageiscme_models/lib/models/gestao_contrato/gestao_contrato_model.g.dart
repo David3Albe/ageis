@@ -8,10 +8,10 @@ part of 'gestao_contrato_model.dart';
 
 _$GestaoContratoModelImpl _$$GestaoContratoModelImplFromJson(Map json) =>
     _$GestaoContratoModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       descricao: json['descricao'] as String?,
       link: json['link'] as String?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),

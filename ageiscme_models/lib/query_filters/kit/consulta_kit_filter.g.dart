@@ -8,10 +8,10 @@ part of 'consulta_kit_filter.dart';
 
 _$ConsultaKitFilterImpl _$$ConsultaKitFilterImplFromJson(Map json) =>
     _$ConsultaKitFilterImpl(
-      codKitDescritor: json['codKitDescritor'] as int?,
-      codKit: json['codKit'] as int?,
+      codKitDescritor: (json['codKitDescritor'] as num?)?.toInt(),
+      codKit: (json['codKit'] as num?)?.toInt(),
       codSituacao: json['codSituacao'] as String?,
-      codProprietario: json['codProprietario'] as int?,
+      codProprietario: (json['codProprietario'] as num?)?.toInt(),
       codBarraKitContem: json['codBarraKitContem'] as String?,
       kitDescritor: json['kitDescritor'] == null
           ? null

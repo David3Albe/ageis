@@ -15,11 +15,11 @@ _$ConsultaProcessosLeituraDispensadoFilterImpl
           finalDate: json['finalDate'] == null
               ? null
               : DateTime.parse(json['finalDate'] as String),
-          codItem: json['codItem'] as int?,
+          codItem: (json['codItem'] as num?)?.toInt(),
           idEtiquetaContem: json['idEtiquetaContem'] as String?,
-          codKit: json['codKit'] as int?,
+          codKit: (json['codKit'] as num?)?.toInt(),
           codBarraKitContem: json['codBarraKitContem'] as String?,
-          codLocal: json['codLocal'] as int?,
+          codLocal: (json['codLocal'] as num?)?.toInt(),
           item: json['item'] == null
               ? null
               : ItemModel.fromJson(

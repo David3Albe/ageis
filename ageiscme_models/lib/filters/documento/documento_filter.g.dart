@@ -8,7 +8,7 @@ part of 'documento_filter.dart';
 
 _$DocumentoFilterImpl _$$DocumentoFilterImplFromJson(Map json) =>
     _$DocumentoFilterImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       tStamp: json['tStamp'] as String?,
     );
 

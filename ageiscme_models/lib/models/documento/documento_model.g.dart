@@ -8,13 +8,13 @@ part of 'documento_model.dart';
 
 _$DocumentoModelImpl _$$DocumentoModelImplFromJson(Map json) =>
     _$DocumentoModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       descricao: json['descricao'] as String?,
       observacao: json['observacao'] as String?,
       usuario: json['usuario'] as String?,
       documento: json['documento'] as String?,
       nomeDocumento: json['nomeDocumento'] as String?,
-      codTipo: json['codTipo'] as int?,
+      codTipo: (json['codTipo'] as num?)?.toInt(),
       validade: json['validade'] == null
           ? null
           : DateTime.parse(json['validade'] as String),

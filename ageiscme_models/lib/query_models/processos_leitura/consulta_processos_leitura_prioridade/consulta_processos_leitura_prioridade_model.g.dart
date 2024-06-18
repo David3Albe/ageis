@@ -9,7 +9,7 @@ part of 'consulta_processos_leitura_prioridade_model.dart';
 _$ConsultaProcessosLeituraPrioridadeModelImpl
     _$$ConsultaProcessosLeituraPrioridadeModelImplFromJson(Map json) =>
         _$ConsultaProcessosLeituraPrioridadeModelImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           nome: json['nome'] as String,
         );
 

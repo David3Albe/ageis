@@ -9,20 +9,20 @@ part of 'processo_resposta_epcepi_model.dart';
 _$ProcessoRespostaEPCEPIModelImpl _$$ProcessoRespostaEPCEPIModelImplFromJson(
         Map json) =>
     _$ProcessoRespostaEPCEPIModelImpl(
-      cod: json['cod'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       instituicao: json['instituicao'] == null
           ? null
           : InstituicaoModel.fromJson(
               Map<String, Object?>.from(json['instituicao'] as Map)),
-      codUsuario: json['codUsuario'] as int?,
-      codUsuarioLiberacao: json['codUsuarioLiberacao'] as int?,
+      codUsuario: (json['codUsuario'] as num?)?.toInt(),
+      codUsuarioLiberacao: (json['codUsuarioLiberacao'] as num?)?.toInt(),
       dataHora: json['dataHora'] == null
           ? null
           : DateTime.parse(json['dataHora'] as String),
-      resposta: json['resposta'] as int?,
-      codEquipamento: json['codEquipamento'] as int?,
-      codEstoque: json['codEstoque'] as int?,
+      resposta: (json['resposta'] as num?)?.toInt(),
+      codEquipamento: (json['codEquipamento'] as num?)?.toInt(),
+      codEstoque: (json['codEstoque'] as num?)?.toInt(),
       equipamento: json['equipamento'] == null
           ? null
           : EquipamentoModel.fromJson(

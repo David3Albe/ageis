@@ -9,9 +9,11 @@ part of 'processo_leitura_cancelamento_preparo_cancel_dto.dart';
 _$ProcessoLeituraCancelamentoPreparoCancelDTOImpl
     _$$ProcessoLeituraCancelamentoPreparoCancelDTOImplFromJson(Map json) =>
         _$ProcessoLeituraCancelamentoPreparoCancelDTOImpl(
-          codigos:
-              (json['codigos'] as List<dynamic>).map((e) => e as int).toList(),
-          codUsuarioCancelamento: json['codUsuarioCancelamento'] as int,
+          codigos: (json['codigos'] as List<dynamic>)
+              .map((e) => (e as num).toInt())
+              .toList(),
+          codUsuarioCancelamento:
+              (json['codUsuarioCancelamento'] as num).toInt(),
         );
 
 Map<String, dynamic> _$$ProcessoLeituraCancelamentoPreparoCancelDTOImplToJson(

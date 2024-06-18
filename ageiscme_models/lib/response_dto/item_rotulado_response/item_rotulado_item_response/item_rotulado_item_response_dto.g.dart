@@ -9,11 +9,11 @@ part of 'item_rotulado_item_response_dto.dart';
 _$ItemRotuladoItemResponseDTOImpl _$$ItemRotuladoItemResponseDTOImplFromJson(
         Map json) =>
     _$ItemRotuladoItemResponseDTOImpl(
-      cod: json['cod'] as int,
+      cod: (json['cod'] as num).toInt(),
       idEtiqueta: json['idEtiqueta'] as String,
       nome: json['nome'] as String,
-      codProprietario: json['codProprietario'] as int?,
-      codTipoProcessoNormal: json['codTipoProcessoNormal'] as int?,
+      codProprietario: (json['codProprietario'] as num?)?.toInt(),
+      codTipoProcessoNormal: (json['codTipoProcessoNormal'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$ItemRotuladoItemResponseDTOImplToJson(

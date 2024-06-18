@@ -9,7 +9,7 @@ part of 'consulta_anormalidade_filter.dart';
 _$ConsultaAnormalidadeFilterImpl _$$ConsultaAnormalidadeFilterImplFromJson(
         Map json) =>
     _$ConsultaAnormalidadeFilterImpl(
-      codAnormalidadeTipo: json['codAnormalidadeTipo'] as int?,
+      codAnormalidadeTipo: (json['codAnormalidadeTipo'] as num?)?.toInt(),
       anormalidadeTipo: json['anormalidadeTipo'] == null
           ? null
           : AnormalidadeTipoShortResponseDTO.fromJson(
@@ -27,7 +27,7 @@ _$ConsultaAnormalidadeFilterImpl _$$ConsultaAnormalidadeFilterImplFromJson(
           ? null
           : DateTime.parse(json['finalTime'] as String),
       idEtiquetaContem: json['idEtiquetaContem'] as String?,
-      codEtapaProcesso: json['codEtapaProcesso'] as int?,
+      codEtapaProcesso: (json['codEtapaProcesso'] as num?)?.toInt(),
       etapa: json['etapa'] == null
           ? null
           : ProcessoEtapaModel.fromJson(

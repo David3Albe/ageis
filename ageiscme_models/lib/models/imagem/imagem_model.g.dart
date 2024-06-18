@@ -7,11 +7,11 @@ part of 'imagem_model.dart';
 // **************************************************************************
 
 _$ImagemModelImpl _$$ImagemModelImplFromJson(Map json) => _$ImagemModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       identificadorImagem: json['identificadorImagem'] as String?,
       nomeFoto: json['nomeFoto'] as String?,
       foto: json['foto'] as String?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ativo: json['ativo'] as bool?,
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null

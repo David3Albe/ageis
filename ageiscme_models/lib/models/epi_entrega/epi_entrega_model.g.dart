@@ -8,10 +8,10 @@ part of 'epi_entrega_model.dart';
 
 _$EpiEntregaModelImpl _$$EpiEntregaModelImplFromJson(Map json) =>
     _$EpiEntregaModelImpl(
-      cod: json['cod'] as int?,
-      codDescritorEpi: json['codDescritorEpi'] as int?,
-      codUsuario: json['codUsuario'] as int?,
-      codUsuarioEntrega: json['codUsuarioEntrega'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codDescritorEpi: (json['codDescritorEpi'] as num?)?.toInt(),
+      codUsuario: (json['codUsuario'] as num?)?.toInt(),
+      codUsuarioEntrega: (json['codUsuarioEntrega'] as num?)?.toInt(),
       dataEntrega: json['dataEntrega'] == null
           ? null
           : DateTime.parse(json['dataEntrega'] as String),
@@ -22,7 +22,7 @@ _$EpiEntregaModelImpl _$$EpiEntregaModelImplFromJson(Map json) =>
           ? null
           : DateTime.parse(json['dataDescarte'] as String),
       conferenciaVisual: json['conferenciaVisual'] as bool?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       controlarValidade: json['controlarValidade'] as bool?,
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null

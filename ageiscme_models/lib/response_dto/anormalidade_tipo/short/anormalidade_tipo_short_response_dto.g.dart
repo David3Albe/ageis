@@ -9,7 +9,7 @@ part of 'anormalidade_tipo_short_response_dto.dart';
 _$AnormalidadeTipoShortResponseDTOImpl
     _$$AnormalidadeTipoShortResponseDTOImplFromJson(Map json) =>
         _$AnormalidadeTipoShortResponseDTOImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           nome: json['nome'] as String,
         );
 

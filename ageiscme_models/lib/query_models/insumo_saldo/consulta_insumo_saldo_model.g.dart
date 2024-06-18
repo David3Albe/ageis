@@ -9,8 +9,8 @@ part of 'consulta_insumo_saldo_model.dart';
 _$ConsultaInsumoSaldoModelImpl _$$ConsultaInsumoSaldoModelImplFromJson(
         Map json) =>
     _$ConsultaInsumoSaldoModelImpl(
-      codDeposito: json['codDeposito'] as int?,
-      codInsumo: json['codInsumo'] as int?,
+      codDeposito: (json['codDeposito'] as num?)?.toInt(),
+      codInsumo: (json['codInsumo'] as num?)?.toInt(),
       lote: json['lote'] as String?,
       qtdeDisponivel: (json['qtdeDisponivel'] as num?)?.toDouble(),
       status: json['status'] as String?,

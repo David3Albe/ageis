@@ -8,11 +8,11 @@ part of 'equipamento_insumo_model.dart';
 
 _$EquipamentoInsumoModelImpl _$$EquipamentoInsumoModelImplFromJson(Map json) =>
     _$EquipamentoInsumoModelImpl(
-      cod: json['cod'] as int?,
-      codEquipamento: json['codEquipamento'] as int?,
-      codInsumo: json['codInsumo'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codEquipamento: (json['codEquipamento'] as num?)?.toInt(),
+      codInsumo: (json['codInsumo'] as num?)?.toInt(),
       consumoPorProcesso: (json['consumoPorProcesso'] as num?)?.toDouble(),
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),

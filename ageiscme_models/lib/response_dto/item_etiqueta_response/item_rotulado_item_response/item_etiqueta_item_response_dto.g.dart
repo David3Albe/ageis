@@ -9,15 +9,15 @@ part of 'item_etiqueta_item_response_dto.dart';
 _$ItemEtiquetaItemResponseDTOImpl _$$ItemEtiquetaItemResponseDTOImplFromJson(
         Map json) =>
     _$ItemEtiquetaItemResponseDTOImpl(
-      cod: json['cod'] as int,
-      codItem: json['codItem'] as int,
+      cod: (json['cod'] as num).toInt(),
+      codItem: (json['codItem'] as num).toInt(),
       idEtiqueta: json['idEtiqueta'] as String,
-      qtdeProcessos: json['qtdeProcessos'] as int?,
+      qtdeProcessos: (json['qtdeProcessos'] as num?)?.toInt(),
       dataDescarte: json['dataDescarte'] == null
           ? null
           : DateTime.parse(json['dataDescarte'] as String),
       nome: json['nome'] as String?,
-      codUsuarioAlteracao: json['codUsuarioAlteracao'] as int?,
+      codUsuarioAlteracao: (json['codUsuarioAlteracao'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$ItemEtiquetaItemResponseDTOImplToJson(

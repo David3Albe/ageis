@@ -9,19 +9,19 @@ part of 'atestado_saude_ocupacional_model.dart';
 _$AtestadoSaudeOcupacionalModelImpl
     _$$AtestadoSaudeOcupacionalModelImplFromJson(Map json) =>
         _$AtestadoSaudeOcupacionalModelImpl(
-          cod: json['cod'] as int?,
+          cod: (json['cod'] as num?)?.toInt(),
           nomeMedico: json['nomeMedico'] as String?,
-          crmMedico: json['crmMedico'] as int?,
-          codUsuario: json['codUsuario'] as int?,
-          tipo: json['tipo'] as int?,
-          conclusao: json['conclusao'] as int?,
+          crmMedico: (json['crmMedico'] as num?)?.toInt(),
+          codUsuario: (json['codUsuario'] as num?)?.toInt(),
+          tipo: (json['tipo'] as num?)?.toInt(),
+          conclusao: (json['conclusao'] as num?)?.toInt(),
           data: json['data'] == null
               ? null
               : DateTime.parse(json['data'] as String),
           validade: json['validade'] == null
               ? null
               : DateTime.parse(json['validade'] as String),
-          codInstituicao: json['codInstituicao'] as int?,
+          codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
           doc: json['doc'] as String?,
           anexo: json['anexo'] as String?,
           docNome: json['docNome'] as String?,

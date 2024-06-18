@@ -8,7 +8,7 @@ part of 'equipamento_filter.dart';
 
 _$EquipamentoFilterImpl _$$EquipamentoFilterImplFromJson(Map json) =>
     _$EquipamentoFilterImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       apenasAtivos: json['apenasAtivos'] as bool?,
       ordenarPorNomeCrescente: json['ordenarPorNomeCrescente'] as bool?,
       incluirTipoServicos: json['incluirTipoServicos'] as bool?,

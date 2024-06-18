@@ -8,7 +8,7 @@ part of 'item_drop_down_search_dto.dart';
 
 _$ItemDropDownSearchDTOImpl _$$ItemDropDownSearchDTOImplFromJson(Map json) =>
     _$ItemDropDownSearchDTOImpl(
-      numeroRegistros: json['numeroRegistros'] as int,
+      numeroRegistros: (json['numeroRegistros'] as num).toInt(),
       termoPesquisa: json['termoPesquisa'] as String?,
     );
 

@@ -9,10 +9,10 @@ part of 'consulta_item_inventario_model.dart';
 _$ConsultaItemInventarioModelImpl _$$ConsultaItemInventarioModelImplFromJson(
         Map json) =>
     _$ConsultaItemInventarioModelImpl(
-      codItemDescritor: json['codItemDescritor'] as int?,
+      codItemDescritor: (json['codItemDescritor'] as num?)?.toInt(),
       descricaoCurta: json['descricaoCurta'] as String?,
       descricao: json['descricao'] as String?,
-      qtdeCodDescritor: json['qtdeCodDescritor'] as int?,
+      qtdeCodDescritor: (json['qtdeCodDescritor'] as num?)?.toInt(),
       valorItem: (json['valorItem'] as num?)?.toDouble(),
       nomeGrupo: json['nomeGrupo'] as String?,
       nomeProcessoNormal: json['nomeProcessoNormal'] as String?,

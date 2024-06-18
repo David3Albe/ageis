@@ -8,7 +8,7 @@ part of 'alterar_senha_dto.dart';
 
 _$AlterarSenhaDTOImpl _$$AlterarSenhaDTOImplFromJson(Map json) =>
     _$AlterarSenhaDTOImpl(
-      codUsuario: json['codUsuario'] as int,
+      codUsuario: (json['codUsuario'] as num).toInt(),
       senhaAntiga: json['senhaAntiga'] as String,
       senhaNova: json['senhaNova'] as String,
       confirmacaoSenhaNova: json['confirmacaoSenhaNova'] as String,

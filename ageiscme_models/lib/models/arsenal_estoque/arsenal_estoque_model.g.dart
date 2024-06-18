@@ -8,11 +8,11 @@ part of 'arsenal_estoque_model.dart';
 
 _$ArsenalEstoqueModelImpl _$$ArsenalEstoqueModelImplFromJson(Map json) =>
     _$ArsenalEstoqueModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       nome: json['nome'] as String?,
       codBarra: json['codBarra'] as String?,
-      codLocal: json['codLocal'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codLocal: (json['codLocal'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ativo: json['ativo'] as bool?,
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null

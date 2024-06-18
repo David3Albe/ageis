@@ -8,7 +8,7 @@ part of 'tipo_documento_model.dart';
 
 _$TipoDocumentoModelImpl _$$TipoDocumentoModelImplFromJson(Map json) =>
     _$TipoDocumentoModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       descricao: json['descricao'] as String?,
     );
 

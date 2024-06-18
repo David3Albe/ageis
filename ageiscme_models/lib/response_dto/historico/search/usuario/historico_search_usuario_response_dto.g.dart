@@ -9,7 +9,7 @@ part of 'historico_search_usuario_response_dto.dart';
 _$HistoricoSearchUsuarioResponseDTOImpl
     _$$HistoricoSearchUsuarioResponseDTOImplFromJson(Map json) =>
         _$HistoricoSearchUsuarioResponseDTOImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           nome: json['nome'] as String,
         );
 

@@ -9,11 +9,11 @@ part of 'consulta_processos_leitura_item_model.dart';
 _$ConsultaProcessosLeituraItemModelImpl
     _$$ConsultaProcessosLeituraItemModelImplFromJson(Map json) =>
         _$ConsultaProcessosLeituraItemModelImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           idEtiqueta: json['idEtiqueta'] as String,
           descricao: json['descricao'] as String,
-          qtdeProcessos: json['qtdeProcessos'] as int?,
-          codProprietario: json['codProprietario'] as int?,
+          qtdeProcessos: (json['qtdeProcessos'] as num?)?.toInt(),
+          codProprietario: (json['codProprietario'] as num?)?.toInt(),
         );
 
 Map<String, dynamic> _$$ConsultaProcessosLeituraItemModelImplToJson(

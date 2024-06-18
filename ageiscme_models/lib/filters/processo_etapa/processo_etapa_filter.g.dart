@@ -8,7 +8,7 @@ part of 'processo_etapa_filter.dart';
 
 _$ProcessoEtapaFilterImpl _$$ProcessoEtapaFilterImplFromJson(Map json) =>
     _$ProcessoEtapaFilterImpl(
-      codigo: json['codigo'] as int?,
+      codigo: (json['codigo'] as num?)?.toInt(),
       apenasAtivos: json['apenasAtivos'] as bool?,
       ordenarPorNomeCrescente: json['ordenarPorNomeCrescente'] as bool?,
       carregarTiposProcesso: json['carregarTiposProcesso'] as bool?,

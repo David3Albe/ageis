@@ -9,7 +9,7 @@ part of 'registros_expirar_remover_dto.dart';
 _$RegistrosExpirarRemoverDTOImpl _$$RegistrosExpirarRemoverDTOImplFromJson(
         Map json) =>
     _$RegistrosExpirarRemoverDTOImpl(
-      codUsuario: json['codUsuario'] as int,
+      codUsuario: (json['codUsuario'] as num).toInt(),
       registros: (json['registros'] as List<dynamic>)
           .map((e) => RegistrosExpirarRemoverRegistroDTO.fromJson(
               Map<String, Object?>.from(e as Map)))

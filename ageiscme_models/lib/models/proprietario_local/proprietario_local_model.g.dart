@@ -8,10 +8,10 @@ part of 'proprietario_local_model.dart';
 
 _$ProprietarioLocalModelImpl _$$ProprietarioLocalModelImplFromJson(Map json) =>
     _$ProprietarioLocalModelImpl(
-      cod: json['cod'] as int?,
-      codProprietario: json['codProprietario'] as int?,
-      codLocal: json['codLocal'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codProprietario: (json['codProprietario'] as num?)?.toInt(),
+      codLocal: (json['codLocal'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),

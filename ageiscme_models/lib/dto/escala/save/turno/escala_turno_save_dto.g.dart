@@ -14,7 +14,7 @@ _$EscalaTurnoSaveDTOImpl _$$EscalaTurnoSaveDTOImplFromJson(Map json) =>
           ? null
           : TurnoShortResponseDTO.fromJson(
               Map<String, Object?>.from(json['turno'] as Map)),
-      Usuarios: (json['Usuarios'] as List<dynamic>?)
+      usuarios: (json['usuarios'] as List<dynamic>?)
           ?.map((e) => EscalaTurnoUsuarioSaveDTO.fromJson(
               Map<String, Object?>.from(e as Map)))
           .toList(),
@@ -26,5 +26,5 @@ Map<String, dynamic> _$$EscalaTurnoSaveDTOImplToJson(
       'anoMes': instance.anoMes.toIso8601String(),
       'codTurno': instance.codTurno,
       'turno': instance.turno?.toJson(),
-      'Usuarios': instance.Usuarios?.map((e) => e.toJson()).toList(),
+      'usuarios': instance.usuarios?.map((e) => e.toJson()).toList(),
     };

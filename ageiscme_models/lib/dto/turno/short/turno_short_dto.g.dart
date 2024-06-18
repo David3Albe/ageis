@@ -9,7 +9,7 @@ part of 'turno_short_dto.dart';
 _$TurnoShortDTOImpl _$$TurnoShortDTOImplFromJson(Map json) =>
     _$TurnoShortDTOImpl(
       termoPesquisa: json['termoPesquisa'] as String?,
-      numeroRegistros: json['numeroRegistros'] as int,
+      numeroRegistros: (json['numeroRegistros'] as num).toInt(),
       ativosApenas: json['ativosApenas'] as bool?,
     );
 

@@ -14,8 +14,8 @@ _$ItemInserirRapidoSearchResponseDTOImpl
                   Map<String, Object?>.from(e as Map)))
               .toList(),
           idEtiqueta: json['idEtiqueta'] as String?,
-          qtdeMax: json['qtdeMax'] as int?,
-          qtdeExistente: json['qtdeExistente'] as int?,
+          qtdeMax: (json['qtdeMax'] as num?)?.toInt(),
+          qtdeExistente: (json['qtdeExistente'] as num?)?.toInt(),
         );
 
 Map<String, dynamic> _$$ItemInserirRapidoSearchResponseDTOImplToJson(

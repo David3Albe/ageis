@@ -8,7 +8,7 @@ part of 'arsenal_estoque_filter.dart';
 
 _$ArsenalEstoqueFilterImpl _$$ArsenalEstoqueFilterImplFromJson(Map json) =>
     _$ArsenalEstoqueFilterImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       apenasAtivos: json['apenasAtivos'] as bool?,
       ordenarPorNomeCrescente: json['ordenarPorNomeCrescente'] as bool?,
       tStamp: json['tStamp'] as String?,

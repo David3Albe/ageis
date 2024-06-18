@@ -8,12 +8,12 @@ part of 'sigla_short_response_dto.dart';
 
 _$SiglaShortResponseDTOImpl _$$SiglaShortResponseDTOImplFromJson(Map json) =>
     _$SiglaShortResponseDTOImpl(
-      cod: json['cod'] as int,
+      cod: (json['cod'] as num).toInt(),
       descricao: json['descricao'] as String,
       sigla: json['sigla'] as String,
-      r: json['r'] as int?,
-      g: json['g'] as int?,
-      b: json['b'] as int?,
+      r: (json['r'] as num?)?.toInt(),
+      g: (json['g'] as num?)?.toInt(),
+      b: (json['b'] as num?)?.toInt(),
       o: (json['o'] as num?)?.toDouble(),
     );
 

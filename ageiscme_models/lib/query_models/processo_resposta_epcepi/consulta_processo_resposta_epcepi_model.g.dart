@@ -12,7 +12,7 @@ _$ConsultaProcessoRespostaEPCEPIModelImpl
           dataHora: json['dataHora'] == null
               ? null
               : DateTime.parse(json['dataHora'] as String),
-          codEquipamento: json['codEquipamento'] as int?,
+          codEquipamento: (json['codEquipamento'] as num?)?.toInt(),
           nomeEquipamento: json['nomeEquipamento'] as String?,
           nomeUsuario: json['nomeUsuario'] as String?,
           resposta: json['resposta'] as String?,

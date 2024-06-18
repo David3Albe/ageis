@@ -9,12 +9,12 @@ part of 'solicitacao_material_search_dto.dart';
 _$SolicitacaoMaterialSearchDTOImpl _$$SolicitacaoMaterialSearchDTOImplFromJson(
         Map json) =>
     _$SolicitacaoMaterialSearchDTOImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       apenasPendentes: json['apenasPendentes'] as bool?,
       apenasAutorizados: json['apenasAutorizados'] as bool?,
       apenasEntregues: json['apenasEntregues'] as bool?,
       apenasNaoAutorizados: json['apenasNaoAutorizados'] as bool?,
-      numeroRegistros: json['numeroRegistros'] as int?,
+      numeroRegistros: (json['numeroRegistros'] as num?)?.toInt(),
       ordenarPeloCodigoDecrescente:
           json['ordenarPeloCodigoDecrescente'] as bool?,
     );

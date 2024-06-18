@@ -9,10 +9,10 @@ part of 'equipamento_servico_model.dart';
 _$EquipamentoServicoModelImpl _$$EquipamentoServicoModelImplFromJson(
         Map json) =>
     _$EquipamentoServicoModelImpl(
-      cod: json['cod'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
-      codEquipamento: json['codEquipamento'] as int?,
-      codServico: json['codServico'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
+      codEquipamento: (json['codEquipamento'] as num?)?.toInt(),
+      codServico: (json['codServico'] as num?)?.toInt(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),

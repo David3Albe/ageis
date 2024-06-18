@@ -8,13 +8,13 @@ part of 'insumo_teste_model.dart';
 
 _$InsumoTesteModelImpl _$$InsumoTesteModelImplFromJson(Map json) =>
     _$InsumoTesteModelImpl(
-      cod: json['cod'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
-      codMovimentoInsumo: json['codMovimentoInsumo'] as int?,
-      codInsumo: json['codInsumo'] as int?,
-      codDeposito: json['codDeposito'] as int?,
-      codUsuario: json['codUsuario'] as int?,
-      codUsuarioLiberacao: json['codUsuarioLiberacao'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
+      codMovimentoInsumo: (json['codMovimentoInsumo'] as num?)?.toInt(),
+      codInsumo: (json['codInsumo'] as num?)?.toInt(),
+      codDeposito: (json['codDeposito'] as num?)?.toInt(),
+      codUsuario: (json['codUsuario'] as num?)?.toInt(),
+      codUsuarioLiberacao: (json['codUsuarioLiberacao'] as num?)?.toInt(),
       comunicadoAnvisa: json['comunicadoAnvisa'] as String?,
       comunicadoFabricante: json['comunicadoFabricante'] as String?,
       data:

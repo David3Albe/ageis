@@ -9,7 +9,7 @@ part of 'treinamento_registro_model.dart';
 _$TreinamentoRegistroModelImpl _$$TreinamentoRegistroModelImplFromJson(
         Map json) =>
     _$TreinamentoRegistroModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       nome: json['nome'] as String?,
       descricao: json['descricao'] as String?,
       observacao: json['observacao'] as String?,
@@ -17,7 +17,7 @@ _$TreinamentoRegistroModelImpl _$$TreinamentoRegistroModelImplFromJson(
           json['data'] == null ? null : DateTime.parse(json['data'] as String),
       entidade: json['entidade'] as String?,
       cargaHoraria: (json['cargaHoraria'] as num?)?.toDouble(),
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       doc: json['doc'] as String?,
       docNome: json['docNome'] as String?,
       ultimaAlteracao: json['ultimaAlteracao'] == null

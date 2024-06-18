@@ -8,13 +8,13 @@ part of 'consulta_item_model.dart';
 
 _$ConsultaItemModelImpl _$$ConsultaItemModelImplFromJson(Map json) =>
     _$ConsultaItemModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       idEtiqueta: json['idEtiqueta'] as String?,
       item: json['item'] as String?,
       descricaoCurta: json['descricaoCurta'] as String?,
       tamanhoSigla: json['tamanhoSigla'] as String?,
       nomeGrupo: json['nomeGrupo'] as String?,
-      qtdeProcessos: json['qtdeProcessos'] as int?,
+      qtdeProcessos: (json['qtdeProcessos'] as num?)?.toInt(),
       nomeKit: json['nomeKit'] as String?,
       nomeProprietario: json['nomeProprietario'] as String?,
       rmsValidade: json['rmsValidade'] == null
@@ -38,8 +38,8 @@ _$ConsultaItemModelImpl _$$ConsultaItemModelImplFromJson(Map json) =>
       fabricante: json['fabricante'] as String?,
       fornecedor: json['fornecedor'] as String?,
       regAnvisa: json['regAnvisa'] as String?,
-      numeroPatrimonio: json['numeroPatrimonio'] as int?,
-      numeroNota: json['numeroNota'] as int?,
+      numeroPatrimonio: (json['numeroPatrimonio'] as num?)?.toInt(),
+      numeroNota: (json['numeroNota'] as num?)?.toInt(),
       entradaSaida: json['entradaSaida'] as String?,
       localEntrega: json['localEntrega'] as String?,
       localRetirada: json['localRetirada'] as String?,

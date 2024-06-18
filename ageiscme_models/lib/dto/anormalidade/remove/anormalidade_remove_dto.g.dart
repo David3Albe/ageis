@@ -8,7 +8,7 @@ part of 'anormalidade_remove_dto.dart';
 
 _$AnormalidadeRemoveDTOImpl _$$AnormalidadeRemoveDTOImplFromJson(Map json) =>
     _$AnormalidadeRemoveDTOImpl(
-      cod: json['cod'] as int,
+      cod: (json['cod'] as num).toInt(),
       tstamp: json['tstamp'] as String,
     );
 

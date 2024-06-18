@@ -8,9 +8,9 @@ part of 'conjunto_model.dart';
 
 _$ConjuntoModelImpl _$$ConjuntoModelImplFromJson(Map json) =>
     _$ConjuntoModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       nome: json['nome'] as String?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ativo: json['ativo'] as bool?,
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null

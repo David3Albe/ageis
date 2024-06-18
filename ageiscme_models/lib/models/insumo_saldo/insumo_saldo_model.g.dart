@@ -8,12 +8,12 @@ part of 'insumo_saldo_model.dart';
 
 _$InsumoSaldoModelImpl _$$InsumoSaldoModelImplFromJson(Map json) =>
     _$InsumoSaldoModelImpl(
-      cod: json['cod'] as int?,
-      codInsumo: json['codInsumo'] as int?,
-      codDeposito: json['codDeposito'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codInsumo: (json['codInsumo'] as num?)?.toInt(),
+      codDeposito: (json['codDeposito'] as num?)?.toInt(),
       qtdeDisponivel: (json['qtdeDisponivel'] as num?)?.toDouble(),
       lote: json['lote'] as String?,
-      codBarra: json['codBarra'] as int?,
+      codBarra: (json['codBarra'] as num?)?.toInt(),
       dataFabricacao: json['dataFabricacao'] == null
           ? null
           : DateTime.parse(json['dataFabricacao'] as String),
@@ -25,7 +25,7 @@ _$InsumoSaldoModelImpl _$$InsumoSaldoModelImplFromJson(Map json) =>
           : DateTime.parse(json['dataValidade'] as String),
       status: json['status'] as String?,
       precoUnVendaMedio: (json['precoUnVendaMedio'] as num?)?.toDouble(),
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),

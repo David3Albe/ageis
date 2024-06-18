@@ -9,9 +9,9 @@ part of 'historico_search_dto.dart';
 _$HistoricoSearchDTOImpl _$$HistoricoSearchDTOImplFromJson(Map json) =>
     _$HistoricoSearchDTOImpl(
       termo: json['termo'] as String,
-      numeroRegistros: json['numeroRegistros'] as int,
-      pk: json['pk'] as int,
-      codUsuario: json['codUsuario'] as int?,
+      numeroRegistros: (json['numeroRegistros'] as num).toInt(),
+      pk: (json['pk'] as num).toInt(),
+      codUsuario: (json['codUsuario'] as num?)?.toInt(),
       usuario: json['usuario'] == null
           ? null
           : UsuarioModel.fromJson(

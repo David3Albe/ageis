@@ -8,7 +8,7 @@ part of 'instituicao_model.dart';
 
 _$InstituicaoModelImpl _$$InstituicaoModelImplFromJson(Map json) =>
     _$InstituicaoModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       nome: json['nome'] as String?,
       endereco: json['endereco'] as String?,
       cnpj: json['cnpj'] as String?,
@@ -17,31 +17,33 @@ _$InstituicaoModelImpl _$$InstituicaoModelImplFromJson(Map json) =>
       foneCme: json['foneCme'] as String?,
       ativo: json['ativo'] as bool?,
       imprimeQrCode: json['imprimeQrCode'] as bool?,
-      debugLevel: json['debugLevel'] as int?,
+      debugLevel: (json['debugLevel'] as num?)?.toInt(),
       calculadoraRotulados: json['calculadoraRotulados'] as bool?,
       fluxoAlternado: json['fluxoAlternado'] as bool?,
       embalagemKit: json['embalagemKit'] as bool?,
       embalagemItem: json['embalagemItem'] as bool?,
       naoAlertarKitIncompleto: json['naoAlertarKitIncompleto'] as bool?,
-      tempoMin: json['tempoMin'] as int?,
+      tempoMin: (json['tempoMin'] as num?)?.toInt(),
       tstamp: json['tStamp'] as String?,
       escalaFonte: (json['escalaFonte'] as num?)?.toDouble(),
-      tempoDescartarItemEstoque: json['tempoDescartarItemEstoque'] as int?,
+      tempoDescartarItemEstoque:
+          (json['tempoDescartarItemEstoque'] as num?)?.toInt(),
       mensagemDescartarItemEstoque:
           json['mensagemDescartarItemEstoque'] as String?,
       mensagemDescartarItemKitEstoque:
           json['mensagemDescartarItemKitEstoque'] as String?,
-      tempoDescartarKitEstoque: json['tempoDescartarKitEstoque'] as int?,
+      tempoDescartarKitEstoque:
+          (json['tempoDescartarKitEstoque'] as num?)?.toInt(),
       mensagemDescartarKitEstoque:
           json['mensagemDescartarKitEstoque'] as String?,
       tempoDescartarItemForaEstoque:
-          json['tempoDescartarItemForaEstoque'] as int?,
+          (json['tempoDescartarItemForaEstoque'] as num?)?.toInt(),
       mensagemDescartarItemForaEstoque:
           json['mensagemDescartarItemForaEstoque'] as String?,
       mensagemDescartarItemKitForaEstoque:
           json['mensagemDescartarItemKitForaEstoque'] as String?,
       tempoDescartarKitForaEstoque:
-          json['tempoDescartarKitForaEstoque'] as int?,
+          (json['tempoDescartarKitForaEstoque'] as num?)?.toInt(),
       mensagemDescartarKitForaEstoque:
           json['mensagemDescartarKitForaEstoque'] as String?,
     );

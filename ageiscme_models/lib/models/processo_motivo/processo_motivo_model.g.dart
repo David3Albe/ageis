@@ -8,9 +8,9 @@ part of 'processo_motivo_model.dart';
 
 _$ProcessoMotivoModelImpl _$$ProcessoMotivoModelImplFromJson(Map json) =>
     _$ProcessoMotivoModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       descricao: json['descricao'] as String?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ativo: json['ativo'] as bool?,
       arsenal: json['arsenal'] as bool?,
       preparo: json['preparo'] as bool?,

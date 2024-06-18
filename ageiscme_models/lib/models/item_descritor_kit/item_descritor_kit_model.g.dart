@@ -8,11 +8,11 @@ part of 'item_descritor_kit_model.dart';
 
 _$ItemDescritorKitModelImpl _$$ItemDescritorKitModelImplFromJson(Map json) =>
     _$ItemDescritorKitModelImpl(
-      cod: json['cod'] as int?,
-      codDescritorKit: json['codDescritorKit'] as int?,
-      codDescritorItem: json['codDescritorItem'] as int?,
-      quantidade: json['quantidade'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codDescritorKit: (json['codDescritorKit'] as num?)?.toInt(),
+      codDescritorItem: (json['codDescritorItem'] as num?)?.toInt(),
+      quantidade: (json['quantidade'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),

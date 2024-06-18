@@ -9,8 +9,8 @@ part of 'consulta_insumo_estoque_filter.dart';
 _$ConsultaInsumoEstoqueFilterImpl _$$ConsultaInsumoEstoqueFilterImplFromJson(
         Map json) =>
     _$ConsultaInsumoEstoqueFilterImpl(
-      codDeposito: json['codDeposito'] as int?,
-      codInsumo: json['codInsumo'] as int?,
+      codDeposito: (json['codDeposito'] as num?)?.toInt(),
+      codInsumo: (json['codInsumo'] as num?)?.toInt(),
       estoqueAbaixoMinimo: json['estoqueAbaixoMinimo'] as bool?,
     );
 

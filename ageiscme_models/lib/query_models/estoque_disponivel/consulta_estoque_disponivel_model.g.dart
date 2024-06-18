@@ -16,10 +16,10 @@ _$ConsultaEstoqueDisponivelModelImpl
           local: json['local'] as String?,
           nomeProprietario: json['nomeProprietario'] as String?,
           nomeKit: json['nomeKit'] as String?,
-          codKit: json['codKit'] as int?,
+          codKit: (json['codKit'] as num?)?.toInt(),
           codBarraKit: json['codBarraKit'] as String?,
           nomeItem: json['nomeItem'] as String?,
-          codItem: json['codItem'] as int?,
+          codItem: (json['codItem'] as num?)?.toInt(),
           idEtiqueta: json['idEtiqueta'] as String?,
           dataEntrada: json['dataEntrada'] == null
               ? null

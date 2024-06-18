@@ -8,7 +8,7 @@ part of 'item_etiqueta_dto.dart';
 
 _$ItemEtiquetaDTOImpl _$$ItemEtiquetaDTOImplFromJson(Map json) =>
     _$ItemEtiquetaDTOImpl(
-      codItem: json['codItem'] as int?,
+      codItem: (json['codItem'] as num?)?.toInt(),
       idEtiquetaContem: json['idEtiquetaContem'] as String?,
       idEtiquetaItemContem: json['idEtiquetaItemContem'] as String?,
     );

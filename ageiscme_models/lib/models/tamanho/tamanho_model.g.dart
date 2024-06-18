@@ -7,10 +7,10 @@ part of 'tamanho_model.dart';
 // **************************************************************************
 
 _$TamanhoModelImpl _$$TamanhoModelImplFromJson(Map json) => _$TamanhoModelImpl(
-      cod: json['cod'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       descricao: json['descricao'] as String?,
-      referencial: json['referencial'] as int?,
+      referencial: (json['referencial'] as num?)?.toInt(),
       sigla: json['sigla'] as String?,
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null

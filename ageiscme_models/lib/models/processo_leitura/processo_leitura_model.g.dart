@@ -8,35 +8,37 @@ part of 'processo_leitura_model.dart';
 
 _$ProcessoLeituraModelImpl _$$ProcessoLeituraModelImplFromJson(Map json) =>
     _$ProcessoLeituraModelImpl(
-      cod: json['cod'] as int?,
-      codRegistroProcesso: json['codRegistroProcesso'] as int?,
-      codItem: json['codItem'] as int?,
-      codKit: json['codKit'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codRegistroProcesso: (json['codRegistroProcesso'] as num?)?.toInt(),
+      codItem: (json['codItem'] as num?)?.toInt(),
+      codKit: (json['codKit'] as num?)?.toInt(),
       entradaSaida: json['entradaSaida'] as String?,
-      codUsuario: json['codUsuario'] as int?,
-      nroItensFaltantes: json['nroItensFaltantes'] as int?,
+      codUsuario: (json['codUsuario'] as num?)?.toInt(),
+      nroItensFaltantes: (json['nroItensFaltantes'] as num?)?.toInt(),
       kitLiberadoIncompleto: json['kitLiberadoIncompleto'] as bool?,
-      codUsuarioLiberacao: json['codUsuarioLiberacao'] as int?,
+      codUsuarioLiberacao: (json['codUsuarioLiberacao'] as num?)?.toInt(),
       conferidoVisualmente: json['conferidoVisualmente'] as bool?,
       dataHora: json['dataHora'] == null
           ? null
           : DateTime.parse(json['dataHora'] as String),
-      codUsuarioQuebraSeq: json['codUsuarioQuebraSeq'] as int?,
-      codEmbalagem: json['codEmbalagem'] as int?,
+      codUsuarioQuebraSeq: (json['codUsuarioQuebraSeq'] as num?)?.toInt(),
+      codEmbalagem: (json['codEmbalagem'] as num?)?.toInt(),
       dataValidade: json['dataValidade'] == null
           ? null
           : DateTime.parse(json['dataValidade'] as String),
-      codEtapaProcesso: json['codEtapaProcesso'] as int?,
-      codMotivo: json['codMotivo'] as int?,
-      codMotivoQuebraFluxo: json['codMotivoQuebraFluxo'] as int?,
-      codMotivoReporRemoverItem: json['codMotivoReporRemoverItem'] as int?,
-      codAcaoOcorrencia: json['codAcaoOcorrencia'] as int?,
-      entradaAutomatica: json['entradaAutomatica'] as int?,
+      codEtapaProcesso: (json['codEtapaProcesso'] as num?)?.toInt(),
+      codMotivo: (json['codMotivo'] as num?)?.toInt(),
+      codMotivoQuebraFluxo: (json['codMotivoQuebraFluxo'] as num?)?.toInt(),
+      codMotivoReporRemoverItem:
+          (json['codMotivoReporRemoverItem'] as num?)?.toInt(),
+      codAcaoOcorrencia: (json['codAcaoOcorrencia'] as num?)?.toInt(),
+      entradaAutomatica: (json['entradaAutomatica'] as num?)?.toInt(),
       loteEquipamento: json['loteEquipamento'] as String?,
-      codUsuarioResponsavelLocal: json['codUsuarioResponsavelLocal'] as int?,
+      codUsuarioResponsavelLocal:
+          (json['codUsuarioResponsavelLocal'] as num?)?.toInt(),
       integradorKit: json['integradorKit'] as bool?,
-      statusKit: json['statusKit'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      statusKit: (json['statusKit'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),

@@ -8,7 +8,7 @@ part of 'turno_short_response_dto.dart';
 
 _$TurnoShortResponseDTOImpl _$$TurnoShortResponseDTOImplFromJson(Map json) =>
     _$TurnoShortResponseDTOImpl(
-      cod: json['cod'] as int,
+      cod: (json['cod'] as num).toInt(),
       descricao: json['descricao'] as String,
     );
 

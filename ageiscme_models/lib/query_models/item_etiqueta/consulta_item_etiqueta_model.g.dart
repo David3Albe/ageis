@@ -9,21 +9,21 @@ part of 'consulta_item_etiqueta_model.dart';
 _$ConsultaItemEtiquetaModelImpl _$$ConsultaItemEtiquetaModelImplFromJson(
         Map json) =>
     _$ConsultaItemEtiquetaModelImpl(
-      codItem: json['codItem'] as int?,
+      codItem: (json['codItem'] as num?)?.toInt(),
       idEtiqueta: json['idEtiqueta'] as String?,
       descricao: json['descricao'] as String?,
       nomeProprietario: json['nomeProprietario'] as String?,
-      codKit: json['codKit'] as int?,
+      codKit: (json['codKit'] as num?)?.toInt(),
       nomeKit: json['nomeKit'] as String?,
-      totalEtiquetas: json['totalEtiquetas'] as int?,
-      totalProcessos: json['totalProcessos'] as int?,
+      totalEtiquetas: (json['totalEtiquetas'] as num?)?.toInt(),
+      totalProcessos: (json['totalProcessos'] as num?)?.toInt(),
       idEtiquetaItensEtiqueta: json['idEtiquetaItensEtiqueta'] as String?,
-      qtdeProcessos: json['qtdeProcessos'] as int?,
+      qtdeProcessos: (json['qtdeProcessos'] as num?)?.toInt(),
       dataDescarte: json['dataDescarte'] == null
           ? null
           : DateTime.parse(json['dataDescarte'] as String),
       usuarioAlteracaoEtiqueta: json['usuarioAlteracaoEtiqueta'] as String?,
-      durabDias: json['durabDias'] as int?,
+      durabDias: (json['durabDias'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$ConsultaItemEtiquetaModelImplToJson(

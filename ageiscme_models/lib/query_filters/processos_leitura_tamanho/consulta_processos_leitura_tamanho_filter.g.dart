@@ -15,8 +15,8 @@ _$ConsultaProcessosLeituraTamanhoFilterImpl
           finalDate: json['finalDate'] == null
               ? null
               : DateTime.parse(json['finalDate'] as String),
-          codLocal: json['codLocal'] as int?,
-          codCentroCusto: json['codCentroCusto'] as int?,
+          codLocal: (json['codLocal'] as num?)?.toInt(),
+          codCentroCusto: (json['codCentroCusto'] as num?)?.toInt(),
         );
 
 Map<String, dynamic> _$$ConsultaProcessosLeituraTamanhoFilterImplToJson(

@@ -16,7 +16,7 @@ _$ItemEtiquetaPreparoResponseDTOImpl
           usuario: ItemEtiquetaPreparoUsuarioResponseDTO.fromJson(
               Map<String, Object?>.from(json['usuario'] as Map)),
           dataLeitura: DateTime.parse(json['dataLeitura'] as String),
-          validadeEmbalagem: json['validadeEmbalagem'] as int,
+          validadeEmbalagem: (json['validadeEmbalagem'] as num).toInt(),
         );
 
 Map<String, dynamic> _$$ItemEtiquetaPreparoResponseDTOImplToJson(

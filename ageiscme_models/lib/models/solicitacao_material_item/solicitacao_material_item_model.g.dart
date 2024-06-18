@@ -9,10 +9,10 @@ part of 'solicitacao_material_item_model.dart';
 _$SolicitacaoMaterialItemModelImpl _$$SolicitacaoMaterialItemModelImplFromJson(
         Map json) =>
     _$SolicitacaoMaterialItemModelImpl(
-      cod: json['cod'] as int?,
-      codInsumoSolicitacao: json['codInsumoSolicitacao'] as int?,
-      codEquipamento: json['codEquipamento'] as int?,
-      codInsumo: json['codInsumo'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codInsumoSolicitacao: (json['codInsumoSolicitacao'] as num?)?.toInt(),
+      codEquipamento: (json['codEquipamento'] as num?)?.toInt(),
+      codInsumo: (json['codInsumo'] as num?)?.toInt(),
       quantidadeSolicitada: (json['quantidadeSolicitada'] as num?)?.toDouble(),
       quantidadeEntregue: (json['quantidadeEntregue'] as num?)?.toDouble(),
       nomeEquipamento: json['nomeEquipamento'] as String?,

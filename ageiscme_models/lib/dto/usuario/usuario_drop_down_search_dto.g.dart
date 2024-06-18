@@ -9,7 +9,7 @@ part of 'usuario_drop_down_search_dto.dart';
 _$UsuarioDropDownSearchDTOImpl _$$UsuarioDropDownSearchDTOImplFromJson(
         Map json) =>
     _$UsuarioDropDownSearchDTOImpl(
-      numeroRegistros: json['numeroRegistros'] as int,
+      numeroRegistros: (json['numeroRegistros'] as num).toInt(),
       search: json['search'] as String?,
       apenasColaboradores: json['apenasColaboradores'] as bool?,
       apenasAtivos: json['apenasAtivos'] as bool?,

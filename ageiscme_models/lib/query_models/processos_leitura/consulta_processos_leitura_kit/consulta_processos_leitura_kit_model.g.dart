@@ -9,7 +9,7 @@ part of 'consulta_processos_leitura_kit_model.dart';
 _$ConsultaProcessosLeituraKitModelImpl
     _$$ConsultaProcessosLeituraKitModelImplFromJson(Map json) =>
         _$ConsultaProcessosLeituraKitModelImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           codBarra: json['codBarra'] as String,
           nome: json['nome'] as String?,
           restricao: json['restricao'] as String?,

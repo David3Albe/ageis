@@ -8,20 +8,20 @@ part of 'entrada_automatica_model.dart';
 
 _$EntradaAutomaticaModelImpl _$$EntradaAutomaticaModelImplFromJson(Map json) =>
     _$EntradaAutomaticaModelImpl(
-      cod: json['cod'] as int?,
-      codRegistroProcesso: json['codRegistroProcesso'] as int?,
-      codUsuario: json['codUsuario'] as int?,
-      situacao: json['situacao'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
+      codRegistroProcesso: (json['codRegistroProcesso'] as num?)?.toInt(),
+      codUsuario: (json['codUsuario'] as num?)?.toInt(),
+      situacao: (json['situacao'] as num?)?.toInt(),
       observacao: json['observacao'] as String?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null
           : DateTime.parse(json['ultimaAlteracao'] as String),
       DataHora: json['DataHora'] == null
           ? null
           : DateTime.parse(json['DataHora'] as String),
-      codEtapa: json['codEtapa'] as int?,
-      codProcessoLeitura: json['codProcessoLeitura'] as int?,
+      codEtapa: (json['codEtapa'] as num?)?.toInt(),
+      codProcessoLeitura: (json['codProcessoLeitura'] as num?)?.toInt(),
       tstamp: json['tStamp'] as String?,
       processoRegistro: json['processoRegistro'] == null
           ? null

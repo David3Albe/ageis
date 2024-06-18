@@ -7,9 +7,9 @@ part of 'peca_model.dart';
 // **************************************************************************
 
 _$PecaModelImpl _$$PecaModelImplFromJson(Map json) => _$PecaModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       peca: json['peca'] as String?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ativo: json['ativo'] as bool?,
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null

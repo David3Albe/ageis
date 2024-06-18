@@ -8,13 +8,13 @@ part of 'consulta_kit_model.dart';
 
 _$ConsultaKitModelImpl _$$ConsultaKitModelImplFromJson(Map json) =>
     _$ConsultaKitModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       codBarra: json['codBarra'] as String?,
       nomeKitDescritor: json['nomeKitDescritor'] as String?,
       nomeProprietario: json['nomeProprietario'] as String?,
       tamanhoKit: json['tamanhoKit'] as String?,
       grupo: json['grupo'] as String?,
-      qtdeItensFisico: json['qtdeItensFisico'] as int?,
+      qtdeItensFisico: (json['qtdeItensFisico'] as num?)?.toInt(),
       nomeCor1: json['nomeCor1'] as String?,
       nomeCor2: json['nomeCor2'] as String?,
       nomeCor3: json['nomeCor3'] as String?,

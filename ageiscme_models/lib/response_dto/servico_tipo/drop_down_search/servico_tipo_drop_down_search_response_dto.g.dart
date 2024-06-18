@@ -9,7 +9,7 @@ part of 'servico_tipo_drop_down_search_response_dto.dart';
 _$ServicoTipoDropDownSearchResponseDTOImpl
     _$$ServicoTipoDropDownSearchResponseDTOImplFromJson(Map json) =>
         _$ServicoTipoDropDownSearchResponseDTOImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           nome: json['nome'] as String,
         );
 

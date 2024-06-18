@@ -10,8 +10,8 @@ _$ProcessoTipoUltimaLeituraItemKitResponseDTOImpl
     _$$ProcessoTipoUltimaLeituraItemKitResponseDTOImplFromJson(Map json) =>
         _$ProcessoTipoUltimaLeituraItemKitResponseDTOImpl(
           ultimoLocal: json['ultimoLocal'] as String?,
-          codTipoProcesso: json['codTipoProcesso'] as int?,
-          codEtapaProcesso: json['codEtapaProcesso'] as int?,
+          codTipoProcesso: (json['codTipoProcesso'] as num?)?.toInt(),
+          codEtapaProcesso: (json['codEtapaProcesso'] as num?)?.toInt(),
         );
 
 Map<String, dynamic> _$$ProcessoTipoUltimaLeituraItemKitResponseDTOImplToJson(

@@ -8,10 +8,10 @@ part of 'centro_custo_model.dart';
 
 _$CentroCustoModelImpl _$$CentroCustoModelImplFromJson(Map json) =>
     _$CentroCustoModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       centroCusto: json['centroCusto'] as String?,
       descricao: json['descricao'] as String?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ativo: json['ativo'] as bool?,
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null

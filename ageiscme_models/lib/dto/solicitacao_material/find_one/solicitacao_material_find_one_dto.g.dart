@@ -9,7 +9,7 @@ part of 'solicitacao_material_find_one_dto.dart';
 _$SolicitacaoMaterialFindOneDTOImpl
     _$$SolicitacaoMaterialFindOneDTOImplFromJson(Map json) =>
         _$SolicitacaoMaterialFindOneDTOImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
         );
 
 Map<String, dynamic> _$$SolicitacaoMaterialFindOneDTOImplToJson(

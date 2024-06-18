@@ -9,10 +9,11 @@ part of 'processo_leitura_andamento_filter.dart';
 _$ProcessoLeituraAndamentoFilterImpl
     _$$ProcessoLeituraAndamentoFilterImplFromJson(Map json) =>
         _$ProcessoLeituraAndamentoFilterImpl(
-          cod: json['cod'] as int?,
-          codDiferenteDe: json['codDiferenteDe'] as int?,
-          codUsuario: json['codUsuario'] as int?,
-          codUsuarioDiferenteDe: json['codUsuarioDiferenteDe'] as int?,
+          cod: (json['cod'] as num?)?.toInt(),
+          codDiferenteDe: (json['codDiferenteDe'] as num?)?.toInt(),
+          codUsuario: (json['codUsuario'] as num?)?.toInt(),
+          codUsuarioDiferenteDe:
+              (json['codUsuarioDiferenteDe'] as num?)?.toInt(),
           dataHoraDiferenteDe: json['dataHoraDiferenteDe'] == null
               ? null
               : DateTime.parse(json['dataHoraDiferenteDe'] as String),

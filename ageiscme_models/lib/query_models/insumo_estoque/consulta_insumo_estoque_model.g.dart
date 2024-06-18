@@ -15,7 +15,7 @@ _$ConsultaInsumoEstoqueModelImpl _$$ConsultaInsumoEstoqueModelImplFromJson(
       pontoReposicao: (json['pontoReposicao'] as num?)?.toDouble(),
       estoqueMinimo: (json['estoqueMinimo'] as num?)?.toDouble(),
       estoqueMaximo: (json['estoqueMaximo'] as num?)?.toDouble(),
-      prazoEntregaDias: json['prazoEntregaDias'] as int?,
+      prazoEntregaDias: (json['prazoEntregaDias'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$ConsultaInsumoEstoqueModelImplToJson(

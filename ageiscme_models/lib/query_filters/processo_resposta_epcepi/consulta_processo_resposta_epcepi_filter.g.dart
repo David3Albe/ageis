@@ -15,8 +15,8 @@ _$ConsultaProcessoRespostaEPCEPIFilterImpl
           finalDate: json['finalDate'] == null
               ? null
               : DateTime.parse(json['finalDate'] as String),
-          codUsuario: json['codUsuario'] as int?,
-          codEquipamento: json['codEquipamento'] as int?,
+          codUsuario: (json['codUsuario'] as num?)?.toInt(),
+          codEquipamento: (json['codEquipamento'] as num?)?.toInt(),
           respostaSim: json['respostaSim'] as bool?,
           respostaNao: json['respostaNao'] as bool?,
           entrada: json['entrada'] as bool?,

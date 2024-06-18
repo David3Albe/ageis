@@ -7,18 +7,18 @@ part of 'usuario_model.dart';
 // **************************************************************************
 
 _$UsuarioModelImpl _$$UsuarioModelImplFromJson(Map json) => _$UsuarioModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       login: json['login'] as String?,
       nome: json['nome'] as String?,
-      rg: json['rg'] as int?,
+      rg: (json['rg'] as num?)?.toInt(),
       docClasse: json['docClasse'] as String?,
-      codBarra: json['codBarra'] as int?,
-      codBarraTemporario: json['codBarraTemporario'] as int?,
+      codBarra: (json['codBarra'] as num?)?.toInt(),
+      codBarraTemporario: (json['codBarraTemporario'] as num?)?.toInt(),
       senha: json['senha'] as String?,
       colaborador: json['colaborador'] as bool?,
       nomeEmpresa: json['nomeEmpresa'] as String?,
       controleGestao: json['controleGestao'] as bool?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ativo: json['ativo'] as bool?,
       foto: json['foto'] as String?,
       ultimaAlteracao: json['ultimaAlteracao'] == null

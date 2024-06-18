@@ -9,7 +9,7 @@ part of 'kit_etiqueta_preparo_instituicao_response_dto.dart';
 _$KitEtiquetaPreparoInstituicaoResponseDTOImpl
     _$$KitEtiquetaPreparoInstituicaoResponseDTOImplFromJson(Map json) =>
         _$KitEtiquetaPreparoInstituicaoResponseDTOImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           nome: json['nome'] as String,
         );
 

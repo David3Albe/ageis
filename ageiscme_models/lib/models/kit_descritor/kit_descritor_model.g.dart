@@ -8,16 +8,18 @@ part of 'kit_descritor_model.dart';
 
 _$KitDescritorModelImpl _$$KitDescritorModelImplFromJson(Map json) =>
     _$KitDescritorModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       nome: json['nome'] as String?,
       descricao: json['descricao'] as String?,
       tamanhoSigla: json['tamanhoSigla'] as String?,
-      codEmbalagem: json['codEmbalagem'] as int?,
-      codInstituicao: json['codInstituicao'] as int,
-      codTipoProcessoNormal: json['codTipoProcessoNormal'] as int?,
-      codTipoProcessoUrgencia: json['codTipoProcessoUrgencia'] as int?,
-      codTipoProcessoEmergencia: json['codTipoProcessoEmergencia'] as int?,
-      codCusto: json['codCusto'] as int?,
+      codEmbalagem: (json['codEmbalagem'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num).toInt(),
+      codTipoProcessoNormal: (json['codTipoProcessoNormal'] as num?)?.toInt(),
+      codTipoProcessoUrgencia:
+          (json['codTipoProcessoUrgencia'] as num?)?.toInt(),
+      codTipoProcessoEmergencia:
+          (json['codTipoProcessoEmergencia'] as num?)?.toInt(),
+      codCusto: (json['codCusto'] as num?)?.toInt(),
       ativo: json['ativo'] as bool,
       exigeProntuario: json['exigeProntuario'] as bool?,
       imagem: json['imagem'] as String?,

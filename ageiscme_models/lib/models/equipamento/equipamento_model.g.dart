@@ -8,7 +8,7 @@ part of 'equipamento_model.dart';
 
 _$EquipamentoModelImpl _$$EquipamentoModelImplFromJson(Map json) =>
     _$EquipamentoModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       nome: json['nome'] as String?,
       fabricante: json['fabricante'] as String?,
       serie: json['serie'] as String?,
@@ -18,9 +18,9 @@ _$EquipamentoModelImpl _$$EquipamentoModelImplFromJson(Map json) =>
       validadeInspecao: json['validadeInspecao'] == null
           ? null
           : DateTime.parse(json['validadeInspecao'] as String),
-      anoFabricacao: json['anoFabricacao'] as int?,
-      capacidadeLitro: json['capacidadeLitro'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      anoFabricacao: (json['anoFabricacao'] as num?)?.toInt(),
+      capacidadeLitro: (json['capacidadeLitro'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       ativo: json['ativo'] as bool?,
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null

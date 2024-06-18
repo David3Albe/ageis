@@ -8,7 +8,7 @@ part of 'processo_leitura_filter.dart';
 
 _$ProcessoLeituraFilterImpl _$$ProcessoLeituraFilterImplFromJson(Map json) =>
     _$ProcessoLeituraFilterImpl(
-      codItem: json['codItem'] as int?,
+      codItem: (json['codItem'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$ProcessoLeituraFilterImplToJson(

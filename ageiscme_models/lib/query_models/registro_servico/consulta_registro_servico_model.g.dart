@@ -18,7 +18,7 @@ _$ConsultaRegistroServicoModelImpl _$$ConsultaRegistroServicoModelImplFromJson(
       dataValidade: json['dataValidade'] == null
           ? null
           : DateTime.parse(json['dataValidade'] as String),
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       lote: json['lote'] as String?,
       descricao: json['descricao'] as String?,
       temperatura: (json['temperatura'] as num?)?.toDouble(),

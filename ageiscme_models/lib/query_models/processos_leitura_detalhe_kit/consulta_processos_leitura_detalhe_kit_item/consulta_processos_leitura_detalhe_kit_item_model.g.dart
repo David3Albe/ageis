@@ -26,9 +26,9 @@ _$ConsultaProcessosLeituraDetalheKitItemModelImpl
               : DateTime.parse(json['dataDescarte'] as String),
           restricao: json['restricao'] as String?,
           statusCod: json['statusCod'] as String?,
-          cod: json['cod'] as int?,
-          codKit: json['codKit'] as int?,
-          codRegistroProcesso: json['codRegistroProcesso'] as int?,
+          cod: (json['cod'] as num?)?.toInt(),
+          codKit: (json['codKit'] as num?)?.toInt(),
+          codRegistroProcesso: (json['codRegistroProcesso'] as num?)?.toInt(),
         );
 
 Map<String, dynamic> _$$ConsultaProcessosLeituraDetalheKitItemModelImplToJson(

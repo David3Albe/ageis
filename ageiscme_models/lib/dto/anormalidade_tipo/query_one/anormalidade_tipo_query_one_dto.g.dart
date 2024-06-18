@@ -9,7 +9,7 @@ part of 'anormalidade_tipo_query_one_dto.dart';
 _$AnormalidadeTipoQueryOneDTOImpl _$$AnormalidadeTipoQueryOneDTOImplFromJson(
         Map json) =>
     _$AnormalidadeTipoQueryOneDTOImpl(
-      cod: json['cod'] as int,
+      cod: (json['cod'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$AnormalidadeTipoQueryOneDTOImplToJson(

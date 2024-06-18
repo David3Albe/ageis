@@ -7,7 +7,7 @@ part of 'item_model.dart';
 // **************************************************************************
 
 _$ItemModelImpl _$$ItemModelImplFromJson(Map json) => _$ItemModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       idEtiqueta: json['idEtiqueta'] as String?,
       descricao: json['descricao'] as String?,
       fabricante: json['fabricante'] as String?,
@@ -16,24 +16,24 @@ _$ItemModelImpl _$$ItemModelImplFromJson(Map json) => _$ItemModelImpl(
       status: json['status'] as String?,
       restricao: json['restricao'] as String?,
       refFornecedor: json['refFornecedor'] as String?,
-      codDescritor: json['codDescritor'] as int?,
-      codProprietario: json['codProprietario'] as int?,
-      codConjunto: json['codConjunto'] as int?,
-      codKit: json['codKit'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
-      codProcessoLeitura: json['codProcessoLeitura'] as int?,
-      codEmbalagem: json['codEmbalagem'] as int?,
+      codDescritor: (json['codDescritor'] as num?)?.toInt(),
+      codProprietario: (json['codProprietario'] as num?)?.toInt(),
+      codConjunto: (json['codConjunto'] as num?)?.toInt(),
+      codKit: (json['codKit'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
+      codProcessoLeitura: (json['codProcessoLeitura'] as num?)?.toInt(),
+      codEmbalagem: (json['codEmbalagem'] as num?)?.toInt(),
       embalagem: json['embalagem'] == null
           ? null
           : EmbalagemModel.fromJson(
               Map<String, Object?>.from(json['embalagem'] as Map)),
-      qtdeProcessos: json['qtdeProcessos'] as int?,
-      codEtiqueta: json['codEtiqueta'] as int?,
-      pendenteRecepcao: json['pendenteRecepcao'] as int?,
-      responsavelPendenteKit: json['responsavelPendenteKit'] as int?,
-      codFabricantes: json['codFabricantes'] as int?,
-      codFornecedores: json['codFornecedores'] as int?,
-      codUsuarioCadastro: json['codUsuarioCadastro'] as int?,
+      qtdeProcessos: (json['qtdeProcessos'] as num?)?.toInt(),
+      codEtiqueta: (json['codEtiqueta'] as num?)?.toInt(),
+      pendenteRecepcao: (json['pendenteRecepcao'] as num?)?.toInt(),
+      responsavelPendenteKit: (json['responsavelPendenteKit'] as num?)?.toInt(),
+      codFabricantes: (json['codFabricantes'] as num?)?.toInt(),
+      codFornecedores: (json['codFornecedores'] as num?)?.toInt(),
+      codUsuarioCadastro: (json['codUsuarioCadastro'] as num?)?.toInt(),
       dataCadastro: json['dataCadastro'] == null
           ? null
           : DateTime.parse(json['dataCadastro'] as String),
@@ -54,8 +54,8 @@ _$ItemModelImpl _$$ItemModelImplFromJson(Map json) => _$ItemModelImpl(
           : DateTime.parse(json['dataHoraPendenteKit'] as String),
       repositorio: json['repositorio'] as bool?,
       implantavel: json['implantavel'] as bool?,
-      numeroPatrimonio: json['numeroPatrimonio'] as int?,
-      numeroNota: json['numeroNota'] as int?,
+      numeroPatrimonio: (json['numeroPatrimonio'] as num?)?.toInt(),
+      numeroNota: (json['numeroNota'] as num?)?.toInt(),
       valorItem: (json['valorItem'] as num?)?.toDouble(),
       ultimaAlteracao: json['ultimaAlteracao'] == null
           ? null

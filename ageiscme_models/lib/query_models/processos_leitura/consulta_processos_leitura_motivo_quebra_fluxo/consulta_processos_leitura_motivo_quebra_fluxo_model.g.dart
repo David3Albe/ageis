@@ -9,7 +9,7 @@ part of 'consulta_processos_leitura_motivo_quebra_fluxo_model.dart';
 _$ConsultaProcessosLeituraMotivoQuebraFluxoModelImpl
     _$$ConsultaProcessosLeituraMotivoQuebraFluxoModelImplFromJson(Map json) =>
         _$ConsultaProcessosLeituraMotivoQuebraFluxoModelImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           nome: json['nome'] as String,
         );
 
