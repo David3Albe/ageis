@@ -438,6 +438,7 @@ class _ConsultaItemPageState extends State<ConsultaItemPage> {
     return service.FilterOne(
       ItemFilter(
         cod: cod,
+        carregarDescritor: true,
       ),
     );
   }

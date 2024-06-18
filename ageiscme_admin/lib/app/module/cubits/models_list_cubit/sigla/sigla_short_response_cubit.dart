@@ -25,6 +25,25 @@ class SiglaShortResponseCubit extends Cubit<SiglaShortResponseState> {
       ),
     );
   }
+
+  Future loadAndIncludeEmpty(SiglaShortDTO filter) async {
+    emit(
+      SiglaShortResponseState(
+        siglas: [],
+        loading: true,
+      ),
+    );
+    (String, List<SiglaShortResponseDTO>)? result =
+        await Modular.get<SiglaService>().short(filter);
+    if (result == null) return;
+    List<SiglaShortResponseDTO> siglas = result.$2;
+    emit(
+      SiglaShortResponseState(
+        siglas: siglas,
+        loaded: true,
+      ),
+    );
+  }
 }
 
 class SiglaShortResponseState {

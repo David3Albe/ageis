@@ -66,8 +66,6 @@ class EscalaPageCubit extends Cubit<EscalaPageState> {
       escala: escala,
     );
 
-    print(escala.turnos);
-
     (String, EscalaSaveResponseDTO)? result =
         await Modular.get<EscalaService>().save(escala);
     loading.closeDefault();

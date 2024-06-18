@@ -2,6 +2,7 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/sigla/sigla_s
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/turno/turno_short_response_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_drop_down_search_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/escala/cubits/escala_page_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/colaborador/escala/cubits/sigla_drop_down_search_widget.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/escala/states/escala_page_grid_state.dart';
 import 'package:ageiscme_models/dto/escala/save/escala_save_dto.dart';
 import 'package:ageiscme_models/dto/escala/save/turno/escala_turno_save_dto.dart';
@@ -14,7 +15,6 @@ import 'package:ageiscme_models/response_dto/sigla/short/sigla_short_response_dt
 import 'package:ageiscme_models/response_dto/turno/short/turno_short_response_dto.dart';
 import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
-import 'package:dependencias_comuns/dropdown_search_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:dependencias_comuns/pluto_grid_data_export.dart' as pluto;
 import 'package:flutter/material.dart';
@@ -147,7 +147,9 @@ class EscalaPageGridCubit extends Cubit<EscalaPageGridState> {
       DateTime data =
           DateTime(escala.anoMes.year, escala.anoMes.month, parseou);
       if (data.weekday == 6 || data.weekday == 7) {
-        cor = pluto.PdfColors.yellow.shade(200);
+        cor = flutterToHex(
+          Colors.yellow.shade200,
+        );
       }
     }
 
@@ -207,25 +209,21 @@ class EscalaPageGridCubit extends Cubit<EscalaPageGridState> {
         sigla?.g != null &&
         sigla?.b != null &&
         sigla?.o != null) {
-      cor = Color.fromRGBO(sigla!.r!, sigla.g!, sigla.g!, sigla.o!);
+      cor = Color.fromRGBO(sigla!.r!, sigla.g!, sigla.b!, sigla.o!);
     }
 
+    List<SiglaShortResponseDTO> siglas =
+        BlocProvider.of<SiglaShortResponseCubit>(context).state.siglas;
+    List<SiglaShortResponseDTO> siglasFormatas = siglas.map((e) => e).toList();
+    siglasFormatas.insert(
+      0,
+      SiglaShortResponseDTO(cod: 0, descricao: 'Limpar', sigla: 'Vazio'),
+    );
     return Container(
       color: cor,
-      child: DropdownSearch<SiglaShortResponseDTO>(
-        popupProps: const PopupProps.menu(
-          showSearchBox: true,
-        ),
-        itemAsString: (item) => item.Sigla(),
-        items: BlocProvider.of<SiglaShortResponseCubit>(context).state.siglas,
-        onChanged: (item) {
-          renderContext.cell.value = item;
-          renderContext.stateManager
-              .setCurrentCell(renderContext.cell, renderContext.rowIdx);
-        },
-        selectedItem: renderContext.cell.value,
-        filterFn: (sigla, filter) =>
-            sigla.sigla.toUpperCase().contains(filter.toUpperCase()),
+      child: SiglaDropDownSearchWidget(
+        siglasFormatas: siglasFormatas,
+        renderContext: renderContext,
       ),
     );
   }

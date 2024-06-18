@@ -8,13 +8,13 @@ import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/open_doc/open_doc_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/upload_button_widget.dart';
-import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
 import 'package:compartilhados/componentes/images/image_widget.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:dependencias_comuns/dropdown_search_export.dart';
 import 'package:flutter/material.dart';
 
 class ImagemPageFrm extends StatefulWidget {
@@ -39,28 +39,12 @@ class _ImagemPageFrmState extends State<ImagemPageFrm> {
     service: ImagemService(),
   );
 
-  late final TextFieldStringWidget txtIdentificador = TextFieldStringWidget(
-    placeholder: 'Identificador',
-    onChanged: (String? str) {
-      imagem.identificadorImagem = txtIdentificador.text;
-    },
-  );
-
   @override
   void initState() {
-    txtIdentificador.addValidator((String str) {
-      if (str.length > 50) {
-        return 'Pode ter no máximo 50 caracteres';
-      }
-      return '';
-    });
-
     super.initState();
   }
 
   void setFields() {
-    txtIdentificador.text = imagem.identificadorImagem.toString();
-
     titulo = 'Cadastro de Imagens';
     if (imagem.cod != 0) {
       titulo = 'Edição da Imagem: ${imagem.cod} - ${imagem.nomeFoto}';
@@ -101,18 +85,41 @@ class _ImagemPageFrmState extends State<ImagemPageFrm> {
               ],
             ),
             content: Container(
-              constraints: BoxConstraints(
-                minWidth: size.width * .5,
-                minHeight: size.height * .5,
-                maxHeight: size.height * .8,
+              constraints: const BoxConstraints(
+                minWidth: 500,
+                minHeight: 500,
+                maxHeight: 1000,
+                maxWidth: 1200,
               ),
+              height: size.height * 0.5,
+              width: size.width * 0.5,
               child: SingleChildScrollView(
                 padding: const EdgeInsets.only(right: 14),
                 child: Column(
                   children: [
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
-                      child: txtIdentificador,
+                      child: DropdownSearch<String>(
+                        clearButtonProps: const ClearButtonProps(
+                          isVisible: true,
+                        ),
+                        validator: (value) => value == null || value.isEmpty
+                            ? 'Obrigatório'
+                            : null,
+                        autoValidateMode: AutovalidateMode.onUserInteraction,
+                        popupProps: const PopupProps.menu(
+                          showSearchBox: true,
+                        ),
+                        itemAsString: (item) => item,
+                        items: _getIdentificadores(),
+                        onChanged: (item) {
+                          imagem.identificadorImagem = item;
+                        },
+                        selectedItem: imagem.identificadorImagem,
+                        filterFn: (identificador, filter) => identificador
+                            .toUpperCase()
+                            .contains(filter.toUpperCase()),
+                      ),
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
@@ -149,8 +156,9 @@ class _ImagemPageFrmState extends State<ImagemPageFrm> {
                               OpenDocWidget(
                                 placeholder: 'Abrir Imagem',
                                 documentoString: imagem.foto,
-                                documentName:
-                                    imagem.nomeFoto ?? 'arquivo sem nome.Webp',
+                                documentName: imagem.nomeFoto != null
+                                    ? trataImagem(imagem.nomeFoto)!
+                                    : 'arquivo sem nome.Webp',
                               ),
                             ],
                           ),
@@ -212,12 +220,33 @@ class _ImagemPageFrmState extends State<ImagemPageFrm> {
     setState(() {
       imagem.foto = foto;
       imagem.nomeFoto = nomeFoto;
+      if (imagem.nomeFoto != null) {
+        imagem.nomeFoto = trataImagem(imagem.nomeFoto);
+      }
+      print(imagem.nomeFoto);
     });
   }
 
-  void salvar() {
-    if (!txtIdentificador.valid) return;
+  String? trataImagem(String? str) {
+    if (str == null) return null;
+    if (!str.contains('.')) return str + '.Webp';
+    return str.substring(0, str.lastIndexOf('.')) + '.Webp';
+  }
 
+  List<String> _getIdentificadores() => [
+        'logo_esquerdo',
+        'logo_direito',
+        'logo_ageis',
+        'logo_menu_cima',
+        'logo_menu_baixo',
+        'logo_impressao_esquerda',
+        'logo_impressao_direita',
+        'inicio_processo',
+      ];
+
+  void salvar() {
+    if (imagem.identificadorImagem == null ||
+        imagem.identificadorImagem!.isEmpty) return;
     cubit.save(imagem);
   }
 }

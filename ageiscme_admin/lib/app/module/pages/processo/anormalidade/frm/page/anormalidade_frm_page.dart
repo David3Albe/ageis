@@ -2,12 +2,14 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/processo_etap
 import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/anormalidade/cubits/anormalidade_frm_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/anormalidade/states/anormalidade_frm_state.dart';
+import 'package:ageiscme_admin/app/module/pages/processo/consulta_anormalidade_materiais/consulta_anormalidade_materiais_page.dart';
 import 'package:ageiscme_data/services/anormalidade_tipo/anormalidade_tipo_service.dart';
 import 'package:ageiscme_data/services/item/item_service.dart';
 import 'package:ageiscme_models/dto/anormalidade/save/anormalidade_save_dto.dart';
 import 'package:ageiscme_models/dto/anormalidade_tipo/short/anormalidade_tipo_short_dto.dart';
 import 'package:ageiscme_models/dto/item/drop_down_search/item_drop_down_search_dto.dart';
 import 'package:ageiscme_models/models/processo_etapa/processo_etapa_model.dart';
+import 'package:ageiscme_models/query_filters/anormalidade_materiais/consulta_anormalidade_materiais_filter.dart';
 import 'package:ageiscme_models/response_dto/anormalidade_tipo/short/anormalidade_tipo_short_response_dto.dart';
 import 'package:ageiscme_models/response_dto/item/drop_down_search/item_drop_down_search_response_dto.dart';
 import 'package:ageiscme_models/response_dto/processo_registro/ultimo/processo_registro_ultimo_response_dto.dart';
@@ -24,7 +26,9 @@ import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_w
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
+import 'package:compartilhados/query_dialog/query_dialog_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:dependencias_comuns/modular_export.dart';
@@ -424,6 +428,10 @@ class AnormalidadeFrmPageWidget extends StatelessWidget {
                             context: context,
                           ),
                         ),
+                      CustomPopupItemModel(
+                        text: 'Materiais',
+                        onTap: () => openModalMateriaisAnormalidade(context),
+                      ),
                     ],
                   );
                 },
@@ -453,6 +461,41 @@ class AnormalidadeFrmPageWidget extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  void openModalMateriaisAnormalidade(
+    BuildContext context,
+  ) {
+    ProcessoRegistroUltimoResponseDTO? processoRegistro =
+        BlocProvider.of<AnormalidadeFrmCubit>(context)
+            .state
+            .dto
+            ?.processoRegistro;
+    if (processoRegistro == null) {
+      ToastUtils.showCustomToastNotice(
+        context,
+        'É necessário ter um proccesso registro marcado para ver os materiais vinculados',
+      );
+      return;
+    }
+    showDialog<bool>(
+      barrierDismissible: true,
+      context: context,
+      barrierColor: Colors.white,
+      builder: (BuildContext context) {
+        return QueryDialogWidget(
+          child: ConsultaAnormalidadeMateriaisPage(
+            filter: ConsultaAnormalidadeMateriaisFilter(
+              codRegistroProcesso: processoRegistro.cod,
+              finalDate: processoRegistro.dataHoraTermino,
+              finalTime: processoRegistro.dataHoraTermino,
+              startDate: processoRegistro.dataHoraInicio,
+              startTime: processoRegistro.dataHoraInicio,
+            ),
+          ),
+        );
+      },
     );
   }
 }

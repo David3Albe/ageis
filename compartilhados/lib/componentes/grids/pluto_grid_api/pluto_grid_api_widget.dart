@@ -536,6 +536,7 @@ class _PlutoGridApiWidgetState<T> extends State<PlutoGridApiWidget<T>> {
     final bool isLast = rows.lastRow;
     gridRecordsCubit.setRecords(rows.records);
 
+    page++;
     if (isLast && rows.records > 0) {
       BuildContext? context = ToastUtils.routerOutletContext;
       if (context != null) {
@@ -545,7 +546,6 @@ class _PlutoGridApiWidgetState<T> extends State<PlutoGridApiWidget<T>> {
       }
     }
 
-    page++;
     return PlutoInfinityScrollRowsResponse(
       isLast: false,
       rows: newRows,
