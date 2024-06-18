@@ -27,6 +27,7 @@ import 'package:ageiscme_admin/app/module/pages/colaborador/consulta_historico_c
 import 'package:ageiscme_admin/app/module/pages/colaborador/consulta_processo_resposta_epcepi/consulta_processo_resposta_epcepi_page.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/epi_descritor/epi_descritor_page.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/epi_entrega/epi_entrega_page.dart';
+import 'package:ageiscme_admin/app/module/pages/colaborador/escala/escala_page.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/sigla/sigla_page.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/tipo_afastamento/tipo_afastamento_page.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/treinamento_registro/treinamento_registro_page.dart';
@@ -502,6 +503,10 @@ class AdminModule extends Module {
         createParallelRoute(
           '/colaborador/turno',
           child: (context) => const TurnoPage(),
+        ),
+        createParallelRoute(
+          '/colaborador/escala',
+          child: (context) => const EscalaPage(),
         ),
       ],
     );

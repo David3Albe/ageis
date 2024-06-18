@@ -15,6 +15,7 @@ class CustomPlutoGridDefaultPdfExport
     this.themeData,
     this.logoEsquerda,
     this.logoDireita,
+    this.colorByData,
   });
 
   final String title;
@@ -23,11 +24,13 @@ class CustomPlutoGridDefaultPdfExport
   pluto.ThemeData? themeData;
   pluto.Widget? logoEsquerda;
   pluto.Widget? logoDireita;
+  final pluto.PdfColor? Function(dynamic data)? colorByData;
 
   @override
   Future<Uint8List> export(PlutoGridStateManager state) async {
     return GenericPdfController(
       title: title,
+      colorByData: colorByData,
       logoEsquerda: logoEsquerda,
       logoDireita: logoDireita,
       creator: creator ?? 'https://pub.dev/packages/pluto_grid',

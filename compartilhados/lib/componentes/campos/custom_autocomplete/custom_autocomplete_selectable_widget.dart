@@ -17,6 +17,7 @@ class CustomAutocompleteSelectableWidget<T> extends StatefulWidget {
     this.subtitle,
     this.initialValue,
     this.validator,
+    this.cor,
     Key? key,
   }) : super(key: key);
 
@@ -29,6 +30,7 @@ class CustomAutocompleteSelectableWidget<T> extends StatefulWidget {
   final T? initialValue;
   final String? Function(String?)? validator;
   final bool readonly;
+  final Color? cor;
 
   @override
   State<CustomAutocompleteSelectableWidget<T>> createState() =>
@@ -69,6 +71,7 @@ class _CustomAutocompleteSelectableWidgetState<T>
           ),
           controller: controller,
           decoration: InputDecoration(
+            fillColor: widget.cor,
             suffixIcon: widget.initialValue == null
                 ? const SizedBox()
                 : InkWell(

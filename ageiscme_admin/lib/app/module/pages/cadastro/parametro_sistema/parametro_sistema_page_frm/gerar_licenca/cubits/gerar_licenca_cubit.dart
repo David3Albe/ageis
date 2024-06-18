@@ -5,14 +5,41 @@ import 'package:ageiscme_models/dto/gerar_licenca/gerar_licenca_dto.dart';
 import 'package:ageiscme_models/response_dto/gerar_licenca/gerar_licenca_response_dto.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/modular_export.dart';
 import 'package:flutter/material.dart';
 
 class GerarLicencaCubit extends Cubit<GerarLicencaState> {
-  GerarLicencaCubit() : super(GerarLicencaState(dto: GerarLicencaDTO()));
+  GerarLicencaCubit()
+      : super(
+          GerarLicencaState(
+            dto: GerarLicencaDTO(
+              contemAdmin: false,
+              contemAdminV2: false,
+              contemProcesso: false,
+              contemProcessoV2: false,
+              contemRelatorio: false,
+            ),
+          ),
+        );
 
   Future gerar({required BuildContext context}) async {
+    if (state.dto.emailCliente == null) {
+      ToastUtils.showCustomToastWarning(context, 'Informe o email do cliente');
+      return;
+    }
+    if (state.dto.nomeCliente == null) {
+      ToastUtils.showCustomToastWarning(context, 'Informe o nome do cliente');
+      return;
+    }
+    if (state.dto.validadeAte == null) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'Informe a validade da licença',
+      );
+      return;
+    }
     bool confirmaGeracao = await ConfirmDialogUtils.showConfirmAlertDialog(
       context,
       'Confirma a geração da nova licença?',

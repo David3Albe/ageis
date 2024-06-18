@@ -10,14 +10,17 @@ import 'package:flutter/material.dart';
 class PlutoGridPdfExport {
   PlutoGridStateManager stateManager;
   BuildContext context;
+  final PdfColor? Function(dynamic data)? colorByData;
 
   PlutoGridPdfExport({
     required this.stateManager,
     required this.context,
+    this.colorByData,
   });
 
   Future export() async {
     var plutoGridPdfExport = CustomPlutoGridDefaultPdfExport(
+      colorByData: colorByData,
       title: 'Consulta',
       creator: 'AGEISCME',
       format: PdfPageFormat.a4.landscape,

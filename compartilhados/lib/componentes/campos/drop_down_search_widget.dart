@@ -40,7 +40,10 @@ class DropDownSearchWidget<T> extends StatefulWidget {
     this.expandOnStart,
     this.validator,
     this.validateBuilder,
+    this.cor,
     this.maxItems = 30,
+    this.ignoreHeight = false,
+    this.useDecoration = true,
   });
   final List<T> sourceList;
   final T? initialValue;
@@ -57,6 +60,9 @@ class DropDownSearchWidget<T> extends StatefulWidget {
   final bool? expandOnStart;
   final String? Function(T? val)? validator;
   final int maxItems;
+  final Color? cor;
+  final bool ignoreHeight;
+  final bool useDecoration;
 
   @override
   DropDownSearchWidgetState<T> createState() => DropDownSearchWidgetState<T>(
@@ -152,16 +158,19 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
                     selectedItem,
                     context,
                   ),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        width: 2,
-                        color: errorText != null && !errorText!.isEmpty
-                            ? Colors.red
-                            : Colors.grey.shade500.withAlpha(200),
-                      ),
-                    ),
-                  ),
+                  decoration: widget.useDecoration
+                      ? BoxDecoration(
+                          color: widget.cor,
+                          border: Border(
+                            bottom: BorderSide(
+                              width: 2,
+                              color: errorText != null && !errorText!.isEmpty
+                                  ? Colors.red
+                                  : Colors.grey.shade500.withAlpha(200),
+                            ),
+                          ),
+                        )
+                      : null,
                 ),
               ),
             ],
@@ -340,19 +349,18 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
     Size size = MediaQuery.of(context).size;
     String text = getItemText(item);
     return Container(
-      height: _getHeight(size),
+      height: widget.ignoreHeight ? null : _getHeight(size),
       child: Align(
         alignment: Alignment.centerLeft,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (item != null) ...{
+            if (item != null && widget.placeholder != null) ...{
               Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   widget.placeholder ?? '',
                   style: Fontes.getRoboto(
-                    
                     cor: errorText != null && !errorText!.isEmpty
                         ? Colors.red
                         : Cores.corPlaceholderTextField,
@@ -366,7 +374,7 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
                 Text(
                   item == null ? widget.placeholder ?? '' : text,
                   style: Fontes.getRoboto(
-                   cor: errorText != null && !errorText!.isEmpty
+                    cor: errorText != null && !errorText!.isEmpty
                         ? Colors.red
                         : widget.readOnly
                             ? Colors.grey

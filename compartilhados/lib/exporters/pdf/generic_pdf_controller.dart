@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:compartilhados/exporters/pdf/custom_table_from_text_array.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:dependencias_comuns/pluto_grid_data_export.dart';
 
@@ -20,16 +21,18 @@ class GenericPdfController extends PdfController {
     this.themeData,
     this.logoEsquerda,
     this.logoDireita,
+    this.colorByData,
   });
 
   final String title;
   final String creator;
   final PdfPageFormat format;
-  final List<String> columns;
-  final List<List<String?>> rows;
+  final Map<dynamic, String> columns;
+  final List<Map<dynamic, String?>> rows;
   final ThemeData? themeData;
   final Widget? logoEsquerda;
   final Widget? logoDireita;
+  final PdfColor? Function(dynamic data)? colorByData;
 
   @override
   PageOrientation getPageOrientation() {
@@ -84,8 +87,8 @@ class GenericPdfController extends PdfController {
     ];
   }
 
-  Widget _table(List<String> columns, List<List<String?>> rows) {
-    return TableHelper.fromTextArray(
+  Widget _table(Map<dynamic,String> columns, List<Map<dynamic, String?>> rows) {
+    return CustomTableHelper.fromTextArray(
       border: null,
       cellAlignment: Alignment.center,
       headerCellDecoration: BoxDecoration(
@@ -117,6 +120,7 @@ class GenericPdfController extends PdfController {
       ),
       oddRowDecoration: const BoxDecoration(color: oddRowColor),
       cellDecoration: (index, data, rowNum) => BoxDecoration(
+        color: colorByData != null ? colorByData!(data.key) : null,
         border: Border.all(
           color: borderColor,
           width: .5,

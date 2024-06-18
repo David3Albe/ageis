@@ -7,9 +7,9 @@ part 'escala_save_dto.freezed.dart';
 @unfreezed
 sealed class EscalaSaveDTO with _$EscalaSaveDTO {
   factory EscalaSaveDTO({
-   required DateTime AnoMes,
-   String? Tstamp,
-   List<EscalaTurnoSaveDTO>? Turnos,
+   required DateTime anoMes,
+   String? tstamp,
+   List<EscalaTurnoSaveDTO>? turnos,
   }) = _EscalaSaveDTO;
 
   factory EscalaSaveDTO.fromJson(Map<String, Object?> json) =>

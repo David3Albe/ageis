@@ -5,17 +5,24 @@ abstract class CustomAbstractTextExport<T> {
 
   T export(PlutoGridStateManager state);
 
-  List<String> getColumnTitles(PlutoGridStateManager state) =>
-      visibleColumns(state).map((e) => e.title).toList();
+  Map<PlutoColumn, String> getColumnTitles(PlutoGridStateManager state) {
+    Iterable<PlutoColumn> columns = visibleColumns(state);
+    Map<PlutoColumn, String> map = {};
+    for (PlutoColumn column in columns) {
+      map.addAll({column: column.title});
+    }
+    return map;
+  }
 
-  List<List<String?>> mapStateToListOfRows(PlutoGridStateManager state) {
-    List<List<String?>> outputRows = [];
+  List<Map<dynamic, String?>> mapStateToListOfRows(
+      PlutoGridStateManager state) {
+    List<Map<dynamic, String?>> outputRows = [];
 
     List<PlutoRow> rowsToExport;
 
     rowsToExport = state.refRows.filteredList.isNotEmpty
         ? state.refRows.filteredList
-        : state.refRows.originalList;
+        : state.iterateRowAndGroup.toList();
 
     for (var plutoRow in rowsToExport) {
       outputRows.add(mapPlutoRowToList(state, plutoRow));
@@ -24,21 +31,25 @@ abstract class CustomAbstractTextExport<T> {
     return outputRows;
   }
 
-  List<String?> mapPlutoRowToList(
+  Map<dynamic, String?> mapPlutoRowToList(
     PlutoGridStateManager state,
     PlutoRow plutoRow,
   ) {
-    List<String?> serializedRow = [];
+    Map<dynamic, String?> serializedRow = {};
 
     for (PlutoColumn column in visibleColumns(state)) {
       dynamic value = plutoRow.cells[column.field]?.value;
       if (value is bool) {
-        serializedRow.add(value == true ? 'Sim' : 'Não');
+        serializedRow.addAll(
+            {plutoRow.cells[column.field]: value == true ? 'Sim' : 'Não'});
         continue;
       }
       String str = column.formattedValueForDisplay(value);
-      if (str == 'null') continue;
-      serializedRow.add(str);
+      if (str == 'null') {
+        serializedRow.addAll({plutoRow.cells[column.field]: ''});
+        continue;
+      }
+      serializedRow.addAll({plutoRow.cells[column.field]: str});
     }
 
     return serializedRow;

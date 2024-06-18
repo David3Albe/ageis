@@ -11,7 +11,7 @@ sealed class EscalaTurnoSaveDTO with _$EscalaTurnoSaveDTO {
     required DateTime anoMes,
     required int codTurno,
     TurnoShortResponseDTO? turno,
-    List<EscalaTurnoUsuarioSaveDTO>? Usuarios,
+    List<EscalaTurnoUsuarioSaveDTO>? usuarios,
   }) = _EscalaTurnoSaveDTO;
 
   factory EscalaTurnoSaveDTO.fromJson(Map<String, Object?> json) =>
