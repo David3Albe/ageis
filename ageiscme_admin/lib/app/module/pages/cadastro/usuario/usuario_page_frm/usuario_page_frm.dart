@@ -58,21 +58,21 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
   );
 
   late final TextFieldStringWidget txtNome = TextFieldStringWidget(
-    placeholder: 'Nome',
+    placeholder: 'Nome *',
     onChanged: (String? str) {
       usuario.nome = txtNome.text;
     },
   );
 
   late final TextFieldStringWidget txtLogin = TextFieldStringWidget(
-    placeholder: 'Login',
+    placeholder: 'Login *',
     onChanged: (String? str) {
       usuario.login = txtLogin.text;
     },
   );
 
   late final TextFieldNumberWidget txtRg = TextFieldNumberWidget(
-    placeholder: 'RG',
+    placeholder: 'RG *',
     onChanged: (String? str) {
       usuario.rg = int.parse(txtRg.text.replaceAll('.', ''));
     },
@@ -113,6 +113,8 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
   );
 
   Image? image;
+
+  final ScrollController scroll = ScrollController();
 
   @override
   void initState() {
@@ -238,6 +240,7 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
               maxHeight: size.height * .8,
             ),
             child: SingleChildScrollView(
+              controller: scroll,
               padding: const EdgeInsets.only(right: 14),
               child: Column(
                 children: [
@@ -289,14 +292,14 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
                               text: 'Ativo',
                               align: MainAxisAlignment.start,
                             ),
-                            const Padding(padding: EdgeInsets.only(top: 5.0)),
-                            CustomCheckboxWidget(
-                              checked: usuario.controleGestao,
-                              onClick: (value) =>
-                                  usuario.controleGestao = value,
-                              text: 'Controlar Acesso Operacional',
-                              align: MainAxisAlignment.start,
-                            ),
+                            // const Padding(padding: EdgeInsets.only(top: 5.0)),
+                            // CustomCheckboxWidget(
+                            //   checked: usuario.controleGestao,
+                            //   onClick: (value) =>
+                            //       usuario.controleGestao = value,
+                            //   text: 'Controlar Acesso Operacional',
+                            //   align: MainAxisAlignment.start,
+                            // ),
                             const Padding(padding: EdgeInsets.only(top: 5.0)),
                             CustomCheckboxWidget(
                               checked: usuario.colaborador,
@@ -636,12 +639,26 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
   }
 
   void salvar() {
-    if (!txtNome.valid ||
-        !txtLogin.valid ||
-        !txtRg.valid ||
-        !txtDocClasse.valid ||
-        !txtSenha.valid ||
-        !txtNomeEmpresa.valid) return;
+    bool nomeValid = txtNome.valid;
+    bool loginValid = txtLogin.valid;
+    bool rgValid =  txtRg.valid;
+    bool docClasseValid = txtDocClasse.valid;
+    bool senhaValid = txtSenha.valid;
+    bool empresaValid = txtNomeEmpresa.valid;
+    if (!nomeValid) {
+      scroll.jumpTo(0);
+    }else if(!loginValid){
+      scroll.jumpTo(40);
+    }else if(!rgValid){
+      scroll.jumpTo(90);
+    }
+
+    if (!nomeValid ||
+        !loginValid ||
+        !rgValid ||
+        !docClasseValid ||
+        !senhaValid ||
+        !empresaValid) return;
 
     final registrarUsuariosPerfis = <UsuarioPerfilModel>[];
 

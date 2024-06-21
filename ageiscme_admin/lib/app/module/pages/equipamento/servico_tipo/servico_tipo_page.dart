@@ -26,6 +26,7 @@ class _ServicoTipoPageState extends State<ServicoTipoPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(text: 'Nome', field: 'nome'),
     CustomDataColumn(
@@ -86,6 +87,7 @@ class _ServicoTipoPageState extends State<ServicoTipoPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     filterOnlyActives: true,
                     onEdit: (ServicoTipoModel objeto) =>
                         {openModal(context, ServicoTipoModel.copy(objeto))},

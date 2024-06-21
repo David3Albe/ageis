@@ -51,12 +51,11 @@ class GerarLicencaCubit extends Cubit<GerarLicencaState> {
     GerarLicencaService service = Modular.get<GerarLicencaService>();
     LoadingController loading = LoadingController(context: context);
     (String, GerarLicencaResponseDTO)? result = await service.gerar(dto);
+    loading.closeDefault();
     if (result == null) {
-      loading.closeDefault();
       return;
     }
 
-    loading.closeDefault();
     BlocProvider.of<LicencaGeradaCubit>(context)
         .change(licencaGerada: result.$2);
     Navigator.of(context).pop((true, result.$1));

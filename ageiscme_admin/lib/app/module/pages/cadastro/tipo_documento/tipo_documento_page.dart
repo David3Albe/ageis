@@ -26,6 +26,7 @@ class _TipoDocumentoPageState extends State<TipoDocumentoPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 110,
     ),
     CustomDataColumn(text: 'Descrição', field: 'descricao'),
   ];
@@ -71,6 +72,7 @@ class _TipoDocumentoPageState extends State<TipoDocumentoPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     onEdit: (TipoDocumentoModel objeto) =>
                         {openModal(context, TipoDocumentoModel.copy(objeto))},
                     onDelete: (TipoDocumentoModel objeto) =>

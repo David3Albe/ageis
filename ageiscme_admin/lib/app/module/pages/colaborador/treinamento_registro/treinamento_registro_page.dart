@@ -105,6 +105,7 @@ class _TreinamentoRegistroPageState extends State<TreinamentoRegistroPage> {
                     child: Padding(
                       padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                       child: PlutoGridWidget(
+                        orderDescendingFieldColumn: 'data',
                         onEdit: (TreinamentoRegistroModel objeto) => {
                           openModal(
                             context,
@@ -192,15 +193,16 @@ class _TreinamentoRegistroPageState extends State<TreinamentoRegistroPage> {
         context.read<TreinamentoRegistroPageCubit>();
     filterCubit = context.read<TreinamentoRegistroCubitFilter>();
     TreinamentoRegistroFilter dto = filterCubit.state;
-    await treinamentoCubit.filter(dto);
+    await treinamentoCubit.filterScreen(dto);
   }
 
   Future carregar() async {
     TreinamentoRegistroFilter filter = TreinamentoRegistroFilter(
       numeroRegistros: 500,
       carregarUsuario: true,
+      ordenarPorDataDecrescente: true,
     );
-    await bloc.filter(filter);
+    await bloc.filterScreen(filter);
   }
 
   void delete(
@@ -228,7 +230,7 @@ class _TreinamentoRegistroPageState extends State<TreinamentoRegistroPage> {
         context.read<TreinamentoRegistroPageCubit>();
     filterCubit = context.read<TreinamentoRegistroCubitFilter>();
     TreinamentoRegistroFilter dto = filterCubit.state;
-    await treinamentoCubit.filter(dto);
+    await treinamentoCubit.filterScreen(dto);
   }
 
   void notFoundError() {

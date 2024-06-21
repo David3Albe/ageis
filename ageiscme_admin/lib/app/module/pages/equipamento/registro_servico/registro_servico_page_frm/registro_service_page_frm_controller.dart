@@ -74,7 +74,7 @@ class RegistroServicePageFrmController {
       onChanged: (String? str) => registroServico.lote = txtLote.text,
     );
     txtDescricaoServico = TextFieldStringAreaWidget(
-      placeholder: 'Descrição do Serviço',
+      placeholder: 'Descrição do Serviço *',
       onChanged: (String? str) =>
           registroServico.descricao = txtDescricaoServico.text,
     );

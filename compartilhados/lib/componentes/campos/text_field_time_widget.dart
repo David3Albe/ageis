@@ -41,13 +41,10 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
     if (widget.initialValue == null) {
       selectedTime = null;
       textController.text = '';
-    } else if (widget.initialValue != const TimeOfDay(hour: 0, minute: 0)) {
+    } else {
       selectedTime = widget.initialValue!;
       textController.text = formatTime(selectedTime!);
-    } else {
-      selectedTime = TimeOfDay.now();
-      textController.text = '';
-    }
+    } 
 
     textController.addListener(_onTextChanged);
   }

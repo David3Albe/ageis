@@ -13,6 +13,7 @@ _$ConsultaProcessosLeituraRetiradoModelImpl
               ? null
               : DateTime.parse(json['dataHora'] as String),
           codKit: (json['codKit'] as num?)?.toInt(),
+          codBarraKit: json['codBarraKit'] as String?,
           nomeKit: json['nomeKit'] as String?,
           nroItemFaltantes: (json['nroItemFaltantes'] as num?)?.toInt(),
           idEtiqueta: json['idEtiqueta'] as String?,
@@ -35,6 +36,7 @@ Map<String, dynamic> _$$ConsultaProcessosLeituraRetiradoModelImplToJson(
     <String, dynamic>{
       'dataHora': instance.dataHora?.toIso8601String(),
       'codKit': instance.codKit,
+      'codBarraKit': instance.codBarraKit,
       'nomeKit': instance.nomeKit,
       'nroItemFaltantes': instance.nroItemFaltantes,
       'idEtiqueta': instance.idEtiqueta,

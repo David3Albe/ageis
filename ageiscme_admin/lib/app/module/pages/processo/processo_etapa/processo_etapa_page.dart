@@ -26,6 +26,7 @@ class _ProcessoEtapaPageState extends State<ProcessoEtapaPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(text: 'Nome', field: 'nome'),
     CustomDataColumn(
@@ -90,6 +91,7 @@ class _ProcessoEtapaPageState extends State<ProcessoEtapaPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     filterOnlyActives: true,
                     onEdit: (ProcessoEtapaModel objeto) =>
                         {openModal(context, ProcessoEtapaModel.copy(objeto))},

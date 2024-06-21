@@ -41,6 +41,7 @@ class _ConsultaItemEtiquetaPageState extends State<ConsultaItemEtiquetaPage> {
       text: 'Cód. Item',
       field: 'codItem',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(text: 'Etiqueta Atual', field: 'idEtiqueta'),
     CustomDataColumn(text: 'Descrição', field: 'descricao'),
@@ -132,6 +133,7 @@ class _ConsultaItemEtiquetaPageState extends State<ConsultaItemEtiquetaPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'codItem',
                     smallRows: true,
                     columns: colunas,
                     items: state.itensEtiquetas,

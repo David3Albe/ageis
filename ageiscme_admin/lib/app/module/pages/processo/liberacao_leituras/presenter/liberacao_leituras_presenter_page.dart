@@ -26,6 +26,7 @@ class _LiberacaoLeiturasPresenterPageState
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(
       text: 'Usuário',
@@ -77,6 +78,7 @@ class _LiberacaoLeiturasPresenterPageState
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     onDelete: (ProcessoLeituraAndamentoModel objeto) =>
                         {delete(context, objeto)},
                     columns: colunas,

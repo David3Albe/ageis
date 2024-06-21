@@ -4,6 +4,11 @@ import 'package:compartilhados/functions/helper_functions.dart';
 import 'package:compartilhados/mixins/drop_down_text.dart';
 import 'package:flutter/material.dart';
 
+typedef ValidateBuilder<T> = void Function(
+  BuildContext context,
+  bool Function() validateMethodBuilder,
+);
+
 class DropDownWidget<T> extends StatefulWidget {
   DropDownWidget({
     required this.sourceList,
@@ -11,23 +16,17 @@ class DropDownWidget<T> extends StatefulWidget {
     this.onChanged,
     this.placeholder,
     this.readOnly = false,
+    this.validator,
+    this.validateBuilder,
   });
   final List<T> sourceList;
   final T? initialValue;
   final String? placeholder;
   final bool readOnly;
   final void Function(T value)? onChanged;
-  final List<String Function(T value)> validators = [];
   final GlobalKey<_DropDownStringWidgetState> key = GlobalKey();
-
-  void addValidator(String Function(T value) validator) {
-    validators.add(validator);
-  }
-
-  // void clear() {
-  //   if (key.currentState == null) return;
-  //   key.currentState!.clear();
-  // }
+  final String? Function(T? obj)? validator;
+  late final ValidateBuilder<T>? validateBuilder;
 
   @override
   _DropDownStringWidgetState<T> createState() => _DropDownStringWidgetState(
@@ -36,14 +35,13 @@ class DropDownWidget<T> extends StatefulWidget {
       );
 }
 
-class _DropDownStringWidgetState<T> extends State<DropDownWidget> {
+class _DropDownStringWidgetState<T> extends State<DropDownWidget<T>> {
   T? selectedItem;
   bool visible = false;
   bool focused = false;
   String textChanged = '';
   String errorText = '';
   final String? placeholder;
-
   set selectedValue(T value) => selectedItem = value;
 
   final void Function(T value)? onChanged;
@@ -54,8 +52,25 @@ class _DropDownStringWidgetState<T> extends State<DropDownWidget> {
     super.initState();
   }
 
+  _validate() {
+    if (widget.validator == null) return;
+    String? str = widget.validator!(selectedItem == null ? null : selectedItem);
+    setState(() {
+      errorText = str ?? '';
+    });
+  }
+
+  bool valid() {
+    _validate();
+    return errorText.isEmpty;
+  }
+
   @override
   Widget build(BuildContext context) {
+    widget.validateBuilder?.call(
+      context,
+      valid,
+    );
     List<DropdownMenuItem<T>> dropdownItems = [];
     for (T sourceListItem in widget.sourceList) {
       String text = sourceListItem.toString();
@@ -97,6 +112,7 @@ class _DropDownStringWidgetState<T> extends State<DropDownWidget> {
                   }
                   setState(() {
                     selectedItem = value!;
+                    _validate();
                   });
                 },
                 style: Fontes.getRoboto(
@@ -115,20 +131,61 @@ class _DropDownStringWidgetState<T> extends State<DropDownWidget> {
                           : Colors.red,
                     ),
                   ),
+                  disabledBorder: errorText.isNotEmpty
+                      ? const UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.red,
+                            width: 1.0,
+                          ),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(1)),
+                        )
+                      : null,
+                  enabledBorder: errorText.isNotEmpty
+                      ? const UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.red,
+                            width: 1.0,
+                          ),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(1)),
+                        )
+                      : null,
+                  focusedBorder: errorText.isNotEmpty
+                      ? const UnderlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Colors.red,
+                            width: 1.0,
+                          ),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(1),
+                          ),
+                        )
+                      : widget.readOnly
+                          ? const UnderlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey,
+                                width: 1.0,
+                              ),
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(1),
+                              ),
+                            )
+                          : null,
                   enabled: !widget.readOnly,
                 ),
               ),
             ),
           ),
-          const Visibility(
-            visible: false,
+          Visibility(
+            visible: errorText.isNotEmpty,
             child: Padding(
               padding: const EdgeInsets.only(top: 8.0),
               child: Row(
                 children: [
                   Expanded(
                     child: Text(
-                      'Error',
+                      errorText,
                       style: const TextStyle(
                         color: Colors.red,
                         fontSize: 12,
@@ -143,23 +200,4 @@ class _DropDownStringWidgetState<T> extends State<DropDownWidget> {
       ),
     );
   }
-
-  void validate() {
-    String error = '';
-    for (String Function(T value) validator in widget.validators) {
-      error = validator(selectedItem!);
-    }
-    setState(() => errorText = error);
-  }
-
-  bool valid() {
-    validate();
-    return errorText.isEmpty;
-  }
-
-  // void clear() {
-  //   setState(() {
-  //     selectedItem == null;
-  //   });
-  // }
 }

@@ -25,6 +25,8 @@ mixin _$ConsultaProcessosLeituraRetiradoModel {
   set dataHora(DateTime? value) => throw _privateConstructorUsedError;
   int? get codKit => throw _privateConstructorUsedError;
   set codKit(int? value) => throw _privateConstructorUsedError;
+  String? get codBarraKit => throw _privateConstructorUsedError;
+  set codBarraKit(String? value) => throw _privateConstructorUsedError;
   String? get nomeKit => throw _privateConstructorUsedError;
   set nomeKit(String? value) => throw _privateConstructorUsedError;
   int? get nroItemFaltantes => throw _privateConstructorUsedError;
@@ -70,6 +72,7 @@ abstract class $ConsultaProcessosLeituraRetiradoModelCopyWith<$Res> {
   $Res call(
       {DateTime? dataHora,
       int? codKit,
+      String? codBarraKit,
       String? nomeKit,
       int? nroItemFaltantes,
       String? idEtiqueta,
@@ -101,6 +104,7 @@ class _$ConsultaProcessosLeituraRetiradoModelCopyWithImpl<$Res,
   $Res call({
     Object? dataHora = freezed,
     Object? codKit = freezed,
+    Object? codBarraKit = freezed,
     Object? nomeKit = freezed,
     Object? nroItemFaltantes = freezed,
     Object? idEtiqueta = freezed,
@@ -124,6 +128,10 @@ class _$ConsultaProcessosLeituraRetiradoModelCopyWithImpl<$Res,
           ? _value.codKit
           : codKit // ignore: cast_nullable_to_non_nullable
               as int?,
+      codBarraKit: freezed == codBarraKit
+          ? _value.codBarraKit
+          : codBarraKit // ignore: cast_nullable_to_non_nullable
+              as String?,
       nomeKit: freezed == nomeKit
           ? _value.nomeKit
           : nomeKit // ignore: cast_nullable_to_non_nullable
@@ -192,6 +200,7 @@ abstract class _$$ConsultaProcessosLeituraRetiradoModelImplCopyWith<$Res>
   $Res call(
       {DateTime? dataHora,
       int? codKit,
+      String? codBarraKit,
       String? nomeKit,
       int? nroItemFaltantes,
       String? idEtiqueta,
@@ -222,6 +231,7 @@ class __$$ConsultaProcessosLeituraRetiradoModelImplCopyWithImpl<$Res>
   $Res call({
     Object? dataHora = freezed,
     Object? codKit = freezed,
+    Object? codBarraKit = freezed,
     Object? nomeKit = freezed,
     Object? nroItemFaltantes = freezed,
     Object? idEtiqueta = freezed,
@@ -245,6 +255,10 @@ class __$$ConsultaProcessosLeituraRetiradoModelImplCopyWithImpl<$Res>
           ? _value.codKit
           : codKit // ignore: cast_nullable_to_non_nullable
               as int?,
+      codBarraKit: freezed == codBarraKit
+          ? _value.codBarraKit
+          : codBarraKit // ignore: cast_nullable_to_non_nullable
+              as String?,
       nomeKit: freezed == nomeKit
           ? _value.nomeKit
           : nomeKit // ignore: cast_nullable_to_non_nullable
@@ -308,6 +322,7 @@ class _$ConsultaProcessosLeituraRetiradoModelImpl
   _$ConsultaProcessosLeituraRetiradoModelImpl(
       {required this.dataHora,
       required this.codKit,
+      required this.codBarraKit,
       required this.nomeKit,
       required this.nroItemFaltantes,
       required this.idEtiqueta,
@@ -331,6 +346,8 @@ class _$ConsultaProcessosLeituraRetiradoModelImpl
   DateTime? dataHora;
   @override
   int? codKit;
+  @override
+  String? codBarraKit;
   @override
   String? nomeKit;
   @override
@@ -360,7 +377,7 @@ class _$ConsultaProcessosLeituraRetiradoModelImpl
 
   @override
   String toString() {
-    return 'ConsultaProcessosLeituraRetiradoModel(dataHora: $dataHora, codKit: $codKit, nomeKit: $nomeKit, nroItemFaltantes: $nroItemFaltantes, idEtiqueta: $idEtiqueta, nomeItem: $nomeItem, entradaSaida: $entradaSaida, nomeEtapaProcesso: $nomeEtapaProcesso, nomeUsuario: $nomeUsuario, prontuarioRetirada: $prontuarioRetirada, origem: $origem, destino: $destino, circulante: $circulante, dataValidade: $dataValidade, codRegistroProcesso: $codRegistroProcesso)';
+    return 'ConsultaProcessosLeituraRetiradoModel(dataHora: $dataHora, codKit: $codKit, codBarraKit: $codBarraKit, nomeKit: $nomeKit, nroItemFaltantes: $nroItemFaltantes, idEtiqueta: $idEtiqueta, nomeItem: $nomeItem, entradaSaida: $entradaSaida, nomeEtapaProcesso: $nomeEtapaProcesso, nomeUsuario: $nomeUsuario, prontuarioRetirada: $prontuarioRetirada, origem: $origem, destino: $destino, circulante: $circulante, dataValidade: $dataValidade, codRegistroProcesso: $codRegistroProcesso)';
   }
 
   @JsonKey(ignore: true)
@@ -384,6 +401,7 @@ abstract class _ConsultaProcessosLeituraRetiradoModel
   factory _ConsultaProcessosLeituraRetiradoModel(
           {required DateTime? dataHora,
           required int? codKit,
+          required String? codBarraKit,
           required String? nomeKit,
           required int? nroItemFaltantes,
           required String? idEtiqueta,
@@ -410,6 +428,9 @@ abstract class _ConsultaProcessosLeituraRetiradoModel
   @override
   int? get codKit;
   set codKit(int? value);
+  @override
+  String? get codBarraKit;
+  set codBarraKit(String? value);
   @override
   String? get nomeKit;
   set nomeKit(String? value);

@@ -38,6 +38,7 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(text: 'Técnico', field: 'tecnico'),
     CustomDataColumn(text: 'Lote', field: 'lote'),
@@ -147,6 +148,7 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                     child: PlutoGridWidget(
+                      orderDescendingFieldColumn: 'dataInicio',
                       onEdit: (RegistroServicoModel objeto) => {
                         openModal(context, RegistroServicoModel.copy(objeto)),
                       },

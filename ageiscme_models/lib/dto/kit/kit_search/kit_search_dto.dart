@@ -10,6 +10,7 @@ sealed class KitSearchDTO with _$KitSearchDTO {
     String? codBarraContem,
     String? nomeContem,
     bool? ordenarCod,
+    bool? ordernarPorCodDecrescente,
   }) = _KitSearchDTO;
 
   factory KitSearchDTO.fromJson(Map<String, Object?> json) =>

@@ -21,6 +21,7 @@ sealed class UsuarioFilter with _$UsuarioFilter {
     int? numeroRegistros,
     bool? ordenarPorAtivosPrimeiro,
     String? termoPesquisa,
+    bool? ordenarPorCodDecrescente,
   }) = _UsuarioFilter;
 
   factory UsuarioFilter.fromJson(Map<String, Object?> json) =>

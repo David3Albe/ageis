@@ -12,7 +12,7 @@ import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/list_field/list_field_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
@@ -62,8 +62,12 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
     service: EpiEntregaService(),
   );
 
+  late bool Function() limiteValidadeValidate;
   late final DatePickerWidget dtpLimiteValidade = DatePickerWidget(
     placeholder: 'Data Limite da Validade',
+    validator: (date) => date == null ? 'Obrigatório' : null,
+    validateBuilder: (context, validateMethodBuilder) =>
+        limiteValidadeValidate = validateMethodBuilder,
     onDateSelected: (selectedDate) =>
         epiEntrega.dataLimiteValidade = selectedDate,
     setDateValueBuilder: (context, setDateMethod) =>
@@ -143,6 +147,9 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
     });
   }
 
+  late bool Function() validateEPI;
+  final ScrollController scroll = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     setFields();
@@ -179,6 +186,7 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
               maxHeight: size.height * .8,
             ),
             child: SingleChildScrollView(
+              controller: scroll,
               child: Column(
                 children: [
                   Padding(
@@ -198,12 +206,13 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
                               widget.usuarios.sort(
                                 (a, b) => a.nome!.compareTo(b.nome!),
                               );
-                              return DropDownWidget(
+                              return DropDownSearchWidget(
+                                textFunction: (p0) => p0.NomeText(),
                                 readOnly: true,
                                 initialValue: usuario,
                                 sourceList: widget.usuarios,
                                 onChanged: (value) =>
-                                    epiEntrega.codUsuario = value.cod!,
+                                    epiEntrega.codUsuario = value?.cod,
                                 placeholder: 'Colaborador',
                               );
                             },
@@ -225,11 +234,17 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
                                 (a, b) => a.descricao!.compareTo(b.descricao!),
                               );
 
-                              return DropDownWidget(
+                              return DropDownSearchWidget(
+                                textFunction: (p0) => p0.GetDropDownText(),
+                                validator: (obj) =>
+                                    obj == null ? 'Obrigatório' : null,
+                                validateBuilder:
+                                    (context, validateMethodBuilder) =>
+                                        validateEPI = validateMethodBuilder,
                                 initialValue: epiDescritor,
                                 sourceList: widget.episDescritores,
                                 onChanged: (value) =>
-                                    epiEntrega.codDescritorEpi = value.cod!,
+                                    epiEntrega.codDescritorEpi = value?.cod,
                                 placeholder: 'EPI',
                               );
                             },
@@ -541,6 +556,16 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
   }
 
   void salvar() {
+    bool epiValid = validateEPI();
+    bool limiteValidadeValid = limiteValidadeValidate();
+    if(!epiValid ){
+      scroll.jumpTo(0);
+    }else if(!limiteValidadeValid){
+      scroll.jumpTo(50);
+    }
+    if (!epiValid || !limiteValidadeValid) {
+      return;
+    }
     cubit.save(epiEntrega);
   }
 }

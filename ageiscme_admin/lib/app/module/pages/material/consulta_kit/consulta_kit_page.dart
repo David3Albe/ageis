@@ -49,6 +49,7 @@ class _ConsultaKitPageState extends State<ConsultaKitPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(text: 'Cod. Barra', field: 'codBarra'),
     CustomDataColumn(text: 'Descritor', field: 'nomeKitDescritor'),
@@ -134,6 +135,7 @@ class _ConsultaKitPageState extends State<ConsultaKitPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     smallRows: true,
                     columns: colunas,
                     items: state.kits,

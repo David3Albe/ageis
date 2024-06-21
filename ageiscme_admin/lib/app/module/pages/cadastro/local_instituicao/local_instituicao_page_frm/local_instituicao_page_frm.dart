@@ -7,11 +7,13 @@ import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_string_area_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
+import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
@@ -39,7 +41,7 @@ class _LocalInstituicaoPageFrmState extends State<LocalInstituicaoPageFrm> {
     service: LocalInstituicaoService(),
   );
   late final TextFieldStringWidget txtNomeLocal = TextFieldStringWidget(
-    placeholder: 'Nome',
+    placeholder: 'Nome *',
     onChanged: (String? str) {
       localInstituicao.nome = txtNomeLocal.text;
     },
@@ -51,24 +53,26 @@ class _LocalInstituicaoPageFrmState extends State<LocalInstituicaoPageFrm> {
       localInstituicao.codBarra = txtCodBarra.text;
     },
   );
-  late final TextFieldStringWidget txtContato = TextFieldStringWidget(
-    placeholder: 'Contato',
+  late final TextFieldStringAreaWidget txtContato = TextFieldStringAreaWidget(
+    placeholder: 'Contato *',
     onChanged: (String? str) {
       localInstituicao.contato = txtContato.text;
     },
   );
   late final TextFieldStringWidget txtLocalizacaoFisica = TextFieldStringWidget(
-    placeholder: 'Localização Física',
+    placeholder: 'Localização Física *',
     onChanged: (String? str) {
       localInstituicao.localizacao = txtLocalizacaoFisica.text;
     },
   );
   late final TextFieldStringWidget txtResponsavel = TextFieldStringWidget(
-    placeholder: 'Responsável',
+    placeholder: 'Responsável *',
     onChanged: (String? str) {
       localInstituicao.responsavel = txtResponsavel.text;
     },
   );
+
+  final ScrollController scroll = ScrollController();
 
   @override
   void initState() {
@@ -147,10 +151,8 @@ class _LocalInstituicaoPageFrmState extends State<LocalInstituicaoPageFrm> {
             actionsPadding: const EdgeInsets.all(8.0),
             title: Row(
               children: [
-                Expanded(
-                  child: TitleWidget(
-                    text: titulo,
-                  ),
+                TitleWidget(
+                  text: titulo,
                 ),
                 const Spacer(),
                 CloseButtonWidget(
@@ -159,12 +161,16 @@ class _LocalInstituicaoPageFrmState extends State<LocalInstituicaoPageFrm> {
               ],
             ),
             content: Container(
-              constraints: BoxConstraints(
-                minWidth: size.width * .5,
-                minHeight: size.height * .5,
-                maxHeight: size.height * .8,
+              constraints: const BoxConstraints(
+                minWidth: 600,
+                minHeight: 500,
+                maxHeight: 1000,
+                maxWidth: 1200,
               ),
+              height: size.height * .5,
+              width: size.width * .5,
               child: SingleChildScrollView(
+                controller: scroll,
                 padding: const EdgeInsets.only(right: 14),
                 child: Column(
                   children: [
@@ -190,10 +196,16 @@ class _LocalInstituicaoPageFrmState extends State<LocalInstituicaoPageFrm> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
-                      child:
-                          BlocBuilder<CentroCustoCubit, List<CentroCustoModel>>(
+                      child: BlocBuilder<CentroCustoCubit, CentroCustoState>(
                         bloc: centroCustoCubit,
-                        builder: (context, centrosCusto) {
+                        builder: (context, state) {
+                          if (state.loading) {
+                            return const Center(
+                              child: LoadingWidget(),
+                            );
+                          }
+                          List<CentroCustoModel> centrosCusto =
+                              state.centrosCusto;
                           centrosCusto.sort(
                             (a, b) => a.centroCusto!.compareTo(b.centroCusto!),
                           );
@@ -205,13 +217,14 @@ class _LocalInstituicaoPageFrmState extends State<LocalInstituicaoPageFrm> {
                               )
                               .firstOrNull;
 
-                          return DropDownWidget<CentroCustoModel>(
+                          return DropDownSearchWidget<CentroCustoModel>(
                             initialValue: centroCusto,
+                            textFunction: (p0) => p0.CentroCustoText(),
                             sourceList: centrosCusto
                                 .where((element) => element.ativo == true)
                                 .toList(),
                             onChanged: (value) =>
-                                localInstituicao.codCentroCusto = value.cod!,
+                                localInstituicao.codCentroCusto = value?.cod,
                             placeholder: 'Centro de Custo',
                           );
                         },
@@ -266,7 +279,8 @@ class _LocalInstituicaoPageFrmState extends State<LocalInstituicaoPageFrm> {
                 children: [
                   CustomPopupMenuWidget(
                     items: [
-                      if (localInstituicao.cod != null && localInstituicao.cod != 0)
+                      if (localInstituicao.cod != null &&
+                          localInstituicao.cod != 0)
                         CustomPopupItemHistoryModel.getHistoryItem(
                           child: HistoricoPage(
                             pk: localInstituicao.cod!,
@@ -309,10 +323,24 @@ class _LocalInstituicaoPageFrmState extends State<LocalInstituicaoPageFrm> {
   }
 
   void salvar() {
-    if (!txtNomeLocal.valid ||
-        !txtContato.valid ||
-        !txtLocalizacaoFisica.valid ||
-        !txtResponsavel.valid) return;
+    bool localValid = txtNomeLocal.valid;
+    bool contatoValid = txtContato.valid;
+    bool localizacaoFisicaValid = txtLocalizacaoFisica.valid;
+    bool responsavelValid = txtResponsavel.valid;
+
+    if (!localValid) {
+      scroll.jumpTo(0);
+    } else if (!contatoValid) {
+      scroll.jumpTo(90);
+    } else if (!localizacaoFisicaValid) {
+      scroll.jumpTo(140);
+    } else if (!responsavelValid) {
+      scroll.jumpTo(190);
+    }
+    if (!localValid ||
+        !contatoValid ||
+        !localizacaoFisicaValid ||
+        !responsavelValid) return;
 
     cubit.save(localInstituicao);
   }

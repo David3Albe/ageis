@@ -209,6 +209,7 @@ class _ConsultaManutencaoPageState extends State<ConsultaManutencaoPage> {
               child: Padding(
                 padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                 child: PlutoGridWidget(
+                  orderDescendingFieldColumn: 'dataInicio',
                   smallRows: true,
                   columns: colunas,
                   items: state.manutencoes,
@@ -387,7 +388,7 @@ class _ConsultaManutencaoPageState extends State<ConsultaManutencaoPage> {
                   bloc: servicoTipoBloc,
                   builder: (context, state) {
                     List<ServicoTipoModel> servicosTipos = state.tiposServico;
-            
+
                     servicosTipos.sort(
                       (a, b) => a.nome!.compareTo(b.nome!),
                     );
@@ -409,9 +410,15 @@ class _ConsultaManutencaoPageState extends State<ConsultaManutencaoPage> {
                   },
                 ),
                 const Padding(padding: EdgeInsets.only(top: 2)),
-                BlocBuilder<PecaCubit, List<PecaModel>>(
+                BlocBuilder<PecaCubit, PecaState>(
                   bloc: pecaBloc,
-                  builder: (context, pecas) {
+                  builder: (context, state) {
+                    if (state.loading == true) {
+                      return const Center(
+                        child: LoadingWidget(),
+                      );
+                    }
+                    List<PecaModel> pecas = state.pecas;
                     pecas.sort(
                       (a, b) => a.peca!.compareTo(b.peca!),
                     );

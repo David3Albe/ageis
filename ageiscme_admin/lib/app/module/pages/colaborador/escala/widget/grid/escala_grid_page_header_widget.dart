@@ -58,7 +58,8 @@ class EscalaGridPageHeaderWidgetState
     if (turno == null) return;
     PlutoRow? row = widget.adicionarLinhaTurno();
     for (PlutoRow row in widget.stateManager.rows) {
-      if (row.cells['turno']!.value != turno) continue;
+      TurnoShortResponseDTO? turnoRow = row.cells['turno']!.value;
+      if (turnoRow?.descricao != turno.descricao) continue;
       ToastUtils.showCustomToastNotice(context, 'Turno já existe na escala');
       return;
     }

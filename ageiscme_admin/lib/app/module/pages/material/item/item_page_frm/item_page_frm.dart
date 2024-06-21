@@ -37,7 +37,6 @@ import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_float_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
@@ -111,6 +110,11 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
   late final TextFieldStringWidget txtUsuarioCadastro;
   late final DatePickerWidget dtpDataCadastro;
 
+  late bool Function() validateDescritor;
+  late bool Function() validateProprietario;
+  late bool Function() validateStatus;
+  final ScrollController scroll = ScrollController();
+
   Future<AuthenticationResultDTO?> recuperaUsuario() async {
     return await Modular.get<AuthenticationStore>().GetAuthenticated();
   }
@@ -120,12 +124,13 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
     txtDescricao = TextFieldStringWidget(
       setReadonlyBuilder: (context, method) => readonlyDescricaoMethod = method,
       setValueBuilder: (context, method) => setDescription = method,
-      placeholder: 'Descrição',
+      placeholder: 'Descrição *',
       readOnly: widget.frmType == ItemPageFrmtype.Items || item.cod != 0,
       onChanged: (String? str) => item.descricao = str,
     );
     txtIdEtiqueta = TextFieldStringWidget(
-      placeholder: 'ID Etiqueta Atual',
+      placeholder:
+          'ID Etiqueta Atual ${widget.frmType == ItemPageFrmtype.Consigned ? '' : '*'}',
       readOnly: item.cod != 0 || widget.frmType == ItemPageFrmtype.Consigned,
       setReadonlyBuilder: (context, method) =>
           readonlyIdEtiquetaMethod = method,
@@ -152,7 +157,7 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
     txtRefFornecedor = TextFieldStringWidget(
       placeholder: widget.frmType == ItemPageFrmtype.Items
           ? 'Lote do Produto'
-          : 'Ref. fornecedor',
+          : 'Ref. fornecedor *',
       onChanged: (String? str) => item.refFornecedor = str,
     );
     dtpDataAquisicao = DatePickerWidget(
@@ -459,11 +464,15 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
               maxHeight: size.height * .8,
             ),
             child: SingleChildScrollView(
+              controller: scroll,
               child: Column(
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 5.0),
                     child: DropDownSearchApiWidget<ItemDescritorModel>(
+                      validator: (val) => val == null ? 'Obrigatório' : null,
+                      validateBuilder: (context, validateMethodBuilder) =>
+                          validateDescritor = validateMethodBuilder,
                       initialValue: item.descritor,
                       textFunction: (item) => item.ItemDescritorText(),
                       search: (str) => ItemDescritorService().Filter(
@@ -493,7 +502,7 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
                           );
                         });
                       },
-                      placeholder: 'Item',
+                      placeholder: 'Item *',
                     ),
                   ),
                   Padding(
@@ -545,27 +554,33 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
                         ),
                         const SizedBox(width: 16.0),
                         Expanded(
-                          child:
-                              BlocBuilder<EtiquetaCubit, List<EtiquetaModel>>(
+                          child: BlocBuilder<EtiquetaCubit, EtiquetaState>(
                             bloc: etiquetaCubit,
-                            builder: (context, etiquetas) {
-                              EtiquetaModel? etiqueta = etiquetas
+                            builder: (context, state) {
+                              if (state.loading) {
+                                return const Center(
+                                  child: LoadingWidget(),
+                                );
+                              }
+                              EtiquetaModel? etiqueta = state.etiquetas
                                   .where(
                                     (element) =>
                                         element.cod == item.codEtiqueta,
                                   )
                                   .firstOrNull;
-
-                              etiquetas.sort(
+                              List<EtiquetaModel> etiquetasAtivas = state
+                                  .etiquetas
+                                  .where((element) => element.ativo == true)
+                                  .toList();
+                              etiquetasAtivas.sort(
                                 (a, b) => a.descricao!.compareTo(b.descricao!),
                               );
-                              return DropDownWidget<EtiquetaModel>(
+                              return DropDownSearchWidget<EtiquetaModel>(
                                 initialValue: etiqueta,
-                                sourceList: etiquetas
-                                    .where((element) => element.ativo == true)
-                                    .toList(),
+                                textFunction: (p0) => p0.GetDropDownText(),
+                                sourceList: etiquetasAtivas,
                                 onChanged: (value) =>
-                                    item.codEtiqueta = value.cod!,
+                                    item.codEtiqueta = value?.cod,
                                 placeholder: 'Etiqueta',
                               );
                             },
@@ -602,6 +617,14 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
                                 (a, b) => a.nome!.compareTo(b.nome!),
                               );
                               return DropDownSearchWidget<ProprietarioModel>(
+                                validateBuilder: (
+                                  context,
+                                  validateMethodBuilder,
+                                ) =>
+                                    validateProprietario =
+                                        validateMethodBuilder,
+                                validator: (val) =>
+                                    val == null ? 'Obrigatório' : null,
                                 setSelectedItemBuilder: (context, method) =>
                                     setSelectedProprietarioMethod = method,
                                 textFunction: (proprietario) =>
@@ -612,22 +635,27 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
                                     .toList(),
                                 onChanged: (value) =>
                                     item.codProprietario = value?.cod,
-                                placeholder: 'Proprietário',
+                                placeholder: 'Proprietário *',
                               );
                             },
                           ),
                         ),
                         const SizedBox(width: 16.0),
                         Expanded(
-                          child: DropDownWidget<ItemSituacaoOption>(
+                          child: DropDownSearchWidget<ItemSituacaoOption>(
+                            validator: (val) =>
+                                val == null ? 'Obrigatório' : null,
+                            validateBuilder: (context, validateMethodBuilder) =>
+                                validateStatus = validateMethodBuilder,
                             initialValue: ItemSituacaoOption.situacaoOptions
                                 .where(
                                   (element) => element.cod == item.status,
                                 )
                                 .firstOrNull,
                             sourceList: ItemSituacaoOption.situacaoOptions,
-                            onChanged: (value) => item.status = value.cod,
-                            placeholder: 'Situação',
+                            textFunction: (p0) => p0.GetDropDownText(),
+                            onChanged: (value) => item.status = value?.cod,
+                            placeholder: 'Situação *',
                           ),
                         ),
                       ],
@@ -911,25 +939,34 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
     if (widget.frmType == ItemPageFrmtype.Consigned) {
       await submitMethod.call();
     }
-    if (item.codDescritor == null) {
-      ToastUtils.showCustomToastWarning(context, 'Selecione um descritor');
-      return;
+    bool descricaoValid = txtDescricao.valid;
+    bool etiquetaValid = txtIdEtiqueta.valid;
+    bool fabricanteValid = txtFabricante.valid;
+    bool registroAnvisaValid = txtRegistroAnvisa.valid;
+    bool refFornecedorValid = txtRefFornecedor.valid;
+    bool restricaoValid = txtRestricao.valid;
+    bool descritorValid = validateDescritor();
+    bool proprietarioValid = validateProprietario();
+    bool statusValid = validateStatus();
+    if (!descritorValid) {
+      scroll.jumpTo(0);
+    } else if (!descricaoValid) {
+      scroll.jumpTo(50);
+    } else if (!etiquetaValid) {
+      scroll.jumpTo(100);
+    } else if (!proprietarioValid) {
+      scroll.jumpTo(350);
     }
-    if (item.codProprietario == null) {
-      ToastUtils.showCustomToastWarning(context, 'Selecione um proprietário');
-      return;
-    }
-    if (item.status == null) {
-      ToastUtils.showCustomToastWarning(context, 'Selecione a situação');
-      return;
-    }
-    if (!txtDescricao.valid ||
-        !txtIdEtiqueta.valid ||
-        !txtFabricante.valid ||
-        !txtFornecedor.valid ||
-        !txtRegistroAnvisa.valid ||
-        !txtRefFornecedor.valid ||
-        !txtRestricao.valid) {
+
+    if (!descricaoValid ||
+        !etiquetaValid ||
+        !fabricanteValid ||
+        !refFornecedorValid ||
+        !registroAnvisaValid ||
+        !restricaoValid ||
+        !descritorValid ||
+        !proprietarioValid ||
+        !statusValid) {
       return;
     }
     (String, ItemSaveResultDTO)? itemSave = await cubit.save(item);

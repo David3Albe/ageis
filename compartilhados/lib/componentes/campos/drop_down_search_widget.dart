@@ -225,16 +225,36 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
 
   bool valid() {
     validate();
-    return errorText == null || errorText!.isEmpty;
+    bool valid = errorText == null || errorText!.isEmpty;
+    return valid;
   }
 
   void showPicker(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: txtFilter,
-        contentPadding: const EdgeInsets.all(16),
-        titlePadding: const EdgeInsets.all(16),
+        title: Column(
+          children: [
+            if (widget.placeholder != null)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.placeholder ?? '',
+                    style: Fontes.getRoboto(fontSize: 16),
+                  ),
+                ],
+              ),
+            txtFilter,
+          ],
+        ),
+        contentPadding: const EdgeInsets.only(
+          left: 24,
+          right: 24,
+          top: 4,
+          bottom: 12,
+        ),
+        titlePadding: const EdgeInsets.all(12),
         actionsPadding: const EdgeInsets.all(16),
         content: Container(
           width: MediaQuery.of(context).size.width / 2,
@@ -243,7 +263,6 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Padding(padding: EdgeInsets.only(top: 8)),
                 getListItems(),
               ],
             ),

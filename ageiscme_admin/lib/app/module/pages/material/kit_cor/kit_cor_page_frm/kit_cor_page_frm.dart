@@ -36,25 +36,25 @@ class _KitCorPageFrmState extends State<KitCorPageFrm> {
     service: KitCorService(),
   );
   late final TextFieldStringWidget txtNomeCor = TextFieldStringWidget(
-    placeholder: 'Nome',
+    placeholder: 'Nome *',
     onChanged: (String? str) {
       kitCor.nome = txtNomeCor.text;
     },
   );
   late final TextFieldNumberWidget txtCorRed = TextFieldNumberWidget(
-    placeholder: 'Red',
+    placeholder: 'Red *',
     onChanged: (String str) {
       kitCor.red = str.isEmpty ? null : int.parse(str);
     },
   );
   late final TextFieldNumberWidget txtCorGreen = TextFieldNumberWidget(
-    placeholder: 'Green',
+    placeholder: 'Green *',
     onChanged: (String str) {
       kitCor.green = str.isEmpty ? null : int.parse(str);
     },
   );
   late final TextFieldNumberWidget txtCorBlue = TextFieldNumberWidget(
-    placeholder: 'Blue',
+    placeholder: 'Blue *',
     onChanged: (String str) {
       kitCor.blue = str.isEmpty ? null : int.parse(str);
     },
@@ -168,23 +168,23 @@ class _KitCorPageFrmState extends State<KitCorPageFrm> {
                       ],
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
+                      padding: const EdgeInsets.only(top: 7.0),
                       child: txtNomeCor,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
+                      padding: const EdgeInsets.only(top: 7.0),
                       child: txtCorRed,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
+                      padding: const EdgeInsets.only(top: 7.0),
                       child: txtCorGreen,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
+                      padding: const EdgeInsets.only(top: 7.0),
                       child: txtCorBlue,
                     ),
                     Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
+                      padding: const EdgeInsets.only(top: 7.0),
                       child: Row(
                         children: [
                           CustomCheckboxWidget(
@@ -247,10 +247,14 @@ class _KitCorPageFrmState extends State<KitCorPageFrm> {
   }
 
   void salvar() {
-    if (!txtNomeCor.valid ||
-        !txtCorGreen.valid ||
-        !txtCorRed.valid ||
-        !txtCorBlue.valid) return;
+    bool nomeCorValid = txtNomeCor.valid;
+    bool corGreenValid = txtCorGreen.valid;
+    bool corRedValid = txtCorRed.valid;
+    bool corBlueValid = txtCorBlue.valid;
+    if (!nomeCorValid ||
+        !corGreenValid ||
+        !corRedValid ||
+        !corBlueValid) return;
     cubit.save(kitCor);
   }
 }

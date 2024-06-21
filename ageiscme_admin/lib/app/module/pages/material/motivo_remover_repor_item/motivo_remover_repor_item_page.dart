@@ -28,6 +28,7 @@ class _MotivoRemoverReporItemPageState
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(text: 'Descrição', field: 'descricao'),
     CustomDataColumn(
@@ -90,6 +91,7 @@ class _MotivoRemoverReporItemPageState
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     filterOnlyActives: true,
                     onEdit: (MotivoRemoverReporItemModel objeto) => {
                       openModal(

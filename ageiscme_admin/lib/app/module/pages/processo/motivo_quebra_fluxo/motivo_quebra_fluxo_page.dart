@@ -26,6 +26,7 @@ class _MotivoQuebraFluxoPageState extends State<MotivoQuebraFluxoPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(text: 'Descrição', field: 'descricao'),
     CustomDataColumn(
@@ -77,6 +78,7 @@ class _MotivoQuebraFluxoPageState extends State<MotivoQuebraFluxoPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     filterOnlyActives: true,
                     onEdit: (MotivoQuebraFluxoModel objeto) => {
                       openModal(context, MotivoQuebraFluxoModel.copy(objeto)),

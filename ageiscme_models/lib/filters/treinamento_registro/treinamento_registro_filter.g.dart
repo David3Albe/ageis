@@ -14,6 +14,7 @@ _$TreinamentoRegistroFilterImpl _$$TreinamentoRegistroFilterImplFromJson(
       numeroRegistros: (json['numeroRegistros'] as num?)?.toInt(),
       nomeContem: json['nomeContem'] as String?,
       tStamp: json['tStamp'] as String?,
+      ordenarPorDataDecrescente: json['ordenarPorDataDecrescente'] as bool?,
     );
 
 Map<String, dynamic> _$$TreinamentoRegistroFilterImplToJson(
@@ -24,4 +25,5 @@ Map<String, dynamic> _$$TreinamentoRegistroFilterImplToJson(
       'numeroRegistros': instance.numeroRegistros,
       'nomeContem': instance.nomeContem,
       'tStamp': instance.tStamp,
+      'ordenarPorDataDecrescente': instance.ordenarPorDataDecrescente,
     };

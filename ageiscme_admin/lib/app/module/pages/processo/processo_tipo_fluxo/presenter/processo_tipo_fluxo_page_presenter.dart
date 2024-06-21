@@ -1,5 +1,6 @@
 import 'package:ageiscme_admin/app/module/pages/processo/processo_tipo_fluxo/controller/processo_tipo_fluxo_page_controller.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/custom_default_button_widget.dart';
 import 'package:compartilhados/componentes/diagram/custom_diagram/custom_diagram_widget.dart';
@@ -76,21 +77,6 @@ class _ProcessoTipoFluxoPagePresenterState
         ],
       ),
       actions: [
-        CustomDefaultButtonWidget(
-          icon: Symbols.cancel,
-          text: widget.canEdit ? 'Cancelar' : 'Fechar',
-          onPressed: Navigator.of(context).pop,
-          cor: Colors.red.shade400,
-          corHovered: Colors.red.shade500,
-        ),
-        if (widget.canEdit)
-          CustomDefaultButtonWidget(
-            icon: Symbols.cleaning,
-            text: 'Limpar',
-            onPressed: controller.clear,
-            cor: Colors.grey.shade400,
-            corHovered: Colors.grey.shade500,
-          ),
         if (widget.canEdit)
           CustomDefaultButtonWidget(
             icon: Icons.save,
@@ -102,6 +88,14 @@ class _ProcessoTipoFluxoPagePresenterState
             cor: Colors.green.shade400,
             corHovered: Colors.green.shade500,
           ),
+        if (widget.canEdit) CleanButtonWidget(onPressed: controller.clear),
+        CustomDefaultButtonWidget(
+          icon: Symbols.cancel,
+          text: widget.canEdit ? 'Cancelar' : 'Fechar',
+          onPressed: Navigator.of(context).pop,
+          cor: Colors.red.shade400,
+          corHovered: Colors.red.shade500,
+        ),
       ],
     );
   }

@@ -16,7 +16,6 @@ import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
@@ -25,7 +24,6 @@ import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
-import 'package:compartilhados/componentes/toasts/warning_dialog.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
@@ -58,7 +56,7 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
   );
 
   late final TextFieldStringWidget txtNome = TextFieldStringWidget(
-    placeholder: 'Nome',
+    placeholder: 'Nome *',
     onChanged: (String? str) {
       processoEtapa.nome = txtNome.text;
     },
@@ -80,9 +78,11 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
 
   late final TextFieldStringWidget txtTempoCicloProcesso =
       TextFieldStringWidget(
-    placeholder: 'Tempo Ciclo Preparo (Minutos)',
+    placeholder: 'Tempo Ciclo Preparo (Minutos) *',
     onChanged: (String? str) {
-      processoEtapa.tempoCicloProcesso = int.parse(txtTempoCicloProcesso.text);
+      processoEtapa.tempoCicloProcesso = str == null || str.isEmpty
+          ? null
+          : int.parse(txtTempoCicloProcesso.text);
     },
   );
 
@@ -171,6 +171,9 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
     }
   }
 
+  late Function() validateTipoProcesso;
+  final ScrollController scroll = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     setFields();
@@ -209,6 +212,7 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                 maxHeight: size.height * .95,
               ),
               child: SingleChildScrollView(
+                controller: scroll,
                 child: Column(
                   children: [
                     Padding(
@@ -232,13 +236,17 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                               )
                               .firstOrNull;
                           return DropDownSearchWidget<ProcessoTipoModel>(
+                            validator: (val) =>
+                                val == null ? 'Obrigatório' : null,
+                            validateBuilder: (context, validateMethodBuilder) =>
+                                validateTipoProcesso = validateMethodBuilder,
                             initialValue: processoTipo,
                             sourceList: processosTipos
                                 .where((element) => element.ativo == true)
                                 .toList(),
                             onChanged: (value) =>
                                 processoEtapa.codProcessoTipo = value?.cod,
-                            placeholder: 'Tipo Processo',
+                            placeholder: 'Tipo Processo *',
                           );
                         },
                       ),
@@ -666,6 +674,11 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                   ServicoTipoState>(
                                 bloc: servicoTipoCubit,
                                 builder: (context, state) {
+                                  if (state.loading == true) {
+                                    return const Center(
+                                      child: LoadingWidget(),
+                                    );
+                                  }
                                   List<ServicoTipoModel> servicosTipos =
                                       state.tiposServico;
 
@@ -676,12 +689,13 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                             processoEtapa.codServicoTipo,
                                       )
                                       .firstOrNull;
-                                  return DropDownWidget<ServicoTipoModel>(
+                                  return DropDownSearchWidget<ServicoTipoModel>(
                                     initialValue: servicoTipo,
                                     sourceList: servicosTipos,
                                     onChanged: (value) => processoEtapa
-                                        .codServicoTipo = value.cod!,
-                                    placeholder: 'Tipo Serviço',
+                                        .codServicoTipo = value?.cod,
+                                    placeholder: 'Tipo Serviço *',
+                                    textFunction: (p0) => p0.GetDropDownText(),
                                   );
                                 },
                               ),
@@ -973,25 +987,40 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
   }
 
   void salvar() {
-    if (!txtNome.valid ||
-        !txtDescricao.valid ||
-        !txtEtiquetaPreparo.valid ||
-        !txtTempoCicloProcesso.valid) return;
+    bool nomeValid = txtNome.valid;
+    bool descricaoValid = txtDescricao.valid;
+    bool etiquetaPreparoValid = txtEtiquetaPreparo.valid;
+    bool tempoCicloValid = txtTempoCicloProcesso.valid;
+    bool tipoProcessoValid = validateTipoProcesso();
+
+    if (!tipoProcessoValid) {
+      scroll.jumpTo(0);
+    } else if (!nomeValid) {
+      scroll.jumpTo(50);
+    } else if (!tempoCicloValid || !etiquetaPreparoValid) {
+      scroll.jumpTo(200);
+    }
+
+    if (!nomeValid ||
+        !descricaoValid ||
+        !etiquetaPreparoValid ||
+        !tempoCicloValid ||
+        !tipoProcessoValid) return;
 
     if (processoEtapa.codEquipamento == null &&
         processoEtapa.codEstoque == null) {
-      WarningUtils.showWarningDialog(
+      ToastUtils.showCustomToastWarning(
         context,
-        'É obrigatório a seleção do Equipamento ou Arsenal vinculados a Etapa de Processo. Campo Obrigatório não preenchido',
+        'É necessário selecionar um Arsenal ou Um Equipamento',
       );
       return;
     }
 
     if (processoEtapa.codEquipamento != null &&
         processoEtapa.codEstoque != null) {
-      WarningUtils.showWarningDialog(
+      ToastUtils.showCustomToastWarning(
         context,
-        'É obrigatório a seleção de um Equipamento ou um Arsenal vinculados a Etapa de Processo. Ambos não podem ser preenchidos',
+        'Apenas um Arsenal ou um Equipamento pode ser selecionado',
       );
       return;
     }

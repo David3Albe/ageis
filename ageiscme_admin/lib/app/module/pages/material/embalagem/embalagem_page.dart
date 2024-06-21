@@ -29,6 +29,7 @@ class _EmbalagemPageState extends State<EmbalagemPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(text: 'Embalagem', field: 'nome'),
     CustomDataColumn(
@@ -95,6 +96,7 @@ class _EmbalagemPageState extends State<EmbalagemPage> {
               child: Padding(
                 padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                 child: PlutoGridWidget(
+                  orderDescendingFieldColumn: 'cod',
                   filterOnlyActives: true,
                   onEdit: (EmbalagemModel objeto) =>
                       {openModal(context, EmbalagemModel.copy(objeto))},
@@ -120,7 +122,9 @@ class _EmbalagemPageState extends State<EmbalagemPage> {
           bloc: bloc,
           builder: (context, state) {
             return EmbalagemPageFrmImpressao(
-              embalagens: state.embalagens.where((element) => element.ativo==true).toList(),
+              embalagens: state.embalagens
+                  .where((element) => element.ativo == true)
+                  .toList(),
             );
           },
         );

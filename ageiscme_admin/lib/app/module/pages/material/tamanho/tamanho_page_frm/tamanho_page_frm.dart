@@ -34,7 +34,7 @@ class _TamanhoPageFrmState extends State<TamanhoPageFrm> {
     service: TamanhoService(),
   );
   late final TextFieldStringWidget txtSigla = TextFieldStringWidget(
-    placeholder: 'Sigla',
+    placeholder: 'Sigla *',
     onChanged: (String? str) {
       tamanho.sigla = txtSigla.text;
     },
@@ -46,7 +46,7 @@ class _TamanhoPageFrmState extends State<TamanhoPageFrm> {
     },
   );
   late final TextFieldStringWidget txtReferencial = TextFieldStringWidget(
-    placeholder: 'Referencial numérico único do tamanho',
+    placeholder: 'Referencial numérico único do tamanho *',
     onChanged: (String? str) {
       tamanho.referencial = int.parse(txtReferencial.text);
     },
@@ -197,7 +197,10 @@ class _TamanhoPageFrmState extends State<TamanhoPageFrm> {
   }
 
   void salvar() {
-    if (!txtSigla.valid || !txtDescricao.valid || !txtReferencial.valid) return;
+    bool siglaValid = txtSigla.valid;
+    bool descricaoValid = txtDescricao.valid;
+    bool referencialValid = txtReferencial.valid;
+    if (!siglaValid || !descricaoValid || !referencialValid) return;
 
     cubit.save(tamanho);
   }

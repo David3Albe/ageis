@@ -26,6 +26,7 @@ class _TipoAfastamentoPageState extends State<TipoAfastamentoPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(text: 'Motivo', field: 'motivo'),
     CustomDataColumn(
@@ -82,6 +83,7 @@ class _TipoAfastamentoPageState extends State<TipoAfastamentoPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     onEdit: (TipoAfastamentoModel objeto) =>
                         {openModal(context, TipoAfastamentoModel.copy(objeto))},
                     onDelete: (TipoAfastamentoModel objeto) =>

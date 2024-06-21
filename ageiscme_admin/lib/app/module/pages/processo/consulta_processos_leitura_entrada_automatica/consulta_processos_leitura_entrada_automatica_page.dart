@@ -19,7 +19,6 @@ import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
 import 'package:compartilhados/componentes/campos/custom_autocomplete/custom_autocomplete_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
@@ -98,16 +97,19 @@ class _ConsultaProcessosLeituraEntradaAutomaticaPageState
         text: 'Data Hora',
         field: 'dataHora',
         type: CustomDataColumnType.DateTime,
+        width: 130,
       ),
       CustomDataColumn(
         text: 'Cód. Registro',
         field: 'codRegistroProcesso',
         type: CustomDataColumnType.Number,
+        width: 110,
       ),
       CustomDataColumn(
         text: 'Cód. Entrada Aut.',
         field: 'codEntradaAut',
         type: CustomDataColumnType.Number,
+        width: 110,
       ),
       CustomDataColumn(text: 'Situação', field: 'situacao'),
       CustomDataColumn(text: 'Obs. Canc.', field: 'observacao'),
@@ -208,6 +210,7 @@ class _ConsultaProcessosLeituraEntradaAutomaticaPageState
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'dataHora',
                     smallRows: true,
                     columns: colunas,
                     items: state.entradasAutomaticas,
@@ -492,7 +495,8 @@ class _ConsultaProcessosLeituraEntradaAutomaticaPageState
                 const Padding(padding: EdgeInsets.only(top: 2)),
                 Padding(
                   padding: const EdgeInsets.only(top: 5.0),
-                  child: DropDownWidget<EntradaAutomaticaSituacaoOptions>(
+                  child: DropDownSearchWidget<EntradaAutomaticaSituacaoOptions>(
+                    textFunction: (p0) => p0.GetDropDownText(),
                     initialValue:
                         EntradaAutomaticaSituacaoOptions.situacaoOptions
                             .where(
@@ -501,7 +505,7 @@ class _ConsultaProcessosLeituraEntradaAutomaticaPageState
                             .firstOrNull,
                     sourceList:
                         EntradaAutomaticaSituacaoOptions.situacaoOptions,
-                    onChanged: (value) => filter.codSituacao = value.cod,
+                    onChanged: (value) => filter.codSituacao = value?.cod,
                     placeholder: 'Situação',
                   ),
                 ),

@@ -75,7 +75,7 @@ class TurnoFrmPageWidget extends StatelessWidget {
                     padding: EdgeInsets.only(top: 24.0 * scalePadding),
                     child: ReactiveStringFormWidget(
                       controlName: 'descricao',
-                      placeholder: 'Descrição',
+                      placeholder: 'Descrição *',
                       validationMessages: {
                         ValidationMessage.required: (_) => 'Obrigatório',
                         ValidationMessage.maxLength: (_) =>

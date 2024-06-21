@@ -185,10 +185,16 @@ class _ConsultaProcessosLeituraTamanhoPageState
                 },
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<CentroCustoCubit, List<CentroCustoModel>>(
+              BlocBuilder<CentroCustoCubit, CentroCustoState>(
                 bloc: centroCustoBloc,
-                builder: (context, centrosCustos) {
-                  CentroCustoModel? centroCusto = centrosCustos
+                builder: (context, state) {
+                  if (state.loading) {
+                    return const Center(
+                      child: LoadingWidget(),
+                    );
+                  }
+
+                  CentroCustoModel? centroCusto = state.centrosCusto
                       .where(
                         (element) => element.cod == filter.codCentroCusto,
                       )
@@ -197,7 +203,7 @@ class _ConsultaProcessosLeituraTamanhoPageState
                     textFunction: (centroCusto) =>
                         centroCusto.CentroCustoText(),
                     initialValue: centroCusto,
-                    sourceList: centrosCustos,
+                    sourceList: state.centrosCusto,
                     onChanged: (value) => filter.codCentroCusto = value?.cod,
                     placeholder: 'Centro Custo',
                   );

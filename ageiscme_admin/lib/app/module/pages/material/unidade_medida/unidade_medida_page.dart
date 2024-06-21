@@ -26,6 +26,7 @@ class _UnidadeMedidaPageState extends State<UnidadeMedidaPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(text: 'Nome', field: 'nome'),
   ];
@@ -71,6 +72,7 @@ class _UnidadeMedidaPageState extends State<UnidadeMedidaPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     onEdit: (UnidadeMedidaModel objeto) =>
                         {openModal(context, UnidadeMedidaModel.copy(objeto))},
                     onDelete: (UnidadeMedidaModel objeto) =>

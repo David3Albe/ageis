@@ -52,7 +52,7 @@ class _PerfilAcessoPageFrmState extends State<PerfilAcessoPageFrm> {
   );
 
   late final TextFieldStringWidget txtDescricao = TextFieldStringWidget(
-    placeholder: 'Descrição',
+    placeholder: 'Descrição *',
     onChanged: (String? str) {
       perfilAcesso.descricao = txtDescricao.text;
     },
@@ -84,6 +84,8 @@ class _PerfilAcessoPageFrmState extends State<PerfilAcessoPageFrm> {
           'Edição do Peril: ${perfilAcesso.cod} - ${perfilAcesso.descricao}';
     }
   }
+
+  final ScrollController scroll = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -123,6 +125,7 @@ class _PerfilAcessoPageFrmState extends State<PerfilAcessoPageFrm> {
                 maxHeight: size.height * .8,
               ),
               child: SingleChildScrollView(
+                controller: scroll,
                 padding: const EdgeInsets.only(right: 14),
                 child: Column(
                   children: [
@@ -386,6 +389,9 @@ class _PerfilAcessoPageFrmState extends State<PerfilAcessoPageFrm> {
   }
 
   void salvar() {
+    if (!txtDescricao.valid) {
+      scroll.jumpTo(0);
+    }
     if (!txtDescricao.valid) return;
 
     final registrarDireitos = <PerfilDireitoModel>[];

@@ -43,6 +43,7 @@ class _ConsultaEstoqueVencidoPageState
       text: 'Data Validade',
       field: 'dataValidade',
       type: CustomDataColumnType.DateTime,
+      width: 130,
     ),
     CustomDataColumn(text: 'Arsenal', field: 'nomeArsenalEstoque'),
     CustomDataColumn(text: 'Local', field: 'nomeLocalEstoque'),
@@ -116,6 +117,7 @@ class _ConsultaEstoqueVencidoPageState
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderAscendingFieldColumn: 'dataValidade',
                     smallRows: true,
                     columns: colunas,
                     items: state.estoquesVencidos,
@@ -135,8 +137,8 @@ class _ConsultaEstoqueVencidoPageState
                       openModalRedirect(
                         context,
                         obj.dataEntrada,
-                        obj.codKit,
-                        obj.codItem,
+                        obj.codBarra,
+                        obj.idEtiqueta,
                       );
                     },
                   ),
@@ -270,8 +272,8 @@ class _ConsultaEstoqueVencidoPageState
   void openModalRedirect(
     BuildContext context,
     DateTime? startDate,
-    int? codKit,
-    int? codItem,
+    String? codBarra,
+    String? idEtiqueta,
   ) {
     showDialog<bool>(
       barrierDismissible: true,
@@ -283,9 +285,9 @@ class _ConsultaEstoqueVencidoPageState
             filter: ConsultaProcessosLeituraFilter(
               startDate: startDate?.add(const Duration(hours: -24)),
               finalDate: DateTime.now(),
-              codKit: codKit,
-              codItem: codItem,
               finalTime: null,
+              codItem: null,
+              codKit: null,
               startTime: null,
               biologico: null,
               codEtapaProcesso: null,
@@ -293,8 +295,8 @@ class _ConsultaEstoqueVencidoPageState
               indicador: null,
               lote: null,
               prontuario: null,
-              idEtiquetaContem: null,
-              codBarraKitContem: null,
+              idEtiquetaContem: idEtiqueta,
+              codBarraKitContem: codBarra,
             ),
           ),
         );

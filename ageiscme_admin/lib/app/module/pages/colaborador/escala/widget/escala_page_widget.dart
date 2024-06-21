@@ -2,7 +2,7 @@ import 'package:ageiscme_admin/app/module/pages/colaborador/escala/cubits/escala
 import 'package:ageiscme_admin/app/module/pages/colaborador/escala/widget/grid/escala_grid_page_widget.dart';
 import 'package:compartilhados/componentes/botoes/default_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
-import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_ano_mes_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +12,7 @@ class EscalaPageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    late bool Function() validateAnoMes;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -19,9 +20,12 @@ class EscalaPageWidget extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: DatePickerWidget(
-                placeholder: 'Ano/Mês',
-                formato: DateFormat('MM/yyyy'),
+              child: TextFieldAnoMesWidget(
+                placeholder: 'Ano/Mês *',
+                validator: (date) => date == null ? 'Obrigatório' : null,
+                validateBuilder: (context, validateMethodBuilder) =>
+                    validateAnoMes = validateMethodBuilder,
+                formato: DateFormat('yyyy/MM'),
                 onDateSelected: (data) =>
                     BlocProvider.of<EscalaPageCubit>(context)
                         .setData(data: data),
@@ -37,7 +41,10 @@ class EscalaPageWidget extends StatelessWidget {
                     cor: Colors.blue.shade400,
                     corHovered: Colors.blue.shade600,
                     icon: Icons.search,
-                    onPressed: () => consultar(context: context),
+                    onPressed: () => consultar(
+                      context: context,
+                      validateAnoMes: validateAnoMes,
+                    ),
                     text: 'Consultar',
                   ),
                 ),
@@ -66,8 +73,14 @@ class EscalaPageWidget extends StatelessWidget {
     );
   }
 
-  void consultar({required BuildContext context}) =>
-      BlocProvider.of<EscalaPageCubit>(context).queryOne(context: context);
+  void consultar({
+    required BuildContext context,
+    required bool Function() validateAnoMes,
+  }) {
+    bool anoMesValid = validateAnoMes();
+    if (!anoMesValid) return;
+    BlocProvider.of<EscalaPageCubit>(context).queryOne(context: context);
+  }
 
   void salvar({
     required BuildContext context,

@@ -100,6 +100,7 @@ class PlutoGridApiWidget<T> extends StatefulWidget {
   final ResetGridPaginationBuilder? resetGridPagionationBuilder;
   final PlutoGridMode mode;
   final void Function(T)? onSelected;
+  final String? orderDescendingFieldColumn;
 
   PlutoGridApiWidget({
     required this.columns,
@@ -121,6 +122,7 @@ class PlutoGridApiWidget<T> extends StatefulWidget {
     this.getObjectByRowMethod,
     this.mode = PlutoGridMode.normal,
     this.onSelected,
+    this.orderDescendingFieldColumn,
   });
 
   static double getFontSize(BuildContext context, bool smallRows) {
@@ -385,6 +387,14 @@ class _PlutoGridApiWidgetState<T> extends State<PlutoGridApiWidget<T>> {
                       ),
                       rows: [],
                       onLoaded: (event) {
+                        if (widget.orderDescendingFieldColumn != null) {
+                          event.stateManager.sortDescending(event
+                              .stateManager.columns
+                              .where((element) =>
+                                  element.field ==
+                                  widget.orderDescendingFieldColumn)
+                              .first);
+                        }
                         event.stateManager.setShowColumnFilter(true);
                         event.stateManager.addListener(() {
                           gridCubit.changeStateManager(event.stateManager);

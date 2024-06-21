@@ -5,14 +5,15 @@ import 'package:ageiscme_models/models/imagem/imagem_model.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/open_doc/open_doc_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/upload_button_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_image_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_open_doc_model.dart';
 import 'package:compartilhados/componentes/images/image_widget.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
+import 'package:compartilhados/functions/image_helper/image_object_model.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/dropdown_search_export.dart';
 import 'package:flutter/material.dart';
@@ -50,6 +51,8 @@ class _ImagemPageFrmState extends State<ImagemPageFrm> {
       titulo = 'Edição da Imagem: ${imagem.cod} - ${imagem.nomeFoto}';
     }
   }
+
+  AutovalidateMode validateMode = AutovalidateMode.onUserInteraction;
 
   @override
   Widget build(BuildContext context) {
@@ -106,10 +109,12 @@ class _ImagemPageFrmState extends State<ImagemPageFrm> {
                         validator: (value) => value == null || value.isEmpty
                             ? 'Obrigatório'
                             : null,
-                        autoValidateMode: AutovalidateMode.onUserInteraction,
-                        popupProps: const PopupProps.menu(
-                          showSearchBox: true,
+                        dropdownDecoratorProps: const DropDownDecoratorProps(
+                          dropdownSearchDecoration: InputDecoration(
+                            labelText: 'Identificador *',
+                          ),
                         ),
+                        autoValidateMode: validateMode,
                         itemAsString: (item) => item,
                         items: _getIdentificadores(),
                         onChanged: (item) {
@@ -139,32 +144,6 @@ class _ImagemPageFrmState extends State<ImagemPageFrm> {
                         imageBase64: imagem.foto,
                       ),
                     ),
-                    const Padding(padding: EdgeInsets.only(top: 5)),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Wrap(
-                            runSpacing: 16 * paddingHorizontalScale,
-                            spacing: 16 * paddingHorizontalScale,
-                            children: [
-                              UploadButtonWidget(
-                                placeholder: 'Anexar Imagem',
-                                imageSelected: (value1, value2) {
-                                  salvarImagem(value1, value2);
-                                },
-                              ),
-                              OpenDocWidget(
-                                placeholder: 'Abrir Imagem',
-                                documentoString: imagem.foto,
-                                documentName: imagem.nomeFoto != null
-                                    ? trataImagem(imagem.nomeFoto)!
-                                    : 'arquivo sem nome.Webp',
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
                     const Padding(padding: EdgeInsets.only(top: 24)),
                   ],
                 ),
@@ -175,6 +154,18 @@ class _ImagemPageFrmState extends State<ImagemPageFrm> {
                 children: [
                   CustomPopupMenuWidget(
                     items: [
+                      CustomPopupItemImageModel.getImageItem(
+                        'Anexar Imagem',
+                        salvarImagem,
+                      ),
+                      CustomPopupItemOpenDocModel.getOpenDocItem(
+                        'Abrir Imagem',
+                        context,
+                        imagem.foto,
+                        imagem.nomeFoto != null
+                            ? trataImagem(imagem.nomeFoto)!
+                            : 'arquivo sem nome.Webp',
+                      ),
                       if (imagem.cod != null && imagem.cod != 0)
                         CustomPopupItemHistoryModel.getHistoryItem(
                           child: HistoricoPage(
@@ -216,14 +207,15 @@ class _ImagemPageFrmState extends State<ImagemPageFrm> {
     );
   }
 
-  void salvarImagem(String foto, String nomeFoto) {
+  void salvarImagem(Future<ImageObjectModel?> Function() onSelectImage) async {
+    ImageObjectModel? imageNew = await onSelectImage();
+    if (imageNew == null) return;
     setState(() {
-      imagem.foto = foto;
-      imagem.nomeFoto = nomeFoto;
+      imagem.foto = imageNew.base64;
+      imagem.nomeFoto = imageNew.fileName;
       if (imagem.nomeFoto != null) {
         imagem.nomeFoto = trataImagem(imagem.nomeFoto);
       }
-      print(imagem.nomeFoto);
     });
   }
 
@@ -245,6 +237,9 @@ class _ImagemPageFrmState extends State<ImagemPageFrm> {
       ];
 
   void salvar() {
+    setState(() {
+      validateMode = AutovalidateMode.always;
+    });
     if (imagem.identificadorImagem == null ||
         imagem.identificadorImagem!.isEmpty) return;
     cubit.save(imagem);

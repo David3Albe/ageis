@@ -11,6 +11,7 @@ sealed class TreinamentoRegistroFilter with _$TreinamentoRegistroFilter {
     int? numeroRegistros,
     String? nomeContem,
     @JsonKey(name: 'tStamp') String? tStamp,
+    bool? ordenarPorDataDecrescente ,
   }) = _TreinamentoRegistroFilter;
 
   factory TreinamentoRegistroFilter.fromJson(Map<String, Object?> json) =>

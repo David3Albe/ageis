@@ -41,6 +41,7 @@ class _ConsultaRegistroServicoPageState
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(
       text: 'Data Início',
@@ -178,6 +179,7 @@ class _ConsultaRegistroServicoPageState
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'dataInicio',
                     smallRows: true,
                     columns: colunas,
                     items: state.registrosServicos,

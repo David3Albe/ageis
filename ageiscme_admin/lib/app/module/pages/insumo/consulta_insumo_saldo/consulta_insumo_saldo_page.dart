@@ -142,6 +142,7 @@ class _ConsultaInsumoSaldoPageState extends State<ConsultaInsumoSaldoPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'dataFabricacao',
                     smallRows: true,
                     columns: colunas,
                     items: state.insumosSaldos,

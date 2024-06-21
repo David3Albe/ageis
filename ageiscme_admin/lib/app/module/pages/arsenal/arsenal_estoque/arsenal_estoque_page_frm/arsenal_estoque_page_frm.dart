@@ -9,7 +9,7 @@ import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_area_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
@@ -49,7 +49,7 @@ class _ArsenalEstoquePageFrmState extends State<ArsenalEstoquePageFrm> {
   );
 
   late final TextFieldStringWidget txtNome = TextFieldStringWidget(
-    placeholder: 'Nome',
+    placeholder: 'Nome *',
     onChanged: (String? str) {
       arsenalEstoque.nome = txtNome.text;
     },
@@ -70,6 +70,7 @@ class _ArsenalEstoquePageFrmState extends State<ArsenalEstoquePageFrm> {
   );
 
   late bool localIsEmpty = false;
+  late bool Function() validateLocal;
 
   @override
   void initState() {
@@ -176,14 +177,18 @@ class _ArsenalEstoquePageFrmState extends State<ArsenalEstoquePageFrm> {
                                     element.cod == arsenalEstoque.codLocal,
                               )
                               .firstOrNull;
-                          return DropDownWidget<LocalInstituicaoModel>(
+                          return DropDownSearchWidget<LocalInstituicaoModel>(
+                            validator: (val) =>
+                                val == null ? 'Obrigatório' : null,
+                            validateBuilder: (context, validateMethodBuilder) =>
+                                validateLocal = validateMethodBuilder,
                             initialValue: local,
                             sourceList: locaisInstituicao
                                 .where((element) => element.ativo == true)
                                 .toList(),
                             onChanged: (value) =>
-                                arsenalEstoque.codLocal = value.cod,
-                            placeholder: 'Local',
+                                arsenalEstoque.codLocal = value?.cod,
+                            placeholder: 'Local *',
                           );
                         },
                       ),
@@ -323,16 +328,13 @@ class _ArsenalEstoquePageFrmState extends State<ArsenalEstoquePageFrm> {
   }
 
   void salvar() {
-    if (!txtNome.valid || !txtCodBarra.valid) {
+    bool nomeValid = txtNome.valid;
+    bool codBarraValid = txtCodBarra.valid;
+    bool localValid = validateLocal();
+    if (!nomeValid || !codBarraValid || !localValid) {
       return;
     }
 
-    if (localIsEmpty) {
-      ToastUtils.showCustomToastWarning(
-        context,
-        'Este Arsenal ainda não possui uma Localização cadastrada e não será possível utiliza-lo no Processo. Utilize o botão Localizações e cadastre uma.',
-      );
-    }
-    cubit.save(arsenalEstoque);
+    cubit.save(arsenalEstoque, localIsEmpty, context);
   }
 }

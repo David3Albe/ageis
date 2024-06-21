@@ -26,6 +26,7 @@ class AnormalidadePageWidget extends StatelessWidget {
         CustomDataColumn(
           text: 'Cód',
           field: 'cod',
+          width: 100,
         ),
         CustomDataColumn(
           text: 'Usuário',
@@ -82,6 +83,7 @@ class AnormalidadePageWidget extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(top: 16.0, bottom: 16),
             child: PlutoGridApiWidget<AnormalidadeQueryItemResponseDTO>(
+              orderDescendingFieldColumn: 'dataHora',
               onEdit: (objeto) => openModalGrid(
                 context: context,
                 resetarGrid: resetarGrid,

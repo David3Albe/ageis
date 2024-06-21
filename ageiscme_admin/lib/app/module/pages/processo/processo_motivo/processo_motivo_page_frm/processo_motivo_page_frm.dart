@@ -36,7 +36,7 @@ class _ProcessoMotivoPageFrmState extends State<ProcessoMotivoPageFrm> {
     service: ProcessoMotivoService(),
   );
   late final TextFieldStringWidget txtDescricao = TextFieldStringWidget(
-    placeholder: 'Descrição',
+    placeholder: 'Descrição *',
     onChanged: (String? str) {
       processoMotivo.descricao = txtDescricao.text;
     },

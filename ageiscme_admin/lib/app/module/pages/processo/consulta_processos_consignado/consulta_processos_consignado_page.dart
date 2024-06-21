@@ -107,6 +107,7 @@ class _ConsultaProcessosConsignadoPageState
         text: 'Data',
         field: 'dataHora',
         type: CustomDataColumnType.DateTime,
+        width: 130,
       ),
       CustomDataColumn(text: 'Usuário', field: 'usuario'),
       CustomDataColumn(text: 'Origem', field: 'origem'),
@@ -116,7 +117,11 @@ class _ConsultaProcessosConsignadoPageState
         field: 'prontuario',
         type: CustomDataColumnType.Number,
       ),
-      CustomDataColumn(text: 'ID Etiqueta', field: 'idEtiqueta'),
+      CustomDataColumn(
+        text: 'ID Etiqueta',
+        field: 'idEtiqueta',
+        width: 140,
+      ),
       CustomDataColumn(
         text: 'Material Consignado',
         field: 'materialConsignado',
@@ -213,6 +218,7 @@ class _ConsultaProcessosConsignadoPageState
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'dataHora',
                     smallRows: true,
                     columns: colunas,
                     items: state.itensConsignados,

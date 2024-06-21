@@ -29,6 +29,9 @@ mixin _$EquipamentoManutencaoFilter {
   set codEquipamento(int? value) => throw _privateConstructorUsedError;
   int? get codTipoServico => throw _privateConstructorUsedError;
   set codTipoServico(int? value) => throw _privateConstructorUsedError;
+  bool? get ordenarDataInicioDecrescente => throw _privateConstructorUsedError;
+  set ordenarDataInicioDecrescente(bool? value) =>
+      throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
   String? get tStamp => throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
@@ -65,6 +68,7 @@ abstract class $EquipamentoManutencaoFilterCopyWith<$Res> {
       int? numeroRegistros,
       int? codEquipamento,
       int? codTipoServico,
+      bool? ordenarDataInicioDecrescente,
       @JsonKey(name: 'tStamp') String? tStamp,
       @JsonKey(includeToJson: false, includeFromJson: false)
       EquipamentoDropDownSearchResponseDTO? equipamento,
@@ -93,6 +97,7 @@ class _$EquipamentoManutencaoFilterCopyWithImpl<$Res,
     Object? numeroRegistros = freezed,
     Object? codEquipamento = freezed,
     Object? codTipoServico = freezed,
+    Object? ordenarDataInicioDecrescente = freezed,
     Object? tStamp = freezed,
     Object? equipamento = freezed,
     Object? servicoTipo = freezed,
@@ -114,6 +119,10 @@ class _$EquipamentoManutencaoFilterCopyWithImpl<$Res,
           ? _value.codTipoServico
           : codTipoServico // ignore: cast_nullable_to_non_nullable
               as int?,
+      ordenarDataInicioDecrescente: freezed == ordenarDataInicioDecrescente
+          ? _value.ordenarDataInicioDecrescente
+          : ordenarDataInicioDecrescente // ignore: cast_nullable_to_non_nullable
+              as bool?,
       tStamp: freezed == tStamp
           ? _value.tStamp
           : tStamp // ignore: cast_nullable_to_non_nullable
@@ -170,6 +179,7 @@ abstract class _$$EquipamentoManutencaoFilterImplCopyWith<$Res>
       int? numeroRegistros,
       int? codEquipamento,
       int? codTipoServico,
+      bool? ordenarDataInicioDecrescente,
       @JsonKey(name: 'tStamp') String? tStamp,
       @JsonKey(includeToJson: false, includeFromJson: false)
       EquipamentoDropDownSearchResponseDTO? equipamento,
@@ -199,6 +209,7 @@ class __$$EquipamentoManutencaoFilterImplCopyWithImpl<$Res>
     Object? numeroRegistros = freezed,
     Object? codEquipamento = freezed,
     Object? codTipoServico = freezed,
+    Object? ordenarDataInicioDecrescente = freezed,
     Object? tStamp = freezed,
     Object? equipamento = freezed,
     Object? servicoTipo = freezed,
@@ -220,6 +231,10 @@ class __$$EquipamentoManutencaoFilterImplCopyWithImpl<$Res>
           ? _value.codTipoServico
           : codTipoServico // ignore: cast_nullable_to_non_nullable
               as int?,
+      ordenarDataInicioDecrescente: freezed == ordenarDataInicioDecrescente
+          ? _value.ordenarDataInicioDecrescente
+          : ordenarDataInicioDecrescente // ignore: cast_nullable_to_non_nullable
+              as bool?,
       tStamp: freezed == tStamp
           ? _value.tStamp
           : tStamp // ignore: cast_nullable_to_non_nullable
@@ -245,6 +260,7 @@ class _$EquipamentoManutencaoFilterImpl
       this.numeroRegistros,
       this.codEquipamento,
       this.codTipoServico,
+      this.ordenarDataInicioDecrescente,
       @JsonKey(name: 'tStamp') this.tStamp,
       @JsonKey(includeToJson: false, includeFromJson: false) this.equipamento,
       @JsonKey(includeToJson: false, includeFromJson: false) this.servicoTipo});
@@ -262,6 +278,8 @@ class _$EquipamentoManutencaoFilterImpl
   @override
   int? codTipoServico;
   @override
+  bool? ordenarDataInicioDecrescente;
+  @override
   @JsonKey(name: 'tStamp')
   String? tStamp;
   @override
@@ -273,7 +291,7 @@ class _$EquipamentoManutencaoFilterImpl
 
   @override
   String toString() {
-    return 'EquipamentoManutencaoFilter(cod: $cod, numeroRegistros: $numeroRegistros, codEquipamento: $codEquipamento, codTipoServico: $codTipoServico, tStamp: $tStamp, equipamento: $equipamento, servicoTipo: $servicoTipo)';
+    return 'EquipamentoManutencaoFilter(cod: $cod, numeroRegistros: $numeroRegistros, codEquipamento: $codEquipamento, codTipoServico: $codTipoServico, ordenarDataInicioDecrescente: $ordenarDataInicioDecrescente, tStamp: $tStamp, equipamento: $equipamento, servicoTipo: $servicoTipo)';
   }
 
   @JsonKey(ignore: true)
@@ -298,6 +316,7 @@ abstract class _EquipamentoManutencaoFilter
           int? numeroRegistros,
           int? codEquipamento,
           int? codTipoServico,
+          bool? ordenarDataInicioDecrescente,
           @JsonKey(name: 'tStamp') String? tStamp,
           @JsonKey(includeToJson: false, includeFromJson: false)
           EquipamentoDropDownSearchResponseDTO? equipamento,
@@ -320,6 +339,9 @@ abstract class _EquipamentoManutencaoFilter
   @override
   int? get codTipoServico;
   set codTipoServico(int? value);
+  @override
+  bool? get ordenarDataInicioDecrescente;
+  set ordenarDataInicioDecrescente(bool? value);
   @override
   @JsonKey(name: 'tStamp')
   String? get tStamp;

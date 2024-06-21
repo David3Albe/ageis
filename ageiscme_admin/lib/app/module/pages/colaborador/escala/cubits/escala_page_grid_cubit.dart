@@ -58,6 +58,7 @@ class EscalaPageGridCubit extends Cubit<EscalaPageGridState> {
         title: 'Turno',
         field: 'turno',
         frozen: PlutoColumnFrozen.start,
+        width: 140,
         readOnly: true,
         type: PlutoColumnType.select(
           enableColumnFilter: true,
@@ -79,7 +80,7 @@ class EscalaPageGridCubit extends Cubit<EscalaPageGridState> {
     for (DateTime day in days) {
       DateFormat format = DateFormat('dd');
       PlutoColumn clm = PlutoColumn(
-        width: 100,
+        width: 115,
         enableEditingMode: false,
         title: format.format(day),
         field: day.day.toString(),

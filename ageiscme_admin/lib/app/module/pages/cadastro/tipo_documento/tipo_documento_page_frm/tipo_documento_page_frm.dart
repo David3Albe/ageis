@@ -35,7 +35,7 @@ class _TipoDocumentoPageFrmState extends State<TipoDocumentoPageFrm> {
     service: TipoDocumentoService(),
   );
   late final TextFieldStringWidget txtDescricao = TextFieldStringWidget(
-    placeholder: 'Descrição',
+    placeholder: 'Descrição *',
     onChanged: (String? str) {
       tipoDocumento.descricao = txtDescricao.text;
     },

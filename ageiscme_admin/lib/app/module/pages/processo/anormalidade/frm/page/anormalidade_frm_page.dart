@@ -41,6 +41,8 @@ class AnormalidadeFrmPageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ScrollController scroll = ScrollController();
+    final GlobalKey<FormState> tipoAnormalidadeForm = GlobalKey<FormState>();
     Size size = MediaQuery.of(context).size;
     double scalePadding = size.width / 1920;
     bool loading =
@@ -91,6 +93,7 @@ class AnormalidadeFrmPageWidget extends StatelessWidget {
           ),
           Expanded(
             child: SingleChildScrollView(
+              controller: scroll,
               child: Padding(
                 padding: const EdgeInsets.only(right: 16.0),
                 child: Column(
@@ -238,31 +241,36 @@ class AnormalidadeFrmPageWidget extends StatelessWidget {
                         },
                       ),
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 16 * scalePadding),
-                      child: BlocBuilder<AnormalidadeFrmCubit,
-                          AnormalidadeFrmState>(
-                        builder: (context, state) =>
-                            CustomAutocompleteSelectableWidget<
-                                AnormalidadeTipoShortResponseDTO>(
-                          initialValue: state.dto?.anormalidadeTipo,
-                          onSelected:
-                              BlocProvider.of<AnormalidadeFrmCubit>(context)
-                                  .changeTipoAnormalidade,
-                          selectedText: (item) => item.Nome(),
-                          readonly: (state.dto?.cod ?? 0) > 0,
-                          label: 'Tipo de Anormalidade',
-                          title: (p0) => Text(p0.Nome()),
-                          suggestionsCallback: (str) async =>
-                              (await Modular.get<AnormalidadeTipoService>()
-                                      .short(
-                                AnormalidadeTipoShortDTO(
-                                  numeroRegistros: 30,
-                                  termoPesquisa: str,
-                                ),
-                              ))
-                                  ?.$2 ??
-                              [],
+                    Form(
+                      key: tipoAnormalidadeForm,
+                      child: Padding(
+                        padding: EdgeInsets.only(top: 16 * scalePadding),
+                        child: BlocBuilder<AnormalidadeFrmCubit,
+                            AnormalidadeFrmState>(
+                          builder: (context, state) =>
+                              CustomAutocompleteSelectableWidget<
+                                  AnormalidadeTipoShortResponseDTO>(
+                            initialValue: state.dto?.anormalidadeTipo,
+                            onSelected:
+                                BlocProvider.of<AnormalidadeFrmCubit>(context)
+                                    .changeTipoAnormalidade,
+                            validator: (p0) =>
+                                p0 == null || p0.isEmpty ? 'Obrigatório' : null,
+                            selectedText: (item) => item.Nome(),
+                            readonly: (state.dto?.cod ?? 0) > 0,
+                            label: 'Tipo de Anormalidade *',
+                            title: (p0) => Text(p0.Nome()),
+                            suggestionsCallback: (str) async =>
+                                (await Modular.get<AnormalidadeTipoService>()
+                                        .short(
+                                  AnormalidadeTipoShortDTO(
+                                    numeroRegistros: 30,
+                                    termoPesquisa: str,
+                                  ),
+                                ))
+                                    ?.$2 ??
+                                [],
+                          ),
                         ),
                       ),
                     ),
@@ -443,9 +451,11 @@ class AnormalidadeFrmPageWidget extends StatelessWidget {
                   alignment: WrapAlignment.end,
                   children: [
                     SaveButtonWidget(
-                      onPressed: () =>
-                          BlocProvider.of<AnormalidadeFrmCubit>(context)
-                              .salvar(context: context),
+                      onPressed: () => save(
+                        context: context,
+                        scroll: scroll,
+                        tipoAnormalidadeForm: tipoAnormalidadeForm,
+                      ),
                     ),
                     CleanButtonWidget(
                       onPressed:
@@ -462,6 +472,19 @@ class AnormalidadeFrmPageWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void save({
+    required BuildContext context,
+    required ScrollController scroll,
+    required GlobalKey<FormState> tipoAnormalidadeForm,
+  }) {
+    bool? anormalidadeTipoValid = tipoAnormalidadeForm.currentState?.validate();
+    if (anormalidadeTipoValid != true) {
+      scroll.jumpTo(200);
+      return;
+    }
+    BlocProvider.of<AnormalidadeFrmCubit>(context).salvar(context: context);
   }
 
   void openModalMateriaisAnormalidade(

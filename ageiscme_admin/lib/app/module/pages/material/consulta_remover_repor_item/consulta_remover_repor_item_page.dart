@@ -41,12 +41,14 @@ class _ConsultaRemoverReporItemPageState
       text: 'Data',
       field: 'dataHora',
       type: CustomDataColumnType.DateTime,
+      width: 130,
     ),
     CustomDataColumn(
       text: 'Cód. Kit',
       field: 'kit',
       calculatedField: 'kitCodBarra',
       valueConverter: (kit) => kit == null ? '' : kit['codBarra'],
+      width: 140,
     ),
     CustomDataColumn(
       text: 'Kit',
@@ -57,6 +59,7 @@ class _ConsultaRemoverReporItemPageState
     ),
     CustomDataColumn(
       text: 'Etiqueta',
+      width: 100,
       field: 'item',
       valueConverter: (value) => value == null ? '' : value['idEtiqueta'],
     ),
@@ -136,6 +139,7 @@ class _ConsultaRemoverReporItemPageState
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
                     smallRows: true,
+                    orderDescendingFieldColumn: 'dataHora',
                     columns: colunas,
                     items: state.itens,
                   ),

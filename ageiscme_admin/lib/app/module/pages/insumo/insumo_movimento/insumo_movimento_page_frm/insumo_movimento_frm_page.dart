@@ -34,6 +34,7 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/read_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
+import 'package:compartilhados/componentes/toasts/warning_dialog.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/modular_export.dart';
@@ -111,16 +112,29 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
   );
 
   late final TextFieldStringWidget txtLote = TextFieldStringWidget(
-    placeholder: 'Lote',
+    placeholder: 'Lote *',
     onChanged: (String? str) {
       insumoMovimento.lote = txtLote.text;
     },
     readOnly: insumoMovimento.cod != 0 ? true : false,
   );
 
+  late bool Function() dataValidadeValidate;
   late final DatePickerWidget dtpDataValidade = DatePickerWidget(
-    placeholder: 'Data Validade',
+    placeholder: 'Data Validade *',
     onDateSelected: (value) => insumoMovimento.dataValidade = value,
+    validateBuilder: (context, validateMethodBuilder) =>
+        dataValidadeValidate = validateMethodBuilder,
+    validator: (date) {
+      if (date == null) {
+        return 'Obrigatório';
+      }
+      if (insumoMovimento.flagEntradaSaida == '0' &&
+          date.isBefore(DateTime.now())) {
+        return 'Não pode ser antes da data atual';
+      }
+      return null;
+    },
     initialValue: insumoMovimento.dataValidade,
     readOnly:
         insumoMovimento.cod != 0 && insumoMovimento.flagEntradaSaida != '1'
@@ -131,15 +145,21 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
   late final TextFieldNumberFloatWidget txtQuantidade =
       TextFieldNumberFloatWidget(
     negative: true,
-    placeholder: 'Quantidade',
+    placeholder: 'Quantidade *',
     onChanged: (String? str) {
-      insumoMovimento.quantidade = double.tryParse(txtQuantidade.text);
+      insumoMovimento.quantidade = str == null || str.isEmpty
+          ? null
+          : double.tryParse(txtQuantidade.text);
     },
     readOnly: insumoMovimento.cod != 0 ? true : false,
   );
 
+  late bool Function() dataFabricacaoValidate;
   late final DatePickerWidget dtpDataFabricacao = DatePickerWidget(
-    placeholder: 'Data Fabricação',
+    placeholder: 'Data Fabricação *',
+    validator: (date) => date == null ? 'Obrigatório' : null,
+    validateBuilder: (context, validateMethodBuilder) =>
+        dataFabricacaoValidate = validateMethodBuilder,
     onDateSelected: (value) => insumoMovimento.dataFabricacao = value,
     initialValue: insumoMovimento.dataFabricacao,
     readOnly:
@@ -172,8 +192,14 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
     },
   );
 
+  late bool Function() dataNotaFiscalValidate;
   late final DatePickerWidget dtpDataNotaFiscal = DatePickerWidget(
-    placeholder: 'Data Nota Fiscal',
+    placeholder: 'Data Nota Fiscal *',
+    validateBuilder: (context, validateMethodBuilder) =>
+        dataNotaFiscalValidate = validateMethodBuilder,
+    validator: (date) => date == null && insumoMovimento.flagEntradaSaida == '1'
+        ? 'Obrigatório'
+        : null,
     onDateSelected: (value) => insumoMovimento.dataNotaFiscal = value,
     initialValue: insumoMovimento.dataNotaFiscal,
   );
@@ -222,6 +248,11 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
 
   late EquipamentoInsumoCubit equipamentoInsumoCubit;
 
+  late bool Function() depositoValidate;
+  late bool Function() insumoValidate;
+
+  final ScrollController scroll = ScrollController();
+
   @override
   void initState() {
     equipamentoInsumoCubit = EquipamentoInsumoCubit();
@@ -254,6 +285,9 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
     });
 
     txtLote.addValidator((String str) {
+      if (str.isEmpty) {
+        return 'Obrigatório';
+      }
       if (str.length > 50) {
         return 'Pode ter no máximo 50 caracteres';
       }
@@ -305,6 +339,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
     txtRegistro.text = insumoMovimento.cod?.toString() ?? '';
     txtNroNotaFiscal.text = insumoMovimento.nroTotalFiscal?.toString() ?? '';
     txtLote.text = insumoMovimento.lote?.toString() ?? '';
+    if (!inInit) txtLote.valid;
     if (!inInit) setFieldsAfterInit();
 
     titulo = 'Cadastro de Movimentos dos Insumos';
@@ -360,6 +395,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
               maxHeight: 1000,
             ),
             child: SingleChildScrollView(
+              controller: scroll,
               padding: const EdgeInsets.only(top: 14),
               child: Column(
                 children: [
@@ -702,6 +738,13 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
                                   cbxInsumoKey.currentState?.setItem(null);
                                 }
                                 return DropDownSearchWidget<InsumoModel>(
+                                  validator: (val) =>
+                                      val == null ? 'Obrigatório' : null,
+                                  validateBuilder: (
+                                    context,
+                                    validateMethodBuilder,
+                                  ) =>
+                                      insumoValidate = validateMethodBuilder,
                                   readOnly: insumoMovimento.cod != 0 ||
                                           baseSolicitacao == true
                                       ? true
@@ -723,7 +766,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
                                     insumoMovimento.codBarra = value?.codBarra;
                                     checkAndCallPopulaCampos();
                                   },
-                                  placeholder: 'Insumo',
+                                  placeholder: 'Insumo *',
                                 );
                               },
                             );
@@ -754,6 +797,10 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
                             )
                             .firstOrNull;
                         return DropDownSearchWidget<DepositoInsumoModel>(
+                          validateBuilder: (context, validateMethodBuilder) =>
+                              depositoValidate = validateMethodBuilder,
+                          validator: (val) =>
+                              val == null ? 'Obrigatório' : null,
                           readOnly: insumoMovimento.cod != 0 ? true : false,
                           textFunction: (deposito) =>
                               deposito.GetNomeDepositoText(),
@@ -763,7 +810,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
                             insumoMovimento.codDeposito = value?.cod!;
                             checkAndCallPopulaCampos();
                           },
-                          placeholder: 'Depósito',
+                          placeholder: 'Depósito *',
                         );
                       },
                     ),
@@ -1029,52 +1076,40 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
     BuildContext context,
     InsumoMovimentoModel insumoMovimento,
   ) async {
-    if (insumoMovimento.dataFabricacao == null) {
-      ToastUtils.showCustomToastWarning(
-        context,
-        'Data de fabricação deve ser informada!',
-      );
-      return;
+    bool dataFabricacaoValid = dataFabricacaoValidate();
+    bool insumoValid = insumoValidate();
+    bool depositoValid = depositoValidate();
+    bool loteValid = txtLote.valid;
+    bool quantidadeValid = txtQuantidade.valid;
+    bool dataValidadeValid = dataValidadeValidate();
+
+    if (!insumoValid) {
+      scroll.jumpTo(30);
+    } else if (!depositoValid) {
+      scroll.jumpTo(80);
+    } else if (!loteValid || !dataFabricacaoValid) {
+      scroll.jumpTo(130);
+    } else if (!dataValidadeValid) {
+      scroll.jumpTo(180);
+    } else if (!quantidadeValid) {
+      scroll.jumpTo(230);
     }
+
     if (insumoMovimento.flagEntradaSaida == '1') {
-      if (!txtQuantidade.valid ||
-          !txtNroNotaFiscal.valid ||
-          !txtLote.valid ||
-          insumoMovimento.dataNotaFiscal == null) {
-        await ErrorUtils.showErrorDialog(
-          context,
-          ['Data Nota Fiscal precisa ser informado'],
-        );
+      bool dtpDataNotaFiscal = dataNotaFiscalValidate();
+      if (!dtpDataNotaFiscal) {
+        scroll.jumpTo(330);
+      }
+      if (!txtNroNotaFiscal.valid || !loteValid || !dtpDataNotaFiscal) {
         return;
       }
     }
-
-    // if (insumoMovimento.flagEntradaSaida == '2') {
-    //   if (!txtQuantidade.valid || insumoMovimento.codDestinoResiduos == null) {
-    //     await ErrorUtils.showErrorDialog(
-    //       context,
-    //       ['Destino de resíduos precisa ser informado'],
-    //     );
-    //     return;
-    //   }
-    // }
-
-    if (insumoMovimento.flagEntradaSaida == '0') {
-      if (insumoMovimento.lote == null || !txtQuantidade.valid) {
-        await ErrorUtils.showErrorDialog(
-          context,
-          ['Lote precisa ser informado'],
-        );
-        return;
-      }
-    }
-
-    if (insumoMovimento.dataValidade!.isBefore(DateTime.now()) &&
-        insumoMovimento.flagEntradaSaida != '0') {
-      ToastUtils.showCustomToastError(
-        context,
-        'Movimentação Geral: Data da Validade Vencida',
-      );
+    if (!dataFabricacaoValid ||
+        !insumoValid ||
+        !depositoValid ||
+        !loteValid ||
+        !quantidadeValid ||
+        !dataValidadeValid) {
       return;
     }
 
@@ -1093,16 +1128,12 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
             'INSUMO NÃO ENCONTRADO: O INSUMO/LOTE informado não foi\nencontrado no DEPÓSITO indicado. Deseja criar?',
           );
           if (!confirmacao) {
-            ToastUtils.showCustomToastWarning(
-              context,
-              'Revise seu Procedimento',
-            );
             return;
           }
         } else {
-          await ErrorUtils.showErrorDialog(context, [
-            'MOVIMENTAÇÃO DE SAÍDA: O INSUMO/LOTE informado não foi encontrado no DEPÓSITO indicado.',
-          ]);
+          await WarningUtils.showWarningDialog(context, 
+            'MOVIMENTAÇÃO DE SAÍDA: O INSUMO/LOTE informado não foi encontrado no DEPÓSITO indicado. Revise seu Procedimento',
+          );
           return;
         }
       }
@@ -1113,10 +1144,6 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
           'Confira atentamente a movimentação preenchida.\nVocê confirma os dados informados?',
         );
         if (!confirmacao) {
-          ToastUtils.showCustomToastWarning(
-            context,
-            'Revise seu Procedimento',
-          );
           return;
         }
       }
@@ -1129,7 +1156,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
         'Faça a leitura do Lote indicado ou Cancele a operação',
       );
       if (!confirmacao.$1) {
-        ToastUtils.showCustomToastWarning(
+        await WarningUtils.showWarningDialog(
           context,
           'Falha na conferência do lote. Revise seu procedimento.',
         );
@@ -1138,9 +1165,10 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
 
       if (insumoMovimento.lote == null ||
           confirmacao.$2 != insumoMovimento.lote) {
-        await ErrorUtils.showErrorDialog(context, [
+        await WarningUtils.showWarningDialog(
+          context,
           'O Lote lido não confere com o lote indicado. Revise seu procedimento.',
-        ]);
+        );
         return;
       }
     }

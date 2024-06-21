@@ -1,6 +1,8 @@
 import 'package:ageiscme_admin/app/module/pages/colaborador/escala/cubits/escala_page_grid_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/escala/states/escala_page_grid_state.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/escala/widget/grid/escala_grid_page_header_widget.dart';
+import 'package:ageiscme_models/response_dto/turno/short/turno_short_response_dto.dart';
+import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/exporters/pluto_grid_csv_export.dart';
 import 'package:compartilhados/exporters/pluto_grid_pdf_export.dart';
@@ -94,7 +96,6 @@ class _EscalaPageGridWidgetState extends State<EscalaPageGridWidget> {
               columns: [],
               rows: [],
               onChanged: (event) => onChanged(
-                stateManager: stateManager,
                 event: event,
                 context: context,
               ),
@@ -152,18 +153,25 @@ class _EscalaPageGridWidgetState extends State<EscalaPageGridWidget> {
   }
 
   void onChanged({
-    required PlutoGridStateManager? stateManager,
     required PlutoGridOnChangedEvent event,
     required BuildContext context,
   }) {
+    PlutoGridStateManager? stateManager =
+        BlocProvider.of<EscalaPageGridCubit>(context).state.stateManager;
     if (stateManager == null) return;
     if (event.oldValue == event.value) return;
     if (event.column.field != 'usuario') return;
-    for (PlutoRow row in stateManager.rows) {
-      if (row.cells['turno']!.value != event.row.cells['turno']!.value) {
+    for (PlutoRow row in stateManager.iterateRowAndGroup) {
+      TurnoShortResponseDTO? turno = event.row.cells['turno']!.value;
+      TurnoShortResponseDTO? turnoRow = row.cells['turno']!.value;
+      if (turnoRow?.descricao != turno?.descricao) {
         continue;
       }
-      if (event.value == row.cells['usuario']!.value && event.row != row) {
+
+      UsuarioDropDownSearchResponseDTO? usuario = event.value;
+      UsuarioDropDownSearchResponseDTO? usuarioRow =
+          row.cells['usuario']!.value;
+      if (usuario?.cod == usuarioRow?.cod && event != row) {
         ToastUtils.showCustomToastWarning(
           context,
           'Usuário já está adicionado a esse turno',

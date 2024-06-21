@@ -36,13 +36,13 @@ class TreinamentoRegistroPageCubit extends Cubit<TreinamentoRegistroPageState> {
     }
   }
 
-  Future filter(TreinamentoRegistroFilter filter) async {
+  Future filterScreen(TreinamentoRegistroFilter filter) async {
     emit(
       TreinamentoRegistroPageState(loading: true, treinamentosRegistros: []),
     );
     try {
       List<TreinamentoRegistroModel> treinamentosRegistros =
-          await service.Filter(filter);
+          await service.FilterScreen(filter);
       emit(
         TreinamentoRegistroPageState(
           loading: false,

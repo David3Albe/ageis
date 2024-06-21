@@ -1,5 +1,6 @@
 import 'package:compartilhados/cores/cores.dart';
 import 'package:compartilhados/functions/helper_functions.dart';
+import 'package:dependencias_comuns/easy_debounce_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
@@ -50,7 +51,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
               elevation: widget.elevation,
               backgroundColor: Cores.corBotaoVerdeSelecionado,
             ),
-      onPressed: widget.onPressed,
+      onPressed: handleClick,
       child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: widget.paddingWidth * scaleW,
@@ -88,6 +89,15 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
           ],
         ),
       ),
+    );
+  }
+
+  void handleClick() {
+    if (widget.onPressed == null) return;
+    EasyThrottle.throttle(
+      'save-button',
+      const Duration(seconds: 4),
+      widget.onPressed!,
     );
   }
 }

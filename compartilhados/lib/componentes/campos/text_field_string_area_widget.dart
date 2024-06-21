@@ -66,7 +66,7 @@ class _TextFieldStringAreaWidgetState extends State<TextFieldStringAreaWidget> {
           onEditingComplete: widget.onEditComplete,
           keyboardType: TextInputType.multiline,
           maxLines: 7,
-          minLines: 7,
+          minLines: 1,
           controller: widget._controller,
           onChanged: (String? str) {
             validate();

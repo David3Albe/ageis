@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/deposito_insumo/deposito_insumo_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/insumo/insumo_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/insumo_movimento/insumo_movimento_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/insumo_movimento/cubit/insumo_movimento_filter_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/insumo_teste/insumo_teste_page_frm/insumo_teste_frm_page_state.dart';
@@ -22,7 +21,6 @@ import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
@@ -57,7 +55,6 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
   InsumoTesteModel insumoTeste;
   late final InsumoCubit insumoCubit;
   late final DepositoInsumoCubit depositoInsumoCubit;
-  late final InsumoMovimentoCubit insumoMovimentoCubit;
   late final UsuarioCubit usuarioCubit;
   late final InsumoTestePageFrmCubit cubit = InsumoTestePageFrmCubit(
     insumoTesteModel: insumoTeste,
@@ -129,8 +126,6 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
   void initState() {
     insumoCubit = InsumoCubit();
     insumoCubit.loadAll();
-    insumoMovimentoCubit = InsumoMovimentoCubit();
-    insumoMovimentoCubit.loadAll();
     insumoMovimentoService = InsumoMovimentoService();
 
     txtLote.addValidator((String str) {
@@ -198,6 +193,12 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
     }
   }
 
+  late bool Function() insumoValidate;
+  late bool Function() situacaoValidate;
+  late bool Function() movimentacaoValidate;
+
+  final ScrollController scroll = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     setFields();
@@ -236,6 +237,7 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
                 maxHeight: size.height * .8,
               ),
               child: SingleChildScrollView(
+                controller: scroll,
                 padding: const EdgeInsets.only(right: 14),
                 child: Column(
                   children: [
@@ -259,6 +261,10 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
                               )
                               .firstOrNull;
                           return DropDownSearchWidget<InsumoModel>(
+                            validateBuilder: (context, validateMethodBuilder) =>
+                                insumoValidate = validateMethodBuilder,
+                            validator: (val) =>
+                                val == null ? 'Obrigatório' : null,
                             readOnly: widget.insumoReadOnly ?? false,
                             textFunction: (insumo) =>
                                 insumo.GetNomeInsumoText(),
@@ -267,13 +273,16 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
                             onChanged: (value) {
                               insumoTeste.codInsumo = value?.cod!;
                             },
-                            placeholder: 'Insumo',
+                            placeholder: 'Insumo *',
                           );
                         },
                       ),
                     ),
                     DropDownSearchApiWidget<
                         InsumoMovimentoDropDownSearchResponseDTO>(
+                      validator: (val) => val == null ? 'Obrigatório' : null,
+                      validateBuilder: (context, validateMethodBuilder) =>
+                          movimentacaoValidate = validateMethodBuilder,
                       textFunction: (insumoMovimento) =>
                           insumoMovimento.InsumoMovimentoText(),
                       initialValue: insumoTeste.insumoMovimento == null
@@ -301,7 +310,7 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
                         InsumoMovimentoFilterCubit().setInsumoMovimento(value);
                         insumoTeste.codMovimentoInsumo = value!.cod;
                       },
-                      placeholder: 'Movimento',
+                      placeholder: 'Movimento *',
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
@@ -332,7 +341,7 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
                             onChanged: (value) {
                               insumoTeste.codDeposito = value?.cod!;
                             },
-                            placeholder: 'Depósito',
+                            placeholder: 'Depósito *',
                           );
                         },
                       ),
@@ -347,7 +356,10 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
-                      child: DropDownWidget<SituacaoOption>(
+                      child: DropDownSearchWidget<SituacaoOption>(
+                        validator: (obj) => obj == null ? 'Obrigatório' : null,
+                        validateBuilder: (context, validateMethodBuilder) =>
+                            situacaoValidate = validateMethodBuilder,
                         initialValue: SituacaoOption.situacaoOption
                             .where(
                               (element) => element.cod == insumoTeste.resultado,
@@ -355,8 +367,9 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
                             .firstOrNull,
                         sourceList: SituacaoOption.situacaoOption,
                         onChanged: (value) =>
-                            insumoTeste.resultado = value.cod.toString(),
-                        placeholder: 'Situação',
+                            insumoTeste.resultado = value?.cod.toString(),
+                        textFunction: (p0) => p0.GetDropDownText(),
+                        placeholder: 'Situação *',
                       ),
                     ),
                     Padding(
@@ -455,7 +468,26 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
   }
 
   void salvar() {
-    if (!txtLote.valid && !txtUsuario.valid) return;
+    bool loteValid = txtLote.valid;
+    bool usuarioValid = txtUsuario.valid;
+    bool insumoValid = insumoValidate();
+    bool situacaoValid = situacaoValidate();
+    bool movimentacaoValid = movimentacaoValidate();
+    if (!insumoValid) {
+      scroll.jumpTo(0);
+    } else if (!movimentacaoValid) {
+      scroll.jumpTo(50);
+    } else if (!loteValid) {
+      scroll.jumpTo(150);
+    } else if (!situacaoValid) {
+      scroll.jumpTo(250);
+    }
+
+    if (!loteValid ||
+        !usuarioValid ||
+        !insumoValid ||
+        !situacaoValid ||
+        !movimentacaoValid) return;
 
     if (insumoTeste.resultado == '0') {
       txtUsuarioLiberacao.text = nomeUsuarioLiberacao;

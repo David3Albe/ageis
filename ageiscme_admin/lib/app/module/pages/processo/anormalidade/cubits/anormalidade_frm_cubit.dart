@@ -90,6 +90,13 @@ class AnormalidadeFrmCubit extends Cubit<AnormalidadeFrmState> {
 
   Future salvar({required BuildContext context}) async {
     if (state.dto == null) return;
+    if (state.dto?.item == null && state.dto?.etapa == null) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'Item ou Etapa devem ser informados',
+      );
+      return;
+    }
     LoadingController loading = LoadingController(context: context);
     (String, AnormalidadeSaveResponseDTO)? result =
         await Modular.get<AnormalidadeService>().save(state.dto!);

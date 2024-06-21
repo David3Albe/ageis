@@ -131,6 +131,7 @@ class _KitPageState extends State<KitPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget<KitSearchKitResponseDTO>(
+                    orderDescendingFieldColumn: 'cod',
                     onEdit: (KitSearchKitResponseDTO objeto) => {
                       openModal(
                         context,
@@ -224,7 +225,8 @@ class _KitPageState extends State<KitPage> {
       context,
       state.message,
     );
-    bloc.searchKits(KitSearchDTO());
+    KitSearchDTO dto = context.read<KitCubitFilter>().state;
+    bloc.searchKits(dto);
   }
 
   void onError(KitPageState state) {

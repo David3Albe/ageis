@@ -47,6 +47,7 @@ class _ConsultaItemInventarioPageState
       field: 'qtdeCodDescritor',
       footerType: CustomDataColumnFooterType.Number,
       type: CustomDataColumnType.Number,
+      width: 110,
     ),
     CustomDataColumn(
       text: 'Valor Item',
@@ -54,6 +55,7 @@ class _ConsultaItemInventarioPageState
       footerType: CustomDataColumnFooterType.Currency,
       valueConverter: (value) => value == 0 ? '' : value,
       type: CustomDataColumnType.Currency,
+      width: 120,
     ),
     CustomDataColumn(text: 'Grupo', field: 'nomeGrupo'),
     CustomDataColumn(text: 'Processo Normal', field: 'nomeProcessoNormal'),
@@ -205,9 +207,15 @@ class _ConsultaItemInventarioPageState
                 },
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<GrupoMaterialCubit, List<GrupoMaterialModel>>(
+              BlocBuilder<GrupoMaterialCubit, GrupoMaterialState>(
                 bloc: grupoMaterialBloc,
-                builder: (context, gruposMateriais) {
+                builder: (context, state) {
+                  if (state.loading) {
+                    return const Center(
+                      child: LoadingWidget(),
+                    );
+                  }
+                  List<GrupoMaterialModel> gruposMateriais = state.grupoMateriais;
                   gruposMateriais.sort(
                     (a, b) => a.nome!.compareTo(b.nome!),
                   );

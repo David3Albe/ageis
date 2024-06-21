@@ -113,6 +113,7 @@ class ProcessoTipoFluxoPageController {
   void save() {
     alteraEtapasNaoInseridasFluxo();
     ajustaEtapasAdicionadas();
+    print(processoTipo.etapas?.where((element) => element.nome!=null && element.nome!.contains('Arsenal')).firstOrNull?.sequencias);
   }
 
   void alteraEtapasNaoInseridasFluxo() {
@@ -146,7 +147,10 @@ class ProcessoTipoFluxoPageController {
     CustomDiagramRectModel rect,
     ProcessoEtapaModel etapa,
   ) {
-    if (rect.links == null || rect.links?.isNotEmpty != true) return;
+    if (rect.links == null || rect.links?.isNotEmpty != true) {
+      etapa.sequencias = [];
+      return;
+    };
     etapa.sequencias = [];
     for (CustomDiagramLinkModel link in rect.links!) {
       etapa.sequencias?.add(

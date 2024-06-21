@@ -31,6 +31,9 @@ mixin _$ItemFilter {
   bool? get ordenarPorNomeCrescente => throw _privateConstructorUsedError;
   set ordenarPorNomeCrescente(bool? value) =>
       throw _privateConstructorUsedError;
+  bool? get ordenarPorCodDecrescente => throw _privateConstructorUsedError;
+  set ordenarPorCodDecrescente(bool? value) =>
+      throw _privateConstructorUsedError;
   bool? get carregarKit => throw _privateConstructorUsedError;
   set carregarKit(bool? value) => throw _privateConstructorUsedError;
   bool? get carregarDescritor => throw _privateConstructorUsedError;
@@ -91,6 +94,7 @@ abstract class $ItemFilterCopyWith<$Res> {
       int? cod,
       bool? apenasAtivos,
       bool? ordenarPorNomeCrescente,
+      bool? ordenarPorCodDecrescente,
       bool? carregarKit,
       bool? carregarDescritor,
       bool? carregarDescritorResumido,
@@ -132,6 +136,7 @@ class _$ItemFilterCopyWithImpl<$Res, $Val extends ItemFilter>
     Object? cod = freezed,
     Object? apenasAtivos = freezed,
     Object? ordenarPorNomeCrescente = freezed,
+    Object? ordenarPorCodDecrescente = freezed,
     Object? carregarKit = freezed,
     Object? carregarDescritor = freezed,
     Object? carregarDescritorResumido = freezed,
@@ -171,6 +176,10 @@ class _$ItemFilterCopyWithImpl<$Res, $Val extends ItemFilter>
       ordenarPorNomeCrescente: freezed == ordenarPorNomeCrescente
           ? _value.ordenarPorNomeCrescente
           : ordenarPorNomeCrescente // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      ordenarPorCodDecrescente: freezed == ordenarPorCodDecrescente
+          ? _value.ordenarPorCodDecrescente
+          : ordenarPorCodDecrescente // ignore: cast_nullable_to_non_nullable
               as bool?,
       carregarKit: freezed == carregarKit
           ? _value.carregarKit
@@ -286,6 +295,7 @@ abstract class _$$ItemFilterImplCopyWith<$Res>
       int? cod,
       bool? apenasAtivos,
       bool? ordenarPorNomeCrescente,
+      bool? ordenarPorCodDecrescente,
       bool? carregarKit,
       bool? carregarDescritor,
       bool? carregarDescritorResumido,
@@ -327,6 +337,7 @@ class __$$ItemFilterImplCopyWithImpl<$Res>
     Object? cod = freezed,
     Object? apenasAtivos = freezed,
     Object? ordenarPorNomeCrescente = freezed,
+    Object? ordenarPorCodDecrescente = freezed,
     Object? carregarKit = freezed,
     Object? carregarDescritor = freezed,
     Object? carregarDescritorResumido = freezed,
@@ -366,6 +377,10 @@ class __$$ItemFilterImplCopyWithImpl<$Res>
       ordenarPorNomeCrescente: freezed == ordenarPorNomeCrescente
           ? _value.ordenarPorNomeCrescente
           : ordenarPorNomeCrescente // ignore: cast_nullable_to_non_nullable
+              as bool?,
+      ordenarPorCodDecrescente: freezed == ordenarPorCodDecrescente
+          ? _value.ordenarPorCodDecrescente
+          : ordenarPorCodDecrescente // ignore: cast_nullable_to_non_nullable
               as bool?,
       carregarKit: freezed == carregarKit
           ? _value.carregarKit
@@ -452,6 +467,7 @@ class _$ItemFilterImpl implements _ItemFilter {
       this.cod,
       this.apenasAtivos,
       this.ordenarPorNomeCrescente,
+      this.ordenarPorCodDecrescente,
       this.carregarKit,
       this.carregarDescritor,
       this.carregarDescritorResumido,
@@ -484,6 +500,8 @@ class _$ItemFilterImpl implements _ItemFilter {
   bool? apenasAtivos;
   @override
   bool? ordenarPorNomeCrescente;
+  @override
+  bool? ordenarPorCodDecrescente;
   @override
   bool? carregarKit;
   @override
@@ -524,7 +542,7 @@ class _$ItemFilterImpl implements _ItemFilter {
 
   @override
   String toString() {
-    return 'ItemFilter(startDate: $startDate, finalDate: $finalDate, cod: $cod, apenasAtivos: $apenasAtivos, ordenarPorNomeCrescente: $ordenarPorNomeCrescente, carregarKit: $carregarKit, carregarDescritor: $carregarDescritor, carregarDescritorResumido: $carregarDescritorResumido, carregarUsuarios: $carregarUsuarios, carregarProprietario: $carregarProprietario, apenasItensConsignados: $apenasItensConsignados, apenasItensNaoConsignados: $apenasItensNaoConsignados, carregarItensConsignado: $carregarItensConsignado, numeroRegistros: $numeroRegistros, termoPesquisa: $termoPesquisa, idEtiquetaComecaCom: $idEtiquetaComecaCom, idEtiquetaContem: $idEtiquetaContem, codBarraKitContem: $codBarraKitContem, tStamp: $tStamp, itemFilter: $itemFilter, kitFilter: $kitFilter, codKit: $codKit, iDEtiqueta: $iDEtiqueta)';
+    return 'ItemFilter(startDate: $startDate, finalDate: $finalDate, cod: $cod, apenasAtivos: $apenasAtivos, ordenarPorNomeCrescente: $ordenarPorNomeCrescente, ordenarPorCodDecrescente: $ordenarPorCodDecrescente, carregarKit: $carregarKit, carregarDescritor: $carregarDescritor, carregarDescritorResumido: $carregarDescritorResumido, carregarUsuarios: $carregarUsuarios, carregarProprietario: $carregarProprietario, apenasItensConsignados: $apenasItensConsignados, apenasItensNaoConsignados: $apenasItensNaoConsignados, carregarItensConsignado: $carregarItensConsignado, numeroRegistros: $numeroRegistros, termoPesquisa: $termoPesquisa, idEtiquetaComecaCom: $idEtiquetaComecaCom, idEtiquetaContem: $idEtiquetaContem, codBarraKitContem: $codBarraKitContem, tStamp: $tStamp, itemFilter: $itemFilter, kitFilter: $kitFilter, codKit: $codKit, iDEtiqueta: $iDEtiqueta)';
   }
 
   @JsonKey(ignore: true)
@@ -548,6 +566,7 @@ abstract class _ItemFilter implements ItemFilter {
       int? cod,
       bool? apenasAtivos,
       bool? ordenarPorNomeCrescente,
+      bool? ordenarPorCodDecrescente,
       bool? carregarKit,
       bool? carregarDescritor,
       bool? carregarDescritorResumido,
@@ -585,6 +604,9 @@ abstract class _ItemFilter implements ItemFilter {
   @override
   bool? get ordenarPorNomeCrescente;
   set ordenarPorNomeCrescente(bool? value);
+  @override
+  bool? get ordenarPorCodDecrescente;
+  set ordenarPorCodDecrescente(bool? value);
   @override
   bool? get carregarKit;
   set carregarKit(bool? value);

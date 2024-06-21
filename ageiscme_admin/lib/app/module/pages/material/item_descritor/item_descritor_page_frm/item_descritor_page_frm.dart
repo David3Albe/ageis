@@ -13,20 +13,20 @@ import 'package:ageiscme_models/models/item_descritor_consignado/item_descritor_
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/delete_image_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/open_doc/open_doc_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/upload_button_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_image_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_open_doc_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
-import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
+import 'package:compartilhados/functions/image_helper/image_object_model.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -62,7 +62,7 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
   );
 
   late final TextFieldStringWidget txtDescricaoCurta = TextFieldStringWidget(
-    placeholder: 'Descrição Curta',
+    placeholder: 'Descrição Curta *',
     onChanged: (String? str) {
       itemDescritor.descricaoCurta = txtDescricaoCurta.text;
       _updateDescricaoCompleta();
@@ -120,11 +120,19 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
   );
 
   late final TextFieldStringWidget txtLimiteProcesso = TextFieldStringWidget(
-    placeholder: 'Limite Processos',
+    placeholder: 'Limite Processos *',
     onChanged: (String? str) {
-      itemDescritor.limiteProcessos = int.parse(txtLimiteProcesso.text);
+      itemDescritor.limiteProcessos =
+          str == null || str.isEmpty ? null : int.parse(txtLimiteProcesso.text);
     },
   );
+
+  late bool Function() validateTipoProcessoNormal;
+  late bool Function() validateTipoProcessoUrgencia;
+  late bool Function() validateGrupoMaterial;
+  late bool Function() validateEmbalagem;
+
+  final ScrollController scroll = ScrollController();
 
   @override
   void initState() {
@@ -236,11 +244,7 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
       txtVolume.text = itemDescritor.volume.toString();
     }
 
-    if (itemDescritor.limiteProcessos == null) {
-      txtLimiteProcesso.text = '';
-    } else {
-      txtLimiteProcesso.text = itemDescritor.limiteProcessos.toString();
-    }
+    txtLimiteProcesso.text = itemDescritor.limiteProcessos?.toString() ?? '';
 
     titulo = 'Cadastro de Descritor de Item';
     if (itemDescritor.cod != 0) {
@@ -253,7 +257,6 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
   late void Function() setStateGridMethod;
   @override
   Widget build(BuildContext context) {
-    double paddingHorizontalScale = MediaQuery.of(context).size.width / 1920;
     Size size = MediaQuery.of(context).size;
     return BlocListener<ItemDescritorPageFrmCubit, ItemDescritorPageFrmState>(
       bloc: cubit,
@@ -290,6 +293,7 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                 maxHeight: size.height * .8,
               ),
               child: SingleChildScrollView(
+                controller: scroll,
                 child: Column(
                   children: [
                     Padding(
@@ -298,10 +302,17 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
-                      child: BlocBuilder<GrupoMaterialCubit,
-                          List<GrupoMaterialModel>>(
+                      child:
+                          BlocBuilder<GrupoMaterialCubit, GrupoMaterialState>(
                         bloc: grupoMaterialCubit,
-                        builder: (context, gruposMateriais) {
+                        builder: (context, state) {
+                          if (state.loading) {
+                            return const Center(
+                              child: LoadingWidget(),
+                            );
+                          }
+                          List<GrupoMaterialModel> gruposMateriais =
+                              state.grupoMateriais;
                           gruposMateriais.sort(
                             (a, b) => a.nome!.compareTo(b.nome!),
                           );
@@ -311,14 +322,19 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                                     element.cod == itemDescritor.codGrupoItem,
                               )
                               .firstOrNull;
-                          return DropDownWidget(
+                          return DropDownSearchWidget(
+                            validator: (val) =>
+                                val == null ? 'Obrigatório' : null,
+                            validateBuilder: (context, validateMethodBuilder) =>
+                                validateGrupoMaterial = validateMethodBuilder,
                             initialValue: grupoMaterial,
                             sourceList: gruposMateriais
                                 .where((element) => element.ativo == true)
                                 .toList(),
+                            textFunction: (p0) => p0.GetGrupoNomeText(),
                             onChanged: (value) =>
-                                itemDescritor.codGrupoItem = value.cod!,
-                            placeholder: 'Grupo Item',
+                                itemDescritor.codGrupoItem = value?.cod,
+                            placeholder: 'Grupo Item *',
                           );
                         },
                       ),
@@ -379,10 +395,15 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                           ),
                           const SizedBox(width: 16.0),
                           Expanded(
-                            child:
-                                BlocBuilder<TamanhoCubit, List<TamanhoModel>>(
+                            child: BlocBuilder<TamanhoCubit, TamanhoState>(
                               bloc: tamanhoCubit,
-                              builder: (context, tamanhos) {
+                              builder: (context, state) {
+                                if (state.loading) {
+                                  return const Center(
+                                    child: LoadingWidget(),
+                                  );
+                                }
+                                List<TamanhoModel> tamanhos = state.tamanhos;
                                 tamanhos.sort(
                                   (a, b) => a.sigla!.compareTo(b.sigla!),
                                 );
@@ -393,12 +414,13 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                                           itemDescritor.tamanhoSigla,
                                     )
                                     .firstOrNull;
-                                return DropDownWidget(
+                                return DropDownSearchWidget(
                                   initialValue: tamanho,
                                   sourceList: tamanhos,
                                   onChanged: (value) =>
-                                      itemDescritor.tamanhoSigla = value.sigla!,
+                                      itemDescritor.tamanhoSigla = value?.sigla,
                                   placeholder: 'Tamanho',
+                                  textFunction: (p0) => p0.GetDropDownText(),
                                 );
                               },
                             ),
@@ -426,15 +448,20 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                                     itemDescritor.codTipoProcessoNormal,
                               )
                               .firstOrNull;
-                          return DropDownWidget(
+                          return DropDownSearchWidget(
+                            validateBuilder: (context, validateMethodBuilder) =>
+                                validateTipoProcessoNormal =
+                                    validateMethodBuilder,
+                            validator: (val) =>
+                                val == null ? 'Obrigatório' : null,
                             initialValue: processoTipo,
                             sourceList: processosTipos
                                 .where((element) => element.ativo == true)
                                 .toList(),
                             onChanged: (value) => itemDescritor
-                                .codTipoProcessoNormal = value.cod!,
+                                .codTipoProcessoNormal = value?.cod,
                             placeholder:
-                                'Tipo do Processo para prioridade Normal',
+                                'Tipo do Processo para prioridade Normal *',
                           );
                         },
                       ),
@@ -459,15 +486,20 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                                     itemDescritor.codTipoProcessoUrgencia,
                               )
                               .firstOrNull;
-                          return DropDownWidget(
+                          return DropDownSearchWidget(
                             initialValue: processoTipo,
+                            validateBuilder: (context, validateMethodBuilder) =>
+                                validateTipoProcessoUrgencia =
+                                    validateMethodBuilder,
+                            validator: (val) =>
+                                val == null ? 'Obrigatório' : null,
                             sourceList: processosTipos
                                 .where((element) => element.ativo == true)
                                 .toList(),
                             onChanged: (value) => itemDescritor
-                                .codTipoProcessoUrgencia = value.cod,
+                                .codTipoProcessoUrgencia = value?.cod,
                             placeholder:
-                                'Tipo do Processo para prioridade Urgência',
+                                'Tipo do Processo para prioridade Urgência *',
                           );
                         },
                       ),
@@ -510,10 +542,16 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                       child: Row(
                         children: [
                           Expanded(
-                            child: BlocBuilder<EmbalagemCubit,
-                                List<EmbalagemModel>>(
+                            child: BlocBuilder<EmbalagemCubit, EmbalagemState>(
                               bloc: embalagemCubit,
-                              builder: (context, embalagens) {
+                              builder: (context, state) {
+                                if (state.loading == true) {
+                                  return const Center(
+                                    child: LoadingWidget(),
+                                  );
+                                }
+                                List<EmbalagemModel> embalagens =
+                                    state.embalagens;
                                 embalagens.sort(
                                   (a, b) => a.nome!.compareTo(b.nome!),
                                 );
@@ -524,38 +562,54 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                                           itemDescritor.codEmbalagem,
                                     )
                                     .firstOrNull;
-                                return DropDownWidget(
+                                return DropDownSearchWidget(
                                   initialValue: embalagem,
+                                  validator: (val) =>
+                                      val == null ? 'Obrigatório' : null,
+                                  validateBuilder: (
+                                    context,
+                                    validateMethodBuilder,
+                                  ) =>
+                                      validateEmbalagem = validateMethodBuilder,
+                                  textFunction: (p0) => p0.GetDropDownText(),
                                   sourceList: embalagens
                                       .where((element) => element.ativo == true)
                                       .toList(),
                                   onChanged: (value) =>
-                                      itemDescritor.codEmbalagem = value.cod!,
-                                  placeholder: 'Embalagem',
+                                      itemDescritor.codEmbalagem = value?.cod,
+                                  placeholder: 'Embalagem *',
                                 );
                               },
                             ),
                           ),
                           const SizedBox(width: 16.0),
                           Expanded(
-                            child: BlocBuilder<CentroCustoCubit,
-                                List<CentroCustoModel>>(
+                            child:
+                                BlocBuilder<CentroCustoCubit, CentroCustoState>(
                               bloc: centroCustoCubit,
-                              builder: (context, centrosCustos) {
-                                CentroCustoModel? centroCusto = centrosCustos
+                              builder: (context, state) {
+                                if (state.loading) {
+                                  return const Center(
+                                    child: LoadingWidget(),
+                                  );
+                                }
+
+                                CentroCustoModel? centroCusto = state
+                                    .centrosCusto
                                     .where(
                                       (element) =>
                                           element.cod == itemDescritor.codCusto,
                                     )
                                     .firstOrNull;
-                                return DropDownWidget(
+                                return DropDownSearchWidget(
                                   initialValue: centroCusto,
-                                  sourceList: centrosCustos
+                                  sourceList: state.centrosCusto
                                       .where((element) => element.ativo == true)
                                       .toList(),
                                   onChanged: (value) =>
-                                      itemDescritor.codCusto = value.cod!,
+                                      itemDescritor.codCusto = value?.cod,
                                   placeholder: 'Valor do Peso',
+                                  textFunction: (p0) => p0.GetDropDownText(),
                                 );
                               },
                             ),
@@ -626,36 +680,6 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                       ) =>
                           this.commitEditGridMethod = commitEditGridMethod,
                     ),
-                    const Padding(padding: EdgeInsets.only(top: 5)),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Wrap(
-                            runSpacing: 16 * paddingHorizontalScale,
-                            spacing: 16 * paddingHorizontalScale,
-                            children: [
-                              UploadButtonWidget(
-                                placeholder: 'Anexar Imagem',
-                                imageSelected: (value1, value2) {
-                                  salvarImage(value1);
-                                },
-                              ),
-                              DeleteImageButtonWidget(
-                                placeholder: 'Excluir Imagem',
-                                onPressed: itemDescritor.foto == null
-                                    ? null
-                                    : () => {excluirImagem()},
-                              ),
-                              OpenDocWidget(
-                                placeholder: 'Abrir Imagem',
-                                documentoString: itemDescritor.foto,
-                                documentName: 'arquivo sem nome.Webp',
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
                     const Padding(padding: EdgeInsets.only(top: 14.0)),
                   ],
                 ),
@@ -664,9 +688,23 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
             actions: [
               Row(
                 children: [
-                  if (itemDescritor.cod != null && itemDescritor.cod != 0)
-                    CustomPopupMenuWidget(
-                      items: [
+                  CustomPopupMenuWidget(
+                    items: [
+                      CustomPopupItemImageModel.getImageItem(
+                        'Anexar Imagem',
+                        salvarImagem,
+                      ),
+                      CustomPopupItemOpenDocModel.getOpenDocItem(
+                        'Abrir Imagem',
+                        context,
+                        itemDescritor.foto,
+                        'arquivo sem nome.Webp',
+                      ),
+                      CustomPopupItemModel(
+                        text: 'Excluir Imagem',
+                        onTap: excluirImagem,
+                      ),
+                      if (itemDescritor.cod != null && itemDescritor.cod != 0)
                         CustomPopupItemHistoryModel.getHistoryItem(
                           child: HistoricoPage(
                             pk: itemDescritor.cod!,
@@ -674,8 +712,8 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                           ),
                           context: context,
                         ),
-                      ],
-                    ),
+                    ],
+                  ),
                   const Spacer(),
                   Padding(
                     padding: const EdgeInsets.only(left: 16.0),
@@ -709,9 +747,11 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
     );
   }
 
-  void salvarImage(String image) {
+  void salvarImagem(Future<ImageObjectModel?> Function() onSelectImage) async {
+    ImageObjectModel? imageNew = await onSelectImage();
+    if (imageNew == null) return;
     setState(() {
-      itemDescritor.foto = image;
+      itemDescritor.foto = imageNew.base64;
     });
   }
 
@@ -723,17 +763,34 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
 
   void salvar() async {
     if (itemDescritor.consignado == true) await commitEditGridMethod.call();
-    if (!txtDescricaoCurta.valid ||
-        !txtDescricaoCompleta.valid ||
-        !txtLimiteProcesso.valid) return;
-    bool valido = await validaItensConsignados();
-    if (itemDescritor.codTipoProcessoUrgencia == null) {
-      ToastUtils.showCustomToastWarning(
-        context,
-        'Informe o tipo de processo para urgência',
-      );
-      return;
+    bool descricaoCurtaValid = txtDescricaoCurta.valid;
+    bool descricaoCompletaValid = txtDescricaoCompleta.valid;
+    bool limiteProcessoValid = txtLimiteProcesso.valid;
+    bool tipoProcessoNormalValid = validateTipoProcessoNormal();
+    bool tipoProcessoUrgenciaValid = validateTipoProcessoUrgencia();
+    bool grupoMaterialValid = validateGrupoMaterial();
+    bool embalagemValid = validateEmbalagem();
+    if (!descricaoCurtaValid) {
+      scroll.jumpTo(0);
+    } else if (!grupoMaterialValid) {
+      scroll.jumpTo(50);
+    } else if (!limiteProcessoValid) {
+      scroll.jumpTo(250);
+    } else if (!tipoProcessoNormalValid) {
+      scroll.jumpTo(300);
+    } else if (!tipoProcessoUrgenciaValid) {
+      scroll.jumpTo(350);
+    } else if (!embalagemValid) {
+      scroll.jumpTo(350);
     }
+    if (!descricaoCurtaValid ||
+        !descricaoCompletaValid ||
+        !limiteProcessoValid ||
+        !tipoProcessoNormalValid ||
+        !tipoProcessoUrgenciaValid ||
+        !grupoMaterialValid ||
+        !embalagemValid) return;
+    bool valido = await validaItensConsignados();
     if (!valido) return;
     cubit.save(itemDescritor);
   }
@@ -742,30 +799,24 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
     if (itemDescritor.consignado != true) return true;
     if (itemDescritor.itensDescritoresConsignados == null ||
         itemDescritor.itensDescritoresConsignados!.isEmpty) {
-      await ErrorUtils.showErrorDialog(
+      ToastUtils.showCustomToastWarning(
         context,
-        [
-          'O Descritor está marcado como consignado, informe os itens que o compoem',
-        ],
+        'O Descritor está marcado como consignado, informe os itens que o compoem',
       );
       return false;
     }
     for (ItemDescritorConsignadoModel item
         in itemDescritor.itensDescritoresConsignados!) {
       if (item.descricao == null || item.descricao!.isEmpty) {
-        await ErrorUtils.showErrorDialog(
+        ToastUtils.showCustomToastWarning(
           context,
-          [
-            'Existem itens que compoem o descritor cosignado sem descrição e é obrigatória, informe e tente novamente',
-          ],
+          'Existem itens que compoem o descritor cosignado sem descrição e é obrigatória, informe e tente novamente',
         );
         return false;
       } else if (item.quantidade == null) {
-        await ErrorUtils.showErrorDialog(
+        ToastUtils.showCustomToastWarning(
           context,
-          [
-            'Existem itens que compoem o descritor cosignado sem quantidade e é obrigatória, informe e tente novamente',
-          ],
+          'Existem itens que compoem o descritor cosignado sem quantidade e é obrigatória, informe e tente novamente',
         );
         return false;
       }

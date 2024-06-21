@@ -12,6 +12,7 @@ sealed class EquipamentoManutencaoFilter with _$EquipamentoManutencaoFilter {
     int? numeroRegistros,
     int? codEquipamento,
     int? codTipoServico,
+    bool? ordenarDataInicioDecrescente,
     @JsonKey(name: 'tStamp') String? tStamp,
     @JsonKey(
       includeToJson: false,

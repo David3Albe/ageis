@@ -1,6 +1,7 @@
 import 'package:compartilhados/cores/cores.dart';
 import 'package:compartilhados/forms/form_controller.dart';
 import 'package:compartilhados/functions/helper_functions.dart';
+import 'package:dependencias_comuns/easy_debounce_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
@@ -49,7 +50,7 @@ class _SaveButtonWidgetState extends State<SaveButtonWidget> {
               ),
               backgroundColor: Cores.corBotaoSalvarHovered,
             ),
-      onPressed: !valid || widget.readonly ? null : widget.onPressed,
+      onPressed: !valid || widget.readonly ? null : handleClick,
       child: Padding(
         padding: EdgeInsetsDirectional.symmetric(
           horizontal: 12.0 * scaleW,
@@ -85,6 +86,15 @@ class _SaveButtonWidgetState extends State<SaveButtonWidget> {
           ],
         ),
       ),
+    );
+  }
+
+  void handleClick() {
+    if (widget.onPressed == null) return;
+    EasyThrottle.throttle(
+      'save-button',
+      const Duration(seconds: 5),
+      widget.onPressed!,
     );
   }
 }

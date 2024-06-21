@@ -93,6 +93,7 @@ class _PerfilAcessoPageState extends State<PerfilAcessoPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     filterOnlyActives: true,
                     onEdit: (PerfilAcessoModel objeto) =>
                         {openModal(context, PerfilAcessoModel.copy(objeto))},

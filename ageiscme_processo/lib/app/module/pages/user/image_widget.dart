@@ -17,6 +17,7 @@ class ImageWidget extends StatelessWidget {
           return const SizedBox();
         }
         return Image.network(
+          errorBuilder: (context, error, stackTrace) => const SizedBox(),
           snapshot.data!,
           repeat: ImageRepeat.noRepeat,
           fit: BoxFit.contain,

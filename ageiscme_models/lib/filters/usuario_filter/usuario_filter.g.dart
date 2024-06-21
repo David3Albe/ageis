@@ -22,6 +22,7 @@ _$UsuarioFilterImpl _$$UsuarioFilterImplFromJson(Map json) =>
       numeroRegistros: (json['numeroRegistros'] as num?)?.toInt(),
       ordenarPorAtivosPrimeiro: json['ordenarPorAtivosPrimeiro'] as bool?,
       termoPesquisa: json['termoPesquisa'] as String?,
+      ordenarPorCodDecrescente: json['ordenarPorCodDecrescente'] as bool?,
     );
 
 Map<String, dynamic> _$$UsuarioFilterImplToJson(_$UsuarioFilterImpl instance) =>
@@ -40,4 +41,5 @@ Map<String, dynamic> _$$UsuarioFilterImplToJson(_$UsuarioFilterImpl instance) =>
       'numeroRegistros': instance.numeroRegistros,
       'ordenarPorAtivosPrimeiro': instance.ordenarPorAtivosPrimeiro,
       'termoPesquisa': instance.termoPesquisa,
+      'ordenarPorCodDecrescente': instance.ordenarPorCodDecrescente,
     };

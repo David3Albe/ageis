@@ -26,6 +26,7 @@ class _TamanhoPageState extends State<TamanhoPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(text: 'Sigla', field: 'sigla'),
     CustomDataColumn(text: 'Descrição', field: 'descricao'),
@@ -76,6 +77,7 @@ class _TamanhoPageState extends State<TamanhoPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     onEdit: (TamanhoModel objeto) =>
                         {openModal(context, TamanhoModel.copy(objeto))},
                     onDelete: (TamanhoModel objeto) =>

@@ -33,6 +33,9 @@ mixin _$TreinamentoRegistroFilter {
   String? get tStamp => throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
   set tStamp(String? value) => throw _privateConstructorUsedError;
+  bool? get ordenarPorDataDecrescente => throw _privateConstructorUsedError;
+  set ordenarPorDataDecrescente(bool? value) =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -51,7 +54,8 @@ abstract class $TreinamentoRegistroFilterCopyWith<$Res> {
       bool? carregarUsuario,
       int? numeroRegistros,
       String? nomeContem,
-      @JsonKey(name: 'tStamp') String? tStamp});
+      @JsonKey(name: 'tStamp') String? tStamp,
+      bool? ordenarPorDataDecrescente});
 }
 
 /// @nodoc
@@ -73,6 +77,7 @@ class _$TreinamentoRegistroFilterCopyWithImpl<$Res,
     Object? numeroRegistros = freezed,
     Object? nomeContem = freezed,
     Object? tStamp = freezed,
+    Object? ordenarPorDataDecrescente = freezed,
   }) {
     return _then(_value.copyWith(
       cod: freezed == cod
@@ -95,6 +100,10 @@ class _$TreinamentoRegistroFilterCopyWithImpl<$Res,
           ? _value.tStamp
           : tStamp // ignore: cast_nullable_to_non_nullable
               as String?,
+      ordenarPorDataDecrescente: freezed == ordenarPorDataDecrescente
+          ? _value.ordenarPorDataDecrescente
+          : ordenarPorDataDecrescente // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 }
@@ -113,7 +122,8 @@ abstract class _$$TreinamentoRegistroFilterImplCopyWith<$Res>
       bool? carregarUsuario,
       int? numeroRegistros,
       String? nomeContem,
-      @JsonKey(name: 'tStamp') String? tStamp});
+      @JsonKey(name: 'tStamp') String? tStamp,
+      bool? ordenarPorDataDecrescente});
 }
 
 /// @nodoc
@@ -134,6 +144,7 @@ class __$$TreinamentoRegistroFilterImplCopyWithImpl<$Res>
     Object? numeroRegistros = freezed,
     Object? nomeContem = freezed,
     Object? tStamp = freezed,
+    Object? ordenarPorDataDecrescente = freezed,
   }) {
     return _then(_$TreinamentoRegistroFilterImpl(
       cod: freezed == cod
@@ -156,6 +167,10 @@ class __$$TreinamentoRegistroFilterImplCopyWithImpl<$Res>
           ? _value.tStamp
           : tStamp // ignore: cast_nullable_to_non_nullable
               as String?,
+      ordenarPorDataDecrescente: freezed == ordenarPorDataDecrescente
+          ? _value.ordenarPorDataDecrescente
+          : ordenarPorDataDecrescente // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -168,7 +183,8 @@ class _$TreinamentoRegistroFilterImpl implements _TreinamentoRegistroFilter {
       this.carregarUsuario,
       this.numeroRegistros,
       this.nomeContem,
-      @JsonKey(name: 'tStamp') this.tStamp});
+      @JsonKey(name: 'tStamp') this.tStamp,
+      this.ordenarPorDataDecrescente});
 
   factory _$TreinamentoRegistroFilterImpl.fromJson(Map<String, dynamic> json) =>
       _$$TreinamentoRegistroFilterImplFromJson(json);
@@ -184,10 +200,12 @@ class _$TreinamentoRegistroFilterImpl implements _TreinamentoRegistroFilter {
   @override
   @JsonKey(name: 'tStamp')
   String? tStamp;
+  @override
+  bool? ordenarPorDataDecrescente;
 
   @override
   String toString() {
-    return 'TreinamentoRegistroFilter(cod: $cod, carregarUsuario: $carregarUsuario, numeroRegistros: $numeroRegistros, nomeContem: $nomeContem, tStamp: $tStamp)';
+    return 'TreinamentoRegistroFilter(cod: $cod, carregarUsuario: $carregarUsuario, numeroRegistros: $numeroRegistros, nomeContem: $nomeContem, tStamp: $tStamp, ordenarPorDataDecrescente: $ordenarPorDataDecrescente)';
   }
 
   @JsonKey(ignore: true)
@@ -207,12 +225,12 @@ class _$TreinamentoRegistroFilterImpl implements _TreinamentoRegistroFilter {
 
 abstract class _TreinamentoRegistroFilter implements TreinamentoRegistroFilter {
   factory _TreinamentoRegistroFilter(
-          {int? cod,
-          bool? carregarUsuario,
-          int? numeroRegistros,
-          String? nomeContem,
-          @JsonKey(name: 'tStamp') String? tStamp}) =
-      _$TreinamentoRegistroFilterImpl;
+      {int? cod,
+      bool? carregarUsuario,
+      int? numeroRegistros,
+      String? nomeContem,
+      @JsonKey(name: 'tStamp') String? tStamp,
+      bool? ordenarPorDataDecrescente}) = _$TreinamentoRegistroFilterImpl;
 
   factory _TreinamentoRegistroFilter.fromJson(Map<String, dynamic> json) =
       _$TreinamentoRegistroFilterImpl.fromJson;
@@ -234,6 +252,9 @@ abstract class _TreinamentoRegistroFilter implements TreinamentoRegistroFilter {
   String? get tStamp;
   @JsonKey(name: 'tStamp')
   set tStamp(String? value);
+  @override
+  bool? get ordenarPorDataDecrescente;
+  set ordenarPorDataDecrescente(bool? value);
   @override
   @JsonKey(ignore: true)
   _$$TreinamentoRegistroFilterImplCopyWith<_$TreinamentoRegistroFilterImpl>

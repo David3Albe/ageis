@@ -35,7 +35,7 @@ class _UnidadeMedidaPageFrmState extends State<UnidadeMedidaPageFrm> {
     service: UnidadeMedidaService(),
   );
   late final TextFieldStringWidget txtUnidadeMedida = TextFieldStringWidget(
-    placeholder: 'Unidade Medida',
+    placeholder: 'Unidade Medida *',
     onChanged: (String? str) {
       unidadeMedida.nome = txtUnidadeMedida.text;
     },

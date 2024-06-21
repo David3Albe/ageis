@@ -7,6 +7,7 @@ class KitDescritorCubitFilter extends Cubit<KitDescritorFilter> {
           KitDescritorFilter(
             numeroRegistros: 500,
             ordenarAtivosPrimeiro: true,
+            ordernarPorCodDecrescente: true,
           ),
         );
 }

@@ -40,7 +40,7 @@ class _MotivoRemoverReporItemPageFrmState
     service: MotivoRemoverReporItemService(),
   );
   late final TextFieldStringWidget txtDescricao = TextFieldStringWidget(
-    placeholder: 'Descrição',
+    placeholder: 'Descrição *',
     onChanged: (String? str) {
       motivoRemoverReporItem.descricao = txtDescricao.text;
     },

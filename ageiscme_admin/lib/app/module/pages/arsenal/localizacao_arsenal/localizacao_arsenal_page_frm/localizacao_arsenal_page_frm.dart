@@ -42,18 +42,20 @@ class _LocalizacaoArsenalPageFrmState extends State<LocalizacaoArsenalPageFrm> {
     service: LocalizacaoArsenalService(),
   );
   late final TextFieldStringWidget txtLocalizacao = TextFieldStringWidget(
-    placeholder: 'Localização',
+    placeholder: 'Localização *',
     onChanged: (String? str) {
       localizacaoArsenal.local = txtLocalizacao.text;
     },
   );
   late final TextFieldNumberWidget txtCodigoBarra = TextFieldNumberWidget(
-    placeholder: 'Código de Barras',
+    placeholder: 'Código de Barras *',
     onChanged: (String str) {
       localizacaoArsenal.codBarra =
           str.isEmpty ? null : int.parse(txtCodigoBarra.text);
     },
   );
+
+  late bool Function() validateEstoque;
 
   @override
   void initState() {
@@ -156,13 +158,17 @@ class _LocalizacaoArsenalPageFrmState extends State<LocalizacaoArsenalPageFrm> {
                               )
                               .firstOrNull;
                           return DropDownSearchWidget<ArsenalEstoqueModel>(
+                            validateBuilder: (context, validateMethodBuilder) =>
+                                validateEstoque = validateMethodBuilder,
+                            validator: (val) =>
+                                val == null ? 'Obrigatório' : null,
                             initialValue: arsenal,
                             sourceList: arsenaisEstoques
                                 .where((element) => element.ativo == true)
                                 .toList(),
                             onChanged: (value) =>
                                 localizacaoArsenal.codEstoque = value?.cod,
-                            placeholder: 'Arsenal',
+                            placeholder: 'Arsenal *',
                           );
                         },
                       ),
@@ -242,7 +248,10 @@ class _LocalizacaoArsenalPageFrmState extends State<LocalizacaoArsenalPageFrm> {
   }
 
   void salvar() {
-    if (!txtLocalizacao.valid || !txtCodigoBarra.valid) return;
+    bool localizacaoValid = txtLocalizacao.valid;
+    bool codigoBarraValid = txtCodigoBarra.valid;
+    bool estoqueValid = validateEstoque();
+    if (!localizacaoValid || !codigoBarraValid || !estoqueValid) return;
     cubit.save(localizacaoArsenal);
   }
 }

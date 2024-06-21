@@ -8,7 +8,6 @@ import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
@@ -33,6 +32,7 @@ class _InsumoMovimentoPageState extends State<InsumoMovimentoPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(text: 'Cód. Barra', field: 'codBarra'),
     CustomDataColumn(
@@ -128,6 +128,7 @@ class _InsumoMovimentoPageState extends State<InsumoMovimentoPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'dataHora',
                     onEdit: (InsumoMovimentoModel objeto) =>
                         {openModal(context, InsumoMovimentoModel.copy(objeto))},
                     onDelete: (InsumoMovimentoModel objeto) =>
@@ -166,15 +167,16 @@ class _InsumoMovimentoPageState extends State<InsumoMovimentoPage> {
               const Padding(padding: EdgeInsets.only(top: 2)),
               Builder(
                 builder: (context) {
-                  return DropDownWidget<TipoMovimentoOption>(
+                  return DropDownSearchWidget<TipoMovimentoOption>(
                     sourceList: TipoMovimentoOption.tipoMovimentoOption,
+                    textFunction: (p0) => p0.GetDropDownText(),
                     initialValue: TipoMovimentoOption.tipoMovimentoOption
                         .where(
                           (element) => element.cod == filter.codTipoMovimento,
                         )
                         .firstOrNull,
                     placeholder: 'Situação',
-                    onChanged: (value) => filter.codTipoMovimento = value.cod,
+                    onChanged: (value) => filter.codTipoMovimento = value?.cod,
                   );
                 },
               ),
@@ -210,8 +212,11 @@ class _InsumoMovimentoPageState extends State<InsumoMovimentoPage> {
     carregarDados();
   }
 
-  void openModal(BuildContext context, InsumoMovimentoModel insumoMovimento) {
-    showDialog<(bool, String)>(
+  Future openModal(
+    BuildContext context,
+    InsumoMovimentoModel insumoMovimento,
+  ) async {
+    await showDialog(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
@@ -219,11 +224,8 @@ class _InsumoMovimentoPageState extends State<InsumoMovimentoPage> {
           insumoMovimento: insumoMovimento,
         );
       },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadInsumoMovimentoFilter(filter);
-    });
+    );
+    bloc.loadInsumoMovimentoFilter(filter);
   }
 
   void delete(

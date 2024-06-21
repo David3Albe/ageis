@@ -11,6 +11,7 @@ _$InsumoTesteFilterImpl _$$InsumoTesteFilterImplFromJson(Map json) =>
       cod: (json['cod'] as num?)?.toInt(),
       codInsumo: (json['codInsumo'] as num?)?.toInt(),
       codMovimentoInsumo: (json['codMovimentoInsumo'] as num?)?.toInt(),
+      carregarMovimentacao: json['carregarMovimentacao'] as bool?,
     );
 
 Map<String, dynamic> _$$InsumoTesteFilterImplToJson(
@@ -19,4 +20,5 @@ Map<String, dynamic> _$$InsumoTesteFilterImplToJson(
       'cod': instance.cod,
       'codInsumo': instance.codInsumo,
       'codMovimentoInsumo': instance.codMovimentoInsumo,
+      'carregarMovimentacao': instance.carregarMovimentacao,
     };

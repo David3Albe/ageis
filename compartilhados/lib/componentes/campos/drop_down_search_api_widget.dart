@@ -80,7 +80,6 @@ class DropDownSearchApiWidgetState<T>
     cubit = DropDownSearchCubit<T>();
     setItems(null);
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => validate());
   }
 
   void validate() {
@@ -167,10 +166,29 @@ class DropDownSearchApiWidgetState<T>
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: txtFilter,
+        title: Column(
+          children: [
+            if (widget.placeholder != null)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.placeholder ?? '',
+                    style: Fontes.getRoboto(fontSize: 16),
+                  ),
+                ],
+              ),
+            txtFilter,
+          ],
+        ),
+        contentPadding: const EdgeInsets.only(
+          left: 24,
+          right: 24,
+          top: 4,
+          bottom: 12,
+        ),
+        titlePadding: const EdgeInsets.all(12),
         actionsPadding: const EdgeInsets.all(16),
-        contentPadding: const EdgeInsets.all(16),
-        titlePadding: const EdgeInsets.all(16),
         content: Container(
           width: MediaQuery.of(context).size.width / 2,
           height: MediaQuery.of(context).size.height / 2,
@@ -269,17 +287,17 @@ class DropDownSearchApiWidgetState<T>
   double _getHeight(Size size) {
     double height = size.height;
     if (height > 800) {
-      return 60;
+      return 52;
     } else if (height > 700) {
-      return 57;
-    } else if (height > 600) {
-      return 55;
-    } else if (height > 500) {
-      return 53;
-    } else if (height > 400) {
       return 50;
+    } else if (height > 600) {
+      return 49;
+    } else if (height > 500) {
+      return 48;
+    } else if (height > 400) {
+      return 46;
     }
-    return 48;
+    return 44;
   }
 
   Widget getSelectedItemText(T? item, BuildContext context) {

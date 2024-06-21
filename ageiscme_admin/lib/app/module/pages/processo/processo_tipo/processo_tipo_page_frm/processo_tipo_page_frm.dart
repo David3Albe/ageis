@@ -12,7 +12,6 @@ import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
@@ -51,7 +50,7 @@ class _ProcessoTipoPageFrmState extends State<ProcessoTipoPageFrm> {
   );
 
   late final TextFieldStringWidget txtNome = TextFieldStringWidget(
-    placeholder: 'Nome',
+    placeholder: 'Nome *',
     onChanged: (String? str) {
       processoTipo.nome = txtNome.text;
     },
@@ -62,18 +61,23 @@ class _ProcessoTipoPageFrmState extends State<ProcessoTipoPageFrm> {
       processoTipo.descricao = txtDescricao.text;
     },
   );
+  late bool Function() validateLimiteVigencia;
   late final DatePickerWidget dtpLimiteVigencia = DatePickerWidget(
-    placeholder: 'Limite Vigência',
+    validator: (date) => date == null ? 'Obrigatório' : null,
+    validateBuilder: (context, validateMethodBuilder) =>
+        validateLimiteVigencia = validateMethodBuilder,
+    placeholder: 'Limite Vigência *',
     initialValue: processoTipo.limiteVigencia,
     onDateSelected: (value) => processoTipo.limiteVigencia = value,
   );
   late final TextFieldStringWidget txtPrazovalidade = TextFieldStringWidget(
-    placeholder: 'Prazo Validade para Itens Processados (dias)',
+    placeholder: 'Prazo Validade para Itens Processados (dias) *',
     onChanged: (String? str) {
       processoTipo.prazoValidade = int.parse(txtPrazovalidade.text);
     },
   );
 
+  late bool Function() validateNivelPrioridade;
   @override
   void initState() {
     txtNome.addValidator((String str) {
@@ -100,6 +104,7 @@ class _ProcessoTipoPageFrmState extends State<ProcessoTipoPageFrm> {
       }
       return '';
     });
+
     super.initState();
   }
 
@@ -120,6 +125,8 @@ class _ProcessoTipoPageFrmState extends State<ProcessoTipoPageFrm> {
           'Edição do Tipo de Processo: ${processoTipo.cod} - ${processoTipo.nome}';
     }
   }
+
+  final ScrollController scroll = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -160,6 +167,7 @@ class _ProcessoTipoPageFrmState extends State<ProcessoTipoPageFrm> {
                 maxHeight: size.height * .8,
               ),
               child: SingleChildScrollView(
+                controller: scroll,
                 padding: const EdgeInsets.only(right: 14),
                 child: Column(
                   children: [
@@ -202,7 +210,13 @@ class _ProcessoTipoPageFrmState extends State<ProcessoTipoPageFrm> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
-                      child: DropDownWidget<ProcessoTipoPrioriodadeOption>(
+                      child:
+                          DropDownSearchWidget<ProcessoTipoPrioriodadeOption>(
+                        textFunction: (p0) => p0.GetDropDownText(),
+                        validator: (obj) =>
+                            obj == null ? 'Obrigatório' : null,
+                        validateBuilder: (context, validateMethodBuilder) =>
+                            validateNivelPrioridade = validateMethodBuilder,
                         initialValue:
                             ProcessoTipoPrioriodadeOption.prioridadeOptions
                                 .where(
@@ -213,9 +227,9 @@ class _ProcessoTipoPageFrmState extends State<ProcessoTipoPageFrm> {
                                 .firstOrNull,
                         sourceList:
                             ProcessoTipoPrioriodadeOption.prioridadeOptions,
-                        onChanged: (value) =>
-                            processoTipo.nivelPrioridade = value.cod.toString(),
-                        placeholder: 'Nível Prioridade',
+                        onChanged: (value) => processoTipo.nivelPrioridade =
+                            value?.cod.toString() ?? '',
+                        placeholder: 'Nível Prioridade *',
                       ),
                     ),
                     Padding(
@@ -353,7 +367,23 @@ class _ProcessoTipoPageFrmState extends State<ProcessoTipoPageFrm> {
   }
 
   void salvar() {
-    if (!txtNome.valid || !txtDescricao.valid || !txtPrazovalidade.valid) {
+    bool nomeValid = txtNome.valid;
+    bool descricaoValid = txtDescricao.valid;
+    bool prazoValidadeValid = txtPrazovalidade.valid;
+    bool limiteVigenciaValid = validateLimiteVigencia();
+    bool nivelPrioridadeValid = validateNivelPrioridade();
+    if (!nomeValid) {
+      scroll.jumpTo(0);
+    } else if (!nivelPrioridadeValid) {
+      scroll.jumpTo(150);
+    } else if (!nivelPrioridadeValid || !limiteVigenciaValid) {
+      scroll.jumpTo(200);
+    }
+    if (!nomeValid ||
+        !descricaoValid ||
+        !prazoValidadeValid ||
+        !limiteVigenciaValid ||
+        !nivelPrioridadeValid) {
       return;
     }
     LoadingController loading = LoadingController(context: context);

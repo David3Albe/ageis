@@ -29,6 +29,7 @@ class _ArsenalEstoquePageState extends State<ArsenalEstoquePage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(text: 'Nome', field: 'nome'),
     CustomDataColumn(
@@ -107,6 +108,7 @@ class _ArsenalEstoquePageState extends State<ArsenalEstoquePage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     filterOnlyActives: true,
                     onEdit: (ArsenalEstoqueModel objeto) {
                       openModal(

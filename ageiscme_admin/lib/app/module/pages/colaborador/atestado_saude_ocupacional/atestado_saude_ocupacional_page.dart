@@ -137,6 +137,7 @@ class _AtestadoSaudeOcupacionalPageState
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'data',
                     onEdit: (AtestadoSaudeOcupacionalModel objeto) => {
                       openModal(
                         context,

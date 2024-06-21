@@ -26,6 +26,7 @@ class _EtiquetaPageState extends State<EtiquetaPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(text: 'Descrição', field: 'descricao'),
     CustomDataColumn(
@@ -80,6 +81,7 @@ class _EtiquetaPageState extends State<EtiquetaPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     filterOnlyActives: true,
                     onEdit: (EtiquetaModel objeto) =>
                         {openModal(context, EtiquetaModel.copy(objeto))},

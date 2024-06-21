@@ -58,7 +58,7 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
   );
 
   late final TextFieldStringWidget txtNome = TextFieldStringWidget(
-    placeholder: 'Nome',
+    placeholder: 'Nome *',
     onChanged: (String? str) {
       equipamento.nome = txtNome.text;
     },
@@ -213,6 +213,8 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
     }
   }
 
+  final ScrollController scroll = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     setFields();
@@ -248,6 +250,7 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
                 maxHeight: size.height * .8,
               ),
               child: SingleChildScrollView(
+                controller: scroll,
                 child: Column(
                   children: [
                     Padding(
@@ -484,13 +487,29 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
   }
 
   void salvar() {
-    if (!txtNome.valid ||
-        !txtFabricante.valid ||
-        !txtCodBarra.valid ||
-        !txtAnoFabricacao.valid ||
-        !txtSerie.valid ||
-        !txtRegistroAnvisa.valid ||
-        !txtStatus.valid) return;
+    bool nomeValid = txtNome.valid;
+    bool fabricanteValid = txtFabricante.valid;
+    bool codBarraValid = txtCodBarra.valid;
+    bool anoFabricacaoValid = txtAnoFabricacao.valid;
+    bool serieValid = txtSerie.valid;
+    bool registroAnvisaValid = txtRegistroAnvisa.valid;
+    bool statusValid = txtStatus.valid;
+    if (!nomeValid) {
+      scroll.jumpTo(0);
+    } else if (!fabricanteValid) {
+      scroll.jumpTo(50);
+    } else if (!anoFabricacaoValid) {
+      scroll.jumpTo(100);
+    }else if(!serieValid || !registroAnvisaValid){
+      scroll.jumpTo(150);
+    }
+    if (!nomeValid ||
+        !fabricanteValid ||
+        !codBarraValid ||
+        !anoFabricacaoValid ||
+        !serieValid ||
+        !registroAnvisaValid ||
+        !statusValid) return;
     cubit.save(equipamento);
   }
 

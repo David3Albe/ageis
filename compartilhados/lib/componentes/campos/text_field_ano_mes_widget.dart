@@ -22,19 +22,19 @@ typedef ValidateBuilder<DateTime> = void Function(
   bool Function() validateMethodBuilder,
 );
 
-class DatePickerWidget extends StatefulWidget {
+class TextFieldAnoMesWidget extends StatefulWidget {
   final String placeholder;
   final void Function(DateTime? selectedDate)? onDateSelected;
   late final DateTime? initialValue;
   final bool readOnly;
-  final GlobalKey<_DatePickerWidgetState> key = GlobalKey();
+  final GlobalKey<_TextFieldAnoMesWidgetState> key = GlobalKey();
   final SetDateValueBuilder? setDateValueBuilder;
   final SetReadonlyBuilder? setReadonlyBuilder;
   final DateFormat? formato;
   final String? Function(DateTime? date)? validator;
   late final ValidateBuilder<DateTime>? validateBuilder;
 
-  DatePickerWidget({
+  TextFieldAnoMesWidget({
     required this.placeholder,
     this.onDateSelected,
     this.initialValue,
@@ -57,12 +57,12 @@ class DatePickerWidget extends StatefulWidget {
   }
 
   @override
-  _DatePickerWidgetState createState() =>
-      _DatePickerWidgetState(key: key, readOnly: readOnly);
+  _TextFieldAnoMesWidgetState createState() =>
+      _TextFieldAnoMesWidgetState(key: key, readOnly: readOnly);
 }
 
-class _DatePickerWidgetState extends State<DatePickerWidget> {
-  _DatePickerWidgetState({required this.readOnly, required Key key});
+class _TextFieldAnoMesWidgetState extends State<TextFieldAnoMesWidget> {
+  _TextFieldAnoMesWidgetState({required this.readOnly, required Key key});
   DateTime? selectedDate;
   late TextEditingController textController;
   late FocusNode focusNode;
@@ -75,7 +75,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
     super.initState();
     textController = TextEditingController();
     focusNode = FocusNode();
-    format = DateFormat('dd/MM/yyyy');
+    format = DateFormat('yyyy/MM');
     if (widget.formato != null) {
       format = widget.formato!;
     }
@@ -113,19 +113,19 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
   void clear() {
     setState(() {
       selectedDate = null;
-      textController.text = '';
       _validate();
+      textController.text = '';
     });
   }
 
   void setValue(DateTime? date) {
     setState(() {
       selectedDate = date;
+      _validate();
       if (date == null) {
         textController.text = '';
         return;
       }
-      _validate();
       textController.text = format.format(date);
     });
   }
@@ -146,40 +146,30 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
     );
     if (picked == null) return;
     selectedDate = picked;
+    _validate();
     textController.text =
         selectedDate != null ? format.format(selectedDate!) : '';
-    _validate();
     if (widget.onDateSelected != null) widget.onDateSelected!(picked);
   }
 
-  _validate() {
-    if (widget.validator == null) return;
-    String? str = widget.validator!(selectedDate);
-    setState(() {
-      errorText = str ?? '';
-    });
-  }
-
   MaskTextInputFormatter maskFormatter = MaskTextInputFormatter(
-    mask: '##/##/####',
+    mask: '####/##',
     filter: {'#': RegExp(r'[0-9]')},
   );
 
   void onEditComplete() {
     String maskedtext = maskFormatter.maskText(textController.text);
-    if (maskedtext.length == 2) {
+    if (maskedtext.length == 4) {
       maskedtext += '/' +
           DateTime.now().month.toString().padLeft(2, '0') +
           '/' +
           DateTime.now().year.toString();
       textController.text = maskedtext;
-    } else if (maskedtext.length == 5) {
-      maskedtext += '/' + DateTime.now().year.toString();
-      textController.text = maskedtext;
     }
 
-    if (textController.text.isEmpty || textController.text.length != 10) {
+    if (textController.text.isEmpty || textController.text.length != 7) {
       selectedDate = null;
+      _validate();
       if (widget.onDateSelected != null) widget.onDateSelected!(selectedDate);
       return;
     }
@@ -194,6 +184,14 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
       selectedDate = data;
       _validate();
       if (widget.onDateSelected != null) widget.onDateSelected!(selectedDate);
+    });
+  }
+
+  _validate() {
+    if (widget.validator == null) return;
+    String? str = widget.validator!(selectedDate);
+    setState(() {
+      errorText = str ?? '';
     });
   }
 
@@ -225,8 +223,8 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
           keyboardType: TextInputType.datetime,
           inputFormatters: [
             LengthLimitingTextInputFormatter(
-                widget.formato?.pattern?.length ?? 10),
-            _DateInputFormatter(),
+                widget.formato?.pattern?.length ?? 7),
+            _AnoMesInputFormatter(),
           ],
           style: Fontes.getRoboto(
             fontSize: HelperFunctions.calculaFontSize(context, 14),
@@ -324,7 +322,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
   }
 }
 
-class _DateInputFormatter extends TextInputFormatter {
+class _AnoMesInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
     TextEditingValue oldValue,
@@ -337,7 +335,7 @@ class _DateInputFormatter extends TextInputFormatter {
 
     final buffer = StringBuffer();
     for (int i = 0; i < newText.length; i++) {
-      if (i == 2 || i == 5) {
+      if (i == 4) {
         buffer.write('/');
       }
       if (newText[i] != '/' && (newText[i].isNotEmpty)) {

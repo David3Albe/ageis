@@ -35,13 +35,13 @@ class _GestaoContratoPageFrmState extends State<GestaoContratoPageFrm> {
     service: GestaoContratoService(),
   );
   late final TextFieldStringWidget txtNomeLink = TextFieldStringWidget(
-    placeholder: 'Nome',
+    placeholder: 'Nome *',
     onChanged: (String? str) {
       gestaoContrato.descricao = txtNomeLink.text;
     },
   );
   late final TextFieldStringWidget txtLink = TextFieldStringWidget(
-    placeholder: 'Link',
+    placeholder: 'Link *',
     onChanged: (String? str) {
       gestaoContrato.link = txtLink.text;
     },
@@ -179,7 +179,9 @@ class _GestaoContratoPageFrmState extends State<GestaoContratoPageFrm> {
   }
 
   void salvar() {
-    if (!txtNomeLink.valid || !txtLink.valid) return;
+    bool nomeValid = txtNomeLink.valid;
+    bool linkValid = txtLink.valid;
+    if (!nomeValid || !linkValid) return;
     cubit.save(gestaoContrato);
   }
 }

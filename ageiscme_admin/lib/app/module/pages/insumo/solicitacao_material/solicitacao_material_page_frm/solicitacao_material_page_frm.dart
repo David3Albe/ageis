@@ -63,7 +63,7 @@ class _SolicitacaoMaterialPageFrmState
   );
 
   late final TextFieldStringWidget txtQuantidade = TextFieldStringWidget(
-    placeholder: 'Quantidade',
+    placeholder: 'Quantidade *',
     onChanged: (String? str) {
       solicitacaoMaterialItem.quantidadeSolicitada =
           double.tryParse(txtQuantidade.text);
@@ -197,7 +197,7 @@ class _SolicitacaoMaterialPageFrmState
                                         codEquipamento: value?.cod,
                                       );
                                 },
-                                placeholder: 'Equipamento',
+                                placeholder: 'Equipamento *',
                               );
                             },
                           ),
@@ -291,7 +291,7 @@ class _SolicitacaoMaterialPageFrmState
                                   solicitacaoMaterialItem.unidadeMedida =
                                       value?.unidadeMedida;
                                 },
-                                placeholder: 'Insumo',
+                                placeholder: 'Insumo *',
                               );
                               if (refreshInsumoMethod != null) {
                                 refreshInsumoMethod!();
@@ -369,11 +369,16 @@ class _SolicitacaoMaterialPageFrmState
   }
 
   void salvar() {
-    if (validateEquipamentoMethod != null && !validateEquipamentoMethod!()) {
-      return;
+    bool equipamentoValid = true;
+    bool insumoValid = true;
+    bool quantidadeValid = txtQuantidade.valid;
+    if (validateEquipamentoMethod != null) {
+      equipamentoValid = validateEquipamentoMethod!();
     }
-    if (validateInsumoMethod != null && !validateInsumoMethod!()) return;
-    if (!txtQuantidade.valid) return;
+    if (validateInsumoMethod != null) {
+      insumoValid = validateInsumoMethod!();
+    }
+    if (!quantidadeValid || !insumoValid || !equipamentoValid) return;
 
     setState(() {
       widget.itemsList.add(solicitacaoMaterialItem);

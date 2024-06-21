@@ -26,6 +26,7 @@ class _ProcessoMotivoPageState extends State<ProcessoMotivoPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(text: 'Descrição', field: 'descricao'),
     CustomDataColumn(
@@ -91,6 +92,7 @@ class _ProcessoMotivoPageState extends State<ProcessoMotivoPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     filterOnlyActives: true,
                     onEdit: (ProcessoMotivoModel objeto) =>
                         {openModal(context, ProcessoMotivoModel.copy(objeto))},

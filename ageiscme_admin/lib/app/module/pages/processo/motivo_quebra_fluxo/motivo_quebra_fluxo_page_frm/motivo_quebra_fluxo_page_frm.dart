@@ -37,7 +37,7 @@ class _MotivoQuebraFluxoPageFrmState extends State<MotivoQuebraFluxoPageFrm> {
     service: MotivoQuebraFluxoService(),
   );
   late final TextFieldStringWidget txtDescricao = TextFieldStringWidget(
-    placeholder: 'Descrição',
+    placeholder: 'Descrição *',
     onChanged: (String? str) {
       motivoQuebraFluxo.descricao = txtDescricao.text;
     },

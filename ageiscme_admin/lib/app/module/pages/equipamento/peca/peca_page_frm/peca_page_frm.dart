@@ -35,7 +35,7 @@ class _PecaPageFrmState extends State<PecaPageFrm> {
     service: PecaService(),
   );
   late final TextFieldStringWidget txtPeca = TextFieldStringWidget(
-    placeholder: 'Peça',
+    placeholder: 'Peça *',
     onChanged: (String? str) {
       peca.peca = txtPeca.text;
     },

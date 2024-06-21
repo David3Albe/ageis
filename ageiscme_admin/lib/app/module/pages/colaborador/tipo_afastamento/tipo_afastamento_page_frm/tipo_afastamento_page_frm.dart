@@ -36,13 +36,13 @@ class _TipoAfastamentoPageFrmState extends State<TipoAfastamentoPageFrm> {
     service: TipoAfastamentoService(),
   );
   late final TextFieldStringWidget txtMotivo = TextFieldStringWidget(
-    placeholder: 'Motivo',
+    placeholder: 'Motivo *',
     onChanged: (String? str) {
       tipoAfastamento.motivo = txtMotivo.text;
     },
   );
   late final TextFieldStringWidget txtDiasConcedido = TextFieldStringWidget(
-    placeholder: 'Dias Concedidos',
+    placeholder: 'Dias Concedidos *',
     onChanged: (String? str) {
       tipoAfastamento.diasConcedido = int.parse(txtDiasConcedido.text);
     },
@@ -193,7 +193,9 @@ class _TipoAfastamentoPageFrmState extends State<TipoAfastamentoPageFrm> {
   }
 
   void salvar() {
-    if (!txtMotivo.valid || !txtDiasConcedido.valid) return;
+    bool motivoValid = txtMotivo.valid;
+    bool diasConcedidoValid = txtDiasConcedido.valid;
+    if (!motivoValid || !diasConcedidoValid) return;
     cubit.save(tipoAfastamento);
   }
 }

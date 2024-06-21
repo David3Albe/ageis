@@ -28,6 +28,7 @@ class _ImagemPageState extends State<ImagemPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(text: 'Idendificator', field: 'identificadorImagem'),
     CustomDataColumn(text: 'Imagem', field: 'nomeFoto'),
@@ -81,6 +82,7 @@ class _ImagemPageState extends State<ImagemPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     onEdit: (ImagemModel objeto) => {
                       openModal(
                         context,

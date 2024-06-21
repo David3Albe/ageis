@@ -6,19 +6,21 @@ import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/open_doc/open_doc_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/label_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_area_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
-import 'package:compartilhados/componentes/botoes/upload_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/delete_image_button_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_file_model.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_save_file_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
+import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
+import 'package:compartilhados/functions/file_helper/file_object_model.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -48,14 +50,14 @@ class _DocumentoPageFrmState extends State<DocumentoPageFrm> {
   );
 
   late final TextFieldStringWidget txtNomeDocumento = TextFieldStringWidget(
-    placeholder: 'Nome do Documento',
+    placeholder: 'Nome do Documento *',
     onChanged: (String? str) {
       documento.descricao = txtNomeDocumento.text;
     },
   );
   late final TextFieldStringAreaWidget txtObservacao =
       TextFieldStringAreaWidget(
-    placeholder: 'Observação',
+    placeholder: 'Observação *',
     onChanged: (String? str) {
       documento.observacao = txtObservacao.text;
     },
@@ -65,6 +67,8 @@ class _DocumentoPageFrmState extends State<DocumentoPageFrm> {
     onDateSelected: (value) => documento.validade = value,
     initialValue: documento.validade!,
   );
+
+  late bool Function() validateTipoDocumento;
 
   @override
   void initState() {
@@ -146,21 +150,33 @@ class _DocumentoPageFrmState extends State<DocumentoPageFrm> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
-                      child: BlocBuilder<TipoDocumentoCubit,
-                          List<TipoDocumentoModel>>(
+                      child:
+                          BlocBuilder<TipoDocumentoCubit, TipoDocumentoState>(
                         bloc: tipoDocumentoCubit,
-                        builder: (context, tiposDocumento) {
-                          TipoDocumentoModel? tipoDocumento = tiposDocumento
-                              .where(
-                                (element) => element.cod == documento.codTipo,
-                              )
-                              .firstOrNull;
-                          return DropDownWidget<TipoDocumentoModel>(
+                        builder: (context, state) {
+                          if (state.loading) {
+                            return const Center(
+                              child: LoadingWidget(),
+                            );
+                          }
+                          TipoDocumentoModel? tipoDocumento =
+                              state.tipoDocumentos
+                                  .where(
+                                    (element) =>
+                                        element.cod == documento.codTipo,
+                                  )
+                                  .firstOrNull;
+                          return DropDownSearchWidget<TipoDocumentoModel>(
+                            validator: (val) =>
+                                val == null ? 'Obrigatório' : null,
+                            validateBuilder: (context, validateMethodBuilder) =>
+                                validateTipoDocumento = validateMethodBuilder,
+                            textFunction: (p0) => p0.GetDropDownText(),
                             initialValue: tipoDocumento,
-                            sourceList: tiposDocumento,
+                            sourceList: state.tipoDocumentos,
                             onChanged: (value) =>
-                                documento.codTipo = value.cod!,
-                            placeholder: 'Tipo Documento',
+                                documento.codTipo = value?.cod,
+                            placeholder: 'Tipo Documento *',
                           );
                         },
                       ),
@@ -189,40 +205,10 @@ class _DocumentoPageFrmState extends State<DocumentoPageFrm> {
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
                       child: LabelStringWidget(
-                        text:
-                            'Documento Anexado: ${documento.nomeDocumento == null ? '' : documento.nomeDocumento}',
+                        text: documento.nomeDocumento == null
+                            ? 'Documento não Anexado'
+                            : 'Documento Anexado: ${documento.nomeDocumento!}',
                       ),
-                    ),
-                    const Padding(padding: EdgeInsets.only(top: 5)),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Wrap(
-                            runSpacing: 16 * paddingHorizontalScale,
-                            spacing: 16 * paddingHorizontalScale,
-                            children: [
-                              UploadButtonWidget(
-                                placeholder: 'Anexar DOC',
-                                imageSelected: (value1, value2) {
-                                  salvarDoc(value1, value2);
-                                },
-                              ),
-                              DeleteImageButtonWidget(
-                                placeholder: 'Excluir DOC',
-                                onPressed: documento.documento == null
-                                    ? null
-                                    : () => {excluirDoc()},
-                              ),
-                              OpenDocWidget(
-                                placeholder: 'Abrir DOC',
-                                documentoString: documento.documento,
-                                documentName: documento.nomeDocumento ??
-                                    'arquivo sem nome.Webp',
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
                     ),
                     const Padding(padding: EdgeInsets.only(top: 24)),
                   ],
@@ -234,6 +220,24 @@ class _DocumentoPageFrmState extends State<DocumentoPageFrm> {
                 children: [
                   CustomPopupMenuWidget(
                     items: [
+                      CustomPopupItemFileModel.getFileItem(
+                        'Anexar DOC',
+                        salvarDoc,
+                      ),
+                      if (documento.nomeDocumento != null &&
+                          documento.documento != null)
+                        CustomPopupItemModel(
+                          text: 'Excluir DOC',
+                          onTap: excluirDoc,
+                        ),
+                      if (documento.nomeDocumento != null &&
+                          documento.documento != null)
+                        CustomPopupItemSaveFileModel.getOpenDocItem(
+                          text: 'Abrir DOC',
+                          context: context,
+                          docName: documento.nomeDocumento,
+                          docString: documento.documento,
+                        ),
                       if (documento.cod != null && documento.cod != 0)
                         CustomPopupItemHistoryModel.getHistoryItem(
                           child: HistoricoPage(
@@ -275,10 +279,13 @@ class _DocumentoPageFrmState extends State<DocumentoPageFrm> {
     );
   }
 
-  void salvarDoc(String doc, String nomeDoc) {
-    documento.documento = doc;
-    documento.nomeDocumento = nomeDoc;
-    setState(() {});
+  void salvarDoc(Future<FileObjectModel?> Function() onSelectFile) async {
+    FileObjectModel? fileNew = await onSelectFile();
+    if (fileNew == null) return;
+    setState(() {
+      documento.documento = fileNew.base64;
+      documento.nomeDocumento = fileNew.fileName;
+    });
   }
 
   void excluirDoc() {
@@ -289,8 +296,10 @@ class _DocumentoPageFrmState extends State<DocumentoPageFrm> {
   }
 
   void salvar() {
-    if (!txtNomeDocumento.valid || !txtObservacao.valid) return;
-
+    bool nomeDocumentoValid = txtNomeDocumento.valid;
+    bool observacaoValid = txtObservacao.valid;
+    bool tipoDocumentoValid = validateTipoDocumento();
+    if (!nomeDocumentoValid || !observacaoValid || !tipoDocumentoValid) return;
     cubit.save(documento);
   }
 }

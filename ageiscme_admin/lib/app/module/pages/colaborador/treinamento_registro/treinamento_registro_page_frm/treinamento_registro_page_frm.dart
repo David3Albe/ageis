@@ -65,7 +65,7 @@ class _TreinamentoRegistroPageFrmState
   );
 
   late final TextFieldStringWidget txtNome = TextFieldStringWidget(
-    placeholder: 'Nome',
+    placeholder: 'Nome *',
     onChanged: (String? str) {
       treinamentoRegistro.nome = txtNome.text;
     },
@@ -86,14 +86,18 @@ class _TreinamentoRegistroPageFrmState
     },
   );
 
+  late bool Function() dataValidate;
   late final DatePickerWidget dtpData = DatePickerWidget(
-    placeholder: 'Data',
+    validateBuilder: (context, validateMethodBuilder) =>
+        dataValidate = validateMethodBuilder,
+    validator: (date) => date == null ? 'Obrigatório' : null,
+    placeholder: 'Data *',
     onDateSelected: (value) => treinamentoRegistro.data = value,
     initialValue: treinamentoRegistro.data,
   );
 
   late TextFieldNumberFloatWidget txtCargaHoraria = TextFieldNumberFloatWidget(
-    placeholder: 'Carga Horária (hs)',
+    placeholder: 'Carga Horária (hs) *',
     onChanged: (String? str) {
       treinamentoRegistro.cargaHoraria = double.parse(txtCargaHoraria.text);
     },
@@ -105,6 +109,8 @@ class _TreinamentoRegistroPageFrmState
       treinamentoRegistro.observacao = txtObservacao.text;
     },
   );
+
+  final ScrollController scroll = ScrollController();
 
   @override
   void initState() {
@@ -208,6 +214,7 @@ class _TreinamentoRegistroPageFrmState
                 maxHeight: size.height * .8,
               ),
               child: SingleChildScrollView(
+                controller: scroll,
                 padding: const EdgeInsets.only(right: 14),
                 child: Column(
                   children: [
@@ -562,16 +569,28 @@ class _TreinamentoRegistroPageFrmState
   }
 
   void salvar() {
-    if (!txtNome.valid ||
-        !txtDescricaoConteudo.valid ||
-        !txtEntidade.valid ||
-        !txtCargaHoraria.valid ||
-        !txtObservacao.valid) {
+    bool nomeValid = txtNome.valid;
+    bool descricaoValid = txtDescricaoConteudo.valid;
+    bool entidadeValid = txtEntidade.valid;
+    bool cargaHorariaValid = txtCargaHoraria.valid;
+    bool observacaoValid = txtObservacao.valid;
+    bool dataValid = dataValidate();
+    if (!nomeValid) {
+      scroll.jumpTo(0);
+    }else if(!dataValid || !cargaHorariaValid){
+      scroll.jumpTo(220);
+    }
+
+    if (!nomeValid ||
+        !descricaoValid ||
+        !entidadeValid ||
+        !cargaHorariaValid ||
+        !observacaoValid ||
+        !dataValid) {
       return;
     }
 
     final registrarUsuariosTreinamento = <TreinamentoUsuarioModel>[];
-
     for (final usuario in treinamentoRegistro.usuariosTreinamentos!) {
       final treinamentoUsuario = TreinamentoUsuarioModel(
         cod: usuario.cod,

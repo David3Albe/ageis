@@ -219,6 +219,17 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
       return '';
     });
 
+    txtEscalaFonte.addValidator((str) {
+      if (str.isEmpty) {
+        return '';
+      }
+      String doubleStr = str.replaceAll(',', '.');
+      double? parse = double.tryParse(doubleStr);
+      if (parse == null) return 'Valor inválido';
+      if (parse > 1.5) return 'Não pode passar de 1,5';
+      return '';
+    });
+
     txtMensagemDescartarItemForaEstoque.addValidator((str) {
       if (str.length > 200) {
         return 'Pode ter no máximo 200 caracteres';
@@ -708,18 +719,18 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
   }
 
   void salvar() {
-    if (!txtNome.valid ||
-        !txtEndereco.valid ||
-        !txtResponsavel.valid ||
-        !txtDebugLevel.valid ||
-        !txtTempoMin.valid) return;
-    if (instituicao.escalaFonte != null && instituicao.escalaFonte! > 1.5) {
-      ToastUtils.showCustomToastWarning(
-        context,
-        'Escala Fonte não pode ser maior que 1.5',
-      );
-      return;
-    }
+    bool nomeValid = txtNome.valid;
+    bool enderecoValid = txtEndereco.valid;
+    bool responsavelValid = txtResponsavel.valid;
+    bool debugLevelValid = txtDebugLevel.valid;
+    bool tempoMinimoValid = txtTempoMin.valid;
+    bool escalaFonteValid = txtEscalaFonte.valid;
+    if (!nomeValid ||
+        !enderecoValid ||
+        !responsavelValid ||
+        !debugLevelValid ||
+        !tempoMinimoValid ||
+        !escalaFonteValid) return;
 
     cubit.save(instituicao);
   }

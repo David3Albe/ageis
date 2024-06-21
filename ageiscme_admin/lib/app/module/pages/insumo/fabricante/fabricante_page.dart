@@ -26,6 +26,7 @@ class _FabricantePageState extends State<FabricantePage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(text: 'Fabricante', field: 'nome'),
   ];
@@ -71,6 +72,7 @@ class _FabricantePageState extends State<FabricantePage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     onEdit: (FabricanteModel objeto) =>
                         {openModal(context, FabricanteModel.copy(objeto))},
                     onDelete: (FabricanteModel objeto) =>

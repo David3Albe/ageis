@@ -26,6 +26,7 @@ class _PecaPageState extends State<PecaPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(text: 'Peça', field: 'peca'),
     CustomDataColumn(
@@ -75,6 +76,7 @@ class _PecaPageState extends State<PecaPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     filterOnlyActives: true,
                     onEdit: (PecaModel objeto) =>
                         {openModal(context, PecaModel.copy(objeto))},

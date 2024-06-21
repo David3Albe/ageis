@@ -9,7 +9,7 @@ import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
+import 'package:compartilhados/componentes/campos/label_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
@@ -57,24 +57,33 @@ class _AtestadoSaudeOcupacionalFrmState
     service: AtestadoSaudeOcupacionalService(),
   );
   late final TextFieldStringWidget txtNomeMedico = TextFieldStringWidget(
-    placeholder: 'Nome do Médico',
+    placeholder: 'Nome do Médico *',
     onChanged: (String? str) {
       atestadoSaudeOcupacional.nomeMedico = txtNomeMedico.text;
     },
   );
   late final TextFieldNumberWidget txtCrmMedico = TextFieldNumberWidget(
-    placeholder: 'CRM do Médico',
+    placeholder: 'CRM do Médico *',
     onChanged: (String? str) {
       atestadoSaudeOcupacional.crmMedico = int.parse(txtCrmMedico.text);
     },
   );
+
+  late bool Function() dataEmissaoValidate;
   late final DatePickerWidget dtpDataEmissao = DatePickerWidget(
-    placeholder: 'Data Emissão',
+    validator: (date) => date == null ? 'Obrigatório' : null,
+    validateBuilder: (context, validateMethodBuilder) =>
+        dataEmissaoValidate = validateMethodBuilder,
+    placeholder: 'Data Emissão *',
     onDateSelected: (value) => atestadoSaudeOcupacional.data = value,
     initialValue: atestadoSaudeOcupacional.data,
   );
+  late bool Function() dataValidadeValidate;
   late final DatePickerWidget dtpDataValidade = DatePickerWidget(
-    placeholder: 'Data Validade',
+    validator: (date) => date == null ? 'Obrigatório' : null,
+    validateBuilder: (context, validateMethodBuilder) =>
+        dataValidadeValidate = validateMethodBuilder,
+    placeholder: 'Data Validade *',
     onDateSelected: (value) => atestadoSaudeOcupacional.validade = value,
     initialValue: atestadoSaudeOcupacional.validade,
   );
@@ -116,6 +125,12 @@ class _AtestadoSaudeOcupacionalFrmState
           'Edição de Atestado de Saúde Ocupacional: ${atestadoSaudeOcupacional.cod}';
     }
   }
+
+  final ScrollController scroll = ScrollController();
+
+  late bool Function() usuarioValidate;
+  late bool Function() tipoAsoValidate;
+  late bool Function() conclusaoValidate;
 
   @override
   Widget build(BuildContext context) {
@@ -159,6 +174,7 @@ class _AtestadoSaudeOcupacionalFrmState
                 maxHeight: 800,
               ),
               child: SingleChildScrollView(
+                controller: scroll,
                 padding: const EdgeInsets.only(right: 14),
                 child: Column(
                   children: [
@@ -170,6 +186,10 @@ class _AtestadoSaudeOcupacionalFrmState
                           if (state.loading) return const LoadingWidget();
                           List<UsuarioModel> usuarios = state.usuarios;
                           return DropDownSearchWidget<UsuarioModel>(
+                            validator: (val) =>
+                                val == null ? 'Obrigatório' : null,
+                            validateBuilder: (context, validateMethodBuilder) =>
+                                usuarioValidate = validateMethodBuilder,
                             initialValue: atestadoSaudeOcupacional.usuario,
                             sourceList: usuarios
                                 .where(
@@ -180,7 +200,7 @@ class _AtestadoSaudeOcupacionalFrmState
                               atestadoSaudeOcupacional.codUsuario = value?.cod;
                               atestadoSaudeOcupacional.usuario = value;
                             },
-                            placeholder: 'Colaborador',
+                            placeholder: 'Colaborador *',
                           );
                         },
                       ),
@@ -198,8 +218,13 @@ class _AtestadoSaudeOcupacionalFrmState
                           ),
                           const SizedBox(width: 16),
                           Expanded(
-                            child: DropDownWidget<
+                            child: DropDownSearchWidget<
                                 AtestadoSaudeOcupacionalTipoAsoOption>(
+                              validator: (obj) =>
+                                  obj == null ? 'Obrigatório' : null,
+                              validateBuilder:
+                                  (context, validateMethodBuilder) =>
+                                      tipoAsoValidate = validateMethodBuilder,
                               initialValue:
                                   AtestadoSaudeOcupacionalTipoAsoOption
                                       .tipoAsoOptions
@@ -211,9 +236,10 @@ class _AtestadoSaudeOcupacionalFrmState
                                       .firstOrNull,
                               sourceList: AtestadoSaudeOcupacionalTipoAsoOption
                                   .tipoAsoOptions,
+                              textFunction: (p0) => p0.GetDropDownText(),
                               onChanged: (value) =>
-                                  atestadoSaudeOcupacional.tipo = value.cod,
-                              placeholder: 'Tipo do ASO',
+                                  atestadoSaudeOcupacional.tipo = value?.cod,
+                              placeholder: 'Tipo do ASO *',
                             ),
                           ),
                         ],
@@ -235,8 +261,11 @@ class _AtestadoSaudeOcupacionalFrmState
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
-                      child: DropDownWidget<
+                      child: DropDownSearchWidget<
                           AtestadoSaudeOcupacionalConclusaoOption>(
+                        validator: (obj) => obj == null ? 'Obrigatório' : null,
+                        validateBuilder: (context, validateMethodBuilder) =>
+                            conclusaoValidate = validateMethodBuilder,
                         initialValue: AtestadoSaudeOcupacionalConclusaoOption
                             .conclusaoOptions
                             .where(
@@ -247,9 +276,10 @@ class _AtestadoSaudeOcupacionalFrmState
                             .firstOrNull,
                         sourceList: AtestadoSaudeOcupacionalConclusaoOption
                             .conclusaoOptions,
+                        textFunction: (p0) => p0.GetDropDownText(),
                         onChanged: (value) =>
-                            atestadoSaudeOcupacional.conclusao = value.cod,
-                        placeholder: 'Conclusão',
+                            atestadoSaudeOcupacional.conclusao = value?.cod,
+                        placeholder: 'Conclusão *',
                       ),
                     ),
                     Padding(
@@ -263,6 +293,14 @@ class _AtestadoSaudeOcupacionalFrmState
                             text: 'Controlar Validade',
                           ),
                         ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 5.0),
+                      child: LabelStringWidget(
+                        text: atestadoSaudeOcupacional.docNome != null
+                            ? 'Documento anexado'
+                            : 'Documento não anexado',
                       ),
                     ),
                     Padding(
@@ -283,15 +321,6 @@ class _AtestadoSaudeOcupacionalFrmState
                 children: [
                   CustomPopupMenuWidget(
                     items: [
-                      if (atestadoSaudeOcupacional.cod != null &&
-                          atestadoSaudeOcupacional.cod != 0)
-                        CustomPopupItemHistoryModel.getHistoryItem(
-                          child: HistoricoPage(
-                            pk: atestadoSaudeOcupacional.cod!,
-                            termo: 'ATESTADO_SAUDE_OCUPACIONAL',
-                          ),
-                          context: context,
-                        ),
                       CustomPopupItemImageModel.getImageItem(
                         'Anexar ASO',
                         salvarASO,
@@ -325,6 +354,15 @@ class _AtestadoSaudeOcupacionalFrmState
                           context: context,
                           docName: atestadoSaudeOcupacional.docNome,
                           docString: atestadoSaudeOcupacional.doc,
+                        ),
+                      if (atestadoSaudeOcupacional.cod != null &&
+                          atestadoSaudeOcupacional.cod != 0)
+                        CustomPopupItemHistoryModel.getHistoryItem(
+                          child: HistoricoPage(
+                            pk: atestadoSaudeOcupacional.cod!,
+                            termo: 'ATESTADO_SAUDE_OCUPACIONAL',
+                          ),
+                          context: context,
                         ),
                     ],
                   ),
@@ -391,7 +429,33 @@ class _AtestadoSaudeOcupacionalFrmState
   }
 
   void salvar() {
-    if (!txtNomeMedico.valid || !txtCrmMedico.valid) return;
+    bool medicoValid = txtNomeMedico.valid;
+    bool crmValid = txtCrmMedico.valid;
+    bool usuarioValid = usuarioValidate();
+    bool tipoAsoValid = tipoAsoValidate();
+    bool dataEmissaoValid = dataEmissaoValidate();
+    bool conclusaoValid = conclusaoValidate();
+    bool dataValidadeValid = dataValidadeValidate();
+
+    if (!usuarioValid) {
+      scroll.jumpTo(0);
+    } else if (!medicoValid) {
+      scroll.jumpTo(40);
+    } else if (!crmValid || !tipoAsoValid) {
+      scroll.jumpTo(90);
+    } else if (!dataEmissaoValid || !dataValidadeValid) {
+      scroll.jumpTo(140);
+    }else if(!conclusaoValid){
+      scroll.jumpTo(190);
+    }
+
+    if (!medicoValid ||
+        !crmValid ||
+        !usuarioValid ||
+        !tipoAsoValid ||
+        !dataEmissaoValid ||
+        !conclusaoValid ||
+        !dataValidadeValid) return;
 
     cubit.save(atestadoSaudeOcupacional);
   }

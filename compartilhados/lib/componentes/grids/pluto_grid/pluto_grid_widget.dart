@@ -93,6 +93,8 @@ class PlutoGridWidget<T> extends StatelessWidget {
   final PlutoGridMode mode;
   final void Function(T)? onSelected;
   final bool showFilters;
+  final String? orderDescendingFieldColumn;
+  final String? orderAscendingFieldColumn;
   PlutoGridWidget({
     required this.items,
     required this.columns,
@@ -112,6 +114,8 @@ class PlutoGridWidget<T> extends StatelessWidget {
     this.getObjectByRowMethod,
     this.mode = PlutoGridMode.normal,
     this.onSelected,
+    this.orderDescendingFieldColumn,
+    this.orderAscendingFieldColumn,
   }) {
     cellsObject = getCellObjects(items);
     this.rows = _getRows(cellsObject);
@@ -329,6 +333,18 @@ class PlutoGridWidget<T> extends StatelessWidget {
                 ),
                 rows: this.rows,
                 onLoaded: (event) {
+                  if (orderDescendingFieldColumn != null) {
+                    event.stateManager.sortDescending(event.stateManager.columns
+                        .where((element) =>
+                            element.field == orderDescendingFieldColumn)
+                        .first);
+                  }
+                  if (orderAscendingFieldColumn != null) {
+                    event.stateManager.sortDescending(event.stateManager.columns
+                        .where((element) =>
+                            element.field == orderAscendingFieldColumn)
+                        .first);
+                  }
                   if (showFilters) event.stateManager.setShowColumnFilter(true);
                   this.setRows(
                     this.filterOnlyActives,

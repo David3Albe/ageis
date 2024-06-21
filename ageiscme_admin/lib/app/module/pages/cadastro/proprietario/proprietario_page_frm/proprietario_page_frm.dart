@@ -57,7 +57,7 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
   );
 
   late final TextFieldStringWidget txtNome = TextFieldStringWidget(
-    placeholder: 'Nome',
+    placeholder: 'Nome *',
     onChanged: (String? str) {
       proprietario.nome = txtNome.text;
     },
@@ -71,7 +71,7 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
   );
 
   late final TextFieldStringWidget txtContato = TextFieldStringWidget(
-    placeholder: 'Contato',
+    placeholder: 'Contato *',
     onChanged: (String? str) {
       proprietario.contato = txtContato.text;
     },
@@ -99,6 +99,8 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
 
     super.initState();
   }
+
+  final ScrollController scroll = ScrollController();
 
   void setFields() {
     txtNome.text = proprietario.nome.toString();
@@ -155,6 +157,7 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
                 maxHeight: size.height * .8,
               ),
               child: SingleChildScrollView(
+                controller: scroll,
                 padding: const EdgeInsets.only(right: 14),
                 child: Column(
                   children: [
@@ -671,7 +674,14 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
   }
 
   void salvar() {
-    if (!txtNome.valid || !txtContato.valid) return;
+    bool nomeValid = txtNome.valid;
+    bool contatoValid = txtContato.valid;
+    if (!nomeValid) {
+      scroll.jumpTo(0);
+    } else if (!contatoValid) {
+      scroll.jumpTo(90);
+    } 
+    if (!nomeValid || !contatoValid) return;
 
     final registrarProprietarioLocal = <ProprietarioLocalModel>[];
     final registrarProprietarioArsenal = <ProprietarioArsenalModel>[];

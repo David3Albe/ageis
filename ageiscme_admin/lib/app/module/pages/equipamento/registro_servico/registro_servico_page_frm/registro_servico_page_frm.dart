@@ -21,7 +21,6 @@ import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/label_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
@@ -30,7 +29,6 @@ import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_pop
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_save_file_model.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
-import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/functions/file_helper/file_object_model.dart';
@@ -70,6 +68,8 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
   }
 
   late final RegistroServicePageFrmController controller;
+  late bool Function() validateTipoServico;
+  late bool Function() validateResultado;
 
   void initState() {
     readonlyCubit = ReadonlyCubit();
@@ -96,6 +96,7 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
   }
 
   late void Function() refreshServicosTipoMethod;
+  final ScrollController scroll = ScrollController();
   @override
   Widget build(BuildContext context) {
     double paddingHorizontalScale = MediaQuery.of(context).size.width / 1920;
@@ -132,6 +133,7 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                 maxHeight: size.height * .8,
               ),
               child: SingleChildScrollView(
+                controller: scroll,
                 padding: const EdgeInsets.only(right: 14),
                 child: Column(
                   children: [
@@ -236,6 +238,12 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                                     .buscarServicosEquipamento(servicosTipos);
 
                                 return DropDownSearchWidget<ServicoTipoModel>(
+                                  validateBuilder:
+                                      (context, validateMethodBuilder) =>
+                                          validateTipoServico =
+                                              validateMethodBuilder,
+                                  validator: (val) =>
+                                      val == null ? 'Obrigatório' : null,
                                   refreshSourceListBuilder:
                                       (context, refreshTipoServicoSourceList) =>
                                           refreshServicosTipoMethod =
@@ -253,7 +261,7 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                                     registroServico.codServicosTipos =
                                         value?.cod;
                                   },
-                                  placeholder: 'Tipo do Serviço',
+                                  placeholder: 'Tipo do Serviço *',
                                 );
                               },
                             ),
@@ -341,6 +349,8 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                                     UsuarioDropDownSearchDTO(
                                       numeroRegistros: 30,
                                       search: str,
+                                      apenasAtivos: true,
+                                      apenasColaboradores: true,
                                     ),
                                   ))
                                       ?.$2 ??
@@ -363,7 +373,13 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                           ),
                           const SizedBox(width: 16.0),
                           Expanded(
-                            child: DropDownWidget<RegistroServicoResultOption>(
+                            child: DropDownSearchWidget<
+                                RegistroServicoResultOption>(
+                              validator: (obj) =>
+                                  obj == null ? 'Obrigatório' : null,
+                              validateBuilder:
+                                  (context, validateMethodBuilder) =>
+                                      validateResultado = validateMethodBuilder,
                               initialValue:
                                   RegistroServicoResultOption.resultOptions
                                       .where(
@@ -374,9 +390,10 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                                       .firstOrNull,
                               sourceList:
                                   RegistroServicoResultOption.resultOptions,
+                              textFunction: (p0) => p0.GetDropDownText(),
                               onChanged: (value) => registroServico.resultado =
-                                  value.cod.toString(),
-                              placeholder: 'Resultado',
+                                  value?.cod.toString(),
+                              placeholder: 'Resultado *',
                             ),
                           ),
                         ],
@@ -552,24 +569,40 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
   }
 
   void salvar() {
-    if (!controller.txtDescricaoServico.valid ||
-        !controller.txtLote.valid ||
-        !controller.txtUsuarioRegistro.valid) return;
+    bool descricaoValid = controller.txtDescricaoServico.valid;
+    bool loteValid = controller.txtLote.valid;
+    bool usuarioRegistroValid = controller.txtUsuarioRegistro.valid;
+    bool tipoServicoValid = validateTipoServico();
+    bool resultadoValid = validateResultado();
+    if (!tipoServicoValid) {
+      scroll.jumpTo(0);
+    } else if (!descricaoValid) {
+      scroll.jumpTo(200.0);
+    }else if(!resultadoValid){
+      scroll.jumpTo(300.0);
+    }
+    if (!descricaoValid ||
+        !loteValid ||
+        !usuarioRegistroValid ||
+        !tipoServicoValid ||
+        !resultadoValid) {
+      return;
+    }
 
     if (registroServico.codItem == null &&
         registroServico.codEquipamento == null) {
-      ErrorUtils.showErrorDialog(
+      ToastUtils.showCustomToastWarning(
         context,
-        ['Deve ser informado um Equipamento ou Item'],
+        'Deve ser informado um Equipamento ou Item',
       );
       return;
     }
 
     if (registroServico.codItem != null &&
         registroServico.codEquipamento != null) {
-      ErrorUtils.showErrorDialog(
+      ToastUtils.showCustomToastWarning(
         context,
-        ['Item ou Equipamento, apenas um pode ser informado'],
+        'Item ou Equipamento, apenas um pode ser informado',
       );
       return;
     }

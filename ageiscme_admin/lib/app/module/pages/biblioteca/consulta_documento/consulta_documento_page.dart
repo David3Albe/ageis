@@ -207,10 +207,15 @@ class _ConsultaDocumentoPageState extends State<ConsultaDocumentoPage> {
         return FilterDialogWidget(
           child: Column(
             children: [
-              BlocBuilder<TipoDocumentoCubit, List<TipoDocumentoModel>>(
+              BlocBuilder<TipoDocumentoCubit, TipoDocumentoState>(
                 bloc: tipoDocumentoBloc,
-                builder: (context, tiposDocumentos) {
-                  TipoDocumentoModel? tipoDocumento = tiposDocumentos
+                builder: (context, state) {
+                  if (state.loading) {
+                    return const Center(
+                      child: LoadingWidget(),
+                    );
+                  }
+                  TipoDocumentoModel? tipoDocumento = state.tipoDocumentos
                       .where(
                         (element) => element.cod == filter.codTipo,
                       )
@@ -219,7 +224,7 @@ class _ConsultaDocumentoPageState extends State<ConsultaDocumentoPage> {
                     textFunction: (tipoDocumento) =>
                         tipoDocumento.GetNomeDepositoText(),
                     initialValue: tipoDocumento,
-                    sourceList: tiposDocumentos,
+                    sourceList: state.tipoDocumentos,
                     onChanged: (value) => filter.codTipo = value?.cod,
                     placeholder: 'Tipo',
                   );

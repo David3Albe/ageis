@@ -48,6 +48,7 @@ dependencies:
   reactive_forms: ^17.0.1
   reactive_color_picker: ^2.0.1
   dropdown_search: ^5.0.6
+  easy_debounce: ^2.0.3
   
 dev_dependencies:
   flutter_test:

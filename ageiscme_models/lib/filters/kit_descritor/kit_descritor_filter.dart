@@ -14,6 +14,7 @@ sealed class KitDescritorFilter with _$KitDescritorFilter {
     bool? ordenarAtivosPrimeiro,
     String? nomeContem,
     String? termoPesquisa,
+    bool? ordernarPorCodDecrescente,
     @JsonKey(name: 'tStamp') String? tStamp,
   }) = _KitDescritorFilter;
 

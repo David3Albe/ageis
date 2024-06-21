@@ -82,6 +82,7 @@ class _EquipamentoManutencaoPageState extends State<EquipamentoManutencaoPage> {
     filter = EquipamentoManutencaoFilter(
       numeroRegistros: 500,
       cod: widget.cod,
+      ordenarDataInicioDecrescente: true,
     );
     consultar().then((value) {
       bool detalhar = filter.cod != null;
@@ -143,6 +144,7 @@ class _EquipamentoManutencaoPageState extends State<EquipamentoManutencaoPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'dataInicio',
                     onEdit: (EquipamentoManutencaoModel objeto) => {
                       openModal(
                         context,

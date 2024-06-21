@@ -102,6 +102,7 @@ class _ItemPageState extends State<ItemPage> {
   void _defineFilter(ItemFilter filter) {
     filter.carregarDescritorResumido = true;
     filter.numeroRegistros = 500;
+    filter.ordenarPorCodDecrescente = true;
     switch (widget.frmType) {
       case ItemPageFrmtype.Items:
         filter.apenasItensNaoConsignados = true;

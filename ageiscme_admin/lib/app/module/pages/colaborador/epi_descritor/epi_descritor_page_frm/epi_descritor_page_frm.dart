@@ -6,20 +6,20 @@ import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/delete_image_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/open_doc/open_doc_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/upload_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_image_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_open_doc_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/images/image_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
+import 'package:compartilhados/functions/image_helper/image_object_model.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -45,21 +45,25 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
     service: EpiDescritorService(),
   );
   late final TextFieldStringWidget txtDescricao = TextFieldStringWidget(
-    placeholder: 'Descrição',
+    placeholder: 'Descrição *',
     onChanged: (String? str) {
       epiDescritor.descricao = txtDescricao.text;
     },
   );
   late final TextFieldStringWidget txtNumeroCA = TextFieldStringWidget(
-    placeholder: 'Número do CA',
+    placeholder: 'Número do CA *',
     onChanged: (String? str) {
       epiDescritor.numeroCA = txtNumeroCA.text;
     },
   );
+  late bool Function() prazoValidadeValidation;
   late final DatePickerWidget dtpPrazoValidade = DatePickerWidget(
-    placeholder: 'Prazo Validade',
+    validator: (date) => date == null ? 'Obrigatório' : null,
+    placeholder: 'Prazo Validade *',
     onDateSelected: (value) => epiDescritor.prazoValidade = value,
     initialValue: epiDescritor.prazoValidade,
+    validateBuilder: (context, validateMethodBuilder) =>
+        prazoValidadeValidation = validateMethodBuilder,
   );
 
   late FornecedorCubit fornecedorCubit;
@@ -71,6 +75,9 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
     txtDescricao.addValidator((String str) {
       if (str.length > 400) {
         return 'Pode ter no máximo 400 caracteres';
+      }
+      if (str.isEmpty) {
+        return 'Obrigatório';
       }
       return '';
     });
@@ -99,6 +106,9 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
           'Edição de Descritor de EPI: ${epiDescritor.cod} -  ${epiDescritor.descricao}';
     }
   }
+
+  late bool Function() tipoEpiValidation;
+  final ScrollController scroll = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -140,6 +150,7 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
                 maxHeight: size.height * .8,
               ),
               child: SingleChildScrollView(
+                controller: scroll,
                 padding: const EdgeInsets.only(right: 14),
                 child: Column(
                   children: [
@@ -149,15 +160,19 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
-                      child: DropDownWidget<EpiDescritorTipoEpiOption>(
+                      child: DropDownSearchWidget<EpiDescritorTipoEpiOption>(
+                        validator: (obj) => obj == null ? 'Obrigatório' : null,
+                        validateBuilder: (context, validateMethodBuilder) =>
+                            tipoEpiValidation = validateMethodBuilder,
                         initialValue: EpiDescritorTipoEpiOption.tipoEpiOptions
                             .where(
                               (element) => element.cod == epiDescritor.tipoEpi,
                             )
                             .firstOrNull,
                         sourceList: EpiDescritorTipoEpiOption.tipoEpiOptions,
-                        onChanged: (value) => epiDescritor.tipoEpi = value.cod,
-                        placeholder: 'Tipo EPI',
+                        onChanged: (value) => epiDescritor.tipoEpi = value?.cod,
+                        textFunction: (p0) => p0.GetDropDownText(),
+                        placeholder: 'Tipo EPI *',
                       ),
                     ),
                     Padding(
@@ -229,36 +244,6 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
                         imageBase64: epiDescritor.imagem,
                       ),
                     ),
-                    const Padding(padding: EdgeInsets.only(top: 5)),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Wrap(
-                            runSpacing: 16 * paddingHorizontalScale,
-                            spacing: 16 * paddingHorizontalScale,
-                            children: [
-                              UploadButtonWidget(
-                                placeholder: 'Anexar Imagem',
-                                imageSelected: (value1, value2) {
-                                  salvarImage(value1);
-                                },
-                              ),
-                              DeleteImageButtonWidget(
-                                placeholder: 'Excluir Imagem',
-                                onPressed: epiDescritor.imagem == null
-                                    ? null
-                                    : () => {excluirImagem()},
-                              ),
-                              OpenDocWidget(
-                                placeholder: 'Abrir Imagem',
-                                documentoString: epiDescritor.imagem,
-                                documentName: 'arquivo sem nome.Webp',
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
                     const Padding(padding: EdgeInsets.only(top: 24)),
                   ],
                 ),
@@ -269,6 +254,20 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
                 children: [
                   CustomPopupMenuWidget(
                     items: [
+                      CustomPopupItemImageModel.getImageItem(
+                        'Anexar Imagem',
+                        salvarImagem,
+                      ),
+                      CustomPopupItemOpenDocModel.getOpenDocItem(
+                        'Abrir Imagem',
+                        context,
+                        epiDescritor.imagem,
+                        'arquivo sem nome.Webp',
+                      ),
+                      CustomPopupItemModel(
+                        text: 'Excluir Imagem',
+                        onTap: excluirImagem,
+                      ),
                       if (epiDescritor.cod != null && epiDescritor.cod != 0)
                         CustomPopupItemHistoryModel.getHistoryItem(
                           child: HistoricoPage(
@@ -310,9 +309,11 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
     );
   }
 
-  void salvarImage(String image) {
+  void salvarImagem(Future<ImageObjectModel?> Function() onSelectImage) async {
+    ImageObjectModel? imageNew = await onSelectImage();
+    if (imageNew == null) return;
     setState(() {
-      epiDescritor.imagem = image;
+      epiDescritor.imagem = imageNew.base64;
     });
   }
 
@@ -323,7 +324,24 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
   }
 
   void salvar() {
-    if (!txtDescricao.valid || !txtNumeroCA.valid) return;
+    bool descricaoValid = txtDescricao.valid;
+    bool numeroCAValid = txtNumeroCA.valid;
+    bool tipoEpiValid = tipoEpiValidation();
+    bool prazoValidadeValid = prazoValidadeValidation();
+
+    if (!descricaoValid) {
+      scroll.jumpTo(0);
+    } else if (!tipoEpiValid) {
+      scroll.jumpTo(50);
+    } else if (!numeroCAValid) {
+      scroll.jumpTo(100);
+    } else if (!prazoValidadeValid) {
+      scroll.jumpTo(200);
+    }
+    if (!descricaoValid ||
+        !numeroCAValid ||
+        !tipoEpiValid ||
+        !prazoValidadeValid) return;
 
     cubit.save(epiDescritor);
   }

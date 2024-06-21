@@ -27,7 +27,6 @@ import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/list_field/list_field_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
@@ -117,6 +116,9 @@ class _KitPageFrmState extends State<KitPageFrm> {
     },
   );
 
+  late bool Function() validateDescritor;
+  late bool Function() validateSituacao;
+
   @override
   void initState() {
     txtRestricao.addValidator((String str) {
@@ -144,6 +146,7 @@ class _KitPageFrmState extends State<KitPageFrm> {
   }
 
   void Function(DateTime?)? setDateDescarte;
+  final ScrollController scroll = ScrollController();
 
   @override
   Widget build(BuildContext context) {
@@ -183,6 +186,7 @@ class _KitPageFrmState extends State<KitPageFrm> {
                 maxHeight: size.height * .8,
               ),
               child: SingleChildScrollView(
+                controller: scroll,
                 padding: const EdgeInsets.only(right: 14),
                 child: Column(
                   children: [
@@ -193,6 +197,11 @@ class _KitPageFrmState extends State<KitPageFrm> {
                           Expanded(
                             child: DropDownSearchApiWidget<
                                 KitDescritorDropDownSearchResponseDTO>(
+                              validateBuilder:
+                                  (context, validateMethodBuilder) =>
+                                      validateDescritor = validateMethodBuilder,
+                              validator: (val) =>
+                                  val == null ? 'Obrigatório' : null,
                               search: (str) async =>
                                   (await KitDescritorService()
                                           .getDropDownSearch(
@@ -214,7 +223,7 @@ class _KitPageFrmState extends State<KitPageFrm> {
                                     ),
                               onChanged: (value) =>
                                   kit.codDescritorKit = value?.cod,
-                              placeholder: 'Descritor do Kit',
+                              placeholder: 'Descritor do Kit *',
                             ),
                           ),
                           const SizedBox(width: 16.0),
@@ -369,15 +378,19 @@ class _KitPageFrmState extends State<KitPageFrm> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
-                      child: DropDownWidget<KitSituacaoOption>(
+                      child: DropDownSearchWidget<KitSituacaoOption>(
+                        validator: (val) => val == null ? 'Obrigatório' : null,
+                        validateBuilder: (context, validateMethodBuilder) => validateSituacao = validateMethodBuilder,
+                        textFunction: (p0) => p0.GetDropDownText(),
                         initialValue: KitSituacaoOption.situacaoOptions
                             .where(
                               (element) => element.cod == kit.status,
                             )
                             .firstOrNull,
                         sourceList: KitSituacaoOption.situacaoOptions,
-                        onChanged: (value) => kit.status = value.cod.toString(),
-                        placeholder: 'Situação',
+                        onChanged: (value) =>
+                            kit.status = value?.cod.toString(),
+                        placeholder: 'Situação *',
                       ),
                     ),
                     Padding(
@@ -484,7 +497,7 @@ class _KitPageFrmState extends State<KitPageFrm> {
                   Padding(
                     padding: const EdgeInsets.only(left: 16.0),
                     child: SaveButtonWidget(
-                      onPressed: () => {salvar()},
+                      onPressed: salvar,
                     ),
                   ),
                   Padding(
@@ -602,15 +615,16 @@ class _KitPageFrmState extends State<KitPageFrm> {
   }
 
   void salvar() {
-    if (!txtRestricao.valid) return;
-    Function(KitModel)? afterSave;
-    if (kit.codDescritorKit == null || kit.codDescritorKit == 0) {
-      ToastUtils.showCustomToastWarning(
-        context,
-        'O campo Descritor do Kit é obrigatório.',
-      );
-      return;
+    bool restricaoValid = txtRestricao.valid;
+    bool descritorKitValid = validateDescritor();
+    bool situacaoValid = validateSituacao();
+    if (!descritorKitValid) {
+      scroll.jumpTo(0);
+    }else if (!situacaoValid){
+      scroll.jumpTo(150);
     }
+    if (!restricaoValid || !descritorKitValid || !situacaoValid) return;
+    Function(KitModel)? afterSave;
     if (kit.cod == 0 || kit.cod == null) {
       afterSave = (kitImprimir) => _imprimirTagKit(kitImprimir: kitImprimir);
     }

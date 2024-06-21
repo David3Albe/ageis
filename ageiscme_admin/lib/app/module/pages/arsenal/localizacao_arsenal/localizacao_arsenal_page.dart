@@ -26,6 +26,7 @@ class _LocalizacaoArsenalPageState extends State<LocalizacaoArsenalPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(
       text: 'Arsenal',
@@ -87,6 +88,7 @@ class _LocalizacaoArsenalPageState extends State<LocalizacaoArsenalPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     filterOnlyActives: true,
                     onEdit: (LocalizacaoArsenalModel objeto) => {
                       openModal(context, LocalizacaoArsenalModel.copy(objeto)),

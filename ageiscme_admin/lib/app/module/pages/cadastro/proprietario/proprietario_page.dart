@@ -92,6 +92,7 @@ class _ProprietarioPageState extends State<ProprietarioPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     filterOnlyActives: true,
                     onEdit: (ProprietarioModel objeto) =>
                         {openModal(context, ProprietarioModel.copy(objeto))},

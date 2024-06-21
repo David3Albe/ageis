@@ -36,7 +36,7 @@ class _ServicoTipoPageFrmState extends State<ServicoTipoPageFrm> {
     service: ServicoTipoService(),
   );
   late final TextFieldStringWidget txtNome = TextFieldStringWidget(
-    placeholder: 'Nome',
+    placeholder: 'Nome *',
     onChanged: (String? str) {
       servicoTipo.nome = txtNome.text;
     },

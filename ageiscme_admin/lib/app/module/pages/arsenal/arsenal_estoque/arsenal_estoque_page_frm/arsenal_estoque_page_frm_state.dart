@@ -1,6 +1,7 @@
 import 'package:ageiscme_data/services/arsenal/arsenal_estoque_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:flutter/material.dart';
 
 class ArsenalEstoquePageFrmCubit extends Cubit<ArsenalEstoquePageFrmState> {
   final ArsenalEstoqueService service;
@@ -12,18 +13,33 @@ class ArsenalEstoquePageFrmCubit extends Cubit<ArsenalEstoquePageFrmState> {
           ArsenalEstoquePageFrmState(arsenalEstoque: arsenalEstoqueModel),
         );
 
-  void save(ArsenalEstoqueModel arsenalEstoque) async {
+  void save(
+    ArsenalEstoqueModel arsenalEstoque,
+    bool localIsEmpty,
+    BuildContext context,
+  ) async {
     try {
       (String message, ArsenalEstoqueModel arsenalEstoque)? result =
           await service.save(arsenalEstoque);
       if (result == null) return;
-      emit(
-        ArsenalEstoquePageFrmState(
-          message: result.$1,
-          saved: true,
-          arsenalEstoque: result.$2,
-        ),
-      );
+      if (localIsEmpty) {
+        emit(
+          ArsenalEstoquePageFrmState(
+            message:
+                'Arsenal Salvo, Este Arsenal ainda não possui uma Localização cadastrada e não será possível utiliza-lo no Processo. Utilize o botão Localizações e cadastre uma.',
+            saved: true,
+            arsenalEstoque: result.$2,
+          ),
+        );
+      } else {
+        emit(
+          ArsenalEstoquePageFrmState(
+            message: result.$1,
+            saved: true,
+            arsenalEstoque: result.$2,
+          ),
+        );
+      }
     } on Exception catch (_) {}
   }
 

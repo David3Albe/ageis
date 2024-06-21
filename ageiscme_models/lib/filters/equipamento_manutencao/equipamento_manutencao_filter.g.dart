@@ -13,6 +13,8 @@ _$EquipamentoManutencaoFilterImpl _$$EquipamentoManutencaoFilterImplFromJson(
       numeroRegistros: (json['numeroRegistros'] as num?)?.toInt(),
       codEquipamento: (json['codEquipamento'] as num?)?.toInt(),
       codTipoServico: (json['codTipoServico'] as num?)?.toInt(),
+      ordenarDataInicioDecrescente:
+          json['ordenarDataInicioDecrescente'] as bool?,
       tStamp: json['tStamp'] as String?,
     );
 
@@ -23,5 +25,6 @@ Map<String, dynamic> _$$EquipamentoManutencaoFilterImplToJson(
       'numeroRegistros': instance.numeroRegistros,
       'codEquipamento': instance.codEquipamento,
       'codTipoServico': instance.codTipoServico,
+      'ordenarDataInicioDecrescente': instance.ordenarDataInicioDecrescente,
       'tStamp': instance.tStamp,
     };

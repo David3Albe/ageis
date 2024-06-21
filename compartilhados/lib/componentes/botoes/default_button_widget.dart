@@ -1,5 +1,6 @@
 import 'package:compartilhados/cores/cores.dart';
 import 'package:compartilhados/functions/helper_functions.dart';
+import 'package:dependencias_comuns/easy_debounce_export.dart';
 import 'package:flutter/material.dart';
 
 class DefaultButtonWidget extends StatefulWidget {
@@ -13,6 +14,7 @@ class DefaultButtonWidget extends StatefulWidget {
     this.paddingHeight = 6,
     this.paddingWidth = 12,
     this.readonly,
+    this.throtleDuration = const Duration(seconds: 5),
     Key? key,
   });
 
@@ -25,6 +27,7 @@ class DefaultButtonWidget extends StatefulWidget {
   final double paddingWidth;
   final bool? readonly;
   final void Function()? onPressed;
+  final Duration? throtleDuration;
 
   @override
   State<DefaultButtonWidget> createState() => _DefaultButtonWidgetState();
@@ -59,7 +62,7 @@ class _DefaultButtonWidgetState extends State<DefaultButtonWidget> {
               elevation: widget.elevation,
               backgroundColor: widget.corHovered,
             ),
-      onPressed: widget.readonly == true ? null : widget.onPressed,
+      onPressed: widget.readonly == true ? null : handleClick,
       child: Padding(
         padding: EdgeInsets.symmetric(
           horizontal: widget.paddingWidth * scaleW,
@@ -97,6 +100,15 @@ class _DefaultButtonWidgetState extends State<DefaultButtonWidget> {
           ],
         ),
       ),
+    );
+  }
+
+  void handleClick() {
+    if (widget.onPressed == null) return;
+    EasyThrottle.throttle(
+      'save-button',
+      const Duration(seconds: 7),
+      widget.onPressed!,
     );
   }
 }

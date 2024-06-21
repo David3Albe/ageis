@@ -7,6 +7,7 @@ class KitCubitFilter extends Cubit<KitSearchDTO> {
           KitSearchDTO(
             numeroRegistros: 500,
             ordenarCod: true,
+            ordernarPorCodDecrescente: true,
           ),
         );
 }

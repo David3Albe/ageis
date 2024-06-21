@@ -37,13 +37,13 @@ class _EmbalagemPageFrmState extends State<EmbalagemPageFrm> {
     service: EmbalagemService(),
   );
   late final TextFieldStringWidget txtNome = TextFieldStringWidget(
-    placeholder: 'Nome da embalagem',
+    placeholder: 'Nome da embalagem *',
     onChanged: (String? str) {
       embalagem.nome = txtNome.text;
     },
   );
   late final TextFieldNumberWidget txtValidadeProcesso = TextFieldNumberWidget(
-    placeholder: 'Validade do processo',
+    placeholder: 'Validade do processo *',
     onChanged: (String? str) {
       embalagem.validadeProcessosDias = int.parse(txtValidadeProcesso.text);
     },
@@ -101,21 +101,22 @@ class _EmbalagemPageFrmState extends State<EmbalagemPageFrm> {
         bloc: cubit,
         builder: (context, state) {
           return Container(
-            constraints: BoxConstraints(
-              minWidth: size.width * .5,
-              minHeight: size.height * .5,
-              maxHeight: size.height * .8,
+            constraints: const BoxConstraints(
+              maxHeight: 1000,
+              minHeight: 400,
+              maxWidth: 1200,
+              minWidth: 600,
             ),
+            height: size.height * .6,
+            width: size.width * .6,
             child: Stack(
               children: <Widget>[
                 Column(
                   children: <Widget>[
                     Row(
                       children: [
-                        Expanded(
-                          child: TitleWidget(
-                            text: titulo,
-                          ),
+                        TitleWidget(
+                          text: titulo,
                         ),
                         const Spacer(),
                         CloseButtonWidget(
@@ -196,7 +197,9 @@ class _EmbalagemPageFrmState extends State<EmbalagemPageFrm> {
   }
 
   void salvar() {
-    if (!txtNome.valid || !txtValidadeProcesso.valid) return;
+    bool nomeValid = txtNome.valid;
+    bool validadeProcessoValid = txtValidadeProcesso.valid;
+    if (!nomeValid || !validadeProcessoValid) return;
     cubit.save(embalagem);
   }
 }

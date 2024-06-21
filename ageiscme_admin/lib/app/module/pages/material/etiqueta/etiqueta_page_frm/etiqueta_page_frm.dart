@@ -34,7 +34,7 @@ class _EtiquetaPageFrmState extends State<EtiquetaPageFrm> {
     service: EtiquetaService(),
   );
   late final TextFieldStringWidget txtDescricao = TextFieldStringWidget(
-    placeholder: 'Descrição',
+    placeholder: 'Descrição *',
     onChanged: (String? str) {
       etiqueta.descricao = txtDescricao.text;
     },
@@ -180,7 +180,9 @@ class _EtiquetaPageFrmState extends State<EtiquetaPageFrm> {
   }
 
   void salvar() {
-    if (!txtDescricao.valid || !txtLimiteProcesso.valid) return;
+    bool descricaoValid = txtDescricao.valid;
+    bool limiteProcessoValid = txtLimiteProcesso.valid;
+    if (!descricaoValid || !limiteProcessoValid) return;
     cubit.save(etiqueta);
   }
 }

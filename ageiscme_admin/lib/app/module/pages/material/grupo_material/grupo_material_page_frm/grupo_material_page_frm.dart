@@ -36,7 +36,7 @@ class _GrupoMaterialPageFrmState extends State<GrupoMaterialPageFrm> {
     service: GrupoMaterialService(),
   );
   late final TextFieldStringWidget txtNomeGrupo = TextFieldStringWidget(
-    placeholder: 'Nome',
+    placeholder: 'Nome *',
     onChanged: (String? str) {
       grupoMaterial.nome = txtNomeGrupo.text;
     },
@@ -188,7 +188,9 @@ class _GrupoMaterialPageFrmState extends State<GrupoMaterialPageFrm> {
   }
 
   void salvar() {
-    if (!txtNomeGrupo.valid || !txtDescricaoGrupo.valid) return;
+    bool nomeValid = txtNomeGrupo.valid;
+    bool descricaoValid = txtDescricaoGrupo.valid;
+    if (!nomeValid || !descricaoValid) return;
     cubit.save(grupoMaterial);
   }
 }

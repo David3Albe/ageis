@@ -2,6 +2,7 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuar
 import 'package:ageiscme_models/dto/usuario/usuario_drop_down_search_dto.dart';
 import 'package:ageiscme_models/filters/insumo/insumo_filter.dart';
 import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
+import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/deposito_insumo/deposito_insumo_cubit.dart';
@@ -67,12 +68,14 @@ class _InsumoTestePageState extends State<InsumoTestePage> {
   List<CustomDataColumn> getColunas() {
     List<InsumoModel> insumos = insumoBloc.state.objs;
     List<DepositoInsumoModel> depositos = depositoInsumoBloc.state.objs;
-    List<UsuarioDropDownSearchResponseDTO> usuarios = usuarioCubit.state.usuarios;
+    List<UsuarioDropDownSearchResponseDTO> usuarios =
+        usuarioCubit.state.usuarios;
     return [
       CustomDataColumn(
         text: 'Cód',
         field: 'cod',
         type: CustomDataColumnType.Number,
+        width: 100,
       ),
       CustomDataColumn(
         text: 'Insumo',
@@ -151,6 +154,7 @@ class _InsumoTestePageState extends State<InsumoTestePage> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
                     child: PlutoGridWidget(
+                      orderDescendingFieldColumn: 'data',
                       onEdit: (InsumoTesteModel objeto) =>
                           {openModal(context, InsumoTesteModel.copy(objeto))},
                       onDelete: (InsumoTesteModel objeto) =>
@@ -243,23 +247,41 @@ class _InsumoTestePageState extends State<InsumoTestePage> {
     });
   }
 
-  void openModal(BuildContext context, InsumoTesteModel insumoTeste) {
-    showDialog<(bool, String)>(
+  Future openModal(BuildContext context, InsumoTesteModel insumoTeste) async {
+    InsumoTesteModel? insumoTesteForm = insumoTeste;
+    if (insumoTeste.cod != null && insumoTeste.cod! > 0) {
+      LoadingController loading = LoadingController(context: context);
+      insumoTesteForm = await InsumoTesteService().FilterOne(
+        InsumoTesteFilter(
+          cod: insumoTesteForm.cod,
+          carregarMovimentacao: true,
+        ),
+      );
+      if (insumoTesteForm == null) {
+        ToastUtils.showCustomToastWarning(
+          context,
+          'Não foi possível encontrar a movimentação selecionada, tente novamente ou entre em contato com o suporte',
+        );
+        return;
+      }
+      print(insumoTesteForm.insumoMovimento);
+      loading.closeDefault();
+    }
+    (bool, String)? result = await showDialog<(bool, String)>(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
         return InsumoTestePageFrm(
           insumoReadOnly: false,
           depositoInsumoCubit: depositoInsumoBloc,
-          insumoTeste: insumoTeste,
+          insumoTeste: insumoTesteForm!,
           usuarioCubit: usuarioCubit,
         );
       },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.filter(filter);
-    });
+    );
+    if (result == null || !result.$1) return;
+    ToastUtils.showCustomToastSucess(context, result.$2);
+    await bloc.filter(filter);
   }
 
   void delete(

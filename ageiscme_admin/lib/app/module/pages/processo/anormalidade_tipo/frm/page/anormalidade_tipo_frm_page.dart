@@ -77,7 +77,7 @@ class AnormalidadeTipoFrmPageWidget extends StatelessWidget {
                     padding: EdgeInsets.only(top: 24.0 * scalePadding),
                     child: ReactiveStringFormWidget(
                       controlName: 'nome',
-                      placeholder: 'Nome',
+                      placeholder: 'Nome *',
                       validationMessages: {
                         ValidationMessage.required: (_) => 'Obrigatório',
                         ValidationMessage.maxLength: (_) =>

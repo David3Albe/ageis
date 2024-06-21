@@ -11,6 +11,7 @@ _$KitSearchDTOImpl _$$KitSearchDTOImplFromJson(Map json) => _$KitSearchDTOImpl(
       codBarraContem: json['codBarraContem'] as String?,
       nomeContem: json['nomeContem'] as String?,
       ordenarCod: json['ordenarCod'] as bool?,
+      ordernarPorCodDecrescente: json['ordernarPorCodDecrescente'] as bool?,
     );
 
 Map<String, dynamic> _$$KitSearchDTOImplToJson(_$KitSearchDTOImpl instance) =>
@@ -19,4 +20,5 @@ Map<String, dynamic> _$$KitSearchDTOImplToJson(_$KitSearchDTOImpl instance) =>
       'codBarraContem': instance.codBarraContem,
       'nomeContem': instance.nomeContem,
       'ordenarCod': instance.ordenarCod,
+      'ordernarPorCodDecrescente': instance.ordernarPorCodDecrescente,
     };

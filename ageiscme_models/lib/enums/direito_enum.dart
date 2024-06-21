@@ -153,6 +153,7 @@ class DireitoEnum {
   static const int GestaoContratoCadastro = 1801;
   static const int GestaoContratoConsulta = 1802;
 
+  static const int PermissaoVisualizacaoPopUp = 1901;
   static const int PermissaoManutencaoPopup = 1902;
 
   static const int FabricantesConsulta = 2001;

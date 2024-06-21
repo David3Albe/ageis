@@ -11,23 +11,23 @@ import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/delete_image_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/navigation_buttom_widget.dart';
-import 'package:compartilhados/componentes/botoes/open_doc/open_doc_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/upload_button_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/list_field/list_field_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_area_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_image_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_open_doc_model.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/images/image_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/fontes/fontes.dart';
+import 'package:compartilhados/functions/image_helper/image_object_model.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -67,7 +67,7 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
   );
 
   late final TextFieldStringWidget txtNome = TextFieldStringWidget(
-    placeholder: 'Nome',
+    placeholder: 'Nome *',
     onChanged: (String? str) {
       kitDescritor.nome = txtNome.text;
     },
@@ -85,6 +85,9 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
     readOnly: true,
   );
 
+  late bool Function() validaTipoProcessoNormal;
+  late bool Function() validaTipoProcessoUrgencia;
+
   @override
   void initState() {
     tamanhoCubit = TamanhoCubit();
@@ -95,8 +98,6 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
     processoTipoCubit.loadAll();
     centroCustoCubit = CentroCustoCubit();
     centroCustoCubit.loadAll();
-    // itemDescritorCubit = ItemDescritorCubit();
-    // itemDescritorCubit.loadAll();
 
     txtNome.addValidator((String str) {
       if (str.isEmpty) {
@@ -138,9 +139,10 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
     }
   }
 
+  final ScrollController scroll = ScrollController();
+
   @override
   Widget build(BuildContext context) {
-    double paddingHorizontalScale = MediaQuery.of(context).size.width / 1920;
     setFields();
     Size size = MediaQuery.of(context).size;
     return BlocListener<KitDescritorPageFrmCubit, KitDescritorPageFrmState>(
@@ -178,6 +180,7 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
                 ],
               ),
               content: SingleChildScrollView(
+                controller: scroll,
                 child: Column(
                   children: [
                     Padding(
@@ -193,22 +196,27 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
                       child: Row(
                         children: [
                           Expanded(
-                            child:
-                                BlocBuilder<TamanhoCubit, List<TamanhoModel>>(
+                            child: BlocBuilder<TamanhoCubit, TamanhoState>(
                               bloc: tamanhoCubit,
-                              builder: (context, tamanhos) {
-                                TamanhoModel? tamanho = tamanhos
+                              builder: (context, state) {
+                                if (state.loading) {
+                                  return const Center(
+                                    child: LoadingWidget(),
+                                  );
+                                }
+                                TamanhoModel? tamanho = state.tamanhos
                                     .where(
                                       (element) =>
                                           element.sigla ==
                                           kitDescritor.tamanhoSigla,
                                     )
                                     .firstOrNull;
-                                return DropDownWidget(
+                                return DropDownSearchWidget(
                                   initialValue: tamanho,
-                                  sourceList: tamanhos,
+                                  sourceList: state.tamanhos,
                                   onChanged: (value) =>
-                                      kitDescritor.tamanhoSigla = value.sigla!,
+                                      kitDescritor.tamanhoSigla = value?.sigla,
+                                  textFunction: (p0) => p0.GetDropDownText(),
                                   placeholder: 'Tamanho',
                                 );
                               },
@@ -216,10 +224,16 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
                           ),
                           const SizedBox(width: 16.0),
                           Expanded(
-                            child: BlocBuilder<EmbalagemCubit,
-                                List<EmbalagemModel>>(
+                            child: BlocBuilder<EmbalagemCubit, EmbalagemState>(
                               bloc: embalagemCubit,
-                              builder: (context, embalagens) {
+                              builder: (context, state) {
+                                if (state.loading) {
+                                  return const Center(
+                                    child: LoadingWidget(),
+                                  );
+                                }
+                                List<EmbalagemModel> embalagens =
+                                    state.embalagens;
                                 embalagens.sort(
                                   (a, b) => a.nome!.compareTo(b.nome!),
                                 );
@@ -230,13 +244,14 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
                                           kitDescritor.codEmbalagem,
                                     )
                                     .firstOrNull;
-                                return DropDownWidget(
+                                return DropDownSearchWidget(
                                   initialValue: embalagem,
+                                  textFunction: (p0) => p0.GetDropDownText(),
                                   sourceList: embalagens
                                       .where((element) => element.ativo == true)
                                       .toList(),
                                   onChanged: (value) =>
-                                      kitDescritor.codEmbalagem = value.cod!,
+                                      kitDescritor.codEmbalagem = value?.cod,
                                   placeholder: 'Embalagem',
                                 );
                               },
@@ -266,15 +281,20 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
                                     kitDescritor.codTipoProcessoNormal,
                               )
                               .firstOrNull;
-                          return DropDownWidget(
+                          return DropDownSearchWidget(
                             initialValue: processoTipo,
+                            validateBuilder: (context, validateMethodBuilder) =>
+                                validaTipoProcessoNormal =
+                                    validateMethodBuilder,
+                            validator: (val) =>
+                                val == null ? 'Obrigatório' : null,
                             sourceList: processosTipos
                                 .where((element) => element.ativo == true)
                                 .toList(),
                             onChanged: (value) =>
-                                kitDescritor.codTipoProcessoNormal = value.cod!,
+                                kitDescritor.codTipoProcessoNormal = value?.cod,
                             placeholder:
-                                'Tipo de Processo para prioridade Normal',
+                                'Tipo de Processo para prioridade Normal *',
                           );
                         },
                       ),
@@ -300,15 +320,20 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
                                     kitDescritor.codTipoProcessoUrgencia,
                               )
                               .firstOrNull;
-                          return DropDownWidget(
+                          return DropDownSearchWidget(
+                            validateBuilder: (context, validateMethodBuilder) =>
+                                validaTipoProcessoUrgencia =
+                                    validateMethodBuilder,
+                            validator: (val) =>
+                                val == null ? 'Obrigatório' : null,
                             initialValue: processoTipo,
                             sourceList: processosTipos
                                 .where((element) => element.ativo == true)
                                 .toList(),
                             onChanged: (value) => kitDescritor
-                                .codTipoProcessoUrgencia = value.cod!,
+                                .codTipoProcessoUrgencia = value?.cod,
                             placeholder:
-                                'Tipo de Processo para prioridade Urgência',
+                                'Tipo de Processo para prioridade Urgência *',
                           );
                         },
                       ),
@@ -349,10 +374,15 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
                     // ),
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
-                      child:
-                          BlocBuilder<CentroCustoCubit, List<CentroCustoModel>>(
+                      child: BlocBuilder<CentroCustoCubit, CentroCustoState>(
                         bloc: centroCustoCubit,
-                        builder: (context, centrosCustos) {
+                        builder: (context, state) {
+                          if (state.loading) {
+                            return const Center(
+                              child: LoadingWidget(),
+                            );
+                          }
+                          List<CentroCustoModel> centrosCustos = state.centrosCusto;
                           centrosCustos.sort(
                             (a, b) => a.centroCusto!.compareTo(b.centroCusto!),
                           );
@@ -362,11 +392,12 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
                                     element.cod == kitDescritor.codCusto,
                               )
                               .firstOrNull;
-                          return DropDownWidget(
+                          return DropDownSearchWidget(
                             initialValue: centroCusto,
+                            textFunction: (p0) => p0.CentroCustoText(),
                             sourceList: centrosCustos,
                             onChanged: (value) =>
-                                kitDescritor.codCusto = value.cod!,
+                                kitDescritor.codCusto = value?.cod,
                             placeholder: 'Valor do Peso',
                           );
                         },
@@ -445,89 +476,33 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
                       ),
                     ),
                     const Padding(padding: EdgeInsets.only(top: 5)),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Wrap(
-                            runSpacing: 16 * paddingHorizontalScale,
-                            spacing: 16 * paddingHorizontalScale,
-                            children: [
-                              if (kitDescritor.cod != 0) ...{
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 0.0),
-                                  child: NavigationButtonWidget(
-                                    placeholder: 'Itens',
-                                    onPressed: () => {
-                                      showDialog<(bool, String)>(
-                                        barrierDismissible: false,
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            content: ItemDescritorKitPageFrm(
-                                              itemDescritorKit:
-                                                  ItemDescritorKitModel(
-                                                cod: 0,
-                                                codDescritorItem: 0,
-                                                codDescritorKit:
-                                                    kitDescritor.cod!,
-                                                quantidade: 0,
-                                                codInstituicao: 0,
-                                                ultimaAlteracao: null,
-                                                tstamp: '',
-                                              ),
-                                              onSave: (itemDescritorKit) {
-                                                setState(() {
-                                                  listaDeItens
-                                                      .add(itemDescritorKit);
-                                                });
-                                              },
-                                            ),
-                                          );
-                                        },
-                                      ).then((result) {
-                                        if (result == null || !result.$1) {
-                                          return;
-                                        }
-                                        ToastUtils.showCustomToastSucess(
-                                          context,
-                                          result.$2,
-                                        );
-                                      }),
-                                    },
-                                  ),
-                                ),
-                              },
-                              UploadButtonWidget(
-                                placeholder: 'Anexar Imagem',
-                                imageSelected: (value1, value2) {
-                                  salvarImagem(value1);
-                                },
-                              ),
-                              DeleteImageButtonWidget(
-                                placeholder: 'Excluir Imagem',
-                                onPressed: kitDescritor.imagem == null
-                                    ? null
-                                    : () => {excluirImagem()},
-                              ),
-                              OpenDocWidget(
-                                placeholder: 'Abrir Imagem',
-                                documentoString: kitDescritor.imagem,
-                                documentName: 'arquivo sem nome.Webp',
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
                   ],
                 ),
               ),
               actions: [
                 Row(
                   children: [
-                    if (kitDescritor.cod != null && kitDescritor.cod != 0)
-                      CustomPopupMenuWidget(
-                        items: [
+                    CustomPopupMenuWidget(
+                      items: [
+                        CustomPopupItemModel(
+                          text: 'Itens',
+                          onTap: abrirTelaItens,
+                        ),
+                        CustomPopupItemImageModel.getImageItem(
+                          'Anexar Imagem',
+                          salvarImagem,
+                        ),
+                        CustomPopupItemOpenDocModel.getOpenDocItem(
+                          'Abrir Imagem',
+                          context,
+                          kitDescritor.imagem,
+                          'arquivo sem nome.Webp',
+                        ),
+                        CustomPopupItemModel(
+                          text: 'Excluir Imagem',
+                          onTap: excluirImagem,
+                        ),
+                        if (kitDescritor.cod != null && kitDescritor.cod != 0)
                           CustomPopupItemHistoryModel.getHistoryItem(
                             child: HistoricoPage(
                               pk: kitDescritor.cod!,
@@ -535,8 +510,8 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
                             ),
                             context: context,
                           ),
-                        ],
-                      ),
+                      ],
+                    ),
                     const Spacer(),
                     Padding(
                       padding: const EdgeInsets.only(left: 16.0),
@@ -572,9 +547,11 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
     );
   }
 
-  void salvarImagem(String value) {
+  void salvarImagem(Future<ImageObjectModel?> Function() onSelectImage) async {
+    ImageObjectModel? imageNew = await onSelectImage();
+    if (imageNew == null) return;
     setState(() {
-      kitDescritor.imagem = value;
+      kitDescritor.imagem = imageNew.base64;
     });
   }
 
@@ -584,8 +561,59 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
     });
   }
 
+  void abrirTelaItens() {
+    showDialog<(bool, String)>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: ItemDescritorKitPageFrm(
+            itemDescritorKit: ItemDescritorKitModel(
+              cod: 0,
+              codDescritorItem: 0,
+              codDescritorKit: kitDescritor.cod!,
+              quantidade: 0,
+              codInstituicao: 0,
+              ultimaAlteracao: null,
+              tstamp: '',
+            ),
+            onSave: (itemDescritorKit) {
+              setState(() {
+                listaDeItens.add(itemDescritorKit);
+              });
+            },
+          ),
+        );
+      },
+    ).then((result) {
+      if (result == null || !result.$1) {
+        return;
+      }
+      ToastUtils.showCustomToastSucess(
+        context,
+        result.$2,
+      );
+    });
+  }
+
   void salvar() {
-    if (!txtNome.valid || !txtDescricao.valid) {
+    bool nomeValid = txtNome.valid;
+    bool descricaoValid = txtDescricao.valid;
+    bool tipoProcessoNormalValid = validaTipoProcessoNormal();
+    bool tipoProcessoUrgenciaValid = validaTipoProcessoUrgencia();
+    if (!nomeValid) {
+      scroll.jumpTo(0);
+    } else if (!descricaoValid) {
+      scroll.jumpTo(50);
+    } else if (!tipoProcessoNormalValid) {
+      scroll.jumpTo(150);
+    } else if (!tipoProcessoUrgenciaValid) {
+      scroll.jumpTo(200);
+    }
+    if (!nomeValid ||
+        !descricaoValid ||
+        !tipoProcessoNormalValid ||
+        !tipoProcessoUrgenciaValid) {
       return;
     }
 
@@ -605,14 +633,6 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
     // }
 
     // kitDescritor.itensDescritorKits = registrarItemDescritorKit;
-
-    if (kitDescritor.codTipoProcessoUrgencia == null) {
-      ToastUtils.showCustomToastWarning(
-        context,
-        'Informe o tipo de processo para urgência',
-      );
-      return;
-    }
     cubit.save(kitDescritor);
   }
 }

@@ -41,6 +41,7 @@ class _ProcessoTipoConsultaPageState extends State<ProcessoTipoConsultaPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 110,
     ),
     CustomDataColumn(text: 'Nome', field: 'nome'),
     CustomDataColumn(text: 'Descrição', field: 'descricao'),
@@ -148,6 +149,7 @@ class _ProcessoTipoConsultaPageState extends State<ProcessoTipoConsultaPage> {
               child: Padding(
                 padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                 child: PlutoGridWidget(
+                  orderDescendingFieldColumn: 'cod',
                   filterOnlyActives: true,
                   onOpen: (ProcessoTipoModel objeto) => {
                     openModal(context, ProcessoTipoModel.copy(objeto), null),

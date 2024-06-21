@@ -23,13 +23,14 @@ class _SiglaDropDownSearchWidgetState extends State<SiglaDropDownSearchWidget> {
   Widget build(BuildContext context) {
     return DropdownSearch<SiglaShortResponseDTO>(
       onBeforeChange: (prevItem, nextItem) async {
+        print(nextItem);
         if (nextItem?.cod == 0) {
           setState(() {
             widget.renderContext.cell.value = null;
-            widget.renderContext.stateManager.setCurrentCell(
-              widget.renderContext.cell,
-              widget.renderContext.rowIdx,
-            );
+            PlutoGridStateManager stateManager =
+                widget.renderContext.stateManager;
+            stateManager.toggleSelectingRow(widget.renderContext.rowIdx);
+            stateManager.toggleSelectingRow(widget.renderContext.rowIdx);
           });
           return false;
         }
@@ -42,12 +43,12 @@ class _SiglaDropDownSearchWidgetState extends State<SiglaDropDownSearchWidget> {
       items: widget.siglasFormatas,
       onChanged: (item) {
         setState(() {
-          widget.renderContext.cell.value = item?.cod == 0 ? null : item;
+          widget.renderContext.cell.value = item;
+          PlutoGridStateManager stateManager =
+              widget.renderContext.stateManager;
+          stateManager.toggleSelectingRow(widget.renderContext.rowIdx);
+          stateManager.toggleSelectingRow(widget.renderContext.rowIdx);
         });
-        widget.renderContext.stateManager.setCurrentCell(
-          widget.renderContext.cell,
-          widget.renderContext.rowIdx,
-        );
       },
       selectedItem: widget.renderContext.cell.value,
       filterFn: (sigla, filter) =>

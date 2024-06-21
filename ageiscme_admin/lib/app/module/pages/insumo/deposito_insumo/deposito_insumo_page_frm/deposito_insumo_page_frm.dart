@@ -7,7 +7,7 @@ import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
+import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
@@ -42,17 +42,21 @@ class _DepositoInsumoPageFrmState extends State<DepositoInsumoPageFrm> {
     service: DepositoInsumoService(),
   );
   late final TextFieldStringWidget txtNomeDeposito = TextFieldStringWidget(
-    placeholder: 'Nome',
+    placeholder: 'Nome *',
     onChanged: (String? str) {
       depositoInsumo.nome = txtNomeDeposito.text;
     },
   );
   late final TextFieldNumberWidget txtCodigoBarra = TextFieldNumberWidget(
-    placeholder: 'Código de Barras',
+    placeholder: 'Código de Barras *',
     onChanged: (String? str) {
-      depositoInsumo.codBarra = int.parse(txtCodigoBarra.text);
+      depositoInsumo.codBarra =
+          str == null || str.isEmpty ? null : int.parse(str);
     },
   );
+
+  late bool Function() validateLocal;
+  late bool Function() validateSituacao;
 
   @override
   void initState() {
@@ -93,6 +97,8 @@ class _DepositoInsumoPageFrmState extends State<DepositoInsumoPageFrm> {
     }
   }
 
+  final ScrollController scroll = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     setFields();
@@ -106,136 +112,142 @@ class _DepositoInsumoPageFrmState extends State<DepositoInsumoPageFrm> {
       },
       builder: (context, state) {
         return Container(
-          constraints: BoxConstraints(
-            minWidth: size.width * .5,
-            minHeight: size.height * .5,
-            maxHeight: size.height * .8,
+          constraints: const BoxConstraints(
+            minWidth: 500,
+            minHeight: 500,
+            maxHeight: 1000,
+            maxWidth: 1200,
           ),
-          child: Stack(
+          width: size.width * .6,
+          height: size.height * .8,
+          child: Column(
             children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TitleWidget(
-                          text: titulo,
+              Row(
+                children: [
+                  Expanded(
+                    child: TitleWidget(
+                      text: titulo,
+                    ),
+                  ),
+                  const Spacer(),
+                  CloseButtonWidget(
+                    onPressed: () => Navigator.of(context).pop((false, '')),
+                  ),
+                ],
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: txtNomeDeposito,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: txtCodigoBarra,
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child:
+                    BlocBuilder<LocalInstituicaoCubit, LocalInstituicaoState>(
+                  bloc: localInstituicaoCubit,
+                  builder: (context, locaisState) {
+                    if (locaisState.loading) {
+                      return const LoadingWidget();
+                    }
+                    List<LocalInstituicaoModel> locaisInstituicao =
+                        locaisState.locaisInstituicoes;
+          
+                    locaisInstituicao.sort(
+                      (a, b) => a.nome.compareTo(b.nome),
+                    );
+                    LocalInstituicaoModel? local = locaisInstituicao
+                        .where(
+                          (element) => element.cod == depositoInsumo.codLocal,
+                        )
+                        .firstOrNull;
+                    return DropDownSearchWidget<LocalInstituicaoModel>(
+                      validator: (val) => val == null ? 'Obrigatório' : null,
+                      validateBuilder: (context, validateMethodBuilder) =>
+                          validateLocal = validateMethodBuilder,
+                      initialValue: local,
+                      textFunction: (p0) => p0.GetDropDownText(),
+                      sourceList: locaisInstituicao
+                          .where((element) => element.ativo == true)
+                          .toList(),
+                      onChanged: (value) =>
+                          depositoInsumo.codLocal = value?.cod,
+                      placeholder: 'Local *',
+                    );
+                  },
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: DropDownSearchWidget<DepositoInsumoStatusOption>(
+                  validateBuilder: (context, validateMethodBuilder) =>
+                      validateSituacao = validateMethodBuilder,
+                  validator: (obj) => obj == null ? 'Obrigatório' : null,
+                  initialValue: DepositoInsumoStatusOption.situacaoOptions
+                      .where(
+                        (element) => element.cod == depositoInsumo.status,
+                      )
+                      .firstOrNull,
+                  sourceList: DepositoInsumoStatusOption.situacaoOptions,
+                  textFunction: (p0) => p0.GetDropDownText(),
+                  onChanged: (value) =>
+                      depositoInsumo.status = value?.cod.toString(),
+                  placeholder: 'Situação *',
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5.0),
+                child: Row(
+                  children: [
+                    CustomCheckboxWidget(
+                      checked: depositoInsumo.ativo,
+                      onClick: (value) => depositoInsumo.ativo = value,
+                      text: 'Ativo',
+                    ),
+                  ],
+                ),
+              ),
+              const Spacer(),
+              Row(
+                children: [
+                  CustomPopupMenuWidget(
+                    items: [
+                      if (depositoInsumo.cod != null &&
+                          depositoInsumo.cod != 0)
+                        CustomPopupItemHistoryModel.getHistoryItem(
+                          child: HistoricoPage(
+                            pk: depositoInsumo.cod!,
+                            termo: 'DEPOSITO_INSUMO',
+                          ),
+                          context: context,
                         ),
-                      ),
-                      const Spacer(),
-                      CloseButtonWidget(
-                        onPressed: () => Navigator.of(context).pop((false, '')),
-                      ),
                     ],
                   ),
+                  const Spacer(),
                   Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: txtNomeDeposito,
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: SaveButtonWidget(
+                      onPressed: () => {salvar()},
+                    ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: txtCodigoBarra,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: BlocBuilder<LocalInstituicaoCubit,
-                        LocalInstituicaoState>(
-                      bloc: localInstituicaoCubit,
-                      builder: (context, locaisState) {
-                        if (locaisState.loading) {
-                          return const LoadingWidget();
-                        }
-                        List<LocalInstituicaoModel> locaisInstituicao =
-                            locaisState.locaisInstituicoes;
-
-                        locaisInstituicao.sort(
-                          (a, b) => a.nome.compareTo(b.nome),
-                        );
-                        LocalInstituicaoModel? local = locaisInstituicao
-                            .where(
-                              (element) =>
-                                  element.cod == depositoInsumo.codLocal,
-                            )
-                            .firstOrNull;
-                        return DropDownWidget<LocalInstituicaoModel>(
-                          initialValue: local,
-                          sourceList: locaisInstituicao
-                              .where((element) => element.ativo == true)
-                              .toList(),
-                          onChanged: (value) =>
-                              depositoInsumo.codLocal = value.cod,
-                          placeholder: 'Local',
-                        );
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: CleanButtonWidget(
+                      onPressed: () => {
+                        setState(() {
+                          depositoInsumo = DepositoInsumoModel.empty();
+                        }),
                       },
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: DropDownWidget<DepositoInsumoStatusOption>(
-                      initialValue: DepositoInsumoStatusOption.situacaoOptions
-                          .where(
-                            (element) => element.cod == depositoInsumo.status,
-                          )
-                          .firstOrNull,
-                      sourceList: DepositoInsumoStatusOption.situacaoOptions,
-                      onChanged: (value) =>
-                          depositoInsumo.status = value.cod.toString(),
-                      placeholder: 'Situação',
+                    padding: const EdgeInsets.only(left: 16.0),
+                    child: CancelButtonUnfilledWidget(
+                      onPressed: () =>
+                          {Navigator.of(context).pop((false, ''))},
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: Row(
-                      children: [
-                        CustomCheckboxWidget(
-                          checked: depositoInsumo.ativo,
-                          onClick: (value) => depositoInsumo.ativo = value,
-                          text: 'Ativo',
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Spacer(),
-                  Row(
-                    children: [
-                      CustomPopupMenuWidget(
-                        items: [
-                          if (depositoInsumo.cod != null &&
-                              depositoInsumo.cod != 0)
-                            CustomPopupItemHistoryModel.getHistoryItem(
-                              child: HistoricoPage(
-                                pk: depositoInsumo.cod!,
-                                termo: 'DEPOSITO_INSUMO',
-                              ),
-                              context: context,
-                            ),
-                        ],
-                      ),
-                      const Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
-                        child: SaveButtonWidget(
-                          onPressed: () => {salvar()},
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
-                        child: CleanButtonWidget(
-                          onPressed: () => {
-                            setState(() {
-                              depositoInsumo = DepositoInsumoModel.empty();
-                            }),
-                          },
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
-                        child: CancelButtonUnfilledWidget(
-                          onPressed: () =>
-                              {Navigator.of(context).pop((false, ''))},
-                        ),
-                      ),
-                    ],
                   ),
                 ],
               ),
@@ -247,7 +259,13 @@ class _DepositoInsumoPageFrmState extends State<DepositoInsumoPageFrm> {
   }
 
   void salvar() {
-    if (!txtNomeDeposito.valid || !txtCodigoBarra.valid) return;
+    bool depositoValid = txtNomeDeposito.valid;
+    bool codigoBarraValid = txtCodigoBarra.valid;
+    bool localValid = validateLocal();
+    bool situacaoValid = validateSituacao();
+    if (!depositoValid || !codigoBarraValid || !localValid || !situacaoValid) {
+      return;
+    }
     cubit.save(depositoInsumo);
   }
 }

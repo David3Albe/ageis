@@ -86,7 +86,7 @@ class _ConsultaAnormalidadePageState extends State<ConsultaAnormalidadePage> {
       ),
       CustomDataColumn(
         text: 'Data Liberação',
-        field: 'dataLiberacao',
+        field: 'dataHoraLiberacao',
         type: CustomDataColumnType.DateTime,
         width: 130,
       ),
@@ -148,6 +148,7 @@ class _ConsultaAnormalidadePageState extends State<ConsultaAnormalidadePage> {
           child: Padding(
             padding: const EdgeInsets.only(top: 16.0, bottom: 16),
             child: PlutoGridApiWidget<ConsultaAnormalidadeModel>(
+              orderDescendingFieldColumn: 'dataHora',
               onDetail: (event, objeto) {
                 openModalAnormalidade(
                   context: context,
@@ -190,7 +191,7 @@ class _ConsultaAnormalidadePageState extends State<ConsultaAnormalidadePage> {
       },
     );
 
-    if(alterou!=true)return;
+    if (alterou != true) return;
     consultar();
   }
 

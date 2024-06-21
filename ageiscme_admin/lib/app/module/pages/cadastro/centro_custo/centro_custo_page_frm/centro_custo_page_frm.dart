@@ -36,13 +36,13 @@ class _CentroCustoPageFrmState extends State<CentroCustoPageFrm> {
     service: CentroCustoService(),
   );
   late final TextFieldStringWidget txtCentroCusto = TextFieldStringWidget(
-    placeholder: 'Centro Custo',
+    placeholder: 'Centro Custo *',
     onChanged: (String? str) {
       centroCusto.centroCusto = txtCentroCusto.text;
     },
   );
   late final TextFieldStringWidget txtDescricao = TextFieldStringWidget(
-    placeholder: 'Descrição',
+    placeholder: 'Descrição *',
     onChanged: (String? str) {
       centroCusto.descricao = txtDescricao.text;
     },
@@ -194,7 +194,9 @@ class _CentroCustoPageFrmState extends State<CentroCustoPageFrm> {
   }
 
   void salvar() {
-    if (!txtCentroCusto.valid || !txtDescricao.valid) return;
+    bool centroCustoValid = txtCentroCusto.valid;
+    bool descricaoValid = txtDescricao.valid;
+    if (!centroCustoValid || !descricaoValid) return;
 
     cubit.save(centroCusto);
   }

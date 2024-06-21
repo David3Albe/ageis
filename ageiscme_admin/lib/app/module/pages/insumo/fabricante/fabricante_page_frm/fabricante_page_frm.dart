@@ -32,7 +32,7 @@ class _FabricantePageFrmState extends State<FabricantePageFrm> {
     service: FabricanteService(),
   );
   late final TextFieldStringWidget txtFabricante = TextFieldStringWidget(
-    placeholder: 'Fabricante',
+    placeholder: 'Fabricante *',
     onChanged: (String? str) {
       fabricante.nome = txtFabricante.text;
     },

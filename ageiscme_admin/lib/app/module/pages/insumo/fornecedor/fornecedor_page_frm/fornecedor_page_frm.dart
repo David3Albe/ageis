@@ -32,7 +32,7 @@ class _FornecedorPageFrmState extends State<FornecedorPageFrm> {
     service: FornecedorService(),
   );
   late final TextFieldStringWidget txtFornecedor = TextFieldStringWidget(
-    placeholder: 'Fornecedor',
+    placeholder: 'Fornecedor *',
     onChanged: (String? str) {
       fornecedor.nome = txtFornecedor.text;
     },

@@ -31,6 +31,7 @@ class _ProcessoTipoPageState extends State<ProcessoTipoPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(text: 'Nome', field: 'nome'),
     CustomDataColumn(text: 'Descrição', field: 'descricao'),
@@ -102,6 +103,7 @@ class _ProcessoTipoPageState extends State<ProcessoTipoPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     filterOnlyActives: true,
                     onEdit: (ProcessoTipoModel objeto) => {
                       openModal(
@@ -131,7 +133,7 @@ class _ProcessoTipoPageState extends State<ProcessoTipoPage> {
           ordenarPorNomeCrescente: true,
         ),
       );
-    } 
+    }
   }
 
   void openModal(BuildContext context, ProcessoTipoModel processoTipo) async {

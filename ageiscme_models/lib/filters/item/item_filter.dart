@@ -13,6 +13,7 @@ sealed class ItemFilter with _$ItemFilter {
     int? cod,
     bool? apenasAtivos,
     bool? ordenarPorNomeCrescente,
+    bool? ordenarPorCodDecrescente,
     bool? carregarKit,
     bool? carregarDescritor,
     bool? carregarDescritorResumido,

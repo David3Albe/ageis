@@ -34,6 +34,6 @@ class TreinamentoRegistroFilterButtonWidget extends StatelessWidget {
     TreinamentoRegistroPageCubit treinamentoCubit = context.read<TreinamentoRegistroPageCubit>();
     filterCubit = context.read<TreinamentoRegistroCubitFilter>();
     TreinamentoRegistroFilter dto = filterCubit.state;
-    await treinamentoCubit.filter(dto);
+    await treinamentoCubit.filterScreen(dto);
   }
 }

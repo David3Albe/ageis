@@ -11,6 +11,7 @@ sealed class ConsultaProcessosLeituraRetiradoModel
   factory ConsultaProcessosLeituraRetiradoModel({
     required DateTime? dataHora,
     required int? codKit,
+    required String? codBarraKit,
     required String? nomeKit,
     required int? nroItemFaltantes,
     required String? idEtiqueta,

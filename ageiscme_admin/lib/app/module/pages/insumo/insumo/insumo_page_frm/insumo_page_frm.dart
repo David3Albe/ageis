@@ -21,7 +21,7 @@ import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
@@ -57,7 +57,7 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
     service: InsumoService(),
   );
   late final TextFieldStringWidget txtNomeitem = TextFieldStringWidget(
-    placeholder: 'Nome',
+    placeholder: 'Nome *',
     onChanged: (String? str) {
       insumo.nome = txtNomeitem.text;
     },
@@ -68,10 +68,11 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
       insumo.descricao = txtDescricaoItem.text;
     },
   );
-  late final TextFieldStringWidget txtCodBarra = TextFieldStringWidget(
-    placeholder: 'Cód. Insumo',
+  late final TextFieldNumberWidget txtCodBarra = TextFieldNumberWidget(
+    placeholder: 'Cód. Insumo *',
     onChanged: (String? str) {
-      insumo.codBarra = int.parse(txtCodBarra.text);
+      insumo.codBarra =
+          str == null || str.isEmpty ? null : int.parse(txtCodBarra.text);
     },
   );
   // late final TextFieldStringWidget txtCodErp3Albe = TextFieldStringWidget(
@@ -94,9 +95,10 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
     },
   );
   late final TextFieldStringWidget txtQtde = TextFieldStringWidget(
-    placeholder: 'Qtde',
+    placeholder: 'Qtde *',
     onChanged: (String? str) {
-      insumo.qtdeEmbalagem = double.parse(txtQtde.text);
+      insumo.qtdeEmbalagem =
+          str == null || str.isEmpty ? null : double.parse(txtQtde.text);
     },
   );
   late final TextFieldStringWidget txtFabricante = TextFieldStringWidget(
@@ -118,40 +120,47 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
     },
   );
   late final TextFieldStringWidget txtEstoqueMinimo = TextFieldStringWidget(
-    placeholder: 'Estoque Mínimo',
+    placeholder: 'Estoque Mínimo *',
     onChanged: (String? str) {
-      insumo.estoqueMinimo = double.parse(txtEstoqueMinimo.text);
+      insumo.estoqueMinimo =
+          str == null ? null : double.parse(txtEstoqueMinimo.text);
     },
   );
   late final TextFieldStringWidget txtEstoqueMaximo = TextFieldStringWidget(
-    placeholder: 'Estoque Máximo',
+    placeholder: 'Estoque Máximo *',
     onChanged: (String? str) {
-      insumo.estoqueMaximo = double.parse(txtEstoqueMaximo.text);
+      insumo.estoqueMaximo =
+          str == null ? null : double.parse(txtEstoqueMaximo.text);
     },
   );
   late final TextFieldStringWidget txtPrazoEntrega = TextFieldStringWidget(
-    placeholder: 'Prazo de Entrega',
+    placeholder: 'Prazo de Entrega *',
     onChanged: (String? str) {
-      insumo.prazoEntregaDias = int.parse(txtPrazoEntrega.text);
+      insumo.prazoEntregaDias =
+          str == null ? null : int.parse(txtPrazoEntrega.text);
     },
   );
   late final TextFieldStringWidget txtPontoReposicao = TextFieldStringWidget(
-    placeholder: 'Ponto de Reposição',
+    placeholder: 'Ponto de Reposição *',
     onChanged: (String? str) {
-      insumo.pontoReposicao = double.parse(txtPontoReposicao.text);
+      insumo.pontoReposicao =
+          str == null ? null : double.parse(txtPontoReposicao.text);
     },
   );
   late final TextFieldStringWidget txtPrazoValidadeAposAtivacao =
       TextFieldStringWidget(
     placeholder: 'Prazo de Validade Após Ativação',
     onChanged: (String? str) {
-      insumo.validadeAposAtivacaoDias =
-          int.parse(txtPrazoValidadeAposAtivacao.text);
+      str == null
+          ? null
+          : insumo.validadeAposAtivacaoDias =
+              int.parse(txtPrazoValidadeAposAtivacao.text);
     },
   );
 
   late final DepositoInsumoCubit depositoInsumoCubit;
   late final DestinoResiduoCubit destinoResiduoCubit;
+  late bool Function() validateDestinoResiduo;
 
   void initState() {
     fabricanteCubit = FabricanteCubit();
@@ -163,7 +172,6 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
     depositoInsumoCubit = DepositoInsumoCubit();
     destinoResiduoCubit = DestinoResiduoCubit();
     destinoResiduoCubit.loadAll();
-
 
     txtCodBarra.addValidator((String str) {
       if (str.isEmpty) {
@@ -304,6 +312,8 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
         : insumo.validadeAposAtivacaoDias.toString();
   }
 
+  final ScrollController scroll = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     setFields();
@@ -341,6 +351,7 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                 minHeight: 600,
               ),
               child: SingleChildScrollView(
+                controller: scroll,
                 padding: const EdgeInsets.only(right: 14),
                 child: Column(
                   children: [
@@ -412,9 +423,16 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                           const SizedBox(width: 16.0),
                           Expanded(
                             child: BlocBuilder<UnidadeMedidaCubit,
-                                List<UnidadeMedidaModel>>(
+                                UnidadeMedidaState>(
                               bloc: unidadeMedidaCubit,
-                              builder: (context, unidadeMedidas) {
+                              builder: (context, state) {
+                                if (state.loading) {
+                                  return const Center(
+                                    child: LoadingWidget(),
+                                  );
+                                }
+                                List<UnidadeMedidaModel> unidadeMedidas =
+                                    state.unidadeMedidas;
                                 unidadeMedidas.sort(
                                   (a, b) => a.nome!.compareTo(b.nome!),
                                 );
@@ -426,11 +444,12 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                                               insumo.codUnidadeMedida,
                                         )
                                         .firstOrNull;
-                                return DropDownWidget<UnidadeMedidaModel>(
+                                return DropDownSearchWidget<UnidadeMedidaModel>(
                                   initialValue: unidadeMedida,
                                   sourceList: unidadeMedidas,
+                                  textFunction: (p0) => p0.GetDropDownText(),
                                   onChanged: (value) =>
-                                      insumo.codFabricante = value.cod!,
+                                      insumo.codFabricante = value?.cod,
                                   placeholder: 'Unidade Medida',
                                 );
                               },
@@ -461,13 +480,19 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                               )
                               .firstOrNull;
                           return DropDownSearchWidget<DestinoResiduoModel>(
+                            validator: (val) =>
+                                val == null ? 'Obrigatório' : null,
+                            validateBuilder: (context, validateMethodBuilder) =>
+                                validateDestinoResiduo = validateMethodBuilder,
                             textFunction: (destino) =>
                                 destino.GetNomeDestinoText(),
                             initialValue: destino,
-                            sourceList: destinos,
+                            sourceList: destinos
+                                .where((element) => element.ativo == true)
+                                .toList(),
                             onChanged: (value) =>
                                 insumo.codDestinoResiduo = value?.cod!,
-                            placeholder: 'Destino Resíduos',
+                            placeholder: 'Destino Resíduos *',
                           );
                         },
                       ),
@@ -804,22 +829,51 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
   }
 
   void salvar() {
-    if (!txtCodBarra.valid ||
-        !txtNomeitem.valid ||
-        !txtDescricaoItem.valid ||
-        !txtUnidadeMedida.valid ||
-        !txtEmbalagem.valid ||
-        !txtFabricante.valid ||
-        !txtFornecedor.valid ||
-        !txtRegistroAnvisa.valid) return;
+    bool codBarraValid = txtCodBarra.valid;
+    bool nomeItemValid = txtNomeitem.valid;
+    bool descricaoItemValid = txtDescricaoItem.valid;
+    bool unidadeMedidaValid = txtUnidadeMedida.valid;
+    bool embalagemValid = txtEmbalagem.valid;
+    bool fabricanteValid = txtFabricante.valid;
+    bool fornecedorValid = txtFornecedor.valid;
+    bool registroAnvisaValid = txtRegistroAnvisa.valid;
+    bool destinoResiduoValid = validateDestinoResiduo();
+    bool qtdeValid = txtQtde.valid;
+    if (!nomeItemValid) {
+      scroll.jumpTo(0);
+    } else if (!codBarraValid) {
+      scroll.jumpTo(150);
+    } else if (!qtdeValid) {
+      scroll.jumpTo(200);
+    } else if (!destinoResiduoValid) {
+      scroll.jumpTo(350);
+    }
 
     if (insumo.controleEstoque == true) {
-      if (!txtEstoqueMinimo.valid ||
-          !txtEstoqueMaximo.valid ||
-          !txtPrazoEntrega.valid ||
-          !txtPontoReposicao.valid ||
-          !txtQtde.valid) return;
+      bool estoqueMinimoValid = txtEstoqueMinimo.valid;
+      bool estoqueMaximoValid = txtEstoqueMaximo.valid;
+      bool prazoEntregaValid = txtPrazoEntrega.valid;
+      bool pontoReposicaoValid = txtPontoReposicao.valid;
+      if (!estoqueMinimoValid || !estoqueMaximoValid || !pontoReposicaoValid) {
+        scroll.jumpTo(400);
+      } else if (!prazoEntregaValid) {
+        scroll.jumpTo(450);
+      }
+      if (!estoqueMinimoValid ||
+          !estoqueMaximoValid ||
+          !prazoEntregaValid ||
+          !pontoReposicaoValid) return;
     }
+    if (!codBarraValid ||
+        !nomeItemValid ||
+        !descricaoItemValid ||
+        !unidadeMedidaValid ||
+        !embalagemValid ||
+        !fabricanteValid ||
+        !fornecedorValid ||
+        !registroAnvisaValid ||
+        !destinoResiduoValid ||
+        !qtdeValid) return;
     cubit.save(insumo);
   }
 }

@@ -30,7 +30,7 @@ abstract class ImagemModel with _$ImagemModel, ImagemMixin {
         cod: 0,
         nomeFoto: '',
         foto: null,
-        identificadorImagem: '',
+        identificadorImagem: null,
         codInstituicao: 0,
         ativo: true,
         ultimaAlteracao: null,

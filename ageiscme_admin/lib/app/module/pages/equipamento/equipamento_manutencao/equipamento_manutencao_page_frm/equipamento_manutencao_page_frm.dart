@@ -17,7 +17,6 @@ import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_string_widget.dart';
 import 'package:compartilhados/componentes/campos/label_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_float_widget.dart';
@@ -82,7 +81,7 @@ class _EquipamentoManutencaoPageFrmState
   );
 
   late final TextFieldStringWidget txtDescricaoServico = TextFieldStringWidget(
-    placeholder: 'Descrição do Problema',
+    placeholder: 'Descrição do Problema *',
     onChanged: (String? str) {
       equipamentoManutencao.descricao = txtDescricaoServico.text;
     },
@@ -367,6 +366,11 @@ class _EquipamentoManutencaoPageFrmState
     return await Modular.get<AuthenticationStore>().GetAuthenticated();
   }
 
+  late bool Function() validateTipoServico;
+  late bool Function() validateEquipamento;
+  late bool Function() validateResultado;
+  late bool Function() validateTecnico;
+
   void initState() {
     _controller = EquipamentoManutencaoPageFrmController();
     servicoTipoCubit = ServicoTipoCubit();
@@ -379,7 +383,7 @@ class _EquipamentoManutencaoPageFrmState
 
     txtDescricaoServico.addValidator((String str) {
       if (str.isEmpty) {
-        return 'Descrição do Serviço deve ser informado';
+        return 'Obrigatório';
       } else if (str.length > 400) {
         return 'Pode ter no máximo 400 caracteres';
       }
@@ -520,6 +524,8 @@ class _EquipamentoManutencaoPageFrmState
     }
   }
 
+  final ScrollController scroll = ScrollController();
+
   @override
   Widget build(BuildContext context) {
     setFields();
@@ -560,6 +566,7 @@ class _EquipamentoManutencaoPageFrmState
                 maxHeight: size.height * .95,
               ),
               child: SingleChildScrollView(
+                controller: scroll,
                 padding: const EdgeInsets.only(right: 14),
                 child: Column(
                   children: [
@@ -588,13 +595,19 @@ class _EquipamentoManutencaoPageFrmState
                                     )
                                     .firstOrNull;
                                 return DropDownSearchWidget(
+                                  validateBuilder:
+                                      (context, validateMethodBuilder) =>
+                                          validateEquipamento =
+                                              validateMethodBuilder,
+                                  validator: (val) =>
+                                      val == null ? 'Obrigatório' : null,
                                   textFunction: (equipamento) =>
                                       equipamento.EquipamentoNomeText(),
                                   initialValue: equipamento,
                                   sourceList: equipamentos,
                                   onChanged: (value) => equipamentoManutencao
                                       .codEquipamento = value?.cod,
-                                  placeholder: 'Equipamento',
+                                  placeholder: 'Equipamento *',
                                 );
                               },
                             ),
@@ -605,6 +618,11 @@ class _EquipamentoManutencaoPageFrmState
                                 BlocBuilder<ServicoTipoCubit, ServicoTipoState>(
                               bloc: servicoTipoCubit,
                               builder: (context, state) {
+                                if (state.loading) {
+                                  return const Center(
+                                    child: LoadingWidget(),
+                                  );
+                                }
                                 List<ServicoTipoModel> servicosTipos =
                                     state.tiposServico;
 
@@ -618,7 +636,14 @@ class _EquipamentoManutencaoPageFrmState
                                           equipamentoManutencao.codServicosTipo,
                                     )
                                     .firstOrNull;
-                                return DropDownWidget(
+                                return DropDownSearchWidget(
+                                  validateBuilder:
+                                      (context, validateMethodBuilder) =>
+                                          validateTipoServico =
+                                              validateMethodBuilder,
+                                  validator: (val) =>
+                                      val == null ? 'Obrigatório' : null,
+                                  textFunction: (p0) => p0.GetDropDownText(),
                                   initialValue: servicoTipo,
                                   sourceList: servicosTipos
                                       .where(
@@ -629,8 +654,8 @@ class _EquipamentoManutencaoPageFrmState
                                       )
                                       .toList(),
                                   onChanged: (value) => equipamentoManutencao
-                                      .codServicosTipo = value.cod!,
-                                  placeholder: 'Tipo do Serviço',
+                                      .codServicosTipo = value?.cod,
+                                  placeholder: 'Tipo do Serviço *',
                                 );
                               },
                             ),
@@ -710,7 +735,8 @@ class _EquipamentoManutencaoPageFrmState
                         textFunction: (usuario) => usuario.NomeText(),
                         initialValue: equipamentoManutencao.usuarioDetectadoPor,
                         onChanged: (value) {
-                          equipamentoManutencao.detectadoPor = value?.cod.toString();
+                          equipamentoManutencao.detectadoPor =
+                              value?.cod.toString();
                           equipamentoManutencao.usuarioDetectadoPor = value;
                         },
                         placeholder: 'Detectado por',
@@ -727,6 +753,11 @@ class _EquipamentoManutencaoPageFrmState
                           Expanded(
                             child: DropDownSearchApiWidget<
                                 UsuarioDropDownSearchResponseDTO>(
+                              validateBuilder:
+                                  (context, validateMethodBuilder) =>
+                                      validateTecnico = validateMethodBuilder,
+                              validator: (val) =>
+                                  val == null ? 'Obrigatório' : null,
                               search: (str) async =>
                                   (await UsuarioService().getDropDownSearch(
                                     UsuarioDropDownSearchDTO(
@@ -737,18 +768,25 @@ class _EquipamentoManutencaoPageFrmState
                                       ?.$2 ??
                                   [],
                               textFunction: (usuario) => usuario.NomeText(),
-                              initialValue: equipamentoManutencao.usuarioTecnico,
+                              initialValue:
+                                  equipamentoManutencao.usuarioTecnico,
                               onChanged: (value) {
                                 equipamentoManutencao.tecnico =
                                     value?.cod.toString();
                                 equipamentoManutencao.usuarioTecnico = value;
                               },
-                              placeholder: 'Técnico',
+                              placeholder: 'Técnico *',
                             ),
                           ),
                           const SizedBox(width: 50.0),
                           Expanded(
-                            child: DropDownWidget<RegistroServicoResultOption>(
+                            child: DropDownSearchWidget<
+                                RegistroServicoResultOption>(
+                              validateBuilder:
+                                  (context, validateMethodBuilder) =>
+                                      validateResultado = validateMethodBuilder,
+                              validator: (obj) =>
+                                  obj == null ? 'Obrigatório' : null,
                               initialValue:
                                   RegistroServicoResultOption.resultOptions
                                       .where(
@@ -760,8 +798,9 @@ class _EquipamentoManutencaoPageFrmState
                               sourceList:
                                   RegistroServicoResultOption.resultOptions,
                               onChanged: (value) => equipamentoManutencao
-                                  .resultado = value.cod.toString(),
-                              placeholder: 'Resultado',
+                                  .resultado = value?.cod.toString(),
+                              placeholder: 'Resultado *',
+                              textFunction: (p0) => p0.GetDropDownText(),
                             ),
                           ),
                         ],
@@ -773,9 +812,15 @@ class _EquipamentoManutencaoPageFrmState
                         children: [
                           Expanded(
                             flex: 2,
-                            child: BlocBuilder<PecaCubit, List<PecaModel>>(
+                            child: BlocBuilder<PecaCubit, PecaState>(
                               bloc: pecaCubit,
-                              builder: (context, pecas) {
+                              builder: (context, state) {
+                                if (state.loading == true) {
+                                  return const Center(
+                                    child: LoadingWidget(),
+                                  );
+                                }
+                                List<PecaModel> pecas = state.pecas;
                                 pecas.sort(
                                   (a, b) => a.peca!.compareTo(b.peca!),
                                 );
@@ -786,12 +831,13 @@ class _EquipamentoManutencaoPageFrmState
                                           equipamentoManutencao.codPeca1,
                                     )
                                     .firstOrNull;
-                                return DropDownWidget(
+                                return DropDownSearchWidget(
                                   initialValue: peca,
                                   sourceList: pecas,
                                   onChanged: (value) => equipamentoManutencao
-                                      .codPeca1 = value.cod!,
+                                      .codPeca1 = value?.cod!,
                                   placeholder: 'Peça Trocada',
+                                  textFunction: (p0) => p0.PecaNomeText(),
                                 );
                               },
                             ),
@@ -825,9 +871,15 @@ class _EquipamentoManutencaoPageFrmState
                         children: [
                           Expanded(
                             flex: 2,
-                            child: BlocBuilder<PecaCubit, List<PecaModel>>(
+                            child: BlocBuilder<PecaCubit, PecaState>(
                               bloc: pecaCubit,
-                              builder: (context, pecas) {
+                              builder: (context, state) {
+                                if (state.loading == true) {
+                                  return const Center(
+                                    child: LoadingWidget(),
+                                  );
+                                }
+                                List<PecaModel> pecas = state.pecas;
                                 pecas.sort(
                                   (a, b) => a.peca!.compareTo(b.peca!),
                                 );
@@ -878,9 +930,15 @@ class _EquipamentoManutencaoPageFrmState
                         children: [
                           Expanded(
                             flex: 2,
-                            child: BlocBuilder<PecaCubit, List<PecaModel>>(
+                            child: BlocBuilder<PecaCubit, PecaState>(
                               bloc: pecaCubit,
-                              builder: (context, pecas) {
+                              builder: (context, state) {
+                                if (state.loading == true) {
+                                  return const Center(
+                                    child: LoadingWidget(),
+                                  );
+                                }
+                                List<PecaModel> pecas = state.pecas;
                                 pecas.sort(
                                   (a, b) => a.peca!.compareTo(b.peca!),
                                 );
@@ -931,9 +989,15 @@ class _EquipamentoManutencaoPageFrmState
                         children: [
                           Expanded(
                             flex: 2,
-                            child: BlocBuilder<PecaCubit, List<PecaModel>>(
+                            child: BlocBuilder<PecaCubit, PecaState>(
                               bloc: pecaCubit,
-                              builder: (context, pecas) {
+                              builder: (context, state) {
+                                if (state.loading == true) {
+                                  return const Center(
+                                    child: LoadingWidget(),
+                                  );
+                                }
+                                List<PecaModel> pecas = state.pecas;
                                 pecas.sort(
                                   (a, b) => a.peca!.compareTo(b.peca!),
                                 );
@@ -984,9 +1048,15 @@ class _EquipamentoManutencaoPageFrmState
                         children: [
                           Expanded(
                             flex: 2,
-                            child: BlocBuilder<PecaCubit, List<PecaModel>>(
+                            child: BlocBuilder<PecaCubit, PecaState>(
                               bloc: pecaCubit,
-                              builder: (context, pecas) {
+                              builder: (context, state) {
+                                if (state.loading == true) {
+                                  return const Center(
+                                    child: LoadingWidget(),
+                                  );
+                                }
+                                List<PecaModel> pecas = state.pecas;
                                 pecas.sort(
                                   (a, b) => a.peca!.compareTo(b.peca!),
                                 );
@@ -1172,25 +1242,59 @@ class _EquipamentoManutencaoPageFrmState
   }
 
   void salvar() {
-    if (!txtDescricaoServico.valid ||
-        !txtNumNF.valid ||
-        !txtNumSerie1.valid ||
-        !txtNumSerie2.valid ||
-        !txtNumSerie3.valid ||
-        !txtNumSerie4.valid ||
-        !txtNumSerie5.valid ||
-        !txtProblema.valid ||
-        !txtQtde1.valid ||
-        !txtQtde2.valid ||
-        !txtQtde3.valid ||
-        !txtQtde4.valid ||
-        !txtQtde5.valid ||
-        !txtUsuarioRegistro.valid ||
-        !txtValor1.valid ||
-        !txtValor2.valid ||
-        !txtValor3.valid ||
-        !txtValor4.valid ||
-        !txtValor5.valid) {
+    bool descricaoServicoValid = txtDescricaoServico.valid;
+    bool numNfValid = txtNumNF.valid;
+    bool numSerie1Valid = txtNumSerie1.valid;
+    bool numSerie2Valid = txtNumSerie2.valid;
+    bool numSerie3Valid = txtNumSerie3.valid;
+    bool numSerie4Valid = txtNumSerie4.valid;
+    bool numSerie5Valid = txtNumSerie5.valid;
+    bool problemaValid = txtProblema.valid;
+    bool qtde1Valid = txtQtde1.valid;
+    bool qtde2Valid = txtQtde2.valid;
+    bool qtde3Valid = txtQtde3.valid;
+    bool qtde4Valid = txtQtde4.valid;
+    bool qtde5Valid = txtQtde5.valid;
+    bool usuarioRegistroValid = txtUsuarioRegistro.valid;
+    bool valor1Valid = txtValor1.valid;
+    bool valor2Valid = txtValor2.valid;
+    bool valor3Valid = txtValor3.valid;
+    bool valor4Valid = txtValor4.valid;
+    bool valor5Valid = txtValor5.valid;
+    bool resultadoValid = validateResultado();
+    bool tecnicoValid = validateTecnico();
+    bool tipoServicoValid = validateTipoServico();
+    bool equipamentoValid = validateEquipamento();
+    if (!equipamentoValid || !tipoServicoValid) {
+      scroll.jumpTo(0.0);
+    }
+    else if(!descricaoServicoValid || !tecnicoValid || !resultadoValid){
+      scroll.jumpTo(250.0);
+    }
+
+    if (!descricaoServicoValid ||
+        !numNfValid ||
+        !numSerie1Valid ||
+        !numSerie2Valid ||
+        !numSerie3Valid ||
+        !numSerie4Valid ||
+        !numSerie5Valid ||
+        !problemaValid ||
+        !qtde1Valid ||
+        !qtde2Valid ||
+        !qtde3Valid ||
+        !qtde4Valid ||
+        !qtde5Valid ||
+        !usuarioRegistroValid ||
+        !valor1Valid ||
+        !valor2Valid ||
+        !valor3Valid ||
+        !valor4Valid ||
+        !valor5Valid ||
+        !resultadoValid ||
+        !tecnicoValid ||
+        !tipoServicoValid ||
+        !equipamentoValid) {
       return;
     }
     cubit.save(equipamentoManutencao);

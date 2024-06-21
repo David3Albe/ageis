@@ -60,6 +60,7 @@ class _EpiEntregaPageState extends State<EpiEntregaPage> {
       tipoQuery: UsuarioFilterTipoQuery.SemFoto,
       apenasAtivos: true,
       apenasColaboradores: true,
+      ordenarPorCodDecrescente: true,
     );
     if (widget.codUsuario != null) {
       usuarioFilter.cod = widget.codUsuario;
@@ -116,6 +117,7 @@ class _EpiEntregaPageState extends State<EpiEntregaPage> {
                         child: Padding(
                           padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                           child: PlutoGridWidget(
+                            orderDescendingFieldColumn: 'cod',
                             onEdit: (UsuarioModel objeto) => {
                               openModal(
                                 context,

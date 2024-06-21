@@ -50,7 +50,11 @@ class ConsultaItemPage extends StatefulWidget {
 
 class _ConsultaItemPageState extends State<ConsultaItemPage> {
   final List<CustomDataColumn> colunas = [
-    CustomDataColumn(text: 'ID Etiqueta', field: 'idEtiqueta'),
+    CustomDataColumn(
+      text: 'ID Etiqueta',
+      field: 'idEtiqueta',
+      width: 120,
+    ),
     CustomDataColumn(text: 'Item', field: 'item'),
     CustomDataColumn(text: 'Descritor', field: 'descricaoCurta'),
     CustomDataColumn(text: 'Tamanho', field: 'tamanhoSigla'),
@@ -59,6 +63,7 @@ class _ConsultaItemPageState extends State<ConsultaItemPage> {
       text: 'Qtde. Processos',
       field: 'qtdeProcessos',
       type: CustomDataColumnType.Number,
+      width: 120,
     ),
     CustomDataColumn(text: 'Kit', field: 'nomeKit'),
     CustomDataColumn(text: 'Proprietário', field: 'nomeProprietario'),
@@ -267,9 +272,15 @@ class _ConsultaItemPageState extends State<ConsultaItemPage> {
                   placeholder: 'Situação',
                 ),
                 const Padding(padding: EdgeInsets.only(top: 2)),
-                BlocBuilder<GrupoMaterialCubit, List<GrupoMaterialModel>>(
+                BlocBuilder<GrupoMaterialCubit, GrupoMaterialState>(
                   bloc: grupoMaterialBloc,
-                  builder: (context, grupos) {
+                  builder: (context, state) {
+                    if (state.loading) {
+                      return const Center(
+                        child: LoadingWidget(),
+                      );
+                    }
+                    List<GrupoMaterialModel> grupos = state.grupoMateriais;
                     grupos.sort(
                       (a, b) => a.nome!.compareTo(b.nome!),
                     );

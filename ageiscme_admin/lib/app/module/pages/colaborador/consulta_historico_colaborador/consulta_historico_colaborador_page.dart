@@ -88,6 +88,7 @@ class _ConsultaHistoricoColaboradorPageState
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'dataHora',
                     smallRows: true,
                     columns: colunas,
                     items: state.historicosColaboradores,

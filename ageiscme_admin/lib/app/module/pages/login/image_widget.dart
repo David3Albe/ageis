@@ -19,6 +19,7 @@ class ImageWidget extends StatelessWidget {
           return const SizedBox();
         }
         return Image.network(
+          errorBuilder: (context, error, stackTrace) => const SizedBox(),
           snapshot.data!,
           height: 60,
         );

@@ -26,6 +26,7 @@ class _FornecedorPageState extends State<FornecedorPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(text: 'Fornecedor', field: 'nome'),
   ];
@@ -71,6 +72,7 @@ class _FornecedorPageState extends State<FornecedorPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     onEdit: (FornecedorModel objeto) =>
                         {openModal(context, FornecedorModel.copy(objeto))},
                     onDelete: (FornecedorModel objeto) =>

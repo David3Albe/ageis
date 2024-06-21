@@ -44,13 +44,22 @@ class _ConsultaProcessosLeituraRetiradoPageState
       text: 'Data',
       field: 'dataHora',
       type: CustomDataColumnType.DateTime,
+      width: 130,
     ),
     CustomDataColumn(
       text: 'Cod. Kit',
       field: 'codKit',
       type: CustomDataColumnType.Number,
     ),
-    CustomDataColumn(text: 'Kit', field: 'nomeKit'),
+    CustomDataColumn(
+      text: 'Cod. Barra. Kit',
+      field: 'codBarraKit',
+      type: CustomDataColumnType.Number,
+    ),
+    CustomDataColumn(
+      text: 'Kit',
+      field: 'nomeKit',
+    ),
     CustomDataColumn(
       text: 'Itens Pendente',
       field: 'nroItemFaltantes',
@@ -125,6 +134,7 @@ class _ConsultaProcessosLeituraRetiradoPageState
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'dataHora',
                     smallRows: true,
                     columns: colunas,
                     items: state.processosLeiturasRetirados,
@@ -149,7 +159,7 @@ class _ConsultaProcessosLeituraRetiradoPageState
 
                       openModalRedirect(
                         context,
-                        obj.codKit,
+                        obj.codBarraKit,
                       );
                     },
                   ),
@@ -327,7 +337,7 @@ class _ConsultaProcessosLeituraRetiradoPageState
     });
   }
 
-  void openModalRedirect(BuildContext context, int? codKit) {
+  void openModalRedirect(BuildContext context, String? codBarraKit) {
     showDialog<bool>(
       barrierDismissible: true,
       context: context,
@@ -336,7 +346,7 @@ class _ConsultaProcessosLeituraRetiradoPageState
         return QueryDialogWidget(
           child: ConsultaItemPage(
             filter: ConsultaItemFilter(
-              codKit: codKit,
+              codKit: null,
               cmInicio: null,
               cmTermino: null,
               codGrupo: null,
@@ -351,7 +361,7 @@ class _ConsultaProcessosLeituraRetiradoPageState
               numeroPatrimonio: null,
               repositorio: null,
               rotulado: null,
-              codBarraKitContem: null,
+              codBarraKitContem: codBarraKit,
               idEtiquetaContem: null,
             ),
           ),

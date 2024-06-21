@@ -26,6 +26,7 @@ class _AcaoOcorrenciaPageState extends State<AcaoOcorrenciaPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 110,
     ),
     CustomDataColumn(text: 'Descrição', field: 'descricao'),
     CustomDataColumn(
@@ -86,6 +87,7 @@ class _AcaoOcorrenciaPageState extends State<AcaoOcorrenciaPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     filterOnlyActives: true,
                     onEdit: (AcaoOcorrenciaModel objeto) =>
                         {openModal(context, AcaoOcorrenciaModel.copy(objeto))},

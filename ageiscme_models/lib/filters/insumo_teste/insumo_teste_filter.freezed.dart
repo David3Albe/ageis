@@ -26,6 +26,8 @@ mixin _$InsumoTesteFilter {
   set codInsumo(int? value) => throw _privateConstructorUsedError;
   int? get codMovimentoInsumo => throw _privateConstructorUsedError;
   set codMovimentoInsumo(int? value) => throw _privateConstructorUsedError;
+  bool? get carregarMovimentacao => throw _privateConstructorUsedError;
+  set carregarMovimentacao(bool? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -39,7 +41,11 @@ abstract class $InsumoTesteFilterCopyWith<$Res> {
           InsumoTesteFilter value, $Res Function(InsumoTesteFilter) then) =
       _$InsumoTesteFilterCopyWithImpl<$Res, InsumoTesteFilter>;
   @useResult
-  $Res call({int? cod, int? codInsumo, int? codMovimentoInsumo});
+  $Res call(
+      {int? cod,
+      int? codInsumo,
+      int? codMovimentoInsumo,
+      bool? carregarMovimentacao});
 }
 
 /// @nodoc
@@ -58,6 +64,7 @@ class _$InsumoTesteFilterCopyWithImpl<$Res, $Val extends InsumoTesteFilter>
     Object? cod = freezed,
     Object? codInsumo = freezed,
     Object? codMovimentoInsumo = freezed,
+    Object? carregarMovimentacao = freezed,
   }) {
     return _then(_value.copyWith(
       cod: freezed == cod
@@ -72,6 +79,10 @@ class _$InsumoTesteFilterCopyWithImpl<$Res, $Val extends InsumoTesteFilter>
           ? _value.codMovimentoInsumo
           : codMovimentoInsumo // ignore: cast_nullable_to_non_nullable
               as int?,
+      carregarMovimentacao: freezed == carregarMovimentacao
+          ? _value.carregarMovimentacao
+          : carregarMovimentacao // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 }
@@ -84,7 +95,11 @@ abstract class _$$InsumoTesteFilterImplCopyWith<$Res>
       __$$InsumoTesteFilterImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int? cod, int? codInsumo, int? codMovimentoInsumo});
+  $Res call(
+      {int? cod,
+      int? codInsumo,
+      int? codMovimentoInsumo,
+      bool? carregarMovimentacao});
 }
 
 /// @nodoc
@@ -101,6 +116,7 @@ class __$$InsumoTesteFilterImplCopyWithImpl<$Res>
     Object? cod = freezed,
     Object? codInsumo = freezed,
     Object? codMovimentoInsumo = freezed,
+    Object? carregarMovimentacao = freezed,
   }) {
     return _then(_$InsumoTesteFilterImpl(
       cod: freezed == cod
@@ -115,6 +131,10 @@ class __$$InsumoTesteFilterImplCopyWithImpl<$Res>
           ? _value.codMovimentoInsumo
           : codMovimentoInsumo // ignore: cast_nullable_to_non_nullable
               as int?,
+      carregarMovimentacao: freezed == carregarMovimentacao
+          ? _value.carregarMovimentacao
+          : carregarMovimentacao // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -124,7 +144,11 @@ class __$$InsumoTesteFilterImplCopyWithImpl<$Res>
 class _$InsumoTesteFilterImpl
     with DiagnosticableTreeMixin
     implements _InsumoTesteFilter {
-  _$InsumoTesteFilterImpl({this.cod, this.codInsumo, this.codMovimentoInsumo});
+  _$InsumoTesteFilterImpl(
+      {this.cod,
+      this.codInsumo,
+      this.codMovimentoInsumo,
+      this.carregarMovimentacao});
 
   factory _$InsumoTesteFilterImpl.fromJson(Map<String, dynamic> json) =>
       _$$InsumoTesteFilterImplFromJson(json);
@@ -135,10 +159,12 @@ class _$InsumoTesteFilterImpl
   int? codInsumo;
   @override
   int? codMovimentoInsumo;
+  @override
+  bool? carregarMovimentacao;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'InsumoTesteFilter(cod: $cod, codInsumo: $codInsumo, codMovimentoInsumo: $codMovimentoInsumo)';
+    return 'InsumoTesteFilter(cod: $cod, codInsumo: $codInsumo, codMovimentoInsumo: $codMovimentoInsumo, carregarMovimentacao: $carregarMovimentacao)';
   }
 
   @override
@@ -148,7 +174,8 @@ class _$InsumoTesteFilterImpl
       ..add(DiagnosticsProperty('type', 'InsumoTesteFilter'))
       ..add(DiagnosticsProperty('cod', cod))
       ..add(DiagnosticsProperty('codInsumo', codInsumo))
-      ..add(DiagnosticsProperty('codMovimentoInsumo', codMovimentoInsumo));
+      ..add(DiagnosticsProperty('codMovimentoInsumo', codMovimentoInsumo))
+      ..add(DiagnosticsProperty('carregarMovimentacao', carregarMovimentacao));
   }
 
   @JsonKey(ignore: true)
@@ -170,7 +197,8 @@ abstract class _InsumoTesteFilter implements InsumoTesteFilter {
   factory _InsumoTesteFilter(
       {int? cod,
       int? codInsumo,
-      int? codMovimentoInsumo}) = _$InsumoTesteFilterImpl;
+      int? codMovimentoInsumo,
+      bool? carregarMovimentacao}) = _$InsumoTesteFilterImpl;
 
   factory _InsumoTesteFilter.fromJson(Map<String, dynamic> json) =
       _$InsumoTesteFilterImpl.fromJson;
@@ -184,6 +212,9 @@ abstract class _InsumoTesteFilter implements InsumoTesteFilter {
   @override
   int? get codMovimentoInsumo;
   set codMovimentoInsumo(int? value);
+  @override
+  bool? get carregarMovimentacao;
+  set carregarMovimentacao(bool? value);
   @override
   @JsonKey(ignore: true)
   _$$InsumoTesteFilterImplCopyWith<_$InsumoTesteFilterImpl> get copyWith =>

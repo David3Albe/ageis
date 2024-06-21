@@ -18,7 +18,11 @@ class ImageWidget extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const SizedBox();
         }
+        if (!snapshot.hasData) {
+          return const SizedBox();
+        }
         return Image.network(
+          errorBuilder: (context, error, stackTrace) => const SizedBox(),
           snapshot.data!,
           width: width,
         );

@@ -39,7 +39,7 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
     bloc = AlterarSenhaCubit(service: AlterarSenhaService());
 
     txtSenhaAntiga = TextFieldStringWidget(
-      placeholder: 'Senha atual',
+      placeholder: 'Senha atual *',
       password: true,
       onChanged: (String? str) {
         alterarSenhaDTO.senhaAntiga = str ?? '';
@@ -50,19 +50,19 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
       txtSenhaAntiga.text = widget.actualPassword!;
     }
     txtSenhaAntiga.addValidator((str) {
-      if (str.isEmpty) return 'Deve ser informada';
+      if (str.isEmpty) return 'Obrigatória';
       return '';
     });
 
     txtSenhaNova = TextFieldStringWidget(
-      placeholder: 'Nova senha',
+      placeholder: 'Nova senha *',
       password: true,
       onChanged: (String? str) {
         alterarSenhaDTO.senhaNova = str ?? '';
       },
     );
     txtSenhaNova.addValidator((str) {
-      if (str.isEmpty) return 'Deve ser informada';
+      if (str.isEmpty) return 'Obrigatória';
       if (str == '123456') return 'A senha não pode ser alterada para "123456"';
       if (str.length < 7) return 'Deve ser não pode ter menos de 6 caracteres';
       if (str != txtConfirmaSenha.text) {
@@ -72,7 +72,7 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
     });
 
     txtConfirmaSenha = TextFieldStringWidget(
-      placeholder: 'Confirmação nova senha',
+      placeholder: 'Confirmação nova senha *',
       password: true,
       onChanged: (String? str) {
         alterarSenhaDTO.confirmacaoSenhaNova = str ?? '';
@@ -80,7 +80,7 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
     );
     txtConfirmaSenha.addValidator((str) {
       txtSenhaNova.valid;
-      if (str.isEmpty) return 'Deve ser informada';
+      if (str.isEmpty) return 'Obrigatório';
       if (str != txtSenhaNova.text) {
         return 'Deve ser igual a senha nova';
       }
@@ -121,7 +121,7 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
             width: 350,
             child: txtConfirmaSenha,
           ),
-          const Padding(padding: EdgeInsets.only(top: 4)),
+          const Padding(padding: EdgeInsets.only(top: 16)),
           SaveButtonWidget(onPressed: save),
         ],
       ),
@@ -129,9 +129,10 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
   }
 
   Future save() async {
-    if (!txtSenhaAntiga.valid ||
-        !txtSenhaNova.valid ||
-        !txtConfirmaSenha.valid) {
+    bool senhaAntigaValid = txtSenhaAntiga.valid;
+    bool senhaNovaValid = txtSenhaNova.valid;
+    bool senhaConfirmacaoValid = txtConfirmaSenha.valid;
+    if (!senhaAntigaValid || !senhaNovaValid || !senhaConfirmacaoValid) {
       return;
     }
     await bloc.changePassword(alterarSenhaDTO);

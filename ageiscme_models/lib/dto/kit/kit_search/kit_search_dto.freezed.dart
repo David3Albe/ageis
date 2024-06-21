@@ -28,6 +28,9 @@ mixin _$KitSearchDTO {
   set nomeContem(String? value) => throw _privateConstructorUsedError;
   bool? get ordenarCod => throw _privateConstructorUsedError;
   set ordenarCod(bool? value) => throw _privateConstructorUsedError;
+  bool? get ordernarPorCodDecrescente => throw _privateConstructorUsedError;
+  set ordernarPorCodDecrescente(bool? value) =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -45,7 +48,8 @@ abstract class $KitSearchDTOCopyWith<$Res> {
       {int? numeroRegistros,
       String? codBarraContem,
       String? nomeContem,
-      bool? ordenarCod});
+      bool? ordenarCod,
+      bool? ordernarPorCodDecrescente});
 }
 
 /// @nodoc
@@ -65,6 +69,7 @@ class _$KitSearchDTOCopyWithImpl<$Res, $Val extends KitSearchDTO>
     Object? codBarraContem = freezed,
     Object? nomeContem = freezed,
     Object? ordenarCod = freezed,
+    Object? ordernarPorCodDecrescente = freezed,
   }) {
     return _then(_value.copyWith(
       numeroRegistros: freezed == numeroRegistros
@@ -83,6 +88,10 @@ class _$KitSearchDTOCopyWithImpl<$Res, $Val extends KitSearchDTO>
           ? _value.ordenarCod
           : ordenarCod // ignore: cast_nullable_to_non_nullable
               as bool?,
+      ordernarPorCodDecrescente: freezed == ordernarPorCodDecrescente
+          ? _value.ordernarPorCodDecrescente
+          : ordernarPorCodDecrescente // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 }
@@ -99,7 +108,8 @@ abstract class _$$KitSearchDTOImplCopyWith<$Res>
       {int? numeroRegistros,
       String? codBarraContem,
       String? nomeContem,
-      bool? ordenarCod});
+      bool? ordenarCod,
+      bool? ordernarPorCodDecrescente});
 }
 
 /// @nodoc
@@ -117,6 +127,7 @@ class __$$KitSearchDTOImplCopyWithImpl<$Res>
     Object? codBarraContem = freezed,
     Object? nomeContem = freezed,
     Object? ordenarCod = freezed,
+    Object? ordernarPorCodDecrescente = freezed,
   }) {
     return _then(_$KitSearchDTOImpl(
       numeroRegistros: freezed == numeroRegistros
@@ -135,6 +146,10 @@ class __$$KitSearchDTOImplCopyWithImpl<$Res>
           ? _value.ordenarCod
           : ordenarCod // ignore: cast_nullable_to_non_nullable
               as bool?,
+      ordernarPorCodDecrescente: freezed == ordernarPorCodDecrescente
+          ? _value.ordernarPorCodDecrescente
+          : ordernarPorCodDecrescente // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -146,7 +161,8 @@ class _$KitSearchDTOImpl implements _KitSearchDTO {
       {this.numeroRegistros,
       this.codBarraContem,
       this.nomeContem,
-      this.ordenarCod});
+      this.ordenarCod,
+      this.ordernarPorCodDecrescente});
 
   factory _$KitSearchDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$KitSearchDTOImplFromJson(json);
@@ -159,10 +175,12 @@ class _$KitSearchDTOImpl implements _KitSearchDTO {
   String? nomeContem;
   @override
   bool? ordenarCod;
+  @override
+  bool? ordernarPorCodDecrescente;
 
   @override
   String toString() {
-    return 'KitSearchDTO(numeroRegistros: $numeroRegistros, codBarraContem: $codBarraContem, nomeContem: $nomeContem, ordenarCod: $ordenarCod)';
+    return 'KitSearchDTO(numeroRegistros: $numeroRegistros, codBarraContem: $codBarraContem, nomeContem: $nomeContem, ordenarCod: $ordenarCod, ordernarPorCodDecrescente: $ordernarPorCodDecrescente)';
   }
 
   @JsonKey(ignore: true)
@@ -184,7 +202,8 @@ abstract class _KitSearchDTO implements KitSearchDTO {
       {int? numeroRegistros,
       String? codBarraContem,
       String? nomeContem,
-      bool? ordenarCod}) = _$KitSearchDTOImpl;
+      bool? ordenarCod,
+      bool? ordernarPorCodDecrescente}) = _$KitSearchDTOImpl;
 
   factory _KitSearchDTO.fromJson(Map<String, dynamic> json) =
       _$KitSearchDTOImpl.fromJson;
@@ -201,6 +220,9 @@ abstract class _KitSearchDTO implements KitSearchDTO {
   @override
   bool? get ordenarCod;
   set ordenarCod(bool? value);
+  @override
+  bool? get ordernarPorCodDecrescente;
+  set ordernarPorCodDecrescente(bool? value);
   @override
   @JsonKey(ignore: true)
   _$$KitSearchDTOImplCopyWith<_$KitSearchDTOImpl> get copyWith =>

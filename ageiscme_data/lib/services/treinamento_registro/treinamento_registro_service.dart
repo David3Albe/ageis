@@ -30,6 +30,16 @@ class TreinamentoRegistroService {
           .map((e) => TreinamentoRegistroModel.fromJson(e))
           .toList();
 
+  Future<List<TreinamentoRegistroModel>> FilterScreen(
+    TreinamentoRegistroFilter filter,
+  ) async =>
+      (await _client.postList(
+        '/treinamento-registro/filter-screen',
+        filter,
+      ))
+          .map((e) => TreinamentoRegistroModel.fromJson(e))
+          .toList();
+
   Future<(String message, TreinamentoRegistroModel treinamentoRegistro)?> save(
     TreinamentoRegistroModel obj,
   ) async {

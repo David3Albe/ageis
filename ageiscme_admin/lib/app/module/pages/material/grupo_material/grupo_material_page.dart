@@ -26,6 +26,7 @@ class _GrupoMaterialPageState extends State<GrupoMaterialPage> {
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 100,
     ),
     CustomDataColumn(text: 'Nome', field: 'nome'),
     CustomDataColumn(text: 'Descrição', field: 'descricao'),
@@ -95,6 +96,7 @@ class _GrupoMaterialPageState extends State<GrupoMaterialPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     filterOnlyActives: true,
                     onEdit: (GrupoMaterialModel objeto) =>
                         {openModal(context, GrupoMaterialModel.copy(objeto))},

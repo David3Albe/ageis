@@ -11,6 +11,7 @@ sealed class InsumoTesteFilter with _$InsumoTesteFilter {
     int? cod,
     int? codInsumo,
     int? codMovimentoInsumo,
+    bool? carregarMovimentacao,
   }) = _InsumoTesteFilter;
 
   factory InsumoTesteFilter.fromJson(Map<String, Object?> json) =>

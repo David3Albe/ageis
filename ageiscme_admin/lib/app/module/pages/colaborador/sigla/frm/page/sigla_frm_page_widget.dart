@@ -76,7 +76,7 @@ class SiglaFrmPageWidget extends StatelessWidget {
                     padding: EdgeInsets.only(top: 24.0 * scalePadding),
                     child: ReactiveStringFormWidget(
                       controlName: 'sigla',
-                      placeholder: 'Sigla',
+                      placeholder: 'Sigla *',
                       validationMessages: {
                         ValidationMessage.required: (_) => 'Obrigatório',
                         ValidationMessage.maxLength: (_) =>
@@ -88,7 +88,7 @@ class SiglaFrmPageWidget extends StatelessWidget {
                     padding: EdgeInsets.only(top: 24.0 * scalePadding),
                     child: ReactiveStringFormWidget(
                       controlName: 'descricao',
-                      placeholder: 'Descrição',
+                      placeholder: 'Descrição *',
                       validationMessages: {
                         ValidationMessage.required: (_) => 'Obrigatório',
                         ValidationMessage.maxLength: (_) =>

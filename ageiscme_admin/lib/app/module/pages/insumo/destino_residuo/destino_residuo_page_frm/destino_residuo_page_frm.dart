@@ -36,7 +36,7 @@ class _DestinoResiduoPageFrmState extends State<DestinoResiduoPageFrm> {
     service: DestinoResiduoService(),
   );
   late final TextFieldStringWidget txtNome = TextFieldStringWidget(
-    placeholder: 'Nome',
+    placeholder: 'Nome *',
     onChanged: (String? str) {
       destinoResiduo.nome = txtNome.text;
     },

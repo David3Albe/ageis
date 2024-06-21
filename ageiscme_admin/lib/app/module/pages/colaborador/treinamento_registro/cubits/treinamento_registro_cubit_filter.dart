@@ -7,6 +7,7 @@ class TreinamentoRegistroCubitFilter extends Cubit<TreinamentoRegistroFilter> {
           TreinamentoRegistroFilter(
             numeroRegistros: 500,
             carregarUsuario: true,
+            ordenarPorDataDecrescente: true,
           ),
         );
 }

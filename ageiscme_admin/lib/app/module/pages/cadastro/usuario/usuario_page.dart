@@ -68,6 +68,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
         carregarFoto: false,
         numeroRegistros: 500,
         ordenarPorAtivosPrimeiro: true,
+        ordenarPorCodDecrescente: true,
       ),
     );
   }
@@ -131,6 +132,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
                       padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                       child: PlutoGridWidget(
                         filterOnlyActives: true,
+                        orderDescendingFieldColumn: 'cod',
                         onEdit: (UsuarioModel objeto) =>
                             {openModal(context, UsuarioModel.copy(objeto))},
                         onDelete: (UsuarioModel objeto) =>

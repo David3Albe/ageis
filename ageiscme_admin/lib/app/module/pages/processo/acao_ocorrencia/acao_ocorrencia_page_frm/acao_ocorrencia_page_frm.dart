@@ -36,7 +36,7 @@ class _AcaoOcorrenciaPageFrmState extends State<AcaoOcorrenciaPageFrm> {
     service: AcaoOcorrenciaService(),
   );
   late final TextFieldStringWidget txtDescricao = TextFieldStringWidget(
-    placeholder: 'Descrição',
+    placeholder: 'Descrição *',
     onChanged: (String? str) {
       acaoOcorrencia.descricao = txtDescricao.text;
     },

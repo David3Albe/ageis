@@ -59,7 +59,7 @@ sealed class InsumoMovimentoModel with _$InsumoMovimentoModel {
         dataValidade: null,
         destinoResiduo: null,
         equipamento: null,
-        flagEntradaSaida: null,
+        flagEntradaSaida: '1',
         insumo: null,
         lote: null,
         nroTotalFiscal: null,
