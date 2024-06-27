@@ -4,7 +4,6 @@ import 'package:ageiscme_data/services/motivo_remover_repor_item/motivo_remover_
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
@@ -18,9 +17,13 @@ class MotivoRemoverReporItemPageFrm extends StatefulWidget {
   const MotivoRemoverReporItemPageFrm({
     Key? key,
     required this.motivoRemoverReporItem,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final MotivoRemoverReporItemModel motivoRemoverReporItem;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<MotivoRemoverReporItemPageFrm> createState() =>
@@ -72,140 +75,125 @@ class _MotivoRemoverReporItemPageFrmState
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<MotivoRemoverReporItemPageFrmCubit,
+    return BlocBuilder<MotivoRemoverReporItemPageFrmCubit,
         MotivoRemoverReporItemPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
-      child: BlocBuilder<MotivoRemoverReporItemPageFrmCubit,
-          MotivoRemoverReporItemPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return Container(
-            constraints: BoxConstraints(
-              minWidth: size.width * .5,
-              minHeight: size.height * .5,
-              maxHeight: size.height * .8,
-            ),
-            child: Stack(
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TitleWidget(
-                            text: titulo,
-                          ),
+      builder: (context, state) {
+        return Container(
+          constraints: BoxConstraints(
+            minWidth: size.width * .5,
+            minHeight: size.height * .5,
+            maxHeight: size.height * .8,
+          ),
+          child: Stack(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TitleWidget(
+                          text: titulo,
                         ),
-                        const Spacer(),
-                        CloseButtonWidget(
-                          onPressed: () =>
-                              Navigator.of(context).pop((false, '')),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: txtDescricao,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: Row(
+                      children: [
+                        CustomCheckboxWidget(
+                          checked: motivoRemoverReporItem.ativo,
+                          onClick: (value) =>
+                              motivoRemoverReporItem.ativo = value,
+                          text: 'Ativo',
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtDescricao,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: Row(
-                        children: [
-                          CustomCheckboxWidget(
-                            checked: motivoRemoverReporItem.ativo,
-                            onClick: (value) =>
-                                motivoRemoverReporItem.ativo = value,
-                            text: 'Ativo',
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: Row(
-                        children: [
-                          CustomCheckboxWidget(
-                            checked: motivoRemoverReporItem.remover,
-                            onClick: (value) =>
-                                motivoRemoverReporItem.remover = value,
-                            text: 'Remover Item',
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: Row(
-                        children: [
-                          CustomCheckboxWidget(
-                            checked: motivoRemoverReporItem.repor,
-                            onClick: (value) =>
-                                motivoRemoverReporItem.repor = value,
-                            text: 'Repor Item',
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Spacer(),
-                    Row(
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: Row(
                       children: [
-                        if (motivoRemoverReporItem.cod != null &&
-                            motivoRemoverReporItem.cod != 0)
-                          CustomPopupMenuWidget(
-                            items: [
-                              CustomPopupItemHistoryModel.getHistoryItem(
-                                child: HistoricoPage(
-                                  pk: motivoRemoverReporItem.cod!,
-                                  termo: 'MOTIVO_REMOVER_REPOR_ITEM',
-                                ),
-                                context: context,
+                        CustomCheckboxWidget(
+                          checked: motivoRemoverReporItem.remover,
+                          onClick: (value) =>
+                              motivoRemoverReporItem.remover = value,
+                          text: 'Remover Item',
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: Row(
+                      children: [
+                        CustomCheckboxWidget(
+                          checked: motivoRemoverReporItem.repor,
+                          onClick: (value) =>
+                              motivoRemoverReporItem.repor = value,
+                          text: 'Repor Item',
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Spacer(),
+                  Row(
+                    children: [
+                      if (motivoRemoverReporItem.cod != null &&
+                          motivoRemoverReporItem.cod != 0)
+                        CustomPopupMenuWidget(
+                          items: [
+                            CustomPopupItemHistoryModel.getHistoryItem(
+                              child: HistoricoPage(
+                                pk: motivoRemoverReporItem.cod!,
+                                termo: 'MOTIVO_REMOVER_REPOR_ITEM',
                               ),
-                            ],
-                          ),
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: SaveButtonWidget(
-                            onPressed: () => {salvar()},
-                          ),
+                              context: context,
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: CleanButtonWidget(
-                            onPressed: () => {
-                              setState(() {
-                                motivoRemoverReporItem =
-                                    MotivoRemoverReporItemModel.empty();
-                              }),
-                            },
-                          ),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: SaveButtonWidget(
+                          onPressed: () => {salvar()},
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: CancelButtonUnfilledWidget(
-                            onPressed: () =>
-                                {Navigator.of(context).pop((false, ''))},
-                          ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: CleanButtonWidget(
+                          onPressed: () => {
+                            setState(() {
+                              motivoRemoverReporItem =
+                                  MotivoRemoverReporItemModel.empty();
+                            }),
+                          },
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: CancelButtonUnfilledWidget(
+                          onPressed: widget.onCancel,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
   void salvar() {
     if (!txtDescricao.valid) return;
-    cubit.save(motivoRemoverReporItem);
+    cubit.save(motivoRemoverReporItem, widget.onSaved);
   }
 }

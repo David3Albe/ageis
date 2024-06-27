@@ -699,7 +699,7 @@ class _ProcessoPageState extends State<ProcessoPage> {
     if (processoLeitura.leituraAtual.decisao ==
             DecisaoEnum.RetentativaDefinirValorCalculadora &&
         aviso != null) {
-      await WarningUtils.showWarningDialog(
+      WarningUtils.showWarningDialog(
         context,
         aviso,
       );
@@ -777,7 +777,7 @@ class _ProcessoPageState extends State<ProcessoPage> {
             .print();
 
     if (sucess == false) {
-      await ErrorUtils.showErrorDialog(context, [
+      ErrorUtils.showErrorDialog(context, [
         'Houve um erro ao realizar a impressão de preparo, entre em contato com o T.I.',
       ]);
     }
@@ -823,8 +823,11 @@ class _ProcessoPageState extends State<ProcessoPage> {
             .firstOrNull
             ?.prioridade;
       }
-      if(prioridade==null) {
-        WarningUtils.showWarningDialog(context, 'Não foi possível definir a prioridade do kit ${kitDescritor.descricao} Entre em contato com o suporte!');
+      if (prioridade == null) {
+        WarningUtils.showWarningDialog(
+          context,
+          'Não foi possível definir a prioridade do kit ${kitDescritor.descricao} Entre em contato com o suporte!',
+        );
         continue;
       }
       ProcessoTipoModel processoTipo = getTipoProcessoPrioridade(
@@ -889,7 +892,7 @@ class _ProcessoPageState extends State<ProcessoPage> {
             .print();
 
     if (sucess == false) {
-      await ErrorUtils.showErrorDialog(context, [
+      ErrorUtils.showErrorDialog(context, [
         'Houve um erro ao realizar a impressão de etiqueta de lote, entre em contato com o T.I.',
       ]);
     }
@@ -906,7 +909,7 @@ class _ProcessoPageState extends State<ProcessoPage> {
     for (int i = 0; i < processoLeitura.leituraAtual.itens.length; i++) {
       impressoes++;
     }
-    impressoes = impressoes+2;
+    impressoes = impressoes + 2;
 
     return EtiquetaLotePrintDTO(
       codRegistroProcesso: processoLeitura.leituraAtual.processoRegistro!.cod!,
@@ -914,6 +917,7 @@ class _ProcessoPageState extends State<ProcessoPage> {
       nomeEquipamento: processoLeitura.leituraAtual.equipamento!.nome!,
       nomeUsuario: processoLeitura.leituraAtual.usuario!.nome!,
       impressoes: impressoes,
+      codLote: processoLeitura.leituraAtual.loteEquipamento.codLote,
     );
   }
 
@@ -929,7 +933,7 @@ class _ProcessoPageState extends State<ProcessoPage> {
       context: context,
     ).print();
     if (sucess == false) {
-      await ErrorUtils.showErrorDialog(context, [
+      ErrorUtils.showErrorDialog(context, [
         'Houve um erro ao realizar a impressão de relatório de retirada, entre em contato com o T.I.',
       ]);
     }

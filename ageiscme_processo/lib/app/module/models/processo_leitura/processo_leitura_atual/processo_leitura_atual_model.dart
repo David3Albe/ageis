@@ -15,6 +15,7 @@ import 'package:ageiscme_processo/app/module/models/item_consignado_base/item_co
 import 'package:ageiscme_processo/app/module/models/item_processo/item_processo_model.dart';
 import 'package:ageiscme_processo/app/module/models/kit_processo/kit_processo_model.dart';
 import 'package:ageiscme_processo/app/module/models/libera_kit_incompleto_processo/libera_kit_incompleto_processo_model.dart';
+import 'package:ageiscme_processo/app/module/models/local_nao_compativel/local_nao_compativel_model.dart';
 import 'package:ageiscme_processo/app/module/models/lote_equipamento/lote_equipamento_model.dart';
 import 'package:ageiscme_processo/app/module/models/selecao_kit_item/selecao_kit_item_model.dart';
 import 'package:ageiscme_processo/app/module/models/usuario_processo/usuario_processo_model.dart';
@@ -89,6 +90,7 @@ sealed class ProcessoLeituraAtualModel with _$ProcessoLeituraAtualModel {
     required bool? solicitaItemKitNaoConforme,
     required DefineAcaoOcorrenciaModel? defineAcaoOcorrencia,
     required List<AcaoOcorrenciaModel> acoesOcorrencia,
+    required LocalNaoCompativelModel localNaoCompativel,
   }) = _ProcessoLeituraAtualModel;
 
   factory ProcessoLeituraAtualModel.fromJson(Map<String, Object?> json) =>
@@ -160,6 +162,7 @@ sealed class ProcessoLeituraAtualModel with _$ProcessoLeituraAtualModel {
         processoMotivosQuebraFluxo: [],
         defineAcaoOcorrencia: null,
         acoesOcorrencia: [],
+        localNaoCompativel: LocalNaoCompativelModel(confirmou: false),
       );
 
   void adicionarMotivo(ProcessoMotivoModel? motivo) {

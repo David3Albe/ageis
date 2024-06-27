@@ -24,7 +24,10 @@ class GerarLicencaCubit extends Cubit<GerarLicencaState> {
           ),
         );
 
-  Future gerar({required BuildContext context}) async {
+  Future gerar({
+    required BuildContext context,
+    required final void Function(String) onSaved,
+  }) async {
     if (state.dto.emailCliente == null) {
       ToastUtils.showCustomToastWarning(context, 'Informe o email do cliente');
       return;
@@ -40,12 +43,17 @@ class GerarLicencaCubit extends Cubit<GerarLicencaState> {
       );
       return;
     }
-    bool confirmaGeracao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a geração da nova licença?',
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message: 'Confirma a geração da nova licença?',
+      onConfirm: () => onConfirmGeracao(context, onSaved),
     );
-    if (!confirmaGeracao) return;
+  }
 
+  Future onConfirmGeracao(
+    BuildContext context,
+    final void Function(String) onSaved,
+  ) async {
     BlocProvider.of<LicencaGeradaCubit>(context).change(licencaGerada: null);
     GerarLicencaDTO dto = BlocProvider.of<GerarLicencaCubit>(context).state.dto;
     GerarLicencaService service = Modular.get<GerarLicencaService>();
@@ -58,6 +66,6 @@ class GerarLicencaCubit extends Cubit<GerarLicencaState> {
 
     BlocProvider.of<LicencaGeradaCubit>(context)
         .change(licencaGerada: result.$2);
-    Navigator.of(context).pop((true, result.$1));
+    onSaved(result.$1);
   }
 }

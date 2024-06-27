@@ -12,11 +12,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ProprietarioPage extends StatefulWidget {
-  ProprietarioPage({super.key});
+  const ProprietarioPage({super.key});
 
   @override
   State<ProprietarioPage> createState() => _ProprietarioPageState();
@@ -132,35 +133,44 @@ class _ProprietarioPageState extends State<ProprietarioPage> {
     }
   }
 
-  Future<void> openModal(
-    BuildContext context,
-    ProprietarioModel proprietario,
-  ) async {
+  Future openModal(BuildContext context, ProprietarioModel proprietario) async {
     loadLocaisInstituicoesCubit();
     loadArsenalEstoqueCubit();
-
-    (bool, String)? result = await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return ProprietarioPageFrm(
-          localInstituicaoCubit: localInstituicaoCubit,
-          arsenalEstoqueCubit: arsenalEstoqueCubit,
-          proprietario: proprietario,
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      theme: Theme.of(context),
+      title: 'Cadastro/Edição Proprietário',
+      widget: ProprietarioPageFrm(
+        localInstituicaoCubit: localInstituicaoCubit,
+        arsenalEstoqueCubit: arsenalEstoqueCubit,
+        proprietario: proprietario,
+        onSaved: (str) => onSaved(str, chave),
+        onCancel: () => onCancel(chave),
+      ),
     );
-    if (result == null || !result.$1) return;
-    ToastUtils.showCustomToastSucess(context, result.$2);
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
     bloc.loadProprietario();
   }
 
-  void delete(BuildContext context, ProprietarioModel proprietario) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do  Proprietário\n${proprietario.cod} - ${proprietario.nome}',
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
+  }
+
+  void delete(BuildContext context, ProprietarioModel proprietario) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do  Proprietário\n${proprietario.cod} - ${proprietario.nome}',
+      onConfirm: () => onConfirmDelete(proprietario),
     );
-    if (confirmacao) bloc.delete(proprietario);
+  }
+
+  void onConfirmDelete(ProprietarioModel proprietario) {
+    bloc.delete(proprietario);
   }
 
   void deleted(ProprietarioPageState state) {

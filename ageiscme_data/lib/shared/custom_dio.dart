@@ -323,12 +323,11 @@ class CustomDio {
     (bool, String) exceptionMessage = ExceptionHelper().getExceptionMessage(ex);
     if (retrys > 0 && exceptionMessage.$1 == true) return (retrys, true);
     try {
-      await ErrorUtils.showErrorDialog(
+      ErrorUtils.showErrorDialog(
         ToastUtils.routerOutletContext!,
         [exceptionMessage.$2],
-      ).then((value) {
-        loading?.closeDefault();
-      });
+      );
+      loading?.closeDefault();
       return (0, true);
     } on Exception catch (_) {
       return (0, false);
@@ -364,12 +363,11 @@ class CustomDio {
     }
 
     try {
-      await ErrorUtils.showErrorDialog(
+      ErrorUtils.showErrorDialog(
         ToastUtils.routerOutletContext!,
         erros,
-      ).then((value) {
-        loading?.closeDefault();
-      });
+      );
+      loading?.closeDefault();
       return true;
     } on Exception catch (_) {
       return false;
@@ -395,12 +393,11 @@ class CustomDio {
       } else if (erroPadrao.message is String) {
         erros.add(erroPadrao.message ?? '');
       }
-      await ErrorUtils.showErrorDialog(
+      ErrorUtils.showErrorDialog(
         ToastUtils.routerOutletContext!,
         erros,
-      ).then((value) {
-        loading?.closeDefault();
-      });
+      );
+      loading?.closeDefault();
       return true;
     } on Exception catch (_) {
       return false;

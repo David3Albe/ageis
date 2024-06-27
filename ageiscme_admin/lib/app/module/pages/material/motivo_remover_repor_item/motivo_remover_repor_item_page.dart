@@ -10,11 +10,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class MotivoRemoverReporItemPage extends StatefulWidget {
-  MotivoRemoverReporItemPage({super.key});
+  const MotivoRemoverReporItemPage({super.key});
 
   @override
   State<MotivoRemoverReporItemPage> createState() =>
@@ -113,36 +114,47 @@ class _MotivoRemoverReporItemPageState
     );
   }
 
-  void openModal(
+  Future openModal(
     BuildContext context,
     MotivoRemoverReporItemModel motivoRemoverReporItem,
-  ) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: MotivoRemoverReporItemPageFrm(
-            motivoRemoverReporItem: motivoRemoverReporItem,
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadMotivoRemoverReporItem();
-    });
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Motivo Remover/Repor Item',
+      widget: MotivoRemoverReporItemPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        motivoRemoverReporItem: motivoRemoverReporItem,
+      ),
+    );
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadMotivoRemoverReporItem();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void delete(
     BuildContext context,
     MotivoRemoverReporItemModel motivoRemoverReporItem,
-  ) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Motivo Remover / Repor Item\n${motivoRemoverReporItem.cod} - ${motivoRemoverReporItem.descricao}',
+  ) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Motivo Remover / Repor Item\n${motivoRemoverReporItem.cod} - ${motivoRemoverReporItem.descricao}',
+      onConfirm: () => confirmDelete(motivoRemoverReporItem),
     );
-    if (confirmacao) bloc.delete(motivoRemoverReporItem);
+  }
+
+  void confirmDelete(
+    MotivoRemoverReporItemModel motivoRemoverReporItem,
+  ) async {
+    bloc.delete(motivoRemoverReporItem);
   }
 
   void deleted(MotivoRemoverReporItemPageState state) {

@@ -4,13 +4,11 @@ import 'package:ageiscme_data/services/centro_custo/centro_custo_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
-import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -18,9 +16,13 @@ class CentroCustoPageFrm extends StatefulWidget {
   const CentroCustoPageFrm({
     Key? key,
     required this.centroCusto,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final CentroCustoModel centroCusto;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<CentroCustoPageFrm> createState() =>
@@ -85,111 +87,88 @@ class _CentroCustoPageFrmState extends State<CentroCustoPageFrm> {
     setFields();
     Size size = MediaQuery.of(context).size;
     double scalePadding = size.width / 1920;
-    return BlocListener<CentroCustoPageFrmCubit, CentroCustoPageFrmState>(
+    return BlocBuilder<CentroCustoPageFrmCubit, CentroCustoPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
-      child: BlocBuilder<CentroCustoPageFrmCubit, CentroCustoPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return Container(
-            constraints: BoxConstraints(
-              minWidth: size.width * .5,
-              minHeight: size.height * .5,
-              maxHeight: size.height * .8,
-            ),
-            child: Stack(
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Row(
+      builder: (context, state) {
+        return Container(
+          constraints: BoxConstraints(
+            minWidth: size.width * .5,
+            minHeight: size.height * .5,
+            maxHeight: size.height * .8,
+          ),
+          child: Stack(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Padding(
+                    padding: EdgeInsets.only(top: 24.0 * scalePadding),
+                    child: txtCentroCusto,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 24.0 * scalePadding),
+                    child: txtDescricao,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 24.0 * scalePadding),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Expanded(
-                          child: TitleWidget(
-                            text: titulo,
+                          child: CustomCheckboxWidget(
+                            align: MainAxisAlignment.start,
+                            checked: centroCusto.ativo,
+                            onClick: (value) => centroCusto.ativo = value,
+                            text: 'Ativo',
                           ),
-                        ),
-                        const Spacer(),
-                        CloseButtonWidget(
-                          onPressed: () =>
-                              Navigator.of(context).pop((false, '')),
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 24.0 * scalePadding),
-                      child: txtCentroCusto,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 24.0 * scalePadding),
-                      child: txtDescricao,
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 24.0 * scalePadding),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: CustomCheckboxWidget(
-                              align: MainAxisAlignment.start,
-                              checked: centroCusto.ativo,
-                              onClick: (value) => centroCusto.ativo = value,
-                              text: 'Ativo',
+                  ),
+                  const Spacer(),
+                  Row(
+                    children: [
+                      CustomPopupMenuWidget(
+                        items: [
+                          if (centroCusto.cod != null && centroCusto.cod != 0)
+                            CustomPopupItemHistoryModel.getHistoryItem(
+                              child: HistoricoPage(
+                                pk: centroCusto.cod!,
+                                termo: 'CENTRO_CUSTO',
+                              ),
+                              context: context,
                             ),
-                          ),
                         ],
                       ),
-                    ),
-                    const Spacer(),
-                    Row(
-                      children: [
-                        CustomPopupMenuWidget(
-                          items: [
-                            if (centroCusto.cod != null && centroCusto.cod != 0)
-                              CustomPopupItemHistoryModel.getHistoryItem(
-                                child: HistoricoPage(
-                                  pk: centroCusto.cod!,
-                                  termo: 'CENTRO_CUSTO',
-                                ),
-                                context: context,
-                              ),
+                      Expanded(
+                        child: Wrap(
+                          runSpacing: 16 * scalePadding,
+                          spacing: 16 * scalePadding,
+                          alignment: WrapAlignment.end,
+                          children: [
+                            SaveButtonWidget(
+                              onPressed: () => {salvar()},
+                            ),
+                            CleanButtonWidget(
+                              onPressed: () => {
+                                setState(() {
+                                  centroCusto = CentroCustoModel.empty();
+                                }),
+                              },
+                            ),
+                            CancelButtonUnfilledWidget(
+                              onPressed: widget.onCancel,
+                            ),
                           ],
                         ),
-                        Expanded(
-                          child: Wrap(
-                            runSpacing: 16 * scalePadding,
-                            spacing: 16 * scalePadding,
-                            alignment: WrapAlignment.end,
-                            children: [
-                              SaveButtonWidget(
-                                onPressed: () => {salvar()},
-                              ),
-                              CleanButtonWidget(
-                                onPressed: () => {
-                                  setState(() {
-                                    centroCusto = CentroCustoModel.empty();
-                                  }),
-                                },
-                              ),
-                              CancelButtonUnfilledWidget(
-                                onPressed: () =>
-                                    {Navigator.of(context).pop((false, ''))},
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -198,6 +177,6 @@ class _CentroCustoPageFrmState extends State<CentroCustoPageFrm> {
     bool descricaoValid = txtDescricao.valid;
     if (!centroCustoValid || !descricaoValid) return;
 
-    cubit.save(centroCusto);
+    cubit.save(centroCusto, widget.onSaved);
   }
 }

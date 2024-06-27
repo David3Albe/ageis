@@ -1,3 +1,4 @@
+import 'package:ageiscme_admin/app/module/pages/colaborador/escala/cubits/escala_page_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/escala/cubits/escala_page_grid_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/escala/states/escala_page_grid_state.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/escala/widget/grid/escala_grid_page_header_widget.dart';
@@ -143,7 +144,19 @@ class _EscalaPageGridWidgetState extends State<EscalaPageGridWidget> {
     PlutoGridStateManager? stateManager =
         BlocProvider.of<EscalaPageGridCubit>(context).state.stateManager;
     if (stateManager == null) return;
+    DateTime? data =
+        BlocProvider.of<EscalaPageCubit>(context).state.escala?.anoMes;
+    if (data == null) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'A escala não está carregada, consulte e tente novamente',
+      );
+      return;
+    }
+    DateFormat format = DateFormat('MM/yyyy');
+    String anoMes = format.format(data);
     PlutoGridPdfExport pdfExport = PlutoGridPdfExport(
+      title: 'Escala $anoMes',
       colorByData: (data) => BlocProvider.of<EscalaPageGridCubit>(context)
           .getPdfColorFromData(data: data, context: context),
       context: context,

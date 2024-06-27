@@ -3,7 +3,6 @@ import 'package:ageiscme_admin/app/module/pages/cadastro/parametro_sistema/param
 import 'package:ageiscme_data/services/parametro_sistema/parametro_sistema_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
@@ -13,6 +12,7 @@ import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart'
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -20,9 +20,13 @@ class ParametroSistemaPageFrm extends StatefulWidget {
   const ParametroSistemaPageFrm({
     Key? key,
     required this.parametroSistema,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final ParametroSistemaModel parametroSistema;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<ParametroSistemaPageFrm> createState() =>
@@ -157,93 +161,90 @@ class _ParametroSistemaPageFrmState extends State<ParametroSistemaPageFrm> {
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocConsumer<ParametroSistemaPageFrmCubit,
+    return BlocBuilder<ParametroSistemaPageFrmCubit,
         ParametroSistemaPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
       builder: (context, state) {
-        return AlertDialog(
-          contentPadding: const EdgeInsets.all(8.0),
-          titlePadding: const EdgeInsets.all(8.0),
-          actionsPadding: const EdgeInsets.all(8.0),
-          title: Row(
-            children: [
-              Expanded(
-                child: TitleWidget(
-                  text: titulo,
+        return Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: TitleWidget(
+                    text: titulo,
+                  ),
                 ),
-              ),
-              const Spacer(),
-              CloseButtonWidget(
-                onPressed: () => Navigator.of(context).pop((false, '')),
-              ),
-            ],
-          ),
-          content: Container(
-            constraints: BoxConstraints(
-              minWidth: size.width * .5,
-              minHeight: size.height * .5,
-              maxHeight: size.height * .8,
+              ],
             ),
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.only(right: 14),
-              child: Column(
+            Expanded(
+              child: Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 24.0),
-                    child: txtVersaoAtual,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 24.0),
-                    child: txtDataVersaoAtual,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 24.0),
-                    child: txtVersaoV2,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 24.0),
-                    child: txtDataVersaoV2,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 24.0),
-                    child: txtQtdeMaxProcessosEtiqueta,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 24.0),
-                    child: txtControleImpressaoIndicador,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 24.0),
-                    child: txtLetraConsignado,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 24.0),
-                    child: Row(
-                      children: [
-                        CustomCheckboxWidget(
-                          checked: parametroSistema.zeraEtiquetaRotulado,
-                          onClick: (value) =>
-                              parametroSistema.zeraEtiquetaRotulado = value,
-                          text: 'Zera Etiqueta Rotulado',
+                  Expanded(
+                    child: Container(
+                      constraints: BoxConstraints(
+                        minWidth: size.width * .5,
+                        minHeight: size.height * .5,
+                        maxHeight: size.height * .8,
+                      ),
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.only(right: 14),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 24.0),
+                              child: txtVersaoAtual,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 24.0),
+                              child: txtDataVersaoAtual,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 24.0),
+                              child: txtVersaoV2,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 24.0),
+                              child: txtDataVersaoV2,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 24.0),
+                              child: txtQtdeMaxProcessosEtiqueta,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 24.0),
+                              child: txtControleImpressaoIndicador,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 24.0),
+                              child: txtLetraConsignado,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 24.0),
+                              child: Row(
+                                children: [
+                                  CustomCheckboxWidget(
+                                    checked:
+                                        parametroSistema.zeraEtiquetaRotulado,
+                                    onClick: (value) => parametroSistema
+                                        .zeraEtiquetaRotulado = value,
+                                    text: 'Zera Etiqueta Rotulado',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 24.0),
+                              child: txtLicenca,
+                            ),
+                            const Padding(padding: EdgeInsets.only(top: 24)),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 24.0),
-                    child: txtLicenca,
-                  ),
-                  const Padding(padding: EdgeInsets.only(top: 24)),
                 ],
               ),
             ),
-          ),
-          actions: [
             Row(
               children: [
                 if (parametroSistema.cod != 0 && parametroSistema.cod != null)
@@ -265,7 +266,7 @@ class _ParametroSistemaPageFrmState extends State<ParametroSistemaPageFrm> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: CancelButtonUnfilledWidget(
-                    onPressed: () => {Navigator.of(context).pop((false, ''))},
+                    onPressed: widget.onCancel,
                   ),
                 ),
               ],
@@ -276,16 +277,19 @@ class _ParametroSistemaPageFrmState extends State<ParametroSistemaPageFrm> {
     );
   }
 
-  Future gerarLicenca() async {
-    (bool, String)? result = await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return const GerarLicencaPage();
-      },
+  void gerarLicenca() {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Geração licença',
+      widget: GerarLicencaPage(
+        onSaved: (str) => onSaved(str, chave),
+      ),
     );
-    if (result == null || result.$1 != true) return;
-    Navigator.of(context).pop(result);
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    widget.onSaved(message);
   }
 
   void salvar() {
@@ -295,6 +299,6 @@ class _ParametroSistemaPageFrmState extends State<ParametroSistemaPageFrm> {
         !txtQtdeMaxProcessosEtiqueta.valid ||
         !txtVersaoAtual.valid) return;
 
-    cubit.save(parametroSistema);
+    cubit.save(parametroSistema, widget.onSaved);
   }
 }

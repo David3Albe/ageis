@@ -15,11 +15,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class TreinamentoRegistroPage extends StatefulWidget {
-  TreinamentoRegistroPage({super.key});
+  const TreinamentoRegistroPage({super.key});
 
   @override
   State<TreinamentoRegistroPage> createState() =>
@@ -155,7 +156,7 @@ class _TreinamentoRegistroPageState extends State<TreinamentoRegistroPage> {
     );
   }
 
-  Future<void> openModal(
+  Future openModal(
     BuildContext context,
     TreinamentoRegistroModel treinamentoRegistro,
   ) async {
@@ -175,18 +176,21 @@ class _TreinamentoRegistroPageState extends State<TreinamentoRegistroPage> {
     }
     loading.close(context, mounted);
 
-    (bool, String)? result = await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return TreinamentoRegistroPageFrm(
-          usuarioCubit: usuarioCubit,
-          treinamentoRegistro: treinamento!,
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Registro de Treinamento',
+      widget: TreinamentoRegistroPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        usuarioCubit: usuarioCubit,
+        treinamentoRegistro: treinamento,
+      ),
     );
-    if (result == null || !result.$1) return;
-    ToastUtils.showCustomToastSucess(context, result.$2);
+  }
+
+  Future onSaved(String message, int chave) async {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
     TreinamentoRegistroCubitFilter filterCubit =
         context.read<TreinamentoRegistroCubitFilter>();
     TreinamentoRegistroPageCubit treinamentoCubit =
@@ -194,6 +198,10 @@ class _TreinamentoRegistroPageState extends State<TreinamentoRegistroPage> {
     filterCubit = context.read<TreinamentoRegistroCubitFilter>();
     TreinamentoRegistroFilter dto = filterCubit.state;
     await treinamentoCubit.filterScreen(dto);
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   Future carregar() async {
@@ -209,14 +217,18 @@ class _TreinamentoRegistroPageState extends State<TreinamentoRegistroPage> {
     BuildContext context,
     TreinamentoRegistroModel treinamentoRegistro,
   ) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Treinamento\n${treinamentoRegistro.cod} - ${treinamentoRegistro.nome}',
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Treinamento\n${treinamentoRegistro.cod} - ${treinamentoRegistro.nome}',
+      onConfirm: () => onConfirmDelete(treinamentoRegistro),
     );
+  }
 
-    if (confirmacao) {
-      bloc.delete(treinamentoRegistro);
-    }
+  void onConfirmDelete(
+    TreinamentoRegistroModel treinamentoRegistro,
+  ) async {
+    bloc.delete(treinamentoRegistro);
   }
 
   Future deleted(TreinamentoRegistroPageState state) async {

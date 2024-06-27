@@ -41,7 +41,7 @@ class DropDownSearchWidget<T> extends StatefulWidget {
     this.validator,
     this.validateBuilder,
     this.cor,
-    this.maxItems = 30,
+    this.maxItems = 1000,
     this.ignoreHeight = false,
     this.useDecoration = true,
   });
@@ -241,7 +241,7 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
                 children: [
                   Text(
                     widget.placeholder ?? '',
-                    style: Fontes.getRoboto(fontSize: 16),
+                    style: Fontes.getRoboto(fontSize: 14),
                   ),
                 ],
               ),
@@ -329,7 +329,10 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
     );
   }
 
-  void _setShowDialogItem(T item, BuildContext context) async {
+  void _setShowDialogItem(
+    T item,
+    BuildContext context,
+  ) async {
     bool valid = true;
     if (widget.validateChange != null) {
       valid = await widget.validateChange!(item);

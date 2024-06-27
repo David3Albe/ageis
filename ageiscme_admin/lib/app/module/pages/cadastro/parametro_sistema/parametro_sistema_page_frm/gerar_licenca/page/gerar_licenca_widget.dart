@@ -9,7 +9,11 @@ import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
 class GerarLicencaWidget extends StatelessWidget {
-  const GerarLicencaWidget({super.key});
+  const GerarLicencaWidget({
+    required this.onSaved,
+    super.key,
+  });
+  final void Function(String) onSaved;
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +27,9 @@ class GerarLicencaWidget extends StatelessWidget {
           children: [
             DefaultButtonWidget(
               text: 'Gerar',
-              onPressed: () =>
-                  context.read<GerarLicencaCubit>().gerar(context: context),
+              onPressed: () => context
+                  .read<GerarLicencaCubit>()
+                  .gerar(context: context, onSaved: onSaved),
               cor: Colors.lightGreen.shade400,
               corHovered: Colors.lightGreen.shade600,
               icon: Symbols.create,

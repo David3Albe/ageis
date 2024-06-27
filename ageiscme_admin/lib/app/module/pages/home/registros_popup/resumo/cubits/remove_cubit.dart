@@ -19,25 +19,10 @@ import 'package:flutter/material.dart';
 class RemoveCubit extends Cubit<RemoveState> {
   RemoveCubit() : super(RemoveState());
 
-  Future remove(BuildContext context) async {
-    List<RegistrosExpirarSearchResponseDTO>? registrosExpirarRemover =
-        BlocProvider.of<SearchCubit>(context)
-            .state
-            .registros
-            ?.where((element) => element.selecionado == true)
-            .toList();
-    if (registrosExpirarRemover == null || registrosExpirarRemover.isEmpty) {
-      ToastUtils.showCustomToastWarning(
-        context,
-        'Nenhum registro selecionado para remover',
-      );
-      return;
-    }
-    bool confirmarRemocao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção dos registros selecionados?',
-    );
-    if (!confirmarRemocao) return;
+  Future onConfirmRemove(
+    BuildContext context,
+    List<RegistrosExpirarSearchResponseDTO> registrosExpirarRemover,
+  ) async {
     bool hasRight = await AccessUserService.validateUserHasRight(
       DireitoEnum.PermissaoManutencaoPopup,
     );
@@ -78,6 +63,27 @@ class RemoveCubit extends Cubit<RemoveState> {
     ToastUtils.showCustomToastSucess(context, result.$1);
     await BlocProvider.of<SearchCubit>(context).search(
       RegistrosExpirarSearchDTO(),
+    );
+  }
+
+  Future remove(BuildContext context) async {
+    List<RegistrosExpirarSearchResponseDTO>? registrosExpirarRemover =
+        BlocProvider.of<SearchCubit>(context)
+            .state
+            .registros
+            ?.where((element) => element.selecionado == true)
+            .toList();
+    if (registrosExpirarRemover == null || registrosExpirarRemover.isEmpty) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'Nenhum registro selecionado para remover',
+      );
+      return;
+    }
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message: 'Confirma a remoção dos registros selecionados?',
+      onConfirm: () => onConfirmRemove(context, registrosExpirarRemover),
     );
   }
 }

@@ -27,6 +27,16 @@ class ToastUtils {
         ),
       );
 
+  static void showCustomToastSucessBig(BuildContext? context, String message) =>
+      insertToast(
+        context: routerOutletContext == null ? context! : routerOutletContext!,
+        overlay: _createOverlayEntry(
+          message: message,
+          type: ToastType.success,
+          big: true
+        ),
+      );
+
   static void showCustomToastError(BuildContext? context, String message) =>
       insertToast(
         context: routerOutletContext == null ? context! : routerOutletContext!,
@@ -70,11 +80,11 @@ class ToastUtils {
     required OverlayEntry? overlay,
     bool big = false,
   }) {
-    OverlayState? state = Overlay.maybeOf(context);
+    OverlayState? state = Overlay.maybeOf(context, rootOverlay: true);
     if (state != null) {
       if (overlay != null) state.insert(overlay);
       Timer(
-         Duration(seconds: big ? SECONDS_DURATION_BIG : SECONDS_DURATION),
+        Duration(seconds: big ? SECONDS_DURATION_BIG : SECONDS_DURATION),
         () {
           if (overlay != null) overlay.remove();
         },

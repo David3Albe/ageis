@@ -12,12 +12,15 @@ class PerfilAcessoPageFrmCubit extends Cubit<PerfilAcessoPageFrmState> {
           PerfilAcessoPageFrmState(perfilAcesso: perfilAcessoModel),
         );
 
-  void save(PerfilAcessoModel perfilAcesso) async {
+  void save(
+    PerfilAcessoModel perfilAcesso,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, PerfilAcessoModel perfilAcesso)? result =
           await service.save(perfilAcesso);
       if (result == null) return;
-
+      onSaved(result.$1);
       emit(
         PerfilAcessoPageFrmState(
           message: result.$1,

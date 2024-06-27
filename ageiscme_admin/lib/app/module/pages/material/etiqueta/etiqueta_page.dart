@@ -10,11 +10,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class EtiquetaPage extends StatefulWidget {
-  EtiquetaPage({super.key});
+  const EtiquetaPage({super.key});
 
   @override
   State<EtiquetaPage> createState() => _EtiquetaPageState();
@@ -99,30 +100,42 @@ class _EtiquetaPageState extends State<EtiquetaPage> {
     );
   }
 
-  void openModal(BuildContext context, EtiquetaModel etiqueta) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: EtiquetaPageFrm(
-            etiqueta: etiqueta,
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadEtiqueta();
-    });
+  Future openModal(
+    BuildContext context,
+    EtiquetaModel etiqueta,
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Etiqueta',
+      widget: EtiquetaPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        etiqueta: etiqueta,
+      ),
+    );
   }
 
-  void delete(BuildContext context, EtiquetaModel etiqueta) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção da etiqueta\n${etiqueta.cod} - ${etiqueta.descricao}',
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadEtiqueta();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
+  }
+
+  void delete(BuildContext context, EtiquetaModel etiqueta) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção da etiqueta\n${etiqueta.cod} - ${etiqueta.descricao}',
+      onConfirm: () => confirmDelete(etiqueta),
     );
-    if (confirmacao) bloc.delete(etiqueta);
+  }
+
+  void confirmDelete(EtiquetaModel etiqueta) async {
+    bloc.delete(etiqueta);
   }
 
   void deleted(EtiquetaPageState state) {

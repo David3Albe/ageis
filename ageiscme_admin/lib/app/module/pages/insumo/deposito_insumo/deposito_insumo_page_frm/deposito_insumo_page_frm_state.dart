@@ -12,11 +12,15 @@ class DepositoInsumoPageFrmCubit extends Cubit<DepositoInsumoPageFrmState> {
           DepositoInsumoPageFrmState(depositoInsumo: depositoInsumoModel),
         );
 
-  void save(DepositoInsumoModel depositoInsumo) async {
+  void save(
+    DepositoInsumoModel depositoInsumo,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, DepositoInsumoModel depositoInsumo)? result =
           await service.save(depositoInsumo);
       if (result == null) return;
+      onSaved(result.$1);
       emit(
         DepositoInsumoPageFrmState(
           message: result.$1,

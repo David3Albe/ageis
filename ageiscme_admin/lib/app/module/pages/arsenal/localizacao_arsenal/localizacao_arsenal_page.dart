@@ -10,11 +10,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class LocalizacaoArsenalPage extends StatefulWidget {
-  LocalizacaoArsenalPage({super.key});
+  const LocalizacaoArsenalPage({super.key});
 
   @override
   State<LocalizacaoArsenalPage> createState() => _LocalizacaoArsenalPageState();
@@ -107,36 +108,47 @@ class _LocalizacaoArsenalPageState extends State<LocalizacaoArsenalPage> {
     );
   }
 
-  void openModal(
+  Future openModal(
     BuildContext context,
     LocalizacaoArsenalModel localizacaoArsenal,
-  ) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: LocalizacaoArsenalPageFrm(
-            localizacaoArsenal: localizacaoArsenal,
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadLocalizacaoArsenal();
-    });
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Localização Arsenal',
+      widget: LocalizacaoArsenalPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        localizacaoArsenal: localizacaoArsenal,
+      ),
+    );
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadLocalizacaoArsenal();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void delete(
     BuildContext context,
     LocalizacaoArsenalModel localizacaoArsenal,
-  ) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção da Localização do Arsenal\n${localizacaoArsenal.cod} - ${localizacaoArsenal.local}',
+  ) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção da Localização do Arsenal\n${localizacaoArsenal.cod} - ${localizacaoArsenal.local}',
+      onConfirm: () => onConfirmDelete(localizacaoArsenal),
     );
-    if (confirmacao) bloc.delete(localizacaoArsenal);
+  }
+
+  void onConfirmDelete(
+    LocalizacaoArsenalModel localizacaoArsenal,
+  ) {
+    bloc.delete(localizacaoArsenal);
   }
 
   void deleted(LocalizacaoArsenalPageState state) {

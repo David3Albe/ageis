@@ -14,6 +14,7 @@ import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/modular_export.dart';
 import 'package:flutter/material.dart';
 
@@ -56,9 +57,9 @@ class AnormalidadeTipoPageWidget extends StatelessWidget {
       children: [
         AddButtonWidget(
           onPressed: () => openModal(
-            context: context,
-            resetarGrid: resetarGrid,
-            cod: -1,
+            context,
+            resetarGrid,
+            -1,
           ),
         ),
         Expanded(
@@ -103,17 +104,28 @@ class AnormalidadeTipoPageWidget extends StatelessWidget {
     return result?.$2.plutoData;
   }
 
-  Future remover({
+  void remover({
+    required AnormalidadeTipoQueryItemResponseDTO item,
+    required BuildContext context,
+    required Function() resetarGrid,
+  }) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a exclusão do tipo de anormalidade: \n${item.cod} - ${item.nome}',
+      onConfirm: () => confirmRemover(
+        item: item,
+        context: context,
+        resetarGrid: resetarGrid,
+      ),
+    );
+  }
+
+  Future confirmRemover({
     required AnormalidadeTipoQueryItemResponseDTO item,
     required BuildContext context,
     required Function() resetarGrid,
   }) async {
-    bool confirma = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a exclusão do tipo de anormalidade: \n${item.cod} - ${item.nome}',
-    );
-    if (confirma != true) return;
-
     AnormalidadeTipoRemoveDTO dto =
         AnormalidadeTipoRemoveDTO(cod: item.cod, tstamp: item.tstamp);
 
@@ -132,28 +144,36 @@ class AnormalidadeTipoPageWidget extends StatelessWidget {
     required AnormalidadeTipoQueryItemResponseDTO item,
   }) async =>
       await openModal(
-        context: context,
-        resetarGrid: resetarGrid,
-        cod: item.cod,
+        context,
+        resetarGrid,
+        item.cod,
       );
 
-  Future openModal({
-    required BuildContext context,
-    required Function() resetarGrid,
+  Future openModal(
+    BuildContext context,
+    Function() resetarGrid,
     int? cod,
-  }) async {
-    bool alterou = await showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: AnormalidadeTipoFrmPage(
-            cod: cod,
-          ),
-        );
-      },
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Tipo de Anormalidade',
+      widget: AnormalidadeTipoFrmPage(
+        onCancel: () => onCancel(chave),
+        onSaved: () => onSaved(resetarGrid, chave),
+        cod: cod,
+      ),
     );
-    if (alterou != true) return;
+  }
+
+  void onSaved(
+    Function() resetarGrid,
+    int chave,
+  ) {
+    WindowsHelper.RemoverWidget(chave);
     resetarGrid();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 }

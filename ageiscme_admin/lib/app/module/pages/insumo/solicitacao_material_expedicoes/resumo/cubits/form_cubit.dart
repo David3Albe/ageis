@@ -15,6 +15,7 @@ import 'package:ageiscme_models/response_dto/solicitacao_material/authorize/soli
 import 'package:ageiscme_models/response_dto/solicitacao_material/find_one/solicitacao_material_find_one_response_dto.dart';
 import 'package:ageiscme_models/response_dto/solicitacao_material/receive/solicitacao_material_receive_response_dto.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/modular_export.dart';
 import 'package:flutter/material.dart';
@@ -123,21 +124,27 @@ class FormCubit extends Cubit<form.FormState> {
       codInstituicao: store!.instituicao!.cod,
       codEquipamentoInsumo: item.codEquipamento,
     );
-    (bool, String)? result = await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return InsumoMovimentoPageFrm(
-          insumoMovimento: insumoMovimento,
-          baseSolicitacao: true,
-          numeroSolicitacao: state.response?.solicitacao?.cod ?? 0,
-          numeroSolicitacaoItem: item.cod,
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Movimentação de Insumo',
+      widget: InsumoMovimentoPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (p0) => onSaved(p0, context),
+        insumoMovimento: insumoMovimento,
+        baseSolicitacao: true,
+        numeroSolicitacao: state.response?.solicitacao?.cod ?? 0,
+        numeroSolicitacaoItem: item.cod,
+      ),
     );
-    if (result == null || !result.$1) return;
-    ToastUtils.showCustomToastSucess(context, result.$2);
+  }
+
+  Future onSaved(String str, BuildContext context) async {
+    ToastUtils.showCustomToastSucess(context, str);
     await carregar(state.response!.solicitacao!.cod!);
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   Future receber(BuildContext context) async {

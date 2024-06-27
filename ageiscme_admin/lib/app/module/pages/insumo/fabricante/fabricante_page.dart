@@ -10,11 +10,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class FabricantePage extends StatefulWidget {
-  FabricantePage({super.key});
+  const FabricantePage({super.key});
 
   @override
   State<FabricantePage> createState() => _FabricantePageState();
@@ -89,30 +90,42 @@ class _FabricantePageState extends State<FabricantePage> {
     );
   }
 
-  void openModal(BuildContext context, FabricanteModel fabricante) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: FabricantePageFrm(
-            fabricante: fabricante,
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadFabricante();
-    });
+  Future openModal(
+    BuildContext context,
+    FabricanteModel fabricante,
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Fabricante',
+      widget: FabricantePageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        fabricante: fabricante,
+      ),
+    );
   }
 
-  void delete(BuildContext context, FabricanteModel fabricante) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Fabricante\n${fabricante.cod} - ${fabricante.nome}',
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadFabricante();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
+  }
+
+  void delete(BuildContext context, FabricanteModel fabricante) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Fabricante\n${fabricante.cod} - ${fabricante.nome}',
+      onConfirm: () => confirmDelete(fabricante),
     );
-    if (confirmacao) bloc.delete(fabricante);
+  }
+
+  void confirmDelete(FabricanteModel fabricante) async {
+    bloc.delete(fabricante);
   }
 
   void deleted(FabricantePageState state) {

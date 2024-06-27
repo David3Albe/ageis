@@ -9,7 +9,7 @@ import 'package:compartilhados/enums/custom_data_column_type.dart';
 import 'package:flutter/material.dart';
 
 class LoadConsultaProcessosLeituraDispensadoPage extends StatefulWidget {
-  LoadConsultaProcessosLeituraDispensadoPage({super.key});
+  const LoadConsultaProcessosLeituraDispensadoPage({super.key});
 
   @override
   State<LoadConsultaProcessosLeituraDispensadoPage> createState() =>

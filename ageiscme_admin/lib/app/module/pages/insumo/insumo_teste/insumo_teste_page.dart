@@ -3,6 +3,7 @@ import 'package:ageiscme_models/dto/usuario/usuario_drop_down_search_dto.dart';
 import 'package:ageiscme_models/filters/insumo/insumo_filter.dart';
 import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/deposito_insumo/deposito_insumo_cubit.dart';
@@ -32,7 +33,7 @@ import 'package:compartilhados/enums/custom_data_column_type.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 
 class InsumoTestePage extends StatefulWidget {
-  InsumoTestePage({super.key});
+  const InsumoTestePage({super.key});
 
   @override
   State<InsumoTestePage> createState() => _InsumoTestePageState();
@@ -172,82 +173,80 @@ class _InsumoTestePageState extends State<InsumoTestePage> {
     );
   }
 
-  void openModalFilter(BuildContext context) {
-    showDialog<bool>(
-      barrierDismissible: false,
+  Future openModalFilter(BuildContext context) async {
+    bool confirm = await showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return FilterDialogWidget(
-          child: Column(
-            children: [
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<InsumoCubit, InsumoState>(
-                bloc: insumoBloc,
-                builder: (context, insumoState) {
-                  if (insumoState.loading) {
-                    return const LoadingWidget();
-                  }
-                  List<InsumoModel> insumos = insumoState.objs;
+      builder: (context) => FilterDialogWidget(
+        child: Column(
+          children: [
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            BlocBuilder<InsumoCubit, InsumoState>(
+              bloc: insumoBloc,
+              builder: (context, insumoState) {
+                if (insumoState.loading) {
+                  return const LoadingWidget();
+                }
+                List<InsumoModel> insumos = insumoState.objs;
 
-                  insumos.sort(
-                    (a, b) => a.nome!.compareTo(b.nome!),
-                  );
+                insumos.sort(
+                  (a, b) => a.nome!.compareTo(b.nome!),
+                );
 
-                  InsumoModel? insumo = insumos
-                      .where(
-                        (element) => element.cod == filter.codInsumo,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<InsumoModel>(
-                    textFunction: (insumo) => insumo.GetNomeInsumoText(),
-                    initialValue: insumo,
-                    sourceList: insumos,
-                    onChanged: (value) => filter.codInsumo = value?.cod,
-                    placeholder: 'Insumo',
-                  );
-                },
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              DropDownSearchApiWidget<InsumoMovimentoDropDownSearchResponseDTO>(
-                textFunction: (insumoMovimento) =>
-                    insumoMovimento.InsumoMovimentoText(),
-                initialValue: filter.codMovimentoInsumo == null
-                    ? null
-                    : InsumoMovimentoDropDownSearchResponseDTO(
-                        cod: filter.codMovimentoInsumo!,
-                        data: DateTime.now(),
-                        flagEntradaSaida: '1',
-                        lote: '',
-                        nomeInsumo: '',
-                      ),
-                search: (str) async =>
-                    (await InsumoMovimentoService()
-                            .getDropDownSearchInsumoMovimento(
-                      InsumoMovimentoDropDownSearchDTO(
-                        numeroRegistros: 30,
-                        search: str,
-                      ),
-                    ))
-                        ?.$2 ??
-                    [],
-                onChanged: (value) {
-                  InsumoMovimentoFilterCubit().setInsumoMovimento(value);
-                  filter.codMovimentoInsumo = value!.cod;
-                },
-                placeholder: 'Movimento',
-              ),
-            ],
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == true) {
-        bloc.filter(filter);
-      }
-    });
+                InsumoModel? insumo = insumos
+                    .where(
+                      (element) => element.cod == filter.codInsumo,
+                    )
+                    .firstOrNull;
+                return DropDownSearchWidget<InsumoModel>(
+                  textFunction: (insumo) => insumo.GetNomeInsumoText(),
+                  initialValue: insumo,
+                  sourceList: insumos,
+                  onChanged: (value) => filter.codInsumo = value?.cod,
+                  placeholder: 'Insumo',
+                );
+              },
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            DropDownSearchApiWidget<InsumoMovimentoDropDownSearchResponseDTO>(
+              textFunction: (insumoMovimento) =>
+                  insumoMovimento.InsumoMovimentoText(),
+              initialValue: filter.codMovimentoInsumo == null
+                  ? null
+                  : InsumoMovimentoDropDownSearchResponseDTO(
+                      cod: filter.codMovimentoInsumo!,
+                      data: DateTime.now(),
+                      flagEntradaSaida: '1',
+                      lote: '',
+                      nomeInsumo: '',
+                    ),
+              search: (str) async =>
+                  (await InsumoMovimentoService()
+                          .getDropDownSearchInsumoMovimento(
+                    InsumoMovimentoDropDownSearchDTO(
+                      numeroRegistros: 30,
+                      search: str,
+                    ),
+                  ))
+                      ?.$2 ??
+                  [],
+              onChanged: (value) {
+                InsumoMovimentoFilterCubit().setInsumoMovimento(value);
+                filter.codMovimentoInsumo = value!.cod;
+              },
+              placeholder: 'Movimento',
+            ),
+          ],
+        ),
+      ),
+    );
+    if (confirm != true) return;
+    await bloc.filter(filter);
   }
 
-  Future openModal(BuildContext context, InsumoTesteModel insumoTeste) async {
+  Future openModal(
+    BuildContext context,
+    InsumoTesteModel insumoTeste,
+  ) async {
     InsumoTesteModel? insumoTesteForm = insumoTeste;
     if (insumoTeste.cod != null && insumoTeste.cod! > 0) {
       LoadingController loading = LoadingController(context: context);
@@ -267,32 +266,45 @@ class _InsumoTestePageState extends State<InsumoTestePage> {
       print(insumoTesteForm.insumoMovimento);
       loading.closeDefault();
     }
-    (bool, String)? result = await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return InsumoTestePageFrm(
-          insumoReadOnly: false,
-          depositoInsumoCubit: depositoInsumoBloc,
-          insumoTeste: insumoTesteForm!,
-          usuarioCubit: usuarioCubit,
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Teste de Insumo',
+      widget: InsumoTestePageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        insumoReadOnly: false,
+        depositoInsumoCubit: depositoInsumoBloc,
+        insumoTeste: insumoTesteForm,
+        usuarioCubit: usuarioCubit,
+      ),
     );
-    if (result == null || !result.$1) return;
-    ToastUtils.showCustomToastSucess(context, result.$2);
+  }
+
+  Future onSaved(String message, int chave) async {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
     await bloc.filter(filter);
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void delete(
     BuildContext context,
     InsumoTesteModel insumoTeste,
-  ) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção da teste de insumo\n${insumoTeste.cod}',
+  ) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message: 'Confirma a remoção da teste de insumo\n${insumoTeste.cod}',
+      onConfirm: () => confirmDelete(insumoTeste),
     );
-    if (confirmacao) bloc.delete(insumoTeste);
+  }
+
+  void confirmDelete(
+    InsumoTesteModel insumoTeste,
+  ) {
+    bloc.delete(insumoTeste);
   }
 
   void deleted(InsumoTestePageState state) {

@@ -25,17 +25,14 @@ class FilterWidget extends StatelessWidget {
 
   Future openModalFilter(BuildContext context) async {
     FilterCubit filterCubit = context.read<FilterCubit>();
-    bool? result = await showDialog<bool>(
-      barrierDismissible: false,
+    bool? confirm = await showDialog<bool>(
       context: context,
-      builder: (BuildContext context) {
-        return BlocProvider<FilterCubit>.value(
-          value: filterCubit,
-          child: FilterFormWidget(),
-        );
-      },
+      builder: (context) => BlocProvider<FilterCubit>.value(
+        value: filterCubit,
+        child: FilterFormWidget(),
+      ),
     );
-    if (result != true) return;
+    if (confirm != true) return;
     filterCubit = context.read<FilterCubit>();
     FilterState state = filterCubit.state;
     if (state.codBarraKit == null && state.idEtiqueta == null) {

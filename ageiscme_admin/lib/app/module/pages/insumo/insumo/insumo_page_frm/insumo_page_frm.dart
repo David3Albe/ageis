@@ -30,6 +30,7 @@ import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -37,9 +38,13 @@ class InsumoPageFrm extends StatefulWidget {
   const InsumoPageFrm({
     Key? key,
     required this.insumo,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final InsumoModel insumo;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<InsumoPageFrm> createState() => _InsumoPageFrmState(insumo: insumo);
@@ -328,360 +333,401 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
       child: BlocBuilder<InsumoPageFrmCubit, InsumoPageFrmState>(
         bloc: cubit,
         builder: (context, state) {
-          return AlertDialog(
-            contentPadding: const EdgeInsets.all(8.0),
-            titlePadding: const EdgeInsets.all(8.0),
-            actionsPadding: const EdgeInsets.all(8.0),
-            title: Row(
-              children: [
-                TitleWidget(
-                  text: titulo,
-                ),
-                const Spacer(),
-                CloseButtonWidget(
-                  onPressed: () => Navigator.of(context).pop((false, '')),
-                ),
-              ],
-            ),
-            content: Container(
-              width: size.width * .6,
-              height: size.height * .8,
-              constraints: const BoxConstraints(
-                minWidth: 500,
-                minHeight: 600,
+          return Column(
+            children: [
+              Row(
+                children: [
+                  TitleWidget(
+                    text: titulo,
+                  ),
+                ],
               ),
-              child: SingleChildScrollView(
-                controller: scroll,
-                padding: const EdgeInsets.only(right: 14),
-                child: Column(
+              Expanded(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtNomeitem,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtDescricaoItem,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: DropDownSearchApiWidget<ItemModel>(
-                        initialValue: insumo.item,
-                        search: (str) => ItemService().Filter(
-                          ItemFilter(
-                            numeroRegistros: 30,
-                            termoPesquisa: str,
-                            idEtiquetaComecaCom: 'ZI',
-                          ),
+                    Expanded(
+                      child: Container(
+                        width: size.width * .6,
+                        height: size.height * .8,
+                        constraints: const BoxConstraints(
+                          minWidth: 500,
+                          minHeight: 600,
                         ),
-                        onChanged: (value) {
-                          insumo.codItem = value!.cod!;
-                          insumo.item = value;
-                        },
-                        placeholder: 'Item',
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: txtCodBarra,
-                          ),
-                          // const SizedBox(width: 16.0),
-                          // Expanded(
-                          //   child: txtCodErp3Albe,
-                          // ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: txtEmbalagem,
-                          ),
-                          const SizedBox(width: 8.0),
-                          Expanded(
-                            child: txtQtde,
-                          ),
-                          const SizedBox(width: 8.0),
-                          Expanded(
-                            child: txtRegistroAnvisa,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: txtUnidadeMedida,
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: BlocBuilder<UnidadeMedidaCubit,
-                                UnidadeMedidaState>(
-                              bloc: unidadeMedidaCubit,
-                              builder: (context, state) {
-                                if (state.loading) {
-                                  return const Center(
-                                    child: LoadingWidget(),
-                                  );
-                                }
-                                List<UnidadeMedidaModel> unidadeMedidas =
-                                    state.unidadeMedidas;
-                                unidadeMedidas.sort(
-                                  (a, b) => a.nome!.compareTo(b.nome!),
-                                );
-                                UnidadeMedidaModel? unidadeMedida =
-                                    unidadeMedidas
+                        child: SingleChildScrollView(
+                          controller: scroll,
+                          padding: const EdgeInsets.only(right: 14),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: txtNomeitem,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: txtDescricaoItem,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: DropDownSearchApiWidget<ItemModel>(
+                                  initialValue: insumo.item,
+                                  search: (str) => ItemService().Filter(
+                                    ItemFilter(
+                                      numeroRegistros: 30,
+                                      termoPesquisa: str,
+                                      idEtiquetaComecaCom: 'ZI',
+                                    ),
+                                  ),
+                                  onChanged: (value) {
+                                    insumo.codItem = value!.cod!;
+                                    insumo.item = value;
+                                  },
+                                  placeholder: 'Item',
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: txtCodBarra,
+                                    ),
+                                    // const SizedBox(width: 16.0),
+                                    // Expanded(
+                                    //   child: txtCodErp3Albe,
+                                    // ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: txtEmbalagem,
+                                    ),
+                                    const SizedBox(width: 8.0),
+                                    Expanded(
+                                      child: txtQtde,
+                                    ),
+                                    const SizedBox(width: 8.0),
+                                    Expanded(
+                                      child: txtRegistroAnvisa,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: txtUnidadeMedida,
+                                    ),
+                                    const SizedBox(width: 16.0),
+                                    Expanded(
+                                      child: BlocBuilder<UnidadeMedidaCubit,
+                                          UnidadeMedidaState>(
+                                        bloc: unidadeMedidaCubit,
+                                        builder: (context, state) {
+                                          if (state.loading) {
+                                            return const Center(
+                                              child: LoadingWidget(),
+                                            );
+                                          }
+                                          List<UnidadeMedidaModel>
+                                              unidadeMedidas =
+                                              state.unidadeMedidas;
+                                          unidadeMedidas.sort(
+                                            (a, b) =>
+                                                a.nome!.compareTo(b.nome!),
+                                          );
+                                          UnidadeMedidaModel? unidadeMedida =
+                                              unidadeMedidas
+                                                  .where(
+                                                    (element) =>
+                                                        element.cod ==
+                                                        insumo.codUnidadeMedida,
+                                                  )
+                                                  .firstOrNull;
+                                          return DropDownSearchWidget<
+                                              UnidadeMedidaModel>(
+                                            initialValue: unidadeMedida,
+                                            sourceList: unidadeMedidas,
+                                            textFunction: (p0) =>
+                                                p0.GetDropDownText(),
+                                            onChanged: (value) => insumo
+                                                .codFabricante = value?.cod,
+                                            placeholder: 'Unidade Medida',
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: BlocBuilder<DestinoResiduoCubit,
+                                    DestinoResiduoState>(
+                                  bloc: destinoResiduoCubit,
+                                  builder: (context, destinoState) {
+                                    if (destinoState.loading) {
+                                      return const LoadingWidget();
+                                    }
+                                    List<DestinoResiduoModel> destinos =
+                                        destinoState.objs;
+
+                                    destinos.sort(
+                                      (a, b) => a.nome!.compareTo(b.nome!),
+                                    );
+                                    DestinoResiduoModel? destino = destinos
                                         .where(
                                           (element) =>
                                               element.cod ==
-                                              insumo.codUnidadeMedida,
+                                              insumo.codDestinoResiduo,
                                         )
                                         .firstOrNull;
-                                return DropDownSearchWidget<UnidadeMedidaModel>(
-                                  initialValue: unidadeMedida,
-                                  sourceList: unidadeMedidas,
-                                  textFunction: (p0) => p0.GetDropDownText(),
-                                  onChanged: (value) =>
-                                      insumo.codFabricante = value?.cod,
-                                  placeholder: 'Unidade Medida',
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child:
-                          BlocBuilder<DestinoResiduoCubit, DestinoResiduoState>(
-                        bloc: destinoResiduoCubit,
-                        builder: (context, destinoState) {
-                          if (destinoState.loading) {
-                            return const LoadingWidget();
-                          }
-                          List<DestinoResiduoModel> destinos =
-                              destinoState.objs;
-
-                          destinos.sort(
-                            (a, b) => a.nome!.compareTo(b.nome!),
-                          );
-                          DestinoResiduoModel? destino = destinos
-                              .where(
-                                (element) =>
-                                    element.cod == insumo.codDestinoResiduo,
-                              )
-                              .firstOrNull;
-                          return DropDownSearchWidget<DestinoResiduoModel>(
-                            validator: (val) =>
-                                val == null ? 'Obrigatório' : null,
-                            validateBuilder: (context, validateMethodBuilder) =>
-                                validateDestinoResiduo = validateMethodBuilder,
-                            textFunction: (destino) =>
-                                destino.GetNomeDestinoText(),
-                            initialValue: destino,
-                            sourceList: destinos
-                                .where((element) => element.ativo == true)
-                                .toList(),
-                            onChanged: (value) =>
-                                insumo.codDestinoResiduo = value?.cod!,
-                            placeholder: 'Destino Resíduos *',
-                          );
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: txtFabricante,
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: txtFornecedor,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child:
-                                BlocBuilder<FabricanteCubit, FabricanteState>(
-                              bloc: fabricanteCubit,
-                              builder: (context, fabricanteState) {
-                                if (fabricanteState.loading) {
-                                  return const Center(
-                                    child: LoadingWidget(),
-                                  );
-                                }
-                                List<FabricanteModel> fabricantes =
-                                    fabricanteState.fabricantes;
-                                fabricantes.sort(
-                                  (a, b) => a.nome!.compareTo(b.nome!),
-                                );
-                                FabricanteModel? fabricante = fabricantes
-                                    .where(
-                                      (element) =>
-                                          element.cod == insumo.codFabricante,
-                                    )
-                                    .firstOrNull;
-                                return DropDownSearchWidget<FabricanteModel>(
-                                  textFunction: (p0) => p0.GetDropDownText(),
-                                  initialValue: fabricante,
-                                  sourceList: fabricantes,
-                                  onChanged: (value) {
-                                    insumo.fabricanteItem = value;
-                                    insumo.codFabricante = value?.cod;
+                                    return DropDownSearchWidget<
+                                        DestinoResiduoModel>(
+                                      validator: (val) =>
+                                          val == null ? 'Obrigatório' : null,
+                                      validateBuilder:
+                                          (context, validateMethodBuilder) =>
+                                              validateDestinoResiduo =
+                                                  validateMethodBuilder,
+                                      textFunction: (destino) =>
+                                          destino.GetNomeDestinoText(),
+                                      initialValue: destino,
+                                      sourceList: destinos
+                                          .where(
+                                            (element) => element.ativo == true,
+                                          )
+                                          .toList(),
+                                      onChanged: (value) => insumo
+                                          .codDestinoResiduo = value?.cod!,
+                                      placeholder: 'Destino Resíduos *',
+                                    );
                                   },
-                                  placeholder: 'Fabricante',
-                                );
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: txtFabricante,
+                                    ),
+                                    const SizedBox(width: 16.0),
+                                    Expanded(
+                                      child: txtFornecedor,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: BlocBuilder<FabricanteCubit,
+                                          FabricanteState>(
+                                        bloc: fabricanteCubit,
+                                        builder: (context, fabricanteState) {
+                                          if (fabricanteState.loading) {
+                                            return const Center(
+                                              child: LoadingWidget(),
+                                            );
+                                          }
+                                          List<FabricanteModel> fabricantes =
+                                              fabricanteState.fabricantes;
+                                          fabricantes.sort(
+                                            (a, b) =>
+                                                a.nome!.compareTo(b.nome!),
+                                          );
+                                          FabricanteModel? fabricante =
+                                              fabricantes
+                                                  .where(
+                                                    (element) =>
+                                                        element.cod ==
+                                                        insumo.codFabricante,
+                                                  )
+                                                  .firstOrNull;
+                                          return DropDownSearchWidget<
+                                              FabricanteModel>(
+                                            textFunction: (p0) =>
+                                                p0.GetDropDownText(),
+                                            initialValue: fabricante,
+                                            sourceList: fabricantes,
+                                            onChanged: (value) {
+                                              insumo.fabricanteItem = value;
+                                              insumo.codFabricante = value?.cod;
+                                            },
+                                            placeholder: 'Fabricante',
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16.0),
+                                    Expanded(
+                                      child: BlocBuilder<FornecedorCubit,
+                                          FornecedorState>(
+                                        bloc: fornecedorCubit,
+                                        builder: (context, stateFornecedor) {
+                                          if (stateFornecedor.loading) {
+                                            return const Center(
+                                              child: LoadingWidget(),
+                                            );
+                                          }
+                                          List<FornecedorModel> fornecedores =
+                                              stateFornecedor.fornecedores;
+                                          fornecedores.sort(
+                                            (a, b) =>
+                                                a.nome!.compareTo(b.nome!),
+                                          );
+                                          FornecedorModel? fornecedor =
+                                              fornecedores
+                                                  .where(
+                                                    (element) =>
+                                                        element.cod ==
+                                                        insumo.codFornecedor,
+                                                  )
+                                                  .firstOrNull;
+                                          insumo.fornecedorItem = fornecedor;
+                                          return DropDownSearchWidget<
+                                              FornecedorModel>(
+                                            textFunction: (p0) =>
+                                                p0.GetDropDownText(),
+                                            initialValue: fornecedor,
+                                            sourceList: fornecedores,
+                                            onChanged: (value) {
+                                              setState(() {
+                                                insumo.nome =
+                                                    insumo.nome?.replaceAll(
+                                                  ' - ' +
+                                                      (insumo.fornecedorItem
+                                                              ?.nome ??
+                                                          ''),
+                                                  '',
+                                                );
+                                                txtNomeitem.text =
+                                                    insumo.nome ?? '';
+                                                insumo.codFornecedor =
+                                                    value?.cod;
+                                                if (insumo.nome == null ||
+                                                    value?.nome == null) return;
+                                                insumo.nome = insumo.nome! +
+                                                    ' - ' +
+                                                    value!.nome!;
+                                              });
+                                            },
+                                            placeholder: 'Fornecedor',
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 5.0),
+                                    child: Row(
+                                      children: [
+                                        CustomCheckboxWidget(
+                                          checked: insumo.ativo,
+                                          onClick: (value) =>
+                                              insumo.ativo = value,
+                                          text: 'Ativo',
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      top: 5.0,
+                                      left: 16.0,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        CustomCheckboxWidget(
+                                          checked:
+                                              insumo.testeInsumoObrigatorio,
+                                          onClick: (value) => insumo
+                                              .testeInsumoObrigatorio = value,
+                                          text: 'Teste Obrigatório',
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                      top: 5.0,
+                                      left: 16.0,
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        CustomCheckboxWidget(
+                                          checked: insumo.controleEstoque,
+                                          onClick: (value) {
+                                            setState(() {
+                                              insumo.controleEstoque = value;
+                                            });
+                                          },
+                                          text: 'Controlar Estoque',
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              if (insumo.controleEstoque == true) ...{
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 5.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: txtEstoqueMinimo,
+                                      ),
+                                      const SizedBox(width: 8.0),
+                                      Expanded(
+                                        child: txtEstoqueMaximo,
+                                      ),
+                                      const SizedBox(width: 8.0),
+                                      Expanded(
+                                        child: txtPontoReposicao,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 5.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: txtPrazoEntrega,
+                                      ),
+                                      const SizedBox(width: 16.0),
+                                      Expanded(
+                                        child: txtPrazoValidadeAposAtivacao,
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               },
-                            ),
+                              const Padding(
+                                padding: EdgeInsets.only(top: 24.0),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child:
-                                BlocBuilder<FornecedorCubit, FornecedorState>(
-                              bloc: fornecedorCubit,
-                              builder: (context, stateFornecedor) {
-                                if (stateFornecedor.loading) {
-                                  return const Center(child: LoadingWidget());
-                                }
-                                List<FornecedorModel> fornecedores =
-                                    stateFornecedor.fornecedores;
-                                fornecedores.sort(
-                                  (a, b) => a.nome!.compareTo(b.nome!),
-                                );
-                                FornecedorModel? fornecedor = fornecedores
-                                    .where(
-                                      (element) =>
-                                          element.cod == insumo.codFornecedor,
-                                    )
-                                    .firstOrNull;
-                                insumo.fornecedorItem = fornecedor;
-                                return DropDownSearchWidget<FornecedorModel>(
-                                  textFunction: (p0) => p0.GetDropDownText(),
-                                  initialValue: fornecedor,
-                                  sourceList: fornecedores,
-                                  onChanged: (value) {
-                                    setState(() {
-                                      insumo.nome = insumo.nome?.replaceAll(
-                                        ' - ' +
-                                            (insumo.fornecedorItem?.nome ?? ''),
-                                        '',
-                                      );
-                                      txtNomeitem.text = insumo.nome ?? '';
-                                      insumo.codFornecedor = value?.cod;
-                                      if (insumo.nome == null ||
-                                          value?.nome == null) return;
-                                      insumo.nome =
-                                          insumo.nome! + ' - ' + value!.nome!;
-                                    });
-                                  },
-                                  placeholder: 'Fornecedor',
-                                );
-                              },
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5.0),
-                          child: Row(
-                            children: [
-                              CustomCheckboxWidget(
-                                checked: insumo.ativo,
-                                onClick: (value) => insumo.ativo = value,
-                                text: 'Ativo',
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5.0, left: 16.0),
-                          child: Row(
-                            children: [
-                              CustomCheckboxWidget(
-                                checked: insumo.testeInsumoObrigatorio,
-                                onClick: (value) =>
-                                    insumo.testeInsumoObrigatorio = value,
-                                text: 'Teste Obrigatório',
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 5.0, left: 16.0),
-                          child: Row(
-                            children: [
-                              CustomCheckboxWidget(
-                                checked: insumo.controleEstoque,
-                                onClick: (value) {
-                                  setState(() {
-                                    insumo.controleEstoque = value;
-                                  });
-                                },
-                                text: 'Controlar Estoque',
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    if (insumo.controleEstoque == true) ...{
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: txtEstoqueMinimo,
-                            ),
-                            const SizedBox(width: 8.0),
-                            Expanded(
-                              child: txtEstoqueMaximo,
-                            ),
-                            const SizedBox(width: 8.0),
-                            Expanded(
-                              child: txtPontoReposicao,
-                            ),
-                          ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: txtPrazoEntrega,
-                            ),
-                            const SizedBox(width: 16.0),
-                            Expanded(
-                              child: txtPrazoValidadeAposAtivacao,
-                            ),
-                          ],
-                        ),
-                      ),
-                    },
-                    const Padding(padding: EdgeInsets.only(top: 24.0)),
                   ],
                 ),
               ),
-            ),
-            actions: [
               Row(
                 children: [
                   CustomPopupMenuWidget(
@@ -710,7 +756,7 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                   Padding(
                     padding: const EdgeInsets.only(left: 16.0),
                     child: SaveButtonWidget(
-                      onPressed: () => {salvar()},
+                      onPressed: salvar,
                     ),
                   ),
                   Padding(
@@ -726,7 +772,7 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                   Padding(
                     padding: const EdgeInsets.only(left: 16.0),
                     child: CancelButtonUnfilledWidget(
-                      onPressed: () => {Navigator.of(context).pop((false, ''))},
+                      onPressed: widget.onCancel,
                     ),
                   ),
                 ],
@@ -766,20 +812,27 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
     InsumoTesteModel insumoTesteModel = InsumoTesteModel.empty();
     insumoTesteModel.codInsumo = insumo.cod;
     insumoTesteModel.insumo = insumo;
-    (bool, String)? result = await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return InsumoTestePageFrm(
-          insumoReadOnly: true,
-          depositoInsumoCubit: depositoInsumoCubit,
-          insumoTeste: insumoTesteModel,
-          usuarioCubit: usuarioCubit,
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Teste de Insumo',
+      widget: InsumoTestePageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        insumoReadOnly: true,
+        depositoInsumoCubit: depositoInsumoCubit,
+        insumoTeste: insumoTesteModel,
+        usuarioCubit: usuarioCubit,
+      ),
     );
-    if (result == null || !result.$1) return;
-    Navigator.of(context).pop(result);
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    widget.onSaved(message);
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   Future _abrirEquipamentos() async {
@@ -874,6 +927,6 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
         !registroAnvisaValid ||
         !destinoResiduoValid ||
         !qtdeValid) return;
-    cubit.save(insumo);
+    cubit.save(insumo, widget.onSaved);
   }
 }

@@ -12,12 +12,15 @@ class UnidadeMedidaPageFrmCubit extends Cubit<UnidadeMedidaPageFrmState> {
           UnidadeMedidaPageFrmState(unidadeMedida: unidadeMedidaModel),
         );
 
-  void save(UnidadeMedidaModel unidadeMedida) async {
+  void save(
+    UnidadeMedidaModel unidadeMedida,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, UnidadeMedidaModel unidadeMedida)? result =
           await service.save(unidadeMedida);
       if (result == null) return;
-
+      onSaved(result.$1);
       emit(
         UnidadeMedidaPageFrmState(
           message: result.$1,

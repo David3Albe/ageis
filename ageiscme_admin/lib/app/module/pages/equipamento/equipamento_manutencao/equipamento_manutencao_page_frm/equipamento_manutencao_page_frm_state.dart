@@ -15,14 +15,17 @@ class EquipamentoManutencaoPageFrmCubit
           ),
         );
 
-  void save(EquipamentoManutencaoModel equipamentoManutencao) async {
+  void save(
+    EquipamentoManutencaoModel equipamentoManutencao,
+    void Function(String) onSaved,
+  ) async {
     try {
       (
         String message,
         EquipamentoManutencaoModel equipamentoManutencao
       )? result = await service.save(equipamentoManutencao);
       if (result == null) return;
-
+      onSaved(result.$1);
       emit(
         EquipamentoManutencaoPageFrmState(
           message: result.$1,

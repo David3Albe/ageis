@@ -16,7 +16,7 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ConsultaProcessosLeituraDevolvidoSubPage extends StatefulWidget {
-  ConsultaProcessosLeituraDevolvidoSubPage({
+  const ConsultaProcessosLeituraDevolvidoSubPage({
     super.key,
     this.filter,
   });
@@ -121,6 +121,7 @@ class _ConsultaProcessosLeituraDevolvidoSubPageState
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'dataHora',
                     smallRows: true,
                     columns: colunas,
                     items: state.processosLeiturasDevolvidos,
@@ -137,8 +138,8 @@ class _ConsultaProcessosLeituraDevolvidoSubPageState
   void onError(ConsultaProcessosLeituraDevolvidoSubPageState state) =>
       ErrorUtils.showErrorDialog(context, [state.error]);
 
-  void openModal(BuildContext context) {
-    showDialog<bool>(
+  Future openModal(BuildContext context) async {
+    bool? confirm = await showDialog<bool>(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
@@ -192,12 +193,8 @@ class _ConsultaProcessosLeituraDevolvidoSubPageState
           ),
         );
       },
-    ).then(
-      (result) {
-        if (result == true) {
-          bloc.loadProcessosLeituraDevolvidoSub(filter);
-        }
-      },
     );
+    if (confirm != true) return;
+    bloc.loadProcessosLeituraDevolvidoSub(filter);
   }
 }

@@ -5,7 +5,6 @@ import 'package:ageiscme_data/services/deposito_insumo/deposito_insumo_service.d
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
@@ -22,9 +21,13 @@ class DepositoInsumoPageFrm extends StatefulWidget {
   const DepositoInsumoPageFrm({
     Key? key,
     required this.depositoInsumo,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final DepositoInsumoModel depositoInsumo;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<DepositoInsumoPageFrm> createState() =>
@@ -103,13 +106,8 @@ class _DepositoInsumoPageFrmState extends State<DepositoInsumoPageFrm> {
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocConsumer<DepositoInsumoPageFrmCubit, DepositoInsumoPageFrmState>(
+    return BlocBuilder<DepositoInsumoPageFrmCubit, DepositoInsumoPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
       builder: (context, state) {
         return Container(
           constraints: const BoxConstraints(
@@ -128,10 +126,6 @@ class _DepositoInsumoPageFrmState extends State<DepositoInsumoPageFrm> {
                     child: TitleWidget(
                       text: titulo,
                     ),
-                  ),
-                  const Spacer(),
-                  CloseButtonWidget(
-                    onPressed: () => Navigator.of(context).pop((false, '')),
                   ),
                 ],
               ),
@@ -154,7 +148,7 @@ class _DepositoInsumoPageFrmState extends State<DepositoInsumoPageFrm> {
                     }
                     List<LocalInstituicaoModel> locaisInstituicao =
                         locaisState.locaisInstituicoes;
-          
+
                     locaisInstituicao.sort(
                       (a, b) => a.nome.compareTo(b.nome),
                     );
@@ -214,8 +208,7 @@ class _DepositoInsumoPageFrmState extends State<DepositoInsumoPageFrm> {
                 children: [
                   CustomPopupMenuWidget(
                     items: [
-                      if (depositoInsumo.cod != null &&
-                          depositoInsumo.cod != 0)
+                      if (depositoInsumo.cod != null && depositoInsumo.cod != 0)
                         CustomPopupItemHistoryModel.getHistoryItem(
                           child: HistoricoPage(
                             pk: depositoInsumo.cod!,
@@ -245,8 +238,7 @@ class _DepositoInsumoPageFrmState extends State<DepositoInsumoPageFrm> {
                   Padding(
                     padding: const EdgeInsets.only(left: 16.0),
                     child: CancelButtonUnfilledWidget(
-                      onPressed: () =>
-                          {Navigator.of(context).pop((false, ''))},
+                      onPressed: widget.onCancel,
                     ),
                   ),
                 ],
@@ -266,6 +258,6 @@ class _DepositoInsumoPageFrmState extends State<DepositoInsumoPageFrm> {
     if (!depositoValid || !codigoBarraValid || !localValid || !situacaoValid) {
       return;
     }
-    cubit.save(depositoInsumo);
+    cubit.save(depositoInsumo, widget.onSaved);
   }
 }

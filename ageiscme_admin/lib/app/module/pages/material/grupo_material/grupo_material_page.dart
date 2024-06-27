@@ -10,11 +10,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class GrupoMaterialPage extends StatefulWidget {
-  GrupoMaterialPage({super.key});
+  const GrupoMaterialPage({super.key});
 
   @override
   State<GrupoMaterialPage> createState() => _GrupoMaterialPageState();
@@ -46,22 +47,29 @@ class _GrupoMaterialPageState extends State<GrupoMaterialPage> {
     super.initState();
   }
 
-  void openModal(BuildContext context, GrupoMaterialModel grupoMaterial) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: GrupoMaterialPageFrm(
-            grupoMaterial: grupoMaterial,
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadGrupoMaterial();
-    });
+  Future openModal(
+    BuildContext context,
+    GrupoMaterialModel grupoMaterial,
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Grupo Material',
+      widget: GrupoMaterialPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        grupoMaterial: grupoMaterial,
+      ),
+    );
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadGrupoMaterial();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   @override
@@ -114,12 +122,17 @@ class _GrupoMaterialPageState extends State<GrupoMaterialPage> {
     );
   }
 
-  void delete(BuildContext context, GrupoMaterialModel grupoMaterial) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Grupo de Item\n${grupoMaterial.cod} = ${grupoMaterial.nome}',
+  void delete(BuildContext context, GrupoMaterialModel grupoMaterial) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Grupo de Item\n${grupoMaterial.cod} = ${grupoMaterial.nome}',
+      onConfirm: () => confirmDelete(grupoMaterial),
     );
-    if (confirmacao) bloc.delete(grupoMaterial);
+  }
+
+  void confirmDelete(GrupoMaterialModel grupoMaterial) async {
+    bloc.delete(grupoMaterial);
   }
 
   void deleted(GrupoMaterialPageState state) {

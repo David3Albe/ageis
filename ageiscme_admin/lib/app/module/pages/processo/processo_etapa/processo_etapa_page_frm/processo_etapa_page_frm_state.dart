@@ -12,12 +12,15 @@ class ProcessoEtapaPageFrmCubit extends Cubit<ProcessoEtapaPageFrmState> {
           ProcessoEtapaPageFrmState(processoEtapa: processoEtapaModel),
         );
 
-  void save(ProcessoEtapaModel processoEtapa) async {
+  void save(
+    ProcessoEtapaModel processoEtapa,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, ProcessoEtapaModel processoEtapa)? result =
           await service.save(processoEtapa);
       if (result == null) return;
-
+      onSaved(result.$1);
       emit(
         ProcessoEtapaPageFrmState(
           message: result.$1,

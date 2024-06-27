@@ -6,7 +6,6 @@ import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/models/atestado_saude_ocupacional/atestado_saude_ocupacional_model.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/label_string_widget.dart';
@@ -34,10 +33,14 @@ class AtestadoSaudeOcupacionalPageFrm extends StatefulWidget {
     Key? key,
     required this.atestadoSaudeOcupacional,
     required this.usuarioCubit,
+    required this.onCancel,
+    required this.onSaved,
   }) : super(key: key);
 
   final AtestadoSaudeOcupacionalModel atestadoSaudeOcupacional;
   final UsuarioCubit usuarioCubit;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<AtestadoSaudeOcupacionalPageFrm> createState() =>
@@ -137,264 +140,276 @@ class _AtestadoSaudeOcupacionalFrmState
     double paddingHorizontalScale = MediaQuery.of(context).size.width / 1920;
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<AtestadoSaudeOcupacionalPageFrmCubit,
+    return BlocBuilder<AtestadoSaudeOcupacionalPageFrmCubit,
         AtestadoSaudeOcupacionalPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
-      child: BlocBuilder<AtestadoSaudeOcupacionalPageFrmCubit,
-          AtestadoSaudeOcupacionalPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return AlertDialog(
-            contentPadding: const EdgeInsets.all(8.0),
-            titlePadding: const EdgeInsets.all(8.0),
-            actionsPadding: const EdgeInsets.all(8.0),
-            title: Row(
+      builder: (context, state) {
+        return Column(
+          children: [
+            Row(
               children: [
                 TitleWidget(
                   text: titulo,
                 ),
-                const Spacer(),
-                CloseButtonWidget(
-                  onPressed: () => Navigator.of(context).pop((false, '')),
-                ),
               ],
             ),
-            content: Container(
-              height: size.height * .8,
-              width: size.width * .8,
-              constraints: const BoxConstraints(
-                minWidth: 400,
-                maxWidth: 1500,
-                minHeight: 500,
-                maxHeight: 800,
-              ),
-              child: SingleChildScrollView(
-                controller: scroll,
-                padding: const EdgeInsets.only(right: 14),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: BlocBuilder<UsuarioCubit, UsuarioState>(
-                        bloc: widget.usuarioCubit,
-                        builder: (context, state) {
-                          if (state.loading) return const LoadingWidget();
-                          List<UsuarioModel> usuarios = state.usuarios;
-                          return DropDownSearchWidget<UsuarioModel>(
-                            validator: (val) =>
-                                val == null ? 'Obrigatório' : null,
-                            validateBuilder: (context, validateMethodBuilder) =>
-                                usuarioValidate = validateMethodBuilder,
-                            initialValue: atestadoSaudeOcupacional.usuario,
-                            sourceList: usuarios
-                                .where(
-                                  (element) => element.colaborador == true,
-                                )
-                                .toList(),
-                            onChanged: (value) {
-                              atestadoSaudeOcupacional.codUsuario = value?.cod;
-                              atestadoSaudeOcupacional.usuario = value;
-                            },
-                            placeholder: 'Colaborador *',
-                          );
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtNomeMedico,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: txtCrmMedico,
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: DropDownSearchWidget<
-                                AtestadoSaudeOcupacionalTipoAsoOption>(
-                              validator: (obj) =>
-                                  obj == null ? 'Obrigatório' : null,
-                              validateBuilder:
-                                  (context, validateMethodBuilder) =>
-                                      tipoAsoValidate = validateMethodBuilder,
-                              initialValue:
-                                  AtestadoSaudeOcupacionalTipoAsoOption
-                                      .tipoAsoOptions
-                                      .where(
-                                        (element) =>
-                                            element.cod ==
-                                            atestadoSaudeOcupacional.tipo,
-                                      )
-                                      .firstOrNull,
-                              sourceList: AtestadoSaudeOcupacionalTipoAsoOption
-                                  .tipoAsoOptions,
-                              textFunction: (p0) => p0.GetDropDownText(),
-                              onChanged: (value) =>
-                                  atestadoSaudeOcupacional.tipo = value?.cod,
-                              placeholder: 'Tipo do ASO *',
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: dtpDataEmissao,
-                          ),
-                          const SizedBox(width: 16),
-                          Expanded(
-                            child: dtpDataValidade,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: DropDownSearchWidget<
-                          AtestadoSaudeOcupacionalConclusaoOption>(
-                        validator: (obj) => obj == null ? 'Obrigatório' : null,
-                        validateBuilder: (context, validateMethodBuilder) =>
-                            conclusaoValidate = validateMethodBuilder,
-                        initialValue: AtestadoSaudeOcupacionalConclusaoOption
-                            .conclusaoOptions
-                            .where(
-                              (element) =>
-                                  element.cod ==
-                                  atestadoSaudeOcupacional.conclusao,
-                            )
-                            .firstOrNull,
-                        sourceList: AtestadoSaudeOcupacionalConclusaoOption
-                            .conclusaoOptions,
-                        textFunction: (p0) => p0.GetDropDownText(),
-                        onChanged: (value) =>
-                            atestadoSaudeOcupacional.conclusao = value?.cod,
-                        placeholder: 'Conclusão *',
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          CustomCheckboxWidget(
-                            checked: atestadoSaudeOcupacional.controlarValidade,
-                            onClick: (value) => atestadoSaudeOcupacional
-                                .controlarValidade = value,
-                            text: 'Controlar Validade',
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: LabelStringWidget(
-                        text: atestadoSaudeOcupacional.docNome != null
-                            ? 'Documento anexado'
-                            : 'Documento não anexado',
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Container(
-                        height: 250,
-                        child: ImageDisplayWidget(
-                          imageBase64: atestadoSaudeOcupacional.anexo,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            actions: [
-              Row(
+            Expanded(
+              child: Row(
                 children: [
-                  CustomPopupMenuWidget(
-                    items: [
-                      CustomPopupItemImageModel.getImageItem(
-                        'Anexar ASO',
-                        salvarASO,
+                  Expanded(
+                    child: Container(
+                      height: size.height * .8,
+                      width: size.width * .8,
+                      constraints: const BoxConstraints(
+                        minWidth: 400,
+                        maxWidth: 1500,
+                        minHeight: 500,
+                        maxHeight: 800,
                       ),
-                      if (atestadoSaudeOcupacional.anexo != null)
-                        CustomPopupItemModel(
-                          text: 'Desanexar ASO',
-                          onTap: excluirAso,
+                      child: SingleChildScrollView(
+                        controller: scroll,
+                        padding: const EdgeInsets.only(right: 14),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: BlocBuilder<UsuarioCubit, UsuarioState>(
+                                bloc: widget.usuarioCubit,
+                                builder: (context, state) {
+                                  if (state.loading) {
+                                    return const LoadingWidget();
+                                  }
+                                  List<UsuarioModel> usuarios = state.usuarios;
+                                  return DropDownSearchWidget<UsuarioModel>(
+                                    validator: (val) =>
+                                        val == null ? 'Obrigatório' : null,
+                                    validateBuilder: (
+                                      context,
+                                      validateMethodBuilder,
+                                    ) =>
+                                        usuarioValidate = validateMethodBuilder,
+                                    initialValue:
+                                        atestadoSaudeOcupacional.usuario,
+                                    sourceList: usuarios
+                                        .where(
+                                          (element) =>
+                                              element.colaborador == true,
+                                        )
+                                        .toList(),
+                                    onChanged: (value) {
+                                      atestadoSaudeOcupacional.codUsuario =
+                                          value?.cod;
+                                      atestadoSaudeOcupacional.usuario = value;
+                                    },
+                                    placeholder: 'Colaborador *',
+                                  );
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: txtNomeMedico,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: txtCrmMedico,
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: DropDownSearchWidget<
+                                        AtestadoSaudeOcupacionalTipoAsoOption>(
+                                      validator: (obj) =>
+                                          obj == null ? 'Obrigatório' : null,
+                                      validateBuilder:
+                                          (context, validateMethodBuilder) =>
+                                              tipoAsoValidate =
+                                                  validateMethodBuilder,
+                                      initialValue:
+                                          AtestadoSaudeOcupacionalTipoAsoOption
+                                              .tipoAsoOptions
+                                              .where(
+                                                (element) =>
+                                                    element.cod ==
+                                                    atestadoSaudeOcupacional
+                                                        .tipo,
+                                              )
+                                              .firstOrNull,
+                                      sourceList:
+                                          AtestadoSaudeOcupacionalTipoAsoOption
+                                              .tipoAsoOptions,
+                                      textFunction: (p0) =>
+                                          p0.GetDropDownText(),
+                                      onChanged: (value) =>
+                                          atestadoSaudeOcupacional.tipo =
+                                              value?.cod,
+                                      placeholder: 'Tipo do ASO *',
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: dtpDataEmissao,
+                                  ),
+                                  const SizedBox(width: 16),
+                                  Expanded(
+                                    child: dtpDataValidade,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: DropDownSearchWidget<
+                                  AtestadoSaudeOcupacionalConclusaoOption>(
+                                validator: (obj) =>
+                                    obj == null ? 'Obrigatório' : null,
+                                validateBuilder: (
+                                  context,
+                                  validateMethodBuilder,
+                                ) =>
+                                    conclusaoValidate = validateMethodBuilder,
+                                initialValue:
+                                    AtestadoSaudeOcupacionalConclusaoOption
+                                        .conclusaoOptions
+                                        .where(
+                                          (element) =>
+                                              element.cod ==
+                                              atestadoSaudeOcupacional
+                                                  .conclusao,
+                                        )
+                                        .firstOrNull,
+                                sourceList:
+                                    AtestadoSaudeOcupacionalConclusaoOption
+                                        .conclusaoOptions,
+                                textFunction: (p0) => p0.GetDropDownText(),
+                                onChanged: (value) => atestadoSaudeOcupacional
+                                    .conclusao = value?.cod,
+                                placeholder: 'Conclusão *',
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  CustomCheckboxWidget(
+                                    checked: atestadoSaudeOcupacional
+                                        .controlarValidade,
+                                    onClick: (value) => atestadoSaudeOcupacional
+                                        .controlarValidade = value,
+                                    text: 'Controlar Validade',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: LabelStringWidget(
+                                text: atestadoSaudeOcupacional.docNome != null
+                                    ? 'Documento anexado'
+                                    : 'Documento não anexado',
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Container(
+                                height: 250,
+                                child: ImageDisplayWidget(
+                                  imageBase64: atestadoSaudeOcupacional.anexo,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      if (atestadoSaudeOcupacional.anexo != null)
-                        CustomPopupItemOpenDocModel.getOpenDocItem(
-                          'Abrir ASO',
-                          context,
-                          atestadoSaudeOcupacional.anexo,
-                          'aso ${atestadoSaudeOcupacional.usuario?.nome}.png',
-                        ),
-                      CustomPopupItemFileModel.getFileItem(
-                        'Anexar DOC',
-                        salvarDoc,
                       ),
-                      if (atestadoSaudeOcupacional.docNome != null &&
-                          atestadoSaudeOcupacional.doc != null)
-                        CustomPopupItemModel(
-                          text: 'Excluir DOC',
-                          onTap: excluirDoc,
-                        ),
-                      if (atestadoSaudeOcupacional.docNome != null &&
-                          atestadoSaudeOcupacional.doc != null)
-                        CustomPopupItemSaveFileModel.getOpenDocItem(
-                          text: 'Abrir DOC',
-                          context: context,
-                          docName: atestadoSaudeOcupacional.docNome,
-                          docString: atestadoSaudeOcupacional.doc,
-                        ),
-                      if (atestadoSaudeOcupacional.cod != null &&
-                          atestadoSaudeOcupacional.cod != 0)
-                        CustomPopupItemHistoryModel.getHistoryItem(
-                          child: HistoricoPage(
-                            pk: atestadoSaudeOcupacional.cod!,
-                            termo: 'ATESTADO_SAUDE_OCUPACIONAL',
-                          ),
-                          context: context,
-                        ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Wrap(
-                    spacing: 16 * paddingHorizontalScale,
-                    runSpacing: 16 * paddingHorizontalScale,
-                    alignment: WrapAlignment.end,
-                    children: [
-                      SaveButtonWidget(
-                        onPressed: () => {salvar()},
-                      ),
-                      CleanButtonWidget(
-                        onPressed: () => {
-                          setState(() {
-                            atestadoSaudeOcupacional =
-                                AtestadoSaudeOcupacionalModel.empty();
-                          }),
-                        },
-                      ),
-                      CancelButtonUnfilledWidget(
-                        onPressed: () =>
-                            {Navigator.of(context).pop((false, ''))},
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),
-            ],
-          );
-        },
-      ),
+            ),
+            Row(
+              children: [
+                CustomPopupMenuWidget(
+                  items: [
+                    CustomPopupItemImageModel.getImageItem(
+                      'Anexar ASO',
+                      salvarASO,
+                    ),
+                    if (atestadoSaudeOcupacional.anexo != null)
+                      CustomPopupItemModel(
+                        text: 'Desanexar ASO',
+                        onTap: excluirAso,
+                      ),
+                    if (atestadoSaudeOcupacional.anexo != null)
+                      CustomPopupItemOpenDocModel.getOpenDocItem(
+                        'Abrir ASO',
+                        context,
+                        atestadoSaudeOcupacional.anexo,
+                        'aso ${atestadoSaudeOcupacional.usuario?.nome}.png',
+                      ),
+                    CustomPopupItemFileModel.getFileItem(
+                      'Anexar DOC',
+                      salvarDoc,
+                    ),
+                    if (atestadoSaudeOcupacional.docNome != null &&
+                        atestadoSaudeOcupacional.doc != null)
+                      CustomPopupItemModel(
+                        text: 'Excluir DOC',
+                        onTap: excluirDoc,
+                      ),
+                    if (atestadoSaudeOcupacional.docNome != null &&
+                        atestadoSaudeOcupacional.doc != null)
+                      CustomPopupItemSaveFileModel.getOpenDocItem(
+                        text: 'Abrir DOC',
+                        context: context,
+                        docName: atestadoSaudeOcupacional.docNome,
+                        docString: atestadoSaudeOcupacional.doc,
+                      ),
+                    if (atestadoSaudeOcupacional.cod != null &&
+                        atestadoSaudeOcupacional.cod != 0)
+                      CustomPopupItemHistoryModel.getHistoryItem(
+                        child: HistoricoPage(
+                          pk: atestadoSaudeOcupacional.cod!,
+                          termo: 'ATESTADO_SAUDE_OCUPACIONAL',
+                        ),
+                        context: context,
+                      ),
+                  ],
+                ),
+                const Spacer(),
+                Wrap(
+                  spacing: 16 * paddingHorizontalScale,
+                  runSpacing: 16 * paddingHorizontalScale,
+                  alignment: WrapAlignment.end,
+                  children: [
+                    SaveButtonWidget(
+                      onPressed: () => {salvar()},
+                    ),
+                    CleanButtonWidget(
+                      onPressed: () => {
+                        setState(() {
+                          atestadoSaudeOcupacional =
+                              AtestadoSaudeOcupacionalModel.empty();
+                        }),
+                      },
+                    ),
+                    CancelButtonUnfilledWidget(
+                      onPressed: widget.onCancel,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -445,7 +460,7 @@ class _AtestadoSaudeOcupacionalFrmState
       scroll.jumpTo(90);
     } else if (!dataEmissaoValid || !dataValidadeValid) {
       scroll.jumpTo(140);
-    }else if(!conclusaoValid){
+    } else if (!conclusaoValid) {
       scroll.jumpTo(190);
     }
 
@@ -457,6 +472,6 @@ class _AtestadoSaudeOcupacionalFrmState
         !conclusaoValid ||
         !dataValidadeValid) return;
 
-    cubit.save(atestadoSaudeOcupacional);
+    cubit.save(atestadoSaudeOcupacional, widget.onSaved);
   }
 }

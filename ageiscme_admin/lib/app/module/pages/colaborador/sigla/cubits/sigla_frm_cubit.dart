@@ -40,7 +40,7 @@ class SiglaFrmCubit extends Cubit<SiglaFrmState> {
     form.controls['sigla']!.value = dto.sigla;
     form.controls['ativo']!.value = dto.ativo;
     form.controls['corRGB']!.value =
-        dto.r != null && dto.b != null && dto.g != null && dto.o!=null
+        dto.r != null && dto.b != null && dto.g != null && dto.o != null
             ? Color.fromRGBO(dto.r!, dto.g!, dto.b!, dto.o!)
             : null;
   }
@@ -76,7 +76,10 @@ class SiglaFrmCubit extends Cubit<SiglaFrmState> {
     );
   }
 
-  Future salvar({required BuildContext context}) async {
+  Future salvar({
+    required BuildContext context,
+    required void Function() onSaved,
+  }) async {
     if (!form.valid) {
       form.markAllAsTouched();
       form.markAsDirty();
@@ -90,7 +93,7 @@ class SiglaFrmCubit extends Cubit<SiglaFrmState> {
     loading.closeDefault();
     if (result == null) return;
     ToastUtils.showCustomToastSucess(context, result.$1);
-    Navigator.of(context).pop(true);
+    onSaved();
   }
 
   void _setDTO() {

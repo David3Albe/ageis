@@ -4,7 +4,6 @@ import 'package:ageiscme_data/services/destino_residuo/destino_residuo_service.d
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
@@ -18,9 +17,13 @@ class DestinoResiduoPageFrm extends StatefulWidget {
   const DestinoResiduoPageFrm({
     Key? key,
     required this.destinoResiduo,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final DestinoResiduoModel destinoResiduo;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<DestinoResiduoPageFrm> createState() =>
@@ -68,13 +71,8 @@ class _DestinoResiduoPageFrmState extends State<DestinoResiduoPageFrm> {
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocConsumer<DestinoResiduoPageFrmCubit, DestinoResiduoPageFrmState>(
+    return BlocBuilder<DestinoResiduoPageFrmCubit, DestinoResiduoPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
       builder: (context, state) {
         return Container(
           constraints: BoxConstraints(
@@ -92,10 +90,6 @@ class _DestinoResiduoPageFrmState extends State<DestinoResiduoPageFrm> {
                         child: TitleWidget(
                           text: titulo,
                         ),
-                      ),
-                      const Spacer(),
-                      CloseButtonWidget(
-                        onPressed: () => Navigator.of(context).pop((false, '')),
                       ),
                     ],
                   ),
@@ -151,8 +145,7 @@ class _DestinoResiduoPageFrmState extends State<DestinoResiduoPageFrm> {
                       Padding(
                         padding: const EdgeInsets.only(left: 16.0),
                         child: CancelButtonUnfilledWidget(
-                          onPressed: () =>
-                              {Navigator.of(context).pop((false, ''))},
+                          onPressed: widget.onCancel,
                         ),
                       ),
                     ],
@@ -168,6 +161,6 @@ class _DestinoResiduoPageFrmState extends State<DestinoResiduoPageFrm> {
 
   void salvar() {
     if (!txtNome.valid) return;
-    cubit.save(destinoResiduo);
+    cubit.save(destinoResiduo, widget.onSaved);
   }
 }

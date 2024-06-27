@@ -5,7 +5,6 @@ import 'package:ageiscme_data/services/documento/documento_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/label_string_widget.dart';
@@ -28,9 +27,13 @@ class DocumentoPageFrm extends StatefulWidget {
   const DocumentoPageFrm({
     Key? key,
     required this.documento,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final DocumentoModel documento;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<DocumentoPageFrm> createState() =>
@@ -106,176 +109,172 @@ class _DocumentoPageFrmState extends State<DocumentoPageFrm> {
     double paddingHorizontalScale = MediaQuery.of(context).size.width / 1920;
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<DocumentoPageFrmCubit, DocumentoPageFrmState>(
+    return BlocBuilder<DocumentoPageFrmCubit, DocumentoPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
-      child: BlocBuilder<DocumentoPageFrmCubit, DocumentoPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return AlertDialog(
-            contentPadding: const EdgeInsets.all(8.0),
-            titlePadding: const EdgeInsets.all(8.0),
-            actionsPadding: const EdgeInsets.all(8.0),
-            insetPadding: const EdgeInsets.all(50.0),
-            title: Row(
+      builder: (context, state) {
+        return Column(
+          children: [
+            Row(
               children: [
                 Expanded(
                   child: TitleWidget(
                     text: titulo,
                   ),
                 ),
-                const Spacer(),
-                CloseButtonWidget(
-                  onPressed: () => Navigator.of(context).pop((false, '')),
-                ),
               ],
             ),
-            content: Container(
-              constraints: BoxConstraints(
-                minWidth: size.width * .5,
-                minHeight: size.height * .5,
-                maxHeight: size.height * .8,
-              ),
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.only(right: 14),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtNomeDocumento,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child:
-                          BlocBuilder<TipoDocumentoCubit, TipoDocumentoState>(
-                        bloc: tipoDocumentoCubit,
-                        builder: (context, state) {
-                          if (state.loading) {
-                            return const Center(
-                              child: LoadingWidget(),
-                            );
-                          }
-                          TipoDocumentoModel? tipoDocumento =
-                              state.tipoDocumentos
-                                  .where(
-                                    (element) =>
-                                        element.cod == documento.codTipo,
-                                  )
-                                  .firstOrNull;
-                          return DropDownSearchWidget<TipoDocumentoModel>(
-                            validator: (val) =>
-                                val == null ? 'Obrigatório' : null,
-                            validateBuilder: (context, validateMethodBuilder) =>
-                                validateTipoDocumento = validateMethodBuilder,
-                            textFunction: (p0) => p0.GetDropDownText(),
-                            initialValue: tipoDocumento,
-                            sourceList: state.tipoDocumentos,
-                            onChanged: (value) =>
-                                documento.codTipo = value?.cod,
-                            placeholder: 'Tipo Documento *',
-                          );
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtDataValidade,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          CustomCheckboxWidget(
-                            checked: documento.controlarValidade,
-                            onClick: (value) =>
-                                documento.controlarValidade = value,
-                            text: 'Controlar Validade',
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtObservacao,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: LabelStringWidget(
-                        text: documento.nomeDocumento == null
-                            ? 'Documento não Anexado'
-                            : 'Documento Anexado: ${documento.nomeDocumento!}',
-                      ),
-                    ),
-                    const Padding(padding: EdgeInsets.only(top: 24)),
-                  ],
-                ),
-              ),
-            ),
-            actions: [
-              Row(
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustomPopupMenuWidget(
-                    items: [
-                      CustomPopupItemFileModel.getFileItem(
-                        'Anexar DOC',
-                        salvarDoc,
+                  Expanded(
+                    child: Container(
+                      constraints: BoxConstraints(
+                        minWidth: size.width * .5,
+                        minHeight: size.height * .5,
+                        maxHeight: size.height * .8,
                       ),
-                      if (documento.nomeDocumento != null &&
-                          documento.documento != null)
-                        CustomPopupItemModel(
-                          text: 'Excluir DOC',
-                          onTap: excluirDoc,
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.only(right: 14),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: txtNomeDocumento,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: BlocBuilder<TipoDocumentoCubit,
+                                  TipoDocumentoState>(
+                                bloc: tipoDocumentoCubit,
+                                builder: (context, state) {
+                                  if (state.loading) {
+                                    return const Center(
+                                      child: LoadingWidget(),
+                                    );
+                                  }
+                                  TipoDocumentoModel? tipoDocumento = state
+                                      .tipoDocumentos
+                                      .where(
+                                        (element) =>
+                                            element.cod == documento.codTipo,
+                                      )
+                                      .firstOrNull;
+                                  return DropDownSearchWidget<
+                                      TipoDocumentoModel>(
+                                    validator: (val) =>
+                                        val == null ? 'Obrigatório' : null,
+                                    validateBuilder:
+                                        (context, validateMethodBuilder) =>
+                                            validateTipoDocumento =
+                                                validateMethodBuilder,
+                                    textFunction: (p0) => p0.GetDropDownText(),
+                                    initialValue: tipoDocumento,
+                                    sourceList: state.tipoDocumentos,
+                                    onChanged: (value) =>
+                                        documento.codTipo = value?.cod,
+                                    placeholder: 'Tipo Documento *',
+                                  );
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: txtDataValidade,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  CustomCheckboxWidget(
+                                    checked: documento.controlarValidade,
+                                    onClick: (value) =>
+                                        documento.controlarValidade = value,
+                                    text: 'Controlar Validade',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: txtObservacao,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: LabelStringWidget(
+                                text: documento.nomeDocumento == null
+                                    ? 'Documento não Anexado'
+                                    : 'Documento Anexado: ${documento.nomeDocumento!}',
+                              ),
+                            ),
+                            const Padding(padding: EdgeInsets.only(top: 24)),
+                          ],
                         ),
-                      if (documento.nomeDocumento != null &&
-                          documento.documento != null)
-                        CustomPopupItemSaveFileModel.getOpenDocItem(
-                          text: 'Abrir DOC',
-                          context: context,
-                          docName: documento.nomeDocumento,
-                          docString: documento.documento,
-                        ),
-                      if (documento.cod != null && documento.cod != 0)
-                        CustomPopupItemHistoryModel.getHistoryItem(
-                          child: HistoricoPage(
-                            pk: documento.cod!,
-                            termo: 'DOCUMENTO',
-                          ),
-                          context: context,
-                        ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Wrap(
-                    spacing: 16 * paddingHorizontalScale,
-                    runSpacing: 16 * paddingHorizontalScale,
-                    alignment: WrapAlignment.end,
-                    children: [
-                      SaveButtonWidget(
-                        onPressed: () => {salvar()},
                       ),
-                      CleanButtonWidget(
-                        onPressed: () => {
-                          setState(() {
-                            documento = DocumentoModel.empty();
-                          }),
-                        },
-                      ),
-                      CancelButtonUnfilledWidget(
-                        onPressed: () =>
-                            {Navigator.of(context).pop((false, ''))},
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),
-            ],
-          );
-        },
-      ),
+            ),
+            Row(
+              children: [
+                CustomPopupMenuWidget(
+                  items: [
+                    CustomPopupItemFileModel.getFileItem(
+                      'Anexar DOC',
+                      salvarDoc,
+                    ),
+                    if (documento.nomeDocumento != null &&
+                        documento.documento != null)
+                      CustomPopupItemModel(
+                        text: 'Excluir DOC',
+                        onTap: excluirDoc,
+                      ),
+                    if (documento.nomeDocumento != null &&
+                        documento.documento != null)
+                      CustomPopupItemSaveFileModel.getOpenDocItem(
+                        text: 'Abrir DOC',
+                        context: context,
+                        docName: documento.nomeDocumento,
+                        docString: documento.documento,
+                      ),
+                    if (documento.cod != null && documento.cod != 0)
+                      CustomPopupItemHistoryModel.getHistoryItem(
+                        child: HistoricoPage(
+                          pk: documento.cod!,
+                          termo: 'DOCUMENTO',
+                        ),
+                        context: context,
+                      ),
+                  ],
+                ),
+                const Spacer(),
+                Wrap(
+                  spacing: 16 * paddingHorizontalScale,
+                  runSpacing: 16 * paddingHorizontalScale,
+                  alignment: WrapAlignment.end,
+                  children: [
+                    SaveButtonWidget(
+                      onPressed: () => {salvar()},
+                    ),
+                    CleanButtonWidget(
+                      onPressed: () => {
+                        setState(() {
+                          documento = DocumentoModel.empty();
+                        }),
+                      },
+                    ),
+                    CancelButtonUnfilledWidget(
+                      onPressed: widget.onCancel,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -300,6 +299,6 @@ class _DocumentoPageFrmState extends State<DocumentoPageFrm> {
     bool observacaoValid = txtObservacao.valid;
     bool tipoDocumentoValid = validateTipoDocumento();
     if (!nomeDocumentoValid || !observacaoValid || !tipoDocumentoValid) return;
-    cubit.save(documento);
+    cubit.save(documento, widget.onSaved);
   }
 }

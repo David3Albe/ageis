@@ -29,7 +29,7 @@ class ConsignmentsWithdrawalPrinterController {
     );
     final pdf = pw.Document(theme: themeOpenSans);
     if (dto.items.isEmpty) {
-      await WarningUtils.showWarningDialog(
+      WarningUtils.showWarningDialog(
         context,
         'Não há itens consignados para imprimir a lista de retirada',
       );

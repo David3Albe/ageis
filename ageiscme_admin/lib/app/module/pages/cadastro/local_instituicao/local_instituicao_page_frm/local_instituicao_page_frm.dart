@@ -5,7 +5,6 @@ import 'package:ageiscme_data/services/local_instituicao/local_instituicao_servi
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_area_widget.dart';
@@ -22,9 +21,13 @@ class LocalInstituicaoPageFrm extends StatefulWidget {
   const LocalInstituicaoPageFrm({
     Key? key,
     required this.localInstituicao,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final LocalInstituicaoModel localInstituicao;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<LocalInstituicaoPageFrm> createState() =>
@@ -133,192 +136,195 @@ class _LocalInstituicaoPageFrmState extends State<LocalInstituicaoPageFrm> {
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<LocalInstituicaoPageFrmCubit,
+    return BlocBuilder<LocalInstituicaoPageFrmCubit,
         LocalInstituicaoPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
-      child: BlocBuilder<LocalInstituicaoPageFrmCubit,
-          LocalInstituicaoPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return AlertDialog(
-            contentPadding: const EdgeInsets.all(8.0),
-            titlePadding: const EdgeInsets.all(8.0),
-            actionsPadding: const EdgeInsets.all(8.0),
-            title: Row(
+      builder: (context, state) {
+        return Column(
+          children: [
+            Row(
               children: [
                 TitleWidget(
                   text: titulo,
                 ),
-                const Spacer(),
-                CloseButtonWidget(
-                  onPressed: () => Navigator.of(context).pop((false, '')),
-                ),
               ],
             ),
-            content: Container(
-              constraints: const BoxConstraints(
-                minWidth: 600,
-                minHeight: 500,
-                maxHeight: 1000,
-                maxWidth: 1200,
-              ),
-              height: size.height * .5,
-              width: size.width * .5,
-              child: SingleChildScrollView(
-                controller: scroll,
-                padding: const EdgeInsets.only(right: 14),
-                child: Column(
+            Expanded(
+              child: Align(
+                alignment: Alignment.topLeft,
+                child: Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtNomeLocal,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtCodBarra,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtContato,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtLocalizacaoFisica,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtResponsavel,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: BlocBuilder<CentroCustoCubit, CentroCustoState>(
-                        bloc: centroCustoCubit,
-                        builder: (context, state) {
-                          if (state.loading) {
-                            return const Center(
-                              child: LoadingWidget(),
-                            );
-                          }
-                          List<CentroCustoModel> centrosCusto =
-                              state.centrosCusto;
-                          centrosCusto.sort(
-                            (a, b) => a.centroCusto!.compareTo(b.centroCusto!),
-                          );
-                          CentroCustoModel? centroCusto = centrosCusto
-                              .where(
-                                (element) =>
-                                    element.cod ==
-                                    localInstituicao.codCentroCusto,
-                              )
-                              .firstOrNull;
+                    Expanded(
+                      child: Container(
+                        constraints: const BoxConstraints(
+                          minWidth: 600,
+                          minHeight: 500,
+                          maxHeight: 1000,
+                          maxWidth: 1200,
+                        ),
+                        height: size.height * .5,
+                        width: size.width * .5,
+                        child: SingleChildScrollView(
+                          controller: scroll,
+                          padding: const EdgeInsets.only(right: 14),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: txtNomeLocal,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: txtCodBarra,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: txtContato,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: txtLocalizacaoFisica,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: txtResponsavel,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: BlocBuilder<CentroCustoCubit,
+                                    CentroCustoState>(
+                                  bloc: centroCustoCubit,
+                                  builder: (context, state) {
+                                    if (state.loading) {
+                                      return const Center(
+                                        child: LoadingWidget(),
+                                      );
+                                    }
+                                    List<CentroCustoModel> centrosCusto =
+                                        state.centrosCusto;
+                                    centrosCusto.sort(
+                                      (a, b) => a.centroCusto!
+                                          .compareTo(b.centroCusto!),
+                                    );
+                                    CentroCustoModel? centroCusto = centrosCusto
+                                        .where(
+                                          (element) =>
+                                              element.cod ==
+                                              localInstituicao.codCentroCusto,
+                                        )
+                                        .firstOrNull;
 
-                          return DropDownSearchWidget<CentroCustoModel>(
-                            initialValue: centroCusto,
-                            textFunction: (p0) => p0.CentroCustoText(),
-                            sourceList: centrosCusto
-                                .where((element) => element.ativo == true)
-                                .toList(),
-                            onChanged: (value) =>
-                                localInstituicao.codCentroCusto = value?.cod,
-                            placeholder: 'Centro de Custo',
-                          );
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          CustomCheckboxWidget(
-                            checked: localInstituicao.ativo,
-                            onClick: (value) => localInstituicao.ativo = value,
-                            text: 'Ativo',
+                                    return DropDownSearchWidget<
+                                        CentroCustoModel>(
+                                      initialValue: centroCusto,
+                                      textFunction: (p0) =>
+                                          p0.CentroCustoText(),
+                                      sourceList: centrosCusto
+                                          .where(
+                                            (element) => element.ativo == true,
+                                          )
+                                          .toList(),
+                                      onChanged: (value) => localInstituicao
+                                          .codCentroCusto = value?.cod,
+                                      placeholder: 'Centro de Custo',
+                                    );
+                                  },
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Row(
+                                  children: [
+                                    CustomCheckboxWidget(
+                                      checked: localInstituicao.ativo,
+                                      onClick: (value) =>
+                                          localInstituicao.ativo = value,
+                                      text: 'Ativo',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Row(
+                                  children: [
+                                    CustomCheckboxWidget(
+                                      checked: localInstituicao.exigeProntuario,
+                                      onClick: (value) => localInstituicao
+                                          .exigeProntuario = value,
+                                      text: 'Exige Prontuário na Recepção',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Row(
+                                  children: [
+                                    CustomCheckboxWidget(
+                                      checked:
+                                          localInstituicao.localConferencia,
+                                      onClick: (value) => localInstituicao
+                                          .localConferencia = value,
+                                      text:
+                                          'Local Conferência \n(Não atualizar o status do item na etapa de Recepção)',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const Padding(padding: EdgeInsets.only(top: 24)),
+                            ],
                           ),
-                        ],
+                        ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          CustomCheckboxWidget(
-                            checked: localInstituicao.exigeProntuario,
-                            onClick: (value) =>
-                                localInstituicao.exigeProntuario = value,
-                            text: 'Exige Prontuário na Recepção',
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          CustomCheckboxWidget(
-                            checked: localInstituicao.localConferencia,
-                            onClick: (value) =>
-                                localInstituicao.localConferencia = value,
-                            text:
-                                'Local Conferência \n(Não atualizar o status do item na etapa de Recepção)',
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Padding(padding: EdgeInsets.only(top: 24)),
                   ],
                 ),
               ),
             ),
-            actions: [
-              Row(
-                children: [
-                  CustomPopupMenuWidget(
-                    items: [
-                      if (localInstituicao.cod != null &&
-                          localInstituicao.cod != 0)
-                        CustomPopupItemHistoryModel.getHistoryItem(
-                          child: HistoricoPage(
-                            pk: localInstituicao.cod!,
-                            termo: 'LOCAL_INSTITUICAO',
-                          ),
-                          context: context,
+            Row(
+              children: [
+                CustomPopupMenuWidget(
+                  items: [
+                    if (localInstituicao.cod != null &&
+                        localInstituicao.cod != 0)
+                      CustomPopupItemHistoryModel.getHistoryItem(
+                        child: HistoricoPage(
+                          pk: localInstituicao.cod!,
+                          termo: 'LOCAL_INSTITUICAO',
                         ),
-                    ],
+                        context: context,
+                      ),
+                  ],
+                ),
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: SaveButtonWidget(
+                    onPressed: () => {salvar()},
                   ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: SaveButtonWidget(
-                      onPressed: () => {salvar()},
-                    ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: CleanButtonWidget(
+                    onPressed: () => {
+                      setState(() {
+                        localInstituicao = LocalInstituicaoModel.empty();
+                      }),
+                    },
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: CleanButtonWidget(
-                      onPressed: () => {
-                        setState(() {
-                          localInstituicao = LocalInstituicaoModel.empty();
-                        }),
-                      },
-                    ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: CancelButtonUnfilledWidget(
+                    onPressed: widget.onCancel,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: CancelButtonUnfilledWidget(
-                      onPressed: () => {Navigator.of(context).pop((false, ''))},
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          );
-        },
-      ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -342,6 +348,6 @@ class _LocalInstituicaoPageFrmState extends State<LocalInstituicaoPageFrm> {
         !localizacaoFisicaValid ||
         !responsavelValid) return;
 
-    cubit.save(localInstituicao);
+    cubit.save(localInstituicao, widget.onSaved);
   }
 }

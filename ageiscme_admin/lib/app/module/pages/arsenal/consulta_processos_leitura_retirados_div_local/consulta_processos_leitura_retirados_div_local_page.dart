@@ -18,7 +18,7 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ConsultaProcessosLeituraRetiradosDivLocalPage extends StatefulWidget {
-  ConsultaProcessosLeituraRetiradosDivLocalPage({super.key});
+  const ConsultaProcessosLeituraRetiradosDivLocalPage({super.key});
 
   @override
   State<ConsultaProcessosLeituraRetiradosDivLocalPage> createState() =>
@@ -101,6 +101,7 @@ class _ConsultaProcessosLeituraRetiradosDivLocalPageState
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'dataHora',
                     smallRows: true,
                     columns: colunas,
                     items: state.processosLeiturasRetiradosDivLocais,
@@ -117,8 +118,8 @@ class _ConsultaProcessosLeituraRetiradosDivLocalPageState
   void onError(ConsultaProcessosLeituraRetiradosDivLocalPageState state) =>
       ErrorUtils.showErrorDialog(context, [state.error]);
 
-  void openModal(BuildContext context) {
-    showDialog<bool>(
+  Future openModal(BuildContext context) async {
+    bool? confirm = await showDialog<bool>(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
@@ -263,10 +264,8 @@ class _ConsultaProcessosLeituraRetiradosDivLocalPageState
           ),
         );
       },
-    ).then((result) {
-      if (result == true) {
-        bloc.loadMotivoProcessosLeituraRetiradosDivLocal(filter);
-      }
-    });
+    );
+    if (confirm != true) return;
+    bloc.loadMotivoProcessosLeituraRetiradosDivLocal(filter);
   }
 }

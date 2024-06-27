@@ -3,7 +3,6 @@ import 'package:ageiscme_admin/app/module/pages/processo/anormalidade_tipo/cubit
 import 'package:ageiscme_models/dto/anormalidade_tipo/save/anormalidade_tipo_save_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
@@ -17,8 +16,12 @@ import 'package:flutter/material.dart';
 
 class AnormalidadeTipoFrmPageWidget extends StatelessWidget {
   const AnormalidadeTipoFrmPageWidget({
+    required this.onSaved,
+    required this.onCancel,
     super.key,
   });
+  final void Function() onSaved;
+  final void Function() onCancel;
 
   @override
   Widget build(BuildContext context) {
@@ -66,10 +69,6 @@ class AnormalidadeTipoFrmPageWidget extends StatelessWidget {
                                 : 'Criação de novo tipo de anormalidade',
                           );
                         },
-                      ),
-                      const Spacer(),
-                      CloseButtonWidget(
-                        onPressed: () => Navigator.of(context).pop(false),
                       ),
                     ],
                   ),
@@ -179,7 +178,10 @@ class AnormalidadeTipoFrmPageWidget extends StatelessWidget {
                                   onPressed: form.valid || !form.dirty
                                       ? () => context
                                           .read<AnormalidadeTipoFrmCubit>()
-                                          .salvar(context: context)
+                                          .salvar(
+                                            context: context,
+                                            onSaved: onSaved,
+                                          )
                                       : null,
                                 );
                               },
@@ -190,7 +192,7 @@ class AnormalidadeTipoFrmPageWidget extends StatelessWidget {
                                   .clear,
                             ),
                             CancelButtonUnfilledWidget(
-                              onPressed: () => Navigator.of(context).pop(false),
+                              onPressed: onCancel,
                             ),
                           ],
                         ),

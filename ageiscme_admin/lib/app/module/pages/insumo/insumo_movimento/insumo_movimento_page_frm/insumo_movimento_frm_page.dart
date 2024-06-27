@@ -19,7 +19,6 @@ import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/models/insumo_saldo/insumo_saldo_model.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
@@ -44,15 +43,19 @@ class InsumoMovimentoPageFrm extends StatefulWidget {
   const InsumoMovimentoPageFrm({
     Key? key,
     required this.insumoMovimento,
+    required this.onCancel,
     this.baseSolicitacao,
     this.numeroSolicitacao,
     this.numeroSolicitacaoItem,
+    this.onSaved,
   }) : super(key: key);
 
   final InsumoMovimentoModel insumoMovimento;
   final bool? baseSolicitacao;
   final int? numeroSolicitacao;
   final int? numeroSolicitacaoItem;
+  final void Function() onCancel;
+  final void Function(String)? onSaved;
 
   @override
   State<InsumoMovimentoPageFrm> createState() => _InsumoMovimentoPageFrmState(
@@ -365,590 +368,689 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return BlocConsumer<InsumoMovimentoPageFrmCubit,
+    return BlocBuilder<InsumoMovimentoPageFrmCubit,
         InsumoMovimentoPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {},
       builder: (context, state) {
-        return AlertDialog(
-          contentPadding: const EdgeInsets.all(8.0),
-          titlePadding: const EdgeInsets.all(8.0),
-          actionsPadding: const EdgeInsets.all(8.0),
-          title: Row(
-            children: [
-              TitleWidget(
-                text: titulo,
-              ),
-              const Spacer(),
-              CloseButtonWidget(
-                onPressed: () => Navigator.of(context).pop((false, '')),
-              ),
-            ],
-          ),
-          content: Container(
-            height: size.height * .8,
-            width: size.width * .7,
-            constraints: const BoxConstraints(
-              minWidth: 1000,
-              maxWidth: 1500,
-              minHeight: 600,
-              maxHeight: 1000,
+        return Column(
+          children: [
+            Row(
+              children: [
+                TitleWidget(
+                  text: titulo,
+                ),
+              ],
             ),
-            child: SingleChildScrollView(
-              controller: scroll,
-              padding: const EdgeInsets.only(top: 14),
-              child: Column(
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Row(
+                  Expanded(
+                    child: Container(
+                      height: size.height * .8,
+                      width: size.width * .7,
+                      constraints: const BoxConstraints(
+                        minWidth: 1000,
+                        maxWidth: 1500,
+                        minHeight: 600,
+                        maxHeight: 1000,
+                      ),
+                      child: SingleChildScrollView(
+                        controller: scroll,
+                        padding: const EdgeInsets.only(top: 14),
+                        child: Column(
                           children: [
-                            InkWell(
-                              onTap: insumoMovimento.cod == 0 &&
-                                      baseSolicitacao != true
-                                  ? () {
-                                      setState(() {
-                                        int? codUsuario =
-                                            insumoMovimento.codUsuario;
-                                        insumoMovimento =
-                                            InsumoMovimentoModel.empty();
-                                        insumoMovimento.codUsuario = codUsuario;
-                                        isEntradaSelected = true;
-                                        isSaidaSelected = false;
-                                        isAjusteSelected = false;
-                                        insumoMovimento.flagEntradaSaida = '1';
-                                        baseSolicitacao = null;
-                                        numeroSolicitacao = null;
-                                        numeroSolicitacaoItem = null;
-                                        cbxInsumoKey.currentState
-                                            ?.setItem(null);
-                                        equipamentoInsumoCubit.reload();
-                                        cbxInsumoKey.currentState?.reload();
-                                      });
-                                      txtSaldoAtual.text = '';
-                                      setFields(false);
-                                    }
-                                  : null,
-                              child: Row(
-                                children: [
-                                  Radio<int>(
-                                    value: 1,
-                                    groupValue:
-                                        insumoMovimento.flagEntradaSaida == '1'
-                                            ? 1
-                                            : (isAjusteSelected ? 0 : null),
-                                    onChanged: insumoMovimento.cod == 0 &&
-                                            baseSolicitacao != true
-                                        ? (value) {
-                                            setState(() {
-                                              int? codUsuario =
-                                                  insumoMovimento.codUsuario;
-                                              insumoMovimento =
-                                                  InsumoMovimentoModel.empty();
-                                              insumoMovimento.codUsuario =
-                                                  codUsuario;
-                                              isEntradaSelected = value == 1;
-                                              isSaidaSelected = false;
-                                              isAjusteSelected = false;
-                                              insumoMovimento.flagEntradaSaida =
-                                                  isEntradaSelected
-                                                      ? '1'
-                                                      : null;
-                                              baseSolicitacao = null;
-                                              numeroSolicitacao = null;
-                                              numeroSolicitacaoItem = null;
-                                              cbxInsumoKey.currentState
-                                                  ?.setItem(null);
-                                              equipamentoInsumoCubit.reload();
-                                              cbxInsumoKey.currentState
-                                                  ?.reload();
-                                            });
-                                            txtSaldoAtual.text = '';
-                                            setFields(false);
-                                          }
-                                        : null,
-                                  ),
-                                  const Text('Entrada'),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 1.0),
-                      Expanded(
-                        child: Row(
-                          children: [
-                            InkWell(
-                              onTap: insumoMovimento.cod == 0
-                                  ? () {
-                                      setState(() {
-                                        int? codUsuario =
-                                            insumoMovimento.codUsuario;
-                                        insumoMovimento =
-                                            InsumoMovimentoModel.empty();
-                                        insumoMovimento.codUsuario = codUsuario;
-                                        isSaidaSelected = true;
-                                        isEntradaSelected = false;
-                                        isAjusteSelected = false;
-                                        insumoMovimento.flagEntradaSaida = '2';
-                                        baseSolicitacao = null;
-                                        numeroSolicitacao = null;
-                                        numeroSolicitacaoItem = null;
-                                        cbxInsumoKey.currentState
-                                            ?.setItem(null);
-                                        equipamentoInsumoCubit.reload();
-                                        cbxInsumoKey.currentState?.reload();
-                                      });
-                                      txtSaldoAtual.text = '';
-                                      setFields(false);
-                                    }
-                                  : null,
-                              child: Row(
-                                children: [
-                                  Radio<int>(
-                                    value: 2,
-                                    groupValue:
-                                        insumoMovimento.flagEntradaSaida == '2'
-                                            ? 2
-                                            : (isAjusteSelected ? 0 : null),
-                                    onChanged: insumoMovimento.cod == 0
-                                        ? (value) {
-                                            setState(() {
-                                              int? codUsuario =
-                                                  insumoMovimento.codUsuario;
-                                              insumoMovimento =
-                                                  InsumoMovimentoModel.empty();
-                                              insumoMovimento.codUsuario =
-                                                  codUsuario;
-                                              isSaidaSelected = value == 2;
-                                              isEntradaSelected = false;
-                                              isAjusteSelected = false;
-                                              insumoMovimento.flagEntradaSaida =
-                                                  isSaidaSelected ? '2' : null;
-                                              baseSolicitacao = null;
-                                              numeroSolicitacao = null;
-                                              numeroSolicitacaoItem = null;
-                                              cbxInsumoKey.currentState
-                                                  ?.setItem(null);
-                                              equipamentoInsumoCubit.reload();
-                                              cbxInsumoKey.currentState
-                                                  ?.reload();
-                                            });
-                                            txtSaldoAtual.text = '';
-                                            setFields(false);
-                                          }
-                                        : null,
-                                  ),
-                                  const Text('Saída'),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 1.0),
-                      Expanded(
-                        child: Row(
-                          children: [
-                            InkWell(
-                              onTap: insumoMovimento.cod == 0 &&
-                                      baseSolicitacao != true
-                                  ? () {
-                                      setState(() {
-                                        int? codUsuario =
-                                            insumoMovimento.codUsuario;
-                                        insumoMovimento =
-                                            InsumoMovimentoModel.empty();
-                                        insumoMovimento.codUsuario = codUsuario;
-                                        isAjusteSelected = true;
-                                        isEntradaSelected = false;
-                                        isSaidaSelected = false;
-                                        insumoMovimento.flagEntradaSaida = '0';
-                                        baseSolicitacao = null;
-                                        numeroSolicitacao = null;
-                                        numeroSolicitacaoItem = null;
-                                        cbxInsumoKey.currentState
-                                            ?.setItem(null);
-                                        equipamentoInsumoCubit.reload();
-                                        cbxInsumoKey.currentState?.reload();
-                                      });
-                                      txtSaldoAtual.text = '';
-                                      setFields(false);
-                                    }
-                                  : null,
-                              child: Row(
-                                children: [
-                                  Radio<int>(
-                                    value: 0,
-                                    groupValue:
-                                        insumoMovimento.flagEntradaSaida == '0'
-                                            ? 0
-                                            : (isEntradaSelected ? 1 : null),
-                                    onChanged: insumoMovimento.cod == 0 &&
-                                            baseSolicitacao != true
-                                        ? (value) {
-                                            setState(() {
-                                              int? codUsuario =
-                                                  insumoMovimento.codUsuario;
-                                              insumoMovimento =
-                                                  InsumoMovimentoModel.empty();
-                                              insumoMovimento.codUsuario =
-                                                  codUsuario;
-                                              isAjusteSelected = value == 0;
-                                              isEntradaSelected = false;
-                                              isSaidaSelected = false;
-                                              insumoMovimento.flagEntradaSaida =
-                                                  isAjusteSelected ? '0' : null;
-                                              baseSolicitacao = null;
-                                              numeroSolicitacao = null;
-                                              numeroSolicitacaoItem = null;
-                                              cbxInsumoKey.currentState
-                                                  ?.setItem(null);
-                                              cbxInsumoKey.currentState
-                                                  ?.reload();
-                                              equipamentoInsumoCubit.reload();
-                                            });
-                                            txtSaldoAtual.text = '';
-                                            setFields(false);
-                                          }
-                                        : null,
-                                  ),
-                                  const Text('Ajuste'),
-                                ],
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  if (insumoMovimento.flagEntradaSaida == '2') ...{
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Builder(
-                        builder: (context) {
-                          return BlocBuilder<EquipamentoCubit,
-                              EquipamentoState>(
-                            bloc: equipamentoCubit,
-                            builder: (context, equipamentoState) {
-                              if (equipamentoState.loading) {
-                                return const LoadingWidget();
-                              }
-                              List<EquipamentoModel> equipamentos =
-                                  equipamentoState.objs;
-
-                              equipamentos.sort(
-                                (a, b) => a.nome!.compareTo(b.nome!),
-                              );
-
-                              EquipamentoModel? equipamento = equipamentos
-                                  .where(
-                                    (element) =>
-                                        element.cod ==
-                                        insumoMovimento.codEquipamentoInsumo,
-                                  )
-                                  .firstOrNull;
-                              insumoMovimento.equipamento = equipamento;
-                              return DropDownSearchWidget<EquipamentoModel>(
-                                readOnly: insumoMovimento.cod != 0 ||
-                                        baseSolicitacao == true
-                                    ? true
-                                    : false,
-                                textFunction: (equipamento) =>
-                                    equipamento.EquipamentoNomeText(),
-                                initialValue: equipamento,
-                                sourceList: equipamentos,
-                                onChanged: (value) {
-                                  insumoMovimento.codEquipamentoInsumo =
-                                      value?.cod!;
-                                  insumoMovimento.equipamento = value;
-                                  equipamentoInsumoCubit.refresh();
-                                  cbxInsumoKey.currentState?.reload();
-                                },
-                                placeholder: 'Equipamento',
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  },
-                  Row(
-                    children: [
-                      Expanded(
-                        child: txtCodigoInsumo,
-                      ),
-                      const SizedBox(width: DEFAULT_HEIGHT),
-                      Expanded(
-                        child: BlocBuilder<EquipamentoInsumoCubit,
-                            EquipamentoInsumoState>(
-                          bloc: equipamentoInsumoCubit,
-                          builder: (context, equipamentoInsumoState) {
-                            return BlocBuilder<InsumoCubit, InsumoState>(
-                              bloc: insumoCubit,
-                              builder: (context, insumoState) {
-                                if (insumoState.loading ||
-                                    equipamentoInsumoState.loading) {
-                                  return const LoadingWidget();
-                                }
-                                List<int>? insumosConsiderar;
-                                print(insumoMovimento.codEquipamentoInsumo);
-                                if (insumoMovimento.codEquipamentoInsumo !=
-                                    null) {
-                                  insumosConsiderar =
-                                      equipamentoInsumoState.obj?.consumos
-                                          .where(
-                                            (element) =>
-                                                element.codEquipamento ==
-                                                    insumoMovimento
-                                                        .codEquipamentoInsumo &&
-                                                element.codInsumo != null,
-                                          )
-                                          .map((e) => e.codInsumo!)
-                                          .toList();
-                                }
-
-                                List<InsumoModel> insumos = insumoState.objs
-                                    .where(
-                                      (element) =>
-                                          insumosConsiderar == null ||
-                                          insumosConsiderar
-                                              .contains(element.cod),
-                                    )
-                                    .toList();
-
-                                insumos.sort(
-                                  (a, b) => a.nome!.compareTo(b.nome!),
-                                );
-
-                                InsumoModel? insumo = insumos
-                                    .where(
-                                      (insumo) =>
-                                          insumo.cod ==
-                                          insumoMovimento.codInsumo,
-                                    )
-                                    .firstOrNull;
-                                if (insumo == null) {
-                                  insumoMovimento.codInsumo = null;
-                                  insumoMovimento.codBarra = null;
-                                  insumoMovimento.insumo = null;
-                                  txtCodigoInsumo.text = '';
-                                  cbxInsumoKey.currentState?.setItem(null);
-                                }
-                                return DropDownSearchWidget<InsumoModel>(
-                                  validator: (val) =>
-                                      val == null ? 'Obrigatório' : null,
-                                  validateBuilder: (
-                                    context,
-                                    validateMethodBuilder,
-                                  ) =>
-                                      insumoValidate = validateMethodBuilder,
-                                  readOnly: insumoMovimento.cod != 0 ||
-                                          baseSolicitacao == true
-                                      ? true
-                                      : false,
-                                  key: cbxInsumoKey,
-                                  initialValue: insumo,
-                                  sourceList: insumos
-                                      .where(
-                                        (element) => element.ativo == true,
-                                      )
-                                      .toList(),
-                                  onChanged: (value) {
-                                    insumoMovimento.codInsumo = value?.cod;
-                                    insumoMovimento.insumo = value;
-                                    txtCodigoInsumo.text =
-                                        value?.codBarra == null
-                                            ? ''
-                                            : value!.codBarra!.toString();
-                                    insumoMovimento.codBarra = value?.codBarra;
-                                    checkAndCallPopulaCampos();
-                                  },
-                                  placeholder: 'Insumo *',
-                                );
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child:
-                        BlocBuilder<DepositoInsumoCubit, DepositoInsumoState>(
-                      bloc: depositoInsumoCubit,
-                      builder: (context, depositoState) {
-                        if (depositoState.loading) {
-                          return const LoadingWidget();
-                        }
-                        List<DepositoInsumoModel> depositos =
-                            depositoState.objs;
-
-                        depositos.sort(
-                          (a, b) => a.nome!.compareTo(b.nome!),
-                        );
-                        DepositoInsumoModel? deposito = depositos
-                            .where(
-                              (element) =>
-                                  element.cod == insumoMovimento.codDeposito,
-                            )
-                            .firstOrNull;
-                        return DropDownSearchWidget<DepositoInsumoModel>(
-                          validateBuilder: (context, validateMethodBuilder) =>
-                              depositoValidate = validateMethodBuilder,
-                          validator: (val) =>
-                              val == null ? 'Obrigatório' : null,
-                          readOnly: insumoMovimento.cod != 0 ? true : false,
-                          textFunction: (deposito) =>
-                              deposito.GetNomeDepositoText(),
-                          initialValue: deposito,
-                          sourceList: depositos,
-                          onChanged: (value) {
-                            insumoMovimento.codDeposito = value?.cod!;
-                            checkAndCallPopulaCampos();
-                          },
-                          placeholder: 'Depósito *',
-                        );
-                      },
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: txtLote,
-                      ),
-                      const SizedBox(width: DEFAULT_HEIGHT),
-                      Expanded(
-                        child: dtpDataFabricacao,
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: dtpDataValidade,
-                      ),
-                      if (insumoMovimento.flagEntradaSaida == '2' &&
-                          insumoMovimento.cod == 0) ...{
-                        const SizedBox(width: DEFAULT_HEIGHT),
-                        Expanded(
-                          child: txtValidadePosAtivaco,
-                        ),
-                      },
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: txtQuantidade,
-                      ),
-                      if (insumoMovimento.flagEntradaSaida != '1' &&
-                          insumoMovimento.cod == 0) ...{
-                        const SizedBox(width: DEFAULT_HEIGHT),
-                        Expanded(
-                          child: txtSaldoAtual,
-                        ),
-                      },
-                    ],
-                  ),
-                  // if (insumoMovimento.flagEntradaSaida == '2') ...{
-                  //   Padding(
-                  //     padding: const EdgeInsets.only(top: 5.0),
-                  //     child:
-                  //         BlocBuilder<DestinoResiduoCubit, DestinoResiduoState>(
-                  //       bloc: destinoResiduoCubit,
-                  //       builder: (context, destinoState) {
-                  //         if (destinoState.loading) {
-                  //           return const LoadingWidget();
-                  //         }
-                  //         List<DestinoResiduoModel> destinos =
-                  //             destinoState.objs;
-
-                  //         destinos.sort(
-                  //           (a, b) => a.nome!.compareTo(b.nome!),
-                  //         );
-                  //         DestinoResiduoModel? destino = destinos
-                  //             .where(
-                  //               (element) =>
-                  //                   element.cod ==
-                  //                   insumoMovimento.codDestinoResiduos,
-                  //             )
-                  //             .firstOrNull;
-                  //         return DropDownSearchWidget<DestinoResiduoModel>(
-                  //           textFunction: (destino) =>
-                  //               destino.GetNomeDestinoText(),
-                  //           initialValue: destino,
-                  //           sourceList: destinos,
-                  //           onChanged: (value) => insumoMovimento
-                  //               .codDestinoResiduos = value?.cod!,
-                  //           placeholder: 'Destino Resíduos',
-                  //         );
-                  //       },
-                  //     ),
-                  //   ),
-                  // },
-                  if (insumoMovimento.flagEntradaSaida == '1') ...{
-                    Row(
-                      children: [
-                        Expanded(
-                          child: txtNroNotaFiscal,
-                        ),
-                        const SizedBox(width: DEFAULT_HEIGHT),
-                        Expanded(
-                          child: txtPrecoNotaFiscal,
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: txtPrecoUnitario,
-                        ),
-                        const SizedBox(width: DEFAULT_HEIGHT),
-                        Expanded(
-                          child: dtpDataNotaFiscal,
-                        ),
-                      ],
-                    ),
-                  },
-                  Padding(
-                    padding: const EdgeInsets.only(top: 50),
-                    child: Row(
-                      children: [
-                        Expanded(child: txtUsuario),
-                        const SizedBox(width: DEFAULT_HEIGHT),
-                        Expanded(
-                          child: baseSolicitacao != true
-                              ? const SizedBox()
-                              : Padding(
-                                  padding: const EdgeInsets.only(top: 24.0),
-                                  child: Text(
-                                    'Nº Solicitação: $numeroSolicitacao',
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Row(
+                                    children: [
+                                      InkWell(
+                                        onTap: insumoMovimento.cod == 0 &&
+                                                baseSolicitacao != true
+                                            ? () {
+                                                setState(() {
+                                                  int? codUsuario =
+                                                      insumoMovimento
+                                                          .codUsuario;
+                                                  insumoMovimento =
+                                                      InsumoMovimentoModel
+                                                          .empty();
+                                                  insumoMovimento.codUsuario =
+                                                      codUsuario;
+                                                  isEntradaSelected = true;
+                                                  isSaidaSelected = false;
+                                                  isAjusteSelected = false;
+                                                  insumoMovimento
+                                                      .flagEntradaSaida = '1';
+                                                  baseSolicitacao = null;
+                                                  numeroSolicitacao = null;
+                                                  numeroSolicitacaoItem = null;
+                                                  cbxInsumoKey.currentState
+                                                      ?.setItem(null);
+                                                  equipamentoInsumoCubit
+                                                      .reload();
+                                                  cbxInsumoKey.currentState
+                                                      ?.reload();
+                                                });
+                                                txtSaldoAtual.text = '';
+                                                setFields(false);
+                                              }
+                                            : null,
+                                        child: Row(
+                                          children: [
+                                            Radio<int>(
+                                              value: 1,
+                                              groupValue: insumoMovimento
+                                                          .flagEntradaSaida ==
+                                                      '1'
+                                                  ? 1
+                                                  : (isAjusteSelected
+                                                      ? 0
+                                                      : null),
+                                              onChanged: insumoMovimento.cod ==
+                                                          0 &&
+                                                      baseSolicitacao != true
+                                                  ? (value) {
+                                                      setState(() {
+                                                        int? codUsuario =
+                                                            insumoMovimento
+                                                                .codUsuario;
+                                                        insumoMovimento =
+                                                            InsumoMovimentoModel
+                                                                .empty();
+                                                        insumoMovimento
+                                                                .codUsuario =
+                                                            codUsuario;
+                                                        isEntradaSelected =
+                                                            value == 1;
+                                                        isSaidaSelected = false;
+                                                        isAjusteSelected =
+                                                            false;
+                                                        insumoMovimento
+                                                                .flagEntradaSaida =
+                                                            isEntradaSelected
+                                                                ? '1'
+                                                                : null;
+                                                        baseSolicitacao = null;
+                                                        numeroSolicitacao =
+                                                            null;
+                                                        numeroSolicitacaoItem =
+                                                            null;
+                                                        cbxInsumoKey
+                                                            .currentState
+                                                            ?.setItem(null);
+                                                        equipamentoInsumoCubit
+                                                            .reload();
+                                                        cbxInsumoKey
+                                                            .currentState
+                                                            ?.reload();
+                                                      });
+                                                      txtSaldoAtual.text = '';
+                                                      setFields(false);
+                                                    }
+                                                  : null,
+                                            ),
+                                            const Text('Entrada'),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
+                                const SizedBox(width: 1.0),
+                                Expanded(
+                                  child: Row(
+                                    children: [
+                                      InkWell(
+                                        onTap: insumoMovimento.cod == 0
+                                            ? () {
+                                                setState(() {
+                                                  int? codUsuario =
+                                                      insumoMovimento
+                                                          .codUsuario;
+                                                  insumoMovimento =
+                                                      InsumoMovimentoModel
+                                                          .empty();
+                                                  insumoMovimento.codUsuario =
+                                                      codUsuario;
+                                                  isSaidaSelected = true;
+                                                  isEntradaSelected = false;
+                                                  isAjusteSelected = false;
+                                                  insumoMovimento
+                                                      .flagEntradaSaida = '2';
+                                                  baseSolicitacao = null;
+                                                  numeroSolicitacao = null;
+                                                  numeroSolicitacaoItem = null;
+                                                  cbxInsumoKey.currentState
+                                                      ?.setItem(null);
+                                                  equipamentoInsumoCubit
+                                                      .reload();
+                                                  cbxInsumoKey.currentState
+                                                      ?.reload();
+                                                });
+                                                txtSaldoAtual.text = '';
+                                                setFields(false);
+                                              }
+                                            : null,
+                                        child: Row(
+                                          children: [
+                                            Radio<int>(
+                                              value: 2,
+                                              groupValue: insumoMovimento
+                                                          .flagEntradaSaida ==
+                                                      '2'
+                                                  ? 2
+                                                  : (isAjusteSelected
+                                                      ? 0
+                                                      : null),
+                                              onChanged: insumoMovimento.cod ==
+                                                      0
+                                                  ? (value) {
+                                                      setState(() {
+                                                        int? codUsuario =
+                                                            insumoMovimento
+                                                                .codUsuario;
+                                                        insumoMovimento =
+                                                            InsumoMovimentoModel
+                                                                .empty();
+                                                        insumoMovimento
+                                                                .codUsuario =
+                                                            codUsuario;
+                                                        isSaidaSelected =
+                                                            value == 2;
+                                                        isEntradaSelected =
+                                                            false;
+                                                        isAjusteSelected =
+                                                            false;
+                                                        insumoMovimento
+                                                                .flagEntradaSaida =
+                                                            isSaidaSelected
+                                                                ? '2'
+                                                                : null;
+                                                        baseSolicitacao = null;
+                                                        numeroSolicitacao =
+                                                            null;
+                                                        numeroSolicitacaoItem =
+                                                            null;
+                                                        cbxInsumoKey
+                                                            .currentState
+                                                            ?.setItem(null);
+                                                        equipamentoInsumoCubit
+                                                            .reload();
+                                                        cbxInsumoKey
+                                                            .currentState
+                                                            ?.reload();
+                                                      });
+                                                      txtSaldoAtual.text = '';
+                                                      setFields(false);
+                                                    }
+                                                  : null,
+                                            ),
+                                            const Text('Saída'),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 1.0),
+                                Expanded(
+                                  child: Row(
+                                    children: [
+                                      InkWell(
+                                        onTap: insumoMovimento.cod == 0 &&
+                                                baseSolicitacao != true
+                                            ? () {
+                                                setState(() {
+                                                  int? codUsuario =
+                                                      insumoMovimento
+                                                          .codUsuario;
+                                                  insumoMovimento =
+                                                      InsumoMovimentoModel
+                                                          .empty();
+                                                  insumoMovimento.codUsuario =
+                                                      codUsuario;
+                                                  isAjusteSelected = true;
+                                                  isEntradaSelected = false;
+                                                  isSaidaSelected = false;
+                                                  insumoMovimento
+                                                      .flagEntradaSaida = '0';
+                                                  baseSolicitacao = null;
+                                                  numeroSolicitacao = null;
+                                                  numeroSolicitacaoItem = null;
+                                                  cbxInsumoKey.currentState
+                                                      ?.setItem(null);
+                                                  equipamentoInsumoCubit
+                                                      .reload();
+                                                  cbxInsumoKey.currentState
+                                                      ?.reload();
+                                                });
+                                                txtSaldoAtual.text = '';
+                                                setFields(false);
+                                              }
+                                            : null,
+                                        child: Row(
+                                          children: [
+                                            Radio<int>(
+                                              value: 0,
+                                              groupValue: insumoMovimento
+                                                          .flagEntradaSaida ==
+                                                      '0'
+                                                  ? 0
+                                                  : (isEntradaSelected
+                                                      ? 1
+                                                      : null),
+                                              onChanged: insumoMovimento.cod ==
+                                                          0 &&
+                                                      baseSolicitacao != true
+                                                  ? (value) {
+                                                      setState(() {
+                                                        int? codUsuario =
+                                                            insumoMovimento
+                                                                .codUsuario;
+                                                        insumoMovimento =
+                                                            InsumoMovimentoModel
+                                                                .empty();
+                                                        insumoMovimento
+                                                                .codUsuario =
+                                                            codUsuario;
+                                                        isAjusteSelected =
+                                                            value == 0;
+                                                        isEntradaSelected =
+                                                            false;
+                                                        isSaidaSelected = false;
+                                                        insumoMovimento
+                                                                .flagEntradaSaida =
+                                                            isAjusteSelected
+                                                                ? '0'
+                                                                : null;
+                                                        baseSolicitacao = null;
+                                                        numeroSolicitacao =
+                                                            null;
+                                                        numeroSolicitacaoItem =
+                                                            null;
+                                                        cbxInsumoKey
+                                                            .currentState
+                                                            ?.setItem(null);
+                                                        cbxInsumoKey
+                                                            .currentState
+                                                            ?.reload();
+                                                        equipamentoInsumoCubit
+                                                            .reload();
+                                                      });
+                                                      txtSaldoAtual.text = '';
+                                                      setFields(false);
+                                                    }
+                                                  : null,
+                                            ),
+                                            const Text('Ajuste'),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            if (insumoMovimento.flagEntradaSaida == '2') ...{
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Builder(
+                                  builder: (context) {
+                                    return BlocBuilder<EquipamentoCubit,
+                                        EquipamentoState>(
+                                      bloc: equipamentoCubit,
+                                      builder: (context, equipamentoState) {
+                                        if (equipamentoState.loading) {
+                                          return const LoadingWidget();
+                                        }
+                                        List<EquipamentoModel> equipamentos =
+                                            equipamentoState.objs;
+
+                                        equipamentos.sort(
+                                          (a, b) => a.nome!.compareTo(b.nome!),
+                                        );
+
+                                        EquipamentoModel? equipamento =
+                                            equipamentos
+                                                .where(
+                                                  (element) =>
+                                                      element.cod ==
+                                                      insumoMovimento
+                                                          .codEquipamentoInsumo,
+                                                )
+                                                .firstOrNull;
+                                        insumoMovimento.equipamento =
+                                            equipamento;
+                                        return DropDownSearchWidget<
+                                            EquipamentoModel>(
+                                          readOnly: insumoMovimento.cod != 0 ||
+                                                  baseSolicitacao == true
+                                              ? true
+                                              : false,
+                                          textFunction: (equipamento) =>
+                                              equipamento.EquipamentoNomeText(),
+                                          initialValue: equipamento,
+                                          sourceList: equipamentos,
+                                          onChanged: (value) {
+                                            insumoMovimento
+                                                    .codEquipamentoInsumo =
+                                                value?.cod!;
+                                            insumoMovimento.equipamento = value;
+                                            equipamentoInsumoCubit.refresh();
+                                            cbxInsumoKey.currentState?.reload();
+                                          },
+                                          placeholder: 'Equipamento',
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                            },
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: txtCodigoInsumo,
+                                ),
+                                const SizedBox(width: DEFAULT_HEIGHT),
+                                Expanded(
+                                  child: BlocBuilder<EquipamentoInsumoCubit,
+                                      EquipamentoInsumoState>(
+                                    bloc: equipamentoInsumoCubit,
+                                    builder: (context, equipamentoInsumoState) {
+                                      return BlocBuilder<InsumoCubit,
+                                          InsumoState>(
+                                        bloc: insumoCubit,
+                                        builder: (context, insumoState) {
+                                          if (insumoState.loading ||
+                                              equipamentoInsumoState.loading) {
+                                            return const LoadingWidget();
+                                          }
+                                          List<int>? insumosConsiderar;
+                                          if (insumoMovimento
+                                                  .codEquipamentoInsumo !=
+                                              null) {
+                                            insumosConsiderar =
+                                                equipamentoInsumoState
+                                                    .obj?.consumos
+                                                    .where(
+                                                      (element) =>
+                                                          element.codEquipamento ==
+                                                              insumoMovimento
+                                                                  .codEquipamentoInsumo &&
+                                                          element.codInsumo !=
+                                                              null,
+                                                    )
+                                                    .map((e) => e.codInsumo!)
+                                                    .toList();
+                                          }
+
+                                          List<InsumoModel> insumos =
+                                              insumoState.objs
+                                                  .where(
+                                                    (element) =>
+                                                        insumosConsiderar ==
+                                                            null ||
+                                                        insumosConsiderar
+                                                            .contains(
+                                                          element.cod,
+                                                        ),
+                                                  )
+                                                  .toList();
+
+                                          insumos.sort(
+                                            (a, b) =>
+                                                a.nome!.compareTo(b.nome!),
+                                          );
+
+                                          InsumoModel? insumo = insumos
+                                              .where(
+                                                (insumo) =>
+                                                    insumo.cod ==
+                                                    insumoMovimento.codInsumo,
+                                              )
+                                              .firstOrNull;
+                                          if (insumo == null) {
+                                            insumoMovimento.codInsumo = null;
+                                            insumoMovimento.codBarra = null;
+                                            insumoMovimento.insumo = null;
+                                            txtCodigoInsumo.text = '';
+                                            cbxInsumoKey.currentState
+                                                ?.setItem(null);
+                                          }
+                                          return DropDownSearchWidget<
+                                              InsumoModel>(
+                                            validator: (val) => val == null
+                                                ? 'Obrigatório'
+                                                : null,
+                                            validateBuilder: (
+                                              context,
+                                              validateMethodBuilder,
+                                            ) =>
+                                                insumoValidate =
+                                                    validateMethodBuilder,
+                                            readOnly:
+                                                insumoMovimento.cod != 0 ||
+                                                        baseSolicitacao == true
+                                                    ? true
+                                                    : false,
+                                            key: cbxInsumoKey,
+                                            initialValue: insumo,
+                                            sourceList: insumos
+                                                .where(
+                                                  (element) =>
+                                                      element.ativo == true,
+                                                )
+                                                .toList(),
+                                            onChanged: (value) {
+                                              insumoMovimento.codInsumo =
+                                                  value?.cod;
+                                              insumoMovimento.insumo = value;
+                                              txtCodigoInsumo.text =
+                                                  value?.codBarra == null
+                                                      ? ''
+                                                      : value!.codBarra!
+                                                          .toString();
+                                              insumoMovimento.codBarra =
+                                                  value?.codBarra;
+                                              checkAndCallPopulaCampos();
+                                            },
+                                            placeholder: 'Insumo *',
+                                          );
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: BlocBuilder<DepositoInsumoCubit,
+                                  DepositoInsumoState>(
+                                bloc: depositoInsumoCubit,
+                                builder: (context, depositoState) {
+                                  if (depositoState.loading) {
+                                    return const LoadingWidget();
+                                  }
+                                  List<DepositoInsumoModel> depositos =
+                                      depositoState.objs;
+
+                                  depositos.sort(
+                                    (a, b) => a.nome!.compareTo(b.nome!),
+                                  );
+                                  DepositoInsumoModel? deposito = depositos
+                                      .where(
+                                        (element) =>
+                                            element.cod ==
+                                            insumoMovimento.codDeposito,
+                                      )
+                                      .firstOrNull;
+                                  return DropDownSearchWidget<
+                                      DepositoInsumoModel>(
+                                    validateBuilder:
+                                        (context, validateMethodBuilder) =>
+                                            depositoValidate =
+                                                validateMethodBuilder,
+                                    validator: (val) =>
+                                        val == null ? 'Obrigatório' : null,
+                                    readOnly:
+                                        insumoMovimento.cod != 0 ? true : false,
+                                    textFunction: (deposito) =>
+                                        deposito.GetNomeDepositoText(),
+                                    initialValue: deposito,
+                                    sourceList: depositos,
+                                    onChanged: (value) {
+                                      insumoMovimento.codDeposito = value?.cod!;
+                                      checkAndCallPopulaCampos();
+                                    },
+                                    placeholder: 'Depósito *',
+                                  );
+                                },
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: txtLote,
+                                ),
+                                const SizedBox(width: DEFAULT_HEIGHT),
+                                Expanded(
+                                  child: dtpDataFabricacao,
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: dtpDataValidade,
+                                ),
+                                if (insumoMovimento.flagEntradaSaida == '2' &&
+                                    insumoMovimento.cod == 0) ...{
+                                  const SizedBox(width: DEFAULT_HEIGHT),
+                                  Expanded(
+                                    child: txtValidadePosAtivaco,
+                                  ),
+                                },
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: txtQuantidade,
+                                ),
+                                if (insumoMovimento.flagEntradaSaida != '1' &&
+                                    insumoMovimento.cod == 0) ...{
+                                  const SizedBox(width: DEFAULT_HEIGHT),
+                                  Expanded(
+                                    child: txtSaldoAtual,
+                                  ),
+                                },
+                              ],
+                            ),
+                            // if (insumoMovimento.flagEntradaSaida == '2') ...{
+                            //   Padding(
+                            //     padding: const EdgeInsets.only(top: 5.0),
+                            //     child:
+                            //         BlocBuilder<DestinoResiduoCubit, DestinoResiduoState>(
+                            //       bloc: destinoResiduoCubit,
+                            //       builder: (context, destinoState) {
+                            //         if (destinoState.loading) {
+                            //           return const LoadingWidget();
+                            //         }
+                            //         List<DestinoResiduoModel> destinos =
+                            //             destinoState.objs;
+
+                            //         destinos.sort(
+                            //           (a, b) => a.nome!.compareTo(b.nome!),
+                            //         );
+                            //         DestinoResiduoModel? destino = destinos
+                            //             .where(
+                            //               (element) =>
+                            //                   element.cod ==
+                            //                   insumoMovimento.codDestinoResiduos,
+                            //             )
+                            //             .firstOrNull;
+                            //         return DropDownSearchWidget<DestinoResiduoModel>(
+                            //           textFunction: (destino) =>
+                            //               destino.GetNomeDestinoText(),
+                            //           initialValue: destino,
+                            //           sourceList: destinos,
+                            //           onChanged: (value) => insumoMovimento
+                            //               .codDestinoResiduos = value?.cod!,
+                            //           placeholder: 'Destino Resíduos',
+                            //         );
+                            //       },
+                            //     ),
+                            //   ),
+                            // },
+                            if (insumoMovimento.flagEntradaSaida == '1') ...{
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: txtNroNotaFiscal,
+                                  ),
+                                  const SizedBox(width: DEFAULT_HEIGHT),
+                                  Expanded(
+                                    child: txtPrecoNotaFiscal,
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: txtPrecoUnitario,
+                                  ),
+                                  const SizedBox(width: DEFAULT_HEIGHT),
+                                  Expanded(
+                                    child: dtpDataNotaFiscal,
+                                  ),
+                                ],
+                              ),
+                            },
+                            Padding(
+                              padding: const EdgeInsets.only(top: 50),
+                              child: Row(
+                                children: [
+                                  Expanded(child: txtUsuario),
+                                  const SizedBox(width: DEFAULT_HEIGHT),
+                                  Expanded(
+                                    child: baseSolicitacao != true
+                                        ? const SizedBox()
+                                        : Padding(
+                                            padding: const EdgeInsets.only(
+                                              top: 24.0,
+                                            ),
+                                            child: Text(
+                                              'Nº Solicitação: $numeroSolicitacao',
+                                            ),
+                                          ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: dtpDataHora,
+                                ),
+                                const SizedBox(width: DEFAULT_HEIGHT),
+                                Expanded(
+                                  child: txtRegistro,
+                                ),
+                              ],
+                            ),
+                          ],
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: dtpDataHora,
-                      ),
-                      const SizedBox(width: DEFAULT_HEIGHT),
-                      Expanded(
-                        child: txtRegistro,
-                      ),
-                    ],
                   ),
                 ],
               ),
             ),
-          ),
-          actions: [
             Row(
               children: [
                 if (insumoMovimento.cod != null && insumoMovimento.cod != 0)
@@ -977,8 +1079,13 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
                     //             insumoMovimento.cod != 0
                     //     ? false
                     //     : true,
-                    onPressed: () =>
-                        {salvarConfirmacao(context, insumoMovimento)},
+                    onPressed: () => {
+                      salvarConfirmacao(
+                        context: context,
+                        insumoMovimento: insumoMovimento,
+                        insumoSaldo: null,
+                      ),
+                    },
                   ),
                 ),
                 Padding(
@@ -1000,7 +1107,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: CancelButtonUnfilledWidget(
-                    onPressed: () => {Navigator.of(context).pop((false, ''))},
+                    onPressed: widget.onCancel,
                   ),
                 ),
               ],
@@ -1025,7 +1132,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
     );
 
     if (insumoSaldo == null) {
-      await ErrorUtils.showErrorDialog(context, [
+      ErrorUtils.showErrorDialog(context, [
         'MOV. SAÍDA: Não foi encontrado LOTE com QTDE disponível no DEPÓSITO indicado.',
       ]);
       return;
@@ -1072,10 +1179,13 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
     await controller.print();
   }
 
-  void salvarConfirmacao(
-    BuildContext context,
-    InsumoMovimentoModel insumoMovimento,
-  ) async {
+  void salvarConfirmacao({
+    required BuildContext context,
+    required InsumoMovimentoModel insumoMovimento,
+    required InsumoSaldoModel? insumoSaldo,
+    bool confirmouCriacaoLote = false,
+    bool confirmaDados = false,
+  }) async {
     bool dataFabricacaoValid = dataFabricacaoValidate();
     bool insumoValid = insumoValidate();
     bool depositoValid = depositoValidate();
@@ -1113,39 +1223,54 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
       return;
     }
 
-    InsumoSaldoModel? insumoSaldo = await InsumoSaldoService().filterOne(
-      InsumoSaldoFilter(
-        codDeposito: insumoMovimento.codDeposito,
-        codInsumo: insumoMovimento.codInsumo,
-        lote: insumoMovimento.lote,
-      ),
-    );
+    if (insumoSaldo == null) {
+      insumoSaldo = await InsumoSaldoService().filterOne(
+        InsumoSaldoFilter(
+          codDeposito: insumoMovimento.codDeposito,
+          codInsumo: insumoMovimento.codInsumo,
+          lote: insumoMovimento.lote,
+        ),
+      );
+    }
+
     if (insumoMovimento.cod == 0) {
       if (insumoSaldo == null) {
         if (insumoMovimento.flagEntradaSaida == '1') {
-          bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-            context,
-            'INSUMO NÃO ENCONTRADO: O INSUMO/LOTE informado não foi\nencontrado no DEPÓSITO indicado. Deseja criar?',
+          ConfirmDialogUtils.showConfirmAlertDialog(
+            context: context,
+            message:
+                'INSUMO NÃO ENCONTRADO: O INSUMO/LOTE informado não foi\nencontrado no DEPÓSITO indicado. Deseja criar?',
+            onConfirm: () => salvarConfirmacao(
+              context: context,
+              insumoMovimento: insumoMovimento,
+              insumoSaldo: insumoSaldo,
+              confirmouCriacaoLote: true,
+            ),
           );
-          if (!confirmacao) {
-            return;
-          }
+          return;
         } else {
-          await WarningUtils.showWarningDialog(context, 
+          WarningUtils.showWarningDialog(
+            context,
             'MOVIMENTAÇÃO DE SAÍDA: O INSUMO/LOTE informado não foi encontrado no DEPÓSITO indicado. Revise seu Procedimento',
           );
           return;
         }
       }
 
-      if (insumoMovimento.flagEntradaSaida == '1') {
-        bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-          context,
-          'Confira atentamente a movimentação preenchida.\nVocê confirma os dados informados?',
+      if (insumoMovimento.flagEntradaSaida == '1' && !confirmaDados) {
+        ConfirmDialogUtils.showConfirmAlertDialog(
+          context: context,
+          message:
+              'Confira atentamente a movimentação preenchida.\nVocê confirma os dados informados?',
+          onConfirm: () => salvarConfirmacao(
+            context: context,
+            insumoMovimento: insumoMovimento,
+            insumoSaldo: insumoSaldo,
+            confirmouCriacaoLote: confirmouCriacaoLote,
+            confirmaDados: true,
+          ),
         );
-        if (!confirmacao) {
-          return;
-        }
+        return;
       }
     }
 
@@ -1156,7 +1281,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
         'Faça a leitura do Lote indicado ou Cancele a operação',
       );
       if (!confirmacao.$1) {
-        await WarningUtils.showWarningDialog(
+        WarningUtils.showWarningDialog(
           context,
           'Falha na conferência do lote. Revise seu procedimento.',
         );
@@ -1165,7 +1290,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
 
       if (insumoMovimento.lote == null ||
           confirmacao.$2 != insumoMovimento.lote) {
-        await WarningUtils.showWarningDialog(
+        WarningUtils.showWarningDialog(
           context,
           'O Lote lido não confere com o lote indicado. Revise seu procedimento.',
         );
@@ -1204,8 +1329,11 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
   }
 
   Future salvar() async {
-    InsumoMovimentoModel? insumo =
-        await cubit.save(insumoMovimento, numeroSolicitacaoItem);
+    InsumoMovimentoModel? insumo = await cubit.save(
+      insumoMovimento,
+      numeroSolicitacaoItem,
+      widget.onSaved,
+    );
     if (insumo == null) return;
     ToastUtils.showCustomToastSucess(context, 'Movimentação salva!');
     setState(() {

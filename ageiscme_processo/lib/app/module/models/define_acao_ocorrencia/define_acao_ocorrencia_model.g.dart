@@ -9,12 +9,12 @@ part of 'define_acao_ocorrencia_model.dart';
 _$DefineAcaoOcorrenciaModelImpl _$$DefineAcaoOcorrenciaModelImplFromJson(
         Map<String, dynamic> json) =>
     _$DefineAcaoOcorrenciaModelImpl(
-      codMaterial: json['codMaterial'] as int?,
+      codMaterial: (json['codMaterial'] as num?)?.toInt(),
       tipoMaterial: $enumDecodeNullable(
           _$TipoMaterialAcaoOcorrenciaEnumMap, json['tipoMaterial']),
       tipoMotivo: $enumDecodeNullable(
           _$TipoMotivoOcorrenciasEnumMap, json['tipoMotivo']),
-      codMotivo: json['codMotivo'] as int?,
+      codMotivo: (json['codMotivo'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$DefineAcaoOcorrenciaModelImplToJson(

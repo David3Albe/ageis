@@ -12,11 +12,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ImagemPage extends StatefulWidget {
-  ImagemPage({super.key});
+  const ImagemPage({super.key});
 
   @override
   State<ImagemPage> createState() => _ImagemPageState();
@@ -113,7 +114,7 @@ class _ImagemPageState extends State<ImagemPage> {
     );
   }
 
-  Future<void> openModal(BuildContext context, ImagemModel imagem) async {
+  Future openModal(BuildContext context, ImagemModel imagem) async {
     LoadingController loading = LoadingController(context: context);
 
     ImagemModel? imagemModel = imagem;
@@ -129,26 +130,38 @@ class _ImagemPageState extends State<ImagemPage> {
     }
     loading.close(context, mounted);
 
-    (bool, String)? result = await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return ImagemPageFrm(
-          imagem: imagemModel!,
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Imagem',
+      widget: ImagemPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        imagem: imagemModel,
+      ),
     );
-    if (result == null || !result.$1) return;
-    ToastUtils.showCustomToastSucess(context, result.$2);
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
     bloc.loadImagem();
   }
 
-  void delete(BuildContext context, ImagemModel imagem) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção da Imagem\n${imagem.cod} - ${imagem.nomeFoto}',
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
+  }
+
+  void delete(BuildContext context, ImagemModel imagem) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção da Imagem\n${imagem.cod} - ${imagem.nomeFoto}',
+      onConfirm: () => onConfirmDelete(imagem),
     );
-    if (confirmacao) bloc.delete(imagem);
+  }
+
+  void onConfirmDelete(ImagemModel obj) {
+    bloc.delete(obj);
   }
 
   void deleted(ImagemPageState state) {

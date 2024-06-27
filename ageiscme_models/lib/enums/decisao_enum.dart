@@ -16,6 +16,7 @@ class DecisaoEnum {
   static const int AutorizarQuebraFluxo = 21;
   static const int DeterminarPriodade = 22;
   static const int ProsseguirDatamatrixDanificado = 23;
+  static const int ProsseguirComLocalDestinoDivergente = 24;
   static const int ExistemItensNaoConforme = 26;
   static const int ItemNaoConforme = 28;
   static const int ExistemKitsNaoConforme = 29;
@@ -25,6 +26,7 @@ class DecisaoEnum {
   static const int AutorizarAcaoOcorrencias = 33;
   static const int TomarDecisaoAcaoItem = 34;
   static const int TomarDecisaoAcaoKit = 35;
+  static const int DefinirResponsavelLocalNaoCompativel = 40;
   static const int RegistrarBiologico = 41;
   static const int SolicitaIntegradorKit = 42;
   static const int MontarProntuario = 101;
@@ -77,4 +79,6 @@ class DecisaoEnum {
   static const int DefineExistemKitsItensNaoConforme = 149;
   static const int CancelaAcaoMotivoNaoConformidade = 150;
   static const int ConfirmaAcaoMotivoNaoConformidade = 151;
+  static const int DefinirResponsavelLocalNaoCompativelItem = 152;
+  static const int ProsseguirComLocalDestinoDivergenteItem = 153;
 }

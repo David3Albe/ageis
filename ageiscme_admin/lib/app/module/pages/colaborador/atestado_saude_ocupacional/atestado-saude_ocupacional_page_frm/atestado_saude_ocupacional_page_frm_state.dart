@@ -15,13 +15,17 @@ class AtestadoSaudeOcupacionalPageFrmCubit
           ),
         );
 
-  void save(AtestadoSaudeOcupacionalModel atestadoSaudeOcupacional) async {
+  void save(
+    AtestadoSaudeOcupacionalModel atestadoSaudeOcupacional,
+    final void Function(String) onSaved,
+  ) async {
     try {
       (
         String message,
         AtestadoSaudeOcupacionalModel atestadoSaudeOcupacional
       )? result = await service.save(atestadoSaudeOcupacional);
       if (result == null) return;
+      onSaved(result.$1);
       emit(
         AtestadoSaudeOcupacionalPageFrmState(
           message: result.$1,

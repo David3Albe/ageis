@@ -10,11 +10,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class AcaoOcorrenciaPage extends StatefulWidget {
-  AcaoOcorrenciaPage({super.key});
+  const AcaoOcorrenciaPage({super.key});
 
   @override
   State<AcaoOcorrenciaPage> createState() => _AcaoOcorrenciaPageState();
@@ -105,30 +106,42 @@ class _AcaoOcorrenciaPageState extends State<AcaoOcorrenciaPage> {
     );
   }
 
-  void openModal(BuildContext context, AcaoOcorrenciaModel acaoOcorrencia) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: AcaoOcorrenciaPageFrm(
-            acaoOcorrencia: acaoOcorrencia,
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadAcaoOcorrencia();
-    });
+  Future openModal(
+    BuildContext context,
+    AcaoOcorrenciaModel acaoOcorrencia,
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Ação Ocorrência',
+      widget: AcaoOcorrenciaPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        acaoOcorrencia: acaoOcorrencia,
+      ),
+    );
   }
 
-  void delete(BuildContext context, AcaoOcorrenciaModel acaoOcorrencia) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção da Ação de Ocorrência\n${acaoOcorrencia.cod} - ${acaoOcorrencia.descricao}',
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadAcaoOcorrencia();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
+  }
+
+  void delete(BuildContext context, AcaoOcorrenciaModel acaoOcorrencia) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção da Ação de Ocorrência\n${acaoOcorrencia.cod} - ${acaoOcorrencia.descricao}',
+      onConfirm: () => confirmDelete(acaoOcorrencia),
     );
-    if (confirmacao) bloc.delete(acaoOcorrencia);
+  }
+
+  void confirmDelete(AcaoOcorrenciaModel acaoOcorrencia) async {
+    bloc.delete(acaoOcorrencia);
   }
 
   void deleted(AcaoOcorrenciaPageState state) {

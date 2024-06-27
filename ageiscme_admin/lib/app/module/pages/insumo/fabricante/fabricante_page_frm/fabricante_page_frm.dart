@@ -3,7 +3,6 @@ import 'package:ageiscme_data/services/fabricante/fabricante_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
@@ -14,9 +13,13 @@ class FabricantePageFrm extends StatefulWidget {
   const FabricantePageFrm({
     Key? key,
     required this.fabricante,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final FabricanteModel fabricante;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<FabricantePageFrm> createState() =>
@@ -63,85 +66,71 @@ class _FabricantePageFrmState extends State<FabricantePageFrm> {
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<FabricantePageFrmCubit, FabricantePageFrmState>(
+    return BlocBuilder<FabricantePageFrmCubit, FabricantePageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
+      builder: (context, state) {
+        return Container(
+          constraints: BoxConstraints(
+            minWidth: size.width * .5,
+            minHeight: size.height * .5,
+            maxHeight: size.height * .8,
+          ),
+          child: Stack(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TitleWidget(
+                          text: titulo,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: txtFabricante,
+                  ),
+                  const Spacer(),
+                  Row(
+                    children: [
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: SaveButtonWidget(
+                          onPressed: () => {salvar()},
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: CleanButtonWidget(
+                          onPressed: () => {
+                            setState(() {
+                              fabricante = FabricanteModel.empty();
+                            }),
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: CancelButtonUnfilledWidget(
+                          onPressed: widget.onCancel,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
       },
-      child: BlocBuilder<FabricantePageFrmCubit, FabricantePageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return Container(
-            constraints: BoxConstraints(
-              minWidth: size.width * .5,
-              minHeight: size.height * .5,
-              maxHeight: size.height * .8,
-            ),
-            child: Stack(
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TitleWidget(
-                            text: titulo,
-                          ),
-                        ),
-                        const Spacer(),
-                        CloseButtonWidget(
-                          onPressed: () =>
-                              Navigator.of(context).pop((false, '')),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtFabricante,
-                    ),
-                    const Spacer(),
-                    Row(
-                      children: [
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: SaveButtonWidget(
-                            onPressed: () => {salvar()},
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: CleanButtonWidget(
-                            onPressed: () => {
-                              setState(() {
-                                fabricante = FabricanteModel.empty();
-                              }),
-                            },
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: CancelButtonUnfilledWidget(
-                            onPressed: () =>
-                                {Navigator.of(context).pop((false, ''))},
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
-      ),
     );
   }
 
   void salvar() {
     if (!txtFabricante.valid) return;
-    cubit.save(fabricante);
+    cubit.save(fabricante, widget.onSaved);
   }
 }

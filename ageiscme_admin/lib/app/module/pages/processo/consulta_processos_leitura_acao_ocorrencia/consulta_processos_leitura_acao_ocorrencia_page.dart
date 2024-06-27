@@ -27,7 +27,7 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ConsultaProcessosLeituraAcaoOcorrenciaPage extends StatefulWidget {
-  ConsultaProcessosLeituraAcaoOcorrenciaPage({super.key});
+  const ConsultaProcessosLeituraAcaoOcorrenciaPage({super.key});
 
   @override
   State<ConsultaProcessosLeituraAcaoOcorrenciaPage> createState() =>
@@ -163,190 +163,186 @@ class _ConsultaProcessosLeituraAcaoOcorrenciaPageState
       ErrorUtils.showErrorDialog(context, [state.error]);
 
   Future openModal(BuildContext context) async {
-    bool? result = await showDialog<bool>(
-      barrierDismissible: false,
+    bool confirm = await showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return FilterDialogWidget(
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: DatePickerWidget(
-                      placeholder: 'Data Inicio',
-                      onDateSelected: (value) => filter.startDate = value,
-                      initialValue: filter.startDate,
-                    ),
+      builder: (context) => FilterDialogWidget(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: DatePickerWidget(
+                    placeholder: 'Data Inicio',
+                    onDateSelected: (value) => filter.startDate = value,
+                    initialValue: filter.startDate,
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 40),
-                  ),
-                  Expanded(
-                    child: TimePickerWidget(
-                      placeholder: 'Hora Início',
-                      initialValue: filter.startTime == null
-                          ? null
-                          : TimeOfDay(
-                              hour: filter.startTime!.hour,
-                              minute: filter.startTime!.minute,
-                            ),
-                      onTimeSelected: (selectedTime) {
-                        if (selectedTime == null) {
-                          filter.startTime = null;
-                          return;
-                        }
-                        filter.startTime = DateTime(
-                          DateTime.now().year,
-                          DateTime.now().month,
-                          DateTime.now().day,
-                          selectedTime.hour,
-                          selectedTime.minute,
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              Row(
-                children: [
-                  Expanded(
-                    child: DatePickerWidget(
-                      placeholder: 'Data Término',
-                      onDateSelected: (value) => filter.finalDate = value,
-                      initialValue: filter.finalDate,
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 40),
-                  ),
-                  Expanded(
-                    child: TimePickerWidget(
-                      placeholder: 'Hora Fim',
-                      initialValue: filter.finalTime == null
-                          ? null
-                          : TimeOfDay(
-                              hour: filter.finalTime!.hour,
-                              minute: filter.finalTime!.minute,
-                            ),
-                      onTimeSelected: (selectedTime) {
-                        print(selectedTime);
-                        if (selectedTime == null) {
-                          filter.finalTime = null;
-                          return;
-                        }
-                        filter.finalTime = DateTime(
-                          DateTime.now().year,
-                          DateTime.now().month,
-                          DateTime.now().day,
-                          selectedTime.hour,
-                          selectedTime.minute,
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              CustomAutocompleteWidget<KitDropDownSearchResponseDTO>(
-                initialValue: filter.codBarraKitContem,
-                onChange: (str) => filter.codBarraKitContem = str,
-                onItemSelectedText: (kit) => kit.codBarra,
-                label: 'Kit',
-                title: (p0) => Text(p0.CodBarraDescritorText()),
-                suggestionsCallback: (str) async {
-                  return (await KitService().getDropDownSearchKits(
-                        KitDropDownSearchDTO(
-                          search: str,
-                          numeroRegistros: 30,
-                        ),
-                      ))
-                          ?.$2 ??
-                      [];
-                },
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              CustomAutocompleteWidget<ItemModel>(
-                initialValue: filter.idEtiquetaContem,
-                onChange: (str) => filter.idEtiquetaContem = str,
-                onItemSelectedText: (item) => item.idEtiqueta ?? null,
-                label: 'Item',
-                title: (p0) => Text(p0.EtiquetaDescricaoText()),
-                suggestionsCallback: (str) => ItemService().Filter(
-                  ItemFilter(numeroRegistros: 30, termoPesquisa: str),
                 ),
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<AcaoOcorrenciaCubit, List<AcaoOcorrenciaModel>>(
-                bloc: acaoOcorrenciaBloc,
-                builder: (context, acoes) {
-                  acoes.sort(
-                    (a, b) => a.descricao!.compareTo(b.descricao!),
-                  );
-                  AcaoOcorrenciaModel? acao = acoes
-                      .where(
-                        (element) => element.cod == filter.codAcaoOcorrencia,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<AcaoOcorrenciaModel>(
-                    textFunction: (acao) => acao.AcaoOcorrenciaDescricaoText(),
-                    initialValue: acao,
-                    sourceList: acoes
-                        .where((element) => element.ativo == true)
-                        .toList(),
-                    onChanged: (value) => filter.codAcaoOcorrencia = value?.cod,
-                    placeholder: 'Ação Ocorrência',
-                  );
-                },
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              DropDownSearchApiWidget<UsuarioDropDownSearchResponseDTO>(
-                search: (str) async =>
-                    (await UsuarioService().getDropDownSearch(
-                      UsuarioDropDownSearchDTO(
-                        numeroRegistros: 30,
+                const Padding(
+                  padding: EdgeInsets.only(left: 40),
+                ),
+                Expanded(
+                  child: TimePickerWidget(
+                    placeholder: 'Hora Início',
+                    initialValue: filter.startTime == null
+                        ? null
+                        : TimeOfDay(
+                            hour: filter.startTime!.hour,
+                            minute: filter.startTime!.minute,
+                          ),
+                    onTimeSelected: (selectedTime) {
+                      if (selectedTime == null) {
+                        filter.startTime = null;
+                        return;
+                      }
+                      filter.startTime = DateTime(
+                        DateTime.now().year,
+                        DateTime.now().month,
+                        DateTime.now().day,
+                        selectedTime.hour,
+                        selectedTime.minute,
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            Row(
+              children: [
+                Expanded(
+                  child: DatePickerWidget(
+                    placeholder: 'Data Término',
+                    onDateSelected: (value) => filter.finalDate = value,
+                    initialValue: filter.finalDate,
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 40),
+                ),
+                Expanded(
+                  child: TimePickerWidget(
+                    placeholder: 'Hora Fim',
+                    initialValue: filter.finalTime == null
+                        ? null
+                        : TimeOfDay(
+                            hour: filter.finalTime!.hour,
+                            minute: filter.finalTime!.minute,
+                          ),
+                    onTimeSelected: (selectedTime) {
+                      print(selectedTime);
+                      if (selectedTime == null) {
+                        filter.finalTime = null;
+                        return;
+                      }
+                      filter.finalTime = DateTime(
+                        DateTime.now().year,
+                        DateTime.now().month,
+                        DateTime.now().day,
+                        selectedTime.hour,
+                        selectedTime.minute,
+                      );
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            CustomAutocompleteWidget<KitDropDownSearchResponseDTO>(
+              initialValue: filter.codBarraKitContem,
+              onChange: (str) => filter.codBarraKitContem = str,
+              onItemSelectedText: (kit) => kit.codBarra,
+              label: 'Kit',
+              title: (p0) => Text(p0.CodBarraDescritorText()),
+              suggestionsCallback: (str) async {
+                return (await KitService().getDropDownSearchKits(
+                      KitDropDownSearchDTO(
                         search: str,
-                        apenasAtivos: true,
+                        numeroRegistros: 30,
                       ),
                     ))
                         ?.$2 ??
-                    [],
-                textFunction: (usuario) => usuario.NomeText(),
-                initialValue: filter.usuarioAcao,
-                onChanged: (value) {
-                  filter.codUsuarioAcao = value?.cod;
-                  filter.usuarioAcao = value;
-                },
-                placeholder: 'Usuário Ação',
+                    [];
+              },
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            CustomAutocompleteWidget<ItemModel>(
+              initialValue: filter.idEtiquetaContem,
+              onChange: (str) => filter.idEtiquetaContem = str,
+              onItemSelectedText: (item) => item.idEtiqueta ?? null,
+              label: 'Item',
+              title: (p0) => Text(p0.EtiquetaDescricaoText()),
+              suggestionsCallback: (str) => ItemService().Filter(
+                ItemFilter(numeroRegistros: 30, termoPesquisa: str),
               ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              DropDownSearchApiWidget<UsuarioDropDownSearchResponseDTO>(
-                search: (str) async =>
-                    (await UsuarioService().getDropDownSearch(
-                      UsuarioDropDownSearchDTO(
-                        numeroRegistros: 30,
-                        search: str,
-                        apenasColaboradores: true,
-                        apenasAtivos: true,
-                      ),
-                    ))
-                        ?.$2 ??
-                    [],
-                textFunction: (usuario) => usuario.NomeText(),
-                initialValue: filter.usuarioAutorizacao,
-                onChanged: (value) {
-                  filter.codUsuarioAutorizacao = value?.cod;
-                  filter.usuarioAutorizacao = value;
-                },
-                placeholder: 'Usuário Autorização',
-              ),
-            ],
-          ),
-        );
-      },
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            BlocBuilder<AcaoOcorrenciaCubit, List<AcaoOcorrenciaModel>>(
+              bloc: acaoOcorrenciaBloc,
+              builder: (context, acoes) {
+                acoes.sort(
+                  (a, b) => a.descricao!.compareTo(b.descricao!),
+                );
+                AcaoOcorrenciaModel? acao = acoes
+                    .where(
+                      (element) => element.cod == filter.codAcaoOcorrencia,
+                    )
+                    .firstOrNull;
+                return DropDownSearchWidget<AcaoOcorrenciaModel>(
+                  textFunction: (acao) => acao.AcaoOcorrenciaDescricaoText(),
+                  initialValue: acao,
+                  sourceList:
+                      acoes.where((element) => element.ativo == true).toList(),
+                  onChanged: (value) => filter.codAcaoOcorrencia = value?.cod,
+                  placeholder: 'Ação Ocorrência',
+                );
+              },
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            DropDownSearchApiWidget<UsuarioDropDownSearchResponseDTO>(
+              search: (str) async =>
+                  (await UsuarioService().getDropDownSearch(
+                    UsuarioDropDownSearchDTO(
+                      numeroRegistros: 30,
+                      search: str,
+                      apenasAtivos: true,
+                    ),
+                  ))
+                      ?.$2 ??
+                  [],
+              textFunction: (usuario) => usuario.NomeText(),
+              initialValue: filter.usuarioAcao,
+              onChanged: (value) {
+                filter.codUsuarioAcao = value?.cod;
+                filter.usuarioAcao = value;
+              },
+              placeholder: 'Usuário Ação',
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            DropDownSearchApiWidget<UsuarioDropDownSearchResponseDTO>(
+              search: (str) async =>
+                  (await UsuarioService().getDropDownSearch(
+                    UsuarioDropDownSearchDTO(
+                      numeroRegistros: 30,
+                      search: str,
+                      apenasColaboradores: true,
+                      apenasAtivos: true,
+                    ),
+                  ))
+                      ?.$2 ??
+                  [],
+              textFunction: (usuario) => usuario.NomeText(),
+              initialValue: filter.usuarioAutorizacao,
+              onChanged: (value) {
+                filter.codUsuarioAutorizacao = value?.cod;
+                filter.usuarioAutorizacao = value;
+              },
+              placeholder: 'Usuário Autorização',
+            ),
+          ],
+        ),
+      ),
     );
-    if (result != true) return;
+    if (confirm != true) return;
     bloc.loadAcaoOcorrencia(filter);
   }
 }

@@ -135,95 +135,95 @@ class AdminModule extends Module {
         ),
         createParallelRoute(
           '/cadastro/centro-custo',
-          child: (context) => CentroCustoPage(),
+          child: (context) => const CentroCustoPage(),
         ),
         createParallelRoute(
           'material/embalagem',
-          child: (context) => EmbalagemPage(),
+          child: (context) => const EmbalagemPage(),
         ),
         createParallelRoute(
           'material/etiqueta',
-          child: (context) => EtiquetaPage(),
+          child: (context) => const EtiquetaPage(),
         ),
         createParallelRoute(
           'insumo/destino-residuo',
-          child: (context) => DestinoResiduoPage(),
+          child: (context) => const DestinoResiduoPage(),
         ),
         createParallelRoute(
           '/colaborador/tipo-afastamento',
-          child: (context) => TipoAfastamentoPage(),
+          child: (context) => const TipoAfastamentoPage(),
         ),
         createParallelRoute(
           '/equipamento/servico-tipo',
-          child: (context) => ServicoTipoPage(),
+          child: (context) => const ServicoTipoPage(),
         ),
         createParallelRoute(
           '/equipamento/peca',
-          child: (context) => PecaPage(),
+          child: (context) => const PecaPage(),
         ),
         createParallelRoute(
           '/material/tamanho',
-          child: (context) => TamanhoPage(),
+          child: (context) => const TamanhoPage(),
         ),
         createParallelRoute(
           '/processo/acao-ocorrencia',
-          child: (context) => AcaoOcorrenciaPage(),
+          child: (context) => const AcaoOcorrenciaPage(),
         ),
         createParallelRoute(
           '/material/unidade-medida',
-          child: (context) => UnidadeMedidaPage(),
+          child: (context) => const UnidadeMedidaPage(),
         ),
         createParallelRoute(
           '/insumo/fornecedor',
-          child: (context) => FornecedorPage(),
+          child: (context) => const FornecedorPage(),
         ),
         createParallelRoute(
           '/insumo/fabricante',
-          child: (context) => FabricantePage(),
+          child: (context) => const FabricantePage(),
         ),
         createParallelRoute(
           '/cadastro/tipo-documento',
-          child: (context) => TipoDocumentoPage(),
+          child: (context) => const TipoDocumentoPage(),
         ),
         createParallelRoute(
           '/material/motivo-remover-repor-item',
-          child: (context) => MotivoRemoverReporItemPage(),
+          child: (context) => const MotivoRemoverReporItemPage(),
         ),
         createParallelRoute(
           '/processo/processo-motivo',
-          child: (context) => ProcessoMotivoPage(),
+          child: (context) => const ProcessoMotivoPage(),
         ),
         createParallelRoute(
           'processo/motivo-quebra-fluxo',
-          child: (context) => MotivoQuebraFluxoPage(),
+          child: (context) => const MotivoQuebraFluxoPage(),
         ),
         createParallelRoute(
           '/biblioteca/gestao-contrato',
-          child: (context) => GestaoContratoPage(),
+          child: (context) => const GestaoContratoPage(),
         ),
         createParallelRoute(
           '/material/grupo-material',
-          child: (context) => GrupoMaterialPage(),
+          child: (context) => const GrupoMaterialPage(),
         ),
         createParallelRoute(
           '/material/kit-cor',
-          child: (context) => KitCorPage(),
+          child: (context) => const KitCorPage(),
         ),
         createParallelRoute(
           '/cadastro/local-instituicao',
-          child: (context) => LocalInstituicaoPage(),
+          child: (context) => const LocalInstituicaoPage(),
         ),
         createParallelRoute(
           '/arsenal/localizacao-arsenal',
-          child: (context) => LocalizacaoArsenalPage(),
+          child: (context) => const LocalizacaoArsenalPage(),
         ),
         createParallelRoute(
           '/cadastro/parametro-sistema',
-          child: (context) => ParametroSistemaPage(),
+          child: (context) => const ParametroSistemaPage(),
         ),
         createParallelRoute(
           '/insumo/deposito',
-          child: (context) => DepositoInsumoPage(),
+          child: (context) => const DepositoInsumoPage(),
         ),
         createParallelRoute(
           '/biblioteca/documento',
@@ -233,11 +233,11 @@ class AdminModule extends Module {
         ),
         createParallelRoute(
           '/insumo/insumo',
-          child: (context) => InsumoPage(),
+          child: (context) => const InsumoPage(),
         ),
         createParallelRoute(
           '/colaborador/epi-descritor',
-          child: (context) => EpiDescritorPage(),
+          child: (context) => const EpiDescritorPage(),
         ),
         createParallelRoute(
           '/colaborador/atestado-saude-ocupacional',
@@ -247,11 +247,11 @@ class AdminModule extends Module {
         ),
         createParallelRoute(
           '/material/item-descritor',
-          child: (context) => ItemDescritorPage(),
+          child: (context) => const ItemDescritorPage(),
         ),
         createParallelRoute(
           '/processo/processo-etapa',
-          child: (context) => ProcessoEtapaPage(),
+          child: (context) => const ProcessoEtapaPage(),
         ),
         createParallelRoute(
           '/equipamento/registro-servico',
@@ -265,31 +265,31 @@ class AdminModule extends Module {
         ),
         createParallelRoute(
           '/equipamento/equipamento',
-          child: (context) => EquipamentoPage(),
+          child: (context) => const EquipamentoPage(),
         ),
         createParallelRoute(
           '/arsenal/arsenal',
-          child: (context) => ArsenalEstoquePage(),
+          child: (context) => const ArsenalEstoquePage(),
         ),
         createParallelRoute(
           '/cadastro/instituicao',
-          child: (context) => InstituicaoPage(),
+          child: (context) => const InstituicaoPage(),
         ),
         createParallelRoute(
           '/colaborador/treinamento-registro',
-          child: (context) => TreinamentoRegistroPage(),
+          child: (context) => const TreinamentoRegistroPage(),
         ),
         createParallelRoute(
           '/cadastro/usuario',
-          child: (context) => UsuarioPage(),
+          child: (context) => const UsuarioPage(),
         ),
         createParallelRoute(
           '/cadastro/proprietario',
-          child: (context) => ProprietarioPage(),
+          child: (context) => const ProprietarioPage(),
         ),
         createParallelRoute(
           '/material/consulta-remover-repor-item',
-          child: (context) => ConsultaRemoverReporItemPage(),
+          child: (context) => const ConsultaRemoverReporItemPage(),
         ),
         createParallelRoute(
           '/material/item',
@@ -302,11 +302,11 @@ class AdminModule extends Module {
         ),
         createParallelRoute(
           '/material/kit-descritor',
-          child: (context) => KitDescritorPage(),
+          child: (context) => const KitDescritorPage(),
         ),
         createParallelRoute(
           '/material/kit',
-          child: (context) => KitPage(),
+          child: (context) => const KitPage(),
         ),
         createParallelRoute(
           '/colaborador/epi-entrega',
@@ -316,11 +316,11 @@ class AdminModule extends Module {
         ),
         createParallelRoute(
           '/equipamento/consulta-registro-servico',
-          child: (context) => ConsultaRegistroServicoPage(),
+          child: (context) => const ConsultaRegistroServicoPage(),
         ),
         createParallelRoute(
           '/equipamento/consulta-manutencao',
-          child: (context) => ConsultaManutencaoPage(),
+          child: (context) => const ConsultaManutencaoPage(),
         ),
         createParallelRoute(
           '/material/consulta-kit',
@@ -330,7 +330,7 @@ class AdminModule extends Module {
         ),
         createParallelRoute(
           '/material/consulta-kit-inventario',
-          child: (context) => ConsultaKitInventarioPage(),
+          child: (context) => const ConsultaKitInventarioPage(),
         ),
         createParallelRoute(
           '/insumo/consulta-movimento-estoque',
@@ -340,35 +340,37 @@ class AdminModule extends Module {
         ),
         createParallelRoute(
           '/arsenal/consulta-estoque-disponivel',
-          child: (context) => ConsultaEstoqueDisponivelPage(),
+          child: (context) => const ConsultaEstoqueDisponivelPage(),
         ),
         createParallelRoute(
           '/arsenal/consulta-processo-leitura-devolvido',
-          child: (context) => ConsultaProcessosLeituraDevolvidoPage(),
+          child: (context) => const ConsultaProcessosLeituraDevolvidoPage(),
         ),
         createParallelRoute(
           '/arsenal/consulta-estoque-disponivel-rotulado',
-          child: (context) => ConsultaEstoqueDisponivelRotuladoPage(),
+          child: (context) => const ConsultaEstoqueDisponivelRotuladoPage(),
         ),
         createParallelRoute(
           '/arsenal/consulta-processos-leitura-dispensado',
-          child: (context) => LoadConsultaProcessosLeituraDispensadoPage(),
+          child: (context) =>
+              const LoadConsultaProcessosLeituraDispensadoPage(),
         ),
         createParallelRoute(
           '/arsenal/consulta-processos-leitura-retirado-div-local',
-          child: (context) => ConsultaProcessosLeituraRetiradosDivLocalPage(),
+          child: (context) =>
+              const ConsultaProcessosLeituraRetiradosDivLocalPage(),
         ),
         createParallelRoute(
           '/arsenal/consulta-estoque-vencido',
-          child: (context) => ConsultaEstoqueVencidoPage(),
+          child: (context) => const ConsultaEstoqueVencidoPage(),
         ),
         createParallelRoute(
           '/arsenal/consulta-processos-leitura-retirado',
-          child: (context) => ConsultaProcessosLeituraRetiradoPage(),
+          child: (context) => const ConsultaProcessosLeituraRetiradoPage(),
         ),
         createParallelRoute(
           '/colaborador/consulta-processo-resposta-ecp-epi',
-          child: (context) => ConsultaProcessoRespostaEPCEPIPage(),
+          child: (context) => const ConsultaProcessoRespostaEPCEPIPage(),
         ),
         createParallelRoute(
           '/insumo/consulta-insumo-saldo',
@@ -378,7 +380,7 @@ class AdminModule extends Module {
         ),
         createParallelRoute(
           '/insumo/consulta-insumo-estoque',
-          child: (context) => ConsultaInsumoEstoquePage(),
+          child: (context) => const ConsultaInsumoEstoquePage(),
         ),
         createParallelRoute(
           '/material/consulta-item',
@@ -388,15 +390,16 @@ class AdminModule extends Module {
         ),
         createParallelRoute(
           '/processo/consulta-processo-leitura-acao-ocorrencia',
-          child: (context) => ConsultaProcessosLeituraAcaoOcorrenciaPage(),
+          child: (context) =>
+              const ConsultaProcessosLeituraAcaoOcorrenciaPage(),
         ),
         createParallelRoute(
           '/biblioteca/consulta-documento',
-          child: (context) => ConsultaDocumentoPage(),
+          child: (context) => const ConsultaDocumentoPage(),
         ),
         createParallelRoute(
           '/processo/consulta-processo-consignado',
-          child: (context) => ConsultaProcessosConsignadoPage(),
+          child: (context) => const ConsultaProcessosConsignadoPage(),
         ),
         createParallelRoute(
           '/processo/consulta-processo-leitura',
@@ -406,23 +409,23 @@ class AdminModule extends Module {
         ),
         createParallelRoute(
           '/colaborador/consulta-historico-colaborador',
-          child: (context) => ConsultaHistoricoColaboradorPage(),
+          child: (context) => const ConsultaHistoricoColaboradorPage(),
         ),
         createParallelRoute(
           '/material/consulta-item-inventario',
-          child: (context) => ConsultaItemInventarioPage(),
+          child: (context) => const ConsultaItemInventarioPage(),
         ),
         createParallelRoute(
           '/insumo/insumo-movimento',
-          child: (context) => InsumoMovimentoPage(),
+          child: (context) => const InsumoMovimentoPage(),
         ),
         createParallelRoute(
           '/processo/processo-tipo',
-          child: (context) => ProcessoTipoPage(),
+          child: (context) => const ProcessoTipoPage(),
         ),
         createParallelRoute(
           '/material/consulta-item-etiqueta',
-          child: (context) => ConsultaItemEtiquetaPage(),
+          child: (context) => const ConsultaItemEtiquetaPage(),
         ),
         createParallelRoute(
           '/arsenal/consulta-processos-leitura-tamanho',
@@ -432,15 +435,16 @@ class AdminModule extends Module {
         ),
         createParallelRoute(
           '/cadastro/perfil-acesso',
-          child: (context) => PerfilAcessoPage(),
+          child: (context) => const PerfilAcessoPage(),
         ),
         createParallelRoute(
           '/processo/consulta-processo-leitura-entrada-automatica',
-          child: (context) => ConsultaProcessosleituraEntradaAutomaticaPage(),
+          child: (context) =>
+              const ConsultaProcessosleituraEntradaAutomaticaPage(),
         ),
         createParallelRoute(
           '/cadastro/imagem',
-          child: (context) => ImagemPage(),
+          child: (context) => const ImagemPage(),
         ),
         createParallelRoute(
           '/arsenal/consulta-processo-leitura-devolvido-sub',
@@ -462,27 +466,27 @@ class AdminModule extends Module {
         ),
         createParallelRoute(
           '/insumo/solicitacao-material',
-          child: (context) => SolicitacaoMaterialPage(),
+          child: (context) => const SolicitacaoMaterialPage(),
         ),
         createParallelRoute(
           '/insumo/solicitacao-material-expedicoes',
-          child: (context) => SolicitacaoMaterialExpedicoesPage(),
+          child: (context) => const SolicitacaoMaterialExpedicoesPage(),
         ),
         createParallelRoute(
           '/processo/liberacao-leituras',
-          child: (context) => LiberacaoLeiturasPresenterPage(),
+          child: (context) => const LiberacaoLeiturasPresenterPage(),
         ),
         createParallelRoute(
           '/processo/cancelamento-preparo',
-          child: (context) => CancelamentoPreparoPage(),
+          child: (context) => const CancelamentoPreparoPage(),
         ),
         createParallelRoute(
           '/insumo/insumo-teste',
-          child: (context) => InsumoTestePage(),
+          child: (context) => const InsumoTestePage(),
         ),
         createParallelRoute(
           '/processo/processo-tipo-consulta',
-          child: (context) => ProcessoTipoConsultaPage(),
+          child: (context) => const ProcessoTipoConsultaPage(),
         ),
         createParallelRoute(
           '/processo/anormalidade-tipo',

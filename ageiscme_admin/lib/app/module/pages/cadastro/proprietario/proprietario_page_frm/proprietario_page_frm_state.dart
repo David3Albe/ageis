@@ -12,11 +12,15 @@ class ProprietarioPageFrmCubit extends Cubit<ProprietarioPageFrmState> {
           ProprietarioPageFrmState(proprietario: proprietarioModel),
         );
 
-  void save(ProprietarioModel proprietario) async {
+  void save(
+    ProprietarioModel proprietario,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, ProprietarioModel proprietario)? result =
           await service.save(proprietario);
       if (result == null) return;
+      onSaved(result.$1);
       emit(
         ProprietarioPageFrmState(
           message: result.$1,

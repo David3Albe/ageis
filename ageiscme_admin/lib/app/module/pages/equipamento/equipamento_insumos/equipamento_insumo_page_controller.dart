@@ -155,11 +155,18 @@ class EquipamentoInsumoPageController {
         'Insumo: ${dto?.insumos.where((element) => element.cod == consumo.codInsumo).firstOrNull?.nome}';
     String consumoPorProcesso =
         'Consumo Por Processo: ${consumo.consumoPorProcesso}';
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Vinculação do equipamento ao insumo?\n\n$equipamento\n$insumo\n$consumoPorProcesso',
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Vinculação do equipamento ao insumo?\n\n$equipamento\n$insumo\n$consumoPorProcesso',
+      onConfirm: () => onConfirmRemover(context, consumo),
     );
-    if (!confirmacao) return;
+  }
+
+  void onConfirmRemover(
+    BuildContext context,
+    EquipamentoInsumoConsumoResponseDTO consumo,
+  ) async {
     LoadingController loading = LoadingController(context: context);
     (String, EquipamentoInsumoDeleteResponseDTO)? result =
         await EquipamentoInsumoService()

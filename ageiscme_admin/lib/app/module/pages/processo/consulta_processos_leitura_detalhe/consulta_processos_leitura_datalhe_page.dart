@@ -10,7 +10,7 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ConsultaProcessoLeituraDetalhePage extends StatefulWidget {
-  ConsultaProcessoLeituraDetalhePage({super.key, this.filter});
+  const ConsultaProcessoLeituraDetalhePage({super.key, this.filter});
 
   final ConsultaProcessosLeituraDetalheFilter? filter;
 

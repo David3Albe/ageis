@@ -12,11 +12,15 @@ class AcaoOcorrenciaPageFrmCubit extends Cubit<AcaoOcorrenciaPageFrmState> {
           AcaoOcorrenciaPageFrmState(acaoOcorrencia: acaoOcorrenciaModel),
         );
 
-  void save(AcaoOcorrenciaModel acaoOcorrencia) async {
+  void save(
+    AcaoOcorrenciaModel acaoOcorrencia,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, AcaoOcorrenciaModel acaoOcorrencia)? result =
           await service.save(acaoOcorrencia);
       if (result == null) return;
+      onSaved(result.$1);
 
       emit(
         AcaoOcorrenciaPageFrmState(

@@ -15,12 +15,15 @@ class MotivoQuebraFluxoPageFrmCubit
           ),
         );
 
-  void save(MotivoQuebraFluxoModel motivoQuebraFluxo) async {
+  void save(
+    MotivoQuebraFluxoModel motivoQuebraFluxo,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, MotivoQuebraFluxoModel motivoQuebraFluxo)? result =
           await service.save(motivoQuebraFluxo);
       if (result == null) return;
-
+      onSaved(result.$1);
       emit(
         MotivoQuebraFluxoPageFrmState(
           message: result.$1,
@@ -39,7 +42,11 @@ class MotivoQuebraFluxoPageFrmCubit
   }
 
   void clear() {
-    emit(MotivoQuebraFluxoPageFrmState(motivoQuebraFluxo: MotivoQuebraFluxoModel.empty()));
+    emit(
+      MotivoQuebraFluxoPageFrmState(
+        motivoQuebraFluxo: MotivoQuebraFluxoModel.empty(),
+      ),
+    );
   }
 }
 

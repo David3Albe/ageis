@@ -10,12 +10,12 @@ class TamanhoPageFrmCubit extends Cubit<TamanhoPageFrmState> {
     required this.tamanhoModel,
   }) : super(TamanhoPageFrmState(tamanho: tamanhoModel));
 
-  void save(TamanhoModel tamanho) async {
+  void save(TamanhoModel tamanho, void Function(String) onSaved) async {
     try {
       (String message, TamanhoModel tamanho)? result =
           await service.save(tamanho);
       if (result == null) return;
-
+      onSaved(result.$1);
       emit(
         TamanhoPageFrmState(
           message: result.$1,

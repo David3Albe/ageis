@@ -17,18 +17,19 @@ import 'package:flutter/material.dart';
 class CancelCubit extends Cubit<CancelState> {
   CancelCubit() : super(CancelState());
 
-  Future cancel(BuildContext context) async {
-      bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma o cancelamento das leituras?',
+  void cancel(BuildContext context) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message: 'Confirma o cancelamento das leituras?',
+      onConfirm: () => confirmCancel(context),
     );
-    if (!confirmacao) return;
+  }
 
+  Future confirmCancel(BuildContext context) async {
     emit(CancelState());
     SearchCubit searchCubit = BlocProvider.of<SearchCubit>(context);
     List<ProcessoLeituraCancelamentoPreparoSearchLeituraResponseDTO>? leituras =
         searchCubit.state.response?.leituras;
-
 
     LoadingController loading = LoadingController(context: context);
     if (leituras == null || leituras.isEmpty) {

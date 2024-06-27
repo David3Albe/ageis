@@ -9,9 +9,9 @@ part of 'selecao_kit_item_model.dart';
 _$SelecaoKitItemModelImpl _$$SelecaoKitItemModelImplFromJson(
         Map<String, dynamic> json) =>
     _$SelecaoKitItemModelImpl(
-      cod: json['cod'] as int,
-      tipoSelecao: json['tipoSelecao'] as int,
-      decisao: json['decisao'] as int?,
+      cod: (json['cod'] as num).toInt(),
+      tipoSelecao: (json['tipoSelecao'] as num).toInt(),
+      decisao: (json['decisao'] as num?)?.toInt(),
       mensagem: json['mensagem'] as String?,
     );
 

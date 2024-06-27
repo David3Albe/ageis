@@ -30,7 +30,7 @@ class EpiDeliveryPrinterController {
     );
     final pdf = pw.Document(theme: themeOpenSans);
     if (dto.epis.isEmpty) {
-      await WarningUtils.showWarningDialog(
+      WarningUtils.showWarningDialog(
         context,
         'Não há Epis para imprimir',
       );
@@ -105,7 +105,7 @@ class EpiDeliveryPrinterController {
     }
 
     widgets.add(Padding(padding: const EdgeInsets.only(top: 16)));
-    
+
     widgets.add(FooterWidget(dto: dto));
 
     return widgets;

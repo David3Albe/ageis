@@ -50,6 +50,7 @@ sealed class ConsultaProcessosLeituraModel
     required String? restricaoKit,
     required String? kitLiberadoIncompleto,
     required int? codRegistroProcesso,
+    String? loteEquipamento,
     bool? cancelada,
   }) = _ConsultaProcessosLeituraModel;
 

@@ -105,6 +105,8 @@ mixin _$ConsultaProcessosLeituraModel {
       throw _privateConstructorUsedError;
   int? get codRegistroProcesso => throw _privateConstructorUsedError;
   set codRegistroProcesso(int? value) => throw _privateConstructorUsedError;
+  String? get loteEquipamento => throw _privateConstructorUsedError;
+  set loteEquipamento(String? value) => throw _privateConstructorUsedError;
   bool? get cancelada => throw _privateConstructorUsedError;
   set cancelada(bool? value) => throw _privateConstructorUsedError;
 
@@ -164,6 +166,7 @@ abstract class $ConsultaProcessosLeituraModelCopyWith<$Res> {
       String? restricaoKit,
       String? kitLiberadoIncompleto,
       int? codRegistroProcesso,
+      String? loteEquipamento,
       bool? cancelada});
 }
 
@@ -222,6 +225,7 @@ class _$ConsultaProcessosLeituraModelCopyWithImpl<$Res,
     Object? restricaoKit = freezed,
     Object? kitLiberadoIncompleto = freezed,
     Object? codRegistroProcesso = freezed,
+    Object? loteEquipamento = freezed,
     Object? cancelada = freezed,
   }) {
     return _then(_value.copyWith(
@@ -389,6 +393,10 @@ class _$ConsultaProcessosLeituraModelCopyWithImpl<$Res,
           ? _value.codRegistroProcesso
           : codRegistroProcesso // ignore: cast_nullable_to_non_nullable
               as int?,
+      loteEquipamento: freezed == loteEquipamento
+          ? _value.loteEquipamento
+          : loteEquipamento // ignore: cast_nullable_to_non_nullable
+              as String?,
       cancelada: freezed == cancelada
           ? _value.cancelada
           : cancelada // ignore: cast_nullable_to_non_nullable
@@ -448,6 +456,7 @@ abstract class _$$ConsultaProcessosLeituraModelImplCopyWith<$Res>
       String? restricaoKit,
       String? kitLiberadoIncompleto,
       int? codRegistroProcesso,
+      String? loteEquipamento,
       bool? cancelada});
 }
 
@@ -505,6 +514,7 @@ class __$$ConsultaProcessosLeituraModelImplCopyWithImpl<$Res>
     Object? restricaoKit = freezed,
     Object? kitLiberadoIncompleto = freezed,
     Object? codRegistroProcesso = freezed,
+    Object? loteEquipamento = freezed,
     Object? cancelada = freezed,
   }) {
     return _then(_$ConsultaProcessosLeituraModelImpl(
@@ -672,6 +682,10 @@ class __$$ConsultaProcessosLeituraModelImplCopyWithImpl<$Res>
           ? _value.codRegistroProcesso
           : codRegistroProcesso // ignore: cast_nullable_to_non_nullable
               as int?,
+      loteEquipamento: freezed == loteEquipamento
+          ? _value.loteEquipamento
+          : loteEquipamento // ignore: cast_nullable_to_non_nullable
+              as String?,
       cancelada: freezed == cancelada
           ? _value.cancelada
           : cancelada // ignore: cast_nullable_to_non_nullable
@@ -726,6 +740,7 @@ class _$ConsultaProcessosLeituraModelImpl
       required this.restricaoKit,
       required this.kitLiberadoIncompleto,
       required this.codRegistroProcesso,
+      this.loteEquipamento,
       this.cancelada})
       : super._();
 
@@ -816,11 +831,13 @@ class _$ConsultaProcessosLeituraModelImpl
   @override
   int? codRegistroProcesso;
   @override
+  String? loteEquipamento;
+  @override
   bool? cancelada;
 
   @override
   String toString() {
-    return 'ConsultaProcessosLeituraModel(dataHora: $dataHora, data: $data, hora: $hora, codBarraKit: $codBarraKit, nomeKit: $nomeKit, nroItensFaltante: $nroItensFaltante, idEtiqueta: $idEtiqueta, descricaoItem: $descricaoItem, nomeProprietario: $nomeProprietario, entradaSaida: $entradaSaida, nomeEquipamento: $nomeEquipamento, nomeEtapaProcesso: $nomeEtapaProcesso, nomeTipoProcesso: $nomeTipoProcesso, prioridade: $prioridade, qtdeProcessos: $qtdeProcessos, nomeUsuario: $nomeUsuario, prontuarioRetirada: $prontuarioRetirada, origem: $origem, destino: $destino, circulante: $circulante, conferidoVisualmente: $conferidoVisualmente, nomeRespKitIncomp: $nomeRespKitIncomp, nomeRespQuebFluxo: $nomeRespQuebFluxo, nomeRepDestinoNaoCompativel: $nomeRepDestinoNaoCompativel, indicador: $indicador, biologico: $biologico, implantavel: $implantavel, lote: $lote, integradorKit: $integradorKit, embalagem: $embalagem, codItem: $codItem, codKit2: $codKit2, codEtapaProcesso: $codEtapaProcesso, codLeitura: $codLeitura, motivo: $motivo, motivoQuebraFluxo: $motivoQuebraFluxo, observacao: $observacao, statusKit: $statusKit, restricaoKit: $restricaoKit, kitLiberadoIncompleto: $kitLiberadoIncompleto, codRegistroProcesso: $codRegistroProcesso, cancelada: $cancelada)';
+    return 'ConsultaProcessosLeituraModel(dataHora: $dataHora, data: $data, hora: $hora, codBarraKit: $codBarraKit, nomeKit: $nomeKit, nroItensFaltante: $nroItensFaltante, idEtiqueta: $idEtiqueta, descricaoItem: $descricaoItem, nomeProprietario: $nomeProprietario, entradaSaida: $entradaSaida, nomeEquipamento: $nomeEquipamento, nomeEtapaProcesso: $nomeEtapaProcesso, nomeTipoProcesso: $nomeTipoProcesso, prioridade: $prioridade, qtdeProcessos: $qtdeProcessos, nomeUsuario: $nomeUsuario, prontuarioRetirada: $prontuarioRetirada, origem: $origem, destino: $destino, circulante: $circulante, conferidoVisualmente: $conferidoVisualmente, nomeRespKitIncomp: $nomeRespKitIncomp, nomeRespQuebFluxo: $nomeRespQuebFluxo, nomeRepDestinoNaoCompativel: $nomeRepDestinoNaoCompativel, indicador: $indicador, biologico: $biologico, implantavel: $implantavel, lote: $lote, integradorKit: $integradorKit, embalagem: $embalagem, codItem: $codItem, codKit2: $codKit2, codEtapaProcesso: $codEtapaProcesso, codLeitura: $codLeitura, motivo: $motivo, motivoQuebraFluxo: $motivoQuebraFluxo, observacao: $observacao, statusKit: $statusKit, restricaoKit: $restricaoKit, kitLiberadoIncompleto: $kitLiberadoIncompleto, codRegistroProcesso: $codRegistroProcesso, loteEquipamento: $loteEquipamento, cancelada: $cancelada)';
   }
 
   @JsonKey(ignore: true)
@@ -883,6 +900,7 @@ abstract class _ConsultaProcessosLeituraModel
       required String? restricaoKit,
       required String? kitLiberadoIncompleto,
       required int? codRegistroProcesso,
+      String? loteEquipamento,
       bool? cancelada}) = _$ConsultaProcessosLeituraModelImpl;
   _ConsultaProcessosLeituraModel._() : super._();
 
@@ -1012,6 +1030,9 @@ abstract class _ConsultaProcessosLeituraModel
   @override
   int? get codRegistroProcesso;
   set codRegistroProcesso(int? value);
+  @override
+  String? get loteEquipamento;
+  set loteEquipamento(String? value);
   @override
   bool? get cancelada;
   set cancelada(bool? value);

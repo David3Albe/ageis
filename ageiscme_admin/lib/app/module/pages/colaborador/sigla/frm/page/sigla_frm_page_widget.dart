@@ -3,7 +3,6 @@ import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_models/dto/sigla/save/sigla_save_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
@@ -18,8 +17,12 @@ import 'package:flutter/material.dart';
 
 class SiglaFrmPageWidget extends StatelessWidget {
   const SiglaFrmPageWidget({
+    required this.onSaved,
+    required this.onCancel,
     super.key,
   });
+  final void Function() onSaved;
+  final void Function() onCancel;
 
   @override
   Widget build(BuildContext context) {
@@ -67,9 +70,6 @@ class SiglaFrmPageWidget extends StatelessWidget {
                         },
                       ),
                       const Spacer(),
-                      CloseButtonWidget(
-                        onPressed: () => Navigator.of(context).pop(false),
-                      ),
                     ],
                   ),
                   Padding(
@@ -153,15 +153,17 @@ class SiglaFrmPageWidget extends StatelessWidget {
                           alignment: WrapAlignment.end,
                           children: [
                             SaveButtonWidget(
-                              onPressed: () => context
-                                  .read<SiglaFrmCubit>()
-                                  .salvar(context: context),
+                              onPressed: () =>
+                                  context.read<SiglaFrmCubit>().salvar(
+                                        context: context,
+                                        onSaved: onSaved,
+                                      ),
                             ),
                             CleanButtonWidget(
                               onPressed: context.read<SiglaFrmCubit>().clear,
                             ),
                             CancelButtonUnfilledWidget(
-                              onPressed: () => Navigator.of(context).pop(false),
+                              onPressed: onCancel,
                             ),
                           ],
                         ),

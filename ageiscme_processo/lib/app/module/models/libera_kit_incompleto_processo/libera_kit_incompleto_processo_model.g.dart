@@ -10,7 +10,7 @@ _$LiberaKitIncompletoProcessoModelImpl
     _$$LiberaKitIncompletoProcessoModelImplFromJson(
             Map<String, dynamic> json) =>
         _$LiberaKitIncompletoProcessoModelImpl(
-          codKit: json['codKit'] as int?,
+          codKit: (json['codKit'] as num?)?.toInt(),
         );
 
 Map<String, dynamic> _$$LiberaKitIncompletoProcessoModelImplToJson(

@@ -14,9 +14,9 @@ _$EmbalagemProcessoModelImpl _$$EmbalagemProcessoModelImplFromJson(
           json['solicitouUtilizaEmbalagemGeral'] as bool?,
       solicitouUtilizaEmbalagemGeralSegundaVez:
           json['solicitouUtilizaEmbalagemGeralSegundaVez'] as bool?,
-      codKit: json['codKit'] as int?,
-      codItem: json['codItem'] as int?,
-      codItemZ: json['codItemZ'] as int?,
+      codKit: (json['codKit'] as num?)?.toInt(),
+      codItem: (json['codItem'] as num?)?.toInt(),
+      codItemZ: (json['codItemZ'] as num?)?.toInt(),
       embalagem: json['embalagem'] == null
           ? null
           : EmbalagemModel.fromJson(json['embalagem'] as Map<String, dynamic>),

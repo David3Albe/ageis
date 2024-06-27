@@ -31,7 +31,7 @@ class TrainingRecordPrinterController {
     );
     final pdf = pw.Document(theme: themeOpenSans);
     if (dto.users.isEmpty) {
-      await WarningUtils.showWarningDialog(
+      WarningUtils.showWarningDialog(
         context,
         'Não há usuários para imprimir a lista de treinamento',
       );

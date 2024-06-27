@@ -10,7 +10,6 @@ import 'package:ageiscme_data/services/kit_descritor/kit_descritor_service.dart'
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/list_field/list_field_widget.dart';
@@ -37,11 +36,15 @@ class KitDescritorPageFrm extends StatefulWidget {
     required this.kitDescritor,
     required this.processoTipoCubit,
     required this.itemDescritorCubit,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final KitDescritorModel kitDescritor;
   final ProcessoTipoCubit processoTipoCubit;
   final ItemDescritorCubit itemDescritorCubit;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<KitDescritorPageFrm> createState() =>
@@ -145,405 +148,426 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<KitDescritorPageFrmCubit, KitDescritorPageFrmState>(
+    return BlocBuilder<KitDescritorPageFrmCubit, KitDescritorPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
-      child: BlocBuilder<KitDescritorPageFrmCubit, KitDescritorPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return Container(
-            constraints: BoxConstraints(
-              minWidth: size.width * .5,
-              minHeight: size.height * .5,
-              maxHeight: size.height * .8,
-            ),
-            child: AlertDialog(
-              contentPadding: const EdgeInsets.all(8.0),
-              titlePadding: const EdgeInsets.all(8.0),
-              actionsPadding: const EdgeInsets.all(8.0),
-              insetPadding: const EdgeInsets.all(50.0),
-              title: Row(
-                children: [
-                  Expanded(
-                    child: TitleWidget(
-                      text: titulo,
-                    ),
+      builder: (context, state) {
+        return Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: TitleWidget(
+                    text: titulo,
                   ),
-                  const Spacer(),
-                  CloseButtonWidget(
-                    onPressed: () => Navigator.of(context).pop((false, '')),
-                  ),
-                ],
-              ),
-              content: SingleChildScrollView(
-                controller: scroll,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtNome,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtDescricao,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: BlocBuilder<TamanhoCubit, TamanhoState>(
-                              bloc: tamanhoCubit,
-                              builder: (context, state) {
-                                if (state.loading) {
-                                  return const Center(
-                                    child: LoadingWidget(),
-                                  );
-                                }
-                                TamanhoModel? tamanho = state.tamanhos
-                                    .where(
-                                      (element) =>
-                                          element.sigla ==
-                                          kitDescritor.tamanhoSigla,
-                                    )
-                                    .firstOrNull;
-                                return DropDownSearchWidget(
-                                  initialValue: tamanho,
-                                  sourceList: state.tamanhos,
-                                  onChanged: (value) =>
-                                      kitDescritor.tamanhoSigla = value?.sigla,
-                                  textFunction: (p0) => p0.GetDropDownText(),
-                                  placeholder: 'Tamanho',
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: BlocBuilder<EmbalagemCubit, EmbalagemState>(
-                              bloc: embalagemCubit,
-                              builder: (context, state) {
-                                if (state.loading) {
-                                  return const Center(
-                                    child: LoadingWidget(),
-                                  );
-                                }
-                                List<EmbalagemModel> embalagens =
-                                    state.embalagens;
-                                embalagens.sort(
-                                  (a, b) => a.nome!.compareTo(b.nome!),
-                                );
-                                EmbalagemModel? embalagem = embalagens
-                                    .where(
-                                      (element) =>
-                                          element.cod ==
-                                          kitDescritor.codEmbalagem,
-                                    )
-                                    .firstOrNull;
-                                return DropDownSearchWidget(
-                                  initialValue: embalagem,
-                                  textFunction: (p0) => p0.GetDropDownText(),
-                                  sourceList: embalagens
-                                      .where((element) => element.ativo == true)
-                                      .toList(),
-                                  onChanged: (value) =>
-                                      kitDescritor.codEmbalagem = value?.cod,
-                                  placeholder: 'Embalagem',
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: BlocBuilder<ProcessoTipoCubit, ProcessoTipoState>(
-                        bloc: processoTipoCubit,
-                        builder: (context, processosTiposState) {
-                          if (processosTiposState.loading) {
-                            return const LoadingWidget();
-                          }
-                          List<ProcessoTipoModel> processosTipos =
-                              processosTiposState.processosTipos;
-
-                          processosTipos.sort(
-                            (a, b) => a.nome.compareTo(b.nome),
-                          );
-                          ProcessoTipoModel? processoTipo = processosTipos
-                              .where(
-                                (element) =>
-                                    element.cod ==
-                                    kitDescritor.codTipoProcessoNormal,
-                              )
-                              .firstOrNull;
-                          return DropDownSearchWidget(
-                            initialValue: processoTipo,
-                            validateBuilder: (context, validateMethodBuilder) =>
-                                validaTipoProcessoNormal =
-                                    validateMethodBuilder,
-                            validator: (val) =>
-                                val == null ? 'Obrigatório' : null,
-                            sourceList: processosTipos
-                                .where((element) => element.ativo == true)
-                                .toList(),
-                            onChanged: (value) =>
-                                kitDescritor.codTipoProcessoNormal = value?.cod,
-                            placeholder:
-                                'Tipo de Processo para prioridade Normal *',
-                          );
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: BlocBuilder<ProcessoTipoCubit, ProcessoTipoState>(
-                        bloc: processoTipoCubit,
-                        builder: (context, processosTiposState) {
-                          if (processosTiposState.loading) {
-                            return const LoadingWidget();
-                          }
-                          List<ProcessoTipoModel> processosTipos =
-                              processosTiposState.processosTipos;
-
-                          processosTipos.sort(
-                            (a, b) => a.nome.compareTo(b.nome),
-                          );
-                          ProcessoTipoModel? processoTipo = processosTipos
-                              .where(
-                                (element) =>
-                                    element.cod ==
-                                    kitDescritor.codTipoProcessoUrgencia,
-                              )
-                              .firstOrNull;
-                          return DropDownSearchWidget(
-                            validateBuilder: (context, validateMethodBuilder) =>
-                                validaTipoProcessoUrgencia =
-                                    validateMethodBuilder,
-                            validator: (val) =>
-                                val == null ? 'Obrigatório' : null,
-                            initialValue: processoTipo,
-                            sourceList: processosTipos
-                                .where((element) => element.ativo == true)
-                                .toList(),
-                            onChanged: (value) => kitDescritor
-                                .codTipoProcessoUrgencia = value?.cod,
-                            placeholder:
-                                'Tipo de Processo para prioridade Urgência *',
-                          );
-                        },
-                      ),
-                    ),
-                    // Padding(
-                    //   padding: const EdgeInsets.only(top: 5.0),
-                    //   child: BlocBuilder<ProcessoTipoCubit, ProcessoTipoState>(
-                    //     bloc: processoTipoCubit,
-                    //     builder: (context, processosTiposState) {
-                    //       if (processosTiposState.loading) {
-                    //         return const LoadingWidget();
-                    //       }
-                    //       List<ProcessoTipoModel> processosTipos =
-                    //           processosTiposState.processosTipos;
-
-                    //       processosTipos.sort(
-                    //         (a, b) => a.nome.compareTo(b.nome),
-                    //       );
-                    //       ProcessoTipoModel? processoTipo = processosTipos
-                    //           .where(
-                    //             (element) =>
-                    //                 element.cod ==
-                    //                 kitDescritor.codTipoProcessoEmergencia,
-                    //           )
-                    //           .firstOrNull;
-                    //       return DropDownWidget(
-                    //         initialValue: processoTipo,
-                    //         sourceList: processosTipos
-                    //             .where((element) => element.ativo == true)
-                    //             .toList(),
-                    //         onChanged: (value) => kitDescritor
-                    //             .codTipoProcessoEmergencia = value.cod!,
-                    //         placeholder:
-                    //             'Tipo de Processo para prioridade Emergência',
-                    //       );
-                    //     },
-                    //   ),
-                    // ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: BlocBuilder<CentroCustoCubit, CentroCustoState>(
-                        bloc: centroCustoCubit,
-                        builder: (context, state) {
-                          if (state.loading) {
-                            return const Center(
-                              child: LoadingWidget(),
-                            );
-                          }
-                          List<CentroCustoModel> centrosCustos = state.centrosCusto;
-                          centrosCustos.sort(
-                            (a, b) => a.centroCusto!.compareTo(b.centroCusto!),
-                          );
-                          CentroCustoModel? centroCusto = centrosCustos
-                              .where(
-                                (element) =>
-                                    element.cod == kitDescritor.codCusto,
-                              )
-                              .firstOrNull;
-                          return DropDownSearchWidget(
-                            initialValue: centroCusto,
-                            textFunction: (p0) => p0.CentroCustoText(),
-                            sourceList: centrosCustos,
-                            onChanged: (value) =>
-                                kitDescritor.codCusto = value?.cod,
-                            placeholder: 'Valor do Peso',
-                          );
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: CustomCheckboxWidget(
-                        align: MainAxisAlignment.start,
-                        checked: kitDescritor.exigeProntuario,
-                        onClick: (value) =>
-                            kitDescritor.exigeProntuario = value,
-                        text: 'Preenchimento do Prontuário Obrigatório',
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: CustomCheckboxWidget(
-                        align: MainAxisAlignment.start,
-                        checked: kitDescritor.ativo,
-                        onClick: (value) => kitDescritor.ativo = value,
-                        text: 'Ativo',
-                      ),
-                    ),
-                    if (listaDeItens.isNotEmpty) ...{
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5.0),
-                        child: Text(
-                          'Itens deste Kit (quantidades)',
-                          style: Fontes.getRoboto(),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5.0),
-                        child:
-                            BlocBuilder<ItemDescritorCubit, ItemDescritorState>(
-                          bloc: widget.itemDescritorCubit,
-                          builder: (context, itensDescritorState) {
-                            if (itensDescritorState.loading) {
-                              return const LoadingWidget();
-                            }
-                            List<ItemDescritorModel> itensDescritores =
-                                itensDescritorState.itensDescritores;
-
-                            return ListFieldWidget<ItemDescritorKitModel>(
-                              sourceList: listaDeItens,
-                              removeButton: false,
-                              onItemSelected: (value) {},
-                              itemText: (value) {
-                                final codDescritorItem = value.codDescritorItem;
-                                final quantidade = value.quantidade;
-
-                                final descricaoItemDescritor = itensDescritores
-                                    .where(
-                                      (itemDescritor) =>
-                                          itemDescritor.cod == codDescritorItem,
-                                    )
-                                    .firstOrNull;
-
-                                final descricaoCurta =
-                                    descricaoItemDescritor?.descricaoCurta;
-                                if (descricaoCurta == null) {
-                                  return '';
-                                }
-                                return '$descricaoCurta - ($quantidade)';
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                    },
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: ImageDisplayWidget(
-                        imageBase64: kitDescritor.imagem,
-                      ),
-                    ),
-                    const Padding(padding: EdgeInsets.only(top: 5)),
-                  ],
-                ),
-              ),
-              actions: [
-                Row(
-                  children: [
-                    CustomPopupMenuWidget(
-                      items: [
-                        CustomPopupItemModel(
-                          text: 'Itens',
-                          onTap: abrirTelaItens,
-                        ),
-                        CustomPopupItemImageModel.getImageItem(
-                          'Anexar Imagem',
-                          salvarImagem,
-                        ),
-                        CustomPopupItemOpenDocModel.getOpenDocItem(
-                          'Abrir Imagem',
-                          context,
-                          kitDescritor.imagem,
-                          'arquivo sem nome.Webp',
-                        ),
-                        CustomPopupItemModel(
-                          text: 'Excluir Imagem',
-                          onTap: excluirImagem,
-                        ),
-                        if (kitDescritor.cod != null && kitDescritor.cod != 0)
-                          CustomPopupItemHistoryModel.getHistoryItem(
-                            child: HistoricoPage(
-                              pk: kitDescritor.cod!,
-                              termo: 'KIT_DESCRITOR',
-                            ),
-                            context: context,
-                          ),
-                      ],
-                    ),
-                    const Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16.0),
-                      child: SaveButtonWidget(
-                        onPressed: () => {salvar()},
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16.0),
-                      child: CleanButtonWidget(
-                        onPressed: () => {
-                          setState(() {
-                            kitDescritor = KitDescritorModel.empty();
-                            listaDeItens = [];
-                          }),
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 16.0),
-                      child: CancelButtonUnfilledWidget(
-                        onPressed: () =>
-                            {Navigator.of(context).pop((false, ''))},
-                      ),
-                    ),
-                  ],
                 ),
               ],
             ),
-          );
-        },
-      ),
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Container(
+                      constraints: BoxConstraints(
+                        minWidth: size.width * .5,
+                        minHeight: size.height * .5,
+                        maxHeight: size.height * .8,
+                      ),
+                      child: SingleChildScrollView(
+                        controller: scroll,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: txtNome,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: txtDescricao,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child:
+                                        BlocBuilder<TamanhoCubit, TamanhoState>(
+                                      bloc: tamanhoCubit,
+                                      builder: (context, state) {
+                                        if (state.loading) {
+                                          return const Center(
+                                            child: LoadingWidget(),
+                                          );
+                                        }
+                                        TamanhoModel? tamanho = state.tamanhos
+                                            .where(
+                                              (element) =>
+                                                  element.sigla ==
+                                                  kitDescritor.tamanhoSigla,
+                                            )
+                                            .firstOrNull;
+                                        return DropDownSearchWidget(
+                                          initialValue: tamanho,
+                                          sourceList: state.tamanhos,
+                                          onChanged: (value) => kitDescritor
+                                              .tamanhoSigla = value?.sigla,
+                                          textFunction: (p0) =>
+                                              p0.GetDropDownText(),
+                                          placeholder: 'Tamanho',
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16.0),
+                                  Expanded(
+                                    child: BlocBuilder<EmbalagemCubit,
+                                        EmbalagemState>(
+                                      bloc: embalagemCubit,
+                                      builder: (context, state) {
+                                        if (state.loading) {
+                                          return const Center(
+                                            child: LoadingWidget(),
+                                          );
+                                        }
+                                        List<EmbalagemModel> embalagens =
+                                            state.embalagens;
+                                        embalagens.sort(
+                                          (a, b) => a.nome!.compareTo(b.nome!),
+                                        );
+                                        EmbalagemModel? embalagem = embalagens
+                                            .where(
+                                              (element) =>
+                                                  element.cod ==
+                                                  kitDescritor.codEmbalagem,
+                                            )
+                                            .firstOrNull;
+                                        return DropDownSearchWidget(
+                                          initialValue: embalagem,
+                                          textFunction: (p0) =>
+                                              p0.GetDropDownText(),
+                                          sourceList: embalagens
+                                              .where(
+                                                (element) =>
+                                                    element.ativo == true,
+                                              )
+                                              .toList(),
+                                          onChanged: (value) => kitDescritor
+                                              .codEmbalagem = value?.cod,
+                                          placeholder: 'Embalagem',
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: BlocBuilder<ProcessoTipoCubit,
+                                  ProcessoTipoState>(
+                                bloc: processoTipoCubit,
+                                builder: (context, processosTiposState) {
+                                  if (processosTiposState.loading) {
+                                    return const LoadingWidget();
+                                  }
+                                  List<ProcessoTipoModel> processosTipos =
+                                      processosTiposState.processosTipos;
+
+                                  processosTipos.sort(
+                                    (a, b) => a.nome.compareTo(b.nome),
+                                  );
+                                  ProcessoTipoModel? processoTipo =
+                                      processosTipos
+                                          .where(
+                                            (element) =>
+                                                element.cod ==
+                                                kitDescritor
+                                                    .codTipoProcessoNormal,
+                                          )
+                                          .firstOrNull;
+                                  return DropDownSearchWidget(
+                                    initialValue: processoTipo,
+                                    validateBuilder:
+                                        (context, validateMethodBuilder) =>
+                                            validaTipoProcessoNormal =
+                                                validateMethodBuilder,
+                                    validator: (val) =>
+                                        val == null ? 'Obrigatório' : null,
+                                    sourceList: processosTipos
+                                        .where(
+                                          (element) => element.ativo == true,
+                                        )
+                                        .toList(),
+                                    onChanged: (value) => kitDescritor
+                                        .codTipoProcessoNormal = value?.cod,
+                                    placeholder:
+                                        'Tipo de Processo para prioridade Normal *',
+                                  );
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: BlocBuilder<ProcessoTipoCubit,
+                                  ProcessoTipoState>(
+                                bloc: processoTipoCubit,
+                                builder: (context, processosTiposState) {
+                                  if (processosTiposState.loading) {
+                                    return const LoadingWidget();
+                                  }
+                                  List<ProcessoTipoModel> processosTipos =
+                                      processosTiposState.processosTipos;
+
+                                  processosTipos.sort(
+                                    (a, b) => a.nome.compareTo(b.nome),
+                                  );
+                                  ProcessoTipoModel? processoTipo =
+                                      processosTipos
+                                          .where(
+                                            (element) =>
+                                                element.cod ==
+                                                kitDescritor
+                                                    .codTipoProcessoUrgencia,
+                                          )
+                                          .firstOrNull;
+                                  return DropDownSearchWidget(
+                                    validateBuilder:
+                                        (context, validateMethodBuilder) =>
+                                            validaTipoProcessoUrgencia =
+                                                validateMethodBuilder,
+                                    validator: (val) =>
+                                        val == null ? 'Obrigatório' : null,
+                                    initialValue: processoTipo,
+                                    sourceList: processosTipos
+                                        .where(
+                                          (element) => element.ativo == true,
+                                        )
+                                        .toList(),
+                                    onChanged: (value) => kitDescritor
+                                        .codTipoProcessoUrgencia = value?.cod,
+                                    placeholder:
+                                        'Tipo de Processo para prioridade Urgência *',
+                                  );
+                                },
+                              ),
+                            ),
+                            // Padding(
+                            //   padding: const EdgeInsets.only(top: 5.0),
+                            //   child: BlocBuilder<ProcessoTipoCubit, ProcessoTipoState>(
+                            //     bloc: processoTipoCubit,
+                            //     builder: (context, processosTiposState) {
+                            //       if (processosTiposState.loading) {
+                            //         return const LoadingWidget();
+                            //       }
+                            //       List<ProcessoTipoModel> processosTipos =
+                            //           processosTiposState.processosTipos;
+
+                            //       processosTipos.sort(
+                            //         (a, b) => a.nome.compareTo(b.nome),
+                            //       );
+                            //       ProcessoTipoModel? processoTipo = processosTipos
+                            //           .where(
+                            //             (element) =>
+                            //                 element.cod ==
+                            //                 kitDescritor.codTipoProcessoEmergencia,
+                            //           )
+                            //           .firstOrNull;
+                            //       return DropDownWidget(
+                            //         initialValue: processoTipo,
+                            //         sourceList: processosTipos
+                            //             .where((element) => element.ativo == true)
+                            //             .toList(),
+                            //         onChanged: (value) => kitDescritor
+                            //             .codTipoProcessoEmergencia = value.cod!,
+                            //         placeholder:
+                            //             'Tipo de Processo para prioridade Emergência',
+                            //       );
+                            //     },
+                            //   ),
+                            // ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: BlocBuilder<CentroCustoCubit,
+                                  CentroCustoState>(
+                                bloc: centroCustoCubit,
+                                builder: (context, state) {
+                                  if (state.loading) {
+                                    return const Center(
+                                      child: LoadingWidget(),
+                                    );
+                                  }
+                                  List<CentroCustoModel> centrosCustos =
+                                      state.centrosCusto;
+                                  centrosCustos.sort(
+                                    (a, b) => a.centroCusto!
+                                        .compareTo(b.centroCusto!),
+                                  );
+                                  CentroCustoModel? centroCusto = centrosCustos
+                                      .where(
+                                        (element) =>
+                                            element.cod ==
+                                            kitDescritor.codCusto,
+                                      )
+                                      .firstOrNull;
+                                  return DropDownSearchWidget(
+                                    initialValue: centroCusto,
+                                    textFunction: (p0) => p0.CentroCustoText(),
+                                    sourceList: centrosCustos,
+                                    onChanged: (value) =>
+                                        kitDescritor.codCusto = value?.cod,
+                                    placeholder: 'Valor do Peso',
+                                  );
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: CustomCheckboxWidget(
+                                align: MainAxisAlignment.start,
+                                checked: kitDescritor.exigeProntuario,
+                                onClick: (value) =>
+                                    kitDescritor.exigeProntuario = value,
+                                text: 'Preenchimento do Prontuário Obrigatório',
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: CustomCheckboxWidget(
+                                align: MainAxisAlignment.start,
+                                checked: kitDescritor.ativo,
+                                onClick: (value) => kitDescritor.ativo = value,
+                                text: 'Ativo',
+                              ),
+                            ),
+                            if (listaDeItens.isNotEmpty) ...{
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Text(
+                                  'Itens deste Kit (quantidades)',
+                                  style: Fontes.getRoboto(),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: BlocBuilder<ItemDescritorCubit,
+                                    ItemDescritorState>(
+                                  bloc: widget.itemDescritorCubit,
+                                  builder: (context, itensDescritorState) {
+                                    if (itensDescritorState.loading) {
+                                      return const LoadingWidget();
+                                    }
+                                    List<ItemDescritorModel> itensDescritores =
+                                        itensDescritorState.itensDescritores;
+
+                                    return ListFieldWidget<
+                                        ItemDescritorKitModel>(
+                                      sourceList: listaDeItens,
+                                      removeButton: false,
+                                      onItemSelected: (value) {},
+                                      itemText: (value) {
+                                        final codDescritorItem =
+                                            value.codDescritorItem;
+                                        final quantidade = value.quantidade;
+
+                                        final descricaoItemDescritor =
+                                            itensDescritores
+                                                .where(
+                                                  (itemDescritor) =>
+                                                      itemDescritor.cod ==
+                                                      codDescritorItem,
+                                                )
+                                                .firstOrNull;
+
+                                        final descricaoCurta =
+                                            descricaoItemDescritor
+                                                ?.descricaoCurta;
+                                        if (descricaoCurta == null) {
+                                          return '';
+                                        }
+                                        return '$descricaoCurta - ($quantidade)';
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                            },
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: ImageDisplayWidget(
+                                imageBase64: kitDescritor.imagem,
+                              ),
+                            ),
+                            const Padding(padding: EdgeInsets.only(top: 5)),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              children: [
+                CustomPopupMenuWidget(
+                  items: [
+                    CustomPopupItemModel(
+                      text: 'Itens',
+                      onTap: abrirTelaItens,
+                    ),
+                    CustomPopupItemImageModel.getImageItem(
+                      'Anexar Imagem',
+                      salvarImagem,
+                    ),
+                    CustomPopupItemOpenDocModel.getOpenDocItem(
+                      'Abrir Imagem',
+                      context,
+                      kitDescritor.imagem,
+                      'arquivo sem nome.Webp',
+                    ),
+                    CustomPopupItemModel(
+                      text: 'Excluir Imagem',
+                      onTap: excluirImagem,
+                    ),
+                    if (kitDescritor.cod != null && kitDescritor.cod != 0)
+                      CustomPopupItemHistoryModel.getHistoryItem(
+                        child: HistoricoPage(
+                          pk: kitDescritor.cod!,
+                          termo: 'KIT_DESCRITOR',
+                        ),
+                        context: context,
+                      ),
+                  ],
+                ),
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: SaveButtonWidget(
+                    onPressed: () => {salvar()},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: CleanButtonWidget(
+                    onPressed: () => {
+                      setState(() {
+                        kitDescritor = KitDescritorModel.empty();
+                        listaDeItens = [];
+                      }),
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: CancelButtonUnfilledWidget(
+                    onPressed: widget.onCancel,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -633,6 +657,6 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
     // }
 
     // kitDescritor.itensDescritorKits = registrarItemDescritorKit;
-    cubit.save(kitDescritor);
+    cubit.save(kitDescritor, widget.onSaved);
   }
 }

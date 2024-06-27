@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/confirm_button_widget.dart';
@@ -8,33 +6,63 @@ import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
 class ConfirmDialogUtils {
-  static Future<bool> showConfirmAlertDialog(
-    BuildContext context,
-    String message,
-  ) async {
-    bool? confirmacao = await showDialog<bool>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: AlertConfirmDialog(
-            realContext: context,
-            message: message,
+  static void showConfirmAlertDialog({
+    required BuildContext context,
+    required String message,
+    required void Function() onConfirm,
+    void Function()? onCancel,
+  }) async {
+    late OverlayEntry overlayEntry;
+    Size size = MediaQuery.of(context).size;
+    overlayEntry = OverlayEntry(
+      builder: (context) => Container(
+        color: Colors.black.withOpacity(0.4),
+        width: size.width,
+        height: size.height,
+        child: Center(
+          child: AlertDialog(
+            content: AlertConfirmDialog(
+              realContext: context,
+              message: message,
+              onCancel: () =>
+                  onWidgetCancel(entry: overlayEntry, onCancel: onCancel),
+              onConfirm: () =>
+                  onWidgetConfirm(entry: overlayEntry, onConfirm: onConfirm),
+            ),
           ),
-        );
-      },
+        ),
+      ),
     );
-    if (confirmacao == null) confirmacao = false;
-    return confirmacao;
+    Overlay.of(context).insert(overlayEntry);
+  }
+
+  static void onWidgetCancel({
+    required OverlayEntry entry,
+    required void Function()? onCancel,
+  }) {
+    entry.remove();
+    if (onCancel != null) onCancel();
+  }
+
+  static void onWidgetConfirm({
+    required OverlayEntry entry,
+    required void Function() onConfirm,
+  }) {
+    entry.remove();
+    onConfirm();
   }
 }
 
 class AlertConfirmDialog extends StatelessWidget {
   final String message;
   final BuildContext realContext;
+  final void Function() onConfirm;
+  final void Function() onCancel;
   const AlertConfirmDialog({
     required this.message,
     required this.realContext,
+    required this.onCancel,
+    required this.onConfirm,
     Key? key,
   });
   @override
@@ -69,7 +97,7 @@ class AlertConfirmDialog extends StatelessWidget {
                   ),
                   const Spacer(),
                   CloseButtonWidget(
-                    onPressed: () => Navigator.of(realContext).pop(false),
+                    onPressed: onCancel,
                   ),
                 ],
               ),
@@ -91,11 +119,11 @@ class AlertConfirmDialog extends StatelessWidget {
               Row(
                 children: [
                   ConfirmButtonWidget(
-                    onPressed: () => Navigator.of(realContext).pop(true),
+                    onPressed: onConfirm,
                   ),
                   const Spacer(),
                   CancelButtonUnfilledWidget(
-                    onPressed: () => Navigator.of(realContext).pop(false),
+                    onPressed: onCancel,
                   ),
                 ],
               ),

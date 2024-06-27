@@ -12,11 +12,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class PerfilAcessoPage extends StatefulWidget {
-  PerfilAcessoPage({super.key});
+  const PerfilAcessoPage({super.key});
 
   @override
   State<PerfilAcessoPage> createState() => _PerfilAcessoPageState();
@@ -121,33 +122,42 @@ class _PerfilAcessoPageState extends State<PerfilAcessoPage> {
     }
   }
 
-  Future<void> openModal(
-    BuildContext context,
-    PerfilAcessoModel perfilAcesso,
-  ) async {
+  Future openModal(BuildContext context, PerfilAcessoModel obj) async {
     loadDireitoCubit();
-
-    (bool, String)? result = await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return PerfilAcessoPageFrm(
-          direitoCubit: direitoCubit,
-          perfilAcesso: perfilAcesso,
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      theme: Theme.of(context),
+      title: 'Cadastro/Edição Perfil de Acesso',
+      widget: PerfilAcessoPageFrm(
+        direitoCubit: direitoCubit,
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        perfilAcesso: obj,
+      ),
     );
-    if (result == null || !result.$1) return;
-    ToastUtils.showCustomToastSucess(context, result.$2);
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
     bloc.loadPerfilAcesso();
   }
 
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
+  }
+
   void delete(BuildContext context, PerfilAcessoModel perfilAcesso) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Perfil de Acesso\n${perfilAcesso.cod} - ${perfilAcesso.descricao}',
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Perfil de Acesso\n${perfilAcesso.cod} - ${perfilAcesso.descricao}',
+      onConfirm: () => onConfirmDelete(perfilAcesso),
     );
-    if (confirmacao) bloc.delete(perfilAcesso);
+  }
+
+  void onConfirmDelete(PerfilAcessoModel perfilAcesso) {
+    bloc.delete(perfilAcesso);
   }
 
   void deleted(PerfilAcessoPageState state) {

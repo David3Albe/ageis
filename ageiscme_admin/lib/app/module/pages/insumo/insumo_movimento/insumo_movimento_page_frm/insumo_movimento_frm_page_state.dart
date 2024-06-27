@@ -16,6 +16,7 @@ class InsumoMovimentoPageFrmCubit extends Cubit<InsumoMovimentoPageFrmState> {
   Future<InsumoMovimentoModel?> save(
     InsumoMovimentoModel insumoMovimento,
     int? numeroSolicitacaoItem,
+    void Function(String)? onSaved,
   ) async {
     try {
       InsumoMovimentoSaveDTO saveDTO = InsumoMovimentoSaveDTO(
@@ -26,6 +27,7 @@ class InsumoMovimentoPageFrmCubit extends Cubit<InsumoMovimentoPageFrmState> {
       (String message, InsumoMovimentoModel insumoMovimento)? result =
           await service.save(saveDTO);
       if (result == null) return null;
+      if (onSaved != null) onSaved(result.$1);
       emit(
         InsumoMovimentoPageFrmState(
           message: result.$1,

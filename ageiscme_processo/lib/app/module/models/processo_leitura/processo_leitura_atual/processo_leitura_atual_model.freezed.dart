@@ -12,7 +12,7 @@ part of 'processo_leitura_atual_model.dart';
 T _$identity<T>(T value) => value;
 
 final _privateConstructorUsedError = UnsupportedError(
-    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
+    'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
 ProcessoLeituraAtualModel _$ProcessoLeituraAtualModelFromJson(
     Map<String, dynamic> json) {
@@ -207,6 +207,10 @@ mixin _$ProcessoLeituraAtualModel {
       throw _privateConstructorUsedError;
   set acoesOcorrencia(List<AcaoOcorrenciaModel> value) =>
       throw _privateConstructorUsedError;
+  LocalNaoCompativelModel get localNaoCompativel =>
+      throw _privateConstructorUsedError;
+  set localNaoCompativel(LocalNaoCompativelModel value) =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -279,7 +283,8 @@ abstract class $ProcessoLeituraAtualModelCopyWith<$Res> {
       LoteEquipamentoModel loteEquipamento,
       bool? solicitaItemKitNaoConforme,
       DefineAcaoOcorrenciaModel? defineAcaoOcorrencia,
-      List<AcaoOcorrenciaModel> acoesOcorrencia});
+      List<AcaoOcorrenciaModel> acoesOcorrencia,
+      LocalNaoCompativelModel localNaoCompativel});
 
   $UsuarioProcessoModelCopyWith<$Res>? get usuario;
   $InstituicaoModelCopyWith<$Res>? get instituicao;
@@ -313,6 +318,7 @@ abstract class $ProcessoLeituraAtualModelCopyWith<$Res> {
       get confirmaQuebraFluxoRemocaoArsenal;
   $LoteEquipamentoModelCopyWith<$Res> get loteEquipamento;
   $DefineAcaoOcorrenciaModelCopyWith<$Res>? get defineAcaoOcorrencia;
+  $LocalNaoCompativelModelCopyWith<$Res> get localNaoCompativel;
 }
 
 /// @nodoc
@@ -388,6 +394,7 @@ class _$ProcessoLeituraAtualModelCopyWithImpl<$Res,
     Object? solicitaItemKitNaoConforme = freezed,
     Object? defineAcaoOcorrencia = freezed,
     Object? acoesOcorrencia = null,
+    Object? localNaoCompativel = null,
   }) {
     return _then(_value.copyWith(
       cod: freezed == cod
@@ -627,6 +634,10 @@ class _$ProcessoLeituraAtualModelCopyWithImpl<$Res,
           ? _value.acoesOcorrencia
           : acoesOcorrencia // ignore: cast_nullable_to_non_nullable
               as List<AcaoOcorrenciaModel>,
+      localNaoCompativel: null == localNaoCompativel
+          ? _value.localNaoCompativel
+          : localNaoCompativel // ignore: cast_nullable_to_non_nullable
+              as LocalNaoCompativelModel,
     ) as $Val);
   }
 
@@ -973,6 +984,15 @@ class _$ProcessoLeituraAtualModelCopyWithImpl<$Res,
       return _then(_value.copyWith(defineAcaoOcorrencia: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $LocalNaoCompativelModelCopyWith<$Res> get localNaoCompativel {
+    return $LocalNaoCompativelModelCopyWith<$Res>(_value.localNaoCompativel,
+        (value) {
+      return _then(_value.copyWith(localNaoCompativel: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -1043,7 +1063,8 @@ abstract class _$$ProcessoLeituraAtualModelImplCopyWith<$Res>
       LoteEquipamentoModel loteEquipamento,
       bool? solicitaItemKitNaoConforme,
       DefineAcaoOcorrenciaModel? defineAcaoOcorrencia,
-      List<AcaoOcorrenciaModel> acoesOcorrencia});
+      List<AcaoOcorrenciaModel> acoesOcorrencia,
+      LocalNaoCompativelModel localNaoCompativel});
 
   @override
   $UsuarioProcessoModelCopyWith<$Res>? get usuario;
@@ -1107,6 +1128,8 @@ abstract class _$$ProcessoLeituraAtualModelImplCopyWith<$Res>
   $LoteEquipamentoModelCopyWith<$Res> get loteEquipamento;
   @override
   $DefineAcaoOcorrenciaModelCopyWith<$Res>? get defineAcaoOcorrencia;
+  @override
+  $LocalNaoCompativelModelCopyWith<$Res> get localNaoCompativel;
 }
 
 /// @nodoc
@@ -1181,6 +1204,7 @@ class __$$ProcessoLeituraAtualModelImplCopyWithImpl<$Res>
     Object? solicitaItemKitNaoConforme = freezed,
     Object? defineAcaoOcorrencia = freezed,
     Object? acoesOcorrencia = null,
+    Object? localNaoCompativel = null,
   }) {
     return _then(_$ProcessoLeituraAtualModelImpl(
       cod: freezed == cod
@@ -1420,6 +1444,10 @@ class __$$ProcessoLeituraAtualModelImplCopyWithImpl<$Res>
           ? _value.acoesOcorrencia
           : acoesOcorrencia // ignore: cast_nullable_to_non_nullable
               as List<AcaoOcorrenciaModel>,
+      localNaoCompativel: null == localNaoCompativel
+          ? _value.localNaoCompativel
+          : localNaoCompativel // ignore: cast_nullable_to_non_nullable
+              as LocalNaoCompativelModel,
     ));
   }
 }
@@ -1487,7 +1515,8 @@ class _$ProcessoLeituraAtualModelImpl extends _ProcessoLeituraAtualModel
       required this.loteEquipamento,
       required this.solicitaItemKitNaoConforme,
       required this.defineAcaoOcorrencia,
-      required this.acoesOcorrencia})
+      required this.acoesOcorrencia,
+      required this.localNaoCompativel})
       : super._();
 
   factory _$ProcessoLeituraAtualModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -1611,10 +1640,12 @@ class _$ProcessoLeituraAtualModelImpl extends _ProcessoLeituraAtualModel
   DefineAcaoOcorrenciaModel? defineAcaoOcorrencia;
   @override
   List<AcaoOcorrenciaModel> acoesOcorrencia;
+  @override
+  LocalNaoCompativelModel localNaoCompativel;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ProcessoLeituraAtualModel(cod: $cod, usuario: $usuario, instituicao: $instituicao, equipamento: $equipamento, acaoEmAndamento: $acaoEmAndamento, dataHoraInicioProcesso: $dataHoraInicioProcesso, prioridade: $prioridade, decisao: $decisao, acao: $acao, respostaEPCEPI: $respostaEPCEPI, itemEmLeitura: $itemEmLeitura, modoConsulta: $modoConsulta, itens: $itens, kitEmLeitura: $kitEmLeitura, kits: $kits, circulante: $circulante, processoTipo: $processoTipo, local: $local, configuracao: $configuracao, processoRegistro: $processoRegistro, processoDetalheRegistro: $processoDetalheRegistro, solicitaItemNaoConforme: $solicitaItemNaoConforme, solicitaKitNaoConforme: $solicitaKitNaoConforme, estoque: $estoque, codMotivoRetornoArsenalItem: $codMotivoRetornoArsenalItem, motivoRetornoArsenalItem: $motivoRetornoArsenalItem, codMotivoRetornoArsenalKit: $codMotivoRetornoArsenalKit, motivoRetornoArsenalKit: $motivoRetornoArsenalKit, etapaFinalItem: $etapaFinalItem, codUsuarioQuebraFluxo: $codUsuarioQuebraFluxo, usuarioQuebraFluxo: $usuarioQuebraFluxo, codMotivoQuebraFluxo: $codMotivoQuebraFluxo, motivoQuebraFluxo: $motivoQuebraFluxo, calculadora: $calculadora, consignado: $consignado, conferidoVisualmente: $conferidoVisualmente, impressaoPreparo: $impressaoPreparo, embalagemProcesso: $embalagemProcesso, integradorKitProcesso: $integradorKitProcesso, conferenciaVisualProcesso: $conferenciaVisualProcesso, liberaKitIncompletoProcesso: $liberaKitIncompletoProcesso, etapas: $etapas, processoMotivos: $processoMotivos, processoMotivosQuebraFluxo: $processoMotivosQuebraFluxo, usuarios: $usuarios, embalagens: $embalagens, proprietarios: $proprietarios, descritores: $descritores, indicadorProcesso: $indicadorProcesso, indicadorBiologicoProcesso: $indicadorBiologicoProcesso, dataMatrixGeralLeitura: $dataMatrixGeralLeitura, impressaoEtiquetaLote: $impressaoEtiquetaLote, impressaoRelatorioRetirada: $impressaoRelatorioRetirada, selecaoKitItem: $selecaoKitItem, confirmaQuebraFluxoRemocaoArsenal: $confirmaQuebraFluxoRemocaoArsenal, loteEquipamento: $loteEquipamento, solicitaItemKitNaoConforme: $solicitaItemKitNaoConforme, defineAcaoOcorrencia: $defineAcaoOcorrencia, acoesOcorrencia: $acoesOcorrencia)';
+    return 'ProcessoLeituraAtualModel(cod: $cod, usuario: $usuario, instituicao: $instituicao, equipamento: $equipamento, acaoEmAndamento: $acaoEmAndamento, dataHoraInicioProcesso: $dataHoraInicioProcesso, prioridade: $prioridade, decisao: $decisao, acao: $acao, respostaEPCEPI: $respostaEPCEPI, itemEmLeitura: $itemEmLeitura, modoConsulta: $modoConsulta, itens: $itens, kitEmLeitura: $kitEmLeitura, kits: $kits, circulante: $circulante, processoTipo: $processoTipo, local: $local, configuracao: $configuracao, processoRegistro: $processoRegistro, processoDetalheRegistro: $processoDetalheRegistro, solicitaItemNaoConforme: $solicitaItemNaoConforme, solicitaKitNaoConforme: $solicitaKitNaoConforme, estoque: $estoque, codMotivoRetornoArsenalItem: $codMotivoRetornoArsenalItem, motivoRetornoArsenalItem: $motivoRetornoArsenalItem, codMotivoRetornoArsenalKit: $codMotivoRetornoArsenalKit, motivoRetornoArsenalKit: $motivoRetornoArsenalKit, etapaFinalItem: $etapaFinalItem, codUsuarioQuebraFluxo: $codUsuarioQuebraFluxo, usuarioQuebraFluxo: $usuarioQuebraFluxo, codMotivoQuebraFluxo: $codMotivoQuebraFluxo, motivoQuebraFluxo: $motivoQuebraFluxo, calculadora: $calculadora, consignado: $consignado, conferidoVisualmente: $conferidoVisualmente, impressaoPreparo: $impressaoPreparo, embalagemProcesso: $embalagemProcesso, integradorKitProcesso: $integradorKitProcesso, conferenciaVisualProcesso: $conferenciaVisualProcesso, liberaKitIncompletoProcesso: $liberaKitIncompletoProcesso, etapas: $etapas, processoMotivos: $processoMotivos, processoMotivosQuebraFluxo: $processoMotivosQuebraFluxo, usuarios: $usuarios, embalagens: $embalagens, proprietarios: $proprietarios, descritores: $descritores, indicadorProcesso: $indicadorProcesso, indicadorBiologicoProcesso: $indicadorBiologicoProcesso, dataMatrixGeralLeitura: $dataMatrixGeralLeitura, impressaoEtiquetaLote: $impressaoEtiquetaLote, impressaoRelatorioRetirada: $impressaoRelatorioRetirada, selecaoKitItem: $selecaoKitItem, confirmaQuebraFluxoRemocaoArsenal: $confirmaQuebraFluxoRemocaoArsenal, loteEquipamento: $loteEquipamento, solicitaItemKitNaoConforme: $solicitaItemKitNaoConforme, defineAcaoOcorrencia: $defineAcaoOcorrencia, acoesOcorrencia: $acoesOcorrencia, localNaoCompativel: $localNaoCompativel)';
   }
 
   @override
@@ -1696,7 +1727,8 @@ class _$ProcessoLeituraAtualModelImpl extends _ProcessoLeituraAtualModel
       ..add(DiagnosticsProperty(
           'solicitaItemKitNaoConforme', solicitaItemKitNaoConforme))
       ..add(DiagnosticsProperty('defineAcaoOcorrencia', defineAcaoOcorrencia))
-      ..add(DiagnosticsProperty('acoesOcorrencia', acoesOcorrencia));
+      ..add(DiagnosticsProperty('acoesOcorrencia', acoesOcorrencia))
+      ..add(DiagnosticsProperty('localNaoCompativel', localNaoCompativel));
   }
 
   @JsonKey(ignore: true)
@@ -1775,7 +1807,8 @@ abstract class _ProcessoLeituraAtualModel extends ProcessoLeituraAtualModel {
           required LoteEquipamentoModel loteEquipamento,
           required bool? solicitaItemKitNaoConforme,
           required DefineAcaoOcorrenciaModel? defineAcaoOcorrencia,
-          required List<AcaoOcorrenciaModel> acoesOcorrencia}) =
+          required List<AcaoOcorrenciaModel> acoesOcorrencia,
+          required LocalNaoCompativelModel localNaoCompativel}) =
       _$ProcessoLeituraAtualModelImpl;
   _ProcessoLeituraAtualModel._() : super._();
 
@@ -1960,6 +1993,9 @@ abstract class _ProcessoLeituraAtualModel extends ProcessoLeituraAtualModel {
   @override
   List<AcaoOcorrenciaModel> get acoesOcorrencia;
   set acoesOcorrencia(List<AcaoOcorrenciaModel> value);
+  @override
+  LocalNaoCompativelModel get localNaoCompativel;
+  set localNaoCompativel(LocalNaoCompativelModel value);
   @override
   @JsonKey(ignore: true)
   _$$ProcessoLeituraAtualModelImplCopyWith<_$ProcessoLeituraAtualModelImpl>

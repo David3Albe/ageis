@@ -12,11 +12,15 @@ class DestinoResiduoPageFrmCubit extends Cubit<DestinoResiduoPageFrmState> {
           DestinoResiduoPageFrmState(destinoResiduo: destinoResiduoModel),
         );
 
-  void save(DestinoResiduoModel destinoResiduo) async {
+  void save(
+    DestinoResiduoModel destinoResiduo,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, DestinoResiduoModel destinoResiduo)? result =
           await service.save(destinoResiduo);
       if (result == null) return;
+      onSaved(result.$1);
       emit(
         DestinoResiduoPageFrmState(
           message: result.$1,
@@ -35,7 +39,11 @@ class DestinoResiduoPageFrmCubit extends Cubit<DestinoResiduoPageFrmState> {
   }
 
   void clear() {
-    emit(DestinoResiduoPageFrmState(destinoResiduo: DestinoResiduoModel.empty()));
+    emit(
+      DestinoResiduoPageFrmState(
+        destinoResiduo: DestinoResiduoModel.empty(),
+      ),
+    );
   }
 }
 

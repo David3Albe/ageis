@@ -12,11 +12,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class DocumentoPage extends StatefulWidget {
-  DocumentoPage({this.cod, super.key});
+  const DocumentoPage({this.cod, super.key});
   final int? cod;
 
   @override
@@ -103,6 +104,7 @@ class _DocumentoPageState extends State<DocumentoPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     onEdit: (DocumentoModel objeto) =>
                         {openModal(context, DocumentoModel.copy(objeto))},
                     onDelete: (DocumentoModel objeto) =>
@@ -127,7 +129,10 @@ class _DocumentoPageState extends State<DocumentoPage> {
     );
   }
 
-  Future<void> openModal(BuildContext context, DocumentoModel documento) async {
+  Future openModal(
+    BuildContext context,
+    DocumentoModel documento,
+  ) async {
     LoadingController loading = LoadingController(context: context);
 
     DocumentoModel? doc = documento;
@@ -143,26 +148,38 @@ class _DocumentoPageState extends State<DocumentoPage> {
     }
     loading.close(context, mounted);
 
-    (bool, String)? result = await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return DocumentoPageFrm(
-          documento: doc!,
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Documento',
+      widget: DocumentoPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        documento: doc,
+      ),
     );
-    if (result == null || !result.$1) return;
-    ToastUtils.showCustomToastSucess(context, result.$2);
+  }
+
+  Future onSaved(String message, int chave) async {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
     await bloc.loadDocumento();
   }
 
-  void delete(BuildContext context, DocumentoModel documento) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Documento\n${documento.cod}  ${documento.descricao}',
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
+  }
+
+  void delete(BuildContext context, DocumentoModel documento) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Documento\n${documento.cod}  ${documento.descricao}',
+      onConfirm: () => onConfirmDelete(documento),
     );
-    if (confirmacao) bloc.delete(documento);
+  }
+
+  void onConfirmDelete(DocumentoModel documento) {
+    bloc.delete(documento);
   }
 
   void deleted(DocumentoPageState state) {

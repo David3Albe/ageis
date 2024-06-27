@@ -12,11 +12,14 @@ class KitCorPageFrmCubit extends Cubit<KitCorPageFrmState> {
           KitCorPageFrmState(kitCor: kitCorModel),
         );
 
-  void save(KitCorModel kitCor) async {
+  void save(
+    KitCorModel kitCor,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, KitCorModel kitCor)? result = await service.save(kitCor);
       if (result == null) return;
-
+      onSaved(result.$1);
       emit(
         KitCorPageFrmState(
           message: result.$1,

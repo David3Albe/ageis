@@ -10,11 +10,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class PecaPage extends StatefulWidget {
-  PecaPage({super.key});
+  const PecaPage({super.key});
 
   @override
   State<PecaPage> createState() => _PecaPageState();
@@ -93,30 +94,41 @@ class _PecaPageState extends State<PecaPage> {
     );
   }
 
-  void openModal(BuildContext context, PecaModel peca) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: PecaPageFrm(
-            peca: peca,
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadPeca();
-    });
+  Future openModal(
+    BuildContext context,
+    PecaModel peca,
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Peça',
+      widget: PecaPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        peca: peca,
+      ),
+    );
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadPeca();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void delete(BuildContext context, PecaModel peca) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção da Peça\n${peca.cod} - ${peca.peca}',
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message: 'Confirma a remoção da Peça\n${peca.cod} - ${peca.peca}',
+      onConfirm: () => onConfirmDelete(peca),
     );
-    if (confirmacao) bloc.delete(peca);
+  }
+
+  void onConfirmDelete(PecaModel peca) async {
+    bloc.delete(peca);
   }
 
   void deleted(PecaPageState state) {

@@ -26,6 +26,7 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -179,71 +180,66 @@ class _ItemPageState extends State<ItemPage> {
     );
   }
 
-  void openModalFilter(BuildContext context) {
-    showDialog<bool>(
-      barrierDismissible: false,
+  Future openModalFilter(BuildContext context) async {
+    bool? confirm = await showDialog<bool>(
       context: context,
-      builder: (BuildContext context) {
-        return FilterDialogWidget(
-          child: Column(
-            children: [
-              CustomAutocompleteWidget<ItemModel>(
-                initialValue: filter.idEtiquetaContem,
-                onChange: (str) => filter.idEtiquetaContem = str,
-                onItemSelectedText: (item) => item.idEtiqueta ?? null,
-                label: 'Item',
-                title: (p0) => Text(p0.EtiquetaDescricaoText()),
-                suggestionsCallback: (str) => ItemService().Filter(
-                  ItemFilter(numeroRegistros: 30, termoPesquisa: str),
-                ),
+      builder: (context) => FilterDialogWidget(
+        child: Column(
+          children: [
+            CustomAutocompleteWidget<ItemModel>(
+              initialValue: filter.idEtiquetaContem,
+              onChange: (str) => filter.idEtiquetaContem = str,
+              onItemSelectedText: (item) => item.idEtiqueta ?? null,
+              label: 'Item',
+              title: (p0) => Text(p0.EtiquetaDescricaoText()),
+              suggestionsCallback: (str) => ItemService().Filter(
+                ItemFilter(numeroRegistros: 30, termoPesquisa: str),
               ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              CustomAutocompleteWidget<KitDropDownSearchResponseDTO>(
-                initialValue: filter.codBarraKitContem,
-                onChange: (str) => filter.codBarraKitContem = str,
-                onItemSelectedText: (kit) => kit.codBarra,
-                label: 'Kit',
-                title: (p0) => Text(p0.CodBarraDescritorText()),
-                suggestionsCallback: (str) async {
-                  return (await KitService().getDropDownSearchKits(
-                        KitDropDownSearchDTO(
-                          search: str,
-                          numeroRegistros: 30,
-                        ),
-                      ))
-                          ?.$2 ??
-                      [];
-                },
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              TextFieldNumberWidget(
-                startValue: filter.numeroRegistros,
-                placeholder: 'Máx Reg.',
-                onChanged: (str) => {filter.numeroRegistros = int.parse(str)},
-              ),
-            ],
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == true) {
-        if (filter.cod != null ||
-            filter.numeroRegistros != null ||
-            filter.codKit != null ||
-            filter.idEtiquetaContem != null) {
-          filter.startDate = null;
-          filter.finalDate = null;
-        }
-        if (filter.numeroRegistros.toString().isEmpty) {
-          ToastUtils.showCustomToastWarning(
-            context,
-            'Informe um limite de itens para buscar',
-          );
-          return;
-        }
-        bloc.loadItemFilter(filter);
-      }
-    });
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            CustomAutocompleteWidget<KitDropDownSearchResponseDTO>(
+              initialValue: filter.codBarraKitContem,
+              onChange: (str) => filter.codBarraKitContem = str,
+              onItemSelectedText: (kit) => kit.codBarra,
+              label: 'Kit',
+              title: (p0) => Text(p0.CodBarraDescritorText()),
+              suggestionsCallback: (str) async {
+                return (await KitService().getDropDownSearchKits(
+                      KitDropDownSearchDTO(
+                        search: str,
+                        numeroRegistros: 30,
+                      ),
+                    ))
+                        ?.$2 ??
+                    [];
+              },
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            TextFieldNumberWidget(
+              startValue: filter.numeroRegistros,
+              placeholder: 'Máx Reg.',
+              onChanged: (str) => {filter.numeroRegistros = int.parse(str)},
+            ),
+          ],
+        ),
+      ),
+    );
+    if (confirm != true) return;
+    if (filter.cod != null ||
+        filter.numeroRegistros != null ||
+        filter.codKit != null ||
+        filter.idEtiquetaContem != null) {
+      filter.startDate = null;
+      filter.finalDate = null;
+    }
+    if (filter.numeroRegistros.toString().isEmpty) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'Informe um limite de itens para buscar',
+      );
+      return;
+    }
+    await bloc.loadItemFilter(filter);
   }
 
   Future imprimirFolhaRotulados() async {
@@ -295,7 +291,10 @@ class _ItemPageState extends State<ItemPage> {
     );
   }
 
-  Future<void> openModal(BuildContext context, ItemModel item) async {
+  Future openModal(
+    BuildContext context,
+    ItemModel item,
+  ) async {
     LoadingController loading = LoadingController(context: context);
     loadProprietarioCubit();
 
@@ -311,34 +310,50 @@ class _ItemPageState extends State<ItemPage> {
       }
     }
     loading.close(context, mounted);
-
-    (bool, String, int?)? result = await showDialog<(bool, String, int?)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return ItemPageFrm(
-          proprietarioCubit: proprietarioCubit,
-          item: itemModel!,
-          frmType: widget.frmType,
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Item',
+      widget: ItemPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str, codItem) => onSaved(str, chave, codItem, itemModel!),
+        proprietarioCubit: proprietarioCubit,
+        item: itemModel,
+        frmType: widget.frmType,
+      ),
     );
-    if (result == null || !result.$1) return;
-    if (result.$3 != null) {
+  }
+
+  Future onSaved(
+    String message,
+    int chave,
+    int? codItem,
+    ItemModel item,
+  ) async {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    if (codItem != null) {
       item.tstamp = null;
+      await bloc.loadItemFilter(filter);
       await openModal(context, item);
       return;
     }
-    ToastUtils.showCustomToastSucess(context, result.$2);
     await bloc.loadItemFilter(filter);
   }
 
-  void delete(BuildContext context, ItemModel item) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do  Item\n${item.cod} - ${item.descricao}',
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
+  }
+
+  void delete(BuildContext context, ItemModel item) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message: 'Confirma a remoção do  Item\n${item.cod} - ${item.descricao}',
+      onConfirm: () => confirmDelete(item),
     );
-    if (confirmacao) bloc.delete(item);
+  }
+
+  void confirmDelete(ItemModel item) {
+    bloc.delete(item);
   }
 
   void deleted(ItemPageState state) {

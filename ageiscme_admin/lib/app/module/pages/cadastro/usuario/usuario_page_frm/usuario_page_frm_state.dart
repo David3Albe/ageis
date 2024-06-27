@@ -12,17 +12,18 @@ class UsuarioPageFrmCubit extends Cubit<UsuarioPageFrmState> {
           UsuarioPageFrmState(usuario: usuarioModel),
         );
 
-  void save(UsuarioModel usuario) async {
+  void save(UsuarioModel usuario, void Function(String) onSaved) async {
     try {
       (String message, UsuarioModel usuario)? result =
           await service.save(usuario);
       if (result == null) return;
+      onSaved(result.$1);
       emit(
         UsuarioPageFrmState(
           message: result.$1,
           saved: true,
           usuario: result.$2,
-        ), 
+        ),
       );
     } on Exception catch (ex) {
       emit(

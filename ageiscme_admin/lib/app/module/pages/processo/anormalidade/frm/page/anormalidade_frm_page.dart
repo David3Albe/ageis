@@ -15,7 +15,6 @@ import 'package:ageiscme_models/response_dto/item/drop_down_search/item_drop_dow
 import 'package:ageiscme_models/response_dto/processo_registro/ultimo/processo_registro_ultimo_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/custom_autocomplete/custom_autocomplete_selectable_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
@@ -28,7 +27,7 @@ import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
-import 'package:compartilhados/query_dialog/query_dialog_widget.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:dependencias_comuns/modular_export.dart';
@@ -36,8 +35,12 @@ import 'package:flutter/material.dart';
 
 class AnormalidadeFrmPageWidget extends StatelessWidget {
   const AnormalidadeFrmPageWidget({
+    required this.onSaved,
+    required this.onCancel,
     super.key,
   });
+  final void Function() onSaved;
+  final void Function() onCancel;
 
   @override
   Widget build(BuildContext context) {
@@ -84,10 +87,6 @@ class AnormalidadeFrmPageWidget extends StatelessWidget {
                         : 'Criação de novo registro de anormalidade',
                   );
                 },
-              ),
-              const Spacer(),
-              CloseButtonWidget(
-                onPressed: () => Navigator.of(context).pop(false),
               ),
             ],
           ),
@@ -462,7 +461,7 @@ class AnormalidadeFrmPageWidget extends StatelessWidget {
                           BlocProvider.of<AnormalidadeFrmCubit>(context).clear,
                     ),
                     CancelButtonUnfilledWidget(
-                      onPressed: () => Navigator.of(context).pop(false),
+                      onPressed: onCancel,
                     ),
                   ],
                 ),
@@ -484,12 +483,13 @@ class AnormalidadeFrmPageWidget extends StatelessWidget {
       scroll.jumpTo(200);
       return;
     }
-    BlocProvider.of<AnormalidadeFrmCubit>(context).salvar(context: context);
+    BlocProvider.of<AnormalidadeFrmCubit>(context)
+        .salvar(context: context, onSaved: onSaved);
   }
 
-  void openModalMateriaisAnormalidade(
+  Future openModalMateriaisAnormalidade(
     BuildContext context,
-  ) {
+  ) async {
     ProcessoRegistroUltimoResponseDTO? processoRegistro =
         BlocProvider.of<AnormalidadeFrmCubit>(context)
             .state
@@ -502,23 +502,18 @@ class AnormalidadeFrmPageWidget extends StatelessWidget {
       );
       return;
     }
-    showDialog<bool>(
-      barrierDismissible: true,
-      context: context,
-      barrierColor: Colors.white,
-      builder: (BuildContext context) {
-        return QueryDialogWidget(
-          child: ConsultaAnormalidadeMateriaisPage(
-            filter: ConsultaAnormalidadeMateriaisFilter(
-              codRegistroProcesso: processoRegistro.cod,
-              finalDate: processoRegistro.dataHoraTermino,
-              finalTime: processoRegistro.dataHoraTermino,
-              startDate: processoRegistro.dataHoraInicio,
-              startTime: processoRegistro.dataHoraInicio,
-            ),
-          ),
-        );
-      },
+
+    WindowsHelper.OpenDefaultWindows(
+      title: 'Consulta Materiais - Anormalidade',
+      widget: ConsultaAnormalidadeMateriaisPage(
+        filter: ConsultaAnormalidadeMateriaisFilter(
+          codRegistroProcesso: processoRegistro.cod,
+          finalDate: processoRegistro.dataHoraTermino,
+          finalTime: processoRegistro.dataHoraTermino,
+          startDate: processoRegistro.dataHoraInicio,
+          startTime: processoRegistro.dataHoraInicio,
+        ),
+      ),
     );
   }
 }

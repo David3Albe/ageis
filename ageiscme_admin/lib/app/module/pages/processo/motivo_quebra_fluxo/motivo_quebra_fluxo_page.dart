@@ -10,11 +10,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class MotivoQuebraFluxoPage extends StatefulWidget {
-  MotivoQuebraFluxoPage({super.key});
+  const MotivoQuebraFluxoPage({super.key});
 
   @override
   State<MotivoQuebraFluxoPage> createState() => _MotivoQuebraFluxoPageState();
@@ -97,36 +98,47 @@ class _MotivoQuebraFluxoPageState extends State<MotivoQuebraFluxoPage> {
     );
   }
 
-  void openModal(
+  Future openModal(
     BuildContext context,
     MotivoQuebraFluxoModel motivoQuebraFluxo,
-  ) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: MotivoQuebraFluxoPageFrm(
-            motivoQuebraFluxo: motivoQuebraFluxo,
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadMotivoQuebraFluxo();
-    });
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Motivo Quebra de Fluxo',
+      widget: MotivoQuebraFluxoPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        motivoQuebraFluxo: motivoQuebraFluxo,
+      ),
+    );
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadMotivoQuebraFluxo();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void delete(
     BuildContext context,
     MotivoQuebraFluxoModel motivoQuebraFluxo,
-  ) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Motivo de Quebra de Fluxo\n${motivoQuebraFluxo.cod} - ${motivoQuebraFluxo.descricao}',
+  ) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Motivo de Quebra de Fluxo\n${motivoQuebraFluxo.cod} - ${motivoQuebraFluxo.descricao}',
+      onConfirm: () => confirmDelete(motivoQuebraFluxo),
     );
-    if (confirmacao) bloc.delete(motivoQuebraFluxo);
+  }
+
+  void confirmDelete(
+    MotivoQuebraFluxoModel motivoQuebraFluxo,
+  ) async {
+    bloc.delete(motivoQuebraFluxo);
   }
 
   void deleted(MotivoQuebraFluxoPageState state) {

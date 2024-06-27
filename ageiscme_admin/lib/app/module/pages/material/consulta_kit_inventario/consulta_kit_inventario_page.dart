@@ -20,12 +20,12 @@ import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_footer_type.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
-import 'package:compartilhados/query_dialog/query_dialog_widget.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ConsultaKitInventarioPage extends StatefulWidget {
-  ConsultaKitInventarioPage({super.key});
+  const ConsultaKitInventarioPage({super.key});
 
   @override
   State<ConsultaKitInventarioPage> createState() =>
@@ -136,7 +136,7 @@ class _ConsultaKitInventarioPageState extends State<ConsultaKitInventarioPage> {
                         );
                       }
 
-                      openModalRedirect(
+                      await openModalRedirect(
                         context,
                         obj.codDescritorKit,
                       );
@@ -154,84 +154,73 @@ class _ConsultaKitInventarioPageState extends State<ConsultaKitInventarioPage> {
   void onError(ConsultaKitInventarioPageState state) =>
       ErrorUtils.showErrorDialog(context, [state.error]);
 
-  void openModal(BuildContext context) {
-    showDialog<bool>(
-      barrierDismissible: false,
+  Future openModal(BuildContext context) async {
+    bool? confirm = await showDialog<bool>(
       context: context,
-      builder: (BuildContext context) {
-        return FilterDialogWidget(
-          child: Column(
-            children: [
-              DropDownSearchApiWidget<KitDescritorDropDownSearchResponseDTO>(
-                search: (str) async =>
-                    (await KitDescritorService().getDropDownSearch(
-                      KitDescritorDropDownSearchDTO(
-                        numeroRegistros: 30,
-                        termoPesquisa: str,
-                        apenasAtivos: true,
-                      ),
-                    ))
-                        ?.$2 ??
-                    [],
-                textFunction: (kitDescritor) => kitDescritor.Nome(),
-                initialValue: filter.kitDescritor == null
-                    ? null
-                    : KitDescritorDropDownSearchResponseDTO(
-                        cod: filter.kitDescritor!.cod,
-                        nome: filter.kitDescritor?.nome,
-                      ),
-                onChanged: (value) {
-                  filter.codKitDescritor = value?.cod;
-                  filter.kitDescritor = value;
-                },
-                placeholder: 'Descritor do Kit',
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              Builder(
-                builder: (context) {
-                  return DropDownSearchWidget<KitSituacaoOption>(
-                    sourceList: KitSituacaoOption.situacaoOptions,
-                    initialValue: KitSituacaoOption.situacaoOptions
-                        .where(
-                          (element) => element.cod == filter.codSituacao,
-                        )
-                        .firstOrNull,
-                    placeholder: 'Situação',
-                    onChanged: (value) => filter.codSituacao = value?.cod,
-                  );
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == true) {
-        bloc.loadKitInventario(filter);
-      }
-    });
+      builder: (context) => FilterDialogWidget(
+        child: Column(
+          children: [
+            DropDownSearchApiWidget<KitDescritorDropDownSearchResponseDTO>(
+              search: (str) async =>
+                  (await KitDescritorService().getDropDownSearch(
+                    KitDescritorDropDownSearchDTO(
+                      numeroRegistros: 30,
+                      termoPesquisa: str,
+                      apenasAtivos: true,
+                    ),
+                  ))
+                      ?.$2 ??
+                  [],
+              textFunction: (kitDescritor) => kitDescritor.Nome(),
+              initialValue: filter.kitDescritor == null
+                  ? null
+                  : KitDescritorDropDownSearchResponseDTO(
+                      cod: filter.kitDescritor!.cod,
+                      nome: filter.kitDescritor?.nome,
+                    ),
+              onChanged: (value) {
+                filter.codKitDescritor = value?.cod;
+                filter.kitDescritor = value;
+              },
+              placeholder: 'Descritor do Kit',
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            Builder(
+              builder: (context) {
+                return DropDownSearchWidget<KitSituacaoOption>(
+                  sourceList: KitSituacaoOption.situacaoOptions,
+                  initialValue: KitSituacaoOption.situacaoOptions
+                      .where(
+                        (element) => element.cod == filter.codSituacao,
+                      )
+                      .firstOrNull,
+                  placeholder: 'Situação',
+                  onChanged: (value) => filter.codSituacao = value?.cod,
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+    if (confirm != true) return;
+    bloc.loadKitInventario(filter);
   }
 
-  void openModalRedirect(
+  Future openModalRedirect(
     BuildContext context,
     int? codKit,
-  ) {
-    showDialog<bool>(
-      barrierDismissible: true,
-      context: context,
-      barrierColor: Colors.white,
-      builder: (BuildContext context) {
-        return QueryDialogWidget(
-          child: ConsultaKitPage(
-            filter: ConsultaKitFilter(
-              codKit: null,
-              codKitDescritor: codKit,
-              codProprietario: null,
-              codSituacao: null,
-            ),
-          ),
-        );
-      },
+  ) async {
+    WindowsHelper.OpenDefaultWindows(
+      title: 'Consulta Kit',
+      widget: ConsultaKitPage(
+        filter: ConsultaKitFilter(
+          codKit: null,
+          codKitDescritor: codKit,
+          codProprietario: null,
+          codSituacao: null,
+        ),
+      ),
     );
   }
 }

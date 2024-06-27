@@ -5,7 +5,6 @@ import 'package:ageiscme_data/services/localizacao_arsenal/localizacao_arsenal_s
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
@@ -22,9 +21,13 @@ class LocalizacaoArsenalPageFrm extends StatefulWidget {
   const LocalizacaoArsenalPageFrm({
     Key? key,
     required this.localizacaoArsenal,
+    required this.onCancel,
+    required this.onSaved,
   }) : super(key: key);
 
   final LocalizacaoArsenalModel localizacaoArsenal;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<LocalizacaoArsenalPageFrm> createState() =>
@@ -99,151 +102,134 @@ class _LocalizacaoArsenalPageFrmState extends State<LocalizacaoArsenalPageFrm> {
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<LocalizacaoArsenalPageFrmCubit,
+    return BlocBuilder<LocalizacaoArsenalPageFrmCubit,
         LocalizacaoArsenalPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
-      child: BlocBuilder<LocalizacaoArsenalPageFrmCubit,
-          LocalizacaoArsenalPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return Container(
-            constraints: BoxConstraints(
-              minWidth: size.width * .5,
-              minHeight: size.height * .5,
-              maxHeight: size.height * .8,
-            ),
-            child: Stack(
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TitleWidget(
-                            text: titulo,
-                          ),
+      builder: (context, state) {
+        return Container(
+          constraints: BoxConstraints(
+            minWidth: size.width * .5,
+            minHeight: size.height * .5,
+            maxHeight: size.height * .8,
+          ),
+          child: Stack(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TitleWidget(
+                          text: titulo,
                         ),
-                        const Spacer(),
-                        CloseButtonWidget(
-                          onPressed: () =>
-                              Navigator.of(context).pop((false, '')),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child:
+                        BlocBuilder<ArsenalEstoqueCubit, ArsenalEstoqueState>(
+                      bloc: arsenalEstoqueCubit,
+                      builder: (context, arsenaisState) {
+                        if (arsenaisState.loading) {
+                          return const LoadingWidget();
+                        }
+                        List<ArsenalEstoqueModel> arsenaisEstoques =
+                            arsenaisState.arsenaisEstoques;
+
+                        arsenaisEstoques.sort(
+                          (a, b) => a.nome!.compareTo(b.nome!),
+                        );
+                        ArsenalEstoqueModel? arsenal = arsenaisEstoques
+                            .where(
+                              (element) =>
+                                  element.cod == localizacaoArsenal.codEstoque,
+                            )
+                            .firstOrNull;
+                        return DropDownSearchWidget<ArsenalEstoqueModel>(
+                          validateBuilder: (context, validateMethodBuilder) =>
+                              validateEstoque = validateMethodBuilder,
+                          validator: (val) =>
+                              val == null ? 'Obrigatório' : null,
+                          initialValue: arsenal,
+                          sourceList: arsenaisEstoques
+                              .where((element) => element.ativo == true)
+                              .toList(),
+                          onChanged: (value) =>
+                              localizacaoArsenal.codEstoque = value?.cod,
+                          placeholder: 'Arsenal *',
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: txtLocalizacao,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: txtCodigoBarra,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: Row(
+                      children: [
+                        CustomCheckboxWidget(
+                          checked: localizacaoArsenal.ativo,
+                          onClick: (value) => localizacaoArsenal.ativo = value,
+                          text: 'Ativo',
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child:
-                          BlocBuilder<ArsenalEstoqueCubit, ArsenalEstoqueState>(
-                        bloc: arsenalEstoqueCubit,
-                        builder: (context, arsenaisState) {
-                          if (arsenaisState.loading) {
-                            return const LoadingWidget();
-                          }
-                          List<ArsenalEstoqueModel> arsenaisEstoques =
-                              arsenaisState.arsenaisEstoques;
-
-                          arsenaisEstoques.sort(
-                            (a, b) => a.nome!.compareTo(b.nome!),
-                          );
-                          ArsenalEstoqueModel? arsenal = arsenaisEstoques
-                              .where(
-                                (element) =>
-                                    element.cod ==
-                                    localizacaoArsenal.codEstoque,
-                              )
-                              .firstOrNull;
-                          return DropDownSearchWidget<ArsenalEstoqueModel>(
-                            validateBuilder: (context, validateMethodBuilder) =>
-                                validateEstoque = validateMethodBuilder,
-                            validator: (val) =>
-                                val == null ? 'Obrigatório' : null,
-                            initialValue: arsenal,
-                            sourceList: arsenaisEstoques
-                                .where((element) => element.ativo == true)
-                                .toList(),
-                            onChanged: (value) =>
-                                localizacaoArsenal.codEstoque = value?.cod,
-                            placeholder: 'Arsenal *',
-                          );
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtLocalizacao,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtCodigoBarra,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: Row(
-                        children: [
-                          CustomCheckboxWidget(
-                            checked: localizacaoArsenal.ativo,
-                            onClick: (value) =>
-                                localizacaoArsenal.ativo = value,
-                            text: 'Ativo',
-                          ),
+                  ),
+                  const Spacer(),
+                  Row(
+                    children: [
+                      CustomPopupMenuWidget(
+                        items: [
+                          if (localizacaoArsenal.cod != null &&
+                              localizacaoArsenal.cod != 0)
+                            CustomPopupItemHistoryModel.getHistoryItem(
+                              child: HistoricoPage(
+                                pk: localizacaoArsenal.cod!,
+                                termo: 'LOCALIZACAO_ARSENAL',
+                              ),
+                              context: context,
+                            ),
                         ],
                       ),
-                    ),
-                    const Spacer(),
-                    Row(
-                      children: [
-                        CustomPopupMenuWidget(
-                          items: [
-                            if (localizacaoArsenal.cod != null &&
-                                localizacaoArsenal.cod != 0)
-                              CustomPopupItemHistoryModel.getHistoryItem(
-                                child: HistoricoPage(
-                                  pk: localizacaoArsenal.cod!,
-                                  termo: 'LOCALIZACAO_ARSENAL',
-                                ),
-                                context: context,
-                              ),
-                          ],
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: SaveButtonWidget(
+                          onPressed: () => {salvar()},
                         ),
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: SaveButtonWidget(
-                            onPressed: () => {salvar()},
-                          ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: CleanButtonWidget(
+                          onPressed: () => {
+                            setState(() {
+                              localizacaoArsenal =
+                                  LocalizacaoArsenalModel.empty();
+                            }),
+                          },
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: CleanButtonWidget(
-                            onPressed: () => {
-                              setState(() {
-                                localizacaoArsenal =
-                                    LocalizacaoArsenalModel.empty();
-                              }),
-                            },
-                          ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: CancelButtonUnfilledWidget(
+                          onPressed: widget.onCancel,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: CancelButtonUnfilledWidget(
-                            onPressed: () =>
-                                {Navigator.of(context).pop((false, ''))},
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -252,6 +238,6 @@ class _LocalizacaoArsenalPageFrmState extends State<LocalizacaoArsenalPageFrm> {
     bool codigoBarraValid = txtCodigoBarra.valid;
     bool estoqueValid = validateEstoque();
     if (!localizacaoValid || !codigoBarraValid || !estoqueValid) return;
-    cubit.save(localizacaoArsenal);
+    cubit.save(localizacaoArsenal, widget.onSaved);
   }
 }

@@ -13,11 +13,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ArsenalEstoquePage extends StatefulWidget {
-  ArsenalEstoquePage({super.key});
+  const ArsenalEstoquePage({super.key});
 
   @override
   State<ArsenalEstoquePage> createState() => _ArsenalEstoquePageState();
@@ -130,30 +131,42 @@ class _ArsenalEstoquePageState extends State<ArsenalEstoquePage> {
     );
   }
 
-  void openModal(BuildContext context, ArsenalEstoqueModel arsenalEstoque) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: ArsenalEstoquePageFrm(
-            arsenalEstoque: arsenalEstoque,
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadArsenalEstoque();
-    });
+  Future openModal(
+    BuildContext context,
+    ArsenalEstoqueModel arsenalEstoque,
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Arsenal',
+      widget: ArsenalEstoquePageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        arsenalEstoque: arsenalEstoque,
+      ),
+    );
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucessBig(context, message);
+    bloc.loadArsenalEstoque();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void delete(BuildContext context, ArsenalEstoqueModel arsenalEstoque) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Arsenal de Estoque\n${arsenalEstoque.cod} - ${arsenalEstoque.nome}',
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Arsenal de Estoque\n${arsenalEstoque.cod} - ${arsenalEstoque.nome}',
+      onConfirm: () => onConfirmDelete(arsenalEstoque),
     );
-    if (confirmacao) bloc.delete(arsenalEstoque);
+  }
+
+  void onConfirmDelete(ArsenalEstoqueModel arsenalEstoque) {
+    bloc.delete(arsenalEstoque);
   }
 
   void deleted(ArsenalEstoquePageState state) {

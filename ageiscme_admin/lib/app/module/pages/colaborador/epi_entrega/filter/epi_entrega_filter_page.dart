@@ -7,7 +7,9 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class EpiEntregaFilterPage extends StatelessWidget {
-  EpiEntregaFilterPage({Key? key});
+  EpiEntregaFilterPage({
+    Key? key,
+  });
 
   @override
   Widget build(BuildContext context) {

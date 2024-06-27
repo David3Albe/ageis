@@ -12,11 +12,15 @@ class EmbalagemPageFrmCubit extends Cubit<EmbalagemPageFrmState> {
           EmbalagemPageFrmState(embalagem: embalagemModel),
         );
 
-  void save(EmbalagemModel embalagem) async {
+  void save(
+    EmbalagemModel embalagem,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, EmbalagemModel embalagem)? result =
           await service.save(embalagem);
       if (result == null) return;
+      onSaved(result.$1);
       emit(
         EmbalagemPageFrmState(
           message: result.$1,

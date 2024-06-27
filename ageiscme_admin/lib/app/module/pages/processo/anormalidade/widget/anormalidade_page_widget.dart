@@ -15,6 +15,7 @@ import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/modular_export.dart';
 import 'package:flutter/material.dart';
@@ -74,9 +75,9 @@ class AnormalidadePageWidget extends StatelessWidget {
       children: [
         AddButtonWidget(
           onPressed: () => openModal(
-            context: context,
-            resetarGrid: resetarGrid,
-            cod: 0,
+             context,
+             resetarGrid,
+             0,
           ),
         ),
         Expanded(
@@ -122,17 +123,28 @@ class AnormalidadePageWidget extends StatelessWidget {
     return result?.$2.plutoData;
   }
 
-  Future remover({
+  void remover({
+    required AnormalidadeQueryItemResponseDTO item,
+    required BuildContext context,
+    required Function() resetarGrid,
+  }) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a exclusão do registro de anormalidade: \n${item.cod} - feito pelo usuário: ${item.nomeUsuario}',
+      onConfirm: () => confirmRemover(
+        item: item,
+        context: context,
+        resetarGrid: resetarGrid,
+      ),
+    );
+  }
+
+  Future confirmRemover({
     required AnormalidadeQueryItemResponseDTO item,
     required BuildContext context,
     required Function() resetarGrid,
   }) async {
-    bool confirma = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a exclusão do registro de anormalidade: \n${item.cod} - feito pelo usuário: ${item.nomeUsuario}',
-    );
-    if (confirma != true) return;
-
     AnormalidadeRemoveDTO dto = AnormalidadeRemoveDTO(
       cod: item.cod,
       tstamp: item.tstamp!,
@@ -153,36 +165,44 @@ class AnormalidadePageWidget extends StatelessWidget {
     required AnormalidadeQueryItemResponseDTO item,
   }) async =>
       await openModal(
-        context: context,
-        resetarGrid: resetarGrid,
-        cod: item.cod,
+        context,
+        resetarGrid,
+        item.cod,
       );
 
-  Future openModal({
-    required BuildContext context,
-    required Function() resetarGrid,
-    int? cod,
-  }) async {
+  Future openModal(
+    BuildContext context,
+    Function() resetarGrid,
+    int cod,
+  ) async {
+    late int chave;
     ProcessoEtapaCubit cubit = BlocProvider.of<ProcessoEtapaCubit>(context);
-    bool alterou = await showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: MultiBlocProvider(
-            providers: [
-              BlocProvider.value(
-                value: cubit,
-              ),
-            ],
-            child: AnormalidadeFrmPage(
-              cod: cod,
-            ),
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Anormalidade',
+      widget: MultiBlocProvider(
+        providers: [
+          BlocProvider.value(
+            value: cubit,
           ),
-        );
-      },
+        ],
+        child: AnormalidadeFrmPage(
+          onCancel: () => onCancel(chave),
+          onSaved: () => onSaved(chave, resetarGrid),
+          cod: cod,
+        ),
+      ),
     );
-    if (alterou != true) return;
+  }
+
+  void onSaved(
+    int chave,
+    Function() resetarGrid,
+  ) {
+    WindowsHelper.RemoverWidget(chave);
     resetarGrid();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 }

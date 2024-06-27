@@ -4,7 +4,6 @@ import 'package:ageiscme_data/services/tipo_afastamento/tipo_afastamento_service
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
@@ -18,9 +17,13 @@ class TipoAfastamentoPageFrm extends StatefulWidget {
   const TipoAfastamentoPageFrm({
     Key? key,
     required this.tipoAfastamento,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final TipoAfastamentoModel tipoAfastamento;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<TipoAfastamentoPageFrm> createState() =>
@@ -89,14 +92,9 @@ class _TipoAfastamentoPageFrmState extends State<TipoAfastamentoPageFrm> {
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocConsumer<TipoAfastamentoPageFrmCubit,
+    return BlocBuilder<TipoAfastamentoPageFrmCubit,
         TipoAfastamentoPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
       builder: (context, state) {
         return Container(
           constraints: BoxConstraints(
@@ -114,10 +112,6 @@ class _TipoAfastamentoPageFrmState extends State<TipoAfastamentoPageFrm> {
                         child: TitleWidget(
                           text: titulo,
                         ),
-                      ),
-                      const Spacer(),
-                      CloseButtonWidget(
-                        onPressed: () => Navigator.of(context).pop((false, '')),
                       ),
                     ],
                   ),
@@ -177,8 +171,7 @@ class _TipoAfastamentoPageFrmState extends State<TipoAfastamentoPageFrm> {
                       Padding(
                         padding: const EdgeInsets.only(left: 16.0),
                         child: CancelButtonUnfilledWidget(
-                          onPressed: () =>
-                              {Navigator.of(context).pop((false, ''))},
+                          onPressed: widget.onCancel,
                         ),
                       ),
                     ],
@@ -196,6 +189,6 @@ class _TipoAfastamentoPageFrmState extends State<TipoAfastamentoPageFrm> {
     bool motivoValid = txtMotivo.valid;
     bool diasConcedidoValid = txtDiasConcedido.valid;
     if (!motivoValid || !diasConcedidoValid) return;
-    cubit.save(tipoAfastamento);
+    cubit.save(tipoAfastamento, widget.onSaved);
   }
 }

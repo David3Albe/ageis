@@ -10,11 +10,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class CentroCustoPage extends StatefulWidget {
-  CentroCustoPage({super.key});
+  const CentroCustoPage({super.key});
 
   @override
   State<CentroCustoPage> createState() => _CentroCustoPageState();
@@ -98,29 +99,42 @@ class _CentroCustoPageState extends State<CentroCustoPage> {
     );
   }
 
-  Future openModal(BuildContext context, CentroCustoModel centroCusto) async {
-    (bool, String)? result = await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: CentroCustoPageFrm(
-            centroCusto: centroCusto,
-          ),
-        );
-      },
+  Future openModal(
+    BuildContext context,
+    CentroCustoModel centroCusto,
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Centro de Custo',
+      widget: CentroCustoPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        centroCusto: centroCusto,
+      ),
     );
-    if (result == null || result.$1 != true) return;
-    ToastUtils.showCustomToastSucess(context, result.$2);
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
     bloc.loadCentroCusto();
   }
 
-  void delete(BuildContext context, CentroCustoModel centroCusto) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Centro de custo\n${centroCusto.cod} - ${centroCusto.descricao}',
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
+  }
+
+  void delete(BuildContext context, CentroCustoModel obj) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: WindowsHelper.windowContext!,
+      message:
+          'Confirma a remoção do Centro de custo\n${obj.cod} - ${obj.descricao}',
+      onConfirm: () => onConfirmDelete(obj),
     );
-    if (confirmacao) bloc.delete(centroCusto);
+  }
+
+  void onConfirmDelete(CentroCustoModel obj) {
+    bloc.delete(obj);
   }
 
   void deleted(CentroCustoPageState state) {

@@ -152,6 +152,7 @@ class ProcessoPageTreeViewKitWidget extends StatelessWidget {
 
     widgets.add(
       ProcessoPageTreeViewKitStatusWidget(
+        processoLeitura: processoLeitura,
         kit: kit,
         itens: itensSemPendenteOuDataMatrix,
         status: KitProcessoStatus.modoConsulta,
@@ -164,6 +165,7 @@ class ProcessoPageTreeViewKitWidget extends StatelessWidget {
     widgets.add(
       ProcessoPageTreeViewKitStatusWidget(
         kit: kit,
+        processoLeitura: processoLeitura,
         itens: kit.itens!
             .where((element) => element.status != '3' && element.status != '4')
             .toList(),
@@ -178,6 +180,7 @@ class ProcessoPageTreeViewKitWidget extends StatelessWidget {
     if (kit.itensLidos == null) return;
     widgets.add(
       ProcessoPageTreeViewKitStatusWidget(
+        processoLeitura: processoLeitura,
         kit: kit,
         itens: kit.itensLidos!
             .where(
@@ -213,6 +216,7 @@ class ProcessoPageTreeViewKitWidget extends StatelessWidget {
     widgets.add(
       ProcessoPageTreeViewKitStatusWidget(
         kit: kit,
+        processoLeitura: processoLeitura,
         itens: itensDataMatrixDanificado,
         status: KitProcessoStatus.dataMatrixDanificado,
         expandido: kit.statusExpandidos != null &&
@@ -242,6 +246,7 @@ class ProcessoPageTreeViewKitWidget extends StatelessWidget {
         itens: itensFaltantes,
         kit: kit,
         status: KitProcessoStatus.faltantes,
+        processoLeitura: processoLeitura,
         expandido: kit.statusExpandidos != null &&
             kit.statusExpandidos!.contains(KitProcessoStatus.faltantes),
       ),
@@ -266,6 +271,7 @@ class ProcessoPageTreeViewKitWidget extends StatelessWidget {
     widgets.add(
       ProcessoPageTreeViewKitStatusWidget(
         itens: itensNaoLidos,
+        processoLeitura: processoLeitura,
         kit: kit,
         status: KitProcessoStatus.naoLidos,
         expandido: kit.statusExpandidos != null &&

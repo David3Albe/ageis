@@ -12,11 +12,15 @@ class EquipamentoPageFrmCubit extends Cubit<EquipamentoPageFrmState> {
           EquipamentoPageFrmState(equipamento: equipamentoModel),
         );
 
-  void save(EquipamentoModel equipamento) async {
+  void save(
+    EquipamentoModel equipamento,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, EquipamentoModel equipamento)? result =
           await service.save(equipamento);
       if (result == null) return;
+      onSaved(result.$1);
       emit(
         EquipamentoPageFrmState(
           message: result.$1,

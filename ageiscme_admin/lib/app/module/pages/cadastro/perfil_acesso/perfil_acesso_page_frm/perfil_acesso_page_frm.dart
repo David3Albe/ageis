@@ -9,7 +9,6 @@ import 'package:ageiscme_models/models/direito/direito_model.dart';
 import 'package:ageiscme_models/models/perfil_direito/perfil_direito_model.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/list_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/list_field/list_field_widget.dart';
@@ -29,10 +28,14 @@ class PerfilAcessoPageFrm extends StatefulWidget {
     Key? key,
     required this.perfilAcesso,
     required this.direitoCubit,
+    required this.onCancel,
+    required this.onSaved,
   }) : super(key: key);
 
   final PerfilAcessoModel perfilAcesso;
   final DireitoCubit direitoCubit;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<PerfilAcessoPageFrm> createState() =>
@@ -91,300 +94,313 @@ class _PerfilAcessoPageFrmState extends State<PerfilAcessoPageFrm> {
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<PerfilAcessoPageFrmCubit, PerfilAcessoPageFrmState>(
+    return BlocBuilder<PerfilAcessoPageFrmCubit, PerfilAcessoPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
-      child: BlocBuilder<PerfilAcessoPageFrmCubit, PerfilAcessoPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return AlertDialog(
-            contentPadding: const EdgeInsets.all(8.0),
-            titlePadding: const EdgeInsets.all(8.0),
-            actionsPadding: const EdgeInsets.all(8.0),
-            title: Row(
+      builder: (context, state) {
+        return Column(
+          children: [
+            Row(
               children: [
                 Expanded(
                   child: TitleWidget(
                     text: titulo,
                   ),
                 ),
-                const Spacer(),
-                CloseButtonWidget(
-                  onPressed: () => Navigator.of(context).pop((false, '')),
-                ),
               ],
             ),
-            content: Container(
-              constraints: BoxConstraints(
-                minWidth: size.width * .5,
-                minHeight: size.height * .5,
-                maxHeight: size.height * .8,
-              ),
-              child: SingleChildScrollView(
-                controller: scroll,
-                padding: const EdgeInsets.only(right: 14),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtDescricao,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          CustomCheckboxWidget(
-                            checked: perfilAcesso.ativo,
-                            onClick: (value) => perfilAcesso.ativo = value,
-                            text: 'Ativo',
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: Row(
-                        children: [
-                          CustomCheckboxWidget(
-                            checked: perfilAcesso.perfilRestrito,
-                            onClick: (value) =>
-                                perfilAcesso.perfilRestrito = value,
-                            text: 'Perfil Restrito',
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              'Direitos do Perfil',
-                              style: Fontes.getRoboto(),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          const SizedBox(width: 25.0),
-                          Expanded(
-                            child: Text(
-                              'Direitos Ausentes do Perfil',
-                              style: Fontes.getRoboto(),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: ListButtonWidget(
-                              text: 'Remover Direito',
-                              icon: Icons.arrow_forward,
-                              onPressed: () {
-                                if (direitoRemover != null) {
-                                  setState(() {
-                                    if (perfilAcesso.perfilDireitos != null) {
-                                      perfilAcesso.perfilDireitos!.removeWhere(
-                                        (element) =>
-                                            element.codDireito ==
-                                            direitoRemover!.cod,
-                                      );
-                                    }
-                                  });
-                                } else {
-                                  ToastUtils.showCustomToastError(
-                                    context,
-                                    'Nenhum Direito selecionado',
-                                  );
-                                }
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 25.0),
-                          Expanded(
-                            child: ListButtonWidget(
-                              text: 'Incluir Direito',
-                              icon: Icons.arrow_back,
-                              onPressed: () {
-                                if (direitoAdicionar != null) {
-                                  setState(() {
-                                    if (perfilAcesso.perfilDireitos == null) {
-                                      perfilAcesso.perfilDireitos = [];
-                                    }
-                                    PerfilDireitoModel perfilDireito =
-                                        PerfilDireitoModel.empty();
-                                    perfilDireito.codDireito =
-                                        direitoAdicionar!.cod;
-                                    perfilAcesso.perfilDireitos!
-                                        .add(perfilDireito);
-
-                                    direitoAdicionar = null;
-                                  });
-                                } else {
-                                  ToastUtils.showCustomToastError(
-                                    context,
-                                    'Nenhum Direito selecionado',
-                                  );
-                                }
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: BlocBuilder<DireitoCubit, DireitoState>(
-                              bloc: widget.direitoCubit,
-                              builder: (context, direitoState) {
-                                if (direitoState.loading) {
-                                  return const Center(child: LoadingWidget());
-                                }
-                                List<DireitoModel> direitos =
-                                    direitoState.direitos;
-
-                                List<DireitoModel> direitosAdicionado = [];
-
-                                if (perfilAcesso.perfilDireitos != null) {
-                                  for (final perfilDireito
-                                      in perfilAcesso.perfilDireitos!) {
-                                    final codDireito = perfilDireito.codDireito;
-
-                                    if (direitos.isNotEmpty) {
-                                      final direitoAdicionado = direitos
-                                          .where(
-                                            (direito) =>
-                                                direito.cod == codDireito,
-                                          )
-                                          .firstOrNull;
-                                      if (direitoAdicionado != null) {
-                                        direitosAdicionado
-                                            .add(direitoAdicionado);
-                                      }
-                                    }
-                                  }
-                                }
-
-                                return ListFieldWidget<DireitoModel>(
-                                  sourceList: direitosAdicionado,
-                                  removeButton: false,
-                                  onItemSelected: (selectedDireito) {
-                                    setState(() {
-                                      direitoRemover = selectedDireito;
-                                    });
-                                  },
-                                  itemText: (direito) {
-                                    return direito.descricao!;
-                                  },
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 25.0),
-                          Expanded(
-                            child: BlocBuilder<DireitoCubit, DireitoState>(
-                              bloc: widget.direitoCubit,
-                              builder: (context, direitoState) {
-                                if (direitoState.loading) {
-                                  return const Center(child: LoadingWidget());
-                                }
-                                List<DireitoModel> direitos =
-                                    direitoState.direitos;
-
-                                if (perfilAcesso.perfilDireitos == null) {
-                                  perfilAcesso.perfilDireitos = [];
-                                }
-
-                                List<DireitoModel> direitosDisponiveis =
-                                    direitos
-                                        .where(
-                                          (direito) =>
-                                              !perfilAcesso.perfilDireitos!.any(
-                                            (direitoPerfil) =>
-                                                direitoPerfil.codDireito ==
-                                                direito.cod,
-                                          ),
-                                        )
-                                        .toList();
-
-                                return ListFieldWidget<DireitoModel>(
-                                  sourceList: direitosDisponiveis,
-                                  removeButton: false,
-                                  onItemSelected: (selectedDireito) {
-                                    setState(() {
-                                      direitoAdicionar = selectedDireito;
-                                    });
-                                  },
-                                  itemText: (direito) {
-                                    return direito.descricao!;
-                                  },
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Padding(padding: EdgeInsets.only(top: 24)),
-                  ],
-                ),
-              ),
-            ),
-            actions: [
-              Row(
+            Expanded(
+              child: Row(
                 children: [
-                  CustomPopupMenuWidget(
-                    items: [
-                      if (perfilAcesso.cod != null && perfilAcesso.cod != 0)
-                        CustomPopupItemHistoryModel.getHistoryItem(
-                          child: HistoricoPage(
-                            pk: perfilAcesso.cod!,
-                            termo: 'PERFIL_ACESSO',
-                          ),
-                          context: context,
+                  Expanded(
+                    child: Container(
+                      constraints: BoxConstraints(
+                        minWidth: size.width * 0.5,
+                        maxWidth: size.width * 0.8,
+                        minHeight: 400,
+                        maxHeight: 2000,
+                      ),
+                      height: size.height * 0.8,
+                      child: SingleChildScrollView(
+                        controller: scroll,
+                        padding: const EdgeInsets.only(right: 14),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: txtDescricao,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  CustomCheckboxWidget(
+                                    checked: perfilAcesso.ativo,
+                                    onClick: (value) =>
+                                        perfilAcesso.ativo = value,
+                                    text: 'Ativo',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 24.0),
+                              child: Row(
+                                children: [
+                                  CustomCheckboxWidget(
+                                    checked: perfilAcesso.perfilRestrito,
+                                    onClick: (value) =>
+                                        perfilAcesso.perfilRestrito = value,
+                                    text: 'Perfil Restrito',
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      'Direitos do Perfil',
+                                      style: Fontes.getRoboto(),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 25.0),
+                                  Expanded(
+                                    child: Text(
+                                      'Direitos Ausentes do Perfil',
+                                      style: Fontes.getRoboto(),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: ListButtonWidget(
+                                      text: 'Remover Direito',
+                                      icon: Icons.arrow_forward,
+                                      onPressed: () {
+                                        if (direitoRemover != null) {
+                                          setState(() {
+                                            if (perfilAcesso.perfilDireitos !=
+                                                null) {
+                                              perfilAcesso.perfilDireitos!
+                                                  .removeWhere(
+                                                (element) =>
+                                                    element.codDireito ==
+                                                    direitoRemover!.cod,
+                                              );
+                                            }
+                                          });
+                                        } else {
+                                          ToastUtils.showCustomToastError(
+                                            context,
+                                            'Nenhum Direito selecionado',
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 25.0),
+                                  Expanded(
+                                    child: ListButtonWidget(
+                                      text: 'Incluir Direito',
+                                      icon: Icons.arrow_back,
+                                      onPressed: () {
+                                        if (direitoAdicionar != null) {
+                                          setState(() {
+                                            if (perfilAcesso.perfilDireitos ==
+                                                null) {
+                                              perfilAcesso.perfilDireitos = [];
+                                            }
+                                            PerfilDireitoModel perfilDireito =
+                                                PerfilDireitoModel.empty();
+                                            perfilDireito.codDireito =
+                                                direitoAdicionar!.cod;
+                                            perfilAcesso.perfilDireitos!
+                                                .add(perfilDireito);
+
+                                            direitoAdicionar = null;
+                                          });
+                                        } else {
+                                          ToastUtils.showCustomToastError(
+                                            context,
+                                            'Nenhum Direito selecionado',
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child:
+                                        BlocBuilder<DireitoCubit, DireitoState>(
+                                      bloc: widget.direitoCubit,
+                                      builder: (context, direitoState) {
+                                        if (direitoState.loading) {
+                                          return const Center(
+                                            child: LoadingWidget(),
+                                          );
+                                        }
+                                        List<DireitoModel> direitos =
+                                            direitoState.direitos;
+
+                                        List<DireitoModel> direitosAdicionado =
+                                            [];
+
+                                        if (perfilAcesso.perfilDireitos !=
+                                            null) {
+                                          for (final perfilDireito
+                                              in perfilAcesso.perfilDireitos!) {
+                                            final codDireito =
+                                                perfilDireito.codDireito;
+
+                                            if (direitos.isNotEmpty) {
+                                              final direitoAdicionado = direitos
+                                                  .where(
+                                                    (direito) =>
+                                                        direito.cod ==
+                                                        codDireito,
+                                                  )
+                                                  .firstOrNull;
+                                              if (direitoAdicionado != null) {
+                                                direitosAdicionado
+                                                    .add(direitoAdicionado);
+                                              }
+                                            }
+                                          }
+                                        }
+
+                                        return ListFieldWidget<DireitoModel>(
+                                          sourceList: direitosAdicionado,
+                                          removeButton: false,
+                                          onItemSelected: (selectedDireito) {
+                                            setState(() {
+                                              direitoRemover = selectedDireito;
+                                            });
+                                          },
+                                          itemText: (direito) {
+                                            return direito.descricao!;
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 25.0),
+                                  Expanded(
+                                    child:
+                                        BlocBuilder<DireitoCubit, DireitoState>(
+                                      bloc: widget.direitoCubit,
+                                      builder: (context, direitoState) {
+                                        if (direitoState.loading) {
+                                          return const Center(
+                                            child: LoadingWidget(),
+                                          );
+                                        }
+                                        List<DireitoModel> direitos =
+                                            direitoState.direitos;
+
+                                        if (perfilAcesso.perfilDireitos ==
+                                            null) {
+                                          perfilAcesso.perfilDireitos = [];
+                                        }
+
+                                        List<DireitoModel> direitosDisponiveis =
+                                            direitos
+                                                .where(
+                                                  (direito) => !perfilAcesso
+                                                      .perfilDireitos!
+                                                      .any(
+                                                    (direitoPerfil) =>
+                                                        direitoPerfil
+                                                            .codDireito ==
+                                                        direito.cod,
+                                                  ),
+                                                )
+                                                .toList();
+
+                                        return ListFieldWidget<DireitoModel>(
+                                          sourceList: direitosDisponiveis,
+                                          removeButton: false,
+                                          onItemSelected: (selectedDireito) {
+                                            setState(() {
+                                              direitoAdicionar =
+                                                  selectedDireito;
+                                            });
+                                          },
+                                          itemText: (direito) {
+                                            return direito.descricao!;
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const Padding(padding: EdgeInsets.only(top: 24)),
+                          ],
                         ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: SaveButtonWidget(
-                      onPressed: () => {salvar()},
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: CleanButtonWidget(
-                      onPressed: () => {
-                        setState(() {
-                          perfilAcesso = PerfilAcessoModel.empty();
-                        }),
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: CancelButtonUnfilledWidget(
-                      onPressed: () => {Navigator.of(context).pop((false, ''))},
+                      ),
                     ),
                   ),
                 ],
               ),
-            ],
-          );
-        },
-      ),
+            ),
+            Row(
+              children: [
+                CustomPopupMenuWidget(
+                  items: [
+                    if (perfilAcesso.cod != null && perfilAcesso.cod != 0)
+                      CustomPopupItemHistoryModel.getHistoryItem(
+                        child: HistoricoPage(
+                          pk: perfilAcesso.cod!,
+                          termo: 'PERFIL_ACESSO',
+                        ),
+                        context: context,
+                      ),
+                  ],
+                ),
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: SaveButtonWidget(
+                    onPressed: () => {salvar()},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: CleanButtonWidget(
+                    onPressed: () => {
+                      setState(() {
+                        perfilAcesso = PerfilAcessoModel.empty();
+                      }),
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: CancelButtonUnfilledWidget(
+                    onPressed: widget.onCancel,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -410,6 +426,6 @@ class _PerfilAcessoPageFrmState extends State<PerfilAcessoPageFrm> {
       registrarDireitos.add(perfilDireito);
     }
     perfilAcesso.perfilDireitos = registrarDireitos;
-    cubit.save(perfilAcesso);
+    cubit.save(perfilAcesso, widget.onSaved);
   }
 }

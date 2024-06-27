@@ -10,12 +10,15 @@ class DocumentoPageFrmCubit extends Cubit<DocumentoPageFrmState> {
     required this.documentoModel,
   }) : super(DocumentoPageFrmState(documento: documentoModel));
 
-  void save(DocumentoModel documento) async {
+  void save(
+    DocumentoModel documento,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, DocumentoModel documento)? result =
           await service.save(documento);
       if (result == null) return;
-
+      onSaved(result.$1);
       emit(
         DocumentoPageFrmState(
           message: result.$1,

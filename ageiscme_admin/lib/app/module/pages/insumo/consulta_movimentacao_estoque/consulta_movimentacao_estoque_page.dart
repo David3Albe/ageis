@@ -23,11 +23,12 @@ import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ConsultaMovimentacaoEstoquePage extends StatefulWidget {
-  ConsultaMovimentacaoEstoquePage({
+  const ConsultaMovimentacaoEstoquePage({
     super.key,
     this.filter,
   });
@@ -209,155 +210,149 @@ class _ConsultaMovimentacaoEstoquePageState
   void onError(ConsultaMovimentacaoEstoquePageState state) =>
       ErrorUtils.showErrorDialog(context, [state.error]);
 
-  void openModal(BuildContext context) {
-    showDialog<bool>(
-      barrierDismissible: false,
+  Future openModal(BuildContext context) async {
+    bool confirm = await showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return FilterDialogWidget(
-          child: Column(
-            children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: DatePickerWidget(
-                      placeholder: 'Data Inicio',
-                      onDateSelected: (value) => filter.startDate = value,
-                      initialValue: filter.startDate,
-                    ),
+      builder: (context) => FilterDialogWidget(
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: DatePickerWidget(
+                    placeholder: 'Data Inicio',
+                    onDateSelected: (value) => filter.startDate = value,
+                    initialValue: filter.startDate,
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 40),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 40),
+                ),
+                Expanded(
+                  child: TimePickerWidget(
+                    placeholder: 'Hora Início',
+                    initialValue: filter.startTime == null
+                        ? null
+                        : TimeOfDay(
+                            hour: filter.startTime!.hour,
+                            minute: filter.startTime!.minute,
+                          ),
+                    onTimeSelected: (selectedTime) {
+                      if (selectedTime == null) {
+                        filter.startTime = null;
+                        return;
+                      }
+                      filter.startTime = DateTime(
+                        DateTime.now().year,
+                        DateTime.now().month,
+                        DateTime.now().day,
+                        selectedTime.hour,
+                        selectedTime.minute,
+                      );
+                    },
                   ),
-                  Expanded(
-                    child: TimePickerWidget(
-                      placeholder: 'Hora Início',
-                      initialValue: filter.startTime == null
-                          ? null
-                          : TimeOfDay(
-                              hour: filter.startTime!.hour,
-                              minute: filter.startTime!.minute,
-                            ),
-                      onTimeSelected: (selectedTime) {
-                        if (selectedTime == null) {
-                          filter.startTime = null;
-                          return;
-                        }
-                        filter.startTime = DateTime(
-                          DateTime.now().year,
-                          DateTime.now().month,
-                          DateTime.now().day,
-                          selectedTime.hour,
-                          selectedTime.minute,
-                        );
-                      },
-                    ),
+                ),
+              ],
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            Row(
+              children: [
+                Expanded(
+                  child: DatePickerWidget(
+                    placeholder: 'Data Término',
+                    onDateSelected: (value) => filter.finalDate = value,
+                    initialValue: filter.finalDate,
                   ),
-                ],
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              Row(
-                children: [
-                  Expanded(
-                    child: DatePickerWidget(
-                      placeholder: 'Data Término',
-                      onDateSelected: (value) => filter.finalDate = value,
-                      initialValue: filter.finalDate,
-                    ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.only(left: 40),
+                ),
+                Expanded(
+                  child: TimePickerWidget(
+                    placeholder: 'Hora Fim',
+                    initialValue: filter.finalTime == null
+                        ? null
+                        : TimeOfDay(
+                            hour: filter.finalTime!.hour,
+                            minute: filter.finalTime!.minute,
+                          ),
+                    onTimeSelected: (selectedTime) {
+                      if (selectedTime == null) {
+                        filter.finalTime = null;
+                        return;
+                      }
+                      filter.finalTime = DateTime(
+                        DateTime.now().year,
+                        DateTime.now().month,
+                        DateTime.now().day,
+                        selectedTime.hour,
+                        selectedTime.minute,
+                      );
+                    },
                   ),
-                  const Padding(
-                    padding: EdgeInsets.only(left: 40),
-                  ),
-                  Expanded(
-                    child: TimePickerWidget(
-                      placeholder: 'Hora Fim',
-                      initialValue: filter.finalTime == null
-                          ? null
-                          : TimeOfDay(
-                              hour: filter.finalTime!.hour,
-                              minute: filter.finalTime!.minute,
-                            ),
-                      onTimeSelected: (selectedTime) {
-                        if (selectedTime == null) {
-                          filter.finalTime = null;
-                          return;
-                        }
-                        filter.finalTime = DateTime(
-                          DateTime.now().year,
-                          DateTime.now().month,
-                          DateTime.now().day,
-                          selectedTime.hour,
-                          selectedTime.minute,
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<DepositoInsumoCubit, DepositoInsumoState>(
-                bloc: depositoInsumoBloc,
-                builder: (context, depositoState) {
-                  if (depositoState.loading) {
-                    return const LoadingWidget();
-                  }
-                  List<DepositoInsumoModel> depositosInsumos =
-                      depositoState.objs;
+                ),
+              ],
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            BlocBuilder<DepositoInsumoCubit, DepositoInsumoState>(
+              bloc: depositoInsumoBloc,
+              builder: (context, depositoState) {
+                if (depositoState.loading) {
+                  return const LoadingWidget();
+                }
+                List<DepositoInsumoModel> depositosInsumos = depositoState.objs;
 
-                  DepositoInsumoModel? depositoInsumo = depositosInsumos
-                      .where(
-                        (element) => element.cod == filter.codDeposito,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<DepositoInsumoModel>(
-                    textFunction: (kit) => kit.GetNomeDepositoText(),
-                    initialValue: depositoInsumo,
-                    sourceList: depositosInsumos,
-                    onChanged: (value) => filter.codDeposito = value?.cod,
-                    placeholder: 'Depósito',
-                  );
-                },
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<InsumoCubit, InsumoState>(
-                bloc: insumoBloc,
-                builder: (context, insumoState) {
-                  if (insumoState.loading) {
-                    return const LoadingWidget();
-                  }
-                  List<InsumoModel> insumos = insumoState.objs;
+                DepositoInsumoModel? depositoInsumo = depositosInsumos
+                    .where(
+                      (element) => element.cod == filter.codDeposito,
+                    )
+                    .firstOrNull;
+                return DropDownSearchWidget<DepositoInsumoModel>(
+                  textFunction: (kit) => kit.GetNomeDepositoText(),
+                  initialValue: depositoInsumo,
+                  sourceList: depositosInsumos,
+                  onChanged: (value) => filter.codDeposito = value?.cod,
+                  placeholder: 'Depósito',
+                );
+              },
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            BlocBuilder<InsumoCubit, InsumoState>(
+              bloc: insumoBloc,
+              builder: (context, insumoState) {
+                if (insumoState.loading) {
+                  return const LoadingWidget();
+                }
+                List<InsumoModel> insumos = insumoState.objs;
 
-                  InsumoModel? insumo = insumos
-                      .where(
-                        (element) => element.cod == filter.codInsumo,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<InsumoModel>(
-                    textFunction: (kit) => kit.GetNomeInsumoText(),
-                    initialValue: insumo,
-                    sourceList: insumos,
-                    onChanged: (value) => filter.codInsumo = value?.cod,
-                    placeholder: 'Insumo',
-                  );
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 2),
-                child: txtLote,
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 2),
-                child: txtNroNotaFiscal,
-              ),
-            ],
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == true) {
-        bloc.loadMovimentacaoEstoque(filter);
-      }
-    });
+                InsumoModel? insumo = insumos
+                    .where(
+                      (element) => element.cod == filter.codInsumo,
+                    )
+                    .firstOrNull;
+                return DropDownSearchWidget<InsumoModel>(
+                  textFunction: (kit) => kit.GetNomeInsumoText(),
+                  initialValue: insumo,
+                  sourceList: insumos,
+                  onChanged: (value) => filter.codInsumo = value?.cod,
+                  placeholder: 'Insumo',
+                );
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: txtLote,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 2),
+              child: txtNroNotaFiscal,
+            ),
+          ],
+        ),
+      ),
+    );
+    if (confirm != true) return;
+    bloc.loadMovimentacaoEstoque(filter);
   }
 
   Future<InsumoMovimentoModel?> getFilter(int cod) async {
@@ -368,7 +363,10 @@ class _ConsultaMovimentacaoEstoquePageState
     );
   }
 
-  Future<void> openModalRedirect(BuildContext context, int cod) async {
+  Future openModalRedirect(
+    BuildContext context,
+    int cod,
+  ) async {
     LoadingController loading = LoadingController(context: context);
 
     InsumoMovimentoModel? movimento;
@@ -379,17 +377,18 @@ class _ConsultaMovimentacaoEstoquePageState
       return;
     }
     loading.close(context, mounted);
-
-    (bool, String)? result = await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return InsumoMovimentoPageFrm(
-          insumoMovimento: movimento!,
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Movimento de Insumo',
+      widget: InsumoMovimentoPageFrm(
+        onCancel: () => onCancel(chave),
+        insumoMovimento: movimento,
+      ),
     );
-    if (result == null || !result.$1) return;
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void notFoundError() {

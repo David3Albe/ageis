@@ -340,7 +340,7 @@ class PlutoGridWidget<T> extends StatelessWidget {
                         .first);
                   }
                   if (orderAscendingFieldColumn != null) {
-                    event.stateManager.sortDescending(event.stateManager.columns
+                    event.stateManager.sortAscending(event.stateManager.columns
                         .where((element) =>
                             element.field == orderAscendingFieldColumn)
                         .first);

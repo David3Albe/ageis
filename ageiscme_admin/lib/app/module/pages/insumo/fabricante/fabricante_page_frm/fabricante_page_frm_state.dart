@@ -12,11 +12,15 @@ class FabricantePageFrmCubit extends Cubit<FabricantePageFrmState> {
           FabricantePageFrmState(fabricante: fabricanteModel),
         );
 
-  void save(FabricanteModel fabricante) async {
+  void save(
+    FabricanteModel fabricante,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, FabricanteModel fabricante)? result =
           await service.save(fabricante);
       if (result == null) return;
+      onSaved(result.$1);
       emit(
         FabricantePageFrmState(
           message: result.$1,

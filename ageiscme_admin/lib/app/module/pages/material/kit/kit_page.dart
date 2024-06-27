@@ -19,11 +19,12 @@ import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
 import 'package:ageiscme_models/filters/kit_cor/kit_cor_filter.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class KitPage extends StatefulWidget {
-  KitPage({super.key});
+  const KitPage({super.key});
 
   @override
   State<KitPage> createState() => _KitPageState();
@@ -96,58 +97,62 @@ class _KitPageState extends State<KitPage> {
         BlocProvider.value(value: kitFilterCubit),
         BlocProvider.value(value: bloc),
       ],
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+      child: Builder(
+        builder: (context) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const KitButtonFilterWidget(),
-              const Padding(padding: EdgeInsets.only(left: 8)),
-              AddButtonWidget(
-                onPressed: () => {
-                  openModal(
-                    context,
-                    null,
+              Row(
+                children: [
+                  const KitButtonFilterWidget(),
+                  const Padding(padding: EdgeInsets.only(left: 8)),
+                  AddButtonWidget(
+                    onPressed: () => {
+                      openModal(
+                        context,
+                        null,
+                      ),
+                    },
                   ),
+                ],
+              ),
+              BlocConsumer<KitPageCubit, KitPageState>(
+                bloc: bloc,
+                listener: (context, state) {
+                  if (state.deleted) deleted(state);
+                  if (state.error.isNotEmpty) onError(state);
+                },
+                builder: (context, state) {
+                  response = state.response;
+                  if (state.loading) {
+                    return const Center(
+                      child: LoadingWidget(),
+                    );
+                  }
+                  return Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 16.0, bottom: 16),
+                      child: PlutoGridWidget<KitSearchKitResponseDTO>(
+                        orderDescendingFieldColumn: 'cod',
+                        onEdit: (KitSearchKitResponseDTO objeto) => {
+                          openModal(
+                            context,
+                            KitSearchKitResponseDTO.copy(objeto),
+                          ),
+                        },
+                        onDelete: (KitSearchKitResponseDTO objeto) =>
+                            {delete(context, objeto)},
+                        columns: colunas,
+                        items: state.response?.kits ?? [],
+                      ),
+                    ),
+                  );
                 },
               ),
             ],
-          ),
-          BlocConsumer<KitPageCubit, KitPageState>(
-            bloc: bloc,
-            listener: (context, state) {
-              if (state.deleted) deleted(state);
-              if (state.error.isNotEmpty) onError(state);
-            },
-            builder: (context, state) {
-              response = state.response;
-              if (state.loading) {
-                return const Center(
-                  child: LoadingWidget(),
-                );
-              }
-              return Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 16.0, bottom: 16),
-                  child: PlutoGridWidget<KitSearchKitResponseDTO>(
-                    orderDescendingFieldColumn: 'cod',
-                    onEdit: (KitSearchKitResponseDTO objeto) => {
-                      openModal(
-                        context,
-                        KitSearchKitResponseDTO.copy(objeto),
-                      ),
-                    },
-                    onDelete: (KitSearchKitResponseDTO objeto) =>
-                        {delete(context, objeto)},
-                    columns: colunas,
-                    items: state.response?.kits ?? [],
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -173,7 +178,7 @@ class _KitPageState extends State<KitPage> {
     );
   }
 
-  Future<void> openModal(
+  Future openModal(
     BuildContext context,
     KitSearchKitResponseDTO? kit,
   ) async {
@@ -192,32 +197,48 @@ class _KitPageState extends State<KitPage> {
       }
     }
     loading.close(context, mounted);
-
-    (bool, String)? result = await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return KitPageFrm(
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Kit',
+      widget: MultiBlocProvider(
+        providers: [
+          BlocProvider.value(value: kitCorCubit),
+        ],
+        child: KitPageFrm(
+          onCancel: () => onCancel(chave),
+          onSaved: (str) => onSaved(str, chave),
+          kit: kitModel,
           kitCorCubit: kitCorCubit,
-          kit: kitModel!,
-        );
-      },
+        ),
+      ),
     );
-    if (result == null || !result.$1) return;
-    ToastUtils.showCustomToastSucess(context, result.$2);
-    KitSearchDTO dto = context.read<KitCubitFilter>().state;
+  }
+
+  Future onSaved(String message, int chave) async {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    KitSearchDTO dto = kitFilterCubit.state;
     await bloc.searchKits(dto);
   }
 
-  void delete(BuildContext context, KitSearchKitResponseDTO kitBase) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Kit\n${kitBase.cod} - ${kitBase.codBarra}',
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
+  }
+
+  void delete(BuildContext context, KitSearchKitResponseDTO kitBase) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Kit\n${kitBase.cod} - ${kitBase.codBarra}',
+      onConfirm: () => confirmDelete(kitBase),
     );
+  }
+
+  void confirmDelete(KitSearchKitResponseDTO kitBase) async {
     KitModel kit = KitModel.empty();
     kit.cod = kitBase.cod;
     kit.tStamp = kitBase.tStamp;
-    if (confirmacao) await bloc.delete(kit);
+    await bloc.delete(kit);
   }
 
   void deleted(KitPageState state) {
@@ -225,7 +246,7 @@ class _KitPageState extends State<KitPage> {
       context,
       state.message,
     );
-    KitSearchDTO dto = context.read<KitCubitFilter>().state;
+    KitSearchDTO dto = kitFilterCubit.state;
     bloc.searchKits(dto);
   }
 

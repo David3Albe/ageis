@@ -17,11 +17,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class UsuarioPage extends StatefulWidget {
-  UsuarioPage({super.key});
+  const UsuarioPage({super.key});
 
   @override
   State<UsuarioPage> createState() => _UsuarioPageState();
@@ -204,18 +205,26 @@ class _UsuarioPageState extends State<UsuarioPage> {
       usuario.senha = null;
     }
 
-    (bool, String)? result = await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return UsuarioPageFrm(
-          usuario: usuario,
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      theme: Theme.of(context),
+      title: 'Cadastro/Edição de Usuários',
+      widget: UsuarioPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        usuario: usuario,
+      ),
     );
-    if (result == null || !result.$1) return;
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
+  }
+
+  Future onSaved(String message, int chave) async {
+    WindowsHelper.RemoverWidget(chave);
     UsuarioCubitFilter filterCubit = context.read<UsuarioCubitFilter>();
-    ToastUtils.showCustomToastSucess(context, result.$2);
+    ToastUtils.showCustomToastSucess(context, message);
     UsuarioPageCubit userCubit = context.read<UsuarioPageCubit>();
     filterCubit = context.read<UsuarioCubitFilter>();
     UsuarioFilter dto = filterCubit.state;
@@ -223,11 +232,15 @@ class _UsuarioPageState extends State<UsuarioPage> {
   }
 
   void delete(BuildContext context, UsuarioModel usuario) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do  Usuário\n${usuario.cod} - ${usuario.nome}',
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do  Usuário\n${usuario.cod} - ${usuario.nome}',
+      onConfirm: () => onConfirmDelete(usuario),
     );
-    if (!confirmacao) return;
-    await bloc.delete(context, usuario);
+  }
+
+  void onConfirmDelete(UsuarioModel usuario) {
+    bloc.delete(context, usuario);
   }
 }

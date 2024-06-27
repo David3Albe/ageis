@@ -7,6 +7,8 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class CancelamentoPreparoPage extends StatelessWidget {
+  const CancelamentoPreparoPage({Key? key});
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(

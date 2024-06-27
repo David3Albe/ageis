@@ -28,6 +28,7 @@ import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/functions/helper_functions.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -35,9 +36,13 @@ class EquipamentoPageFrm extends StatefulWidget {
   const EquipamentoPageFrm({
     Key? key,
     required this.equipamento,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final EquipamentoModel equipamento;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<EquipamentoPageFrm> createState() =>
@@ -219,270 +224,278 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<EquipamentoPageFrmCubit, EquipamentoPageFrmState>(
+    return BlocBuilder<EquipamentoPageFrmCubit, EquipamentoPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
-      child: BlocBuilder<EquipamentoPageFrmCubit, EquipamentoPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return FormAlertDialogWidget(
-            title: Row(
+      builder: (context, state) {
+        return Column(
+          children: [
+            Row(
               children: [
                 Expanded(
                   child: TitleWidget(
                     text: titulo,
                   ),
                 ),
-                const Spacer(),
-                CloseButtonWidget(
-                  onPressed: () => Navigator.of(context).pop((false, '')),
-                ),
               ],
             ),
-            content: Container(
-              constraints: BoxConstraints(
-                minWidth: size.width * .5,
-                minHeight: size.height * .5,
-                maxHeight: size.height * .8,
-              ),
-              child: SingleChildScrollView(
-                controller: scroll,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: txtNome,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Expanded(
-                            child: txtCodBarra,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: txtFabricante,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Expanded(
-                            child:
-                                BlocBuilder<FabricanteCubit, FabricanteState>(
-                              bloc: fabricanteCubit,
-                              builder: (context, fabricanteState) {
-                                if (fabricanteState.loading) {
-                                  return const Center(
-                                    child: LoadingWidget(),
-                                  );
-                                }
-                                List<FabricanteModel> fabricantes =
-                                    fabricanteState.fabricantes;
-                                FabricanteModel? fabricante = fabricantes
-                                    .where(
-                                      (element) =>
-                                          element.nome ==
-                                          equipamento.fabricante,
-                                    )
-                                    .firstOrNull;
-                                return DropDownSearchWidget(
-                                  textFunction: (p0) => p0.GetDropDownText(),
-                                  initialValue: fabricante,
-                                  sourceList: fabricantes,
-                                  onChanged: (value) {
-                                    equipamento.fabricante = value?.nome;
-                                  },
-                                  placeholder: 'Fabricante',
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: txtAnoFabricacao,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Expanded(
-                            child: txtCapacidadeLitro,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: txtSerie,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Expanded(
-                            child: txtRegistroAnvisa,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: CustomCheckboxWidget(
-                        checked: equipamento.ativo,
-                        onClick: (value) => equipamento.ativo = value,
-                        text: 'Ativo',
-                        align: MainAxisAlignment.start,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: txtStatus,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Expanded(
-                            child: dtpValidadeInspecao,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Padding(padding: EdgeInsets.only(top: 5.0)),
-                    Text(
-                      'Tipo de Serviço',
-                      style: TextStyle(
-                        fontSize: HelperFunctions.calculaFontSize(context, 16),
-                      ),
-                      textAlign: TextAlign.left,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: BlocBuilder<ServicoTipoCubit, ServicoTipoState>(
-                        bloc: servicoTipoCubit,
-                        builder: (context, state) {
-                          List<ServicoTipoModel> servicosTipos =
-                              state.tiposServico;
-                          final items = servicosTipos
-                              .map((servicoTipo) => servicoTipo.nome)
-                              .toList();
-                          var checkedList =
-                              List<bool>.filled(items.length, false);
-                          if (equipamento.equipamentosServicos != null) {
-                            for (final equipamentoServico
-                                in equipamento.equipamentosServicos!) {
-                              final codServico = equipamentoServico.codServico;
-
-                              if (servicosTipos.any(
-                                (servicoTipo) => servicoTipo.cod == codServico,
-                              )) {
-                                final index = servicosTipos.indexWhere(
-                                  (servicoTipo) =>
-                                      servicoTipo.cod == codServico,
-                                );
-
-                                if (index >= 0) {
-                                  checkedList[index] = true;
-                                }
-                              }
-                            }
-                          }
-                          return CheckboxListWidget(
-                            items: items,
-                            checkedList: checkedList,
-                            onChecked: (values) {
-                              final codigosServicosSelecionados = <int>[];
-                              for (var i = 0; i < items.length; i++) {
-                                if (values[i]) {
-                                  codigosServicosSelecionados
-                                      .add(servicosTipos[i].cod ?? 0);
-                                }
-                              }
-                              equipamento.equipamentosServicos =
-                                  codigosServicosSelecionados.map((codServico) {
-                                return EquipamentoServicoModel(
-                                  cod: 0,
-                                  codEquipamento: equipamento.cod,
-                                  codServico: codServico,
-                                  codInstituicao: 0,
-                                  ultimaAlteracao: null,
-                                  tstamp: '',
-                                );
-                              }).toList();
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                    const Padding(padding: EdgeInsets.only(top: 24.0)),
-                  ],
-                ),
-              ),
-            ),
-            actions: [
-              Row(
+            Expanded(
+              child: Row(
                 children: [
-                  CustomPopupMenuWidget(
-                    items: [
-                      CustomPopupItemModel(
-                        text: 'Serviços',
-                        onTap: abrirMonitoramento,
+                  Expanded(
+                    child: Container(
+                      constraints: BoxConstraints(
+                        minWidth: size.width * .5,
+                        minHeight: size.height * .5,
+                        maxHeight: size.height * .8,
                       ),
-                      CustomPopupItemModel(
-                        text: 'Insumos',
-                        onTap: abrirInsumos,
-                      ),
-                      if (equipamento.cod != null && equipamento.cod != 0)
-                        CustomPopupItemHistoryModel.getHistoryItem(
-                          child: HistoricoPage(
-                            pk: equipamento.cod!,
-                            termo: 'EQUIPAMENTO',
-                          ),
-                          context: context,
+                      child: SingleChildScrollView(
+                        controller: scroll,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: txtNome,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Expanded(
+                                    child: txtCodBarra,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: txtFabricante,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Expanded(
+                                    child: BlocBuilder<FabricanteCubit,
+                                        FabricanteState>(
+                                      bloc: fabricanteCubit,
+                                      builder: (context, fabricanteState) {
+                                        if (fabricanteState.loading) {
+                                          return const Center(
+                                            child: LoadingWidget(),
+                                          );
+                                        }
+                                        List<FabricanteModel> fabricantes =
+                                            fabricanteState.fabricantes;
+                                        FabricanteModel? fabricante =
+                                            fabricantes
+                                                .where(
+                                                  (element) =>
+                                                      element.nome ==
+                                                      equipamento.fabricante,
+                                                )
+                                                .firstOrNull;
+                                        return DropDownSearchWidget(
+                                          textFunction: (p0) =>
+                                              p0.GetDropDownText(),
+                                          initialValue: fabricante,
+                                          sourceList: fabricantes,
+                                          onChanged: (value) {
+                                            equipamento.fabricante =
+                                                value?.nome;
+                                          },
+                                          placeholder: 'Fabricante',
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: txtAnoFabricacao,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Expanded(
+                                    child: txtCapacidadeLitro,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: txtSerie,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Expanded(
+                                    child: txtRegistroAnvisa,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: CustomCheckboxWidget(
+                                checked: equipamento.ativo,
+                                onClick: (value) => equipamento.ativo = value,
+                                text: 'Ativo',
+                                align: MainAxisAlignment.start,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: txtStatus,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Expanded(
+                                    child: dtpValidadeInspecao,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const Padding(padding: EdgeInsets.only(top: 5.0)),
+                            Text(
+                              'Tipo de Serviço',
+                              style: TextStyle(
+                                fontSize: HelperFunctions.calculaFontSize(
+                                  context,
+                                  16,
+                                ),
+                              ),
+                              textAlign: TextAlign.left,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: BlocBuilder<ServicoTipoCubit,
+                                  ServicoTipoState>(
+                                bloc: servicoTipoCubit,
+                                builder: (context, state) {
+                                  List<ServicoTipoModel> servicosTipos =
+                                      state.tiposServico;
+                                  final items = servicosTipos
+                                      .map((servicoTipo) => servicoTipo.nome)
+                                      .toList();
+                                  var checkedList =
+                                      List<bool>.filled(items.length, false);
+                                  if (equipamento.equipamentosServicos !=
+                                      null) {
+                                    for (final equipamentoServico
+                                        in equipamento.equipamentosServicos!) {
+                                      final codServico =
+                                          equipamentoServico.codServico;
+
+                                      if (servicosTipos.any(
+                                        (servicoTipo) =>
+                                            servicoTipo.cod == codServico,
+                                      )) {
+                                        final index = servicosTipos.indexWhere(
+                                          (servicoTipo) =>
+                                              servicoTipo.cod == codServico,
+                                        );
+
+                                        if (index >= 0) {
+                                          checkedList[index] = true;
+                                        }
+                                      }
+                                    }
+                                  }
+                                  return CheckboxListWidget(
+                                    items: items,
+                                    checkedList: checkedList,
+                                    onChecked: (values) {
+                                      final codigosServicosSelecionados =
+                                          <int>[];
+                                      for (var i = 0; i < items.length; i++) {
+                                        if (values[i]) {
+                                          codigosServicosSelecionados
+                                              .add(servicosTipos[i].cod ?? 0);
+                                        }
+                                      }
+                                      equipamento.equipamentosServicos =
+                                          codigosServicosSelecionados
+                                              .map((codServico) {
+                                        return EquipamentoServicoModel(
+                                          cod: 0,
+                                          codEquipamento: equipamento.cod,
+                                          codServico: codServico,
+                                          codInstituicao: 0,
+                                          ultimaAlteracao: null,
+                                          tstamp: '',
+                                        );
+                                      }).toList();
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                            const Padding(padding: EdgeInsets.only(top: 24.0)),
+                          ],
                         ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: SaveButtonWidget(
-                      onPressed: () => {salvar()},
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: CleanButtonWidget(
-                      onPressed: () => {
-                        setState(() {
-                          equipamento = EquipamentoModel.empty();
-                        }),
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: CancelButtonUnfilledWidget(
-                      onPressed: () => {Navigator.of(context).pop((false, ''))},
+                      ),
                     ),
                   ),
                 ],
               ),
-            ],
-          );
-        },
-      ),
+            ),
+            Row(
+              children: [
+                CustomPopupMenuWidget(
+                  items: [
+                    CustomPopupItemModel(
+                      text: 'Serviços',
+                      onTap: abrirMonitoramento,
+                    ),
+                    CustomPopupItemModel(
+                      text: 'Insumos',
+                      onTap: abrirInsumos,
+                    ),
+                    if (equipamento.cod != null && equipamento.cod != 0)
+                      CustomPopupItemHistoryModel.getHistoryItem(
+                        child: HistoricoPage(
+                          pk: equipamento.cod!,
+                          termo: 'EQUIPAMENTO',
+                        ),
+                        context: context,
+                      ),
+                  ],
+                ),
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: SaveButtonWidget(
+                    onPressed: () => {salvar()},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: CleanButtonWidget(
+                    onPressed: () => {
+                      setState(() {
+                        equipamento = EquipamentoModel.empty();
+                      }),
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: CancelButtonUnfilledWidget(
+                    onPressed: widget.onCancel,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -500,7 +513,7 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
       scroll.jumpTo(50);
     } else if (!anoFabricacaoValid) {
       scroll.jumpTo(100);
-    }else if(!serieValid || !registroAnvisaValid){
+    } else if (!serieValid || !registroAnvisaValid) {
       scroll.jumpTo(150);
     }
     if (!nomeValid ||
@@ -510,7 +523,7 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
         !serieValid ||
         !registroAnvisaValid ||
         !statusValid) return;
-    cubit.save(equipamento);
+    cubit.save(equipamento, widget.onSaved);
   }
 
   void loadEquipamentoCubit() {
@@ -584,23 +597,30 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
     registroServicoModel.codEquipamento = equipamento.cod;
     registroServicoModel.equipamento = equipamento;
     registroServicoModel.dataInicio = DateTime.now();
-    (bool, String)? result = await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return RegistroServicoPageFrm(
-          equipamentoReadOnly: true,
-          itemReadOnly: true,
-          equipamentoCubit: equipamentoCubit,
-          itemFilter: ItemFilter(
-            apenasAtivos: true,
-            ordenarPorNomeCrescente: true,
-          ),
-          registroServico: registroServicoModel,
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Equipamento',
+      widget: RegistroServicoPageFrm(
+        equipamentoReadOnly: true,
+        itemReadOnly: true,
+        equipamentoCubit: equipamentoCubit,
+        itemFilter: ItemFilter(
+          apenasAtivos: true,
+          ordenarPorNomeCrescente: true,
+        ),
+        registroServico: registroServicoModel,
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+      ),
     );
-    if (result == null || !result.$1) return;
-    Navigator.of(context).pop(result);
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    widget.onSaved(message);
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 }

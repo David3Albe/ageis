@@ -9,7 +9,9 @@ import 'package:flutter/material.dart';
 
 class InstituicaoPageFrmImpressaoController {
   final InstituicaoModel instituicao;
-  InstituicaoPageFrmImpressaoController({required this.instituicao});
+  InstituicaoPageFrmImpressaoController({
+    required this.instituicao,
+  });
 
   List<CompanyLocalsPrintLocalDTO> printLocals = [];
   void Function()? refreshMethod;
@@ -33,7 +35,10 @@ class InstituicaoPageFrmImpressaoController {
     if (refreshMethod != null) refreshMethod!();
   }
 
-  void print(BuildContext context) async {
+  void print(
+    BuildContext context,
+    void Function() onPrinted,
+  ) async {
     List<CompanyLocalsPrintLocalDTO> printLocalsSelected =
         printLocals.where((local) => local.selected == true).toList();
 
@@ -54,6 +59,6 @@ class InstituicaoPageFrmImpressaoController {
     );
     await controller.print();
     loading.close(context, true);
-    Navigator.of(context).pop();
+    onPrinted();
   }
 }

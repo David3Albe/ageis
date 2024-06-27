@@ -8,11 +8,12 @@ import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ParametroSistemaPage extends StatefulWidget {
-  ParametroSistemaPage({super.key});
+  const ParametroSistemaPage({super.key});
 
   @override
   State<ParametroSistemaPage> createState() => _ParametroSistemaPageState();
@@ -101,18 +102,26 @@ class _ParametroSistemaPageState extends State<ParametroSistemaPage> {
     BuildContext context,
     ParametroSistemaModel parametroSistema,
   ) async {
-    (bool, String)? result = await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return ParametroSistemaPageFrm(
-          parametroSistema: parametroSistema,
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      theme: Theme.of(context),
+      title: 'Cadastro/Edição Paramêtros',
+      widget: ParametroSistemaPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        parametroSistema: parametroSistema,
+      ),
     );
-    if (result == null || !result.$1) return;
-    ToastUtils.showCustomToastSucess(context, result.$2);
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
     bloc.loadParametroSistema();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void onError(ParametroSistemaPageState state) {

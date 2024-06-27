@@ -6,39 +6,46 @@ import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
 class ErrorUtils {
-  static Future<bool> showOneErrorDialog(
+  static void showOneErrorDialog(
     BuildContext? context,
     String error,
   ) async {
-    return showErrorDialog(context, [error]);
+    showErrorDialog(context, [error]);
   }
 
-  static Future<bool> showErrorDialog(
+  static void showErrorDialog(
     BuildContext? context,
     List<String> errors,
   ) async {
-    bool? confirmacao = await showDialog<bool>(
-      barrierDismissible: false,
-      context: context ?? ToastUtils.routerOutletContext!,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          contentPadding: const EdgeInsets.all(0),
-          content: _ErrorWidget(
-            errors: errors,
+    late OverlayEntry overlayEntry;
+    Size size = MediaQuery.of(ToastUtils.routerOutletContext ?? context!).size;
+    overlayEntry = OverlayEntry(
+      builder: (context) => Container(
+        color: Colors.black.withOpacity(0.4),
+        width: size.width,
+        height: size.height,
+        child: Center(
+          child: AlertDialog(
+            contentPadding: const EdgeInsets.all(0),
+            content: _ErrorWidget(
+              overlay: overlayEntry,
+              errors: errors,
+            ),
           ),
-        );
-      },
+        ),
+      ),
     );
-    if (confirmacao == null) confirmacao = false;
-    return confirmacao;
+    Overlay.of(ToastUtils.routerOutletContext ?? context!).insert(overlayEntry);
   }
 }
 
 class _ErrorWidget extends StatelessWidget {
   const _ErrorWidget({
     required this.errors,
+    required this.overlay,
   });
   final List<String> errors;
+  final OverlayEntry overlay;
   Widget build(BuildContext context) {
     double size = MediaQuery.of(context).size.height / 2.25;
     return Container(
@@ -61,7 +68,7 @@ class _ErrorWidget extends StatelessWidget {
                             alignment: Alignment.topRight,
                             child: CloseButtonWidget(
                               backgroundColor: Cores.corFundoIconeErro,
-                              onPressed: () => Navigator.of(context).pop(false),
+                              onPressed: overlay.remove,
                             ),
                           ),
                         ),

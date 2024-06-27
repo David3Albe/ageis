@@ -6,9 +6,14 @@ import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
-class FilterWidget extends StatelessWidget {
+class FilterWidget extends StatefulWidget {
   const FilterWidget({Key? key}) : super(key: key);
 
+  @override
+  State<FilterWidget> createState() => _FilterWidgetState();
+}
+
+class _FilterWidgetState extends State<FilterWidget> {
   @override
   Widget build(BuildContext context) {
     return FilterButtonWidget(
@@ -20,19 +25,15 @@ class FilterWidget extends StatelessWidget {
 
   Future openModalFilter(BuildContext context) async {
     FilterCubit filterCubit = context.read<FilterCubit>();
-    bool? result = await showDialog<bool>(
-      barrierDismissible: false,
+    bool? confirm = await showDialog<bool>(
       context: context,
-      builder: (BuildContext context) {
-        return BlocProvider<FilterCubit>.value(
-          value: filterCubit,
-          child: FilterForm(),
-        );
-      },
+      builder: (context) => BlocProvider<FilterCubit>.value(
+        value: filterCubit,
+        child: FilterForm(),
+      ),
     );
-    if (result != true) return;
+    if (confirm != true) return;
     SearchCubit searchCubit = context.read<SearchCubit>();
-    filterCubit = context.read<FilterCubit>();
     LoadingController loading = LoadingController(context: context);
     await searchCubit.search(context);
     loading.closeDefault();

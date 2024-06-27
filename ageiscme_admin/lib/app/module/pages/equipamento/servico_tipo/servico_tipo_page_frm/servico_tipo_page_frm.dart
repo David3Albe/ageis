@@ -4,7 +4,6 @@ import 'package:ageiscme_data/services/servico_tipo/servico_tipo_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
@@ -18,9 +17,13 @@ class ServicoTipoPageFrm extends StatefulWidget {
   const ServicoTipoPageFrm({
     Key? key,
     required this.servicoTipo,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final ServicoTipoModel servicoTipo;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<ServicoTipoPageFrm> createState() =>
@@ -68,135 +71,120 @@ class _ServicoTipoPageFrmState extends State<ServicoTipoPageFrm> {
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<ServicoTipoPageFrmCubit, ServicoTipoPageFrmState>(
+    return BlocBuilder<ServicoTipoPageFrmCubit, ServicoTipoPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
-      child: BlocBuilder<ServicoTipoPageFrmCubit, ServicoTipoPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return Container(
-            constraints: BoxConstraints(
-              minWidth: size.width * .5,
-              minHeight: size.height * .5,
-              maxHeight: size.height * .8,
-            ),
-            child: Stack(
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TitleWidget(
-                            text: titulo,
-                          ),
+      builder: (context, state) {
+        return Container(
+          constraints: BoxConstraints(
+            minWidth: size.width * .5,
+            minHeight: size.height * .5,
+            maxHeight: size.height * .8,
+          ),
+          child: Stack(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TitleWidget(
+                          text: titulo,
                         ),
-                        const Spacer(),
-                        CloseButtonWidget(
-                          onPressed: () =>
-                              Navigator.of(context).pop((false, '')),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: txtNome,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: Row(
+                      children: [
+                        CustomCheckboxWidget(
+                          checked: servicoTipo.ativo,
+                          onClick: (value) => servicoTipo.ativo = value,
+                          text: 'Ativo',
                         ),
                       ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtNome,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: Row(
-                        children: [
-                          CustomCheckboxWidget(
-                            checked: servicoTipo.ativo,
-                            onClick: (value) => servicoTipo.ativo = value,
-                            text: 'Ativo',
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: Row(
-                        children: [
-                          CustomCheckboxWidget(
-                            checked: servicoTipo.monitoramento,
-                            onClick: (value) =>
-                                servicoTipo.monitoramento = value,
-                            text: 'Monitoramento',
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: Row(
-                        children: [
-                          CustomCheckboxWidget(
-                            checked: servicoTipo.servicosEquipamentos,
-                            onClick: (value) =>
-                                servicoTipo.servicosEquipamentos = value,
-                            text: 'Serviço em Equipamentos',
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Spacer(),
-                    Row(
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: Row(
                       children: [
-                        if (servicoTipo.cod != null && servicoTipo.cod != 0)
-                          CustomPopupMenuWidget(
-                            items: [
-                              CustomPopupItemHistoryModel.getHistoryItem(
-                                child: HistoricoPage(
-                                  pk: servicoTipo.cod!,
-                                  termo: 'SERVICO_TIPO',
-                                ),
-                                context: context,
+                        CustomCheckboxWidget(
+                          checked: servicoTipo.monitoramento,
+                          onClick: (value) => servicoTipo.monitoramento = value,
+                          text: 'Monitoramento',
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: Row(
+                      children: [
+                        CustomCheckboxWidget(
+                          checked: servicoTipo.servicosEquipamentos,
+                          onClick: (value) =>
+                              servicoTipo.servicosEquipamentos = value,
+                          text: 'Serviço em Equipamentos',
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Spacer(),
+                  Row(
+                    children: [
+                      if (servicoTipo.cod != null && servicoTipo.cod != 0)
+                        CustomPopupMenuWidget(
+                          items: [
+                            CustomPopupItemHistoryModel.getHistoryItem(
+                              child: HistoricoPage(
+                                pk: servicoTipo.cod!,
+                                termo: 'SERVICO_TIPO',
                               ),
-                            ],
-                          ),
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: SaveButtonWidget(
-                            onPressed: () => {salvar()},
-                          ),
+                              context: context,
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: CleanButtonWidget(
-                            onPressed: () => {
-                              setState(() {
-                                servicoTipo = ServicoTipoModel.empty();
-                              }),
-                            },
-                          ),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: SaveButtonWidget(
+                          onPressed: () => {salvar()},
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: CancelButtonUnfilledWidget(
-                            onPressed: () =>
-                                {Navigator.of(context).pop((false, ''))},
-                          ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: CleanButtonWidget(
+                          onPressed: () => {
+                            setState(() {
+                              servicoTipo = ServicoTipoModel.empty();
+                            }),
+                          },
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: CancelButtonUnfilledWidget(
+                          onPressed: widget.onCancel,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
   void salvar() {
     if (!txtNome.valid) return;
-    cubit.save(servicoTipo);
+    cubit.save(servicoTipo, widget.onSaved);
   }
 }

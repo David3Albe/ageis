@@ -24,12 +24,12 @@ import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
-import 'package:compartilhados/query_dialog/query_dialog_widget.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ConsultaEstoqueVencidoPage extends StatefulWidget {
-  ConsultaEstoqueVencidoPage({super.key});
+  const ConsultaEstoqueVencidoPage({super.key});
 
   @override
   State<ConsultaEstoqueVencidoPage> createState() =>
@@ -134,7 +134,7 @@ class _ConsultaEstoqueVencidoPageState
                         );
                       }
 
-                      openModalRedirect(
+                      await openModalRedirect(
                         context,
                         obj.dataEntrada,
                         obj.codBarra,
@@ -154,8 +154,8 @@ class _ConsultaEstoqueVencidoPageState
   void onError(ConsultaEstoqueVencidoPageState state) =>
       ErrorUtils.showErrorDialog(context, [state.error]);
 
-  void openModal(BuildContext context) {
-    showDialog<bool>(
+  Future openModal(BuildContext context) async {
+    bool? confirm = await showDialog<bool>(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
@@ -262,45 +262,37 @@ class _ConsultaEstoqueVencidoPageState
           ),
         );
       },
-    ).then((result) {
-      if (result == true) {
-        bloc.loadEstoqueVencido(filter);
-      }
-    });
+    );
+    if (confirm != true) return;
+    bloc.loadEstoqueVencido(filter);
   }
 
-  void openModalRedirect(
+  Future openModalRedirect(
     BuildContext context,
     DateTime? startDate,
     String? codBarra,
     String? idEtiqueta,
-  ) {
-    showDialog<bool>(
-      barrierDismissible: true,
-      context: context,
-      barrierColor: Colors.white,
-      builder: (BuildContext context) {
-        return QueryDialogWidget(
-          child: ConsultaProcessosLeituraPage(
-            filter: ConsultaProcessosLeituraFilter(
-              startDate: startDate?.add(const Duration(hours: -24)),
-              finalDate: DateTime.now(),
-              finalTime: null,
-              codItem: null,
-              codKit: null,
-              startTime: null,
-              biologico: null,
-              codEtapaProcesso: null,
-              implantavel: null,
-              indicador: null,
-              lote: null,
-              prontuario: null,
-              idEtiquetaContem: idEtiqueta,
-              codBarraKitContem: codBarra,
-            ),
-          ),
-        );
-      },
+  ) async {
+    WindowsHelper.OpenDefaultWindows(
+      title: 'Consulta Processo Leitura',
+      widget: ConsultaProcessosLeituraPage(
+        filter: ConsultaProcessosLeituraFilter(
+          startDate: startDate?.add(const Duration(hours: -24)),
+          finalDate: DateTime.now(),
+          finalTime: null,
+          codItem: null,
+          codKit: null,
+          startTime: null,
+          biologico: null,
+          codEtapaProcesso: null,
+          implantavel: null,
+          indicador: null,
+          lote: null,
+          prontuario: null,
+          idEtiquetaContem: idEtiqueta,
+          codBarraKitContem: codBarra,
+        ),
+      ),
     );
   }
 }

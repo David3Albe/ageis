@@ -10,8 +10,9 @@ _$ProcessoLeituraCodigoModelImpl _$$ProcessoLeituraCodigoModelImplFromJson(
         Map<String, dynamic> json) =>
     _$ProcessoLeituraCodigoModelImpl(
       codigoLido: json['codigoLido'] as String?,
-      avisosSonoro:
-          (json['avisosSonoro'] as List<dynamic>).map((e) => e as int).toList(),
+      avisosSonoro: (json['avisosSonoro'] as List<dynamic>)
+          .map((e) => (e as num).toInt())
+          .toList(),
       cancelarLeituras: json['cancelarLeituras'] as bool?,
       leituraFinalizada: json['leituraFinalizada'] as bool?,
       alertaVermelho: json['alertaVermelho'] as bool?,

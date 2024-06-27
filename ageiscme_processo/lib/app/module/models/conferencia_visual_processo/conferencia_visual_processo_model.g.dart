@@ -9,7 +9,7 @@ part of 'conferencia_visual_processo_model.dart';
 _$ConferenciaVisualProcessoModelImpl
     _$$ConferenciaVisualProcessoModelImplFromJson(Map<String, dynamic> json) =>
         _$ConferenciaVisualProcessoModelImpl(
-          codKit: json['codKit'] as int?,
+          codKit: (json['codKit'] as num?)?.toInt(),
         );
 
 Map<String, dynamic> _$$ConferenciaVisualProcessoModelImplToJson(

@@ -13,7 +13,6 @@ import 'package:ageiscme_models/filters/equipamento/equipamento_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
@@ -32,9 +31,13 @@ class ProcessoEtapaPageFrm extends StatefulWidget {
   const ProcessoEtapaPageFrm({
     Key? key,
     required this.processoEtapa,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final ProcessoEtapaModel processoEtapa;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<ProcessoEtapaPageFrm> createState() =>
@@ -178,590 +181,134 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<ProcessoEtapaPageFrmCubit, ProcessoEtapaPageFrmState>(
+    return BlocBuilder<ProcessoEtapaPageFrmCubit, ProcessoEtapaPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
-      child: BlocBuilder<ProcessoEtapaPageFrmCubit, ProcessoEtapaPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return AlertDialog(
-            contentPadding: const EdgeInsets.all(8.0),
-            titlePadding: const EdgeInsets.all(8.0),
-            actionsPadding: const EdgeInsets.all(8.0),
-            title: Row(
+      builder: (context, state) {
+        return Column(
+          children: [
+            Row(
               children: [
                 Expanded(
                   child: TitleWidget(
                     text: titulo,
                   ),
                 ),
-                const Spacer(),
-                CloseButtonWidget(
-                  onPressed: () => Navigator.of(context).pop((false, '')),
-                ),
               ],
             ),
-            content: Container(
-              constraints: BoxConstraints(
-                minWidth: size.width * .5,
-                minHeight: size.height * .5,
-                maxHeight: size.height * .95,
-              ),
-              child: SingleChildScrollView(
-                controller: scroll,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: BlocBuilder<ProcessoTipoCubit, ProcessoTipoState>(
-                        bloc: processoTipoCubit,
-                        builder: (context, processosTiposState) {
-                          if (processosTiposState.loading) {
-                            return const LoadingWidget();
-                          }
-                          List<ProcessoTipoModel> processosTipos =
-                              processosTiposState.processosTipos;
-                          processosTipos.sort(
-                            (a, b) => a.nome.compareTo(b.nome),
-                          );
-                          ProcessoTipoModel? processoTipo = processosTipos
-                              .where(
-                                (element) =>
-                                    element.cod ==
-                                    processoEtapa.codProcessoTipo,
-                              )
-                              .firstOrNull;
-                          return DropDownSearchWidget<ProcessoTipoModel>(
-                            validator: (val) =>
-                                val == null ? 'Obrigatório' : null,
-                            validateBuilder: (context, validateMethodBuilder) =>
-                                validateTipoProcesso = validateMethodBuilder,
-                            initialValue: processoTipo,
-                            sourceList: processosTipos
-                                .where((element) => element.ativo == true)
-                                .toList(),
-                            onChanged: (value) =>
-                                processoEtapa.codProcessoTipo = value?.cod,
-                            placeholder: 'Tipo Processo *',
-                          );
-                        },
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Container(
+                      constraints: BoxConstraints(
+                        minWidth: size.width * .5,
+                        minHeight: size.height * .5,
+                        maxHeight: size.height * .95,
                       ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtNome,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child:
-                                BlocBuilder<EquipamentoCubit, EquipamentoState>(
-                              bloc: equipamentoCubit,
-                              builder: (context, equipamentoState) {
-                                if (equipamentoState.loading) {
-                                  return const LoadingWidget();
-                                }
-                                List<EquipamentoModel> equipamentos =
-                                    equipamentoState.objs;
-
-                                EquipamentoModel? equipamento = equipamentos
-                                    .where(
-                                      (element) =>
-                                          element.cod ==
-                                          processoEtapa.codEquipamento,
-                                    )
-                                    .firstOrNull;
-
-                                List<EquipamentoModel> equipamentosAtivos =
-                                    equipamentos
-                                        .where(
-                                          (element) => element.ativo == true,
-                                        )
-                                        .toList();
-
-                                if (equipamento != null &&
-                                    !equipamentosAtivos.contains(equipamento)) {
-                                  equipamentosAtivos.add(equipamento);
-                                }
-
-                                return DropDownSearchWidget<EquipamentoModel>(
-                                  initialValue: equipamento,
-                                  sourceList: equipamentosAtivos,
-                                  onChanged: (value) => processoEtapa
-                                      .codEquipamento = value?.cod!,
-                                  placeholder: 'Equipamento',
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: BlocBuilder<ArsenalEstoqueCubit,
-                                ArsenalEstoqueState>(
-                              bloc: arsenalEstoqueCubit,
-                              builder: (context, arsenaisState) {
-                                if (arsenaisState.loading) {
-                                  return const LoadingWidget();
-                                }
-                                List<ArsenalEstoqueModel> arsenaisEstoques =
-                                    arsenaisState.arsenaisEstoques;
-
-                                ArsenalEstoqueModel? arsenalEstoque =
-                                    arsenaisEstoques
-                                        .where(
-                                          (element) =>
-                                              element.cod ==
-                                              processoEtapa.codEstoque,
-                                        )
-                                        .firstOrNull;
-                                List<ArsenalEstoqueModel>
-                                    arsenaisEstoquesAtivos = arsenaisEstoques
-                                        .where(
-                                          (element) => element.ativo == true,
-                                        )
-                                        .toList();
-
-                                if (arsenalEstoque != null &&
-                                    !arsenaisEstoquesAtivos
-                                        .contains(arsenalEstoque)) {
-                                  arsenaisEstoquesAtivos.add(arsenalEstoque);
-                                }
-
-                                return DropDownSearchWidget<
-                                    ArsenalEstoqueModel>(
-                                  initialValue: arsenalEstoque,
-                                  sourceList: arsenaisEstoquesAtivos,
-                                  onChanged: (value) =>
-                                      processoEtapa.codEstoque = value?.cod,
-                                  placeholder: 'Arsenal',
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtDescricao,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: txtEtiquetaPreparo,
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: txtTempoCicloProcesso,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            children: [
-                              const Padding(padding: EdgeInsets.only(top: 2.0)),
-                              CustomCheckboxWidget(
-                                checked: processoEtapa.exigeLeituraEntrada,
-                                onClick: (value) =>
-                                    processoEtapa.exigeLeituraEntrada = value,
-                                text: 'Exige Leitura Entrada',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 2.0)),
-                              CustomCheckboxWidget(
-                                checked: processoEtapa.exigeLeituraSaida,
-                                onClick: (value) =>
-                                    processoEtapa.exigeLeituraSaida = value,
-                                text: 'Exige Leitura Saída',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 2.0)),
-                              CustomCheckboxWidget(
-                                checked: processoEtapa.exigeTesteIndicador,
-                                onClick: (value) {
-                                  setState(() {
-                                    processoEtapa.exigeTesteIndicador = value;
-                                  });
-                                },
-                                text: 'Teste Indicador Obrigatório',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 2.0)),
-                              CustomCheckboxWidget(
-                                checked: processoEtapa.exigeTesteBiologico,
-                                onClick: (value) {
-                                  setState(() {
-                                    processoEtapa.exigeTesteBiologico = value;
-                                  });
-                                },
-                                text:
-                                    'Teste Biológico Obrigatório (Implantável)',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 2.0)),
-                              CustomCheckboxWidget(
-                                checked: processoEtapa.usuarioColocaNaoRetira,
-                                onClick: (value) => processoEtapa
-                                    .usuarioColocaNaoRetira = value,
-                                text: 'Usuário Coloca Não Retira',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 2.0)),
-                              CustomCheckboxWidget(
-                                checked: processoEtapa.imprimirEtiquetaLote,
-                                onClick: (value) {
-                                  setState(() {
-                                    processoEtapa.imprimirEtiquetaLote = value;
-                                  });
-                                },
-                                text: 'Imprime Etiqueta de Lote',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 2.0)),
-                              CustomCheckboxWidget(
-                                checked: processoEtapa.exigeEpcSaida,
-                                onClick: (value) =>
-                                    processoEtapa.exigeEpcSaida = value,
-                                text: 'Exige Uso de EPC na Leitura de Saída',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 2.0)),
-                              CustomCheckboxWidget(
-                                checked: processoEtapa.recebe,
-                                onClick: (value) =>
-                                    processoEtapa.recebe = value,
-                                text: 'Recebe',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 2.0)),
-                              CustomCheckboxWidget(
-                                checked:
-                                    processoEtapa.relatorioRetiradaMateriais,
-                                onClick: (value) => processoEtapa
-                                    .relatorioRetiradaMateriais = value,
-                                text: 'Relatório Retirada de Materiais',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 2.0)),
-                              CustomCheckboxWidget(
-                                checked:
-                                    processoEtapa.responsavelLocalNaoCompativel,
-                                onClick: (value) => processoEtapa
-                                    .responsavelLocalNaoCompativel = value,
-                                text:
-                                    'Solicita Responsável Local não compatível',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 2.0)),
-                              CustomCheckboxWidget(
-                                checked: processoEtapa.integradorKit,
-                                onClick: (value) =>
-                                    processoEtapa.integradorKit = value,
-                                text: 'Solicita Integrador',
-                                align: MainAxisAlignment.start,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              const Padding(padding: EdgeInsets.only(top: 2.0)),
-                              CustomCheckboxWidget(
-                                checked:
-                                    processoEtapa.conferenciaVisualPermitida,
-                                onClick: (value) => processoEtapa
-                                    .conferenciaVisualPermitida = value,
-                                text: 'Conferencia Visual Permitida',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 2.0)),
-                              CustomCheckboxWidget(
-                                checked: processoEtapa.liberaKitIncompleto,
-                                onClick: (value) =>
-                                    processoEtapa.liberaKitIncompleto = value,
-                                text: 'Libera Kit Incompleto',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 2.0)),
-                              CustomCheckboxWidget(
-                                checked: processoEtapa.autorizaQuebraFluxo,
-                                onClick: (value) =>
-                                    processoEtapa.autorizaQuebraFluxo = value,
-                                text: 'Permite Quebra de Fluxo sob Autorização',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 2.0)),
-                              CustomCheckboxWidget(
-                                checked: processoEtapa.preparo,
-                                onClick: (value) {
-                                  setState(() {
-                                    processoEtapa.preparo = value;
-                                  });
-                                },
-                                text: 'Disponibiliza  Funções de Preparo',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 2.0)),
-                              CustomCheckboxWidget(
-                                checked: processoEtapa.areaEsteril,
-                                onClick: (value) =>
-                                    processoEtapa.areaEsteril = value,
-                                text: 'Etapa está em Área Estéril',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 2.0)),
-                              CustomCheckboxWidget(
-                                checked: processoEtapa.exigeEpcEntrada,
-                                onClick: (value) =>
-                                    processoEtapa.exigeEpcEntrada = value,
-                                text: 'Exige Uso de EPC na Leitura de Entrada',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 2.0)),
-                              CustomCheckboxWidget(
-                                checked: processoEtapa.transfere,
-                                onClick: (value) =>
-                                    processoEtapa.transfere = value,
-                                text: 'Transfere',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 2.0)),
-                              CustomCheckboxWidget(
-                                checked: processoEtapa.solicitacaoCirculante,
-                                onClick: (value) =>
-                                    processoEtapa.solicitacaoCirculante = value,
-                                text: 'Solicita Circulante',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 2.0)),
-                              CustomCheckboxWidget(
-                                checked: processoEtapa.pacote,
-                                onClick: (value) =>
-                                    processoEtapa.pacote = value,
-                                text: 'Pacotes',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 2.0)),
-                              Visibility(
-                                visible: false,
-                                child: CustomCheckboxWidget(
-                                  checked: processoEtapa.pacote,
-                                  onClick: (value) =>
-                                      processoEtapa.pacote = value,
-                                  text: 'Pacotes',
-                                  align: MainAxisAlignment.start,
-                                ),
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 2.0)),
-                              CustomCheckboxWidget(
-                                checked:
-                                    processoEtapa.naoAlterarStatusItemPendente,
-                                onClick: (value) => processoEtapa
-                                    .naoAlterarStatusItemPendente = value,
-                                text: 'Status Conferência (Sem Leitura)',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 2.0)),
-                              CustomCheckboxWidget(
-                                checked: processoEtapa.ativo,
-                                onClick: (value) => processoEtapa.ativo = value,
-                                text: 'Ativo',
-                                align: MainAxisAlignment.start,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    if (processoEtapa.exigeTesteIndicador == true) ...{
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey,
-                            width: 1.0,
-                          ),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8.0)),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 0.0),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: CustomCheckboxWidget(
-                                  checked: processoEtapa.testeIndicadorEntrada,
-                                  onClick: (value) => processoEtapa
-                                      .testeIndicadorEntrada = value,
-                                  text: 'Teste Indicador Entrada',
-                                  align: MainAxisAlignment.start,
-                                ),
-                              ),
-                              Expanded(
-                                child: CustomCheckboxWidget(
-                                  checked: processoEtapa.testeIndicadorSaida,
-                                  onClick: (value) =>
-                                      processoEtapa.testeIndicadorSaida = value,
-                                  text: 'Teste Indicador Saída',
-                                  align: MainAxisAlignment.start,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    },
-                    const Padding(padding: EdgeInsets.only(top: 5.0)),
-                    if (processoEtapa.exigeTesteBiologico == true) ...{
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey,
-                            width: 1.0,
-                          ),
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(8.0),
-                          ),
-                        ),
+                      child: SingleChildScrollView(
+                        controller: scroll,
                         child: Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(top: 0.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: CustomCheckboxWidget(
-                                      checked:
-                                          processoEtapa.testeBiologicoEntrada,
-                                      onClick: (value) => processoEtapa
-                                          .testeBiologicoEntrada = value,
-                                      text: 'Teste Biológico Entrada',
-                                      align: MainAxisAlignment.start,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: CustomCheckboxWidget(
-                                      checked:
-                                          processoEtapa.testeBiologicoSaida,
-                                      onClick: (value) => processoEtapa
-                                          .testeBiologicoSaida = value,
-                                      text: 'Teste Biológico Saída',
-                                      align: MainAxisAlignment.start,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(
-                                top: 0.0,
-                                left: 8.0,
-                                bottom: 8.0,
-                                right: 8.0,
-                              ),
-                              child: BlocBuilder<ServicoTipoCubit,
-                                  ServicoTipoState>(
-                                bloc: servicoTipoCubit,
-                                builder: (context, state) {
-                                  if (state.loading == true) {
-                                    return const Center(
-                                      child: LoadingWidget(),
-                                    );
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: BlocBuilder<ProcessoTipoCubit,
+                                  ProcessoTipoState>(
+                                bloc: processoTipoCubit,
+                                builder: (context, processosTiposState) {
+                                  if (processosTiposState.loading) {
+                                    return const LoadingWidget();
                                   }
-                                  List<ServicoTipoModel> servicosTipos =
-                                      state.tiposServico;
-
-                                  ServicoTipoModel? servicoTipo = servicosTipos
-                                      .where(
-                                        (element) =>
-                                            element.cod ==
-                                            processoEtapa.codServicoTipo,
-                                      )
-                                      .firstOrNull;
-                                  return DropDownSearchWidget<ServicoTipoModel>(
-                                    initialValue: servicoTipo,
-                                    sourceList: servicosTipos,
+                                  List<ProcessoTipoModel> processosTipos =
+                                      processosTiposState.processosTipos;
+                                  processosTipos.sort(
+                                    (a, b) => a.nome.compareTo(b.nome),
+                                  );
+                                  ProcessoTipoModel? processoTipo =
+                                      processosTipos
+                                          .where(
+                                            (element) =>
+                                                element.cod ==
+                                                processoEtapa.codProcessoTipo,
+                                          )
+                                          .firstOrNull;
+                                  return DropDownSearchWidget<
+                                      ProcessoTipoModel>(
+                                    validator: (val) =>
+                                        val == null ? 'Obrigatório' : null,
+                                    validateBuilder:
+                                        (context, validateMethodBuilder) =>
+                                            validateTipoProcesso =
+                                                validateMethodBuilder,
+                                    initialValue: processoTipo,
+                                    sourceList: processosTipos
+                                        .where(
+                                          (element) => element.ativo == true,
+                                        )
+                                        .toList(),
                                     onChanged: (value) => processoEtapa
-                                        .codServicoTipo = value?.cod,
-                                    placeholder: 'Tipo Serviço *',
-                                    textFunction: (p0) => p0.GetDropDownText(),
+                                        .codProcessoTipo = value?.cod,
+                                    placeholder: 'Tipo Processo *',
                                   );
                                 },
                               ),
                             ),
-                          ],
-                        ),
-                      ),
-                    },
-                    const Padding(padding: EdgeInsets.only(top: 5.0)),
-                    if (processoEtapa.imprimirEtiquetaLote == true) ...{
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey,
-                            width: 1.0,
-                          ),
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(8.0),
-                          ),
-                        ),
-                        child: Column(
-                          children: [
                             Padding(
-                              padding: const EdgeInsets.only(top: 0.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: CustomCheckboxWidget(
-                                      checked: processoEtapa.etiquetaEntrada,
-                                      onClick: (value) =>
-                                          processoEtapa.etiquetaEntrada = value,
-                                      text: 'Etiqueta Lote Entrada',
-                                      align: MainAxisAlignment.start,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: CustomCheckboxWidget(
-                                      checked: processoEtapa.etiquetaSaida,
-                                      onClick: (value) =>
-                                          processoEtapa.etiquetaSaida = value,
-                                      text: 'Etiqueta Lote Saída',
-                                      align: MainAxisAlignment.start,
-                                    ),
-                                  ),
-                                  Expanded(
-                                    child: CustomCheckboxWidget(
-                                      checked:
-                                          processoEtapa.exigeLoteEquipamento,
-                                      onClick: (value) => processoEtapa
-                                          .exigeLoteEquipamento = value,
-                                      text: 'Exige Lote Equipamento',
-                                      align: MainAxisAlignment.start,
-                                    ),
-                                  ),
-                                ],
-                              ),
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: txtNome,
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(
-                                top: 0.0,
-                                left: 8.0,
-                                bottom: 8.0,
-                                right: 8.0,
-                              ),
+                              padding: const EdgeInsets.only(top: 5.0),
                               child: Row(
                                 children: [
+                                  Expanded(
+                                    child: BlocBuilder<EquipamentoCubit,
+                                        EquipamentoState>(
+                                      bloc: equipamentoCubit,
+                                      builder: (context, equipamentoState) {
+                                        if (equipamentoState.loading) {
+                                          return const LoadingWidget();
+                                        }
+                                        List<EquipamentoModel> equipamentos =
+                                            equipamentoState.objs;
+
+                                        EquipamentoModel? equipamento =
+                                            equipamentos
+                                                .where(
+                                                  (element) =>
+                                                      element.cod ==
+                                                      processoEtapa
+                                                          .codEquipamento,
+                                                )
+                                                .firstOrNull;
+
+                                        List<EquipamentoModel>
+                                            equipamentosAtivos = equipamentos
+                                                .where(
+                                                  (element) =>
+                                                      element.ativo == true,
+                                                )
+                                                .toList();
+
+                                        if (equipamento != null &&
+                                            !equipamentosAtivos
+                                                .contains(equipamento)) {
+                                          equipamentosAtivos.add(equipamento);
+                                        }
+
+                                        return DropDownSearchWidget<
+                                            EquipamentoModel>(
+                                          initialValue: equipamento,
+                                          sourceList: equipamentosAtivos,
+                                          onChanged: (value) => processoEtapa
+                                              .codEquipamento = value?.cod!,
+                                          placeholder: 'Equipamento',
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16.0),
                                   Expanded(
                                     child: BlocBuilder<ArsenalEstoqueCubit,
                                         ArsenalEstoqueState>(
@@ -779,16 +326,31 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                                 .where(
                                                   (element) =>
                                                       element.cod ==
-                                                      processoEtapa
-                                                          .codEstoqueAut,
+                                                      processoEtapa.codEstoque,
                                                 )
                                                 .firstOrNull;
+                                        List<ArsenalEstoqueModel>
+                                            arsenaisEstoquesAtivos =
+                                            arsenaisEstoques
+                                                .where(
+                                                  (element) =>
+                                                      element.ativo == true,
+                                                )
+                                                .toList();
+
+                                        if (arsenalEstoque != null &&
+                                            !arsenaisEstoquesAtivos
+                                                .contains(arsenalEstoque)) {
+                                          arsenaisEstoquesAtivos
+                                              .add(arsenalEstoque);
+                                        }
+
                                         return DropDownSearchWidget<
                                             ArsenalEstoqueModel>(
                                           initialValue: arsenalEstoque,
-                                          sourceList: arsenaisEstoques,
+                                          sourceList: arsenaisEstoquesAtivos,
                                           onChanged: (value) => processoEtapa
-                                              .codEstoqueAut = value?.cod,
+                                              .codEstoque = value?.cod,
                                           placeholder: 'Arsenal',
                                         );
                                       },
@@ -797,80 +359,615 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                 ],
                               ),
                             ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: txtDescricao,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: txtEtiquetaPreparo,
+                                  ),
+                                  const SizedBox(width: 16.0),
+                                  Expanded(
+                                    child: txtTempoCicloProcesso,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 2.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked:
+                                            processoEtapa.exigeLeituraEntrada,
+                                        onClick: (value) => processoEtapa
+                                            .exigeLeituraEntrada = value,
+                                        text: 'Exige Leitura Entrada',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 2.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked:
+                                            processoEtapa.exigeLeituraSaida,
+                                        onClick: (value) => processoEtapa
+                                            .exigeLeituraSaida = value,
+                                        text: 'Exige Leitura Saída',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 2.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked:
+                                            processoEtapa.exigeTesteIndicador,
+                                        onClick: (value) {
+                                          setState(() {
+                                            processoEtapa.exigeTesteIndicador =
+                                                value;
+                                          });
+                                        },
+                                        text: 'Teste Indicador Obrigatório',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 2.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked:
+                                            processoEtapa.exigeTesteBiologico,
+                                        onClick: (value) {
+                                          setState(() {
+                                            processoEtapa.exigeTesteBiologico =
+                                                value;
+                                          });
+                                        },
+                                        text:
+                                            'Teste Biológico Obrigatório (Implantável)',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 2.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked: processoEtapa
+                                            .usuarioColocaNaoRetira,
+                                        onClick: (value) => processoEtapa
+                                            .usuarioColocaNaoRetira = value,
+                                        text: 'Usuário Coloca Não Retira',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 2.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked:
+                                            processoEtapa.imprimirEtiquetaLote,
+                                        onClick: (value) {
+                                          setState(() {
+                                            processoEtapa.imprimirEtiquetaLote =
+                                                value;
+                                          });
+                                        },
+                                        text: 'Imprime Etiqueta de Lote',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 2.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked: processoEtapa.exigeEpcSaida,
+                                        onClick: (value) =>
+                                            processoEtapa.exigeEpcSaida = value,
+                                        text:
+                                            'Exige Uso de EPC na Leitura de Saída',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 2.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked: processoEtapa.recebe,
+                                        onClick: (value) =>
+                                            processoEtapa.recebe = value,
+                                        text: 'Recebe',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 2.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked: processoEtapa
+                                            .relatorioRetiradaMateriais,
+                                        onClick: (value) => processoEtapa
+                                            .relatorioRetiradaMateriais = value,
+                                        text: 'Relatório Retirada de Materiais',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 2.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked: processoEtapa
+                                            .responsavelLocalNaoCompativel,
+                                        onClick: (value) => processoEtapa
+                                                .responsavelLocalNaoCompativel =
+                                            value,
+                                        text:
+                                            'Solicita Responsável Local não compatível',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 2.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked: processoEtapa.integradorKit,
+                                        onClick: (value) =>
+                                            processoEtapa.integradorKit = value,
+                                        text: 'Solicita Integrador',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 2.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked: processoEtapa
+                                            .conferenciaVisualPermitida,
+                                        onClick: (value) => processoEtapa
+                                            .conferenciaVisualPermitida = value,
+                                        text: 'Conferencia Visual Permitida',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 2.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked:
+                                            processoEtapa.liberaKitIncompleto,
+                                        onClick: (value) => processoEtapa
+                                            .liberaKitIncompleto = value,
+                                        text: 'Libera Kit Incompleto',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 2.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked:
+                                            processoEtapa.autorizaQuebraFluxo,
+                                        onClick: (value) => processoEtapa
+                                            .autorizaQuebraFluxo = value,
+                                        text:
+                                            'Permite Quebra de Fluxo sob Autorização',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 2.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked: processoEtapa.preparo,
+                                        onClick: (value) {
+                                          setState(() {
+                                            processoEtapa.preparo = value;
+                                          });
+                                        },
+                                        text:
+                                            'Disponibiliza  Funções de Preparo',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 2.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked: processoEtapa.areaEsteril,
+                                        onClick: (value) =>
+                                            processoEtapa.areaEsteril = value,
+                                        text: 'Etapa está em Área Estéril',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 2.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked: processoEtapa.exigeEpcEntrada,
+                                        onClick: (value) => processoEtapa
+                                            .exigeEpcEntrada = value,
+                                        text:
+                                            'Exige Uso de EPC na Leitura de Entrada',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 2.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked: processoEtapa.transfere,
+                                        onClick: (value) =>
+                                            processoEtapa.transfere = value,
+                                        text: 'Transfere',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 2.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked:
+                                            processoEtapa.solicitacaoCirculante,
+                                        onClick: (value) => processoEtapa
+                                            .solicitacaoCirculante = value,
+                                        text: 'Solicita Circulante',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 2.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked: processoEtapa.pacote,
+                                        onClick: (value) =>
+                                            processoEtapa.pacote = value,
+                                        text: 'Pacotes',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 2.0),
+                                      ),
+                                      Visibility(
+                                        visible: false,
+                                        child: CustomCheckboxWidget(
+                                          checked: processoEtapa.pacote,
+                                          onClick: (value) =>
+                                              processoEtapa.pacote = value,
+                                          text: 'Pacotes',
+                                          align: MainAxisAlignment.start,
+                                        ),
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 2.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked: processoEtapa
+                                            .naoAlterarStatusItemPendente,
+                                        onClick: (value) => processoEtapa
+                                                .naoAlterarStatusItemPendente =
+                                            value,
+                                        text:
+                                            'Status Conferência (Sem Leitura)',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 2.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked: processoEtapa.ativo,
+                                        onClick: (value) =>
+                                            processoEtapa.ativo = value,
+                                        text: 'Ativo',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            if (processoEtapa.exigeTesteIndicador == true) ...{
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(8.0),
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 0.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: CustomCheckboxWidget(
+                                          checked: processoEtapa
+                                              .testeIndicadorEntrada,
+                                          onClick: (value) => processoEtapa
+                                              .testeIndicadorEntrada = value,
+                                          text: 'Teste Indicador Entrada',
+                                          align: MainAxisAlignment.start,
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: CustomCheckboxWidget(
+                                          checked:
+                                              processoEtapa.testeIndicadorSaida,
+                                          onClick: (value) => processoEtapa
+                                              .testeIndicadorSaida = value,
+                                          text: 'Teste Indicador Saída',
+                                          align: MainAxisAlignment.start,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            },
+                            const Padding(padding: EdgeInsets.only(top: 5.0)),
+                            if (processoEtapa.exigeTesteBiologico == true) ...{
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(8.0),
+                                  ),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 0.0),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: CustomCheckboxWidget(
+                                              checked: processoEtapa
+                                                  .testeBiologicoEntrada,
+                                              onClick: (value) => processoEtapa
+                                                      .testeBiologicoEntrada =
+                                                  value,
+                                              text: 'Teste Biológico Entrada',
+                                              align: MainAxisAlignment.start,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: CustomCheckboxWidget(
+                                              checked: processoEtapa
+                                                  .testeBiologicoSaida,
+                                              onClick: (value) => processoEtapa
+                                                  .testeBiologicoSaida = value,
+                                              text: 'Teste Biológico Saída',
+                                              align: MainAxisAlignment.start,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        top: 0.0,
+                                        left: 8.0,
+                                        bottom: 8.0,
+                                        right: 8.0,
+                                      ),
+                                      child: BlocBuilder<ServicoTipoCubit,
+                                          ServicoTipoState>(
+                                        bloc: servicoTipoCubit,
+                                        builder: (context, state) {
+                                          if (state.loading == true) {
+                                            return const Center(
+                                              child: LoadingWidget(),
+                                            );
+                                          }
+                                          List<ServicoTipoModel> servicosTipos =
+                                              state.tiposServico;
+
+                                          ServicoTipoModel? servicoTipo =
+                                              servicosTipos
+                                                  .where(
+                                                    (element) =>
+                                                        element.cod ==
+                                                        processoEtapa
+                                                            .codServicoTipo,
+                                                  )
+                                                  .firstOrNull;
+                                          return DropDownSearchWidget<
+                                              ServicoTipoModel>(
+                                            initialValue: servicoTipo,
+                                            sourceList: servicosTipos,
+                                            onChanged: (value) => processoEtapa
+                                                .codServicoTipo = value?.cod,
+                                            placeholder: 'Tipo Serviço *',
+                                            textFunction: (p0) =>
+                                                p0.GetDropDownText(),
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            },
+                            const Padding(padding: EdgeInsets.only(top: 5.0)),
+                            if (processoEtapa.imprimirEtiquetaLote == true) ...{
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(8.0),
+                                  ),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 0.0),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: CustomCheckboxWidget(
+                                              checked:
+                                                  processoEtapa.etiquetaEntrada,
+                                              onClick: (value) => processoEtapa
+                                                  .etiquetaEntrada = value,
+                                              text: 'Etiqueta Lote Entrada',
+                                              align: MainAxisAlignment.start,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: CustomCheckboxWidget(
+                                              checked:
+                                                  processoEtapa.etiquetaSaida,
+                                              onClick: (value) => processoEtapa
+                                                  .etiquetaSaida = value,
+                                              text: 'Etiqueta Lote Saída',
+                                              align: MainAxisAlignment.start,
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: CustomCheckboxWidget(
+                                              checked: processoEtapa
+                                                  .exigeLoteEquipamento,
+                                              onClick: (value) => processoEtapa
+                                                  .exigeLoteEquipamento = value,
+                                              text: 'Exige Lote Equipamento',
+                                              align: MainAxisAlignment.start,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                        top: 0.0,
+                                        left: 8.0,
+                                        bottom: 8.0,
+                                        right: 8.0,
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Expanded(
+                                            child: BlocBuilder<
+                                                ArsenalEstoqueCubit,
+                                                ArsenalEstoqueState>(
+                                              bloc: arsenalEstoqueCubit,
+                                              builder:
+                                                  (context, arsenaisState) {
+                                                if (arsenaisState.loading) {
+                                                  return const LoadingWidget();
+                                                }
+                                                List<ArsenalEstoqueModel>
+                                                    arsenaisEstoques =
+                                                    arsenaisState
+                                                        .arsenaisEstoques;
+
+                                                ArsenalEstoqueModel?
+                                                    arsenalEstoque =
+                                                    arsenaisEstoques
+                                                        .where(
+                                                          (element) =>
+                                                              element.cod ==
+                                                              processoEtapa
+                                                                  .codEstoqueAut,
+                                                        )
+                                                        .firstOrNull;
+                                                return DropDownSearchWidget<
+                                                    ArsenalEstoqueModel>(
+                                                  initialValue: arsenalEstoque,
+                                                  sourceList: arsenaisEstoques,
+                                                  onChanged: (value) =>
+                                                      processoEtapa
+                                                              .codEstoqueAut =
+                                                          value?.cod,
+                                                  placeholder: 'Arsenal',
+                                                );
+                                              },
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            },
+                            const Padding(padding: EdgeInsets.only(top: 5.0)),
+                            if (processoEtapa.preparo == true) ...{
+                              Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color: Colors.grey,
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(8.0),
+                                  ),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.only(top: 0.0),
+                                  child: Row(
+                                    children: [
+                                      CustomCheckboxWidget(
+                                        checked: processoEtapa
+                                            .permiteLiberacaoDataMatrixComCrachaPreparo,
+                                        onClick: (value) => processoEtapa
+                                                .permiteLiberacaoDataMatrixComCrachaPreparo =
+                                            value,
+                                        text:
+                                            'Permite liberação do Data Matrix com Crachá',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            },
+                            const Padding(padding: EdgeInsets.only(top: 24)),
                           ],
                         ),
                       ),
-                    },
-                    const Padding(padding: EdgeInsets.only(top: 5.0)),
-                    if (processoEtapa.preparo == true) ...{
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Colors.grey,
-                            width: 1.0,
-                          ),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(8.0)),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(top: 0.0),
-                          child: Row(
-                            children: [
-                              CustomCheckboxWidget(
-                                checked: processoEtapa
-                                    .permiteLiberacaoDataMatrixComCrachaPreparo,
-                                onClick: (value) => processoEtapa
-                                        .permiteLiberacaoDataMatrixComCrachaPreparo =
-                                    value,
-                                text:
-                                    'Permite liberação do Data Matrix com Crachá',
-                                align: MainAxisAlignment.start,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    },
-                    const Padding(padding: EdgeInsets.only(top: 24)),
-                  ],
-                ),
-              ),
-            ),
-            actions: [
-              Row(
-                children: [
-                  CustomPopupMenuWidget(
-                    items: items,
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: SaveButtonWidget(
-                      onPressed: () => {salvar()},
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: CleanButtonWidget(
-                      onPressed: () => {
-                        setState(() {
-                          processoEtapa = ProcessoEtapaModel.empty();
-                        }),
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: CancelButtonUnfilledWidget(
-                      onPressed: () => {Navigator.of(context).pop((false, ''))},
                     ),
                   ),
                 ],
               ),
-            ],
-          );
-        },
-      ),
+            ),
+            Row(
+              children: [
+                CustomPopupMenuWidget(
+                  items: items,
+                ),
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: SaveButtonWidget(
+                    onPressed: () => {salvar()},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: CleanButtonWidget(
+                    onPressed: () => {
+                      setState(() {
+                        processoEtapa = ProcessoEtapaModel.empty();
+                      }),
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: CancelButtonUnfilledWidget(
+                    onPressed: widget.onCancel,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -1025,6 +1122,6 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
       return;
     }
 
-    cubit.save(processoEtapa);
+    cubit.save(processoEtapa, widget.onSaved);
   }
 }

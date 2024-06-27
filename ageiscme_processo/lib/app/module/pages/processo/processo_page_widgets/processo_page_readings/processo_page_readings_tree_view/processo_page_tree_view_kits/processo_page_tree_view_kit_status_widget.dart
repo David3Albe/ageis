@@ -1,8 +1,11 @@
 import 'package:ageiscme_models/enums/decisao_enum.dart';
+import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_processo/app/module/blocs/processo_leitura_cubit.dart';
+import 'package:ageiscme_processo/app/module/enums/item_processo_status.dart';
 import 'package:ageiscme_processo/app/module/enums/kit_processo_status.dart';
 import 'package:ageiscme_processo/app/module/models/item_processo/item_processo_model.dart';
 import 'package:ageiscme_processo/app/module/models/kit_processo/kit_processo_model.dart';
+import 'package:ageiscme_processo/app/module/models/processo_leitura/processo_leitura_montagem_model.dart';
 import 'package:ageiscme_processo/app/module/pages/processo/processo_page_widgets/processo_page_readings/processo_page_readings_tree_view/processo_page_tree_view_kits/processo_page_tree_view_kit_status_item_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
@@ -14,8 +17,10 @@ class ProcessoPageTreeViewKitStatusWidget extends StatelessWidget {
     required this.status,
     required this.expandido,
     required this.kit,
+    required this.processoLeitura,
   });
   final List<ItemProcessoModel> itens;
+  final ProcessoLeituraMontagemModel processoLeitura;
   final KitProcessoModel kit;
   final int status;
   final bool expandido;
@@ -119,7 +124,10 @@ class ProcessoPageTreeViewKitStatusWidget extends StatelessWidget {
               ),
               child: ProcessoPageTreeViewKitStatusItemWidget(
                 item,
-                color: KitProcessoStatus.getCorTextItemFromStatus(status),
+                color: getCorTextItemFromStatus(
+                  cod: status,
+                  item: item,
+                ),
               ),
             ),
           ],
@@ -138,5 +146,34 @@ class ProcessoPageTreeViewKitStatusWidget extends StatelessWidget {
     processoCubit.state.processo.leituraAtual.decisao =
         DecisaoEnum.DefinirItemDataMatrixDanificado;
     processoCubit.readCode(item.idEtiqueta);
+  }
+
+  Color getCorTextItemFromStatus({
+    required ItemProcessoModel item,
+    required int cod,
+  }) {
+    ProcessoEtapaModel? etapa = item.getEtapa(processoLeitura);
+    if (item.pendenteRecepcao == 1 &&
+        item.status != ItemProcessoStatus.Pendente &&
+        kit.preparado == false &&
+        etapa?.preparo != true) {
+      return const Color.fromARGB(255, 8, 216, 15);
+    }
+
+    switch (cod) {
+      case KitProcessoStatus.lidos:
+        return const Color.fromARGB(255, 0, 0, 0);
+      case KitProcessoStatus.dataMatrixDanificado:
+        return const Color.fromARGB(255, 139, 0, 0);
+      case KitProcessoStatus.naoLidos:
+        return const Color.fromARGB(255, 255, 0, 0);
+      case KitProcessoStatus.faltantes:
+        return const Color.fromARGB(255, 0, 0, 255);
+      case KitProcessoStatus.preparado:
+        return const Color.fromARGB(255, 78, 78, 78);
+      case KitProcessoStatus.modoConsulta:
+        return const Color.fromARGB(255, 37, 37, 37);
+    }
+    throw Exception('Kit Processo Status Tipo Não Definido');
   }
 }

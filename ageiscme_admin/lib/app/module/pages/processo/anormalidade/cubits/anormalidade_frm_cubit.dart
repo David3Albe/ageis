@@ -88,7 +88,10 @@ class AnormalidadeFrmCubit extends Cubit<AnormalidadeFrmState> {
     );
   }
 
-  Future salvar({required BuildContext context}) async {
+  Future salvar({
+    required BuildContext context,
+    required void Function() onSaved,
+  }) async {
     if (state.dto == null) return;
     if (state.dto?.item == null && state.dto?.etapa == null) {
       ToastUtils.showCustomToastWarning(
@@ -103,7 +106,7 @@ class AnormalidadeFrmCubit extends Cubit<AnormalidadeFrmState> {
     loading.closeDefault();
     if (result == null) return;
     ToastUtils.showCustomToastSucess(context, result.$1);
-    Navigator.of(context).pop(true);
+    onSaved();
   }
 
   void _change({

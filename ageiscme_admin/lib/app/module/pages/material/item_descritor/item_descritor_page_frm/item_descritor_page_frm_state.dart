@@ -12,12 +12,15 @@ class ItemDescritorPageFrmCubit extends Cubit<ItemDescritorPageFrmState> {
           ItemDescritorPageFrmState(itemDescritor: itemDescritorModel),
         );
 
-  void save(ItemDescritorModel itemDescritor) async {
+  void save(
+    ItemDescritorModel itemDescritor,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, ItemDescritorModel itemDescritor)? result =
           await service.save(itemDescritor);
       if (result == null) return;
-
+      onSaved(result.$1);
       emit(
         ItemDescritorPageFrmState(
           message: result.$1,

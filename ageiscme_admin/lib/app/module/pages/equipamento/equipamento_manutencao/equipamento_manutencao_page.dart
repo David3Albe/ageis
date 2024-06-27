@@ -16,11 +16,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class EquipamentoManutencaoPage extends StatefulWidget {
-  EquipamentoManutencaoPage({this.cod, super.key});
+  const EquipamentoManutencaoPage({this.cod, super.key});
   final int? cod;
 
   @override
@@ -187,7 +188,7 @@ class _EquipamentoManutencaoPageState extends State<EquipamentoManutencaoPage> {
     );
   }
 
-  Future<void> openModal(
+  Future openModal(
     BuildContext context,
     EquipamentoManutencaoModel equipamentoManutencao,
   ) async {
@@ -206,31 +207,44 @@ class _EquipamentoManutencaoPageState extends State<EquipamentoManutencaoPage> {
       }
     }
     loading.close(context, mounted);
-
-    (bool, String)? result = await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return EquipamentoManutencaoPageFrm(
-          equipamentoCubit: equipamentoCubit,
-          equipamentoManutencao: equipamentoMan!,
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Manutenção',
+      widget: EquipamentoManutencaoPageFrm(
+        equipamentoCubit: equipamentoCubit,
+        equipamentoManutencao: equipamentoMan,
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+      ),
     );
-    if (result == null || !result.$1) return;
-    ToastUtils.showCustomToastSucess(context, result.$2);
+  }
+
+  Future onSaved(String message, int chave) async {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
     await consultar();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void delete(
     BuildContext context,
     EquipamentoManutencaoModel equipamentoManutencao,
   ) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção da Manutenção\n${equipamentoManutencao.cod} - ${equipamentoManutencao.equipamento!.nome}',
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção da Manutenção\n${equipamentoManutencao.cod} - ${equipamentoManutencao.equipamento!.nome}',
+      onConfirm: () => onConfirmDelete(equipamentoManutencao),
     );
-    if (confirmacao) bloc.delete(equipamentoManutencao);
+  }
+
+  void onConfirmDelete(
+    EquipamentoManutencaoModel equipamentoManutencao,
+  ) {
+    bloc.delete(equipamentoManutencao);
   }
 
   Future deleted(EquipamentoManutencaoPageState state) async {

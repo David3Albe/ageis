@@ -75,7 +75,10 @@ class AnormalidadeTipoFrmCubit extends Cubit<AnormalidadeTipoFrmState> {
     );
   }
 
-  Future salvar({required BuildContext context}) async {
+  Future salvar({
+    required BuildContext context,
+    required void Function() onSaved,
+  }) async {
     if (!form.valid) {
       form.markAllAsTouched();
       form.markAsDirty();
@@ -89,7 +92,6 @@ class AnormalidadeTipoFrmCubit extends Cubit<AnormalidadeTipoFrmState> {
     loading.closeDefault();
     if (result == null) return;
     ToastUtils.showCustomToastSucess(context, result.$1);
-    Navigator.of(context).pop(true);
   }
 
   void _setDTO() {

@@ -21,7 +21,7 @@ import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
 class ConsultaInsumoEstoquePage extends StatefulWidget {
-  ConsultaInsumoEstoquePage({super.key});
+  const ConsultaInsumoEstoquePage({super.key});
 
   @override
   State<ConsultaInsumoEstoquePage> createState() =>
@@ -171,72 +171,67 @@ class _ConsultaInsumoEstoquePageState extends State<ConsultaInsumoEstoquePage> {
   void onError(ConsultaInsumoEstoquePageState state) =>
       ErrorUtils.showErrorDialog(context, [state.error]);
 
-  void openModal(BuildContext context) {
-    showDialog<bool>(
-      barrierDismissible: false,
+  Future openModal(BuildContext context) async {
+    bool confirm = await showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return FilterDialogWidget(
-          child: Column(
-            children: [
-              BlocBuilder<DepositoInsumoCubit, DepositoInsumoState>(
-                bloc: depositoInsumoBloc,
-                builder: (context, depositoState) {
-                  if (depositoState.loading) {
-                    return const LoadingWidget();
-                  }
-                  List<DepositoInsumoModel> depositos = depositoState.objs;
-                  DepositoInsumoModel? deposito = depositos
-                      .where(
-                        (element) => element.cod == filter.codDeposito,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<DepositoInsumoModel>(
-                    textFunction: (deposito) => deposito.GetNomeDepositoText(),
-                    initialValue: deposito,
-                    sourceList: depositos,
-                    onChanged: (value) => filter.codDeposito = value?.cod,
-                    placeholder: 'Depósito',
-                  );
-                },
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<InsumoCubit, InsumoState>(
-                bloc: insumoBloc,
-                builder: (context, insumoState) {
-                  if (insumoState.loading) {
-                    return const LoadingWidget();
-                  }
-                  List<InsumoModel> insumos = insumoState.objs;
-                  InsumoModel? insumo = insumos
-                      .where(
-                        (element) => element.cod == filter.codInsumo,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<InsumoModel>(
-                    textFunction: (insumo) => insumo.GetNomeInsumoText(),
-                    initialValue: insumo,
-                    sourceList: insumos,
-                    onChanged: (value) => filter.codInsumo = value?.cod,
-                    placeholder: 'Insumo',
-                  );
-                },
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              CustomCheckboxWidget(
-                checked: filter.estoqueAbaixoMinimo,
-                onClick: (value) => filter.estoqueAbaixoMinimo = value,
-                text: 'Estoque abaixo do minimo',
-                align: MainAxisAlignment.start,
-              ),
-            ],
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == true) {
-        bloc.loadInsumoEstoque(filter);
-      }
-    });
+      builder: (context) => FilterDialogWidget(
+        child: Column(
+          children: [
+            BlocBuilder<DepositoInsumoCubit, DepositoInsumoState>(
+              bloc: depositoInsumoBloc,
+              builder: (context, depositoState) {
+                if (depositoState.loading) {
+                  return const LoadingWidget();
+                }
+                List<DepositoInsumoModel> depositos = depositoState.objs;
+                DepositoInsumoModel? deposito = depositos
+                    .where(
+                      (element) => element.cod == filter.codDeposito,
+                    )
+                    .firstOrNull;
+                return DropDownSearchWidget<DepositoInsumoModel>(
+                  textFunction: (deposito) => deposito.GetNomeDepositoText(),
+                  initialValue: deposito,
+                  sourceList: depositos,
+                  onChanged: (value) => filter.codDeposito = value?.cod,
+                  placeholder: 'Depósito',
+                );
+              },
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            BlocBuilder<InsumoCubit, InsumoState>(
+              bloc: insumoBloc,
+              builder: (context, insumoState) {
+                if (insumoState.loading) {
+                  return const LoadingWidget();
+                }
+                List<InsumoModel> insumos = insumoState.objs;
+                InsumoModel? insumo = insumos
+                    .where(
+                      (element) => element.cod == filter.codInsumo,
+                    )
+                    .firstOrNull;
+                return DropDownSearchWidget<InsumoModel>(
+                  textFunction: (insumo) => insumo.GetNomeInsumoText(),
+                  initialValue: insumo,
+                  sourceList: insumos,
+                  onChanged: (value) => filter.codInsumo = value?.cod,
+                  placeholder: 'Insumo',
+                );
+              },
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            CustomCheckboxWidget(
+              checked: filter.estoqueAbaixoMinimo,
+              onClick: (value) => filter.estoqueAbaixoMinimo = value,
+              text: 'Estoque abaixo do minimo',
+              align: MainAxisAlignment.start,
+            ),
+          ],
+        ),
+      ),
+    );
+    if (confirm != true) return;
+    bloc.loadInsumoEstoque(filter);
   }
 }

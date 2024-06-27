@@ -12,12 +12,12 @@ class EtiquetaPageFrmCubit extends Cubit<EtiquetaPageFrmState> {
           EtiquetaPageFrmState(etiqueta: etiquetaModel),
         );
 
-  void save(EtiquetaModel etiqueta) async {
+  void save(EtiquetaModel etiqueta, void Function(String) onSaved) async {
     try {
       (String message, EtiquetaModel etiqueta)? result =
           await service.save(etiqueta);
       if (result == null) return;
-
+      onSaved(result.$1);
       emit(
         EtiquetaPageFrmState(
           message: result.$1,

@@ -23,11 +23,12 @@ import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ConsultaRegistroServicoPage extends StatefulWidget {
-  ConsultaRegistroServicoPage({super.key});
+  const ConsultaRegistroServicoPage({super.key});
 
   @override
   State<ConsultaRegistroServicoPage> createState() =>
@@ -215,98 +216,93 @@ class _ConsultaRegistroServicoPageState
   void onError(ConsultaRegistroServicoPageState state) =>
       ErrorUtils.showErrorDialog(context, [state.error]);
 
-  void openModal(BuildContext context) {
-    showDialog<bool>(
-      barrierDismissible: false,
+  Future openModal(BuildContext context) async {
+    bool? confirm = await showDialog<bool>(
       context: context,
-      builder: (BuildContext context) {
-        return FilterDialogWidget(
-          child: Column(
-            children: [
-              DatePickerWidget(
-                placeholder: 'Data Início',
-                onDateSelected: (value) => filter.startDate = value,
-                initialValue: filter.startDate,
+      builder: (context) => FilterDialogWidget(
+        child: Column(
+          children: [
+            DatePickerWidget(
+              placeholder: 'Data Início',
+              onDateSelected: (value) => filter.startDate = value,
+              initialValue: filter.startDate,
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            DatePickerWidget(
+              placeholder: 'Data Término',
+              onDateSelected: (value) => filter.finalDate = value,
+              initialValue: filter.finalDate,
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            BlocBuilder<EquipamentoCubit, EquipamentoState>(
+              bloc: equipamentoBloc,
+              builder: (context, equipamentoState) {
+                if (equipamentoState.loading) {
+                  return const LoadingWidget();
+                }
+                List<EquipamentoModel> equipamentos = equipamentoState.objs;
+                equipamentos.sort(
+                  (a, b) => a.nome!.compareTo(b.nome!),
+                );
+                EquipamentoModel? equipamento = equipamentos
+                    .where(
+                      (element) => element.cod == filter.codEquipamento,
+                    )
+                    .firstOrNull;
+                return DropDownSearchWidget(
+                  textFunction: (equipamento) =>
+                      equipamento.EquipamentoNomeText(),
+                  initialValue: equipamento,
+                  sourceList: equipamentos
+                      .where((element) => element.ativo == true)
+                      .toList(),
+                  onChanged: (value) => filter.codEquipamento = value?.cod,
+                  placeholder: 'Equipamento',
+                );
+              },
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            CustomAutocompleteWidget<ItemModel>(
+              initialValue: filter.idEtiquetaContem,
+              onChange: (str) => filter.idEtiquetaContem = str,
+              onItemSelectedText: (item) => item.idEtiqueta ?? null,
+              label: 'Item',
+              title: (p0) => Text(p0.EtiquetaDescricaoText()),
+              suggestionsCallback: (str) => ItemService().Filter(
+                ItemFilter(numeroRegistros: 30, termoPesquisa: str),
               ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              DatePickerWidget(
-                placeholder: 'Data Término',
-                onDateSelected: (value) => filter.finalDate = value,
-                initialValue: filter.finalDate,
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<EquipamentoCubit, EquipamentoState>(
-                bloc: equipamentoBloc,
-                builder: (context, equipamentoState) {
-                  if (equipamentoState.loading) {
-                    return const LoadingWidget();
-                  }
-                  List<EquipamentoModel> equipamentos = equipamentoState.objs;
-                  equipamentos.sort(
-                    (a, b) => a.nome!.compareTo(b.nome!),
-                  );
-                  EquipamentoModel? equipamento = equipamentos
-                      .where(
-                        (element) => element.cod == filter.codEquipamento,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget(
-                    textFunction: (equipamento) =>
-                        equipamento.EquipamentoNomeText(),
-                    initialValue: equipamento,
-                    sourceList: equipamentos
-                        .where((element) => element.ativo == true)
-                        .toList(),
-                    onChanged: (value) => filter.codEquipamento = value?.cod,
-                    placeholder: 'Equipamento',
-                  );
-                },
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              CustomAutocompleteWidget<ItemModel>(
-                initialValue: filter.idEtiquetaContem,
-                onChange: (str) => filter.idEtiquetaContem = str,
-                onItemSelectedText: (item) => item.idEtiqueta ?? null,
-                label: 'Item',
-                title: (p0) => Text(p0.EtiquetaDescricaoText()),
-                suggestionsCallback: (str) => ItemService().Filter(
-                  ItemFilter(numeroRegistros: 30, termoPesquisa: str),
-                ),
-              ),
-              BlocBuilder<ServicoTipoCubit, ServicoTipoState>(
-                bloc: servicoTipoBloc,
-                builder: (context, state) {
-                  List<ServicoTipoModel> servicosTipos = state.tiposServico;
+            ),
+            BlocBuilder<ServicoTipoCubit, ServicoTipoState>(
+              bloc: servicoTipoBloc,
+              builder: (context, state) {
+                List<ServicoTipoModel> servicosTipos = state.tiposServico;
 
-                  servicosTipos.sort(
-                    (a, b) => a.nome!.compareTo(b.nome!),
-                  );
-                  ServicoTipoModel? servicoTipo = servicosTipos
-                      .where(
-                        (element) => element.cod == filter.codServicoTipo,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<ServicoTipoModel>(
-                    textFunction: (servicoTipo) =>
-                        servicoTipo.ServicoTipoNomeText(),
-                    initialValue: servicoTipo,
-                    sourceList: servicosTipos
-                        .where((element) => element.ativo == true)
-                        .toList(),
-                    onChanged: (value) => filter.codServicoTipo = value?.cod,
-                    placeholder: 'Tipo de Serviço',
-                  );
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == true) {
-        bloc.loadRegistroServico(filter);
-      }
-    });
+                servicosTipos.sort(
+                  (a, b) => a.nome!.compareTo(b.nome!),
+                );
+                ServicoTipoModel? servicoTipo = servicosTipos
+                    .where(
+                      (element) => element.cod == filter.codServicoTipo,
+                    )
+                    .firstOrNull;
+                return DropDownSearchWidget<ServicoTipoModel>(
+                  textFunction: (servicoTipo) =>
+                      servicoTipo.ServicoTipoNomeText(),
+                  initialValue: servicoTipo,
+                  sourceList: servicosTipos
+                      .where((element) => element.ativo == true)
+                      .toList(),
+                  onChanged: (value) => filter.codServicoTipo = value?.cod,
+                  placeholder: 'Tipo de Serviço',
+                );
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+    if (confirm != true) return;
+    bloc.loadRegistroServico(filter);
   }
 
   Future<RegistroServicoModel?> getFilter(int cod) async {
@@ -317,7 +313,10 @@ class _ConsultaRegistroServicoPageState
     );
   }
 
-  Future<void> openModalRedirect(BuildContext context, int cod) async {
+  Future openModalRedirect(
+    BuildContext context,
+    int cod,
+  ) async {
     LoadingController loading = LoadingController(context: context);
 
     RegistroServicoModel? servico;
@@ -328,18 +327,26 @@ class _ConsultaRegistroServicoPageState
       return;
     }
     loading.close(context, mounted);
-
-    await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return RegistroServicoPageFrm(
-          equipamentoCubit: equipamentoBloc,
-          itemFilter: ItemFilter(),
-          registroServico: servico!,
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Equipamento',
+      widget: RegistroServicoPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        equipamentoCubit: equipamentoBloc,
+        itemFilter: ItemFilter(),
+        registroServico: servico,
+      ),
     );
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void notFoundError() {

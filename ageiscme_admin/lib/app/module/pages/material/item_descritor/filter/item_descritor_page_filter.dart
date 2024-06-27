@@ -7,7 +7,9 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ItemDescritorPageFilter extends StatelessWidget {
-  ItemDescritorPageFilter({Key? key});
+  ItemDescritorPageFilter({
+    Key? key,
+  });
 
   @override
   Widget build(BuildContext context) {

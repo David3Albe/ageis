@@ -12,12 +12,15 @@ class CentroCustoPageFrmCubit extends Cubit<CentroCustoPageFrmState> {
           CentroCustoPageFrmState(centroCusto: centroCustoModel),
         );
 
-  void save(CentroCustoModel centroCusto) async {
+  Future save(
+    CentroCustoModel centroCusto,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, CentroCustoModel centroCusto)? result =
           await service.save(centroCusto);
       if (result == null) return;
-
+      onSaved(result.$1);
       emit(
         CentroCustoPageFrmState(
           message: result.$1,

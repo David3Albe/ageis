@@ -7,7 +7,6 @@ import 'package:ageiscme_data/services/arsenal/arsenal_estoque_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_area_widget.dart';
@@ -19,6 +18,7 @@ import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -26,9 +26,13 @@ class ArsenalEstoquePageFrm extends StatefulWidget {
   const ArsenalEstoquePageFrm({
     Key? key,
     required this.arsenalEstoque,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final ArsenalEstoqueModel arsenalEstoque;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<ArsenalEstoquePageFrm> createState() =>
@@ -113,218 +117,206 @@ class _ArsenalEstoquePageFrmState extends State<ArsenalEstoquePageFrm> {
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<ArsenalEstoquePageFrmCubit, ArsenalEstoquePageFrmState>(
+    return BlocBuilder<ArsenalEstoquePageFrmCubit, ArsenalEstoquePageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
+      builder: (context, state) {
+        return Container(
+          constraints: BoxConstraints(
+            minWidth: size.width * .5,
+            minHeight: size.height * .5,
+            maxHeight: size.height * .8,
+          ),
+          child: Stack(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TitleWidget(
+                          text: titulo,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: txtNome,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: txtCodBarra,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: BlocBuilder<LocalInstituicaoCubit,
+                        LocalInstituicaoState>(
+                      bloc: localInstituicaoCubit,
+                      builder: (context, locaisState) {
+                        if (locaisState.loading) {
+                          return const LoadingWidget();
+                        }
+                        List<LocalInstituicaoModel> locaisInstituicao =
+                            locaisState.locaisInstituicoes;
+
+                        locaisInstituicao.sort(
+                          (a, b) => a.nome.compareTo(b.nome),
+                        );
+                        LocalInstituicaoModel? local = locaisInstituicao
+                            .where(
+                              (element) =>
+                                  element.cod == arsenalEstoque.codLocal,
+                            )
+                            .firstOrNull;
+                        return DropDownSearchWidget<LocalInstituicaoModel>(
+                          validator: (val) =>
+                              val == null ? 'Obrigatório' : null,
+                          validateBuilder: (context, validateMethodBuilder) =>
+                              validateLocal = validateMethodBuilder,
+                          initialValue: local,
+                          sourceList: locaisInstituicao
+                              .where((element) => element.ativo == true)
+                              .toList(),
+                          onChanged: (value) =>
+                              arsenalEstoque.codLocal = value?.cod,
+                          placeholder: 'Local *',
+                        );
+                      },
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: Row(
+                      children: [
+                        CustomCheckboxWidget(
+                          checked: arsenalEstoque.ativo,
+                          onClick: (value) => arsenalEstoque.ativo = value,
+                          text: 'Ativo',
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 5.0),
+                    child: BlocBuilder<LocalizacaoArsenalCubit,
+                        LocalizacaoArsenalState>(
+                      bloc: localizacaoArsenalCubit,
+                      builder: (context, localizacoesArsenaisState) {
+                        if (localizacoesArsenaisState.loading) {
+                          return const LoadingWidget();
+                        }
+                        List<LocalizacaoArsenalModel> localizacoesArsenais =
+                            localizacoesArsenaisState.objs;
+
+                        final local = localizacoesArsenais
+                            .where(
+                              (element) =>
+                                  element.codEstoque == arsenalEstoque.cod,
+                            )
+                            .toList();
+
+                        if (local.isEmpty) {
+                          localIsEmpty = true;
+                        }
+
+                        final localizacoesText = local
+                            .map((localizacao) => localizacao.local)
+                            .join('\n');
+
+                        if (local.isNotEmpty) {
+                          txtLocalizacoes.text = localizacoesText.toString();
+                          return txtLocalizacoes;
+                        } else {
+                          txtLocalizacoes.text = ' ';
+                          return txtLocalizacoes;
+                        }
+                      },
+                    ),
+                  ),
+                  const Spacer(),
+                  Row(
+                    children: [
+                      if (arsenalEstoque.cod != null && arsenalEstoque.cod != 0)
+                        CustomPopupMenuWidget(
+                          items: [
+                            CustomPopupItemModel(
+                              text: 'Localizações',
+                              onTap: () => openLocalizacaoArsenal(context),
+                            ),
+                            CustomPopupItemHistoryModel.getHistoryItem(
+                              child: HistoricoPage(
+                                pk: arsenalEstoque.cod!,
+                                termo: 'ARSENAL_ESTQOUE',
+                              ),
+                              context: context,
+                            ),
+                          ],
+                        ),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: SaveButtonWidget(
+                          onPressed: () => {salvar()},
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: CleanButtonWidget(
+                          onPressed: () => {
+                            setState(() {
+                              arsenalEstoque = ArsenalEstoqueModel.empty();
+                            }),
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: CancelButtonUnfilledWidget(
+                          onPressed: widget.onCancel,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
       },
-      child:
-          BlocBuilder<ArsenalEstoquePageFrmCubit, ArsenalEstoquePageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return Container(
-            constraints: BoxConstraints(
-              minWidth: size.width * .5,
-              minHeight: size.height * .5,
-              maxHeight: size.height * .8,
-            ),
-            child: Stack(
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TitleWidget(
-                            text: titulo,
-                          ),
-                        ),
-                        const Spacer(),
-                        CloseButtonWidget(
-                          onPressed: () =>
-                              Navigator.of(context).pop((false, '')),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtNome,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtCodBarra,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: BlocBuilder<LocalInstituicaoCubit,
-                          LocalInstituicaoState>(
-                        bloc: localInstituicaoCubit,
-                        builder: (context, locaisState) {
-                          if (locaisState.loading) {
-                            return const LoadingWidget();
-                          }
-                          List<LocalInstituicaoModel> locaisInstituicao =
-                              locaisState.locaisInstituicoes;
+    );
+  }
 
-                          locaisInstituicao.sort(
-                            (a, b) => a.nome.compareTo(b.nome),
-                          );
-                          LocalInstituicaoModel? local = locaisInstituicao
-                              .where(
-                                (element) =>
-                                    element.cod == arsenalEstoque.codLocal,
-                              )
-                              .firstOrNull;
-                          return DropDownSearchWidget<LocalInstituicaoModel>(
-                            validator: (val) =>
-                                val == null ? 'Obrigatório' : null,
-                            validateBuilder: (context, validateMethodBuilder) =>
-                                validateLocal = validateMethodBuilder,
-                            initialValue: local,
-                            sourceList: locaisInstituicao
-                                .where((element) => element.ativo == true)
-                                .toList(),
-                            onChanged: (value) =>
-                                arsenalEstoque.codLocal = value?.cod,
-                            placeholder: 'Local *',
-                          );
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          CustomCheckboxWidget(
-                            checked: arsenalEstoque.ativo,
-                            onClick: (value) => arsenalEstoque.ativo = value,
-                            text: 'Ativo',
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: BlocBuilder<LocalizacaoArsenalCubit,
-                          LocalizacaoArsenalState>(
-                        bloc: localizacaoArsenalCubit,
-                        builder: (context, localizacoesArsenaisState) {
-                          if (localizacoesArsenaisState.loading) {
-                            return const LoadingWidget();
-                          }
-                          List<LocalizacaoArsenalModel> localizacoesArsenais =
-                              localizacoesArsenaisState.objs;
-
-                          final local = localizacoesArsenais
-                              .where(
-                                (element) =>
-                                    element.codEstoque == arsenalEstoque.cod,
-                              )
-                              .toList();
-
-                          if (local.isEmpty) {
-                            localIsEmpty = true;
-                          }
-
-                          final localizacoesText = local
-                              .map((localizacao) => localizacao.local)
-                              .join('\n');
-
-                          if (local.isNotEmpty) {
-                            txtLocalizacoes.text = localizacoesText.toString();
-                            return txtLocalizacoes;
-                          } else {
-                            txtLocalizacoes.text = ' ';
-                            return txtLocalizacoes;
-                          }
-                        },
-                      ),
-                    ),
-                    const Spacer(),
-                    Row(
-                      children: [
-                        if (arsenalEstoque.cod != null &&
-                            arsenalEstoque.cod != 0)
-                          CustomPopupMenuWidget(
-                            items: [
-                              CustomPopupItemModel(
-                                text: 'Localizações',
-                                onTap: () => {
-                                  showDialog<(bool, String)>(
-                                    barrierDismissible: false,
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        content: LocalizacaoArsenalPageFrm(
-                                          localizacaoArsenal:
-                                              LocalizacaoArsenalModel(
-                                            cod: 0,
-                                            ativo: true,
-                                            arsenal: null,
-                                            codBarra: null,
-                                            codInstituicao: 0,
-                                            local: '',
-                                            ultimaAlteracao: null,
-                                            tstamp: '',
-                                            codEstoque: arsenalEstoque.cod,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ).then((result) {
-                                    if (result == null || !result.$1) return;
-                                    ToastUtils.showCustomToastSucess(
-                                      context,
-                                      result.$2,
-                                    );
-                                  }),
-                                },
-                              ),
-                              CustomPopupItemHistoryModel.getHistoryItem(
-                                child: HistoricoPage(
-                                  pk: arsenalEstoque.cod!,
-                                  termo: 'ARSENAL_ESTQOUE',
-                                ),
-                                context: context,
-                              ),
-                            ],
-                          ),
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: SaveButtonWidget(
-                            onPressed: () => {salvar()},
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: CleanButtonWidget(
-                            onPressed: () => {
-                              setState(() {
-                                arsenalEstoque = ArsenalEstoqueModel.empty();
-                              }),
-                            },
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: CancelButtonUnfilledWidget(
-                            onPressed: () =>
-                                {Navigator.of(context).pop((false, ''))},
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
+  Future openLocalizacaoArsenal(
+    BuildContext context,
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Localização Arsenal',
+      widget: LocalizacaoArsenalPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (p0) => onSaved(p0, chave),
+        localizacaoArsenal: LocalizacaoArsenalModel(
+          cod: 0,
+          ativo: true,
+          arsenal: null,
+          codBarra: null,
+          codInstituicao: 0,
+          local: '',
+          ultimaAlteracao: null,
+          tstamp: '',
+          codEstoque: arsenalEstoque.cod,
+        ),
       ),
     );
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void salvar() {
@@ -335,6 +327,6 @@ class _ArsenalEstoquePageFrmState extends State<ArsenalEstoquePageFrm> {
       return;
     }
 
-    cubit.save(arsenalEstoque, localIsEmpty, context);
+    cubit.save(arsenalEstoque, localIsEmpty, context, widget.onSaved);
   }
 }

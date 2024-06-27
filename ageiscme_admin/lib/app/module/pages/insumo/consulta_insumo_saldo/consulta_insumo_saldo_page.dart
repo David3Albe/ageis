@@ -19,7 +19,7 @@ import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
-import 'package:compartilhados/query_dialog/query_dialog_widget.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -159,7 +159,7 @@ class _ConsultaInsumoSaldoPageState extends State<ConsultaInsumoSaldoPage> {
                         );
                       }
 
-                      openModalRedirect(
+                      await openModalRedirect(
                         context,
                         obj.codDeposito,
                         obj.codInsumo,
@@ -180,112 +180,103 @@ class _ConsultaInsumoSaldoPageState extends State<ConsultaInsumoSaldoPage> {
       ErrorUtils.showErrorDialog(context, [state.error]);
 
   Future openModal(BuildContext context) async {
-    bool? value = await showDialog<bool>(
-      barrierDismissible: false,
+    bool confirm = await showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return FilterDialogWidget(
-          child: Column(
-            children: [
-              BlocBuilder<DepositoInsumoCubit, DepositoInsumoState>(
-                bloc: depositoInsumoBloc,
-                builder: (context, depositoState) {
-                  if (depositoState.loading) {
-                    return const LoadingWidget();
-                  }
-                  List<DepositoInsumoModel> depositos = depositoState.objs;
+      builder: (context) => FilterDialogWidget(
+        child: Column(
+          children: [
+            BlocBuilder<DepositoInsumoCubit, DepositoInsumoState>(
+              bloc: depositoInsumoBloc,
+              builder: (context, depositoState) {
+                if (depositoState.loading) {
+                  return const LoadingWidget();
+                }
+                List<DepositoInsumoModel> depositos = depositoState.objs;
 
-                  DepositoInsumoModel? deposito = depositos
+                DepositoInsumoModel? deposito = depositos
+                    .where(
+                      (element) => element.cod == filter.codDeposito,
+                    )
+                    .firstOrNull;
+                return DropDownSearchWidget<DepositoInsumoModel>(
+                  textFunction: (deposito) => deposito.GetNomeDepositoText(),
+                  initialValue: deposito,
+                  sourceList: depositos,
+                  onChanged: (value) => filter.codDeposito = value?.cod,
+                  placeholder: 'Depósito',
+                );
+              },
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            BlocBuilder<InsumoCubit, InsumoState>(
+              bloc: insumoBloc,
+              builder: (context, insumoState) {
+                if (insumoState.loading) {
+                  return const LoadingWidget();
+                }
+                List<InsumoModel> insumos = insumoState.objs;
+                InsumoModel? insumo = insumos
+                    .where(
+                      (element) => element.cod == filter.codInsumo,
+                    )
+                    .firstOrNull;
+                return DropDownSearchWidget<InsumoModel>(
+                  textFunction: (insumo) => insumo.GetNomeInsumoText(),
+                  initialValue: insumo,
+                  sourceList: insumos,
+                  onChanged: (value) => filter.codInsumo = value?.cod,
+                  placeholder: 'Insumo',
+                );
+              },
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            Builder(
+              builder: (context) {
+                return DropDownSearchWidget<InsumoSaldoStatusOption>(
+                  sourceList: InsumoSaldoStatusOption.situacaoOptions,
+                  initialValue: InsumoSaldoStatusOption.situacaoOptions
                       .where(
-                        (element) => element.cod == filter.codDeposito,
+                        (element) => element.cod == filter.situacao,
                       )
-                      .firstOrNull;
-                  return DropDownSearchWidget<DepositoInsumoModel>(
-                    textFunction: (deposito) => deposito.GetNomeDepositoText(),
-                    initialValue: deposito,
-                    sourceList: depositos,
-                    onChanged: (value) => filter.codDeposito = value?.cod,
-                    placeholder: 'Depósito',
-                  );
-                },
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<InsumoCubit, InsumoState>(
-                bloc: insumoBloc,
-                builder: (context, insumoState) {
-                  if (insumoState.loading) {
-                    return const LoadingWidget();
-                  }
-                  List<InsumoModel> insumos = insumoState.objs;
-                  InsumoModel? insumo = insumos
-                      .where(
-                        (element) => element.cod == filter.codInsumo,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<InsumoModel>(
-                    textFunction: (insumo) => insumo.GetNomeInsumoText(),
-                    initialValue: insumo,
-                    sourceList: insumos,
-                    onChanged: (value) => filter.codInsumo = value?.cod,
-                    placeholder: 'Insumo',
-                  );
-                },
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              Builder(
-                builder: (context) {
-                  return DropDownSearchWidget<InsumoSaldoStatusOption>(
-                    sourceList: InsumoSaldoStatusOption.situacaoOptions,
-                    initialValue: InsumoSaldoStatusOption.situacaoOptions
-                        .where(
-                          (element) => element.cod == filter.situacao,
-                        )
-                        .firstOrNull,
-                    placeholder: 'Situação',
-                    onChanged: (value) => filter.situacao = value?.cod,
-                  );
-                },
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              CustomCheckboxWidget(
-                checked: filter.semSaldo,
-                onClick: (value) => filter.semSaldo = value,
-                text: 'Sem Saldo',
-                align: MainAxisAlignment.start,
-              ),
-            ],
-          ),
-        );
-      },
+                      .firstOrNull,
+                  placeholder: 'Situação',
+                  onChanged: (value) => filter.situacao = value?.cod,
+                );
+              },
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            CustomCheckboxWidget(
+              checked: filter.semSaldo,
+              onClick: (value) => filter.semSaldo = value,
+              text: 'Sem Saldo',
+              align: MainAxisAlignment.start,
+            ),
+          ],
+        ),
+      ),
     );
-    if (value != true) return;
+    if (confirm != true) return;
     bloc.loadInsumoSaldo(filter);
   }
 
-  void openModalRedirect(
+  Future openModalRedirect(
     BuildContext context,
     int? codDeposito,
     int? codInsumo,
     String? lote,
-  ) {
-    showDialog<bool>(
-      barrierDismissible: true,
-      context: context,
-      barrierColor: Colors.white,
-      builder: (BuildContext context) {
-        return QueryDialogWidget(
-          child: ConsultaMovimentacaoEstoquePage(
-            filter: ConsultaMovimentacaoEstoqueFilter(
-              codDeposito: codDeposito,
-              codInsumo: codInsumo,
-              lote: lote,
-              finalDate: DateTime.now(),
-              startDate: DateTime.now().add(const Duration(days: -1)),
-              nroNotaFiscal: null,
-            ),
-          ),
-        );
-      },
+  ) async {
+    WindowsHelper.OpenDefaultWindows(
+      title: 'Consulta Movimentação Estoque',
+      widget: ConsultaMovimentacaoEstoquePage(
+        filter: ConsultaMovimentacaoEstoqueFilter(
+          codDeposito: codDeposito,
+          codInsumo: codInsumo,
+          lote: lote,
+          finalDate: DateTime.now(),
+          startDate: DateTime.now().add(const Duration(days: -1)),
+          nroNotaFiscal: null,
+        ),
+      ),
     );
   }
 }

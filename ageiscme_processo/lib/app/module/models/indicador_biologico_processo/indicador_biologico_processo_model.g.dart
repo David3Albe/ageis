@@ -10,7 +10,7 @@ _$IndicadorBiologicoProcessoModelImpl
     _$$IndicadorBiologicoProcessoModelImplFromJson(Map<String, dynamic> json) =>
         _$IndicadorBiologicoProcessoModelImpl(
           codBarraIndicador: json['codBarraIndicador'] as String?,
-          codServicoTipo: json['codServicoTipo'] as int?,
+          codServicoTipo: (json['codServicoTipo'] as num?)?.toInt(),
         );
 
 Map<String, dynamic> _$$IndicadorBiologicoProcessoModelImplToJson(

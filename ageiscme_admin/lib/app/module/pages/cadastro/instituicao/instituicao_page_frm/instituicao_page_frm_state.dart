@@ -1,6 +1,7 @@
 import 'package:ageiscme_data/services/instituicao/instituicao_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:flutter/material.dart';
 
 class InstituicaoPageFrmCubit extends Cubit<InstituicaoPageFrmState> {
   final InstituicaoService service;
@@ -12,12 +13,16 @@ class InstituicaoPageFrmCubit extends Cubit<InstituicaoPageFrmState> {
           InstituicaoPageFrmState(instituicao: instituicaoModel),
         );
 
-  void save(InstituicaoModel instituicao) async {
+  void save(
+    InstituicaoModel instituicao,
+    final void Function(String) onSaved,
+    BuildContext context,
+  ) async {
     try {
       (String message, InstituicaoModel instituicao)? result =
           await service.save(instituicao);
       if (result == null) return;
-
+      onSaved(result.$1);
       emit(
         InstituicaoPageFrmState(
           message: result.$1,

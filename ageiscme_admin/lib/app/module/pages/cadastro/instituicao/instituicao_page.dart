@@ -8,11 +8,12 @@ import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class InstituicaoPage extends StatefulWidget {
-  InstituicaoPage({super.key});
+  const InstituicaoPage({super.key});
 
   @override
   State<InstituicaoPage> createState() => _InstituicaoPageState();
@@ -101,20 +102,27 @@ class _InstituicaoPageState extends State<InstituicaoPage> {
     );
   }
 
-  void openModal(BuildContext context, InstituicaoModel instituicao) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return InstituicaoPageFrm(
-          instituicao: instituicao,
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadInstituicao();
-    });
+  Future openModal(BuildContext context, InstituicaoModel instituicao) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      theme: Theme.of(context),
+      title: 'Cadastro/Edição Instituição',
+      widget: InstituicaoPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        instituicao: instituicao,
+      ),
+    );
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadInstituicao();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void onError(InstituicaoPageState state) {

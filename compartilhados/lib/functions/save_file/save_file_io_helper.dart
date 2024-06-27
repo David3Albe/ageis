@@ -38,12 +38,16 @@ class SaveFileIo implements SaveFileInterface {
 
     final file = File(path);
     await file.writeAsBytes(bytes);
-    bool? open = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Abrir arquivo?',
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message: 'Abrir arquivo?',
+      onCancel: () => {},
+      onConfirm: () => onConfirm(openAfterSave, path),
     );
-    if (openAfterSave && open) {
-      await launchUrl(Uri.parse('file:///$path'));
-    }
+  }
+
+  Future onConfirm(bool openAfterSave, String path) async {
+    if (!openAfterSave) return;
+    await launchUrl(Uri.parse('file:///$path'));
   }
 }

@@ -1,4 +1,3 @@
-import 'package:ageiscme_admin/app/module/widgets/custom_navigation_bar/icon_expandable_navigation_bar_widget.dart';
 import 'package:ageiscme_admin/app/module/widgets/custom_navigation_bar/item_menu_widget.dart';
 import 'package:ageiscme_admin/app/module/widgets/custom_navigation_bar/user_avatar_widget.dart';
 import 'package:ageiscme_models/models/item_menu/item_menu_model.dart';
@@ -37,7 +36,7 @@ class MenuItemsWidget extends StatelessWidget {
             ),
           ),
         ),
-        IconExpandableNavigationBarWidget(expanded, toogleExpand),
+        // IconExpandableNavigationBarWidget(expanded, toogleExpand),
       ],
     );
   }

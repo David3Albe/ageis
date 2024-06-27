@@ -11,7 +11,6 @@ import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/response_dto/alterar_senha_padrao/alterar_senha_padrao_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/list_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/list_field/list_field_widget.dart';
@@ -36,16 +35,22 @@ class UsuarioPageFrm extends StatefulWidget {
   const UsuarioPageFrm({
     Key? key,
     required this.usuario,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final UsuarioModel usuario;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<UsuarioPageFrm> createState() => _UsuarioPageFrmState(usuario: usuario);
 }
 
 class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
-  _UsuarioPageFrmState({required this.usuario});
+  _UsuarioPageFrmState({
+    required this.usuario,
+  });
   late String titulo;
   late final PerfilAcessoCubit perfilAcessoCubit;
   UsuarioModel usuario;
@@ -216,314 +221,346 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
         }
       },
       builder: (context, state) {
-        return AlertDialog(
-          contentPadding: const EdgeInsets.all(8.0),
-          titlePadding: const EdgeInsets.all(8.0),
-          actionsPadding: const EdgeInsets.all(8.0),
-          title: Row(
-            children: [
-              Expanded(
-                child: TitleWidget(
-                  text: titulo,
+        return Column(
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: TitleWidget(
+                    text: titulo,
+                  ),
                 ),
-              ),
-              const Spacer(),
-              CloseButtonWidget(
-                onPressed: () => Navigator.of(context).pop((false, '')),
-              ),
-            ],
-          ),
-          content: Container(
-            constraints: BoxConstraints(
-              minWidth: size.width * .5,
-              minHeight: size.height * .5,
-              maxHeight: size.height * .8,
+              ],
             ),
-            child: SingleChildScrollView(
-              controller: scroll,
-              padding: const EdgeInsets.only(right: 14),
-              child: Column(
+            Expanded(
+              child: Row(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 3.0),
-                    child: txtNome,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 3.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 6,
-                          child: txtLogin,
-                        ),
-                        const Spacer(),
-                        Expanded(
-                          flex: 6,
-                          child: txtSenha,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 3.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 6,
-                          child: txtRg,
-                        ),
-                        const Spacer(),
-                        Expanded(
-                          flex: 6,
-                          child: txtCodBarra,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          children: [
-                            const Padding(padding: EdgeInsets.only(top: 5.0)),
-                            CustomCheckboxWidget(
-                              checked: usuario.ativo,
-                              onClick: (value) => usuario.ativo = value,
-                              text: 'Ativo',
-                              align: MainAxisAlignment.start,
-                            ),
-                            // const Padding(padding: EdgeInsets.only(top: 5.0)),
-                            // CustomCheckboxWidget(
-                            //   checked: usuario.controleGestao,
-                            //   onClick: (value) =>
-                            //       usuario.controleGestao = value,
-                            //   text: 'Controlar Acesso Operacional',
-                            //   align: MainAxisAlignment.start,
-                            // ),
-                            const Padding(padding: EdgeInsets.only(top: 5.0)),
-                            CustomCheckboxWidget(
-                              checked: usuario.colaborador,
-                              onClick: (value) => usuario.colaborador = value,
-                              text:
-                                  'Colaborador - Validar EPI ao Registrar Acesso',
-                              align: MainAxisAlignment.start,
-                            ),
-                          ],
-                        ),
+                  Expanded(
+                    child: Container(
+                      constraints: BoxConstraints(
+                        minWidth: size.width * .5,
+                        minHeight: size.height * .5,
+                        maxHeight: size.height * .8,
                       ),
-                      Expanded(
+                      child: SingleChildScrollView(
+                        controller: scroll,
+                        padding: const EdgeInsets.only(right: 14),
                         child: Column(
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: ImageMemoryDisplayWidget(image: image),
+                              padding: const EdgeInsets.only(top: 3.0),
+                              child: txtNome,
                             ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 3.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 6,
+                                    child: txtLogin,
+                                  ),
+                                  const Spacer(),
+                                  Expanded(
+                                    flex: 6,
+                                    child: txtSenha,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 3.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 6,
+                                    child: txtRg,
+                                  ),
+                                  const Spacer(),
+                                  Expanded(
+                                    flex: 6,
+                                    child: txtCodBarra,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 5.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked: usuario.ativo,
+                                        onClick: (value) =>
+                                            usuario.ativo = value,
+                                        text: 'Ativo',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      // const Padding(padding: EdgeInsets.only(top: 5.0)),
+                                      // CustomCheckboxWidget(
+                                      //   checked: usuario.controleGestao,
+                                      //   onClick: (value) =>
+                                      //       usuario.controleGestao = value,
+                                      //   text: 'Controlar Acesso Operacional',
+                                      //   align: MainAxisAlignment.start,
+                                      // ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 5.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked: usuario.colaborador,
+                                        onClick: (value) =>
+                                            usuario.colaborador = value,
+                                        text:
+                                            'Colaborador - Validar EPI ao Registrar Acesso',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding:
+                                            const EdgeInsets.only(top: 5.0),
+                                        child: ImageMemoryDisplayWidget(
+                                          image: image,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 3.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 6,
+                                    child: txtNomeEmpresa,
+                                  ),
+                                  const Spacer(),
+                                  Expanded(
+                                    flex: 6,
+                                    child: txtDocClasse,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 3.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      'Perfis do Usuário',
+                                      style: Fontes.getRoboto(),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 25.0),
+                                  Expanded(
+                                    child: Text(
+                                      'Perfis Disponíveis',
+                                      style: Fontes.getRoboto(),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: ListButtonWidget(
+                                      text: 'Remover',
+                                      icon: Icons.arrow_forward,
+                                      onPressed: () {
+                                        if (perflAcessoRemover != null) {
+                                          setState(() {
+                                            if (usuario.usuariosPerfis !=
+                                                null) {
+                                              usuario.usuariosPerfis!
+                                                  .removeWhere(
+                                                (element) =>
+                                                    element.codPerfil ==
+                                                    perflAcessoRemover!.cod,
+                                              );
+                                            }
+                                          });
+                                        } else {
+                                          ToastUtils.showCustomToastError(
+                                            context,
+                                            'Nenhum Perfil de Acesso selecionado',
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 25.0),
+                                  Expanded(
+                                    child: ListButtonWidget(
+                                      text: 'Adicionar',
+                                      icon: Icons.arrow_back,
+                                      onPressed: () {
+                                        if (perfilAcessoAdicionar != null) {
+                                          setState(() {
+                                            if (usuario.usuariosPerfis ==
+                                                null) {
+                                              usuario.usuariosPerfis = [];
+                                            }
+                                            UsuarioPerfilModel usuarioPerfil =
+                                                UsuarioPerfilModel.empty();
+                                            usuarioPerfil.codPerfil =
+                                                perfilAcessoAdicionar!.cod;
+                                            usuario.usuariosPerfis!
+                                                .add(usuarioPerfil);
+
+                                            perfilAcessoAdicionar = null;
+                                          });
+                                        } else {
+                                          ToastUtils.showCustomToastError(
+                                            context,
+                                            'Nenhum Perfil de Acesso selecionado',
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: BlocBuilder<PerfilAcessoCubit,
+                                        List<PerfilAcessoModel>>(
+                                      bloc: perfilAcessoCubit,
+                                      builder: (context, perfisAcessos) {
+                                        List<PerfilAcessoModel>
+                                            perfisAcessosAdicionado = [];
+
+                                        if (usuario.usuariosPerfis != null) {
+                                          for (final usuarioPerfil
+                                              in usuario.usuariosPerfis!) {
+                                            final codPerfil =
+                                                usuarioPerfil.codPerfil;
+
+                                            if (perfisAcessos.isNotEmpty) {
+                                              final perfilAcessoAdicionado =
+                                                  perfisAcessos
+                                                      .where(
+                                                        (perfilAcesso) =>
+                                                            perfilAcesso.cod ==
+                                                            codPerfil,
+                                                      )
+                                                      .firstOrNull;
+                                              if (perfilAcessoAdicionado !=
+                                                  null) {
+                                                perfisAcessosAdicionado.add(
+                                                  perfilAcessoAdicionado,
+                                                );
+                                              }
+                                            }
+                                          }
+                                        }
+
+                                        perfisAcessosAdicionado.sort(
+                                          (a, b) => a.descricao!
+                                              .compareTo(b.descricao!),
+                                        );
+
+                                        return ListFieldWidget<
+                                            PerfilAcessoModel>(
+                                          sourceList: perfisAcessosAdicionado,
+                                          removeButton: false,
+                                          onItemSelected:
+                                              (selectedPerfilusuario) {
+                                            setState(() {
+                                              perflAcessoRemover =
+                                                  selectedPerfilusuario;
+                                            });
+                                          },
+                                          itemText: (perfilUsuario) {
+                                            return perfilUsuario.descricao!;
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 25.0),
+                                  Expanded(
+                                    child: BlocBuilder<PerfilAcessoCubit,
+                                        List<PerfilAcessoModel>>(
+                                      bloc: perfilAcessoCubit,
+                                      builder: (context, perfisAcessos) {
+                                        if (usuario.usuariosPerfis == null) {
+                                          usuario.usuariosPerfis = [];
+                                        }
+
+                                        List<PerfilAcessoModel>
+                                            perfisAcessosDisponiveis =
+                                            perfisAcessos
+                                                .where(
+                                                  (perfilAcesso) => !usuario
+                                                      .usuariosPerfis!
+                                                      .any(
+                                                    (usuarioPerfil) =>
+                                                        usuarioPerfil
+                                                            .codPerfil ==
+                                                        perfilAcesso.cod,
+                                                  ),
+                                                )
+                                                .toList();
+
+                                        perfisAcessosDisponiveis.sort(
+                                          (a, b) => a.descricao!
+                                              .compareTo(b.descricao!),
+                                        );
+
+                                        return ListFieldWidget<
+                                            PerfilAcessoModel>(
+                                          sourceList: perfisAcessosDisponiveis
+                                              .where(
+                                                (element) =>
+                                                    element.ativo == true,
+                                              )
+                                              .toList(),
+                                          removeButton: false,
+                                          onItemSelected:
+                                              (selectedPerfilUsuario) {
+                                            setState(() {
+                                              perfilAcessoAdicionar =
+                                                  selectedPerfilUsuario;
+                                            });
+                                          },
+                                          itemText: (perfilUsuario) {
+                                            return perfilUsuario.descricao!;
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const Padding(padding: EdgeInsets.only(top: 24)),
                           ],
                         ),
                       ),
-                    ],
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 3.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          flex: 6,
-                          child: txtNomeEmpresa,
-                        ),
-                        const Spacer(),
-                        Expanded(
-                          flex: 6,
-                          child: txtDocClasse,
-                        ),
-                      ],
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 3.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'Perfis do Usuário',
-                            style: Fontes.getRoboto(),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        const SizedBox(width: 25.0),
-                        Expanded(
-                          child: Text(
-                            'Perfis Disponíveis',
-                            style: Fontes.getRoboto(),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: ListButtonWidget(
-                            text: 'Remover',
-                            icon: Icons.arrow_forward,
-                            onPressed: () {
-                              if (perflAcessoRemover != null) {
-                                setState(() {
-                                  if (usuario.usuariosPerfis != null) {
-                                    usuario.usuariosPerfis!.removeWhere(
-                                      (element) =>
-                                          element.codPerfil ==
-                                          perflAcessoRemover!.cod,
-                                    );
-                                  }
-                                });
-                              } else {
-                                ToastUtils.showCustomToastError(
-                                  context,
-                                  'Nenhum Perfil de Acesso selecionado',
-                                );
-                              }
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 25.0),
-                        Expanded(
-                          child: ListButtonWidget(
-                            text: 'Adicionar',
-                            icon: Icons.arrow_back,
-                            onPressed: () {
-                              if (perfilAcessoAdicionar != null) {
-                                setState(() {
-                                  if (usuario.usuariosPerfis == null) {
-                                    usuario.usuariosPerfis = [];
-                                  }
-                                  UsuarioPerfilModel usuarioPerfil =
-                                      UsuarioPerfilModel.empty();
-                                  usuarioPerfil.codPerfil =
-                                      perfilAcessoAdicionar!.cod;
-                                  usuario.usuariosPerfis!.add(usuarioPerfil);
-
-                                  perfilAcessoAdicionar = null;
-                                });
-                              } else {
-                                ToastUtils.showCustomToastError(
-                                  context,
-                                  'Nenhum Perfil de Acesso selecionado',
-                                );
-                              }
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: BlocBuilder<PerfilAcessoCubit,
-                              List<PerfilAcessoModel>>(
-                            bloc: perfilAcessoCubit,
-                            builder: (context, perfisAcessos) {
-                              List<PerfilAcessoModel> perfisAcessosAdicionado =
-                                  [];
-
-                              if (usuario.usuariosPerfis != null) {
-                                for (final usuarioPerfil
-                                    in usuario.usuariosPerfis!) {
-                                  final codPerfil = usuarioPerfil.codPerfil;
-
-                                  if (perfisAcessos.isNotEmpty) {
-                                    final perfilAcessoAdicionado = perfisAcessos
-                                        .where(
-                                          (perfilAcesso) =>
-                                              perfilAcesso.cod == codPerfil,
-                                        )
-                                        .firstOrNull;
-                                    if (perfilAcessoAdicionado != null) {
-                                      perfisAcessosAdicionado
-                                          .add(perfilAcessoAdicionado);
-                                    }
-                                  }
-                                }
-                              }
-
-                              perfisAcessosAdicionado.sort(
-                                (a, b) => a.descricao!.compareTo(b.descricao!),
-                              );
-
-                              return ListFieldWidget<PerfilAcessoModel>(
-                                sourceList: perfisAcessosAdicionado,
-                                removeButton: false,
-                                onItemSelected: (selectedPerfilusuario) {
-                                  setState(() {
-                                    perflAcessoRemover = selectedPerfilusuario;
-                                  });
-                                },
-                                itemText: (perfilUsuario) {
-                                  return perfilUsuario.descricao!;
-                                },
-                              );
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 25.0),
-                        Expanded(
-                          child: BlocBuilder<PerfilAcessoCubit,
-                              List<PerfilAcessoModel>>(
-                            bloc: perfilAcessoCubit,
-                            builder: (context, perfisAcessos) {
-                              if (usuario.usuariosPerfis == null) {
-                                usuario.usuariosPerfis = [];
-                              }
-
-                              List<PerfilAcessoModel> perfisAcessosDisponiveis =
-                                  perfisAcessos
-                                      .where(
-                                        (perfilAcesso) =>
-                                            !usuario.usuariosPerfis!.any(
-                                          (usuarioPerfil) =>
-                                              usuarioPerfil.codPerfil ==
-                                              perfilAcesso.cod,
-                                        ),
-                                      )
-                                      .toList();
-
-                              perfisAcessosDisponiveis.sort(
-                                (a, b) => a.descricao!.compareTo(b.descricao!),
-                              );
-
-                              return ListFieldWidget<PerfilAcessoModel>(
-                                sourceList: perfisAcessosDisponiveis
-                                    .where((element) => element.ativo == true)
-                                    .toList(),
-                                removeButton: false,
-                                onItemSelected: (selectedPerfilUsuario) {
-                                  setState(() {
-                                    perfilAcessoAdicionar =
-                                        selectedPerfilUsuario;
-                                  });
-                                },
-                                itemText: (perfilUsuario) {
-                                  return perfilUsuario.descricao!;
-                                },
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const Padding(padding: EdgeInsets.only(top: 24)),
                 ],
               ),
             ),
-          ),
-          actions: [
             Row(
               children: [
                 CustomPopupMenuWidget(
@@ -577,7 +614,7 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: CancelButtonUnfilledWidget(
-                    onPressed: () => {Navigator.of(context).pop((false, ''))},
+                    onPressed: widget.onCancel,
                   ),
                 ),
               ],
@@ -612,11 +649,15 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
       );
       return;
     }
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a alteração da senha do Usuário\n${usuario.cod} - ${usuario.nome} para a senha Padrão 123456?',
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a alteração da senha do Usuário\n${usuario.cod} - ${usuario.nome} para a senha Padrão 123456?',
+      onConfirm: onConfirmResetPasssword,
     );
-    if (!confirmacao) return;
+  }
+
+  void onConfirmResetPasssword() async {
     (String, AlterarSenhaPadraoResponseDTO)? result =
         await AlterarSenhaPadraoService().changePassword(
       AlterarSenhaPadraoDTO(
@@ -641,15 +682,15 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
   void salvar() {
     bool nomeValid = txtNome.valid;
     bool loginValid = txtLogin.valid;
-    bool rgValid =  txtRg.valid;
+    bool rgValid = txtRg.valid;
     bool docClasseValid = txtDocClasse.valid;
     bool senhaValid = txtSenha.valid;
     bool empresaValid = txtNomeEmpresa.valid;
     if (!nomeValid) {
       scroll.jumpTo(0);
-    }else if(!loginValid){
+    } else if (!loginValid) {
       scroll.jumpTo(40);
-    }else if(!rgValid){
+    } else if (!rgValid) {
       scroll.jumpTo(90);
     }
 
@@ -676,6 +717,6 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
       registrarUsuariosPerfis.add(usuarioPerfil);
     }
     usuario.usuariosPerfis = registrarUsuariosPerfis;
-    cubit.save(usuario);
+    cubit.save(usuario, widget.onSaved);
   }
 }

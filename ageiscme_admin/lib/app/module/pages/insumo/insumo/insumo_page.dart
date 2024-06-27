@@ -10,11 +10,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class InsumoPage extends StatefulWidget {
-  InsumoPage({super.key});
+  const InsumoPage({super.key});
 
   @override
   State<InsumoPage> createState() => _InsumoPageState();
@@ -108,28 +109,38 @@ class _InsumoPageState extends State<InsumoPage> {
     );
   }
 
-  void openModal(BuildContext context, InsumoModel insumo) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return InsumoPageFrm(
-          insumo: insumo,
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadInsumo();
-    });
+  Future openModal(BuildContext context, InsumoModel insumo) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Insumos',
+      widget: InsumoPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        insumo: insumo,
+      ),
+    );
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadInsumo();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void delete(BuildContext context, InsumoModel insumo) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Insumo\n${insumo.cod} - ${insumo.nome}',
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message: 'Confirma a remoção do Insumo\n${insumo.cod} - ${insumo.nome}',
+      onConfirm: () => confirmDelete(insumo),
     );
-    if (confirmacao) bloc.delete(insumo);
+  }
+
+  void confirmDelete(InsumoModel insumo) {
+    bloc.delete(insumo);
   }
 
   void deleted(InsumoPageState state) {

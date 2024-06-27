@@ -10,11 +10,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class UnidadeMedidaPage extends StatefulWidget {
-  UnidadeMedidaPage({super.key});
+  const UnidadeMedidaPage({super.key});
 
   @override
   State<UnidadeMedidaPage> createState() => _UnidadeMedidaPageState();
@@ -89,30 +90,42 @@ class _UnidadeMedidaPageState extends State<UnidadeMedidaPage> {
     );
   }
 
-  void openModal(BuildContext context, UnidadeMedidaModel unidadeMedida) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: UnidadeMedidaPageFrm(
-            unidadeMedida: unidadeMedida,
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadUnidadeMedida();
-    });
+  Future openModal(
+    BuildContext context,
+    UnidadeMedidaModel unidadeMedida,
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Unidade Medida',
+      widget: UnidadeMedidaPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        unidadeMedida: unidadeMedida,
+      ),
+    );
   }
 
-  void delete(BuildContext context, UnidadeMedidaModel unidadeMedida) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção da Unidade de Medida\n${unidadeMedida.cod} - ${unidadeMedida.nome}',
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadUnidadeMedida();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
+  }
+
+  void delete(BuildContext context, UnidadeMedidaModel unidadeMedida) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção da Unidade de Medida\n${unidadeMedida.cod} - ${unidadeMedida.nome}',
+      onConfirm: () => confirmDelete(unidadeMedida),
     );
-    if (confirmacao) bloc.delete(unidadeMedida);
+  }
+
+  void confirmDelete(UnidadeMedidaModel unidadeMedida) {
+    bloc.delete(unidadeMedida);
   }
 
   void deleted(UnidadeMedidaPageState state) {

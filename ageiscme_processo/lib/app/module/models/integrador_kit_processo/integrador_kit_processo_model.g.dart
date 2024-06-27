@@ -11,7 +11,7 @@ _$IntegradorKitProcessoModelImpl _$$IntegradorKitProcessoModelImplFromJson(
     _$IntegradorKitProcessoModelImpl(
       solicitouIntegradorKit: json['solicitouIntegradorKit'] as bool?,
       utilizouIntegradorKit: json['utilizouIntegradorKit'] as bool?,
-      codKit: json['codKit'] as int?,
+      codKit: (json['codKit'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$IntegradorKitProcessoModelImplToJson(

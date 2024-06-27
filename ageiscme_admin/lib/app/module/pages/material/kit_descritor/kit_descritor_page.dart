@@ -18,11 +18,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class KitDescritorPage extends StatefulWidget {
-  KitDescritorPage({super.key});
+  const KitDescritorPage({super.key});
 
   @override
   State<KitDescritorPage> createState() => _KitDescritorPageState();
@@ -68,7 +69,7 @@ class _KitDescritorPageState extends State<KitDescritorPage> {
     super.initState();
   }
 
-  Future carregar()async{
+  Future carregar() async {
     await bloc.getScreenData(cubitFilter.state);
   }
 
@@ -168,7 +169,10 @@ class _KitDescritorPageState extends State<KitDescritorPage> {
     );
   }
 
-  void openModal(BuildContext context, KitDescritorModel kitDescritor) async {
+  Future openModal(
+    BuildContext context,
+    KitDescritorModel kitDescritor,
+  ) async {
     LoadingController loading = LoadingController(context: context);
     loadProcessoTipo();
     loadItemDescritor();
@@ -185,32 +189,43 @@ class _KitDescritorPageState extends State<KitDescritorPage> {
       }
     }
     loading.close(context, mounted);
-
-    (bool, String)? result = await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return KitDescritorPageFrm(
-          processoTipoCubit: processoTipoCubit,
-          itemDescritorCubit: itemDescritorCubit,
-          kitDescritor: kit!,
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Descritor de Kit',
+      widget: KitDescritorPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        processoTipoCubit: processoTipoCubit,
+        itemDescritorCubit: itemDescritorCubit,
+        kitDescritor: kit,
+      ),
     );
-    if (result == null || !result.$1) return;
-    ToastUtils.showCustomToastSucess(context, result.$2);
+  }
+
+  Future onSaved(String message, int chave) async {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
     await carregar();
   }
 
-  void delete(BuildContext context, KitDescritorModel kitDescritor) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Descritor de Kits\n${kitDescritor.cod} - ${kitDescritor.nome}',
-    );
-    if (confirmacao) bloc.delete(kitDescritor);
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
-  Future deleted(KitDescritorPageState state) async{
+  void delete(BuildContext context, KitDescritorModel kitDescritor) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Descritor de Kits\n${kitDescritor.cod} - ${kitDescritor.nome}',
+      onConfirm: () => confirmDelete(kitDescritor),
+    );
+  }
+
+  void confirmDelete(KitDescritorModel kitDescritor) async {
+    bloc.delete(kitDescritor);
+  }
+
+  Future deleted(KitDescritorPageState state) async {
     ToastUtils.showCustomToastSucess(
       context,
       state.message,

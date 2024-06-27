@@ -11,6 +11,7 @@ import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.da
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -40,23 +41,33 @@ class GridWidget extends StatelessWidget {
     BuildContext context,
     SolicitacaoMaterialSearchItemResponseDTO obj,
   ) async {
+    late int chave;
     FormCubit formCubit = context.read<FormCubit>();
-    await showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return BlocProvider<FormCubit>.value(
-          value: formCubit,
-          child: FormWidget(cod: obj.cod),
-        );
-      },
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Solicitação Material Expedição',
+      widget: BlocProvider<FormCubit>.value(
+        value: formCubit,
+        child: FormWidget(
+          cod: obj.cod,
+          onCancel: () => onCancel(chave),
+          onSaved: (p0) => onSaved(p0, chave, context),
+        ),
+      ),
     );
+  }
+
+  Future onSaved(String message, int chave, BuildContext context) async {
+    WindowsHelper.RemoverWidget(chave);
     SearchCubit searchCubit = context.read<SearchCubit>();
     FilterCubit filterCubit = context.read<FilterCubit>();
     SolicitacaoMaterialSearchDTO dto = filterCubit.state.dto;
     LoadingController loading = LoadingController(context: context);
     await searchCubit.search(dto);
     loading.closeDefault();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   List<CustomDataColumn> getColunas(BuildContext context) {

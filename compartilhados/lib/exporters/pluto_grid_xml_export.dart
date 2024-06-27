@@ -37,10 +37,13 @@ class PlutoGridXmlExport {
         .toList();
 
     for (PlutoColumn column in columns) {
-      columnTitleToReplace[column.field] = column.title
-          .replaceAll(' ', '.')
-          .replaceAll('/', '.')
-          .replaceAll('..', '.');
+      columnTitleToReplace[column.field] = '_' +
+          column.title
+              .replaceAll(' ', '.')
+              .replaceAll('/', '.')
+              .replaceAll('(', '.')
+              .replaceAll(')', '.')
+              .replaceAll('.', '');
     }
 
     builder.processing('xml', 'version="1.0"');
@@ -70,7 +73,8 @@ class PlutoGridXmlExport {
   }
 
   Future<String> _getXmlString() {
-    return Future.value(_getXmlBuilder().buildDocument().toXmlString());
+    String xml = _getXmlBuilder().buildDocument().toXmlString();
+    return Future.value(xml);
   }
 
   Future _export() async {

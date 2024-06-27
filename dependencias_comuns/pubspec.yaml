@@ -49,6 +49,7 @@ dependencies:
   reactive_color_picker: ^2.0.1
   dropdown_search: ^5.0.6
   easy_debounce: ^2.0.3
+  resizable_widget: ^1.0.5
   
 dev_dependencies:
   flutter_test:

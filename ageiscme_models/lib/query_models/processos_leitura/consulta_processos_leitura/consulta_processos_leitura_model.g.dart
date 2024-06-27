@@ -55,6 +55,7 @@ _$ConsultaProcessosLeituraModelImpl
           restricaoKit: json['restricaoKit'] as String?,
           kitLiberadoIncompleto: json['kitLiberadoIncompleto'] as String?,
           codRegistroProcesso: (json['codRegistroProcesso'] as num?)?.toInt(),
+          loteEquipamento: json['loteEquipamento'] as String?,
           cancelada: json['cancelada'] as bool?,
         );
 
@@ -102,5 +103,6 @@ Map<String, dynamic> _$$ConsultaProcessosLeituraModelImplToJson(
       'restricaoKit': instance.restricaoKit,
       'kitLiberadoIncompleto': instance.kitLiberadoIncompleto,
       'codRegistroProcesso': instance.codRegistroProcesso,
+      'loteEquipamento': instance.loteEquipamento,
       'cancelada': instance.cancelada,
     };

@@ -93,6 +93,16 @@ abstract class ItemProcessoModel with _$ItemProcessoModel {
         .firstOrNull;
   }
 
+  
+  ProcessoEtapaModel? getEtapa(
+    ProcessoLeituraMontagemModel processoLeitura,
+  ) {
+    if (processoLeitura.leituraAtual.etapas == null) return null;
+    return processoLeitura.leituraAtual.etapas
+        ?.where((element) => element.cod == codDescritor)
+        .firstOrNull;
+  }
+
   ProprietarioModel? getProprietario(
     ProcessoLeituraMontagemModel processoLeitura,
   ) {

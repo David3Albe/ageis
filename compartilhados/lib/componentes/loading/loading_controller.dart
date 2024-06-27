@@ -10,6 +10,7 @@ class LoadingController {
   Color? barrierColor;
   FocusNode _textNode = FocusNode();
   late final ColetoresHelper coletorHelper = ColetoresHelper();
+  OverlayEntry? overlay;
 
   LoadingController({
     required this.context,
@@ -25,27 +26,33 @@ class LoadingController {
     if (!mounted) return;
     _closed = true;
     _showed = false;
-    Navigator.of(context ?? this.context, rootNavigator: true).pop();
+    overlay?.remove();
+    overlay = null;
   }
 
-  Future<void> show(BuildContext? context) {
+  void show(BuildContext? context) {
     _closed = false;
     _showed = true;
-    return showDialog(
-      barrierColor: barrierColor,
-      barrierDismissible: false,
-      context: context ?? this.context,
-      builder: (_) {
-        return RawKeyboardListener(
+    Size size = MediaQuery.of(context ?? this.context).size;
+
+    late OverlayEntry overlayEntry;
+    overlayEntry = OverlayEntry(
+      builder: (context) => Container(
+        color: Colors.black.withOpacity(0.2),
+        width: size.width,
+        height: size.height,
+        child: RawKeyboardListener(
           onKey: coletorHelper.handleKey,
           autofocus: true,
           focusNode: _textNode,
           child: const Center(
             child: LoadingWidget(),
           ),
-        );
-      },
+        ),
+      ),
     );
+    Overlay.of(context ?? this.context).insert(overlayEntry);
+    overlay = overlayEntry;
   }
 
   void setHandleKeyFunction(dynamic Function(String) onEnter) {

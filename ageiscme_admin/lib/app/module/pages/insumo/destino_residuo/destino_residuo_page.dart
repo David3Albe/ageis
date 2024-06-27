@@ -10,11 +10,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class DestinoResiduoPage extends StatefulWidget {
-  DestinoResiduoPage({super.key});
+  const DestinoResiduoPage({super.key});
 
   @override
   State<DestinoResiduoPage> createState() => _DestinoResiduoPageState();
@@ -95,30 +96,42 @@ class _DestinoResiduoPageState extends State<DestinoResiduoPage> {
     );
   }
 
-  void openModal(BuildContext context, DestinoResiduoModel destinoResiduo) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: DestinoResiduoPageFrm(
-            destinoResiduo: destinoResiduo,
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadDestinoResiduo();
-    });
+  Future openModal(
+    BuildContext context,
+    DestinoResiduoModel destinoResiduo,
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Destino de Resíduo',
+      widget: DestinoResiduoPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        destinoResiduo: destinoResiduo,
+      ),
+    );
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadDestinoResiduo();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void delete(BuildContext context, DestinoResiduoModel destinoResiduo) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Destino de resíduo\n${destinoResiduo.cod} - ${destinoResiduo.nome}',
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Destino de resíduo\n${destinoResiduo.cod} - ${destinoResiduo.nome}',
+      onConfirm: () => confirmDelete(destinoResiduo),
     );
-    if (confirmacao) bloc.delete(destinoResiduo);
+  }
+
+  void confirmDelete(DestinoResiduoModel destinoResiduo) async {
+    bloc.delete(destinoResiduo);
   }
 
   void deleted(DestinoResiduoPageState state) {

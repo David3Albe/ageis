@@ -1,7 +1,6 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/processo_etapa/processo_etapa_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/anormalidade/frm/anormalidade_frm_page.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/consulta_processos_leitura/consulta_processos_leitura_page_state.dart';
-import 'package:ageiscme_admin/app/module/services/custom_navigation_bar_service.dart';
 import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
 import 'package:ageiscme_data/query_services/anormalidade/consulta_anormalidade_service.dart';
 import 'package:ageiscme_data/services/anormalidade_tipo/anormalidade_tipo_service.dart';
@@ -26,6 +25,7 @@ import 'package:compartilhados/componentes/grids/pluto_grid_api/response/pluto_g
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/modular_export.dart';
 import 'package:flutter/material.dart';
@@ -151,8 +151,8 @@ class _ConsultaAnormalidadePageState extends State<ConsultaAnormalidadePage> {
               orderDescendingFieldColumn: 'dataHora',
               onDetail: (event, objeto) {
                 openModalAnormalidade(
-                  context: context,
-                  codAnormalidade: objeto.cod!,
+                  context,
+                  objeto.cod!,
                 );
               },
               fromJson: (objectsSerialized) => objectsSerialized
@@ -170,193 +170,194 @@ class _ConsultaAnormalidadePageState extends State<ConsultaAnormalidadePage> {
     );
   }
 
-  Future openModalAnormalidade({
-    required BuildContext context,
-    required int codAnormalidade,
-  }) async {
-    bool? alterou = await showDialog<bool>(
-      barrierDismissible: true,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: MultiBlocProvider(
-            providers: [
-              BlocProvider.value(
-                value: processoEtapaBloc,
-              ),
-            ],
-            child: AnormalidadeFrmPage(cod: codAnormalidade),
+  Future openModalAnormalidade(
+    BuildContext context,
+    int cod,
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Anormalidade',
+      widget: MultiBlocProvider(
+        providers: [
+          BlocProvider.value(
+            value: processoEtapaBloc,
           ),
-        );
-      },
+        ],
+        child: AnormalidadeFrmPage(
+          onCancel: () => onCancel(chave),
+          onSaved: () => onSaved(chave),
+          cod: cod,
+        ),
+      ),
     );
+  }
 
-    if (alterou != true) return;
+  void onSaved(int chave) {
+    WindowsHelper.RemoverWidget(chave);
     consultar();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void onError(ConsultaProcessosLeituraPageState state) =>
       ErrorUtils.showErrorDialog(context, [state.error]);
 
   Future openModal(BuildContext context) async {
-    loadEtapaCubit();
-    bool? result = await showDialog<bool>(
-      barrierDismissible: false,
+    bool confirm = await showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return FilterDialogWidget(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: DatePickerWidget(
-                        placeholder: 'Data Inicio',
-                        onDateSelected: (value) => filter.startDate = value,
-                        initialValue: filter.startDate,
-                      ),
+      builder: (context) => FilterDialogWidget(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: DatePickerWidget(
+                      placeholder: 'Data Inicio',
+                      onDateSelected: (value) => filter.startDate = value,
+                      initialValue: filter.startDate,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 40),
-                    ),
-                    Expanded(
-                      child: TimePickerWidget(
-                        placeholder: 'Hora Início',
-                        initialValue: filter.startTime == null
-                            ? null
-                            : TimeOfDay(
-                                hour: filter.startTime!.hour,
-                                minute: filter.startTime!.minute,
-                              ),
-                        onTimeSelected: (selectedTime) {
-                          if (selectedTime == null) {
-                            filter.startTime = null;
-                            return;
-                          }
-                          filter.startTime = DateTime(
-                            DateTime.now().year,
-                            DateTime.now().month,
-                            DateTime.now().day,
-                            selectedTime.hour,
-                            selectedTime.minute,
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const Padding(padding: EdgeInsets.only(top: 2)),
-                Row(
-                  children: [
-                    Expanded(
-                      child: DatePickerWidget(
-                        placeholder: 'Data Término',
-                        onDateSelected: (value) => filter.finalDate = value,
-                        initialValue: filter.finalDate,
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 40),
-                    ),
-                    Expanded(
-                      child: TimePickerWidget(
-                        placeholder: 'Hora Fim',
-                        initialValue: filter.finalTime == null
-                            ? null
-                            : TimeOfDay(
-                                hour: filter.finalTime!.hour,
-                                minute: filter.finalTime!.minute,
-                              ),
-                        onTimeSelected: (selectedTime) {
-                          if (selectedTime == null) {
-                            filter.finalTime = null;
-                            return;
-                          }
-                          filter.finalTime = DateTime(
-                            DateTime.now().year,
-                            DateTime.now().month,
-                            DateTime.now().day,
-                            selectedTime.hour,
-                            selectedTime.minute,
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const Padding(padding: EdgeInsets.only(top: 2)),
-                CustomAutocompleteWidget<ItemModel>(
-                  initialValue: filter.idEtiquetaContem,
-                  onChange: (str) => filter.idEtiquetaContem = str,
-                  onItemSelectedText: (item) => item.idEtiqueta ?? null,
-                  label: 'Item',
-                  title: (p0) => Text(p0.EtiquetaDescricaoText()),
-                  suggestionsCallback: (str) => ItemService().Filter(
-                    ItemFilter(numeroRegistros: 30, termoPesquisa: str),
                   ),
-                ),
-                const Padding(padding: EdgeInsets.only(top: 2)),
-                BlocBuilder<ProcessoEtapaCubit, ProcessoEtapaState>(
-                  bloc: processoEtapaBloc,
-                  builder: (context, state) {
-                    if (state.loading) return const LoadingWidget();
-                    List<ProcessoEtapaModel> processosEtapas =
-                        state.processosEtapas;
-
-                    processosEtapas.sort(
-                      (a, b) =>
-                          a.tipoProcesso!.nome.compareTo(b.tipoProcesso!.nome),
-                    );
-
-                    return DropDownSearchWidget<ProcessoEtapaModel>(
-                      maxItems: 200,
-                      initialValue: processosEtapas
-                          .where(
-                            (element) => element.cod == filter.codEtapaProcesso,
-                          )
-                          .firstOrNull,
-                      textFunction: (processoEtapa) =>
-                          processoEtapa.GetNomeEtapaTipoText(),
-                      sourceList: processosEtapas
-                          .where((element) => element.ativo == true)
-                          .toList(),
-                      onChanged: (value) {
-                        filter.codEtapaProcesso = value?.cod;
+                  const Padding(
+                    padding: EdgeInsets.only(left: 40),
+                  ),
+                  Expanded(
+                    child: TimePickerWidget(
+                      placeholder: 'Hora Início',
+                      initialValue: filter.startTime == null
+                          ? null
+                          : TimeOfDay(
+                              hour: filter.startTime!.hour,
+                              minute: filter.startTime!.minute,
+                            ),
+                      onTimeSelected: (selectedTime) {
+                        if (selectedTime == null) {
+                          filter.startTime = null;
+                          return;
+                        }
+                        filter.startTime = DateTime(
+                          DateTime.now().year,
+                          DateTime.now().month,
+                          DateTime.now().day,
+                          selectedTime.hour,
+                          selectedTime.minute,
+                        );
                       },
-                      placeholder: 'Etapa do Processo',
-                    );
-                  },
+                    ),
+                  ),
+                ],
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              Row(
+                children: [
+                  Expanded(
+                    child: DatePickerWidget(
+                      placeholder: 'Data Término',
+                      onDateSelected: (value) => filter.finalDate = value,
+                      initialValue: filter.finalDate,
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 40),
+                  ),
+                  Expanded(
+                    child: TimePickerWidget(
+                      placeholder: 'Hora Fim',
+                      initialValue: filter.finalTime == null
+                          ? null
+                          : TimeOfDay(
+                              hour: filter.finalTime!.hour,
+                              minute: filter.finalTime!.minute,
+                            ),
+                      onTimeSelected: (selectedTime) {
+                        if (selectedTime == null) {
+                          filter.finalTime = null;
+                          return;
+                        }
+                        filter.finalTime = DateTime(
+                          DateTime.now().year,
+                          DateTime.now().month,
+                          DateTime.now().day,
+                          selectedTime.hour,
+                          selectedTime.minute,
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              CustomAutocompleteWidget<ItemModel>(
+                initialValue: filter.idEtiquetaContem,
+                onChange: (str) => filter.idEtiquetaContem = str,
+                onItemSelectedText: (item) => item.idEtiqueta ?? null,
+                label: 'Item',
+                title: (p0) => Text(p0.EtiquetaDescricaoText()),
+                suggestionsCallback: (str) => ItemService().Filter(
+                  ItemFilter(numeroRegistros: 30, termoPesquisa: str),
                 ),
-                const Padding(padding: EdgeInsets.only(top: 2)),
-                CustomAutocompleteSelectableWidget<
-                    AnormalidadeTipoShortResponseDTO>(
-                  initialValue: filter.anormalidadeTipo,
-                  onSelected: (obj) {
-                    filter.anormalidadeTipo = obj;
-                    filter.codAnormalidadeTipo = obj?.cod;
-                  },
-                  selectedText: (item) => item.Nome(),
-                  label: 'Tipo de Anormalidade',
-                  title: (p0) => Text(p0.Nome()),
-                  suggestionsCallback: (str) async =>
-                      (await Modular.get<AnormalidadeTipoService>().short(
-                        AnormalidadeTipoShortDTO(
-                          numeroRegistros: 30,
-                          termoPesquisa: str,
-                        ),
-                      ))
-                          ?.$2 ??
-                      [],
-                ),
-              ],
-            ),
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              BlocBuilder<ProcessoEtapaCubit, ProcessoEtapaState>(
+                bloc: processoEtapaBloc,
+                builder: (context, state) {
+                  if (state.loading) return const LoadingWidget();
+                  List<ProcessoEtapaModel> processosEtapas =
+                      state.processosEtapas;
+
+                  processosEtapas.sort(
+                    (a, b) =>
+                        a.tipoProcesso!.nome.compareTo(b.tipoProcesso!.nome),
+                  );
+
+                  return DropDownSearchWidget<ProcessoEtapaModel>(
+                    maxItems: 200,
+                    initialValue: processosEtapas
+                        .where(
+                          (element) => element.cod == filter.codEtapaProcesso,
+                        )
+                        .firstOrNull,
+                    textFunction: (processoEtapa) =>
+                        processoEtapa.GetNomeEtapaTipoText(),
+                    sourceList: processosEtapas
+                        .where((element) => element.ativo == true)
+                        .toList(),
+                    onChanged: (value) {
+                      filter.codEtapaProcesso = value?.cod;
+                    },
+                    placeholder: 'Etapa do Processo',
+                  );
+                },
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              CustomAutocompleteSelectableWidget<
+                  AnormalidadeTipoShortResponseDTO>(
+                initialValue: filter.anormalidadeTipo,
+                onSelected: (obj) {
+                  filter.anormalidadeTipo = obj;
+                  filter.codAnormalidadeTipo = obj?.cod;
+                },
+                selectedText: (item) => item.Nome(),
+                label: 'Tipo de Anormalidade',
+                title: (p0) => Text(p0.Nome()),
+                suggestionsCallback: (str) async =>
+                    (await Modular.get<AnormalidadeTipoService>().short(
+                      AnormalidadeTipoShortDTO(
+                        numeroRegistros: 30,
+                        termoPesquisa: str,
+                      ),
+                    ))
+                        ?.$2 ??
+                    [],
+              ),
+            ],
           ),
-        );
-      },
+        ),
+      ),
     );
-    if (result != true) return;
-    CustomNavigationBarService.turnExpandedOff(context);
+    if (confirm != true) return;
     consultar();
   }
 

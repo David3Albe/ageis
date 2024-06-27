@@ -13,7 +13,6 @@ import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
@@ -41,10 +40,14 @@ class EquipamentoManutencaoPageFrm extends StatefulWidget {
     Key? key,
     required this.equipamentoManutencao,
     required this.equipamentoCubit,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final EquipamentoManutencaoModel equipamentoManutencao;
   final EquipamentoCubit equipamentoCubit;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<EquipamentoManutencaoPageFrm> createState() =>
@@ -530,698 +533,730 @@ class _EquipamentoManutencaoPageFrmState
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<EquipamentoManutencaoPageFrmCubit,
+    return BlocBuilder<EquipamentoManutencaoPageFrmCubit,
         EquipamentoManutencaoPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
-      child: BlocBuilder<EquipamentoManutencaoPageFrmCubit,
-          EquipamentoManutencaoPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return AlertDialog(
-            contentPadding: const EdgeInsets.all(8.0),
-            titlePadding: const EdgeInsets.all(8.0),
-            actionsPadding: const EdgeInsets.all(8.0),
-            title: Row(
+      builder: (context, state) {
+        return Column(
+          children: [
+            Row(
               children: [
                 Expanded(
                   child: TitleWidget(
                     text: titulo,
                   ),
                 ),
-                const Spacer(),
-                CloseButtonWidget(
-                  onPressed: () => Navigator.of(context).pop((false, '')),
-                ),
               ],
             ),
-            content: Container(
-              constraints: BoxConstraints(
-                minWidth: size.width * .80,
-                minHeight: size.height * .5,
-                maxHeight: size.height * .95,
-              ),
-              child: SingleChildScrollView(
-                controller: scroll,
-                padding: const EdgeInsets.only(right: 14),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child:
-                                BlocBuilder<EquipamentoCubit, EquipamentoState>(
-                              bloc: widget.equipamentoCubit,
-                              builder: (context, equipamentoState) {
-                                if (equipamentoState.loading) {
-                                  return const LoadingWidget();
-                                }
-                                List<EquipamentoModel> equipamentos =
-                                    equipamentoState.objs;
-                                equipamentos.sort(
-                                  (a, b) => a.nome!.compareTo(b.nome!),
-                                );
-                                EquipamentoModel? equipamento = equipamentos
-                                    .where(
-                                      (element) =>
-                                          element.cod ==
-                                          equipamentoManutencao.codEquipamento,
-                                    )
-                                    .firstOrNull;
-                                return DropDownSearchWidget(
-                                  validateBuilder:
-                                      (context, validateMethodBuilder) =>
-                                          validateEquipamento =
-                                              validateMethodBuilder,
-                                  validator: (val) =>
-                                      val == null ? 'Obrigatório' : null,
-                                  textFunction: (equipamento) =>
-                                      equipamento.EquipamentoNomeText(),
-                                  initialValue: equipamento,
-                                  sourceList: equipamentos,
-                                  onChanged: (value) => equipamentoManutencao
-                                      .codEquipamento = value?.cod,
-                                  placeholder: 'Equipamento *',
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 50.0),
-                          Expanded(
-                            child:
-                                BlocBuilder<ServicoTipoCubit, ServicoTipoState>(
-                              bloc: servicoTipoCubit,
-                              builder: (context, state) {
-                                if (state.loading) {
-                                  return const Center(
-                                    child: LoadingWidget(),
-                                  );
-                                }
-                                List<ServicoTipoModel> servicosTipos =
-                                    state.tiposServico;
-
-                                servicosTipos.sort(
-                                  (a, b) => a.nome!.compareTo(b.nome!),
-                                );
-                                ServicoTipoModel? servicoTipo = servicosTipos
-                                    .where(
-                                      (element) =>
-                                          element.cod ==
-                                          equipamentoManutencao.codServicosTipo,
-                                    )
-                                    .firstOrNull;
-                                return DropDownSearchWidget(
-                                  validateBuilder:
-                                      (context, validateMethodBuilder) =>
-                                          validateTipoServico =
-                                              validateMethodBuilder,
-                                  validator: (val) =>
-                                      val == null ? 'Obrigatório' : null,
-                                  textFunction: (p0) => p0.GetDropDownText(),
-                                  initialValue: servicoTipo,
-                                  sourceList: servicosTipos
-                                      .where(
-                                        (element) =>
-                                            element.ativo == true &&
-                                            element.servicosEquipamentos ==
-                                                true,
-                                      )
-                                      .toList(),
-                                  onChanged: (value) => equipamentoManutencao
-                                      .codServicosTipo = value?.cod,
-                                  placeholder: 'Tipo do Serviço *',
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: dtpDataInicio,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Expanded(
-                            child: tmpHoraInicio,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: dtpDataTermino,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Expanded(
-                            child: tmpHoraTermino,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: dtpDataParada,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Expanded(
-                            child: tmpHoraParada,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: txtNumNF,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Expanded(
-                            child: txtProblema,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: DropDownSearchApiWidget<
-                          UsuarioDropDownSearchResponseDTO>(
-                        search: (str) async =>
-                            (await UsuarioService().getDropDownSearch(
-                              UsuarioDropDownSearchDTO(
-                                numeroRegistros: 30,
-                                search: str,
-                              ),
-                            ))
-                                ?.$2 ??
-                            [],
-                        textFunction: (usuario) => usuario.NomeText(),
-                        initialValue: equipamentoManutencao.usuarioDetectadoPor,
-                        onChanged: (value) {
-                          equipamentoManutencao.detectadoPor =
-                              value?.cod.toString();
-                          equipamentoManutencao.usuarioDetectadoPor = value;
-                        },
-                        placeholder: 'Detectado por',
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtDescricaoServico,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: DropDownSearchApiWidget<
-                                UsuarioDropDownSearchResponseDTO>(
-                              validateBuilder:
-                                  (context, validateMethodBuilder) =>
-                                      validateTecnico = validateMethodBuilder,
-                              validator: (val) =>
-                                  val == null ? 'Obrigatório' : null,
-                              search: (str) async =>
-                                  (await UsuarioService().getDropDownSearch(
-                                    UsuarioDropDownSearchDTO(
-                                      numeroRegistros: 30,
-                                      search: str,
-                                    ),
-                                  ))
-                                      ?.$2 ??
-                                  [],
-                              textFunction: (usuario) => usuario.NomeText(),
-                              initialValue:
-                                  equipamentoManutencao.usuarioTecnico,
-                              onChanged: (value) {
-                                equipamentoManutencao.tecnico =
-                                    value?.cod.toString();
-                                equipamentoManutencao.usuarioTecnico = value;
-                              },
-                              placeholder: 'Técnico *',
-                            ),
-                          ),
-                          const SizedBox(width: 50.0),
-                          Expanded(
-                            child: DropDownSearchWidget<
-                                RegistroServicoResultOption>(
-                              validateBuilder:
-                                  (context, validateMethodBuilder) =>
-                                      validateResultado = validateMethodBuilder,
-                              validator: (obj) =>
-                                  obj == null ? 'Obrigatório' : null,
-                              initialValue:
-                                  RegistroServicoResultOption.resultOptions
-                                      .where(
-                                        (element) =>
-                                            element.cod ==
-                                            equipamentoManutencao.resultado,
-                                      )
-                                      .firstOrNull,
-                              sourceList:
-                                  RegistroServicoResultOption.resultOptions,
-                              onChanged: (value) => equipamentoManutencao
-                                  .resultado = value?.cod.toString(),
-                              placeholder: 'Resultado *',
-                              textFunction: (p0) => p0.GetDropDownText(),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: BlocBuilder<PecaCubit, PecaState>(
-                              bloc: pecaCubit,
-                              builder: (context, state) {
-                                if (state.loading == true) {
-                                  return const Center(
-                                    child: LoadingWidget(),
-                                  );
-                                }
-                                List<PecaModel> pecas = state.pecas;
-                                pecas.sort(
-                                  (a, b) => a.peca!.compareTo(b.peca!),
-                                );
-                                PecaModel? peca = pecas
-                                    .where(
-                                      (element) =>
-                                          element.cod ==
-                                          equipamentoManutencao.codPeca1,
-                                    )
-                                    .firstOrNull;
-                                return DropDownSearchWidget(
-                                  initialValue: peca,
-                                  sourceList: pecas,
-                                  onChanged: (value) => equipamentoManutencao
-                                      .codPeca1 = value?.cod!,
-                                  placeholder: 'Peça Trocada',
-                                  textFunction: (p0) => p0.PecaNomeText(),
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 50.0),
-                          Container(
-                            width: 100,
-                            child: txtQtde1,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Container(
-                            width: 100,
-                            child: txtValor1,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Container(
-                            width: 120,
-                            child: dtpGarantia1,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Container(
-                            width: 200,
-                            child: txtNumSerie1,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: BlocBuilder<PecaCubit, PecaState>(
-                              bloc: pecaCubit,
-                              builder: (context, state) {
-                                if (state.loading == true) {
-                                  return const Center(
-                                    child: LoadingWidget(),
-                                  );
-                                }
-                                List<PecaModel> pecas = state.pecas;
-                                pecas.sort(
-                                  (a, b) => a.peca!.compareTo(b.peca!),
-                                );
-                                PecaModel? peca = pecas
-                                    .where(
-                                      (element) =>
-                                          element.cod ==
-                                          equipamentoManutencao.codPeca2,
-                                    )
-                                    .firstOrNull;
-                                return DropDownSearchWidget(
-                                  textFunction: (peca) => peca.PecaNomeText(),
-                                  initialValue: peca,
-                                  sourceList: pecas,
-                                  onChanged: (value) => equipamentoManutencao
-                                      .codPeca2 = value?.cod,
-                                  placeholder: 'Peça Trocada',
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 50.0),
-                          Container(
-                            width: 100,
-                            child: txtQtde2,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Container(
-                            width: 100,
-                            child: txtValor2,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Container(
-                            width: 120,
-                            child: dtpGarantia2,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Container(
-                            width: 200,
-                            child: txtNumSerie2,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: BlocBuilder<PecaCubit, PecaState>(
-                              bloc: pecaCubit,
-                              builder: (context, state) {
-                                if (state.loading == true) {
-                                  return const Center(
-                                    child: LoadingWidget(),
-                                  );
-                                }
-                                List<PecaModel> pecas = state.pecas;
-                                pecas.sort(
-                                  (a, b) => a.peca!.compareTo(b.peca!),
-                                );
-                                PecaModel? peca = pecas
-                                    .where(
-                                      (element) =>
-                                          element.cod ==
-                                          equipamentoManutencao.codPeca3,
-                                    )
-                                    .firstOrNull;
-                                return DropDownSearchWidget(
-                                  textFunction: (peca) => peca.PecaNomeText(),
-                                  initialValue: peca,
-                                  sourceList: pecas,
-                                  onChanged: (value) => equipamentoManutencao
-                                      .codPeca3 = value?.cod,
-                                  placeholder: 'Peça Trocada',
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 50.0),
-                          Container(
-                            width: 100,
-                            child: txtQtde3,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Container(
-                            width: 100,
-                            child: txtValor3,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Container(
-                            width: 120,
-                            child: dtpGarantia3,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Container(
-                            width: 200,
-                            child: txtNumSerie3,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: BlocBuilder<PecaCubit, PecaState>(
-                              bloc: pecaCubit,
-                              builder: (context, state) {
-                                if (state.loading == true) {
-                                  return const Center(
-                                    child: LoadingWidget(),
-                                  );
-                                }
-                                List<PecaModel> pecas = state.pecas;
-                                pecas.sort(
-                                  (a, b) => a.peca!.compareTo(b.peca!),
-                                );
-                                PecaModel? peca = pecas
-                                    .where(
-                                      (element) =>
-                                          element.cod ==
-                                          equipamentoManutencao.codPeca4,
-                                    )
-                                    .firstOrNull;
-                                return DropDownSearchWidget(
-                                  textFunction: (peca) => peca.PecaNomeText(),
-                                  initialValue: peca,
-                                  sourceList: pecas,
-                                  onChanged: (value) => equipamentoManutencao
-                                      .codPeca4 = value?.cod,
-                                  placeholder: 'Peça Trocada',
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 50.0),
-                          Container(
-                            width: 100,
-                            child: txtQtde4,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Container(
-                            width: 100,
-                            child: txtValor4,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Container(
-                            width: 120,
-                            child: dtpGarantia4,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Container(
-                            width: 200,
-                            child: txtNumSerie4,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: BlocBuilder<PecaCubit, PecaState>(
-                              bloc: pecaCubit,
-                              builder: (context, state) {
-                                if (state.loading == true) {
-                                  return const Center(
-                                    child: LoadingWidget(),
-                                  );
-                                }
-                                List<PecaModel> pecas = state.pecas;
-                                pecas.sort(
-                                  (a, b) => a.peca!.compareTo(b.peca!),
-                                );
-                                PecaModel? peca = pecas
-                                    .where(
-                                      (element) =>
-                                          element.cod ==
-                                          equipamentoManutencao.codPeca5,
-                                    )
-                                    .firstOrNull;
-                                return DropDownSearchWidget(
-                                  textFunction: (peca) => peca.PecaNomeText(),
-                                  initialValue: peca,
-                                  sourceList: pecas,
-                                  onChanged: (value) => equipamentoManutencao
-                                      .codPeca5 = value?.cod,
-                                  placeholder: 'Peça Trocada',
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 50.0),
-                          Container(
-                            width: 100,
-                            child: txtQtde5,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Container(
-                            width: 100,
-                            child: txtValor5,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Container(
-                            width: 120,
-                            child: dtpGarantia5,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Container(
-                            width: 200,
-                            child: txtNumSerie5,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtUsuarioRegistro,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: dtpDataRegistro,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Expanded(
-                            child: tmpHoraRegistro,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: dtpDataValidade,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Expanded(
-                            child: Row(
-                              children: [
-                                CustomCheckboxWidget(
-                                  checked:
-                                      equipamentoManutencao.controlarValidade,
-                                  onClick: (value) => equipamentoManutencao
-                                      .controlarValidade = value,
-                                  text: 'Controlar Validade',
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: LabelStringWidget(
-                        text:
-                            'Documento Anexado: ${equipamentoManutencao.nfAnexa == null ? 'Nenhum Documento Encontrado' : equipamentoManutencao.nfAnexaNome}',
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            actions: [
-              Row(
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  CustomPopupMenuWidget(
-                    items: [
-                      CustomPopupItemFileModel.getFileItem(
-                        'Anexar NF',
-                        salvarArquivo,
+                  Expanded(
+                    child: Container(
+                      constraints: BoxConstraints(
+                        minWidth: size.width * .80,
+                        minHeight: size.height * .5,
+                        maxHeight: size.height * .95,
                       ),
-                      CustomPopupItemModel(
-                        text: 'Excluir NF',
-                        onTap: excluirArquivo,
-                      ),
-                      CustomPopupItemOpenDocModel.getOpenDocItem(
-                        'Abrir NF',
-                        context,
-                        equipamentoManutencao.nfAnexa,
-                        equipamentoManutencao.nfAnexaNome ??
-                            'arquivo sem nome.WebP',
-                      ),
-                      CustomPopupItemModel(
-                        text: 'Imprimir Etiqueta',
-                        onTap: () => _controller.printTag(
-                          context,
-                          equipamentoManutencao,
+                      child: SingleChildScrollView(
+                        controller: scroll,
+                        padding: const EdgeInsets.only(right: 14),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: BlocBuilder<EquipamentoCubit,
+                                        EquipamentoState>(
+                                      bloc: widget.equipamentoCubit,
+                                      builder: (context, equipamentoState) {
+                                        if (equipamentoState.loading) {
+                                          return const LoadingWidget();
+                                        }
+                                        List<EquipamentoModel> equipamentos =
+                                            equipamentoState.objs;
+                                        equipamentos.sort(
+                                          (a, b) => a.nome!.compareTo(b.nome!),
+                                        );
+                                        EquipamentoModel? equipamento =
+                                            equipamentos
+                                                .where(
+                                                  (element) =>
+                                                      element.cod ==
+                                                      equipamentoManutencao
+                                                          .codEquipamento,
+                                                )
+                                                .firstOrNull;
+                                        return DropDownSearchWidget(
+                                          validateBuilder: (
+                                            context,
+                                            validateMethodBuilder,
+                                          ) =>
+                                              validateEquipamento =
+                                                  validateMethodBuilder,
+                                          validator: (val) => val == null
+                                              ? 'Obrigatório'
+                                              : null,
+                                          textFunction: (equipamento) =>
+                                              equipamento.EquipamentoNomeText(),
+                                          initialValue: equipamento,
+                                          sourceList: equipamentos,
+                                          onChanged: (value) =>
+                                              equipamentoManutencao
+                                                  .codEquipamento = value?.cod,
+                                          placeholder: 'Equipamento *',
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Expanded(
+                                    child: BlocBuilder<ServicoTipoCubit,
+                                        ServicoTipoState>(
+                                      bloc: servicoTipoCubit,
+                                      builder: (context, state) {
+                                        if (state.loading) {
+                                          return const Center(
+                                            child: LoadingWidget(),
+                                          );
+                                        }
+                                        List<ServicoTipoModel> servicosTipos =
+                                            state.tiposServico;
+
+                                        servicosTipos.sort(
+                                          (a, b) => a.nome!.compareTo(b.nome!),
+                                        );
+                                        ServicoTipoModel? servicoTipo =
+                                            servicosTipos
+                                                .where(
+                                                  (element) =>
+                                                      element.cod ==
+                                                      equipamentoManutencao
+                                                          .codServicosTipo,
+                                                )
+                                                .firstOrNull;
+                                        return DropDownSearchWidget(
+                                          validateBuilder: (
+                                            context,
+                                            validateMethodBuilder,
+                                          ) =>
+                                              validateTipoServico =
+                                                  validateMethodBuilder,
+                                          validator: (val) => val == null
+                                              ? 'Obrigatório'
+                                              : null,
+                                          textFunction: (p0) =>
+                                              p0.GetDropDownText(),
+                                          initialValue: servicoTipo,
+                                          sourceList: servicosTipos
+                                              .where(
+                                                (element) =>
+                                                    element.ativo == true &&
+                                                    element.servicosEquipamentos ==
+                                                        true,
+                                              )
+                                              .toList(),
+                                          onChanged: (value) =>
+                                              equipamentoManutencao
+                                                  .codServicosTipo = value?.cod,
+                                          placeholder: 'Tipo do Serviço *',
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: dtpDataInicio,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Expanded(
+                                    child: tmpHoraInicio,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: dtpDataTermino,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Expanded(
+                                    child: tmpHoraTermino,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: dtpDataParada,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Expanded(
+                                    child: tmpHoraParada,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: txtNumNF,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Expanded(
+                                    child: txtProblema,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: DropDownSearchApiWidget<
+                                  UsuarioDropDownSearchResponseDTO>(
+                                search: (str) async =>
+                                    (await UsuarioService().getDropDownSearch(
+                                      UsuarioDropDownSearchDTO(
+                                        numeroRegistros: 30,
+                                        search: str,
+                                      ),
+                                    ))
+                                        ?.$2 ??
+                                    [],
+                                textFunction: (usuario) => usuario.NomeText(),
+                                initialValue:
+                                    equipamentoManutencao.usuarioDetectadoPor,
+                                onChanged: (value) {
+                                  equipamentoManutencao.detectadoPor =
+                                      value?.cod.toString();
+                                  equipamentoManutencao.usuarioDetectadoPor =
+                                      value;
+                                },
+                                placeholder: 'Detectado por',
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: txtDescricaoServico,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: DropDownSearchApiWidget<
+                                        UsuarioDropDownSearchResponseDTO>(
+                                      validateBuilder:
+                                          (context, validateMethodBuilder) =>
+                                              validateTecnico =
+                                                  validateMethodBuilder,
+                                      validator: (val) =>
+                                          val == null ? 'Obrigatório' : null,
+                                      search: (str) async =>
+                                          (await UsuarioService()
+                                                  .getDropDownSearch(
+                                            UsuarioDropDownSearchDTO(
+                                              numeroRegistros: 30,
+                                              search: str,
+                                            ),
+                                          ))
+                                              ?.$2 ??
+                                          [],
+                                      textFunction: (usuario) =>
+                                          usuario.NomeText(),
+                                      initialValue:
+                                          equipamentoManutencao.usuarioTecnico,
+                                      onChanged: (value) {
+                                        equipamentoManutencao.tecnico =
+                                            value?.cod.toString();
+                                        equipamentoManutencao.usuarioTecnico =
+                                            value;
+                                      },
+                                      placeholder: 'Técnico *',
+                                    ),
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Expanded(
+                                    child: DropDownSearchWidget<
+                                        RegistroServicoResultOption>(
+                                      validateBuilder:
+                                          (context, validateMethodBuilder) =>
+                                              validateResultado =
+                                                  validateMethodBuilder,
+                                      validator: (obj) =>
+                                          obj == null ? 'Obrigatório' : null,
+                                      initialValue: RegistroServicoResultOption
+                                          .resultOptions
+                                          .where(
+                                            (element) =>
+                                                element.cod ==
+                                                equipamentoManutencao.resultado,
+                                          )
+                                          .firstOrNull,
+                                      sourceList: RegistroServicoResultOption
+                                          .resultOptions,
+                                      onChanged: (value) =>
+                                          equipamentoManutencao.resultado =
+                                              value?.cod.toString(),
+                                      placeholder: 'Resultado *',
+                                      textFunction: (p0) =>
+                                          p0.GetDropDownText(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: BlocBuilder<PecaCubit, PecaState>(
+                                      bloc: pecaCubit,
+                                      builder: (context, state) {
+                                        if (state.loading == true) {
+                                          return const Center(
+                                            child: LoadingWidget(),
+                                          );
+                                        }
+                                        List<PecaModel> pecas = state.pecas;
+                                        pecas.sort(
+                                          (a, b) => a.peca!.compareTo(b.peca!),
+                                        );
+                                        PecaModel? peca = pecas
+                                            .where(
+                                              (element) =>
+                                                  element.cod ==
+                                                  equipamentoManutencao
+                                                      .codPeca1,
+                                            )
+                                            .firstOrNull;
+                                        return DropDownSearchWidget(
+                                          initialValue: peca,
+                                          sourceList: pecas,
+                                          onChanged: (value) =>
+                                              equipamentoManutencao.codPeca1 =
+                                                  value?.cod!,
+                                          placeholder: 'Peça Trocada',
+                                          textFunction: (p0) =>
+                                              p0.PecaNomeText(),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Container(
+                                    width: 100,
+                                    child: txtQtde1,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Container(
+                                    width: 100,
+                                    child: txtValor1,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Container(
+                                    width: 120,
+                                    child: dtpGarantia1,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Container(
+                                    width: 200,
+                                    child: txtNumSerie1,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: BlocBuilder<PecaCubit, PecaState>(
+                                      bloc: pecaCubit,
+                                      builder: (context, state) {
+                                        if (state.loading == true) {
+                                          return const Center(
+                                            child: LoadingWidget(),
+                                          );
+                                        }
+                                        List<PecaModel> pecas = state.pecas;
+                                        pecas.sort(
+                                          (a, b) => a.peca!.compareTo(b.peca!),
+                                        );
+                                        PecaModel? peca = pecas
+                                            .where(
+                                              (element) =>
+                                                  element.cod ==
+                                                  equipamentoManutencao
+                                                      .codPeca2,
+                                            )
+                                            .firstOrNull;
+                                        return DropDownSearchWidget(
+                                          textFunction: (peca) =>
+                                              peca.PecaNomeText(),
+                                          initialValue: peca,
+                                          sourceList: pecas,
+                                          onChanged: (value) =>
+                                              equipamentoManutencao.codPeca2 =
+                                                  value?.cod,
+                                          placeholder: 'Peça Trocada',
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Container(
+                                    width: 100,
+                                    child: txtQtde2,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Container(
+                                    width: 100,
+                                    child: txtValor2,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Container(
+                                    width: 120,
+                                    child: dtpGarantia2,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Container(
+                                    width: 200,
+                                    child: txtNumSerie2,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: BlocBuilder<PecaCubit, PecaState>(
+                                      bloc: pecaCubit,
+                                      builder: (context, state) {
+                                        if (state.loading == true) {
+                                          return const Center(
+                                            child: LoadingWidget(),
+                                          );
+                                        }
+                                        List<PecaModel> pecas = state.pecas;
+                                        pecas.sort(
+                                          (a, b) => a.peca!.compareTo(b.peca!),
+                                        );
+                                        PecaModel? peca = pecas
+                                            .where(
+                                              (element) =>
+                                                  element.cod ==
+                                                  equipamentoManutencao
+                                                      .codPeca3,
+                                            )
+                                            .firstOrNull;
+                                        return DropDownSearchWidget(
+                                          textFunction: (peca) =>
+                                              peca.PecaNomeText(),
+                                          initialValue: peca,
+                                          sourceList: pecas,
+                                          onChanged: (value) =>
+                                              equipamentoManutencao.codPeca3 =
+                                                  value?.cod,
+                                          placeholder: 'Peça Trocada',
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Container(
+                                    width: 100,
+                                    child: txtQtde3,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Container(
+                                    width: 100,
+                                    child: txtValor3,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Container(
+                                    width: 120,
+                                    child: dtpGarantia3,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Container(
+                                    width: 200,
+                                    child: txtNumSerie3,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: BlocBuilder<PecaCubit, PecaState>(
+                                      bloc: pecaCubit,
+                                      builder: (context, state) {
+                                        if (state.loading == true) {
+                                          return const Center(
+                                            child: LoadingWidget(),
+                                          );
+                                        }
+                                        List<PecaModel> pecas = state.pecas;
+                                        pecas.sort(
+                                          (a, b) => a.peca!.compareTo(b.peca!),
+                                        );
+                                        PecaModel? peca = pecas
+                                            .where(
+                                              (element) =>
+                                                  element.cod ==
+                                                  equipamentoManutencao
+                                                      .codPeca4,
+                                            )
+                                            .firstOrNull;
+                                        return DropDownSearchWidget(
+                                          textFunction: (peca) =>
+                                              peca.PecaNomeText(),
+                                          initialValue: peca,
+                                          sourceList: pecas,
+                                          onChanged: (value) =>
+                                              equipamentoManutencao.codPeca4 =
+                                                  value?.cod,
+                                          placeholder: 'Peça Trocada',
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Container(
+                                    width: 100,
+                                    child: txtQtde4,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Container(
+                                    width: 100,
+                                    child: txtValor4,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Container(
+                                    width: 120,
+                                    child: dtpGarantia4,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Container(
+                                    width: 200,
+                                    child: txtNumSerie4,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: BlocBuilder<PecaCubit, PecaState>(
+                                      bloc: pecaCubit,
+                                      builder: (context, state) {
+                                        if (state.loading == true) {
+                                          return const Center(
+                                            child: LoadingWidget(),
+                                          );
+                                        }
+                                        List<PecaModel> pecas = state.pecas;
+                                        pecas.sort(
+                                          (a, b) => a.peca!.compareTo(b.peca!),
+                                        );
+                                        PecaModel? peca = pecas
+                                            .where(
+                                              (element) =>
+                                                  element.cod ==
+                                                  equipamentoManutencao
+                                                      .codPeca5,
+                                            )
+                                            .firstOrNull;
+                                        return DropDownSearchWidget(
+                                          textFunction: (peca) =>
+                                              peca.PecaNomeText(),
+                                          initialValue: peca,
+                                          sourceList: pecas,
+                                          onChanged: (value) =>
+                                              equipamentoManutencao.codPeca5 =
+                                                  value?.cod,
+                                          placeholder: 'Peça Trocada',
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Container(
+                                    width: 100,
+                                    child: txtQtde5,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Container(
+                                    width: 100,
+                                    child: txtValor5,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Container(
+                                    width: 120,
+                                    child: dtpGarantia5,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Container(
+                                    width: 200,
+                                    child: txtNumSerie5,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: txtUsuarioRegistro,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: dtpDataRegistro,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Expanded(
+                                    child: tmpHoraRegistro,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: dtpDataValidade,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Expanded(
+                                    child: Row(
+                                      children: [
+                                        CustomCheckboxWidget(
+                                          checked: equipamentoManutencao
+                                              .controlarValidade,
+                                          onClick: (value) =>
+                                              equipamentoManutencao
+                                                  .controlarValidade = value,
+                                          text: 'Controlar Validade',
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: LabelStringWidget(
+                                text:
+                                    'Documento Anexado: ${equipamentoManutencao.nfAnexa == null ? 'Nenhum Documento Encontrado' : equipamentoManutencao.nfAnexaNome}',
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                      if (equipamentoManutencao.cod != null &&
-                          equipamentoManutencao.cod != 0)
-                        CustomPopupItemHistoryModel.getHistoryItem(
-                          child: HistoricoPage(
-                            pk: equipamentoManutencao.cod!,
-                            termo: 'EQUIPAMENTO_MANUTENCAO',
-                          ),
-                          context: context,
-                        ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: SaveButtonWidget(
-                      onPressed: () => {salvar()},
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: CleanButtonWidget(
-                      onPressed: () => {
-                        setState(() {
-                          equipamentoManutencao =
-                              EquipamentoManutencaoModel.empty();
-                        }),
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: CancelButtonUnfilledWidget(
-                      onPressed: () => {Navigator.of(context).pop((false, ''))},
                     ),
                   ),
                 ],
               ),
-            ],
-          );
-        },
-      ),
+            ),
+            Row(
+              children: [
+                CustomPopupMenuWidget(
+                  items: [
+                    CustomPopupItemFileModel.getFileItem(
+                      'Anexar NF',
+                      salvarArquivo,
+                    ),
+                    CustomPopupItemModel(
+                      text: 'Excluir NF',
+                      onTap: excluirArquivo,
+                    ),
+                    CustomPopupItemOpenDocModel.getOpenDocItem(
+                      'Abrir NF',
+                      context,
+                      equipamentoManutencao.nfAnexa,
+                      equipamentoManutencao.nfAnexaNome ??
+                          'arquivo sem nome.WebP',
+                    ),
+                    CustomPopupItemModel(
+                      text: 'Imprimir Etiqueta',
+                      onTap: () => _controller.printTag(
+                        context,
+                        equipamentoManutencao,
+                      ),
+                    ),
+                    if (equipamentoManutencao.cod != null &&
+                        equipamentoManutencao.cod != 0)
+                      CustomPopupItemHistoryModel.getHistoryItem(
+                        child: HistoricoPage(
+                          pk: equipamentoManutencao.cod!,
+                          termo: 'EQUIPAMENTO_MANUTENCAO',
+                        ),
+                        context: context,
+                      ),
+                  ],
+                ),
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: SaveButtonWidget(
+                    onPressed: () => {salvar()},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: CleanButtonWidget(
+                    onPressed: () => {
+                      setState(() {
+                        equipamentoManutencao =
+                            EquipamentoManutencaoModel.empty();
+                      }),
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: CancelButtonUnfilledWidget(
+                    onPressed: widget.onCancel,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -1267,8 +1302,7 @@ class _EquipamentoManutencaoPageFrmState
     bool equipamentoValid = validateEquipamento();
     if (!equipamentoValid || !tipoServicoValid) {
       scroll.jumpTo(0.0);
-    }
-    else if(!descricaoServicoValid || !tecnicoValid || !resultadoValid){
+    } else if (!descricaoServicoValid || !tecnicoValid || !resultadoValid) {
       scroll.jumpTo(250.0);
     }
 
@@ -1297,6 +1331,9 @@ class _EquipamentoManutencaoPageFrmState
         !equipamentoValid) {
       return;
     }
-    cubit.save(equipamentoManutencao);
+    cubit.save(
+      equipamentoManutencao,
+      widget.onSaved,
+    );
   }
 }

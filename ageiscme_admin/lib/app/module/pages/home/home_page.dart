@@ -11,7 +11,8 @@ import 'package:ageiscme_models/dto/registros/expirar/registros_expirar_search_d
 import 'package:ageiscme_models/enums/direito_enum.dart';
 import 'package:ageiscme_models/response_dto/insumo/expirar/insumo_expirar_search_response_dto.dart';
 import 'package:ageiscme_models/response_dto/registros/expirar/registros_expirar_search_response_dto.dart';
-import 'package:compartilhados/componentes/overlay/custom_overlay_widget.dart';
+import 'package:compartilhados/windows/custom_default_window_component.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -29,21 +30,13 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      int chaveInsumo = WindowsHelper.GetNextChave();
+      int chaveRegistroExpirar = WindowsHelper.GetNextChave();
       await Future.wait([
-        showOverlayInsumos(),
-        showOverlayRegistrosExpirar(),
+        showOverlayInsumos(chaveInsumo),
+        showOverlayRegistrosExpirar(chaveRegistroExpirar),
       ]);
-      _inserirOverlays();
     });
-  }
-
-  void _inserirOverlays() {
-    if (overlayInsumo != null) {
-      Overlay.of(context).insert(overlayInsumo!);
-    }
-    if (overlayRegistro != null) {
-      Overlay.of(context).insert(overlayRegistro!, below: overlayInsumo);
-    }
   }
 
   @override
@@ -51,7 +44,7 @@ class _HomePageState extends State<HomePage> {
     return const Center(child: Text('Home'));
   }
 
-  Future showOverlayInsumos() async {
+  Future showOverlayInsumos(int chave) async {
     bool permissao = await AccessUserService.validateUserHasRight(
       DireitoEnum.PermissaoVisualizacaoPopUp,
     );
@@ -62,61 +55,57 @@ class _HomePageState extends State<HomePage> {
     if (insumos.isEmpty) return;
     SearchCubit searchCubit = SearchCubit();
     searchCubit.set(insumos);
-    late OverlayEntry overlayEntry;
-    late CustomOverlayWidget overlayWidget = CustomOverlayWidget(
-      onEnter: () => onEnter(overlayInsumo!),
-      height: 350,
-      onClose: overlayEntry.remove,
-      width: 600,
-      child: InsumosPopupPage(
-        cubit: searchCubit,
-        onClose: removerOverlays,
-      ),
+    Size size = MediaQuery.of(context).size;
+    double right = size.width / 5.5;
+    double width = size.width / 3;
+    double height = size.height * 0.8;
+
+    final Widget widget =
+        InsumosPopupPage(cubit: searchCubit, onClose: () => {});
+    Widget? window;
+    window = CustomDefaultWindowComponent(
+      key: UniqueKey(),
+      chave: chave,
+      title: 'Insumos expirados e a expirar',
+      height: height,
+      ofssetBase: Offset(right, 60),
+      width: width,
+      child: widget,
+      remove: WindowsHelper.RemoverWidget,
+      setToLast: WindowsHelper.SetToLast,
+      setToFirst: WindowsHelper.SetToFirst,
     );
 
-    overlayEntry = OverlayEntry(
-      builder: (context) => overlayWidget,
-    );
-
-    overlayInsumo = overlayEntry;
+    WindowsHelper.AdicionarOverlayCustomizada(chave: chave, overlay: window);
   }
 
-  void removerOverlays() {
-    overlayInsumo?.remove();
-    overlayRegistro?.remove();
-  }
-
-  void onEnter(OverlayEntry entry) {
-    entry.remove();
-    Overlay.of(context).insert(entry);
-  }
-
-  Future showOverlayRegistrosExpirar() async {
+  Future showOverlayRegistrosExpirar(int chave) async {
     List<RegistrosExpirarSearchResponseDTO> registros =
         await RegistrosExpirarService()
             .searchExpirar(RegistrosExpirarSearchDTO());
     if (registros.isEmpty) return;
     registros_expirar.SearchCubit searchCubit = registros_expirar.SearchCubit();
     searchCubit.set(registros);
-    late OverlayEntry overlayEntry;
-    double right = MediaQuery.of(context).size.width / 3;
+    Size size = MediaQuery.of(context).size;
+    double right = size.width / 1.85;
+    double width = size.width / 2.5;
+    double height = size.height * 0.8;
 
-    late CustomOverlayWidget overlayWidget = CustomOverlayWidget(
-      onEnter: () => onEnter(overlayRegistro!),
-      ofssetBase: Offset(right, 0),
-      height: 500,
-      onClose: overlayEntry.remove,
-      width: 800,
-      child: RegistrosPopupPage(
-        cubit: searchCubit,
-        onClose: removerOverlays,
-      ),
+    final Widget widget =
+        RegistrosPopupPage(cubit: searchCubit, onClose: () => {});
+    Widget window = CustomDefaultWindowComponent(
+      key: UniqueKey(),
+      chave: chave,
+      remove: WindowsHelper.RemoverWidget,
+      setToFirst: WindowsHelper.SetToFirst,
+      setToLast: WindowsHelper.SetToLast,
+      title: 'Documentos vencidos e a vencer',
+      width: width,
+      height: height,
+      ofssetBase: Offset(right, 60),
+      child: widget,
     );
 
-    overlayEntry = OverlayEntry(
-      builder: (context) => overlayWidget,
-    );
-
-    overlayRegistro = overlayEntry;
+    WindowsHelper.AdicionarOverlayCustomizada(chave: chave, overlay: window);
   }
 }

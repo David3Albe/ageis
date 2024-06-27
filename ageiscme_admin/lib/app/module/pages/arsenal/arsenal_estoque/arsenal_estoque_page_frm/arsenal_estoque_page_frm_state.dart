@@ -17,12 +17,16 @@ class ArsenalEstoquePageFrmCubit extends Cubit<ArsenalEstoquePageFrmState> {
     ArsenalEstoqueModel arsenalEstoque,
     bool localIsEmpty,
     BuildContext context,
+    void Function(String) onSaved,
   ) async {
     try {
       (String message, ArsenalEstoqueModel arsenalEstoque)? result =
           await service.save(arsenalEstoque);
       if (result == null) return;
       if (localIsEmpty) {
+        onSaved(
+          'Arsenal Salvo, Este Arsenal ainda não possui uma Localização cadastrada e não será possível utiliza-lo no Processo. Utilize o botão Localizações e cadastre uma.',
+        );
         emit(
           ArsenalEstoquePageFrmState(
             message:
@@ -32,6 +36,7 @@ class ArsenalEstoquePageFrmCubit extends Cubit<ArsenalEstoquePageFrmState> {
           ),
         );
       } else {
+        onSaved(result.$1);
         emit(
           ArsenalEstoquePageFrmState(
             message: result.$1,

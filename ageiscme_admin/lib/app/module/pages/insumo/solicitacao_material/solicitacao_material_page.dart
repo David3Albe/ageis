@@ -27,7 +27,7 @@ import 'package:dependencias_comuns/modular_export.dart';
 import 'package:flutter/material.dart';
 
 class SolicitacaoMaterialPage extends StatefulWidget {
-  SolicitacaoMaterialPage({super.key});
+  const SolicitacaoMaterialPage({super.key});
 
   @override
   State<SolicitacaoMaterialPage> createState() =>
@@ -237,7 +237,7 @@ class _SolicitacaoMaterialPageState extends State<SolicitacaoMaterialPage> {
 
   Future salvar() async {
     if (bloc.state.itemsList.isEmpty) {
-      await WarningUtils.showWarningDialog(
+      WarningUtils.showWarningDialog(
         context,
         'Não há solicitação de material para ser inserida!',
       );

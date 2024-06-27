@@ -12,11 +12,15 @@ class TipoAfastamentoPageFrmCubit extends Cubit<TipoAfastamentoPageFrmState> {
           TipoAfastamentoPageFrmState(tipoAfastamento: tipoAfastamentoModel),
         );
 
-  void save(TipoAfastamentoModel tipoAfastamento) async {
+  void save(
+    TipoAfastamentoModel tipoAfastamento,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, TipoAfastamentoModel tipoAfastamento)? result =
           await service.save(tipoAfastamento);
       if (result == null) return;
+      onSaved(result.$1);
       emit(
         TipoAfastamentoPageFrmState(
           message: result.$1,
@@ -35,7 +39,11 @@ class TipoAfastamentoPageFrmCubit extends Cubit<TipoAfastamentoPageFrmState> {
   }
 
   void clear() {
-    emit(TipoAfastamentoPageFrmState(tipoAfastamento: TipoAfastamentoModel.empty()));
+    emit(
+      TipoAfastamentoPageFrmState(
+        tipoAfastamento: TipoAfastamentoModel.empty(),
+      ),
+    );
   }
 }
 

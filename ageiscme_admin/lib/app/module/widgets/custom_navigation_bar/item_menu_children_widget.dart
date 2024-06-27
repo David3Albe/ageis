@@ -163,7 +163,7 @@ class ItemMenuChildrenWidget extends AnimatedWidget {
   void itemSelected(BuildContext context, ItemMenuModel menu) async {
     if (item.getChildrens().isEmpty) {
       if (await AccessUserService.validateUserAccess(item)) {
-        AdminNavigatorService.navigateTo(menu);
+        AdminNavigatorService.navigateTo(menu, context);
       } else {
         ToastUtils.showCustomToastWarning(
           context,

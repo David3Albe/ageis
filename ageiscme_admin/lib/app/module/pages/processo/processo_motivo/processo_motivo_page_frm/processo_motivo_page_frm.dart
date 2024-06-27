@@ -4,7 +4,6 @@ import 'package:ageiscme_data/services/processo_motivo/processo_motivo_service.d
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
@@ -18,9 +17,13 @@ class ProcessoMotivoPageFrm extends StatefulWidget {
   const ProcessoMotivoPageFrm({
     Key? key,
     required this.processoMotivo,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final ProcessoMotivoModel processoMotivo;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<ProcessoMotivoPageFrm> createState() =>
@@ -68,13 +71,8 @@ class _ProcessoMotivoPageFrmState extends State<ProcessoMotivoPageFrm> {
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocConsumer<ProcessoMotivoPageFrmCubit, ProcessoMotivoPageFrmState>(
+    return BlocBuilder<ProcessoMotivoPageFrmCubit, ProcessoMotivoPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
       builder: (context, state) {
         return Container(
           constraints: BoxConstraints(
@@ -92,10 +90,6 @@ class _ProcessoMotivoPageFrmState extends State<ProcessoMotivoPageFrm> {
                         child: TitleWidget(
                           text: titulo,
                         ),
-                      ),
-                      const Spacer(),
-                      CloseButtonWidget(
-                        onPressed: () => Navigator.of(context).pop((false, '')),
                       ),
                     ],
                   ),
@@ -200,8 +194,7 @@ class _ProcessoMotivoPageFrmState extends State<ProcessoMotivoPageFrm> {
                       Padding(
                         padding: const EdgeInsets.only(left: 16.0),
                         child: CancelButtonUnfilledWidget(
-                          onPressed: () =>
-                              {Navigator.of(context).pop((false, ''))},
+                          onPressed: widget.onCancel,
                         ),
                       ),
                     ],
@@ -217,6 +210,6 @@ class _ProcessoMotivoPageFrmState extends State<ProcessoMotivoPageFrm> {
 
   void salvar() {
     if (!txtDescricao.valid) return;
-    cubit.save(processoMotivo);
+    cubit.save(processoMotivo, widget.onSaved);
   }
 }

@@ -14,7 +14,7 @@ import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
 class ConsultaProcessoLeituraDetalheKitPage extends StatefulWidget {
-  ConsultaProcessoLeituraDetalheKitPage({super.key, this.filter});
+  const ConsultaProcessoLeituraDetalheKitPage({super.key, this.filter});
 
   final ConsultaProcessosLeituraDetalheKitFilter? filter;
 

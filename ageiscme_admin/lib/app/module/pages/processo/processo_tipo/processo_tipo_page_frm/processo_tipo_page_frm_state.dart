@@ -16,15 +16,16 @@ class ProcessoTipoPageFrmCubit extends Cubit<ProcessoTipoPageFrmState> {
   void save(
     ProcessoTipoModel processoTipo,
     LoadingController loading,
+    void Function(String) onSaved,
   ) async {
     try {
       (String message, ProcessoTipoModel processoTipo)? result =
           await service.save(processoTipo);
+      loading.closeDefault();
       if (result == null) {
-        loading.closeDefault();
         return;
       }
-      loading.closeDefault();
+      onSaved(result.$1);
       emit(
         ProcessoTipoPageFrmState(
           message: result.$1,

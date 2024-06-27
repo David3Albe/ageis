@@ -15,13 +15,12 @@ class CustomPlutoGridDefaultCsvExport extends CustomAbstractTextExport<String> {
   final String? textEndDelimiter;
   final String? eol;
 
-  /// [state] PlutoGrid's PlutoGridStateManager.
   @override
   String export(PlutoGridStateManager state) {
     String toCsv = const ListToCsvConverter().convert(
       [
         getColumnTitles(state).values.toList(),
-        ...mapStateToListOfRows(state).map((e) => e.values as dynamic).toList(),
+        ...mapStateToListOfRows(state).map((e) => e.values.toList()).toList(),
       ],
       fieldDelimiter: fieldDelimiter,
       textDelimiter: textDelimiter,

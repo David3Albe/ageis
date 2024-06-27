@@ -6,34 +6,39 @@ import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
 class WarningUtils {
-  static Future<bool> showWarningDialog(
+  static void showWarningDialog(
     BuildContext? context,
     String warning,
   ) async {
-    bool? confirmacao = await showDialog<bool>(
-      barrierDismissible: false,
-      context: ToastUtils.routerOutletContext == null
-          ? context!
-          : ToastUtils.routerOutletContext!,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          contentPadding: const EdgeInsets.all(0),
-          content: _WarningWidget(
-            warning: warning,
+    late OverlayEntry overlayEntry;
+    Size size = MediaQuery.of(ToastUtils.routerOutletContext ?? context!).size;
+    overlayEntry = OverlayEntry(
+      builder: (context) => Container(
+        color: Colors.black.withOpacity(0.4),
+        width: size.width,
+        height: size.height,
+        child: Center(
+          child: AlertDialog(
+            contentPadding: const EdgeInsets.all(0),
+            content: _WarningWidget(
+              overlay: overlayEntry,
+              warning: warning,
+            ),
           ),
-        );
-      },
+        ),
+      ),
     );
-    if (confirmacao == null) confirmacao = false;
-    return confirmacao;
+    Overlay.of(ToastUtils.routerOutletContext ?? context!).insert(overlayEntry);
   }
 }
 
 class _WarningWidget extends StatelessWidget {
   const _WarningWidget({
     required this.warning,
+    required this.overlay,
   });
   final String warning;
+  final OverlayEntry overlay;
   Widget build(BuildContext context) {
     double size = MediaQuery.of(context).size.height / 2.25;
     return Container(
@@ -55,8 +60,9 @@ class _WarningWidget extends StatelessWidget {
                           child: Container(
                             alignment: Alignment.topRight,
                             child: CloseButtonWidget(
-                              backgroundColor: const Color.fromARGB(118, 225, 157, 0),
-                              onPressed: () => Navigator.of(context).pop(false),
+                              backgroundColor:
+                                  const Color.fromARGB(118, 225, 157, 0),
+                              onPressed: overlay.remove,
                             ),
                           ),
                         ),

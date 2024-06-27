@@ -12,11 +12,15 @@ class EpiEntregaPageFrmCubit extends Cubit<EpiEntregaPageFrmState> {
           EpiEntregaPageFrmState(epiEntrega: epiEntregaModel),
         );
 
-  void save(EpiEntregaModel epiEntrega) async {
+  void save(
+    EpiEntregaModel epiEntrega,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, EpiEntregaModel epiEntrega)? result =
           await service.save(epiEntrega);
       if (result == null) return;
+      onSaved(result.$1);
       emit(
         EpiEntregaPageFrmState(
           message: result.$1,

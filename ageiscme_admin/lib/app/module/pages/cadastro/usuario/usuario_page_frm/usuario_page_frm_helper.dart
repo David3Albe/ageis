@@ -13,7 +13,7 @@ class UsuarioPageFrmHelper {
     BuildContext context,
   ) async {
     bool possui = await usuarioLogadoPossuiDireito(context: context);
-    if(!possui) return;
+    if (!possui) return;
     UserTagPrintDTO userTagPrint =
         UserTagPrintDTO(tagId: tagId, userName: userName);
     UserTagPrinterController controller = UserTagPrinterController(
@@ -36,7 +36,7 @@ class UsuarioPageFrmHelper {
       );
       return false;
     } catch (ex) {
-      await ErrorUtils.showOneErrorDialog(context, ex.toString());
+      ErrorUtils.showOneErrorDialog(context, ex.toString());
       return false;
     }
   }

@@ -10,11 +10,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ProcessoMotivoPage extends StatefulWidget {
-  ProcessoMotivoPage({super.key});
+  const ProcessoMotivoPage({super.key});
 
   @override
   State<ProcessoMotivoPage> createState() => _ProcessoMotivoPageState();
@@ -110,30 +111,42 @@ class _ProcessoMotivoPageState extends State<ProcessoMotivoPage> {
     );
   }
 
-  void openModal(BuildContext context, ProcessoMotivoModel processoMotivo) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: ProcessoMotivoPageFrm(
-            processoMotivo: processoMotivo,
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadProcessoMotivo();
-    });
+  Future openModal(
+    BuildContext context,
+    ProcessoMotivoModel processoMotivo,
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Motivo de Processo',
+      widget: ProcessoMotivoPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        processoMotivo: processoMotivo,
+      ),
+    );
   }
 
-  void delete(BuildContext context, ProcessoMotivoModel processoMotivo) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Motivo de Processo\n${processoMotivo.cod} - ${processoMotivo.descricao}',
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadProcessoMotivo();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
+  }
+
+  void delete(BuildContext context, ProcessoMotivoModel processoMotivo) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Motivo de Processo\n${processoMotivo.cod} - ${processoMotivo.descricao}',
+      onConfirm: () => confirmDelete(processoMotivo),
     );
-    if (confirmacao) bloc.delete(processoMotivo, context);
+  }
+
+  void confirmDelete(ProcessoMotivoModel processoMotivo) {
+    bloc.delete(processoMotivo, context);
   }
 
   void deleted(ProcessoMotivoPageState state) {

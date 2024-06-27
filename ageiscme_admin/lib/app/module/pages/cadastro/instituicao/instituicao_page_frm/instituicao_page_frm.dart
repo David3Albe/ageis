@@ -6,7 +6,6 @@ import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_data/services/instituicao/instituicao_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_float_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
@@ -19,6 +18,7 @@ import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -26,9 +26,13 @@ class InstituicaoPageFrm extends StatefulWidget {
   const InstituicaoPageFrm({
     Key? key,
     required this.instituicao,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final InstituicaoModel instituicao;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<InstituicaoPageFrm> createState() =>
@@ -336,386 +340,410 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<InstituicaoPageFrmCubit, InstituicaoPageFrmState>(
+    return BlocBuilder<InstituicaoPageFrmCubit, InstituicaoPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
-      child: BlocBuilder<InstituicaoPageFrmCubit, InstituicaoPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return AlertDialog(
-            contentPadding: const EdgeInsets.all(8.0),
-            titlePadding: const EdgeInsets.all(8.0),
-            actionsPadding: const EdgeInsets.all(8.0),
-            title: Row(
+      builder: (context, state) {
+        return Column(
+          children: [
+            Row(
               children: [
                 TitleWidget(
                   text: titulo,
                 ),
-                const Spacer(),
-                CloseButtonWidget(
-                  onPressed: () => Navigator.of(context).pop((false, '')),
-                ),
               ],
             ),
-            content: Container(
-              constraints: const BoxConstraints(
-                minWidth: 400,
-                maxWidth: 1800,
-                minHeight: 600,
-                maxHeight: 1000,
-              ),
-              height: size.height * 0.9,
-              width: size.width * 0.9,
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.only(right: 14),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: txtNome,
-                          ),
-                          const SizedBox(width: 25.0),
-                          Expanded(
-                            child: txtCnpj,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtEndereco,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: txtFoneCme,
-                          ),
-                          const SizedBox(width: 25.0),
-                          Expanded(
-                            child: txtFoneResponsavel,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtResponsavel,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            children: [
-                              const Padding(padding: EdgeInsets.only(top: 5.0)),
-                              CustomCheckboxWidget(
-                                checked: instituicao.ativo,
-                                onClick: (value) => instituicao.ativo = value,
-                                text: 'Ativo',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 5.0)),
-                              CustomCheckboxWidget(
-                                checked: instituicao.imprimeQrCode,
-                                onClick: (value) =>
-                                    instituicao.imprimeQrCode = value,
-                                text: 'Imprime',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 5.0)),
-                              CustomCheckboxWidget(
-                                checked: instituicao.calculadoraRotulados,
-                                onClick: (value) =>
-                                    instituicao.calculadoraRotulados = value,
-                                text: 'Calculadora',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 5.0)),
-                              CustomCheckboxWidget(
-                                checked: instituicao.fluxoAlternado,
-                                onClick: (value) =>
-                                    instituicao.fluxoAlternado = value,
-                                text: 'Permite Fluxo Alternado',
-                                align: MainAxisAlignment.start,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              const Padding(padding: EdgeInsets.only(top: 5.0)),
-                              CustomCheckboxWidget(
-                                checked: instituicao.embalagemKit,
-                                onClick: (value) =>
-                                    instituicao.embalagemKit = value,
-                                text: 'Embalagem - Kit',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 5.0)),
-                              CustomCheckboxWidget(
-                                checked: instituicao.embalagemItem,
-                                onClick: (value) =>
-                                    instituicao.embalagemItem = value,
-                                text: 'Embalagem - Item',
-                                align: MainAxisAlignment.start,
-                              ),
-                              const Padding(padding: EdgeInsets.only(top: 5.0)),
-                              CustomCheckboxWidget(
-                                checked: instituicao.naoAlertarKitIncompleto,
-                                onClick: (value) =>
-                                    instituicao.naoAlertarKitIncompleto = value,
-                                text: 'Não Alertar Kit Incompleto (Preparo)',
-                                align: MainAxisAlignment.start,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: txtDebugLevel,
-                          ),
-                          const SizedBox(width: 25.0),
-                          Expanded(
-                            child: txtTempoMin,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: txtEscalaFonte,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: txtTempoDescartarItemEstoque,
-                          ),
-                          const SizedBox(width: 25.0),
-                          Expanded(
-                            flex: 6,
-                            child: txtMensagemDescartarItemEstoque,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          const Spacer(flex: 2),
-                          const SizedBox(width: 25.0),
-                          Expanded(
-                            flex: 6,
-                            child: txtMensagemDescartarItemKitEstoque,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: txtTempoDescartarKitEstoque,
-                          ),
-                          const SizedBox(width: 25.0),
-                          Expanded(
-                            flex: 6,
-                            child: txtMensagemDescartarKitEstoque,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: txtTempoDescartarItemForaEstoque,
-                          ),
-                          const SizedBox(width: 25.0),
-                          Expanded(
-                            flex: 6,
-                            child: txtMensagemDescartarItemForaEstoque,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          const Spacer(flex: 2),
-                          const SizedBox(width: 25.0),
-                          Expanded(
-                            flex: 6,
-                            child: txtMensagemDescartarItemKitForaEstoque,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 2,
-                            child: txtTempoDescartarKitForaEstoque,
-                          ),
-                          const SizedBox(width: 25.0),
-                          Expanded(
-                            flex: 6,
-                            child: txtMensagemDescartarKitForaEstoque,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: BlocBuilder<LocalInstituicaoCubit,
-                          LocalInstituicaoState>(
-                        bloc: localInstituicaoCubit,
-                        builder: (context, locaisState) {
-                          if (locaisState.loading) return const LoadingWidget();
-                          List<LocalInstituicaoModel> locais =
-                              locaisState.locaisInstituicoes;
-
-                          final localizacoesText = locais
-                              .map((localizacao) => localizacao.nome)
-                              .join('\n');
-
-                          if (locais.isNotEmpty) {
-                            txtLocais.text = localizacoesText.toString();
-                            return txtLocais;
-                          }
-                          txtLocais.text = ' ';
-                          return txtLocais;
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            actions: [
-              Row(
+            Expanded(
+              child: Row(
                 children: [
-                  CustomPopupMenuWidget(
-                    items: [
-                      CustomPopupItemModel(
-                        text: 'Locais',
-                        onTap: _selectLocal,
+                  Expanded(
+                    child: Container(
+                      constraints: const BoxConstraints(
+                        minWidth: 400,
+                        maxWidth: 1800,
+                        minHeight: 600,
+                        maxHeight: 1000,
                       ),
-                      CustomPopupItemModel(
-                        text: 'Imprimir Locais',
-                        onTap: _imprimir,
-                      ),
-                      if (instituicao.cod != null && instituicao.cod != 0)
-                        CustomPopupItemHistoryModel.getHistoryItem(
-                          child: HistoricoPage(
-                            pk: instituicao.cod!,
-                            termo: 'INSTITUICAO',
-                          ),
-                          context: context,
+                      height: size.height * 0.9,
+                      width: size.width * 0.9,
+                      child: SingleChildScrollView(
+                        padding: const EdgeInsets.only(right: 14),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: txtNome,
+                                  ),
+                                  const SizedBox(width: 25.0),
+                                  Expanded(
+                                    child: txtCnpj,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 24.0),
+                              child: txtEndereco,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: txtFoneCme,
+                                  ),
+                                  const SizedBox(width: 25.0),
+                                  Expanded(
+                                    child: txtFoneResponsavel,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 24.0),
+                              child: txtResponsavel,
+                            ),
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 5.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked: instituicao.ativo,
+                                        onClick: (value) =>
+                                            instituicao.ativo = value,
+                                        text: 'Ativo',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 5.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked: instituicao.imprimeQrCode,
+                                        onClick: (value) =>
+                                            instituicao.imprimeQrCode = value,
+                                        text: 'Imprime',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 5.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked:
+                                            instituicao.calculadoraRotulados,
+                                        onClick: (value) => instituicao
+                                            .calculadoraRotulados = value,
+                                        text: 'Calculadora',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 5.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked: instituicao.fluxoAlternado,
+                                        onClick: (value) =>
+                                            instituicao.fluxoAlternado = value,
+                                        text: 'Permite Fluxo Alternado',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Column(
+                                    children: [
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 5.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked: instituicao.embalagemKit,
+                                        onClick: (value) =>
+                                            instituicao.embalagemKit = value,
+                                        text: 'Embalagem - Kit',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 5.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked: instituicao.embalagemItem,
+                                        onClick: (value) =>
+                                            instituicao.embalagemItem = value,
+                                        text: 'Embalagem - Item',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 5.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked:
+                                            instituicao.naoAlertarKitIncompleto,
+                                        onClick: (value) => instituicao
+                                            .naoAlertarKitIncompleto = value,
+                                        text:
+                                            'Não Alertar Kit Incompleto (Preparo)',
+                                        align: MainAxisAlignment.start,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: txtDebugLevel,
+                                  ),
+                                  const SizedBox(width: 25.0),
+                                  Expanded(
+                                    child: txtTempoMin,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: txtEscalaFonte,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: txtTempoDescartarItemEstoque,
+                                  ),
+                                  const SizedBox(width: 25.0),
+                                  Expanded(
+                                    flex: 6,
+                                    child: txtMensagemDescartarItemEstoque,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  const Spacer(flex: 2),
+                                  const SizedBox(width: 25.0),
+                                  Expanded(
+                                    flex: 6,
+                                    child: txtMensagemDescartarItemKitEstoque,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: txtTempoDescartarKitEstoque,
+                                  ),
+                                  const SizedBox(width: 25.0),
+                                  Expanded(
+                                    flex: 6,
+                                    child: txtMensagemDescartarKitEstoque,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: txtTempoDescartarItemForaEstoque,
+                                  ),
+                                  const SizedBox(width: 25.0),
+                                  Expanded(
+                                    flex: 6,
+                                    child: txtMensagemDescartarItemForaEstoque,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  const Spacer(flex: 2),
+                                  const SizedBox(width: 25.0),
+                                  Expanded(
+                                    flex: 6,
+                                    child:
+                                        txtMensagemDescartarItemKitForaEstoque,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    flex: 2,
+                                    child: txtTempoDescartarKitForaEstoque,
+                                  ),
+                                  const SizedBox(width: 25.0),
+                                  Expanded(
+                                    flex: 6,
+                                    child: txtMensagemDescartarKitForaEstoque,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: BlocBuilder<LocalInstituicaoCubit,
+                                  LocalInstituicaoState>(
+                                bloc: localInstituicaoCubit,
+                                builder: (context, locaisState) {
+                                  if (locaisState.loading) {
+                                    return const LoadingWidget();
+                                  }
+                                  List<LocalInstituicaoModel> locais =
+                                      locaisState.locaisInstituicoes;
+
+                                  final localizacoesText = locais
+                                      .map((localizacao) => localizacao.nome)
+                                      .join('\n');
+
+                                  if (locais.isNotEmpty) {
+                                    txtLocais.text =
+                                        localizacoesText.toString();
+                                    return txtLocais;
+                                  }
+                                  txtLocais.text = ' ';
+                                  return txtLocais;
+                                },
+                              ),
+                            ),
+                          ],
                         ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: SaveButtonWidget(
-                      onPressed: () => {salvar()},
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: CancelButtonUnfilledWidget(
-                      onPressed: () => {Navigator.of(context).pop((false, ''))},
+                      ),
                     ),
                   ),
                 ],
               ),
-            ],
+            ),
+            Row(
+              children: [
+                CustomPopupMenuWidget(
+                  items: [
+                    CustomPopupItemModel(
+                      text: 'Locais',
+                      onTap: _selectLocal,
+                    ),
+                    CustomPopupItemModel(
+                      text: 'Imprimir Locais',
+                      onTap: _imprimir,
+                    ),
+                    if (instituicao.cod != null && instituicao.cod != 0)
+                      CustomPopupItemHistoryModel.getHistoryItem(
+                        child: HistoricoPage(
+                          pk: instituicao.cod!,
+                          termo: 'INSTITUICAO',
+                        ),
+                        context: context,
+                      ),
+                  ],
+                ),
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: SaveButtonWidget(
+                    onPressed: () => {salvar()},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: CancelButtonUnfilledWidget(
+                    onPressed: widget.onCancel,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _imprimir() async {
+    late int chave;
+    chave = WindowsHelper.openDefaultDialog(
+      widget: BlocBuilder<LocalInstituicaoCubit, LocalInstituicaoState>(
+        bloc: localInstituicaoCubit,
+        builder: (context, state) {
+          return InstituicaoPageFrmImpressao(
+            instituicao: instituicao,
+            locais: state.locaisInstituicoes,
+            onCancel: () => onCancelImpressao(chave),
+            onPrinted: () => onPrinted(chave),
           );
         },
       ),
     );
   }
 
-  void _imprimir() async {
-    await showDialog<bool>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return BlocBuilder<LocalInstituicaoCubit, LocalInstituicaoState>(
-          bloc: localInstituicaoCubit,
-          builder: (context, state) {
-            return InstituicaoPageFrmImpressao(
-              instituicao: instituicao,
-              locais: state.locaisInstituicoes,
-            );
-          },
-        );
-      },
-    );
+  void onPrinted(int chave) {
+    WindowsHelper.RemoverWidget(chave);
+  }
+
+  void onCancelImpressao(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void _selectLocal() {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return LocalInstituicaoPageFrm(
-          localInstituicao: LocalInstituicaoModel(
-            cod: 0,
-            ativo: true,
-            codBarra: '',
-            codInstituicao: 0,
-            centroCusto: null,
-            codCentroCusto: 0,
-            contato: '',
-            exigeProntuario: false,
-            localConferencia: false,
-            localizacao: '',
-            nome: '',
-            responsavel: '',
-            ultimaAlteracao: null,
-            tstamp: '',
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(
-        context,
-        result.$2,
-      );
-    });
+    late int chave;
+    chave = WindowsHelper.openDefaultDialog(
+      widget: LocalInstituicaoPageFrm(
+        onSaved: (str) => onSaved(str, chave),
+        onCancel: () => onCancel(chave),
+        localInstituicao: LocalInstituicaoModel(
+          cod: 0,
+          ativo: true,
+          codBarra: '',
+          codInstituicao: 0,
+          centroCusto: null,
+          codCentroCusto: null,
+          contato: '',
+          exigeProntuario: false,
+          localConferencia: false,
+          localizacao: '',
+          nome: '',
+          responsavel: '',
+          ultimaAlteracao: null,
+          tstamp: '',
+        ),
+      ),
+    );
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void salvar() {
@@ -732,6 +760,6 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
         !tempoMinimoValid ||
         !escalaFonteValid) return;
 
-    cubit.save(instituicao);
+    cubit.save(instituicao, widget.onSaved, context);
   }
 }

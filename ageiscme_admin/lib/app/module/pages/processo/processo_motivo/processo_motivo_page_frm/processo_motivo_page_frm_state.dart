@@ -12,12 +12,15 @@ class ProcessoMotivoPageFrmCubit extends Cubit<ProcessoMotivoPageFrmState> {
           ProcessoMotivoPageFrmState(processoMotivo: processoMotivoModel),
         );
 
-  void save(ProcessoMotivoModel processoMotivo) async {
+  void save(
+    ProcessoMotivoModel processoMotivo,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, ProcessoMotivoModel processoMotivo)? result =
           await service.save(processoMotivo);
       if (result == null) return;
-
+      onSaved(result.$1);
       emit(
         ProcessoMotivoPageFrmState(
           message: result.$1,

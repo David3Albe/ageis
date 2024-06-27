@@ -23,7 +23,6 @@ import 'package:ageiscme_models/response_dto/kit_etiqueta_preparo_response/kit_e
 import 'package:ageiscme_models/response_dto/kit_etiqueta_preparo_response/kit_etiqueta_preparo_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
@@ -48,10 +47,14 @@ class KitPageFrm extends StatefulWidget {
     Key? key,
     required this.kit,
     required this.kitCorCubit,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final KitModel kit;
   final KitCorCubit kitCorCubit;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<KitPageFrm> createState() => _KitPageFrmState(kit: kit);
@@ -152,377 +155,400 @@ class _KitPageFrmState extends State<KitPageFrm> {
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<KitPageFrmCubit, KitPageFrmState>(
+    return BlocBuilder<KitPageFrmCubit, KitPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
-      child: BlocBuilder<KitPageFrmCubit, KitPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return AlertDialog(
-            contentPadding: const EdgeInsets.all(8.0),
-            titlePadding: const EdgeInsets.all(8.0),
-            actionsPadding: const EdgeInsets.all(8.0),
-            title: Row(
+      builder: (context, state) {
+        return Column(
+          children: [
+            Row(
               children: [
                 Expanded(
                   child: TitleWidget(
                     text: titulo,
                   ),
                 ),
-                const Spacer(),
-                CloseButtonWidget(
-                  onPressed: () => Navigator.of(context).pop((false, '')),
-                ),
               ],
             ),
-            content: Container(
-              constraints: BoxConstraints(
-                minWidth: size.width * .5,
-                minHeight: size.height * .5,
-                maxHeight: size.height * .8,
-              ),
-              child: SingleChildScrollView(
-                controller: scroll,
-                padding: const EdgeInsets.only(right: 14),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: DropDownSearchApiWidget<
-                                KitDescritorDropDownSearchResponseDTO>(
-                              validateBuilder:
-                                  (context, validateMethodBuilder) =>
-                                      validateDescritor = validateMethodBuilder,
-                              validator: (val) =>
-                                  val == null ? 'Obrigatório' : null,
-                              search: (str) async =>
-                                  (await KitDescritorService()
-                                          .getDropDownSearch(
-                                    KitDescritorDropDownSearchDTO(
-                                      numeroRegistros: 30,
-                                      termoPesquisa: str,
-                                      apenasAtivos: true,
-                                    ),
-                                  ))
-                                      ?.$2 ??
-                                  [],
-                              textFunction: (kitDescritor) =>
-                                  kitDescritor.Nome(),
-                              initialValue: kit.descritor == null
-                                  ? null
-                                  : KitDescritorDropDownSearchResponseDTO(
-                                      cod: kit.descritor!.cod!,
-                                      nome: kit.descritor?.nome,
-                                    ),
-                              onChanged: (value) =>
-                                  kit.codDescritorKit = value?.cod,
-                              placeholder: 'Descritor do Kit *',
-                            ),
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: txtCodBarra,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: BlocBuilder<KitCorCubit, KitCorState>(
-                              bloc: widget.kitCorCubit,
-                              builder: (context, kitsCoresState) {
-                                if (kitsCoresState.loading) {
-                                  return const Center(
-                                    child: const LoadingWidget(),
-                                  );
-                                }
-                                List<KitCorModel> kitsCores =
-                                    kitsCoresState.kitCores;
-
-                                kitsCores.sort(
-                                  (a, b) => a.nome!.compareTo(b.nome!),
-                                );
-                                KitCorModel? kitCor = kitsCores
-                                    .where(
-                                      (element) => element.cod == kit.codCor1,
-                                    )
-                                    .firstOrNull;
-                                return DropDownSearchWidget(
-                                  textFunction: (kit) =>
-                                      kit.GetNomeKitCorText(),
-                                  initialValue: kitCor,
-                                  sourceList: kitsCores
-                                      .where((element) => element.ativo == true)
-                                      .toList(),
-                                  onChanged: (value) =>
-                                      kit.codCor1 = value?.cod,
-                                  placeholder: 'Cor 1',
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: BlocBuilder<KitCorCubit, KitCorState>(
-                              bloc: widget.kitCorCubit,
-                              builder: (context, kitsCoresState) {
-                                if (kitsCoresState.loading) {
-                                  return const Center(child: LoadingWidget());
-                                }
-                                List<KitCorModel> kitsCores =
-                                    kitsCoresState.kitCores;
-                                kitsCores.sort(
-                                  (a, b) => a.nome!.compareTo(b.nome!),
-                                );
-                                KitCorModel? kitCor = kitsCores
-                                    .where(
-                                      (element) => element.cod == kit.codCor2,
-                                    )
-                                    .firstOrNull;
-                                return DropDownSearchWidget(
-                                  textFunction: (kit) =>
-                                      kit.GetNomeKitCorText(),
-                                  initialValue: kitCor,
-                                  sourceList: kitsCores
-                                      .where((element) => element.ativo == true)
-                                      .toList(),
-                                  onChanged: (value) =>
-                                      kit.codCor2 = value?.cod,
-                                  placeholder: 'Cor 2',
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: BlocBuilder<KitCorCubit, KitCorState>(
-                              bloc: widget.kitCorCubit,
-                              builder: (context, kitsCoresState) {
-                                if (kitsCoresState.loading) {
-                                  return const LoadingWidget();
-                                }
-                                List<KitCorModel> kitsCores =
-                                    kitsCoresState.kitCores;
-                                kitsCores.sort(
-                                  (a, b) => a.nome!.compareTo(b.nome!),
-                                );
-                                KitCorModel? kitCor = kitsCores
-                                    .where(
-                                      (element) => element.cod == kit.codCor3,
-                                    )
-                                    .firstOrNull;
-                                return DropDownSearchWidget(
-                                  textFunction: (kit) =>
-                                      kit.GetNomeKitCorText(),
-                                  initialValue: kitCor,
-                                  sourceList: kitsCores
-                                      .where((element) => element.ativo == true)
-                                      .toList(),
-                                  onChanged: (value) =>
-                                      kit.codCor3 = value?.cod,
-                                  placeholder: 'Cor 3',
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: BlocBuilder<KitCorCubit, KitCorState>(
-                              bloc: widget.kitCorCubit,
-                              builder: (context, kitsCoresState) {
-                                if (kitsCoresState.loading) {
-                                  return const LoadingWidget();
-                                }
-                                List<KitCorModel> kitsCores =
-                                    kitsCoresState.kitCores;
-                                kitsCores.sort(
-                                  (a, b) => a.nome!.compareTo(b.nome!),
-                                );
-                                KitCorModel? kitCor = kitsCores
-                                    .where(
-                                      (element) => element.cod == kit.codCor4,
-                                    )
-                                    .firstOrNull;
-                                return DropDownSearchWidget(
-                                  textFunction: (kit) =>
-                                      kit.GetNomeKitCorText(),
-                                  initialValue: kitCor,
-                                  sourceList: kitsCores
-                                      .where((element) => element.ativo == true)
-                                      .toList(),
-                                  onChanged: (value) =>
-                                      kit.codCor4 = value?.cod,
-                                  placeholder: 'Cor 4',
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: DropDownSearchWidget<KitSituacaoOption>(
-                        validator: (val) => val == null ? 'Obrigatório' : null,
-                        validateBuilder: (context, validateMethodBuilder) => validateSituacao = validateMethodBuilder,
-                        textFunction: (p0) => p0.GetDropDownText(),
-                        initialValue: KitSituacaoOption.situacaoOptions
-                            .where(
-                              (element) => element.cod == kit.status,
-                            )
-                            .firstOrNull,
-                        sourceList: KitSituacaoOption.situacaoOptions,
-                        onChanged: (value) =>
-                            kit.status = value?.cod.toString(),
-                        placeholder: 'Situação *',
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtRestricao,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtConjuntoAtual,
-                    ),
-                    if (kit.itens!.isNotEmpty) ...{
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5.0),
-                        child: Text(
-                          'Itens deste Kit',
-                          style: Fontes.getRoboto(),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 5.0),
-                        child: Builder(
-                          builder: (context) {
-                            List<ItemModel>? itens = [];
-
-                            itens.addAll(kit.itens!);
-
-                            return ListFieldWidget<ItemModel>(
-                              sourceList: itens,
-                              removeButton: false,
-                              onItemSelected: (value) {},
-                              onDoubleTap: (ItemModel item) =>
-                                  _detalharItem(item.cod),
-                              itemText: (value) {
-                                return '${value.descricao}, ${value.idEtiqueta}';
-                              },
-                            );
-                          },
-                        ),
-                      ),
-                    },
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: txtPreparo,
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: txtCodEmbalagem,
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: txtProcessoLeitura,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            actions: [
-              Row(
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustomPopupMenuWidget(
-                    items: [
-                      if (kit.cod != 0 && kit.cod != null)
-                        CustomPopupItemModel(
-                          text: 'Imprimir Etiqueta Kit',
-                          onTap: _imprimirTagKit,
+                  Expanded(
+                    child: Container(
+                      constraints: BoxConstraints(
+                        minWidth: size.width * .5,
+                        minHeight: size.height * .5,
+                        maxHeight: size.height * .8,
+                      ),
+                      child: SingleChildScrollView(
+                        controller: scroll,
+                        padding: const EdgeInsets.only(right: 14),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: DropDownSearchApiWidget<
+                                        KitDescritorDropDownSearchResponseDTO>(
+                                      validateBuilder:
+                                          (context, validateMethodBuilder) =>
+                                              validateDescritor =
+                                                  validateMethodBuilder,
+                                      validator: (val) =>
+                                          val == null ? 'Obrigatório' : null,
+                                      search: (str) async =>
+                                          (await KitDescritorService()
+                                                  .getDropDownSearch(
+                                            KitDescritorDropDownSearchDTO(
+                                              numeroRegistros: 30,
+                                              termoPesquisa: str,
+                                              apenasAtivos: true,
+                                            ),
+                                          ))
+                                              ?.$2 ??
+                                          [],
+                                      textFunction: (kitDescritor) =>
+                                          kitDescritor.Nome(),
+                                      initialValue: kit.descritor == null
+                                          ? null
+                                          : KitDescritorDropDownSearchResponseDTO(
+                                              cod: kit.descritor!.cod!,
+                                              nome: kit.descritor?.nome,
+                                            ),
+                                      onChanged: (value) =>
+                                          kit.codDescritorKit = value?.cod,
+                                      placeholder: 'Descritor do Kit *',
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16.0),
+                                  Expanded(
+                                    child: txtCodBarra,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child:
+                                        BlocBuilder<KitCorCubit, KitCorState>(
+                                      bloc: widget.kitCorCubit,
+                                      builder: (context, kitsCoresState) {
+                                        if (kitsCoresState.loading) {
+                                          return const Center(
+                                            child: const LoadingWidget(),
+                                          );
+                                        }
+                                        List<KitCorModel> kitsCores =
+                                            kitsCoresState.kitCores;
+
+                                        kitsCores.sort(
+                                          (a, b) => a.nome!.compareTo(b.nome!),
+                                        );
+                                        KitCorModel? kitCor = kitsCores
+                                            .where(
+                                              (element) =>
+                                                  element.cod == kit.codCor1,
+                                            )
+                                            .firstOrNull;
+                                        return DropDownSearchWidget(
+                                          textFunction: (kit) =>
+                                              kit.GetNomeKitCorText(),
+                                          initialValue: kitCor,
+                                          sourceList: kitsCores
+                                              .where(
+                                                (element) =>
+                                                    element.ativo == true,
+                                              )
+                                              .toList(),
+                                          onChanged: (value) =>
+                                              kit.codCor1 = value?.cod,
+                                          placeholder: 'Cor 1',
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16.0),
+                                  Expanded(
+                                    child:
+                                        BlocBuilder<KitCorCubit, KitCorState>(
+                                      bloc: widget.kitCorCubit,
+                                      builder: (context, kitsCoresState) {
+                                        if (kitsCoresState.loading) {
+                                          return const Center(
+                                            child: LoadingWidget(),
+                                          );
+                                        }
+                                        List<KitCorModel> kitsCores =
+                                            kitsCoresState.kitCores;
+                                        kitsCores.sort(
+                                          (a, b) => a.nome!.compareTo(b.nome!),
+                                        );
+                                        KitCorModel? kitCor = kitsCores
+                                            .where(
+                                              (element) =>
+                                                  element.cod == kit.codCor2,
+                                            )
+                                            .firstOrNull;
+                                        return DropDownSearchWidget(
+                                          textFunction: (kit) =>
+                                              kit.GetNomeKitCorText(),
+                                          initialValue: kitCor,
+                                          sourceList: kitsCores
+                                              .where(
+                                                (element) =>
+                                                    element.ativo == true,
+                                              )
+                                              .toList(),
+                                          onChanged: (value) =>
+                                              kit.codCor2 = value?.cod,
+                                          placeholder: 'Cor 2',
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child:
+                                        BlocBuilder<KitCorCubit, KitCorState>(
+                                      bloc: widget.kitCorCubit,
+                                      builder: (context, kitsCoresState) {
+                                        if (kitsCoresState.loading) {
+                                          return const LoadingWidget();
+                                        }
+                                        List<KitCorModel> kitsCores =
+                                            kitsCoresState.kitCores;
+                                        kitsCores.sort(
+                                          (a, b) => a.nome!.compareTo(b.nome!),
+                                        );
+                                        KitCorModel? kitCor = kitsCores
+                                            .where(
+                                              (element) =>
+                                                  element.cod == kit.codCor3,
+                                            )
+                                            .firstOrNull;
+                                        return DropDownSearchWidget(
+                                          textFunction: (kit) =>
+                                              kit.GetNomeKitCorText(),
+                                          initialValue: kitCor,
+                                          sourceList: kitsCores
+                                              .where(
+                                                (element) =>
+                                                    element.ativo == true,
+                                              )
+                                              .toList(),
+                                          onChanged: (value) =>
+                                              kit.codCor3 = value?.cod,
+                                          placeholder: 'Cor 3',
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16.0),
+                                  Expanded(
+                                    child:
+                                        BlocBuilder<KitCorCubit, KitCorState>(
+                                      bloc: widget.kitCorCubit,
+                                      builder: (context, kitsCoresState) {
+                                        if (kitsCoresState.loading) {
+                                          return const LoadingWidget();
+                                        }
+                                        List<KitCorModel> kitsCores =
+                                            kitsCoresState.kitCores;
+                                        kitsCores.sort(
+                                          (a, b) => a.nome!.compareTo(b.nome!),
+                                        );
+                                        KitCorModel? kitCor = kitsCores
+                                            .where(
+                                              (element) =>
+                                                  element.cod == kit.codCor4,
+                                            )
+                                            .firstOrNull;
+                                        return DropDownSearchWidget(
+                                          textFunction: (kit) =>
+                                              kit.GetNomeKitCorText(),
+                                          initialValue: kitCor,
+                                          sourceList: kitsCores
+                                              .where(
+                                                (element) =>
+                                                    element.ativo == true,
+                                              )
+                                              .toList(),
+                                          onChanged: (value) =>
+                                              kit.codCor4 = value?.cod,
+                                          placeholder: 'Cor 4',
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: DropDownSearchWidget<KitSituacaoOption>(
+                                validator: (val) =>
+                                    val == null ? 'Obrigatório' : null,
+                                validateBuilder: (
+                                  context,
+                                  validateMethodBuilder,
+                                ) =>
+                                    validateSituacao = validateMethodBuilder,
+                                textFunction: (p0) => p0.GetDropDownText(),
+                                initialValue: KitSituacaoOption.situacaoOptions
+                                    .where(
+                                      (element) => element.cod == kit.status,
+                                    )
+                                    .firstOrNull,
+                                sourceList: KitSituacaoOption.situacaoOptions,
+                                onChanged: (value) =>
+                                    kit.status = value?.cod.toString(),
+                                placeholder: 'Situação *',
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: txtRestricao,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: txtConjuntoAtual,
+                            ),
+                            if (kit.itens!.isNotEmpty) ...{
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Text(
+                                  'Itens deste Kit',
+                                  style: Fontes.getRoboto(),
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Builder(
+                                  builder: (context) {
+                                    List<ItemModel>? itens = [];
+
+                                    itens.addAll(kit.itens!);
+
+                                    return ListFieldWidget<ItemModel>(
+                                      sourceList: itens,
+                                      removeButton: false,
+                                      onItemSelected: (value) {},
+                                      onDoubleTap: (ItemModel item) =>
+                                          _detalharItem(item.cod),
+                                      itemText: (value) {
+                                        return '${value.descricao}, ${value.idEtiqueta}';
+                                      },
+                                    );
+                                  },
+                                ),
+                              ),
+                            },
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: txtPreparo,
+                                  ),
+                                  const SizedBox(width: 16.0),
+                                  Expanded(
+                                    child: txtCodEmbalagem,
+                                  ),
+                                  const SizedBox(width: 16.0),
+                                  Expanded(
+                                    child: txtProcessoLeitura,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      if (kit.cod != 0 && kit.cod != null)
-                        CustomPopupItemModel(
-                          text: 'Imprimir Etiqueta Preparo',
-                          onTap: _imprimirEtiquetaPreparo,
-                        ),
-                      if (kit.cod == 0 || kit.cod == null)
-                        CustomPopupItemModel(
-                          text: 'Montar Itens Kit',
-                          onTap: adicionarItemKit,
-                        ),
-                      if (kit.cod != 0 && kit.cod != null)
-                        CustomPopupItemModel(
-                          text: 'Repor Item no Kit',
-                          onTap: reporItemKit,
-                        ),
-                      if (kit.cod != 0 && kit.cod != null)
-                        CustomPopupItemModel(
-                          text: 'Remover Item do Kit',
-                          onTap: removerItemKit,
-                        ),
-                      if (kit.cod != 0 && kit.cod != null)
-                        CustomPopupItemHistoryModel.getHistoryItem(
-                          child: HistoricoPage(
-                            pk: kit.cod!,
-                            termo: 'KIT',
-                          ),
-                          context: context,
-                        ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: SaveButtonWidget(
-                      onPressed: salvar,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: CleanButtonWidget(
-                      onPressed: () => {
-                        setState(() {
-                          kit = KitModel.empty();
-                          setDateDescarte?.call(null);
-                        }),
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: CancelButtonUnfilledWidget(
-                      onPressed: () => {Navigator.of(context).pop((false, ''))},
+                      ),
                     ),
                   ),
                 ],
               ),
-            ],
-          );
-        },
-      ),
+            ),
+            Row(
+              children: [
+                CustomPopupMenuWidget(
+                  items: [
+                    if (kit.cod != 0 && kit.cod != null)
+                      CustomPopupItemModel(
+                        text: 'Imprimir Etiqueta Kit',
+                        onTap: _imprimirTagKit,
+                      ),
+                    if (kit.cod != 0 && kit.cod != null)
+                      CustomPopupItemModel(
+                        text: 'Imprimir Etiqueta Preparo',
+                        onTap: _imprimirEtiquetaPreparo,
+                      ),
+                    if (kit.cod == 0 || kit.cod == null)
+                      CustomPopupItemModel(
+                        text: 'Montar Itens Kit',
+                        onTap: adicionarItemKit,
+                      ),
+                    if (kit.cod != 0 && kit.cod != null)
+                      CustomPopupItemModel(
+                        text: 'Repor Item no Kit',
+                        onTap: reporItemKit,
+                      ),
+                    if (kit.cod != 0 && kit.cod != null)
+                      CustomPopupItemModel(
+                        text: 'Remover Item do Kit',
+                        onTap: removerItemKit,
+                      ),
+                    if (kit.cod != 0 && kit.cod != null)
+                      CustomPopupItemHistoryModel.getHistoryItem(
+                        child: HistoricoPage(
+                          pk: kit.cod!,
+                          termo: 'KIT',
+                        ),
+                        context: context,
+                      ),
+                  ],
+                ),
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: SaveButtonWidget(
+                    onPressed: salvar,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: CleanButtonWidget(
+                    onPressed: () => {
+                      setState(() {
+                        kit = KitModel.empty();
+                        setDateDescarte?.call(null);
+                      }),
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: CancelButtonUnfilledWidget(
+                    onPressed: widget.onCancel,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -620,7 +646,7 @@ class _KitPageFrmState extends State<KitPageFrm> {
     bool situacaoValid = validateSituacao();
     if (!descritorKitValid) {
       scroll.jumpTo(0);
-    }else if (!situacaoValid){
+    } else if (!situacaoValid) {
       scroll.jumpTo(150);
     }
     if (!restricaoValid || !descritorKitValid || !situacaoValid) return;
@@ -628,7 +654,7 @@ class _KitPageFrmState extends State<KitPageFrm> {
     if (kit.cod == 0 || kit.cod == null) {
       afterSave = (kitImprimir) => _imprimirTagKit(kitImprimir: kitImprimir);
     }
-    cubit.save(kit, afterSave);
+    cubit.save(kit, afterSave, widget.onSaved);
   }
 
   Future _imprimirTagKit({KitModel? kitImprimir}) async {

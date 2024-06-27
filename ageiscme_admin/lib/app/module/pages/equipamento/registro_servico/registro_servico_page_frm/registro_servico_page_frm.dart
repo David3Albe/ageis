@@ -14,10 +14,8 @@ import 'package:ageiscme_models/dto/usuario/usuario_drop_down_search_dto.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
-import 'package:compartilhados/alert_dialog/form_alert_dialog_widget.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
@@ -42,6 +40,8 @@ class RegistroServicoPageFrm extends StatefulWidget {
     required this.registroServico,
     required this.equipamentoCubit,
     required this.itemFilter,
+    required this.onSaved,
+    required this.onCancel,
     this.equipamentoReadOnly,
     this.itemReadOnly,
   }) : super(key: key);
@@ -51,6 +51,8 @@ class RegistroServicoPageFrm extends StatefulWidget {
   final ItemFilter itemFilter;
   final bool? equipamentoReadOnly;
   final bool? itemReadOnly;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<RegistroServicoPageFrm> createState() =>
@@ -102,352 +104,395 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
     double paddingHorizontalScale = MediaQuery.of(context).size.width / 1920;
     Size size = MediaQuery.of(context).size;
     return MultiBlocProvider(
-      providers: [BlocProvider.value(value: readonlyCubit)],
-      child: BlocConsumer<RegistroServicoPageFrmCubit,
-          RegistroServicoPageFrmState>(
+      providers: [
+        BlocProvider.value(value: readonlyCubit),
+      ],
+      child:
+          BlocBuilder<RegistroServicoPageFrmCubit, RegistroServicoPageFrmState>(
         bloc: controller.cubit,
-        listener: (context, state) {
-          if (state.saved) {
-            Navigator.of(context).pop((state.saved, state.message));
-          }
-        },
         builder: (context, state) {
-          return FormAlertDialogWidget(
-            title: Row(
-              children: [
-                Expanded(
-                  child: TitleWidget(
-                    text: controller.titulo,
-                  ),
-                ),
-                const Spacer(),
-                CloseButtonWidget(
-                  onPressed: () => Navigator.of(context).pop((false, '')),
-                ),
-              ],
-            ),
-            content: Container(
-              constraints: BoxConstraints(
-                minWidth: size.width * .5,
-                minHeight: size.height * .5,
-                maxHeight: size.height * .8,
-              ),
-              child: SingleChildScrollView(
-                controller: scroll,
-                padding: const EdgeInsets.only(right: 14),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child:
-                                BlocBuilder<EquipamentoCubit, EquipamentoState>(
-                              bloc: widget.equipamentoCubit,
-                              builder: (context, equipamentoState) {
-                                if (equipamentoState.loading) {
-                                  return const Center(child: LoadingWidget());
-                                }
-                                List<EquipamentoModel> equipamentos =
-                                    equipamentoState.objs;
-                                equipamentos.sort(
-                                  (a, b) => a.nome!.compareTo(b.nome!),
-                                );
-                                registroServico.equipamento = equipamentos
-                                    .where(
-                                      (element) =>
-                                          element.cod ==
-                                          registroServico.codEquipamento,
-                                    )
-                                    .firstOrNull;
-                                return DropDownSearchWidget(
-                                  readOnly: widget.equipamentoReadOnly ?? false,
-                                  textFunction: (equipamento) =>
-                                      equipamento.EquipamentoNomeText(),
-                                  initialValue: registroServico.equipamento,
-                                  sourceList: equipamentos
-                                      .where((element) => element.ativo == true)
-                                      .toList(),
-                                  onChanged: (value) {
-                                    registroServico.codEquipamento =
-                                        value?.cod!;
-                                    registroServico.equipamento = value;
-                                    controller.servicoTipoCubit.reload();
-                                    refreshServicosTipoMethod.call();
-                                  },
-                                  placeholder: 'Equipamento',
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: controller.txtLote,
-                          ),
-                        ],
-                      ),
+          return Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: TitleWidget(
+                      text: controller.titulo,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: DropDownSearchApiWidget(
-                              readOnly: widget.itemReadOnly ?? false,
-                              textFunction: (item) =>
-                                  item.EtiquetaDescricaoText(),
-                              initialValue: registroServico.item,
-                              search: (str) => ItemService().Filter(
-                                widget.itemFilter.copyWith(
-                                  termoPesquisa: str,
-                                  numeroRegistros: 30,
+                  ),
+                ],
+              ),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        constraints: BoxConstraints(
+                          minWidth: size.width * .5,
+                          minHeight: size.height * .5,
+                          maxHeight: size.height * .8,
+                        ),
+                        child: SingleChildScrollView(
+                          controller: scroll,
+                          padding: const EdgeInsets.only(right: 14),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: BlocBuilder<EquipamentoCubit,
+                                          EquipamentoState>(
+                                        bloc: widget.equipamentoCubit,
+                                        builder: (context, equipamentoState) {
+                                          if (equipamentoState.loading) {
+                                            return const Center(
+                                              child: LoadingWidget(),
+                                            );
+                                          }
+                                          List<EquipamentoModel> equipamentos =
+                                              equipamentoState.objs;
+                                          equipamentos.sort(
+                                            (a, b) =>
+                                                a.nome!.compareTo(b.nome!),
+                                          );
+                                          registroServico.equipamento =
+                                              equipamentos
+                                                  .where(
+                                                    (element) =>
+                                                        element.cod ==
+                                                        registroServico
+                                                            .codEquipamento,
+                                                  )
+                                                  .firstOrNull;
+                                          return DropDownSearchWidget(
+                                            readOnly:
+                                                widget.equipamentoReadOnly ??
+                                                    false,
+                                            textFunction: (equipamento) =>
+                                                equipamento
+                                                    .EquipamentoNomeText(),
+                                            initialValue:
+                                                registroServico.equipamento,
+                                            sourceList: equipamentos
+                                                .where(
+                                                  (element) =>
+                                                      element.ativo == true,
+                                                )
+                                                .toList(),
+                                            onChanged: (value) {
+                                              registroServico.codEquipamento =
+                                                  value?.cod!;
+                                              registroServico.equipamento =
+                                                  value;
+                                              controller.servicoTipoCubit
+                                                  .reload();
+                                              refreshServicosTipoMethod.call();
+                                            },
+                                            placeholder: 'Equipamento',
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16.0),
+                                    Expanded(
+                                      child: controller.txtLote,
+                                    ),
+                                  ],
                                 ),
                               ),
-                              onChanged: (value) {
-                                registroServico.codItem = value?.cod;
-                                registroServico.item = value;
-                              },
-                              placeholder: 'Item',
-                            ),
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child:
-                                BlocBuilder<ServicoTipoCubit, ServicoTipoState>(
-                              bloc: controller.servicoTipoCubit,
-                              builder: (context, state) {
-                                if (state.loading == true) {
-                                  return const Center(
-                                    child: LoadingWidget(),
-                                  );
-                                }
-                                List<ServicoTipoModel> servicosTipos =
-                                    state.tiposServico;
-                                registroServico.servicoTipo = servicosTipos
-                                    .where(
-                                      (element) =>
-                                          element.cod ==
-                                          registroServico.codServicosTipos,
-                                    )
-                                    .firstOrNull;
-                                servicosTipos.sort(
-                                  (a, b) => a.nome!.compareTo(b.nome!),
-                                );
-                                List<ServicoTipoModel> servicos = controller
-                                    .buscarServicosEquipamento(servicosTipos);
-
-                                return DropDownSearchWidget<ServicoTipoModel>(
-                                  validateBuilder:
-                                      (context, validateMethodBuilder) =>
-                                          validateTipoServico =
-                                              validateMethodBuilder,
-                                  validator: (val) =>
-                                      val == null ? 'Obrigatório' : null,
-                                  refreshSourceListBuilder:
-                                      (context, refreshTipoServicoSourceList) =>
-                                          refreshServicosTipoMethod =
-                                              refreshTipoServicoSourceList,
-                                  initialValue: registroServico.servicoTipo,
-                                  sourceList: servicos
-                                      .where(
-                                        (element) =>
-                                            element.ativo == true &&
-                                            element.monitoramento == true,
-                                      )
-                                      .toList(),
-                                  onChanged: (value) {
-                                    registroServico.servicoTipo = value;
-                                    registroServico.codServicosTipos =
-                                        value?.cod;
-                                  },
-                                  placeholder: 'Tipo do Serviço *',
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: controller.dtpDataInicio,
-                          ),
-                          const SizedBox(width: 8.0),
-                          Expanded(
-                            child: controller.tmpHoraInicio,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: controller.dtpDataTermino,
-                          ),
-                          const SizedBox(width: 8.0),
-                          Expanded(
-                            child: controller.tmpHoraTermino,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: controller.txtDescricaoServico,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: controller.txtTemperatura,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Expanded(
-                            child: controller.txtTemperaturaMax,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Expanded(
-                            child: controller.txtTemperaturaMin,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: controller.txtUmidade,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Expanded(
-                            child: controller.txtUmidadeMax,
-                          ),
-                          const SizedBox(width: 50.0),
-                          Expanded(
-                            child: controller.txtUmidadeMin,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: DropDownSearchApiWidget<
-                                UsuarioDropDownSearchResponseDTO>(
-                              search: (str) async =>
-                                  (await UsuarioService().getDropDownSearch(
-                                    UsuarioDropDownSearchDTO(
-                                      numeroRegistros: 30,
-                                      search: str,
-                                      apenasAtivos: true,
-                                      apenasColaboradores: true,
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: DropDownSearchApiWidget(
+                                        readOnly: widget.itemReadOnly ?? false,
+                                        textFunction: (item) =>
+                                            item.EtiquetaDescricaoText(),
+                                        initialValue: registroServico.item,
+                                        search: (str) => ItemService().Filter(
+                                          widget.itemFilter.copyWith(
+                                            termoPesquisa: str,
+                                            numeroRegistros: 30,
+                                          ),
+                                        ),
+                                        onChanged: (value) {
+                                          registroServico.codItem = value?.cod;
+                                          registroServico.item = value;
+                                        },
+                                        placeholder: 'Item',
+                                      ),
                                     ),
-                                  ))
-                                      ?.$2 ??
-                                  [],
-                              textFunction: (usuario) => usuario.NomeText(),
-                              initialValue: registroServico.usuario != null
-                                  ? UsuarioDropDownSearchResponseDTO(
-                                      cod: registroServico.codUsuario!,
-                                      nome: registroServico.usuario!.nome,
-                                      codBarra:
-                                          registroServico.usuario!.codBarra!,
-                                    )
-                                  : registroServico.usuarioDropDown,
-                              onChanged: (value) {
-                                registroServico.usuarioDropDown = value;
-                                registroServico.tecnico = value?.cod.toString();
-                              },
-                              placeholder: 'Responsável',
-                            ),
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: DropDownSearchWidget<
-                                RegistroServicoResultOption>(
-                              validator: (obj) =>
-                                  obj == null ? 'Obrigatório' : null,
-                              validateBuilder:
-                                  (context, validateMethodBuilder) =>
-                                      validateResultado = validateMethodBuilder,
-                              initialValue:
-                                  RegistroServicoResultOption.resultOptions
-                                      .where(
-                                        (element) =>
-                                            element.cod ==
-                                            registroServico.resultado,
-                                      )
-                                      .firstOrNull,
-                              sourceList:
-                                  RegistroServicoResultOption.resultOptions,
-                              textFunction: (p0) => p0.GetDropDownText(),
-                              onChanged: (value) => registroServico.resultado =
-                                  value?.cod.toString(),
-                              placeholder: 'Resultado *',
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: controller.dtpDataValidade,
-                          ),
-                          const SizedBox(width: 16.0),
-                          Expanded(
-                            child: Row(
-                              children: [
-                                CustomCheckboxWidget(
-                                  checked: registroServico.controlarValidade,
-                                  onClick: (value) =>
-                                      registroServico.controlarValidade = value,
-                                  text: 'Controlar Validade',
+                                    const SizedBox(width: 16.0),
+                                    Expanded(
+                                      child: BlocBuilder<ServicoTipoCubit,
+                                          ServicoTipoState>(
+                                        bloc: controller.servicoTipoCubit,
+                                        builder: (context, state) {
+                                          if (state.loading == true) {
+                                            return const Center(
+                                              child: LoadingWidget(),
+                                            );
+                                          }
+                                          List<ServicoTipoModel> servicosTipos =
+                                              state.tiposServico;
+                                          registroServico.servicoTipo =
+                                              servicosTipos
+                                                  .where(
+                                                    (element) =>
+                                                        element.cod ==
+                                                        registroServico
+                                                            .codServicosTipos,
+                                                  )
+                                                  .firstOrNull;
+                                          servicosTipos.sort(
+                                            (a, b) =>
+                                                a.nome!.compareTo(b.nome!),
+                                          );
+                                          List<ServicoTipoModel> servicos =
+                                              controller
+                                                  .buscarServicosEquipamento(
+                                            servicosTipos,
+                                          );
+
+                                          return DropDownSearchWidget<
+                                              ServicoTipoModel>(
+                                            validateBuilder: (
+                                              context,
+                                              validateMethodBuilder,
+                                            ) =>
+                                                validateTipoServico =
+                                                    validateMethodBuilder,
+                                            validator: (val) => val == null
+                                                ? 'Obrigatório'
+                                                : null,
+                                            refreshSourceListBuilder: (
+                                              context,
+                                              refreshTipoServicoSourceList,
+                                            ) =>
+                                                refreshServicosTipoMethod =
+                                                    refreshTipoServicoSourceList,
+                                            initialValue:
+                                                registroServico.servicoTipo,
+                                            sourceList: servicos
+                                                .where(
+                                                  (element) =>
+                                                      element.ativo == true &&
+                                                      element.monitoramento ==
+                                                          true,
+                                                )
+                                                .toList(),
+                                            onChanged: (value) {
+                                              registroServico.servicoTipo =
+                                                  value;
+                                              registroServico.codServicosTipos =
+                                                  value?.cod;
+                                            },
+                                            placeholder: 'Tipo do Serviço *',
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: controller.dtpDataInicio,
+                                    ),
+                                    const SizedBox(width: 8.0),
+                                    Expanded(
+                                      child: controller.tmpHoraInicio,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: controller.dtpDataTermino,
+                                    ),
+                                    const SizedBox(width: 8.0),
+                                    Expanded(
+                                      child: controller.tmpHoraTermino,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: controller.txtDescricaoServico,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: controller.txtTemperatura,
+                                    ),
+                                    const SizedBox(width: 50.0),
+                                    Expanded(
+                                      child: controller.txtTemperaturaMax,
+                                    ),
+                                    const SizedBox(width: 50.0),
+                                    Expanded(
+                                      child: controller.txtTemperaturaMin,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: controller.txtUmidade,
+                                    ),
+                                    const SizedBox(width: 50.0),
+                                    Expanded(
+                                      child: controller.txtUmidadeMax,
+                                    ),
+                                    const SizedBox(width: 50.0),
+                                    Expanded(
+                                      child: controller.txtUmidadeMin,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: DropDownSearchApiWidget<
+                                          UsuarioDropDownSearchResponseDTO>(
+                                        search: (str) async =>
+                                            (await UsuarioService()
+                                                    .getDropDownSearch(
+                                              UsuarioDropDownSearchDTO(
+                                                numeroRegistros: 30,
+                                                search: str,
+                                                apenasAtivos: true,
+                                                apenasColaboradores: true,
+                                              ),
+                                            ))
+                                                ?.$2 ??
+                                            [],
+                                        textFunction: (usuario) =>
+                                            usuario.NomeText(),
+                                        initialValue: registroServico.usuario !=
+                                                null
+                                            ? UsuarioDropDownSearchResponseDTO(
+                                                cod:
+                                                    registroServico.codUsuario!,
+                                                nome: registroServico
+                                                    .usuario!.nome,
+                                                codBarra: registroServico
+                                                    .usuario!.codBarra!,
+                                              )
+                                            : registroServico.usuarioDropDown,
+                                        onChanged: (value) {
+                                          registroServico.usuarioDropDown =
+                                              value;
+                                          registroServico.tecnico =
+                                              value?.cod.toString();
+                                        },
+                                        placeholder: 'Responsável',
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16.0),
+                                    Expanded(
+                                      child: DropDownSearchWidget<
+                                          RegistroServicoResultOption>(
+                                        validator: (obj) =>
+                                            obj == null ? 'Obrigatório' : null,
+                                        validateBuilder:
+                                            (context, validateMethodBuilder) =>
+                                                validateResultado =
+                                                    validateMethodBuilder,
+                                        initialValue:
+                                            RegistroServicoResultOption
+                                                .resultOptions
+                                                .where(
+                                                  (element) =>
+                                                      element.cod ==
+                                                      registroServico.resultado,
+                                                )
+                                                .firstOrNull,
+                                        sourceList: RegistroServicoResultOption
+                                            .resultOptions,
+                                        textFunction: (p0) =>
+                                            p0.GetDropDownText(),
+                                        onChanged: (value) => registroServico
+                                            .resultado = value?.cod.toString(),
+                                        placeholder: 'Resultado *',
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: controller.dtpDataValidade,
+                                    ),
+                                    const SizedBox(width: 16.0),
+                                    Expanded(
+                                      child: Row(
+                                        children: [
+                                          CustomCheckboxWidget(
+                                            checked: registroServico
+                                                .controlarValidade,
+                                            onClick: (value) => registroServico
+                                                .controlarValidade = value,
+                                            text: 'Controlar Validade',
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: controller.txtUsuarioRegistro,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: controller.dtpDataRegistro,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: LabelStringWidget(
+                                  text:
+                                      'Documento Anexado: ${registroServico.docAnexaNome == null ? 'Nenhum Documento Encontrado' : registroServico.docAnexaNome}',
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: controller.txtUsuarioRegistro,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: controller.dtpDataRegistro,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: LabelStringWidget(
-                        text:
-                            'Documento Anexado: ${registroServico.docAnexaNome == null ? 'Nenhum Documento Encontrado' : registroServico.docAnexaNome}',
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
-            actions: [
               Row(
                 children: [
                   CustomPopupMenuWidget(
@@ -509,8 +554,7 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                         },
                       ),
                       CancelButtonUnfilledWidget(
-                        onPressed: () =>
-                            {Navigator.of(context).pop((false, ''))},
+                        onPressed: widget.onCancel,
                       ),
                     ],
                   ),
@@ -578,7 +622,7 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
       scroll.jumpTo(0);
     } else if (!descricaoValid) {
       scroll.jumpTo(200.0);
-    }else if(!resultadoValid){
+    } else if (!resultadoValid) {
       scroll.jumpTo(300.0);
     }
     if (!descricaoValid ||
@@ -606,6 +650,6 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
       );
       return;
     }
-    controller.cubit.save(registroServico);
+    controller.cubit.save(registroServico, widget.onSaved);
   }
 }

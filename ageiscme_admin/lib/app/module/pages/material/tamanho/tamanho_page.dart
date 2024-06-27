@@ -10,11 +10,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class TamanhoPage extends StatefulWidget {
-  TamanhoPage({super.key});
+  const TamanhoPage({super.key});
 
   @override
   State<TamanhoPage> createState() => _TamanhoPageState();
@@ -94,30 +95,42 @@ class _TamanhoPageState extends State<TamanhoPage> {
     );
   }
 
-  void openModal(BuildContext context, TamanhoModel tamanho) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: TamanhoPageFrm(
-            tamanho: tamanho,
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadTamanho();
-    });
+  Future openModal(
+    BuildContext context,
+    TamanhoModel tamanho,
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Tamanho',
+      widget: TamanhoPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        tamanho: tamanho,
+      ),
+    );
   }
 
-  void delete(BuildContext context, TamanhoModel tamanho) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Tamanho\n${tamanho.cod} - ${tamanho.sigla}',
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadTamanho();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
+  }
+
+  void delete(BuildContext context, TamanhoModel tamanho) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Tamanho\n${tamanho.cod} - ${tamanho.sigla}',
+      onConfirm: () => confirmDelete(tamanho),
     );
-    if (confirmacao) bloc.delete(tamanho);
+  }
+
+  void confirmDelete(TamanhoModel tamanho) async {
+    bloc.delete(tamanho);
   }
 
   void deleted(TamanhoPageState state) {

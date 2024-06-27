@@ -19,18 +19,17 @@ class KitDescritorButtonFilterWidget extends StatelessWidget {
   }
 
   Future openModalFilter(BuildContext context) async {
-    KitDescritorCubitFilter filterCubit = context.read<KitDescritorCubitFilter>();
-    bool? result = await showDialog<bool>(
-      barrierDismissible: false,
+    KitDescritorCubitFilter filterCubit =
+        context.read<KitDescritorCubitFilter>();
+    bool? confirm = await showDialog<bool>(
       context: context,
-      builder: (BuildContext context) {
-        return BlocProvider<KitDescritorCubitFilter>.value(
-          value: filterCubit,
-          child: KitDescritorPageFilter(),
-        );
-      },
+      builder: (context) => BlocProvider<KitDescritorCubitFilter>.value(
+        value: filterCubit,
+        child: KitDescritorPageFilter(
+        ),
+      ),
     );
-    if (result != true) return;
+    if (confirm != true) return;
     KitDescritorPageCubit kitCubit = context.read<KitDescritorPageCubit>();
     filterCubit = context.read<KitDescritorCubitFilter>();
     KitDescritorFilter dto = filterCubit.state;

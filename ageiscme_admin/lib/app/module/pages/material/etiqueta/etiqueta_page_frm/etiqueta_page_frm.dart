@@ -3,7 +3,6 @@ import 'package:ageiscme_data/services/etiqueta/etiqueta_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
@@ -16,9 +15,13 @@ class EtiquetaPageFrm extends StatefulWidget {
   const EtiquetaPageFrm({
     Key? key,
     required this.etiqueta,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final EtiquetaModel etiqueta;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<EtiquetaPageFrm> createState() =>
@@ -86,96 +89,82 @@ class _EtiquetaPageFrmState extends State<EtiquetaPageFrm> {
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<EtiquetaPageFrmCubit, EtiquetaPageFrmState>(
+    return BlocBuilder<EtiquetaPageFrmCubit, EtiquetaPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
-      child: BlocBuilder<EtiquetaPageFrmCubit, EtiquetaPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return Container(
-            constraints: BoxConstraints(
-              minWidth: size.width * .5,
-              minHeight: size.height * .5,
-              maxHeight: size.height * .8,
-            ),
-            child: Stack(
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TitleWidget(
-                            text: titulo,
-                          ),
+      builder: (context, state) {
+        return Container(
+          constraints: BoxConstraints(
+            minWidth: size.width * .5,
+            minHeight: size.height * .5,
+            maxHeight: size.height * .8,
+          ),
+          child: Stack(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TitleWidget(
+                          text: titulo,
                         ),
-                        const Spacer(),
-                        CloseButtonWidget(
-                          onPressed: () =>
-                              Navigator.of(context).pop((false, '')),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtDescricao,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtLimiteProcesso,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: Row(
-                        children: [
-                          CustomCheckboxWidget(
-                            checked: etiqueta.ativo,
-                            onClick: (value) => etiqueta.ativo = value,
-                            text: 'Ativo',
-                          ),
-                        ],
                       ),
-                    ),
-                    const Spacer(),
-                    Row(
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: txtDescricao,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: txtLimiteProcesso,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: Row(
                       children: [
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: SaveButtonWidget(
-                            onPressed: () => {salvar()},
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: CleanButtonWidget(
-                            onPressed: () => {
-                              setState(() {
-                                etiqueta = EtiquetaModel.empty();
-                              }),
-                            },
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: CancelButtonUnfilledWidget(
-                            onPressed: () =>
-                                {Navigator.of(context).pop((false, ''))},
-                          ),
+                        CustomCheckboxWidget(
+                          checked: etiqueta.ativo,
+                          onClick: (value) => etiqueta.ativo = value,
+                          text: 'Ativo',
                         ),
                       ],
                     ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+                  ),
+                  const Spacer(),
+                  Row(
+                    children: [
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: SaveButtonWidget(
+                          onPressed: () => {salvar()},
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: CleanButtonWidget(
+                          onPressed: () => {
+                            setState(() {
+                              etiqueta = EtiquetaModel.empty();
+                            }),
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: CancelButtonUnfilledWidget(
+                          onPressed: widget.onCancel,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -183,6 +172,9 @@ class _EtiquetaPageFrmState extends State<EtiquetaPageFrm> {
     bool descricaoValid = txtDescricao.valid;
     bool limiteProcessoValid = txtLimiteProcesso.valid;
     if (!descricaoValid || !limiteProcessoValid) return;
-    cubit.save(etiqueta);
+    cubit.save(
+      etiqueta,
+      widget.onSaved,
+    );
   }
 }

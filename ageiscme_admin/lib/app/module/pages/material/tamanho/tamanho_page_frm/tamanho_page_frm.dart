@@ -4,7 +4,6 @@ import 'package:ageiscme_data/services/tamanho/tamanho_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
@@ -17,9 +16,13 @@ class TamanhoPageFrm extends StatefulWidget {
   const TamanhoPageFrm({
     Key? key,
     required this.tamanho,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final TamanhoModel tamanho;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<TamanhoPageFrm> createState() => _TamanhoPageFrmState(tamanho: tamanho);
@@ -99,100 +102,86 @@ class _TamanhoPageFrmState extends State<TamanhoPageFrm> {
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<TamanhoPageFrmCubit, TamanhoPageFrmState>(
+    return BlocBuilder<TamanhoPageFrmCubit, TamanhoPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
-      child: BlocBuilder<TamanhoPageFrmCubit, TamanhoPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return Container(
-            constraints: BoxConstraints(
-              minWidth: size.width * .5,
-              minHeight: size.height * .5,
-              maxHeight: size.height * .8,
-            ),
-            child: Stack(
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TitleWidget(
-                            text: titulo,
-                          ),
+      builder: (context, state) {
+        return Container(
+          constraints: BoxConstraints(
+            minWidth: size.width * .5,
+            minHeight: size.height * .5,
+            maxHeight: size.height * .8,
+          ),
+          child: Stack(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TitleWidget(
+                          text: titulo,
                         ),
-                        const Spacer(),
-                        CloseButtonWidget(
-                          onPressed: () =>
-                              Navigator.of(context).pop((false, '')),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtSigla,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtDescricao,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtReferencial,
-                    ),
-                    const Spacer(),
-                    Row(
-                      children: [
-                        if (tamanho.cod != null && tamanho.cod != 0)
-                          CustomPopupMenuWidget(
-                            items: [
-                              CustomPopupItemHistoryModel.getHistoryItem(
-                                child: HistoricoPage(
-                                  pk: tamanho.cod!,
-                                  termo: 'TAMANHO',
-                                ),
-                                context: context,
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: txtSigla,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: txtDescricao,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: txtReferencial,
+                  ),
+                  const Spacer(),
+                  Row(
+                    children: [
+                      if (tamanho.cod != null && tamanho.cod != 0)
+                        CustomPopupMenuWidget(
+                          items: [
+                            CustomPopupItemHistoryModel.getHistoryItem(
+                              child: HistoricoPage(
+                                pk: tamanho.cod!,
+                                termo: 'TAMANHO',
                               ),
-                            ],
-                          ),
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: SaveButtonWidget(
-                            onPressed: () => {salvar()},
-                          ),
+                              context: context,
+                            ),
+                          ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: CleanButtonWidget(
-                            onPressed: () => {
-                              setState(() {
-                                tamanho = TamanhoModel.empty();
-                              }),
-                            },
-                          ),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: SaveButtonWidget(
+                          onPressed: () => {salvar()},
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: CancelButtonUnfilledWidget(
-                            onPressed: () =>
-                                {Navigator.of(context).pop((false, ''))},
-                          ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: CleanButtonWidget(
+                          onPressed: () => {
+                            setState(() {
+                              tamanho = TamanhoModel.empty();
+                            }),
+                          },
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: CancelButtonUnfilledWidget(
+                          onPressed: widget.onCancel,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -202,6 +191,6 @@ class _TamanhoPageFrmState extends State<TamanhoPageFrm> {
     bool referencialValid = txtReferencial.valid;
     if (!siglaValid || !descricaoValid || !referencialValid) return;
 
-    cubit.save(tamanho);
+    cubit.save(tamanho, widget.onSaved);
   }
 }

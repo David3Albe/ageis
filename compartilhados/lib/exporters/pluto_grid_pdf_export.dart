@@ -11,17 +11,19 @@ class PlutoGridPdfExport {
   PlutoGridStateManager stateManager;
   BuildContext context;
   final PdfColor? Function(dynamic data)? colorByData;
+  final String title;
 
   PlutoGridPdfExport({
     required this.stateManager,
     required this.context,
+    this.title = 'Consulta',
     this.colorByData,
   });
 
   Future export() async {
     var plutoGridPdfExport = CustomPlutoGridDefaultPdfExport(
       colorByData: colorByData,
-      title: 'Consulta',
+      title: title,
       creator: 'AGEISCME',
       format: PdfPageFormat.a4.landscape,
       logoEsquerda:

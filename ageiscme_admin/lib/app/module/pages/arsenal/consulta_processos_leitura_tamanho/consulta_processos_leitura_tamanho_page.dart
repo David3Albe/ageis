@@ -17,12 +17,12 @@ import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_footer_type.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
-import 'package:compartilhados/query_dialog/query_dialog_widget.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ConsultaProcessosLeituraTamanhoPage extends StatefulWidget {
-  ConsultaProcessosLeituraTamanhoPage({
+  const ConsultaProcessosLeituraTamanhoPage({
     super.key,
     this.filter,
   });
@@ -138,8 +138,8 @@ class _ConsultaProcessosLeituraTamanhoPageState
   void onError(ConsultaProcessosLeituraTamanhoPageState state) =>
       ErrorUtils.showErrorDialog(context, [state.error]);
 
-  void openModal(BuildContext context) {
-    showDialog<bool>(
+  Future openModal(BuildContext context) async {
+    bool? confirm = await showDialog<bool>(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
@@ -213,33 +213,25 @@ class _ConsultaProcessosLeituraTamanhoPageState
           ),
         );
       },
-    ).then((result) {
-      if (result == true) {
-        bloc.loadProcessosLeituraTamanho(filter);
-      }
-    });
+    );
+    if (confirm != true) return;
+    bloc.loadProcessosLeituraTamanho(filter);
   }
 
-  Future<void> openModalRedirect(
+  Future openModalRedirect(
     BuildContext context,
     int? codLocal,
   ) async {
-    await showDialog<bool>(
-      barrierDismissible: true,
-      context: context,
-      barrierColor: Colors.white,
-      builder: (BuildContext context) {
-        return QueryDialogWidget(
-          child: ConsultaProcessosLeituraTamanhoPage(
-            filter: ConsultaProcessosLeituraTamanhoFilter(
-              startDate: filter.startDate,
-              finalDate: filter.finalDate,
-              codLocal: codLocal,
-              codCentroCusto: null,
-            ),
-          ),
-        );
-      },
+    WindowsHelper.OpenDefaultWindows(
+      title: 'Consulta processo Leitura - Tamanho',
+      widget: ConsultaProcessosLeituraTamanhoPage(
+        filter: ConsultaProcessosLeituraTamanhoFilter(
+          startDate: filter.startDate,
+          finalDate: filter.finalDate,
+          codLocal: codLocal,
+          codCentroCusto: null,
+        ),
+      ),
     );
   }
 }

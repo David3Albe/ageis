@@ -12,7 +12,7 @@ _$ProcessoLeituraMontagemModelImpl _$$ProcessoLeituraMontagemModelImplFromJson(
       cancelado: json['cancelado'] as bool?,
       maquina: json['maquina'] as String?,
       tstamp: json['tstamp'] as String?,
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       dataHora: json['dataHora'] == null
           ? null
           : DateTime.parse(json['dataHora'] as String),

@@ -21,6 +21,7 @@ import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/cores/cores.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ import 'package:compartilhados/componentes/botoes/open_doc/open_doc_helper_stub.
     if (dart.library.io) 'package:compartilhados/componentes/botoes/open_doc/open_doc_io_helper.dart';
 
 class ConsultaDocumentoPage extends StatefulWidget {
-  ConsultaDocumentoPage({super.key});
+  const ConsultaDocumentoPage({super.key});
 
   @override
   State<ConsultaDocumentoPage> createState() => _ConsultaDocumentoPageState();
@@ -132,6 +133,7 @@ class _ConsultaDocumentoPageState extends State<ConsultaDocumentoPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderAscendingFieldColumn: 'validade',
                     smallRows: true,
                     columns: colunas,
                     items: state.documentos,
@@ -173,7 +175,10 @@ class _ConsultaDocumentoPageState extends State<ConsultaDocumentoPage> {
     );
   }
 
-  Future<void> openModalRedirect(BuildContext context, int cod) async {
+  Future openModalRedirect(
+    BuildContext context,
+    int cod,
+  ) async {
     LoadingController loading = LoadingController(context: context);
 
     DocumentoModel? doc;
@@ -185,22 +190,31 @@ class _ConsultaDocumentoPageState extends State<ConsultaDocumentoPage> {
     }
     loading.close(context, mounted);
 
-    await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return DocumentoPageFrm(
-          documento: doc!,
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Documento',
+      widget: DocumentoPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        documento: doc,
+      ),
     );
+  }
+
+  Future onSaved(String message, int chave) async {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void onError(ConsultaDocumentoPageState state) =>
       ErrorUtils.showErrorDialog(context, [state.error]);
 
-  void openModal(BuildContext context) {
-    showDialog<bool>(
+  Future openModal(BuildContext context) async {
+    bool? confirm = await showDialog<bool>(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
@@ -246,11 +260,9 @@ class _ConsultaDocumentoPageState extends State<ConsultaDocumentoPage> {
           ),
         );
       },
-    ).then((result) {
-      if (result == true) {
-        bloc.loadDocumento(filter);
-      }
-    });
+    );
+    if (confirm != true) return;
+    bloc.loadDocumento(filter);
   }
 
   void baixarImagem(int? cod) async {

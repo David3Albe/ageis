@@ -12,11 +12,15 @@ class EpiDescritorPageFrmCubit extends Cubit<EpiDescritorPageFrmState> {
           EpiDescritorPageFrmState(epiDescritor: epiDescritorModel),
         );
 
-  void save(EpiDescritorModel epiDescritor) async {
+  void save(
+    EpiDescritorModel epiDescritor,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, EpiDescritorModel epiDescritor)? result =
           await service.save(epiDescritor);
       if (result == null) return;
+      onSaved(result.$1);
       emit(
         EpiDescritorPageFrmState(
           message: result.$1,

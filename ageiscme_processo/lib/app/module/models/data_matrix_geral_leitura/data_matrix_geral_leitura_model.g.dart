@@ -9,8 +9,8 @@ part of 'data_matrix_geral_leitura_model.dart';
 _$DataMatrixGeralLeituraModelImpl _$$DataMatrixGeralLeituraModelImplFromJson(
         Map<String, dynamic> json) =>
     _$DataMatrixGeralLeituraModelImpl(
-      codUsuarioLiberacao: json['codUsuarioLiberacao'] as int?,
-      codKit: json['codKit'] as int?,
+      codUsuarioLiberacao: (json['codUsuarioLiberacao'] as num?)?.toInt(),
+      codKit: (json['codKit'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$DataMatrixGeralLeituraModelImplToJson(

@@ -9,20 +9,20 @@ part of 'kit_processo_model.dart';
 _$KitProcessoModelImpl _$$KitProcessoModelImplFromJson(
         Map<String, dynamic> json) =>
     _$KitProcessoModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       codBarra: json['codBarra'] as String?,
-      codCor1: json['codCor1'] as int?,
-      codCor2: json['codCor2'] as int?,
-      codCor3: json['codCor3'] as int?,
-      codCor4: json['codCor4'] as int?,
+      codCor1: (json['codCor1'] as num?)?.toInt(),
+      codCor2: (json['codCor2'] as num?)?.toInt(),
+      codCor3: (json['codCor3'] as num?)?.toInt(),
+      codCor4: (json['codCor4'] as num?)?.toInt(),
       status: json['status'] as String?,
       restricao: json['restricao'] as String?,
-      codDescritorKit: json['codDescritorKit'] as int?,
-      codConjunto: json['codConjunto'] as int?,
-      codInstituicao: json['codInstituicao'] as int?,
+      codDescritorKit: (json['codDescritorKit'] as num?)?.toInt(),
+      codConjunto: (json['codConjunto'] as num?)?.toInt(),
+      codInstituicao: (json['codInstituicao'] as num?)?.toInt(),
       preparo: json['preparo'] as String?,
-      codProcessoLeitura: json['codProcessoLeitura'] as int?,
-      codEmbalagem: json['codEmbalagem'] as int?,
+      codProcessoLeitura: (json['codProcessoLeitura'] as num?)?.toInt(),
+      codEmbalagem: (json['codEmbalagem'] as num?)?.toInt(),
       embalagem: json['embalagem'] == null
           ? null
           : EmbalagemModel.fromJson(json['embalagem'] as Map<String, dynamic>),
@@ -52,26 +52,27 @@ _$KitProcessoModelImpl _$$KitProcessoModelImplFromJson(
           : KitCorModel.fromJson(json['cor4'] as Map<String, dynamic>),
       selecionado: json['selecionado'] as bool?,
       statusExpandidos: (json['statusExpandidos'] as List<dynamic>?)
-          ?.map((e) => e as int)
+          ?.map((e) => (e as num).toInt())
           .toList(),
-      codMotivoNaoConforme: json['codMotivoNaoConforme'] as int?,
-      codEtapa: json['codEtapa'] as int?,
+      codMotivoNaoConforme: (json['codMotivoNaoConforme'] as num?)?.toInt(),
+      codEtapa: (json['codEtapa'] as num?)?.toInt(),
       validacoesCompletas: (json['validacoesCompletas'] as List<dynamic>)
-          .map((e) => e as int)
+          .map((e) => (e as num).toInt())
           .toList(),
-      codMotivoRetornoArsenal: json['codMotivoRetornoArsenal'] as int?,
-      codUsuarioQuebraFluxo: json['codUsuarioQuebraFluxo'] as int?,
+      codMotivoRetornoArsenal:
+          (json['codMotivoRetornoArsenal'] as num?)?.toInt(),
+      codUsuarioQuebraFluxo: (json['codUsuarioQuebraFluxo'] as num?)?.toInt(),
       usuarioQuebraFluxo: json['usuarioQuebraFluxo'] == null
           ? null
           : UsuarioModel.fromJson(
               json['usuarioQuebraFluxo'] as Map<String, dynamic>),
-      codMotivoQuebraFluxo: json['codMotivoQuebraFluxo'] as int?,
-      prioridade: json['prioridade'] as int?,
+      codMotivoQuebraFluxo: (json['codMotivoQuebraFluxo'] as num?)?.toInt(),
+      prioridade: (json['prioridade'] as num?)?.toInt(),
       dataValidadeRetornoArsenal: json['dataValidadeRetornoArsenal'] == null
           ? null
           : DateTime.parse(json['dataValidadeRetornoArsenal'] as String),
       preparoInicioLeitura: json['preparoInicioLeitura'] as String?,
-      codUsuarioLiberacao: json['codUsuarioLiberacao'] as int?,
+      codUsuarioLiberacao: (json['codUsuarioLiberacao'] as num?)?.toInt(),
       conferidoVisualmente: json['conferidoVisualmente'] as bool?,
       liberadoIncompleto: json['liberadoIncompleto'] as bool?,
       impressaoPreparoRealizada: json['impressaoPreparoRealizada'] as bool?,
@@ -80,10 +81,11 @@ _$KitProcessoModelImpl _$$KitProcessoModelImplFromJson(
           json['impressaoEtiquetaLoteRealizada'] as bool?,
       impressaoRelatorioRetiradaRealizada:
           json['impressaoRelatorioRetiradaRealizada'] as bool?,
-      codUsuarioAcaoOcorrencia: json['codUsuarioAcaoOcorrencia'] as int?,
-      codAcaoOcorrencia: json['codAcaoOcorrencia'] as int?,
-      itensLidosCalculado: json['itensLidosCalculado'] as int?,
-      itensTotalKitCalculado: json['itensTotalKitCalculado'] as int?,
+      codUsuarioAcaoOcorrencia:
+          (json['codUsuarioAcaoOcorrencia'] as num?)?.toInt(),
+      codAcaoOcorrencia: (json['codAcaoOcorrencia'] as num?)?.toInt(),
+      itensLidosCalculado: (json['itensLidosCalculado'] as num?)?.toInt(),
+      itensTotalKitCalculado: (json['itensTotalKitCalculado'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$KitProcessoModelImplToJson(

@@ -55,7 +55,7 @@ class DropDownSearchApiWidgetState<T>
   late bool filterVisible;
   final void Function(T? value)? onChanged;
   late final TextFieldStringWidget txtFilter;
-  static const int MAX_ITENS = 50;
+  static const int MAX_ITENS = 1000;
   late final DropDownSearchCubit<T> cubit;
   List<DateTime> lastTypedsTime = [];
   final Key? key;
@@ -174,7 +174,7 @@ class DropDownSearchApiWidgetState<T>
                 children: [
                   Text(
                     widget.placeholder ?? '',
-                    style: Fontes.getRoboto(fontSize: 16),
+                    style: Fontes.getRoboto(fontSize: 14),
                   ),
                 ],
               ),
@@ -196,7 +196,6 @@ class DropDownSearchApiWidgetState<T>
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Padding(padding: EdgeInsets.only(top: 8)),
                 getListItems(),
               ],
             ),

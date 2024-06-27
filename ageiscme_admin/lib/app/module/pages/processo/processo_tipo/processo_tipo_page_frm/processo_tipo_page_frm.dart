@@ -9,7 +9,6 @@ import 'package:ageiscme_models/filters/processo_tipo/processo_tipo_filter.dart'
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
@@ -22,6 +21,7 @@ import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -30,10 +30,14 @@ class ProcessoTipoPageFrm extends StatefulWidget {
     Key? key,
     required this.processoTipo,
     required this.processoEtapaCubit,
+    required this.onCancel,
+    required this.onSaved,
   }) : super(key: key);
 
   final ProcessoTipoModel processoTipo;
   final ProcessoEtapaCubit processoEtapaCubit;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<ProcessoTipoPageFrm> createState() =>
@@ -132,184 +136,188 @@ class _ProcessoTipoPageFrmState extends State<ProcessoTipoPageFrm> {
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<ProcessoTipoPageFrmCubit, ProcessoTipoPageFrmState>(
+    return BlocBuilder<ProcessoTipoPageFrmCubit, ProcessoTipoPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
-      child: BlocBuilder<ProcessoTipoPageFrmCubit, ProcessoTipoPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return AlertDialog(
-            contentPadding: const EdgeInsets.all(8.0),
-            titlePadding: const EdgeInsets.all(8.0),
-            actionsPadding: const EdgeInsets.all(8.0),
-            insetPadding: const EdgeInsets.all(50.0),
-            title: Row(
+      builder: (context, state) {
+        return Column(
+          children: [
+            Row(
               children: [
                 Expanded(
                   child: TitleWidget(
                     text: titulo,
                   ),
                 ),
-                const Spacer(),
-                CloseButtonWidget(
-                  onPressed: () => Navigator.of(context).pop((false, '')),
-                ),
               ],
             ),
-            content: Container(
-              constraints: BoxConstraints(
-                minWidth: size.width * .5,
-                minHeight: size.height * .5,
-                maxHeight: size.height * .8,
-              ),
-              child: SingleChildScrollView(
-                controller: scroll,
-                padding: const EdgeInsets.only(right: 14),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5),
-                      child: txtNome,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child:
-                          BlocBuilder<ProcessoEtapaCubit, ProcessoEtapaState>(
-                        bloc: widget.processoEtapaCubit,
-                        builder: (context, state) {
-                          if (state.loading) return const LoadingWidget();
-                          List<ProcessoEtapaModel> processosEtapas =
-                              state.processosEtapas;
-
-                          processosEtapas.sort(
-                            (a, b) => a.tipoProcesso!.nome
-                                .compareTo(b.tipoProcesso!.nome),
-                          );
-
-                          return DropDownSearchWidget<ProcessoEtapaModel>(
-                            initialValue: processoTipo.etapaInicial,
-                            textFunction: (processoEtapa) =>
-                                processoEtapa.GetNomeEtapaTipoText(),
-                            sourceList: processosEtapas,
-                            onChanged: (value) {
-                              processoTipo.codEtapaProcessoInicial = value?.cod;
-                              processoTipo.etapaInicial = value;
-                            },
-                            placeholder: 'Etapa Inicial',
-                          );
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtDescricao,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child:
-                          DropDownSearchWidget<ProcessoTipoPrioriodadeOption>(
-                        textFunction: (p0) => p0.GetDropDownText(),
-                        validator: (obj) =>
-                            obj == null ? 'Obrigatório' : null,
-                        validateBuilder: (context, validateMethodBuilder) =>
-                            validateNivelPrioridade = validateMethodBuilder,
-                        initialValue:
-                            ProcessoTipoPrioriodadeOption.prioridadeOptions
-                                .where(
-                                  (element) =>
-                                      element.cod.toString() ==
-                                      processoTipo.nivelPrioridade,
-                                )
-                                .firstOrNull,
-                        sourceList:
-                            ProcessoTipoPrioriodadeOption.prioridadeOptions,
-                        onChanged: (value) => processoTipo.nivelPrioridade =
-                            value?.cod.toString() ?? '',
-                        placeholder: 'Nível Prioridade *',
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: txtPrazovalidade,
-                          ),
-                          const SizedBox(width: 24.0),
-                          Expanded(
-                            child: dtpLimiteVigencia,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          CustomCheckboxWidget(
-                            checked: processoTipo.ativo,
-                            onClick: (value) => processoTipo.ativo = value,
-                            text: 'Ativo',
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            actions: [
-              Row(
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CustomPopupMenuWidget(
-                    items: [
-                      if (processoTipo.cod != null && processoTipo.cod != 0)
-                        CustomPopupItemHistoryModel.getHistoryItem(
-                          child: HistoricoPage(
-                            pk: processoTipo.cod!,
-                            termo: 'PROCESSO_TIPO',
-                          ),
-                          context: context,
-                        ),
-                      CustomPopupItemModel(
-                        text: 'Fluxo',
-                        onTap: abrirFluxo,
+                  Expanded(
+                    child: Container(
+                      constraints: BoxConstraints(
+                        minWidth: size.width * .5,
+                        minHeight: size.height * .5,
+                        maxHeight: size.height * .8,
                       ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: SaveButtonWidget(
-                      onPressed: () => {salvar()},
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: CleanButtonWidget(
-                      onPressed: () => {
-                        setState(() {
-                          processoTipo = ProcessoTipoModel.empty();
-                        }),
-                      },
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 16.0),
-                    child: CancelButtonUnfilledWidget(
-                      onPressed: () => {Navigator.of(context).pop((false, ''))},
+                      child: SingleChildScrollView(
+                        controller: scroll,
+                        padding: const EdgeInsets.only(right: 14),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5),
+                              child: txtNome,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: BlocBuilder<ProcessoEtapaCubit,
+                                  ProcessoEtapaState>(
+                                bloc: widget.processoEtapaCubit,
+                                builder: (context, state) {
+                                  if (state.loading) {
+                                    return const LoadingWidget();
+                                  }
+                                  List<ProcessoEtapaModel> processosEtapas =
+                                      state.processosEtapas;
+
+                                  processosEtapas.sort(
+                                    (a, b) => a.tipoProcesso!.nome
+                                        .compareTo(b.tipoProcesso!.nome),
+                                  );
+
+                                  return DropDownSearchWidget<
+                                      ProcessoEtapaModel>(
+                                    initialValue: processoTipo.etapaInicial,
+                                    textFunction: (processoEtapa) =>
+                                        processoEtapa.GetNomeEtapaTipoText(),
+                                    sourceList: processosEtapas,
+                                    onChanged: (value) {
+                                      processoTipo.codEtapaProcessoInicial =
+                                          value?.cod;
+                                      processoTipo.etapaInicial = value;
+                                    },
+                                    placeholder: 'Etapa Inicial',
+                                  );
+                                },
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: txtDescricao,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: DropDownSearchWidget<
+                                  ProcessoTipoPrioriodadeOption>(
+                                textFunction: (p0) => p0.GetDropDownText(),
+                                validator: (obj) =>
+                                    obj == null ? 'Obrigatório' : null,
+                                validateBuilder: (
+                                  context,
+                                  validateMethodBuilder,
+                                ) =>
+                                    validateNivelPrioridade =
+                                        validateMethodBuilder,
+                                initialValue: ProcessoTipoPrioriodadeOption
+                                    .prioridadeOptions
+                                    .where(
+                                      (element) =>
+                                          element.cod.toString() ==
+                                          processoTipo.nivelPrioridade,
+                                    )
+                                    .firstOrNull,
+                                sourceList: ProcessoTipoPrioriodadeOption
+                                    .prioridadeOptions,
+                                onChanged: (value) =>
+                                    processoTipo.nivelPrioridade =
+                                        value?.cod.toString() ?? '',
+                                placeholder: 'Nível Prioridade *',
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: txtPrazovalidade,
+                                  ),
+                                  const SizedBox(width: 24.0),
+                                  Expanded(
+                                    child: dtpLimiteVigencia,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  CustomCheckboxWidget(
+                                    checked: processoTipo.ativo,
+                                    onClick: (value) =>
+                                        processoTipo.ativo = value,
+                                    text: 'Ativo',
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
-            ],
-          );
-        },
-      ),
+            ),
+            Row(
+              children: [
+                CustomPopupMenuWidget(
+                  items: [
+                    if (processoTipo.cod != null && processoTipo.cod != 0)
+                      CustomPopupItemHistoryModel.getHistoryItem(
+                        child: HistoricoPage(
+                          pk: processoTipo.cod!,
+                          termo: 'PROCESSO_TIPO',
+                        ),
+                        context: context,
+                      ),
+                    CustomPopupItemModel(
+                      text: 'Fluxo',
+                      onTap: abrirFluxo,
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: SaveButtonWidget(
+                    onPressed: () => {salvar()},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: CleanButtonWidget(
+                    onPressed: () => {
+                      setState(() {
+                        processoTipo = ProcessoTipoModel.empty();
+                      }),
+                    },
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 16.0),
+                  child: CancelButtonUnfilledWidget(
+                    onPressed: widget.onCancel,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -354,16 +362,19 @@ class _ProcessoTipoPageFrmState extends State<ProcessoTipoPageFrm> {
     }
     loading.close(context, mounted);
 
-    await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return ProcessoTipoFluxoPagePresenter(
-          canEdit: true,
-          processoTipo: processoTipo,
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Fluxo Tipo de Processo',
+      widget: ProcessoTipoFluxoPagePresenter(
+        onCancel: () => onCancel(chave),
+        canEdit: true,
+        processoTipo: processoTipo,
+      ),
     );
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void salvar() {
@@ -387,6 +398,6 @@ class _ProcessoTipoPageFrmState extends State<ProcessoTipoPageFrm> {
       return;
     }
     LoadingController loading = LoadingController(context: context);
-    cubit.save(processoTipo, loading);
+    cubit.save(processoTipo, loading, widget.onSaved);
   }
 }

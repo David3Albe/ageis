@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 
 class KitPageFilter extends StatelessWidget {
   KitPageFilter({Key? key});
-
   @override
   Widget build(BuildContext context) {
     KitSearchDTO dto = context.watch<KitCubitFilter>().state;

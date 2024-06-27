@@ -10,11 +10,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ProcessoEtapaPage extends StatefulWidget {
-  ProcessoEtapaPage({super.key});
+  const ProcessoEtapaPage({super.key});
 
   @override
   State<ProcessoEtapaPage> createState() => _ProcessoEtapaPageState();
@@ -109,28 +110,42 @@ class _ProcessoEtapaPageState extends State<ProcessoEtapaPage> {
     );
   }
 
-  void openModal(BuildContext context, ProcessoEtapaModel processoEtapa) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return ProcessoEtapaPageFrm(
-          processoEtapa: processoEtapa,
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadProcessoEtapa();
-    });
+  Future openModal(
+    BuildContext context,
+    ProcessoEtapaModel processoEtapa,
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Etapa Processo',
+      widget: ProcessoEtapaPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        processoEtapa: processoEtapa,
+      ),
+    );
   }
 
-  void delete(BuildContext context, ProcessoEtapaModel processoEtapa) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção da Etapa Processo\n${processoEtapa.cod} - ${processoEtapa.nome}',
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadProcessoEtapa();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
+  }
+
+  void delete(BuildContext context, ProcessoEtapaModel processoEtapa) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção da Etapa Processo\n${processoEtapa.cod} - ${processoEtapa.nome}',
+      onConfirm: () => confirmDelete(processoEtapa),
     );
-    if (confirmacao) bloc.delete(processoEtapa);
+  }
+
+  void confirmDelete(ProcessoEtapaModel processoEtapa) async {
+    bloc.delete(processoEtapa);
   }
 
   void delted(ProcessoEtapaPageState state) {

@@ -19,19 +19,19 @@ class EquipamentoManutencaoFilterButtonWidget extends StatelessWidget {
   }
 
   Future openModalFilter(BuildContext context) async {
-    EquipamentoManutencaoFilterCubit filterCubit = context.read<EquipamentoManutencaoFilterCubit>();
-    bool? result = await showDialog<bool>(
-      barrierDismissible: false,
+    EquipamentoManutencaoFilterCubit filterCubit =
+        context.read<EquipamentoManutencaoFilterCubit>();
+    bool? confirm = await showDialog<bool>(
       context: context,
-      builder: (BuildContext context) {
-        return BlocProvider<EquipamentoManutencaoFilterCubit>.value(
-          value: filterCubit,
-          child: EquipamentoManutencaoPageFilter(),
-        );
-      },
+      builder: (context) =>
+          BlocProvider<EquipamentoManutencaoFilterCubit>.value(
+        value: filterCubit,
+        child: EquipamentoManutencaoPageFilter(),
+      ),
     );
-    if (result != true) return;
-    EquipamentoManutencaoPageCubit equipamentoManutencaoCubit = context.read<EquipamentoManutencaoPageCubit>();
+    if (confirm != true) return;
+    EquipamentoManutencaoPageCubit equipamentoManutencaoCubit =
+        context.read<EquipamentoManutencaoPageCubit>();
     filterCubit = context.read<EquipamentoManutencaoFilterCubit>();
     EquipamentoManutencaoFilter dto = filterCubit.state;
     await equipamentoManutencaoCubit.getScreenData(dto);

@@ -12,7 +12,7 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class LiberacaoLeiturasPresenterPage extends StatefulWidget {
-  LiberacaoLeiturasPresenterPage({super.key});
+  const LiberacaoLeiturasPresenterPage({super.key});
 
   @override
   State<LiberacaoLeiturasPresenterPage> createState() =>
@@ -97,11 +97,18 @@ class _LiberacaoLeiturasPresenterPageState
     BuildContext context,
     ProcessoLeituraAndamentoModel leituraEmAndamento,
   ) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção da leitura em andamento: ${leituraEmAndamento.cod}\nEm execução por: Usuário: ${leituraEmAndamento.usuario?.nome}',
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção da leitura em andamento: ${leituraEmAndamento.cod}\nEm execução por: Usuário: ${leituraEmAndamento.usuario?.nome}',
+      onConfirm: () => onConfirmDelete(leituraEmAndamento),
     );
-    if (confirmacao) bloc.delete(leituraEmAndamento);
+  }
+
+  void onConfirmDelete(
+    ProcessoLeituraAndamentoModel leituraEmAndamento,
+  ) {
+    bloc.delete(leituraEmAndamento);
   }
 
   void deleted(LiberacaoLeiturasPageState state) {

@@ -76,6 +76,10 @@ class ProcessoPageWarningController extends ChangeNotifier
       case DecisaoEnum.TomarDecisaoAcaoKit:
       case DecisaoEnum.AutorizarAcaoOcorrencias:
       case DecisaoEnum.EquipamentoComRestricaoContinuar:
+      case DecisaoEnum.DefinirResponsavelLocalNaoCompativel:
+      case DecisaoEnum.ProsseguirComLocalDestinoDivergente:
+      case DecisaoEnum.DefinirResponsavelLocalNaoCompativelItem:
+      case DecisaoEnum.ProsseguirComLocalDestinoDivergenteItem:
         return null;
       default:
         return 10;

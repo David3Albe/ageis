@@ -10,11 +10,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ServicoTipoPage extends StatefulWidget {
-  ServicoTipoPage({super.key});
+  const ServicoTipoPage({super.key});
 
   @override
   State<ServicoTipoPage> createState() => _ServicoTipoPageState();
@@ -105,30 +106,42 @@ class _ServicoTipoPageState extends State<ServicoTipoPage> {
     );
   }
 
-  void openModal(BuildContext context, ServicoTipoModel servicoTipo) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: ServicoTipoPageFrm(
-            servicoTipo: servicoTipo,
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadServicoTipo();
-    });
+  Future openModal(
+    BuildContext context,
+    ServicoTipoModel servicoTipo,
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Tipo de Serviço',
+      widget: ServicoTipoPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        servicoTipo: servicoTipo,
+      ),
+    );
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadServicoTipo();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void delete(BuildContext context, ServicoTipoModel servicoTipo) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Tipo de Serviço\n${servicoTipo.cod} - ${servicoTipo.nome}',
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Tipo de Serviço\n${servicoTipo.cod} - ${servicoTipo.nome}',
+      onConfirm: () => confirmDelete(servicoTipo),
     );
-    if (confirmacao) bloc.delete(servicoTipo);
+  }
+
+  void confirmDelete(ServicoTipoModel servicoTipo) async {
+    bloc.delete(servicoTipo);
   }
 
   void deleted(ServicoTipoPageState state) {

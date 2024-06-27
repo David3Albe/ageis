@@ -19,19 +19,18 @@ class TreinamentoRegistroFilterButtonWidget extends StatelessWidget {
   }
 
   Future openModalFilter(BuildContext context) async {
-    TreinamentoRegistroCubitFilter filterCubit = context.read<TreinamentoRegistroCubitFilter>();
-    bool? result = await showDialog<bool>(
-      barrierDismissible: false,
+    TreinamentoRegistroCubitFilter filterCubit =
+        context.read<TreinamentoRegistroCubitFilter>();
+    bool? confirm = await showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return BlocProvider<TreinamentoRegistroCubitFilter>.value(
-          value: filterCubit,
-          child: TreinamentoRegistroPageFilter(),
-        );
-      },
+      builder: (context) => BlocProvider<TreinamentoRegistroCubitFilter>.value(
+        value: filterCubit,
+        child: TreinamentoRegistroPageFilter(),
+      ),
     );
-    if (result != true) return;
-    TreinamentoRegistroPageCubit treinamentoCubit = context.read<TreinamentoRegistroPageCubit>();
+    if (confirm != true) return;
+    TreinamentoRegistroPageCubit treinamentoCubit =
+        context.read<TreinamentoRegistroPageCubit>();
     filterCubit = context.read<TreinamentoRegistroCubitFilter>();
     TreinamentoRegistroFilter dto = filterCubit.state;
     await treinamentoCubit.filterScreen(dto);

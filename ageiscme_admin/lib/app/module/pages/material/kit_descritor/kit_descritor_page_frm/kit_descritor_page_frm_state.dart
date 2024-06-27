@@ -12,12 +12,15 @@ class KitDescritorPageFrmCubit extends Cubit<KitDescritorPageFrmState> {
           KitDescritorPageFrmState(kitDescritor: kitDescritorModel),
         );
 
-  void save(KitDescritorModel kitDescritor) async {
+  void save(
+    KitDescritorModel kitDescritor,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, KitDescritorModel kitDescritor)? result =
           await service.save(kitDescritor);
       if (result == null) return;
-
+      onSaved(result.$1);
       emit(
         KitDescritorPageFrmState(
           message: result.$1,

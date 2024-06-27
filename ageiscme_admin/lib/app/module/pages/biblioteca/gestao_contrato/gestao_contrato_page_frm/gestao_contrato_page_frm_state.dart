@@ -12,12 +12,15 @@ class GestaoContratoPageFrmCubit extends Cubit<GestaoContratoPageFrmState> {
           GestaoContratoPageFrmState(gestaoContrato: gestaoContratoModel),
         );
 
-  void save(GestaoContratoModel gestaoContrato) async {
+  void save(
+    GestaoContratoModel gestaoContrato,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, GestaoContratoModel gestaoContrato)? result =
           await service.save(gestaoContrato);
       if (result == null) return;
-
+      onSaved(result.$1);
       emit(
         GestaoContratoPageFrmState(
           message: result.$1,
@@ -36,7 +39,11 @@ class GestaoContratoPageFrmCubit extends Cubit<GestaoContratoPageFrmState> {
   }
 
   void clear() {
-    emit(GestaoContratoPageFrmState(gestaoContrato: GestaoContratoModel.empty()));
+    emit(
+      GestaoContratoPageFrmState(
+        gestaoContrato: GestaoContratoModel.empty(),
+      ),
+    );
   }
 }
 

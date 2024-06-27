@@ -24,11 +24,12 @@ import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ProcessoTipoConsultaPage extends StatefulWidget {
-  ProcessoTipoConsultaPage({super.key});
+  const ProcessoTipoConsultaPage({super.key});
 
   @override
   State<ProcessoTipoConsultaPage> createState() =>
@@ -200,7 +201,7 @@ class _ProcessoTipoConsultaPageState extends State<ProcessoTipoConsultaPage> {
         .where((element) => element.cod == result.$2.codTipoProcesso)
         .firstOrNull;
     if (tipoProcesso == null) return;
-    openModal(context, tipoProcesso, result.$2.codEtapaProcesso);
+    await openModal(context, tipoProcesso, result.$2.codEtapaProcesso);
   }
 
   Future<bool?> _carregarFluxoEtapas(ProcessoTipoModel processoTipo) async {
@@ -227,7 +228,7 @@ class _ProcessoTipoConsultaPageState extends State<ProcessoTipoConsultaPage> {
     return true;
   }
 
-  void openModal(
+  Future openModal(
     BuildContext context,
     ProcessoTipoModel processoTipo,
     int? codEtapa,
@@ -247,19 +248,21 @@ class _ProcessoTipoConsultaPageState extends State<ProcessoTipoConsultaPage> {
       return;
     }
     loading.close(context, mounted);
-
-    await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return ProcessoTipoFluxoPagePresenter(
-          canEdit: false,
-          processoTipo: processoTipo,
-          initialClickOn: codEtapa,
-          onDetailSearchItems: findMaterials,
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Fluxo Tipo de Processo',
+      widget: ProcessoTipoFluxoPagePresenter(
+        onCancel: () => onCancel(chave),
+        canEdit: false,
+        processoTipo: processoTipo,
+        initialClickOn: codEtapa,
+        onDetailSearchItems: findMaterials,
+      ),
     );
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void onError(ProcessoTipoConsultaPageState state) {

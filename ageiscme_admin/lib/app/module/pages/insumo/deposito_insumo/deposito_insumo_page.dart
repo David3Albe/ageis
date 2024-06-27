@@ -10,11 +10,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class DepositoInsumoPage extends StatefulWidget {
-  DepositoInsumoPage({super.key});
+  const DepositoInsumoPage({super.key});
 
   @override
   State<DepositoInsumoPage> createState() => _DepositoInsumoPageState();
@@ -115,30 +116,42 @@ class _DepositoInsumoPageState extends State<DepositoInsumoPage> {
     );
   }
 
-  void openModal(BuildContext context, DepositoInsumoModel depositoInsumo) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: DepositoInsumoPageFrm(
-            depositoInsumo: depositoInsumo,
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadDepositoInsumo();
-    });
+  Future openModal(
+    BuildContext context,
+    DepositoInsumoModel depositoInsumo,
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Depósito',
+      widget: DepositoInsumoPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        depositoInsumo: depositoInsumo,
+      ),
+    );
   }
 
-  void delete(BuildContext context, DepositoInsumoModel depositoInsumo) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Depósito de Insumo\n${depositoInsumo.cod} - ${depositoInsumo.nome}',
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadDepositoInsumo();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
+  }
+
+  void delete(BuildContext context, DepositoInsumoModel depositoInsumo) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Depósito de Insumo\n${depositoInsumo.cod} - ${depositoInsumo.nome}',
+      onConfirm: () => confirmDelete(depositoInsumo),
     );
-    if (confirmacao) bloc.delete(depositoInsumo);
+  }
+
+  void confirmDelete(DepositoInsumoModel depositoInsumo) async {
+    bloc.delete(depositoInsumo);
   }
 
   void deleted(DepositoInsumoPageState state) {

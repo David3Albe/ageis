@@ -12,12 +12,15 @@ class ParametroSistemaPageFrmCubit extends Cubit<ParametroSistemaPageFrmState> {
           ParametroSistemaPageFrmState(parametroSistema: parametroSistemaModel),
         );
 
-  void save(ParametroSistemaModel parametroSistema) async {
+  void save(
+    ParametroSistemaModel parametroSistema,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, ParametroSistemaModel parametroSistema)? result =
           await service.save(parametroSistema);
       if (result == null) return;
-
+      onSaved(result.$1);
       emit(
         ParametroSistemaPageFrmState(
           message: result.$1,

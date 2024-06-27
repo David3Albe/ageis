@@ -9,9 +9,9 @@ part of 'calculadora_item_model.dart';
 _$CalculadoraItemModelImpl _$$CalculadoraItemModelImplFromJson(
         Map<String, dynamic> json) =>
     _$CalculadoraItemModelImpl(
-      codEstoque: json['codEstoque'] as int?,
+      codEstoque: (json['codEstoque'] as num?)?.toInt(),
       saldo: json['saldo'] as String?,
-      valorInformado: json['valorInformado'] as int?,
+      valorInformado: (json['valorInformado'] as num?)?.toInt(),
       calculadoraJaDefinida: json['calculadoraJaDefinida'] as bool?,
     );
 

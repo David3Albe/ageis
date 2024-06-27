@@ -14,11 +14,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ItemDescritorPage extends StatefulWidget {
-  ItemDescritorPage({super.key});
+  const ItemDescritorPage({super.key});
 
   @override
   State<ItemDescritorPage> createState() => _ItemDescritorPageState();
@@ -154,7 +155,7 @@ class _ItemDescritorPageState extends State<ItemDescritorPage> {
     );
   }
 
-  Future<void> openModal(
+  Future openModal(
     BuildContext context,
     ItemDescritorModel itemDescritor,
   ) async {
@@ -173,27 +174,39 @@ class _ItemDescritorPageState extends State<ItemDescritorPage> {
     }
     loading.close(context, mounted);
 
-    (bool, String)? result = await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return ItemDescritorPageFrm(
-          itemDescritor: item!,
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Descritor de Item',
+      widget: ItemDescritorPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        itemDescritor: item,
+      ),
     );
-    if (result == null || !result.$1) return;
-    ToastUtils.showCustomToastSucess(context, result.$2);
+  }
+
+  Future onSaved(String message, int chave) async {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
     ItemDescritorFilter filter = context.read<ItemDescritorCubitFilter>().state;
     await bloc.getScreenData(filter);
   }
 
-  void delete(BuildContext context, ItemDescritorModel itemDescritor) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Descritor de Item\n${itemDescritor.cod} - ${itemDescritor.descricaoCurta}',
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
+  }
+
+  void delete(BuildContext context, ItemDescritorModel itemDescritor) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Descritor de Item\n${itemDescritor.cod} - ${itemDescritor.descricaoCurta}',
+      onConfirm: () => confirmDelete(itemDescritor),
     );
-    if (confirmacao) bloc.delete(itemDescritor);
+  }
+
+  void confirmDelete(ItemDescritorModel itemDescritor) async {
+    bloc.delete(itemDescritor);
   }
 
   void deleted(ItemDescritorPageState state) {

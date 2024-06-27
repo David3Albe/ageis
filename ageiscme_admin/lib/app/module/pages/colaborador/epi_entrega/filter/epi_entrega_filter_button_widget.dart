@@ -20,17 +20,15 @@ class EpiEntregaFilterButtonWidget extends StatelessWidget {
 
   Future openModalFilter(BuildContext context) async {
     EpiEntregaFilterCubit filterCubit = context.read<EpiEntregaFilterCubit>();
-    bool? result = await showDialog<bool>(
-      barrierDismissible: false,
+
+    bool? confirm = await showDialog<bool>(
       context: context,
-      builder: (BuildContext context) {
-        return BlocProvider<EpiEntregaFilterCubit>.value(
-          value: filterCubit,
-          child: EpiEntregaFilterPage(),
-        );
-      },
+      builder: (context) => BlocProvider<EpiEntregaFilterCubit>.value(
+        value: filterCubit,
+        child: EpiEntregaFilterPage(),
+      ),
     );
-    if (result != true) return;
+    if (confirm != true) return;
     EpiEntregaUsuarioPageCubit epiEntregaCubit =
         context.read<EpiEntregaUsuarioPageCubit>();
     filterCubit = context.read<EpiEntregaFilterCubit>();

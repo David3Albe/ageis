@@ -18,12 +18,12 @@ import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_footer_type.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
-import 'package:compartilhados/query_dialog/query_dialog_widget.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ConsultaProcessosLeituraDevolvidoPage extends StatefulWidget {
-  ConsultaProcessosLeituraDevolvidoPage({super.key});
+  const ConsultaProcessosLeituraDevolvidoPage({super.key});
 
   @override
   State<ConsultaProcessosLeituraDevolvidoPage> createState() =>
@@ -106,7 +106,7 @@ class _ConsultaProcessosLeituraDevolvidoPageState
                         );
                       }
 
-                      openModalRedirect(
+                      await openModalRedirect(
                         context,
                         obj.codLocal,
                       );
@@ -121,33 +121,27 @@ class _ConsultaProcessosLeituraDevolvidoPageState
     );
   }
 
-  void openModalRedirect(
+  Future openModalRedirect(
     BuildContext context,
     int? codLocal,
-  ) {
-    showDialog<bool>(
-      barrierDismissible: true,
-      context: context,
-      barrierColor: Colors.white,
-      builder: (BuildContext context) {
-        return QueryDialogWidget(
-          child: ConsultaProcessosLeituraDevolvidoSubPage(
-            filter: ConsultaProcessosLeituraDevolvidoSubFilter(
-              startDate: filter.startDate,
-              finalDate: filter.finalDate,
-              codLocal: codLocal,
-            ),
-          ),
-        );
-      },
+  ) async {
+    WindowsHelper.OpenDefaultWindows(
+      title: 'Consulta Processo Leitura - Devolvidos - Sub',
+      widget: ConsultaProcessosLeituraDevolvidoSubPage(
+        filter: ConsultaProcessosLeituraDevolvidoSubFilter(
+          startDate: filter.startDate,
+          finalDate: filter.finalDate,
+          codLocal: codLocal,
+        ),
+      ),
     );
   }
 
   void onError(ConsultaProcessosLeituraDevolvidoPageState state) =>
       ErrorUtils.showErrorDialog(context, [state.error]);
 
-  void openModal(BuildContext context) {
-    showDialog<bool>(
+  Future openModal(BuildContext context) async {
+    bool? confirm = await showDialog<bool>(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
@@ -198,12 +192,8 @@ class _ConsultaProcessosLeituraDevolvidoPageState
           ),
         );
       },
-    ).then(
-      (result) {
-        if (result == true) {
-          bloc.loadProcessosLeituraDevolvido(filter);
-        }
-      },
     );
+    if (confirm != true) return;
+    bloc.loadProcessosLeituraDevolvido(filter);
   }
 }

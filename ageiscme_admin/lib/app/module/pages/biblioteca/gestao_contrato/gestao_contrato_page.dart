@@ -10,12 +10,13 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
 class GestaoContratoPage extends StatefulWidget {
-  GestaoContratoPage({super.key});
+  const GestaoContratoPage({super.key});
 
   @override
   State<GestaoContratoPage> createState() => _GestaoContratoPageState();
@@ -73,6 +74,7 @@ class _GestaoContratoPageState extends State<GestaoContratoPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderDescendingFieldColumn: 'cod',
                     onEdit: (GestaoContratoModel objeto) =>
                         {openModal(context, GestaoContratoModel.copy(objeto))},
                     onDelete: (GestaoContratoModel objeto) =>
@@ -91,22 +93,29 @@ class _GestaoContratoPageState extends State<GestaoContratoPage> {
     );
   }
 
-  void openModal(BuildContext context, GestaoContratoModel gestaoContrato) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: GestaoContratoPageFrm(
-            gestaoContrato: gestaoContrato,
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadGestaoContrato();
-    });
+  Future openModal(
+    BuildContext context,
+    GestaoContratoModel gestaoContrato,
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Gestão Contrato',
+      widget: GestaoContratoPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        gestaoContrato: gestaoContrato,
+      ),
+    );
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadGestaoContrato();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void acessar(BuildContext context, GestaoContratoModel gestaoContrato) async {
@@ -122,12 +131,17 @@ class _GestaoContratoPageState extends State<GestaoContratoPage> {
     }
   }
 
-  void delete(BuildContext context, GestaoContratoModel gestaoContrato) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção da Gestão de Documento\n${gestaoContrato.cod} - ${gestaoContrato.descricao}',
+  void delete(BuildContext context, GestaoContratoModel gestaoContrato) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção da Gestão de Documento\n${gestaoContrato.cod} - ${gestaoContrato.descricao}',
+      onConfirm: () => onConfirmDelete(gestaoContrato),
     );
-    if (confirmacao) bloc.delete(gestaoContrato);
+  }
+
+  void onConfirmDelete(GestaoContratoModel obj) {
+    bloc.delete(obj);
   }
 
   void deleted(GestaoContratoPageState state) {

@@ -9,7 +9,7 @@ part of 'item_consignado_base_model.dart';
 _$ItemConsignadoBaseModelImpl _$$ItemConsignadoBaseModelImplFromJson(
         Map<String, dynamic> json) =>
     _$ItemConsignadoBaseModelImpl(
-      tipoAcesso: json['tipoAcesso'] as int,
+      tipoAcesso: (json['tipoAcesso'] as num).toInt(),
       preparo: json['preparo'] as bool? ?? false,
     );
 

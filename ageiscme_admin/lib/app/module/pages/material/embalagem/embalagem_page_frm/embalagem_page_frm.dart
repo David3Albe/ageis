@@ -4,7 +4,6 @@ import 'package:ageiscme_data/services/embalagem/embalagem_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
@@ -19,9 +18,13 @@ class EmbalagemPageFrm extends StatefulWidget {
   const EmbalagemPageFrm({
     Key? key,
     required this.embalagem,
+    required this.onCancel,
+    required this.onSaved,
   }) : super(key: key);
 
   final EmbalagemModel embalagem;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<EmbalagemPageFrm> createState() =>
@@ -90,109 +93,95 @@ class _EmbalagemPageFrmState extends State<EmbalagemPageFrm> {
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<EmbalagemPageFrmCubit, EmbalagemPageFrmState>(
+    return BlocBuilder<EmbalagemPageFrmCubit, EmbalagemPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
-      child: BlocBuilder<EmbalagemPageFrmCubit, EmbalagemPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return Container(
-            constraints: const BoxConstraints(
-              maxHeight: 1000,
-              minHeight: 400,
-              maxWidth: 1200,
-              minWidth: 600,
-            ),
-            height: size.height * .6,
-            width: size.width * .6,
-            child: Stack(
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        TitleWidget(
-                          text: titulo,
-                        ),
-                        const Spacer(),
-                        CloseButtonWidget(
-                          onPressed: () =>
-                              Navigator.of(context).pop((false, '')),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtNome,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtValidadeProcesso,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: Row(
-                        children: [
-                          CustomCheckboxWidget(
-                            checked: embalagem.ativo,
-                            onClick: (value) => embalagem.ativo = value,
-                            text: 'Ativo',
-                          ),
-                        ],
+      builder: (context, state) {
+        return Container(
+          constraints: const BoxConstraints(
+            maxHeight: 1000,
+            minHeight: 400,
+            maxWidth: 1200,
+            minWidth: 600,
+          ),
+          height: size.height * .6,
+          width: size.width * .6,
+          child: Stack(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Row(
+                    children: [
+                      TitleWidget(
+                        text: titulo,
                       ),
-                    ),
-                    const Spacer(),
-                    Row(
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: txtNome,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: txtValidadeProcesso,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: Row(
                       children: [
-                        if (embalagem.cod != null && embalagem.cod != 0)
-                          CustomPopupMenuWidget(
-                            items: [
-                              CustomPopupItemHistoryModel.getHistoryItem(
-                                child: HistoricoPage(
-                                  pk: embalagem.cod!,
-                                  termo: 'EMBALAGEM',
-                                ),
-                                context: context,
-                              ),
-                            ],
-                          ),
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: SaveButtonWidget(
-                            onPressed: () => {salvar()},
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: CleanButtonWidget(
-                            onPressed: () => {
-                              setState(() {
-                                embalagem = EmbalagemModel.empty();
-                              }),
-                            },
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: CancelButtonUnfilledWidget(
-                            onPressed: () =>
-                                {Navigator.of(context).pop((false, ''))},
-                          ),
+                        CustomCheckboxWidget(
+                          checked: embalagem.ativo,
+                          onClick: (value) => embalagem.ativo = value,
+                          text: 'Ativo',
                         ),
                       ],
                     ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+                  ),
+                  const Spacer(),
+                  Row(
+                    children: [
+                      if (embalagem.cod != null && embalagem.cod != 0)
+                        CustomPopupMenuWidget(
+                          items: [
+                            CustomPopupItemHistoryModel.getHistoryItem(
+                              child: HistoricoPage(
+                                pk: embalagem.cod!,
+                                termo: 'EMBALAGEM',
+                              ),
+                              context: context,
+                            ),
+                          ],
+                        ),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: SaveButtonWidget(
+                          onPressed: () => {salvar()},
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: CleanButtonWidget(
+                          onPressed: () => {
+                            setState(() {
+                              embalagem = EmbalagemModel.empty();
+                            }),
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: CancelButtonUnfilledWidget(
+                          onPressed: widget.onCancel,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -200,6 +189,6 @@ class _EmbalagemPageFrmState extends State<EmbalagemPageFrm> {
     bool nomeValid = txtNome.valid;
     bool validadeProcessoValid = txtValidadeProcesso.valid;
     if (!nomeValid || !validadeProcessoValid) return;
-    cubit.save(embalagem);
+    cubit.save(embalagem, widget.onSaved);
   }
 }

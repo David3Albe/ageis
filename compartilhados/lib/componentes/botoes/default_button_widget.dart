@@ -106,7 +106,7 @@ class _DefaultButtonWidgetState extends State<DefaultButtonWidget> {
   void handleClick() {
     if (widget.onPressed == null) return;
     EasyThrottle.throttle(
-      'save-button',
+      widget.text,
       const Duration(seconds: 7),
       widget.onPressed!,
     );

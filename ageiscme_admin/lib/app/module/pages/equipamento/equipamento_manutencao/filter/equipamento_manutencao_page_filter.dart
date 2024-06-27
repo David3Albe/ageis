@@ -13,7 +13,9 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class EquipamentoManutencaoPageFilter extends StatelessWidget {
-  EquipamentoManutencaoPageFilter({Key? key});
+  EquipamentoManutencaoPageFilter({
+    Key? key,
+  });
 
   @override
   Widget build(BuildContext context) {

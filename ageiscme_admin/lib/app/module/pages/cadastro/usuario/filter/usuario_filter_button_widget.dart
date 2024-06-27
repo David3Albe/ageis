@@ -6,9 +6,15 @@ import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
-class UsuarioButtonFilterWidget extends StatelessWidget {
+class UsuarioButtonFilterWidget extends StatefulWidget {
   const UsuarioButtonFilterWidget({Key? key}) : super(key: key);
 
+  @override
+  State<UsuarioButtonFilterWidget> createState() =>
+      _UsuarioButtonFilterWidgetState();
+}
+
+class _UsuarioButtonFilterWidgetState extends State<UsuarioButtonFilterWidget> {
   @override
   Widget build(BuildContext context) {
     return FilterButtonWidget(
@@ -20,7 +26,7 @@ class UsuarioButtonFilterWidget extends StatelessWidget {
 
   Future openModalFilter(BuildContext context) async {
     UsuarioCubitFilter filterCubit = context.read<UsuarioCubitFilter>();
-    bool? result = await showDialog<bool>(
+    bool? confirm = await showDialog<bool>(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
@@ -30,7 +36,7 @@ class UsuarioButtonFilterWidget extends StatelessWidget {
         );
       },
     );
-    if (result != true) return;
+    if (confirm != true) return;
     UsuarioPageCubit userCubit = context.read<UsuarioPageCubit>();
     filterCubit = context.read<UsuarioCubitFilter>();
     UsuarioFilter dto = filterCubit.state;

@@ -10,11 +10,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class KitCorPage extends StatefulWidget {
-  KitCorPage({super.key});
+  const KitCorPage({super.key});
 
   @override
   State<KitCorPage> createState() => _KitCorPageState();
@@ -108,30 +109,42 @@ class _KitCorPageState extends State<KitCorPage> {
     );
   }
 
-  void openModal(BuildContext context, KitCorModel kitCor) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: KitCorPageFrm(
-            kitCor: kitCor,
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadKitCor();
-    });
+  Future openModal(
+    BuildContext context,
+    KitCorModel kitCor,
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Cores do Kit',
+      widget: KitCorPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        kitCor: kitCor,
+      ),
+    );
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadKitCor();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void delete(BuildContext context, KitCorModel kitCor) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção da Cor de Kit\n${kitCor.cod} - ${kitCor.nome}',
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção da Cor de Kit\n${kitCor.cod} - ${kitCor.nome}',
+      onConfirm: () => confirmDelete(kitCor),
     );
-    if (confirmacao) bloc.delete(kitCor);
+  }
+
+  void confirmDelete(KitCorModel kitCor) async {
+    bloc.delete(kitCor);
   }
 
   void deleted(KitCorPageState state) {

@@ -9,7 +9,6 @@ import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/models/treinamento_usuario/treinamento_usuario_model.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/label_string_widget.dart';
 import 'package:compartilhados/componentes/campos/list_field/list_field_widget.dart';
@@ -36,10 +35,14 @@ class TreinamentoRegistroPageFrm extends StatefulWidget {
     Key? key,
     required this.treinamentoRegistro,
     required this.usuarioCubit,
+    required this.onCancel,
+    required this.onSaved,
   }) : super(key: key);
 
   final TreinamentoRegistroModel treinamentoRegistro;
   final UsuarioCubit usuarioCubit;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<TreinamentoRegistroPageFrm> createState() =>
@@ -178,337 +181,328 @@ class _TreinamentoRegistroPageFrmState
     double paddingHorizontalScale = MediaQuery.of(context).size.width / 1920;
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<TreinamentoRegistroPageFrmCubit,
+    return BlocBuilder<TreinamentoRegistroPageFrmCubit,
         TreinamentoRegistroPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
-      child: BlocBuilder<TreinamentoRegistroPageFrmCubit,
-          TreinamentoRegistroPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return AlertDialog(
-            contentPadding: const EdgeInsets.all(8.0),
-            titlePadding: const EdgeInsets.all(8.0),
-            actionsPadding: const EdgeInsets.all(8.0),
-            title: Row(
+      builder: (context, state) {
+        return Column(
+          children: [
+            Row(
               children: [
                 Expanded(
                   child: TitleWidget(
                     text: titulo,
                   ),
                 ),
-                const Spacer(),
-                CloseButtonWidget(
-                  onPressed: () => Navigator.of(context).pop((false, '')),
-                ),
               ],
             ),
-            content: Container(
-              constraints: BoxConstraints(
-                minWidth: size.width * .5,
-                minHeight: size.height * .5,
-                maxHeight: size.height * .8,
-              ),
-              child: SingleChildScrollView(
-                controller: scroll,
-                padding: const EdgeInsets.only(right: 14),
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtNome,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtDescricaoConteudo,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtEntidade,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: dtpData,
-                          ),
-                          const SizedBox(width: 25.0),
-                          Expanded(
-                            child: txtCargaHoraria,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: txtObservacao,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: LabelStringWidget(
-                        text:
-                            'Documento Anexado: ${treinamentoRegistro.docNome == null ? 'Nenhum Documento foi Encontrado' : treinamentoRegistro.docNome}',
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              'Lista de Presença',
-                              style: Fontes.getRoboto(),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          const SizedBox(width: 25.0),
-                          Expanded(
-                            child: Text(
-                              'Colaboradores',
-                              style: Fontes.getRoboto(),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: ListButtonWidget(
-                              text: 'Remover',
-                              icon: Icons.arrow_forward,
-                              onPressed: () {
-                                if (usuarioRemover != null) {
-                                  setState(() {
-                                    if (treinamentoRegistro
-                                            .usuariosTreinamentos !=
-                                        null) {
-                                      treinamentoRegistro.usuariosTreinamentos!
-                                          .removeWhere(
-                                        (element) =>
-                                            element.codUsuario ==
-                                            usuarioRemover!.cod,
-                                      );
-                                    }
-                                  });
-                                } else {
-                                  ToastUtils.showCustomToastError(
-                                    context,
-                                    'Nenhum Colaborador selecionado',
-                                  );
-                                }
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 25.0),
-                          Expanded(
-                            child: ListButtonWidget(
-                              text: 'Adicionar',
-                              icon: Icons.arrow_back,
-                              onPressed: () {
-                                if (usuarioAdicionar != null) {
-                                  setState(() {
-                                    if (treinamentoRegistro
-                                            .usuariosTreinamentos ==
-                                        null) {
-                                      treinamentoRegistro.usuariosTreinamentos =
-                                          [];
-                                    }
-                                    TreinamentoUsuarioModel treinamentoUsuario =
-                                        TreinamentoUsuarioModel.empty();
-                                    treinamentoUsuario.codUsuario =
-                                        usuarioAdicionar!.cod;
-                                    treinamentoRegistro.usuariosTreinamentos!
-                                        .add(treinamentoUsuario);
-
-                                    usuarioAdicionar = null;
-                                  });
-                                } else {
-                                  ToastUtils.showCustomToastError(
-                                    context,
-                                    'Nenhum Colaborador selecionado',
-                                  );
-                                }
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 5.0),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: BlocBuilder<UsuarioCubit, UsuarioState>(
-                              bloc: widget.usuarioCubit,
-                              builder: (context, usuarioState) {
-                                if (usuarioState.loading) {
-                                  return const Center(child: LoadingWidget());
-                                }
-                                List<UsuarioModel> usuarios =
-                                    usuarioState.usuarios;
-                                List<UsuarioModel> usuariosPresentes = [];
-                                if (treinamentoRegistro.usuariosTreinamentos !=
-                                    null) {
-                                  for (final treinamentoUsuario
-                                      in treinamentoRegistro
-                                          .usuariosTreinamentos!) {
-                                    final codUsuario =
-                                        treinamentoUsuario.codUsuario;
-
-                                    if (usuarios.isNotEmpty) {
-                                      final usuarioPresente = usuarios
-                                          .where(
-                                            (usuario) =>
-                                                usuario.cod == codUsuario,
-                                          )
-                                          .firstOrNull;
-                                      if (usuarioPresente != null) {
-                                        usuariosPresentes.add(usuarioPresente);
-                                      }
-                                    }
-                                  }
-                                }
-
-                                return ListFieldWidget<UsuarioModel>(
-                                  sourceList: usuariosPresentes,
-                                  removeButton: false,
-                                  onItemSelected: (selectedUsuario) {
-                                    setState(() {
-                                      usuarioRemover = selectedUsuario;
-                                    });
-                                  },
-                                  itemText: (usuario) {
-                                    return usuario.nome!;
-                                  },
-                                );
-                              },
-                            ),
-                          ),
-                          const SizedBox(width: 25.0),
-                          Expanded(
-                            child: BlocBuilder<UsuarioCubit, UsuarioState>(
-                              bloc: widget.usuarioCubit,
-                              builder: (context, usuarioState) {
-                                if (usuarioState.loading) {
-                                  return const Center(child: LoadingWidget());
-                                }
-                                List<UsuarioModel> usuarios =
-                                    usuarioState.usuarios;
-                                if (treinamentoRegistro.usuariosTreinamentos ==
-                                    null) {
-                                  treinamentoRegistro.usuariosTreinamentos = [];
-                                }
-                                List<UsuarioModel> colaboradoresAusentes =
-                                    usuarios
-                                        .where(
-                                          (usuario) => !treinamentoRegistro
-                                              .usuariosTreinamentos!
-                                              .any(
-                                            (treinamento) =>
-                                                treinamento.codUsuario ==
-                                                usuario.cod,
-                                          ),
-                                        )
-                                        .toList();
-                                return ListFieldWidget<UsuarioModel>(
-                                  sourceList: colaboradoresAusentes,
-                                  removeButton: false,
-                                  onItemSelected: (selectedUsuario) {
-                                    setState(() {
-                                      usuarioAdicionar = selectedUsuario;
-                                    });
-                                  },
-                                  itemText: (usuario) {
-                                    return usuario.nome!;
-                                  },
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            actions: [
-              Row(
+            Expanded(
+              child: Row(
                 children: [
-                  CustomPopupMenuWidget(
-                    items: [
-                      CustomPopupItemModel(
-                        text: 'Imprimir',
-                        onTap: print,
+                  Expanded(
+                    child: Container(
+                      constraints: BoxConstraints(
+                        minWidth: size.width * .5,
+                        minHeight: size.height * .5,
+                        maxHeight: size.height * .8,
                       ),
-                      CustomPopupItemFileModel.getFileItem(
-                        'Anexar DOC',
-                        salvarDoc,
-                      ),
-                      if (treinamentoRegistro.docNome != null &&
-                          treinamentoRegistro.doc != null)
-                        CustomPopupItemModel(
-                          text: 'Excluir DOC',
-                          onTap: excluirDoc,
+                      child: SingleChildScrollView(
+                        controller: scroll,
+                        padding: const EdgeInsets.only(right: 14),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 24.0),
+                              child: txtNome,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 24.0),
+                              child: txtDescricaoConteudo,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 24.0),
+                              child: txtEntidade,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: dtpData,
+                                  ),
+                                  const SizedBox(width: 25.0),
+                                  Expanded(
+                                    child: txtCargaHoraria,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: txtObservacao,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: LabelStringWidget(
+                                text:
+                                    'Documento Anexado: ${treinamentoRegistro.docNome == null ? 'Nenhum Documento foi Encontrado' : treinamentoRegistro.docNome}',
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      'Lista de Presença',
+                                      style: Fontes.getRoboto(),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 25.0),
+                                  Expanded(
+                                    child: Text(
+                                      'Colaboradores',
+                                      style: Fontes.getRoboto(),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: ListButtonWidget(
+                                      text: 'Remover',
+                                      icon: Icons.arrow_forward,
+                                      onPressed: () {
+                                        if (usuarioRemover != null) {
+                                          setState(() {
+                                            if (treinamentoRegistro
+                                                    .usuariosTreinamentos !=
+                                                null) {
+                                              treinamentoRegistro.usuariosTreinamentos!
+                                                  .removeWhere(
+                                                (element) =>
+                                                    element.codUsuario ==
+                                                    usuarioRemover!.cod,
+                                              );
+                                            }
+                                          });
+                                        } else {
+                                          ToastUtils.showCustomToastError(
+                                            context,
+                                            'Nenhum Colaborador selecionado',
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 25.0),
+                                  Expanded(
+                                    child: ListButtonWidget(
+                                      text: 'Adicionar',
+                                      icon: Icons.arrow_back,
+                                      onPressed: () {
+                                        if (usuarioAdicionar != null) {
+                                          setState(() {
+                                            if (treinamentoRegistro
+                                                    .usuariosTreinamentos ==
+                                                null) {
+                                              treinamentoRegistro.usuariosTreinamentos =
+                                                  [];
+                                            }
+                                            TreinamentoUsuarioModel treinamentoUsuario =
+                                                TreinamentoUsuarioModel.empty();
+                                            treinamentoUsuario.codUsuario =
+                                                usuarioAdicionar!.cod;
+                                            treinamentoRegistro.usuariosTreinamentos!
+                                                .add(treinamentoUsuario);
+                    
+                                            usuarioAdicionar = null;
+                                          });
+                                        } else {
+                                          ToastUtils.showCustomToastError(
+                                            context,
+                                            'Nenhum Colaborador selecionado',
+                                          );
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: BlocBuilder<UsuarioCubit, UsuarioState>(
+                                      bloc: widget.usuarioCubit,
+                                      builder: (context, usuarioState) {
+                                        if (usuarioState.loading) {
+                                          return const Center(child: LoadingWidget());
+                                        }
+                                        List<UsuarioModel> usuarios =
+                                            usuarioState.usuarios;
+                                        List<UsuarioModel> usuariosPresentes = [];
+                                        if (treinamentoRegistro.usuariosTreinamentos !=
+                                            null) {
+                                          for (final treinamentoUsuario
+                                              in treinamentoRegistro
+                                                  .usuariosTreinamentos!) {
+                                            final codUsuario =
+                                                treinamentoUsuario.codUsuario;
+                    
+                                            if (usuarios.isNotEmpty) {
+                                              final usuarioPresente = usuarios
+                                                  .where(
+                                                    (usuario) =>
+                                                        usuario.cod == codUsuario,
+                                                  )
+                                                  .firstOrNull;
+                                              if (usuarioPresente != null) {
+                                                usuariosPresentes.add(usuarioPresente);
+                                              }
+                                            }
+                                          }
+                                        }
+                    
+                                        return ListFieldWidget<UsuarioModel>(
+                                          sourceList: usuariosPresentes,
+                                          removeButton: false,
+                                          onItemSelected: (selectedUsuario) {
+                                            setState(() {
+                                              usuarioRemover = selectedUsuario;
+                                            });
+                                          },
+                                          itemText: (usuario) {
+                                            return usuario.nome!;
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 25.0),
+                                  Expanded(
+                                    child: BlocBuilder<UsuarioCubit, UsuarioState>(
+                                      bloc: widget.usuarioCubit,
+                                      builder: (context, usuarioState) {
+                                        if (usuarioState.loading) {
+                                          return const Center(child: LoadingWidget());
+                                        }
+                                        List<UsuarioModel> usuarios =
+                                            usuarioState.usuarios;
+                                        if (treinamentoRegistro.usuariosTreinamentos ==
+                                            null) {
+                                          treinamentoRegistro.usuariosTreinamentos = [];
+                                        }
+                                        List<UsuarioModel> colaboradoresAusentes =
+                                            usuarios
+                                                .where(
+                                                  (usuario) => !treinamentoRegistro
+                                                      .usuariosTreinamentos!
+                                                      .any(
+                                                    (treinamento) =>
+                                                        treinamento.codUsuario ==
+                                                        usuario.cod,
+                                                  ),
+                                                )
+                                                .toList();
+                                        return ListFieldWidget<UsuarioModel>(
+                                          sourceList: colaboradoresAusentes,
+                                          removeButton: false,
+                                          onItemSelected: (selectedUsuario) {
+                                            setState(() {
+                                              usuarioAdicionar = selectedUsuario;
+                                            });
+                                          },
+                                          itemText: (usuario) {
+                                            return usuario.nome!;
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                      if (treinamentoRegistro.docNome != null &&
-                          treinamentoRegistro.doc != null)
-                        CustomPopupItemSaveFileModel.getOpenDocItem(
-                          text: 'Abrir DOC',
-                          context: context,
-                          docName: treinamentoRegistro.docNome,
-                          docString: treinamentoRegistro.doc,
-                        ),
-                      if (treinamentoRegistro.cod != null &&
-                          treinamentoRegistro.cod != 0)
-                        CustomPopupItemHistoryModel.getHistoryItem(
-                          child: HistoricoPage(
-                            pk: treinamentoRegistro.cod!,
-                            termo: 'TREINAMENTO_REGISTRO',
-                          ),
-                          context: context,
-                        ),
-                    ],
-                  ),
-                  const Spacer(),
-                  Wrap(
-                    spacing: 16 * paddingHorizontalScale,
-                    runSpacing: 16 * paddingHorizontalScale,
-                    alignment: WrapAlignment.end,
-                    children: [
-                      SaveButtonWidget(
-                        onPressed: () => {salvar()},
                       ),
-                      CleanButtonWidget(
-                        onPressed: () => {
-                          setState(() {
-                            treinamentoRegistro =
-                                TreinamentoRegistroModel.empty();
-                          }),
-                        },
-                      ),
-                      CancelButtonUnfilledWidget(
-                        onPressed: () =>
-                            {Navigator.of(context).pop((false, ''))},
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),
-            ],
-          );
-        },
-      ),
+            ),
+            Row(
+              children: [
+                CustomPopupMenuWidget(
+                  items: [
+                    CustomPopupItemModel(
+                      text: 'Imprimir',
+                      onTap: print,
+                    ),
+                    CustomPopupItemFileModel.getFileItem(
+                      'Anexar DOC',
+                      salvarDoc,
+                    ),
+                    if (treinamentoRegistro.docNome != null &&
+                        treinamentoRegistro.doc != null)
+                      CustomPopupItemModel(
+                        text: 'Excluir DOC',
+                        onTap: excluirDoc,
+                      ),
+                    if (treinamentoRegistro.docNome != null &&
+                        treinamentoRegistro.doc != null)
+                      CustomPopupItemSaveFileModel.getOpenDocItem(
+                        text: 'Abrir DOC',
+                        context: context,
+                        docName: treinamentoRegistro.docNome,
+                        docString: treinamentoRegistro.doc,
+                      ),
+                    if (treinamentoRegistro.cod != null &&
+                        treinamentoRegistro.cod != 0)
+                      CustomPopupItemHistoryModel.getHistoryItem(
+                        child: HistoricoPage(
+                          pk: treinamentoRegistro.cod!,
+                          termo: 'TREINAMENTO_REGISTRO',
+                        ),
+                        context: context,
+                      ),
+                  ],
+                ),
+                const Spacer(),
+                Wrap(
+                  spacing: 16 * paddingHorizontalScale,
+                  runSpacing: 16 * paddingHorizontalScale,
+                  alignment: WrapAlignment.end,
+                  children: [
+                    SaveButtonWidget(
+                      onPressed: salvar,
+                    ),
+                    CleanButtonWidget(
+                      onPressed: () => {
+                        setState(() {
+                          treinamentoRegistro =
+                              TreinamentoRegistroModel.empty();
+                        }),
+                      },
+                    ),
+                    CancelButtonUnfilledWidget(
+                      onPressed: widget.onCancel,
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -577,7 +571,7 @@ class _TreinamentoRegistroPageFrmState
     bool dataValid = dataValidate();
     if (!nomeValid) {
       scroll.jumpTo(0);
-    }else if(!dataValid || !cargaHorariaValid){
+    } else if (!dataValid || !cargaHorariaValid) {
       scroll.jumpTo(220);
     }
 
@@ -603,6 +597,6 @@ class _TreinamentoRegistroPageFrmState
       registrarUsuariosTreinamento.add(treinamentoUsuario);
     }
     treinamentoRegistro.usuariosTreinamentos = registrarUsuariosTreinamento;
-    cubit.save(treinamentoRegistro);
+    cubit.save(treinamentoRegistro, widget.onSaved);
   }
 }

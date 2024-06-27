@@ -7,7 +7,9 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class FilterForm extends StatelessWidget {
-  FilterForm({Key? key});
+  FilterForm({
+    Key? key,
+  });
 
   @override
   Widget build(BuildContext context) {

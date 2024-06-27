@@ -12,12 +12,15 @@ class LocalInstituicaoPageFrmCubit extends Cubit<LocalInstituicaoPageFrmState> {
           LocalInstituicaoPageFrmState(localInstituicao: localInstituicaoModel),
         );
 
-  void save(LocalInstituicaoModel localInstituicao) async {
+  void save(
+    LocalInstituicaoModel localInstituicao,
+    final void Function(String) onSaved,
+  ) async {
     try {
       (String message, LocalInstituicaoModel localInstituicao)? result =
           await service.save(localInstituicao);
       if (result == null) return;
-
+      onSaved(result.$1);
       emit(
         LocalInstituicaoPageFrmState(
           message: result.$1,

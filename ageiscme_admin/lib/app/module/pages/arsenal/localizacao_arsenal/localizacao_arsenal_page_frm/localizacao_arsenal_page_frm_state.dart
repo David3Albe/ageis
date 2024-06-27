@@ -15,12 +15,15 @@ class LocalizacaoArsenalPageFrmCubit
           ),
         );
 
-  void save(LocalizacaoArsenalModel localizacaoArsenal) async {
+  void save(
+    LocalizacaoArsenalModel localizacaoArsenal,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, LocalizacaoArsenalModel localizacaoArsenal)? result =
           await service.save(localizacaoArsenal);
       if (result == null) return;
-
+      onSaved(result.$1);
       emit(
         LocalizacaoArsenalPageFrmState(
           message: result.$1,

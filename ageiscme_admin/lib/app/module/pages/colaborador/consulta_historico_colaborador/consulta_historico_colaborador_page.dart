@@ -17,7 +17,7 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ConsultaHistoricoColaboradorPage extends StatefulWidget {
-  ConsultaHistoricoColaboradorPage({super.key});
+  const ConsultaHistoricoColaboradorPage({super.key});
 
   @override
   State<ConsultaHistoricoColaboradorPage> createState() =>
@@ -105,52 +105,47 @@ class _ConsultaHistoricoColaboradorPageState
   void onError(ConsultaHistoricoColaboradorPageState state) =>
       ErrorUtils.showErrorDialog(context, [state.error]);
 
-  void openModal(BuildContext context) {
-    showDialog<bool>(
-      barrierDismissible: false,
+  Future openModal(BuildContext context) async {
+    bool? confirm = await showDialog<bool>(
       context: context,
-      builder: (BuildContext context) {
-        return FilterDialogWidget(
-          child: Column(
-            children: [
-              DatePickerWidget(
-                placeholder: 'Data Inicio',
-                onDateSelected: (value) => filter.startDate = value,
-                initialValue: filter.startDate,
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              DatePickerWidget(
-                placeholder: 'Data Término',
-                onDateSelected: (value) => filter.finalDate = value,
-                initialValue: filter.finalDate,
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              DropDownSearchApiWidget<UsuarioDropDownSearchResponseDTO>(
-                search: (str) async =>
-                    (await UsuarioService().getDropDownSearch(
-                      UsuarioDropDownSearchDTO(
-                        numeroRegistros: 30,
-                        search: str,
-                      ),
-                    ))
-                        ?.$2 ??
-                    [],
-                textFunction: (usuario) => usuario.NomeText(),
-                initialValue: filter.usuario,
-                onChanged: (value) {
-                  filter.codUsuario = value?.cod;
-                  filter.usuario = value;
-                },
-                placeholder: 'Usuário',
-              ),
-            ],
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == true) {
-        bloc.loadHistoricoColaborador(filter);
-      }
-    });
+      builder: (context) => FilterDialogWidget(
+        child: Column(
+          children: [
+            DatePickerWidget(
+              placeholder: 'Data Inicio',
+              onDateSelected: (value) => filter.startDate = value,
+              initialValue: filter.startDate,
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            DatePickerWidget(
+              placeholder: 'Data Término',
+              onDateSelected: (value) => filter.finalDate = value,
+              initialValue: filter.finalDate,
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            DropDownSearchApiWidget<UsuarioDropDownSearchResponseDTO>(
+              search: (str) async =>
+                  (await UsuarioService().getDropDownSearch(
+                    UsuarioDropDownSearchDTO(
+                      numeroRegistros: 30,
+                      search: str,
+                    ),
+                  ))
+                      ?.$2 ??
+                  [],
+              textFunction: (usuario) => usuario.NomeText(),
+              initialValue: filter.usuario,
+              onChanged: (value) {
+                filter.codUsuario = value?.cod;
+                filter.usuario = value;
+              },
+              placeholder: 'Usuário',
+            ),
+          ],
+        ),
+      ),
+    );
+    if (confirm != true) return;
+    bloc.loadHistoricoColaborador(filter);
   }
 }

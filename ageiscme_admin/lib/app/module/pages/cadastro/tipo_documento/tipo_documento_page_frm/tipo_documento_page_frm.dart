@@ -4,7 +4,6 @@ import 'package:ageiscme_data/services/tipo_documento/tipo_documento_service.dar
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
@@ -17,9 +16,13 @@ class TipoDocumentoPageFrm extends StatefulWidget {
   const TipoDocumentoPageFrm({
     Key? key,
     required this.tipoDocumento,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final TipoDocumentoModel tipoDocumento;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<TipoDocumentoPageFrm> createState() =>
@@ -67,98 +70,85 @@ class _TipoDocumentoPageFrmState extends State<TipoDocumentoPageFrm> {
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<TipoDocumentoPageFrmCubit, TipoDocumentoPageFrmState>(
+    return BlocBuilder<TipoDocumentoPageFrmCubit, TipoDocumentoPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
-      child: BlocBuilder<TipoDocumentoPageFrmCubit, TipoDocumentoPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return Container(
-            constraints: BoxConstraints(
-              minWidth: size.width * .5,
-              minHeight: size.height * .5,
-              maxHeight: size.height * .8,
-            ),
-            child: Stack(
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TitleWidget(
-                            text: titulo,
-                          ),
+      builder: (context, state) {
+        return Container(
+          constraints: BoxConstraints(
+            minWidth: size.width * .5,
+            minHeight: size.height * .5,
+            maxHeight: size.height * .8,
+          ),
+          child: Stack(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TitleWidget(
+                          text: titulo,
                         ),
-                        const Spacer(),
-                        CloseButtonWidget(
-                          onPressed: () =>
-                              Navigator.of(context).pop((false, '')),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 24.0),
-                      child: txtDescricao,
-                    ),
-                    const Spacer(),
-                    Row(
-                      children: [
-                        CustomPopupMenuWidget(
-                          items: [
-                            if (tipoDocumento.cod != null &&
-                                tipoDocumento.cod != 0)
-                              CustomPopupItemHistoryModel.getHistoryItem(
-                                child: HistoricoPage(
-                                  pk: tipoDocumento.cod!,
-                                  termo: 'TIPO_DOCUMENTO',
-                                ),
-                                context: context,
+                      ),
+                      const Spacer(),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 24.0),
+                    child: txtDescricao,
+                  ),
+                  const Spacer(),
+                  Row(
+                    children: [
+                      CustomPopupMenuWidget(
+                        items: [
+                          if (tipoDocumento.cod != null &&
+                              tipoDocumento.cod != 0)
+                            CustomPopupItemHistoryModel.getHistoryItem(
+                              child: HistoricoPage(
+                                pk: tipoDocumento.cod!,
+                                termo: 'TIPO_DOCUMENTO',
                               ),
-                          ],
+                              context: context,
+                            ),
+                        ],
+                      ),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: SaveButtonWidget(
+                          onPressed: () => {salvar()},
                         ),
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: SaveButtonWidget(
-                            onPressed: () => {salvar()},
-                          ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: CleanButtonWidget(
+                          onPressed: () => {
+                            setState(() {
+                              tipoDocumento = TipoDocumentoModel.empty();
+                            }),
+                          },
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: CleanButtonWidget(
-                            onPressed: () => {
-                              setState(() {
-                                tipoDocumento = TipoDocumentoModel.empty();
-                              }),
-                            },
-                          ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: CancelButtonUnfilledWidget(
+                          onPressed: widget.onCancel,
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: CancelButtonUnfilledWidget(
-                            onPressed: () =>
-                                {Navigator.of(context).pop((false, ''))},
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
   void salvar() {
     if (!txtDescricao.valid) return;
-    cubit.save(tipoDocumento);
+    cubit.save(tipoDocumento,widget.onSaved);
   }
 }

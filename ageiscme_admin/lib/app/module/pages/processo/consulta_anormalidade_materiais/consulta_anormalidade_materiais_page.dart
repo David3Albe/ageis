@@ -1,4 +1,3 @@
-import 'package:ageiscme_admin/app/module/services/custom_navigation_bar_service.dart';
 import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
 import 'package:ageiscme_data/query_services/anormalidade_materiais/consulta_anormalidade_materiais_service.dart';
 import 'package:ageiscme_data/services/item/item_service.dart';
@@ -139,125 +138,121 @@ class _ConsultaAnormalidadeMateriaisPageState
   }
 
   Future openModal(BuildContext context) async {
-    bool? result = await showDialog<bool>(
-      barrierDismissible: false,
+    bool confirm = await showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return FilterDialogWidget(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: DatePickerWidget(
-                        placeholder: 'Data Inicio',
-                        onDateSelected: (value) => filter.startDate = value,
-                        initialValue: filter.startDate,
-                      ),
+      builder: (context) => FilterDialogWidget(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: DatePickerWidget(
+                      placeholder: 'Data Inicio',
+                      onDateSelected: (value) => filter.startDate = value,
+                      initialValue: filter.startDate,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 40),
-                    ),
-                    Expanded(
-                      child: TimePickerWidget(
-                        placeholder: 'Hora Início',
-                        initialValue: filter.startTime == null
-                            ? null
-                            : TimeOfDay(
-                                hour: filter.startTime!.hour,
-                                minute: filter.startTime!.minute,
-                              ),
-                        onTimeSelected: (selectedTime) {
-                          if (selectedTime == null) {
-                            filter.startTime = null;
-                            return;
-                          }
-                          filter.startTime = DateTime(
-                            DateTime.now().year,
-                            DateTime.now().month,
-                            DateTime.now().day,
-                            selectedTime.hour,
-                            selectedTime.minute,
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const Padding(padding: EdgeInsets.only(top: 2)),
-                Row(
-                  children: [
-                    Expanded(
-                      child: DatePickerWidget(
-                        placeholder: 'Data Término',
-                        onDateSelected: (value) => filter.finalDate = value,
-                        initialValue: filter.finalDate,
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 40),
-                    ),
-                    Expanded(
-                      child: TimePickerWidget(
-                        placeholder: 'Hora Término',
-                        initialValue: filter.finalTime == null
-                            ? null
-                            : TimeOfDay(
-                                hour: filter.finalTime!.hour,
-                                minute: filter.finalTime!.minute,
-                              ),
-                        onTimeSelected: (selectedTime) {
-                          if (selectedTime == null) {
-                            filter.finalTime = null;
-                            return;
-                          }
-                          filter.finalTime = DateTime(
-                            DateTime.now().year,
-                            DateTime.now().month,
-                            DateTime.now().day,
-                            selectedTime.hour,
-                            selectedTime.minute,
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const Padding(padding: EdgeInsets.only(top: 2)),
-                CustomAutocompleteWidget<ItemModel>(
-                  initialValue: filter.idEtiquetaContem,
-                  onChange: (str) => filter.idEtiquetaContem = str,
-                  onItemSelectedText: (item) => item.idEtiqueta ?? null,
-                  label: 'Item',
-                  title: (p0) => Text(p0.EtiquetaDescricaoText()),
-                  suggestionsCallback: (str) => ItemService().Filter(
-                    ItemFilter(numeroRegistros: 30, termoPesquisa: str),
                   ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 40),
+                  ),
+                  Expanded(
+                    child: TimePickerWidget(
+                      placeholder: 'Hora Início',
+                      initialValue: filter.startTime == null
+                          ? null
+                          : TimeOfDay(
+                              hour: filter.startTime!.hour,
+                              minute: filter.startTime!.minute,
+                            ),
+                      onTimeSelected: (selectedTime) {
+                        if (selectedTime == null) {
+                          filter.startTime = null;
+                          return;
+                        }
+                        filter.startTime = DateTime(
+                          DateTime.now().year,
+                          DateTime.now().month,
+                          DateTime.now().day,
+                          selectedTime.hour,
+                          selectedTime.minute,
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              Row(
+                children: [
+                  Expanded(
+                    child: DatePickerWidget(
+                      placeholder: 'Data Término',
+                      onDateSelected: (value) => filter.finalDate = value,
+                      initialValue: filter.finalDate,
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 40),
+                  ),
+                  Expanded(
+                    child: TimePickerWidget(
+                      placeholder: 'Hora Término',
+                      initialValue: filter.finalTime == null
+                          ? null
+                          : TimeOfDay(
+                              hour: filter.finalTime!.hour,
+                              minute: filter.finalTime!.minute,
+                            ),
+                      onTimeSelected: (selectedTime) {
+                        if (selectedTime == null) {
+                          filter.finalTime = null;
+                          return;
+                        }
+                        filter.finalTime = DateTime(
+                          DateTime.now().year,
+                          DateTime.now().month,
+                          DateTime.now().day,
+                          selectedTime.hour,
+                          selectedTime.minute,
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              CustomAutocompleteWidget<ItemModel>(
+                initialValue: filter.idEtiquetaContem,
+                onChange: (str) => filter.idEtiquetaContem = str,
+                onItemSelectedText: (item) => item.idEtiqueta ?? null,
+                label: 'Item',
+                title: (p0) => Text(p0.EtiquetaDescricaoText()),
+                suggestionsCallback: (str) => ItemService().Filter(
+                  ItemFilter(numeroRegistros: 30, termoPesquisa: str),
                 ),
-                const Padding(padding: EdgeInsets.only(top: 2)),
-                CustomAutocompleteWidget<KitDropDownSearchResponseDTO>(
-                  initialValue: filter.codBarraKitContem,
-                  onChange: (str) => filter.codBarraKitContem = str,
-                  onItemSelectedText: (item) => item.codBarra,
-                  label: 'Kit',
-                  title: (p0) => Text(p0.CodBarraDescritorText()),
-                  suggestionsCallback: (str) async =>
-                      (await KitService().getDropDownSearchKits(
-                        KitDropDownSearchDTO(numeroRegistros: 30, search: str),
-                      ))
-                          ?.$2 ??
-                      [],
-                ),
-                const Padding(padding: EdgeInsets.only(top: 2)),
-              ],
-            ),
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              CustomAutocompleteWidget<KitDropDownSearchResponseDTO>(
+                initialValue: filter.codBarraKitContem,
+                onChange: (str) => filter.codBarraKitContem = str,
+                onItemSelectedText: (item) => item.codBarra,
+                label: 'Kit',
+                title: (p0) => Text(p0.CodBarraDescritorText()),
+                suggestionsCallback: (str) async =>
+                    (await KitService().getDropDownSearchKits(
+                      KitDropDownSearchDTO(numeroRegistros: 30, search: str),
+                    ))
+                        ?.$2 ??
+                    [],
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+            ],
           ),
-        );
-      },
+        ),
+      ),
     );
-    if (result != true) return;
-    CustomNavigationBarService.turnExpandedOff(context);
+    if (confirm != true) return;
     consultar();
   }
 

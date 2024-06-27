@@ -15,11 +15,15 @@ class TreinamentoRegistroPageFrmCubit
           ),
         );
 
-  void save(TreinamentoRegistroModel treinamentoRegistro) async {
+  void save(
+    TreinamentoRegistroModel treinamentoRegistro,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, TreinamentoRegistroModel treinamentoRegistro)? result =
           await service.save(treinamentoRegistro);
       if (result == null) return;
+      onSaved(result.$1);
       emit(
         TreinamentoRegistroPageFrmState(
           message: result.$1,

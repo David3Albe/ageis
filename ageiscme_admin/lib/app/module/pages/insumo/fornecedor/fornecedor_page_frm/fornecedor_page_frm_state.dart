@@ -12,11 +12,15 @@ class FornecedorPageFrmCubit extends Cubit<FornecedorPageFrmState> {
           FornecedorPageFrmState(fornecedor: fornecedorModel),
         );
 
-  void save(FornecedorModel fornecedor) async {
+  void save(
+    FornecedorModel fornecedor,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, FornecedorModel fornecedor)? result =
           await service.save(fornecedor);
       if (result == null) return;
+      onSaved(result.$1);
       emit(
         FornecedorPageFrmState(
           message: result.$1,

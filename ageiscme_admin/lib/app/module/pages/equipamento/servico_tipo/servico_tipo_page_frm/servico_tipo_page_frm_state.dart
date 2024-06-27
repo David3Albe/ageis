@@ -12,11 +12,15 @@ class ServicoTipoPageFrmCubit extends Cubit<ServicoTipoPageFrmState> {
           ServicoTipoPageFrmState(servicoTipo: servicoTipoModel),
         );
 
-  void save(ServicoTipoModel servicoTipo) async {
+  void save(
+    ServicoTipoModel servicoTipo,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, ServicoTipoModel servicoTipo)? result =
           await service.save(servicoTipo);
       if (result == null) return;
+      onSaved(result.$1);
       emit(
         ServicoTipoPageFrmState(
           message: result.$1,

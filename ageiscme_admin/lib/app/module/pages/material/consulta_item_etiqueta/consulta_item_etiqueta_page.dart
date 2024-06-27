@@ -28,7 +28,7 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ConsultaItemEtiquetaPage extends StatefulWidget {
-  ConsultaItemEtiquetaPage({super.key});
+  const ConsultaItemEtiquetaPage({super.key});
 
   @override
   State<ConsultaItemEtiquetaPage> createState() =>
@@ -150,129 +150,124 @@ class _ConsultaItemEtiquetaPageState extends State<ConsultaItemEtiquetaPage> {
   void onError(ConsultaItemEtiquetaPageState state) =>
       ErrorUtils.showErrorDialog(context, [state.error]);
 
-  void openModal(BuildContext context) {
-    showDialog<bool>(
-      barrierDismissible: false,
+  Future openModal(BuildContext context) async {
+    bool? confirm = await showDialog<bool>(
       context: context,
-      builder: (BuildContext context) {
-        return FilterDialogWidget(
-          child: Column(
-            children: [
-              DatePickerWidget(
-                placeholder: 'Data Inicio',
-                onDateSelected: (value) => filter.startDate = value,
-                initialValue: filter.startDate,
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              DatePickerWidget(
-                placeholder: 'Data Término',
-                onDateSelected: (value) => filter.finalDate = value,
-                initialValue: filter.finalDate,
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<ProprietarioCubit, ProprietarioState>(
-                bloc: proprietarioBloc,
-                builder: (context, proprietarioState) {
-                  if (proprietarioState.loading) return const LoadingWidget();
-                  List<ProprietarioModel> proprietarios =
-                      proprietarioState.proprietarios;
-                  proprietarios.sort((a, b) => a.nome!.compareTo(b.nome!));
-                  ProprietarioModel? proprietario = proprietarios
-                      .where(
-                        (element) => element.cod == filter.codProprietario,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<ProprietarioModel>(
-                    textFunction: (proprietario) =>
-                        proprietario.ProprietarioText(),
-                    initialValue: proprietario,
-                    sourceList: proprietarios
-                        .where((element) => element.ativo == true)
-                        .toList(),
-                    onChanged: (value) => filter.codProprietario = value?.cod,
-                    placeholder: 'Proprietário',
-                  );
-                },
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              CustomAutocompleteWidget<KitDropDownSearchResponseDTO>(
-                initialValue: filter.codBarraKitContem,
-                onChange: (str) => filter.codBarraKitContem = str,
-                onItemSelectedText: (kit) => kit.codBarra,
-                label: 'Kit',
-                title: (p0) => Text(p0.CodBarraDescritorText()),
-                suggestionsCallback: (str) async {
-                  return (await KitService().getDropDownSearchKits(
-                        KitDropDownSearchDTO(
-                          search: str,
-                          numeroRegistros: 30,
-                        ),
-                      ))
-                          ?.$2 ??
-                      [];
-                },
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              CustomAutocompleteWidget<ItemModel>(
-                initialValue: filter.idEtiqueta,
-                onChange: (str) {
-                  filter.idEtiqueta = str;
-                },
-                onItemSelectedText: (item) => item.idEtiqueta ?? null,
-                label: 'Item',
-                title: (p0) => Text(p0.EtiquetaDescricaoText()),
-                suggestionsCallback: (str) => ItemService().Filter(
-                  ItemFilter(numeroRegistros: 30, termoPesquisa: str),
-                ),
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              DropDownSearchApiWidget<ItemDescritorDropDownSearchResponseDTO>(
-                search: (str) async =>
-                    (await ItemDescritorService().getDropDownSearch(
-                      ItemDescritorDropDownSearchDTO(
+      builder: (context) => FilterDialogWidget(
+        child: Column(
+          children: [
+            DatePickerWidget(
+              placeholder: 'Data Inicio',
+              onDateSelected: (value) => filter.startDate = value,
+              initialValue: filter.startDate,
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            DatePickerWidget(
+              placeholder: 'Data Término',
+              onDateSelected: (value) => filter.finalDate = value,
+              initialValue: filter.finalDate,
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            BlocBuilder<ProprietarioCubit, ProprietarioState>(
+              bloc: proprietarioBloc,
+              builder: (context, proprietarioState) {
+                if (proprietarioState.loading) return const LoadingWidget();
+                List<ProprietarioModel> proprietarios =
+                    proprietarioState.proprietarios;
+                proprietarios.sort((a, b) => a.nome!.compareTo(b.nome!));
+                ProprietarioModel? proprietario = proprietarios
+                    .where(
+                      (element) => element.cod == filter.codProprietario,
+                    )
+                    .firstOrNull;
+                return DropDownSearchWidget<ProprietarioModel>(
+                  textFunction: (proprietario) =>
+                      proprietario.ProprietarioText(),
+                  initialValue: proprietario,
+                  sourceList: proprietarios
+                      .where((element) => element.ativo == true)
+                      .toList(),
+                  onChanged: (value) => filter.codProprietario = value?.cod,
+                  placeholder: 'Proprietário',
+                );
+              },
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            CustomAutocompleteWidget<KitDropDownSearchResponseDTO>(
+              initialValue: filter.codBarraKitContem,
+              onChange: (str) => filter.codBarraKitContem = str,
+              onItemSelectedText: (kit) => kit.codBarra,
+              label: 'Kit',
+              title: (p0) => Text(p0.CodBarraDescritorText()),
+              suggestionsCallback: (str) async {
+                return (await KitService().getDropDownSearchKits(
+                      KitDropDownSearchDTO(
+                        search: str,
                         numeroRegistros: 30,
-                        termoPesquisa: str,
-                        apenasAtivos: true,
                       ),
                     ))
                         ?.$2 ??
-                    [],
-                textFunction: (itemDescritor) => itemDescritor.Nome(),
-                initialValue: filter.itemDescritor == null
-                    ? null
-                    : ItemDescritorDropDownSearchResponseDTO(
-                        cod: filter.itemDescritor!.cod,
-                        nome: filter.itemDescritor?.nome,
-                      ),
-                onChanged: (value) {
-                  filter.codItemDescritor = value?.cod;
-                  filter.itemDescritor = value;
-                },
-                placeholder: 'Item Descritor',
+                    [];
+              },
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            CustomAutocompleteWidget<ItemModel>(
+              initialValue: filter.idEtiqueta,
+              onChange: (str) {
+                filter.idEtiqueta = str;
+              },
+              onItemSelectedText: (item) => item.idEtiqueta ?? null,
+              label: 'Item',
+              title: (p0) => Text(p0.EtiquetaDescricaoText()),
+              suggestionsCallback: (str) => ItemService().Filter(
+                ItemFilter(numeroRegistros: 30, termoPesquisa: str),
               ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              TextFieldNumberWidget(
-                placeholder: 'Número Registros',
-                startValue: filter.numeroRegistros,
-                onChanged: (value) => filter.numeroRegistros =
-                    value.isEmpty ? null : int.parse(value),
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              CustomCheckboxWidget(
-                checked: filter.descartar,
-                onClick: (value) => filter.descartar = value,
-                text: 'Descartar Itens sem troca',
-                align: MainAxisAlignment.start,
-              ),
-            ],
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == true) {
-        bloc.loadItemEtiqueta(filter);
-      }
-    });
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            DropDownSearchApiWidget<ItemDescritorDropDownSearchResponseDTO>(
+              search: (str) async =>
+                  (await ItemDescritorService().getDropDownSearch(
+                    ItemDescritorDropDownSearchDTO(
+                      numeroRegistros: 30,
+                      termoPesquisa: str,
+                      apenasAtivos: true,
+                    ),
+                  ))
+                      ?.$2 ??
+                  [],
+              textFunction: (itemDescritor) => itemDescritor.Nome(),
+              initialValue: filter.itemDescritor == null
+                  ? null
+                  : ItemDescritorDropDownSearchResponseDTO(
+                      cod: filter.itemDescritor!.cod,
+                      nome: filter.itemDescritor?.nome,
+                    ),
+              onChanged: (value) {
+                filter.codItemDescritor = value?.cod;
+                filter.itemDescritor = value;
+              },
+              placeholder: 'Item Descritor',
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            TextFieldNumberWidget(
+              placeholder: 'Número Registros',
+              startValue: filter.numeroRegistros,
+              onChanged: (value) => filter.numeroRegistros =
+                  value.isEmpty ? null : int.parse(value),
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            CustomCheckboxWidget(
+              checked: filter.descartar,
+              onClick: (value) => filter.descartar = value,
+              text: 'Descartar Itens sem troca',
+              align: MainAxisAlignment.start,
+            ),
+          ],
+        ),
+      ),
+    );
+    if (confirm != true) return;
+    bloc.loadItemEtiqueta(filter);
   }
 }

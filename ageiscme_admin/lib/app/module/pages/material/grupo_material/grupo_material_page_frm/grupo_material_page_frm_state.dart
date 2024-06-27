@@ -12,12 +12,15 @@ class GrupoMaterialPageFrmCubit extends Cubit<GrupoMaterialPageFrmState> {
           GrupoMaterialPageFrmState(grupoMaterial: grupoMaterialModel),
         );
 
-  void save(GrupoMaterialModel grupoMaterial) async {
+  void save(
+    GrupoMaterialModel grupoMaterial,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, GrupoMaterialModel grupoMaterial)? result =
           await service.save(grupoMaterial);
       if (result == null) return;
-
+      onSaved(result.$1);
       emit(
         GrupoMaterialPageFrmState(
           message: result.$1,

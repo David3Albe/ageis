@@ -303,7 +303,7 @@ class _ProcessoPageCalculatorDialogState
       Navigator.of(context).pop();
       return;
     }
-    await WarningUtils.showWarningDialog(
+    WarningUtils.showWarningDialog(
       context,
       processoLeituraState.aviso ?? '',
     );

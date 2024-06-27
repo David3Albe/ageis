@@ -11,11 +11,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class EquipamentoPage extends StatefulWidget {
-  EquipamentoPage({super.key});
+  const EquipamentoPage({super.key});
 
   @override
   State<EquipamentoPage> createState() => _EquipamentoPageState();
@@ -116,28 +117,42 @@ class _EquipamentoPageState extends State<EquipamentoPage> {
     );
   }
 
-  void openModal(BuildContext context, EquipamentoModel equipamento) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return EquipamentoPageFrm(
-          equipamento: equipamento,
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadEquipamento();
-    });
+  Future openModal(
+    BuildContext context,
+    EquipamentoModel equipamento,
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Equipamento',
+      widget: EquipamentoPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        equipamento: equipamento,
+      ),
+    );
   }
 
-  void delete(BuildContext context, EquipamentoModel equipamento) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Equipamento\n${equipamento.cod} - ${equipamento.nome}',
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadEquipamento();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
+  }
+
+  void delete(BuildContext context, EquipamentoModel equipamento) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Equipamento\n${equipamento.cod} - ${equipamento.nome}',
+      onConfirm: () => onConfirmDelete(equipamento),
     );
-    if (confirmacao) bloc.delete(equipamento);
+  }
+
+  void onConfirmDelete(EquipamentoModel equipamento) {
+    bloc.delete(equipamento);
   }
 
   void deleted(EquipamentoPageState state) {

@@ -14,11 +14,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class AtestadoSaudeOcupacionalPage extends StatefulWidget {
-  AtestadoSaudeOcupacionalPage({this.cod, super.key});
+  const AtestadoSaudeOcupacionalPage({this.cod, super.key});
   final int? cod;
 
   @override
@@ -183,7 +184,7 @@ class _AtestadoSaudeOcupacionalPageState
     );
   }
 
-  Future<void> openModal(
+  Future openModal(
     BuildContext context,
     AtestadoSaudeOcupacionalModel atestadoSaudeOcupacional,
   ) async {
@@ -202,31 +203,44 @@ class _AtestadoSaudeOcupacionalPageState
       }
     }
     loading.close(context, mounted);
-
-    (bool, String)? result = await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AtestadoSaudeOcupacionalPageFrm(
-          usuarioCubit: usuarioCubit,
-          atestadoSaudeOcupacional: atestado!,
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Atestado Saúde Ocupacional',
+      widget: AtestadoSaudeOcupacionalPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        usuarioCubit: usuarioCubit,
+        atestadoSaudeOcupacional: atestado,
+      ),
     );
-    if (result == null || !result.$1) return;
-    ToastUtils.showCustomToastSucess(context, result.$2);
+  }
+
+  Future onSaved(String message, int chave) async {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
     await bloc.loadAtestadoSaudeOcupacional();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void delete(
     BuildContext context,
     AtestadoSaudeOcupacionalModel atestadoSaudeOcupacional,
   ) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Atestado de Saúde Ocupacional\n${atestadoSaudeOcupacional.cod} - ${atestadoSaudeOcupacional.nomeMedico}',
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Atestado de Saúde Ocupacional\n${atestadoSaudeOcupacional.cod} - ${atestadoSaudeOcupacional.nomeMedico}',
+      onConfirm: () => onConfirmDelete(atestadoSaudeOcupacional),
     );
-    if (confirmacao) bloc.delete(atestadoSaudeOcupacional);
+  }
+
+  void onConfirmDelete(
+    AtestadoSaudeOcupacionalModel atestadoSaudeOcupacional,
+  ) {
+    bloc.delete(atestadoSaudeOcupacional);
   }
 
   void deleted(AtestadoSaudeOcupacionalPageState state) {

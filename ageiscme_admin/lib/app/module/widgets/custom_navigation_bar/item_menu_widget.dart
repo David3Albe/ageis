@@ -194,7 +194,7 @@ class _ItemMenuWidgetState extends State<ItemMenuWidget>
   ) async {
     if (widget.item.getChildrens().isEmpty) {
       if (await AccessUserService.validateUserAccess(widget.item)) {
-        AdminNavigatorService.navigateTo(menu);
+        AdminNavigatorService.navigateTo(menu, context);
       } else {
         ToastUtils.showCustomToastWarning(
           context,

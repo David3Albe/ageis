@@ -7,8 +7,9 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class KitDescritorPageFilter extends StatelessWidget {
-  KitDescritorPageFilter({Key? key});
-
+  KitDescritorPageFilter({
+    Key? key,
+  });
   @override
   Widget build(BuildContext context) {
     KitDescritorFilter dto = context.watch<KitDescritorCubitFilter>().state;

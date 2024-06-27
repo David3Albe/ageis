@@ -13,11 +13,12 @@ import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class EpiEntregaPage extends StatefulWidget {
-  EpiEntregaPage({this.codUsuario, super.key});
+  const EpiEntregaPage({this.codUsuario, super.key});
   final int? codUsuario;
 
   @override
@@ -142,12 +143,13 @@ class _EpiEntregaPageState extends State<EpiEntregaPage> {
     );
   }
 
-  void openModal(
+  Future openModal(
     BuildContext context,
     UsuarioModel? usuario,
     List<UsuarioModel>? usuarios,
     List<EpiDescritorModel>? episDescritores,
-  ) {
+  ) async {
+    late int chave;
     EpiEntregaModel epiEntrega = EpiEntregaModel(
       cod: 0,
       codDescritorEpi: 0,
@@ -163,20 +165,25 @@ class _EpiEntregaPageState extends State<EpiEntregaPage> {
       epiDescritor: null,
       tstamp: '',
     );
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return EpiEntregaPageFrm(
-          epiEntrega: epiEntrega,
-          usuarios: usuarios!,
-          episDescritores: episDescritores!,
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-    });
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Entrega de Epi',
+      widget: EpiEntregaPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        epiEntrega: epiEntrega,
+        usuarios: usuarios!,
+        episDescritores: episDescritores!,
+      ),
+    );
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void onError(EpiEntregaUsuarioPageState state) {

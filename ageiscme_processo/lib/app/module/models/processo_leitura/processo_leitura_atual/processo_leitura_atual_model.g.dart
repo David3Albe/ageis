@@ -9,7 +9,7 @@ part of 'processo_leitura_atual_model.dart';
 _$ProcessoLeituraAtualModelImpl _$$ProcessoLeituraAtualModelImplFromJson(
         Map<String, dynamic> json) =>
     _$ProcessoLeituraAtualModelImpl(
-      cod: json['cod'] as int?,
+      cod: (json['cod'] as num?)?.toInt(),
       usuario: json['usuario'] == null
           ? null
           : UsuarioProcessoModel.fromJson(
@@ -22,12 +22,12 @@ _$ProcessoLeituraAtualModelImpl _$$ProcessoLeituraAtualModelImplFromJson(
           ? null
           : EquipamentoModel.fromJson(
               json['equipamento'] as Map<String, dynamic>),
-      acaoEmAndamento: json['acaoEmAndamento'] as int?,
+      acaoEmAndamento: (json['acaoEmAndamento'] as num?)?.toInt(),
       dataHoraInicioProcesso: json['dataHoraInicioProcesso'] == null
           ? null
           : DateTime.parse(json['dataHoraInicioProcesso'] as String),
-      prioridade: json['prioridade'] as int?,
-      decisao: json['decisao'] as int?,
+      prioridade: (json['prioridade'] as num?)?.toInt(),
+      decisao: (json['decisao'] as num?)?.toInt(),
       acao: json['acao'] as String?,
       respostaEPCEPI: json['respostaEPCEPI'] == null
           ? null
@@ -78,23 +78,25 @@ _$ProcessoLeituraAtualModelImpl _$$ProcessoLeituraAtualModelImplFromJson(
           ? null
           : ArsenalEstoqueModel.fromJson(
               json['estoque'] as Map<String, dynamic>),
-      codMotivoRetornoArsenalItem: json['codMotivoRetornoArsenalItem'] as int?,
+      codMotivoRetornoArsenalItem:
+          (json['codMotivoRetornoArsenalItem'] as num?)?.toInt(),
       motivoRetornoArsenalItem: json['motivoRetornoArsenalItem'] == null
           ? null
           : ProcessoMotivoModel.fromJson(
               json['motivoRetornoArsenalItem'] as Map<String, dynamic>),
-      codMotivoRetornoArsenalKit: json['codMotivoRetornoArsenalKit'] as int?,
+      codMotivoRetornoArsenalKit:
+          (json['codMotivoRetornoArsenalKit'] as num?)?.toInt(),
       motivoRetornoArsenalKit: json['motivoRetornoArsenalKit'] == null
           ? null
           : ProcessoMotivoModel.fromJson(
               json['motivoRetornoArsenalKit'] as Map<String, dynamic>),
       etapaFinalItem: json['etapaFinalItem'] as bool?,
-      codUsuarioQuebraFluxo: json['codUsuarioQuebraFluxo'] as int?,
+      codUsuarioQuebraFluxo: (json['codUsuarioQuebraFluxo'] as num?)?.toInt(),
       usuarioQuebraFluxo: json['usuarioQuebraFluxo'] == null
           ? null
           : UsuarioProcessoModel.fromJson(
               json['usuarioQuebraFluxo'] as Map<String, dynamic>),
-      codMotivoQuebraFluxo: json['codMotivoQuebraFluxo'] as int?,
+      codMotivoQuebraFluxo: (json['codMotivoQuebraFluxo'] as num?)?.toInt(),
       motivoQuebraFluxo: json['motivoQuebraFluxo'] == null
           ? null
           : MotivoQuebraFluxoModel.fromJson(
@@ -166,6 +168,8 @@ _$ProcessoLeituraAtualModelImpl _$$ProcessoLeituraAtualModelImplFromJson(
       acoesOcorrencia: (json['acoesOcorrencia'] as List<dynamic>)
           .map((e) => AcaoOcorrenciaModel.fromJson(e as Map<String, dynamic>))
           .toList(),
+      localNaoCompativel: LocalNaoCompativelModel.fromJson(
+          json['localNaoCompativel'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$ProcessoLeituraAtualModelImplToJson(
@@ -232,4 +236,5 @@ Map<String, dynamic> _$$ProcessoLeituraAtualModelImplToJson(
       'solicitaItemKitNaoConforme': instance.solicitaItemKitNaoConforme,
       'defineAcaoOcorrencia': instance.defineAcaoOcorrencia,
       'acoesOcorrencia': instance.acoesOcorrencia,
+      'localNaoCompativel': instance.localNaoCompativel,
     };

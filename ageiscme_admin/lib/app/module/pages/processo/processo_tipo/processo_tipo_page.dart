@@ -15,11 +15,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ProcessoTipoPage extends StatefulWidget {
-  ProcessoTipoPage({super.key});
+  const ProcessoTipoPage({super.key});
 
   @override
   State<ProcessoTipoPage> createState() => _ProcessoTipoPageState();
@@ -136,33 +137,47 @@ class _ProcessoTipoPageState extends State<ProcessoTipoPage> {
     }
   }
 
-  void openModal(BuildContext context, ProcessoTipoModel processoTipo) async {
+  Future openModal(
+    BuildContext context,
+    ProcessoTipoModel processoTipo,
+  ) async {
     LoadingController loading = LoadingController(context: context);
     loadEtapaCubit();
 
     loading.close(context, mounted);
-
-    (bool, String)? result = await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return ProcessoTipoPageFrm(
-          processoEtapaCubit: processoEtapaCubit,
-          processoTipo: processoTipo,
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Tipo de Processo',
+      widget: ProcessoTipoPageFrm(
+        processoEtapaCubit: processoEtapaCubit,
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        processoTipo: processoTipo,
+      ),
     );
-    if (result == null || !result.$1) return;
-    ToastUtils.showCustomToastSucess(context, result.$2);
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
     bloc.loadProcessoTipo();
   }
 
-  void delete(BuildContext context, ProcessoTipoModel processoTipo) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Tipo de Processo\n${processoTipo.cod} - ${processoTipo.nome}',
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
+  }
+
+  void delete(BuildContext context, ProcessoTipoModel processoTipo) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Tipo de Processo\n${processoTipo.cod} - ${processoTipo.nome}',
+      onConfirm: () => confirmDelete(processoTipo),
     );
-    if (confirmacao) bloc.delete(processoTipo);
+  }
+
+  void confirmDelete(ProcessoTipoModel processoTipo) async {
+    bloc.delete(processoTipo);
   }
 
   void deleted(ProcessoTipoPageState state) {

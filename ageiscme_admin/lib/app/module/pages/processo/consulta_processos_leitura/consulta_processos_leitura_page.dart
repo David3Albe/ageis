@@ -2,7 +2,6 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/processo_etap
 import 'package:ageiscme_admin/app/module/pages/processo/consulta_processos_leitura/consulta_processos_leitura_page_state.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/consulta_processos_leitura_detalhe/consulta_processos_leitura_datalhe_page.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/consulta_processos_leitura_detalhe_kit/consulta_processos_leitura_detalhe_kit_page.dart';
-import 'package:ageiscme_admin/app/module/services/custom_navigation_bar_service.dart';
 import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
 import 'package:ageiscme_data/query_services/processos_leitura/consulta_processos_leitura_service.dart';
 import 'package:ageiscme_data/services/access_user/access_user_service.dart';
@@ -35,13 +34,13 @@ import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/cores/cores.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
-import 'package:compartilhados/query_dialog/query_dialog_widget.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
 class ConsultaProcessosLeituraPage extends StatefulWidget {
-  ConsultaProcessosLeituraPage({super.key, this.filter});
+  const ConsultaProcessosLeituraPage({super.key, this.filter});
 
   final ConsultaProcessosLeituraFilter? filter;
 
@@ -188,6 +187,11 @@ class _ConsultaProcessosLeituraPageState
         field: 'lote',
         type: CustomDataColumnType.Number,
         width: 110,
+      ),
+      CustomDataColumn(
+        text: 'Lote Equipamento',
+        field: 'loteEquipamento',
+        width: 130,
       ),
       CustomDataColumn(text: 'Integrador Kit', field: 'integradorKit'),
       CustomDataColumn(text: 'Embalagem', field: 'embalagem'),
@@ -355,7 +359,7 @@ class _ConsultaProcessosLeituraPageState
                       if (clickedColumnValue != null &&
                           clickedColumnValue is String &&
                           clickedColumnValue.isNotEmpty) {
-                        openModalRedirectDetalheKit(
+                        await openModalRedirectDetalheKit(
                           context,
                           obj.codKit2,
                           obj.codRegistroProcesso,
@@ -383,45 +387,33 @@ class _ConsultaProcessosLeituraPageState
     BuildContext context,
     int? codLeitura,
   ) {
-    showDialog<bool>(
-      barrierDismissible: true,
-      context: context,
-      barrierColor: Colors.white,
-      builder: (BuildContext context) {
-        return QueryDialogWidget(
-          child: ConsultaProcessoLeituraDetalhePage(
-            filter: ConsultaProcessosLeituraDetalheFilter(
-              codLeitura: codLeitura,
-            ),
-          ),
-        );
-      },
+    WindowsHelper.OpenDefaultWindows(
+      title: 'Consulta Processo Leitura - Kit',
+      widget: ConsultaProcessoLeituraDetalhePage(
+        filter: ConsultaProcessosLeituraDetalheFilter(
+          codLeitura: codLeitura,
+        ),
+      ),
     );
   }
 
-  void openModalRedirectDetalheKit(
+  Future openModalRedirectDetalheKit(
     BuildContext context,
     int? codKit,
     int? codRegistroProcesso,
     int? faltantes,
     DateTime? dataHora,
-  ) {
-    showDialog<bool>(
-      barrierDismissible: true,
-      context: context,
-      barrierColor: Colors.white,
-      builder: (BuildContext context) {
-        return QueryDialogWidget(
-          child: ConsultaProcessoLeituraDetalheKitPage(
-            filter: ConsultaProcessosLeituraDetalheKitFilter(
-              codKit: codKit,
-              codRegistroProcesso: codRegistroProcesso,
-              faltantes: faltantes,
-              dataHora: dataHora,
-            ),
-          ),
-        );
-      },
+  ) async {
+    WindowsHelper.OpenDefaultWindows(
+      title: 'Consulta Processo Leitura - Kit',
+      widget: ConsultaProcessoLeituraDetalheKitPage(
+        filter: ConsultaProcessosLeituraDetalheKitFilter(
+          codKit: codKit,
+          codRegistroProcesso: codRegistroProcesso,
+          faltantes: faltantes,
+          dataHora: dataHora,
+        ),
+      ),
     );
   }
 
@@ -429,209 +421,204 @@ class _ConsultaProcessosLeituraPageState
       ErrorUtils.showErrorDialog(context, [state.error]);
 
   Future openModal(BuildContext context) async {
-    loadEtapaCubit();
-    bool? result = await showDialog<bool>(
-      barrierDismissible: false,
+    bool? confirm = await showDialog<bool>(
       context: context,
-      builder: (BuildContext context) {
-        return FilterDialogWidget(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: DatePickerWidget(
-                        placeholder: 'Data Inicio',
-                        onDateSelected: (value) => filter.startDate = value,
-                        initialValue: filter.startDate,
-                      ),
+      builder: (context) => FilterDialogWidget(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: DatePickerWidget(
+                      placeholder: 'Data Inicio',
+                      onDateSelected: (value) => filter.startDate = value,
+                      initialValue: filter.startDate,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 40),
-                    ),
-                    Expanded(
-                      child: TimePickerWidget(
-                        placeholder: 'Hora Início',
-                        initialValue: filter.startTime == null
-                            ? null
-                            : TimeOfDay(
-                                hour: filter.startTime!.hour,
-                                minute: filter.startTime!.minute,
-                              ),
-                        onTimeSelected: (selectedTime) {
-                          if (selectedTime == null) {
-                            filter.startTime = null;
-                            return;
-                          }
-                          filter.startTime = DateTime(
-                            DateTime.now().year,
-                            DateTime.now().month,
-                            DateTime.now().day,
-                            selectedTime.hour,
-                            selectedTime.minute,
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const Padding(padding: EdgeInsets.only(top: 2)),
-                Row(
-                  children: [
-                    Expanded(
-                      child: DatePickerWidget(
-                        placeholder: 'Data Término',
-                        onDateSelected: (value) => filter.finalDate = value,
-                        initialValue: filter.finalDate,
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 40),
-                    ),
-                    Expanded(
-                      child: TimePickerWidget(
-                        placeholder: 'Hora Fim',
-                        initialValue: filter.finalTime == null
-                            ? null
-                            : TimeOfDay(
-                                hour: filter.finalTime!.hour,
-                                minute: filter.finalTime!.minute,
-                              ),
-                        onTimeSelected: (selectedTime) {
-                          if (selectedTime == null) {
-                            filter.finalTime = null;
-                            return;
-                          }
-                          filter.finalTime = DateTime(
-                            DateTime.now().year,
-                            DateTime.now().month,
-                            DateTime.now().day,
-                            selectedTime.hour,
-                            selectedTime.minute,
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const Padding(padding: EdgeInsets.only(top: 2)),
-                CustomAutocompleteWidget<KitDropDownSearchResponseDTO>(
-                  initialValue: filter.codBarraKitContem,
-                  onChange: (str) => filter.codBarraKitContem = str,
-                  onItemSelectedText: (kit) => kit.codBarra,
-                  label: 'Kit',
-                  title: (p0) => Text(p0.CodBarraDescritorText()),
-                  suggestionsCallback: (str) async {
-                    return (await KitService().getDropDownSearchKits(
-                          KitDropDownSearchDTO(
-                            search: str,
-                            numeroRegistros: 30,
-                          ),
-                        ))
-                            ?.$2 ??
-                        [];
-                  },
-                ),
-                const Padding(padding: EdgeInsets.only(top: 2)),
-                CustomAutocompleteWidget<ItemModel>(
-                  initialValue: filter.idEtiquetaContem,
-                  onChange: (str) => filter.idEtiquetaContem = str,
-                  onItemSelectedText: (item) => item.idEtiqueta ?? null,
-                  label: 'Item',
-                  title: (p0) => Text(p0.EtiquetaDescricaoText()),
-                  suggestionsCallback: (str) => ItemService().Filter(
-                    ItemFilter(numeroRegistros: 30, termoPesquisa: str),
                   ),
-                ),
-                const Padding(padding: EdgeInsets.only(top: 2)),
-                BlocBuilder<ProcessoEtapaCubit, ProcessoEtapaState>(
-                  bloc: processoEtapaBloc,
-                  builder: (context, state) {
-                    if (state.loading) return const LoadingWidget();
-                    List<ProcessoEtapaModel> processosEtapas =
-                        state.processosEtapas;
-
-                    processosEtapas.sort(
-                      (a, b) =>
-                          a.tipoProcesso!.nome.compareTo(b.tipoProcesso!.nome),
-                    );
-
-                    return DropDownSearchWidget<ProcessoEtapaModel>(
-                      maxItems: 200,
-                      initialValue: processosEtapas
-                          .where(
-                            (element) => element.cod == filter.codEtapaProcesso,
-                          )
-                          .firstOrNull,
-                      textFunction: (processoEtapa) =>
-                          processoEtapa.GetNomeEtapaTipoText(),
-                      sourceList: processosEtapas
-                          .where((element) => element.ativo == true)
-                          .toList(),
-                      onChanged: (value) {
-                        filter.codEtapaProcesso = value?.cod;
+                  const Padding(
+                    padding: EdgeInsets.only(left: 40),
+                  ),
+                  Expanded(
+                    child: TimePickerWidget(
+                      placeholder: 'Hora Início',
+                      initialValue: filter.startTime == null
+                          ? null
+                          : TimeOfDay(
+                              hour: filter.startTime!.hour,
+                              minute: filter.startTime!.minute,
+                            ),
+                      onTimeSelected: (selectedTime) {
+                        if (selectedTime == null) {
+                          filter.startTime = null;
+                          return;
+                        }
+                        filter.startTime = DateTime(
+                          DateTime.now().year,
+                          DateTime.now().month,
+                          DateTime.now().day,
+                          selectedTime.hour,
+                          selectedTime.minute,
+                        );
                       },
-                      placeholder: 'Etapa do Processo',
-                    );
-                  },
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 2.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextFieldNumberWidget(
-                          placeholder: 'Lote',
-                          onChanged: (value) => filter.lote = int.parse(value),
-                        ),
-                      ),
-                      const SizedBox(width: 50.0),
-                      Expanded(
-                        child: TextFieldStringWidget(
-                          placeholder: 'Indicador',
-                          onChanged: (value) => filter.indicador = value,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 2.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextFieldNumberWidget(
-                          placeholder: 'Biológico Implantável',
-                          onChanged: (value) => filter.biologico = value,
-                        ),
-                      ),
-                      const SizedBox(width: 50.0),
-                      Expanded(
-                        child: TextFieldStringWidget(
-                          placeholder: 'Prontuário',
-                          onChanged: (value) => filter.prontuario = value,
-                        ),
-                      ),
-                    ],
+                ],
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              Row(
+                children: [
+                  Expanded(
+                    child: DatePickerWidget(
+                      placeholder: 'Data Término',
+                      onDateSelected: (value) => filter.finalDate = value,
+                      initialValue: filter.finalDate,
+                    ),
                   ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 40),
+                  ),
+                  Expanded(
+                    child: TimePickerWidget(
+                      placeholder: 'Hora Fim',
+                      initialValue: filter.finalTime == null
+                          ? null
+                          : TimeOfDay(
+                              hour: filter.finalTime!.hour,
+                              minute: filter.finalTime!.minute,
+                            ),
+                      onTimeSelected: (selectedTime) {
+                        if (selectedTime == null) {
+                          filter.finalTime = null;
+                          return;
+                        }
+                        filter.finalTime = DateTime(
+                          DateTime.now().year,
+                          DateTime.now().month,
+                          DateTime.now().day,
+                          selectedTime.hour,
+                          selectedTime.minute,
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              CustomAutocompleteWidget<KitDropDownSearchResponseDTO>(
+                initialValue: filter.codBarraKitContem,
+                onChange: (str) => filter.codBarraKitContem = str,
+                onItemSelectedText: (kit) => kit.codBarra,
+                label: 'Kit',
+                title: (p0) => Text(p0.CodBarraDescritorText()),
+                suggestionsCallback: (str) async {
+                  return (await KitService().getDropDownSearchKits(
+                        KitDropDownSearchDTO(
+                          search: str,
+                          numeroRegistros: 30,
+                        ),
+                      ))
+                          ?.$2 ??
+                      [];
+                },
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              CustomAutocompleteWidget<ItemModel>(
+                initialValue: filter.idEtiquetaContem,
+                onChange: (str) => filter.idEtiquetaContem = str,
+                onItemSelectedText: (item) => item.idEtiqueta ?? null,
+                label: 'Item',
+                title: (p0) => Text(p0.EtiquetaDescricaoText()),
+                suggestionsCallback: (str) => ItemService().Filter(
+                  ItemFilter(numeroRegistros: 30, termoPesquisa: str),
                 ),
-                const Padding(padding: EdgeInsets.only(top: 2)),
-                CustomCheckboxWidget(
-                  checked: filter.implantavel,
-                  onClick: (value) => filter.implantavel = value,
-                  text: 'Apenas Implantáveis',
-                  align: MainAxisAlignment.start,
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              BlocBuilder<ProcessoEtapaCubit, ProcessoEtapaState>(
+                bloc: processoEtapaBloc,
+                builder: (context, state) {
+                  if (state.loading) return const LoadingWidget();
+                  List<ProcessoEtapaModel> processosEtapas =
+                      state.processosEtapas;
+
+                  processosEtapas.sort(
+                    (a, b) =>
+                        a.tipoProcesso!.nome.compareTo(b.tipoProcesso!.nome),
+                  );
+
+                  return DropDownSearchWidget<ProcessoEtapaModel>(
+                    maxItems: 200,
+                    initialValue: processosEtapas
+                        .where(
+                          (element) => element.cod == filter.codEtapaProcesso,
+                        )
+                        .firstOrNull,
+                    textFunction: (processoEtapa) =>
+                        processoEtapa.GetNomeEtapaTipoText(),
+                    sourceList: processosEtapas
+                        .where((element) => element.ativo == true)
+                        .toList(),
+                    onChanged: (value) {
+                      filter.codEtapaProcesso = value?.cod;
+                    },
+                    placeholder: 'Etapa do Processo',
+                  );
+                },
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 2.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextFieldNumberWidget(
+                        placeholder: 'Lote',
+                        onChanged: (value) => filter.lote = int.parse(value),
+                      ),
+                    ),
+                    const SizedBox(width: 50.0),
+                    Expanded(
+                      child: TextFieldStringWidget(
+                        placeholder: 'Indicador',
+                        onChanged: (value) => filter.indicador = value,
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 2.0),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: TextFieldNumberWidget(
+                        placeholder: 'Biológico Implantável',
+                        onChanged: (value) => filter.biologico = value,
+                      ),
+                    ),
+                    const SizedBox(width: 50.0),
+                    Expanded(
+                      child: TextFieldStringWidget(
+                        placeholder: 'Prontuário',
+                        onChanged: (value) => filter.prontuario = value,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              CustomCheckboxWidget(
+                checked: filter.implantavel,
+                onClick: (value) => filter.implantavel = value,
+                text: 'Apenas Implantáveis',
+                align: MainAxisAlignment.start,
+              ),
+            ],
           ),
-        );
-      },
+        ),
+      ),
     );
-    if (result != true) return;
+    if (confirm != true) return;
     codRegistroProcessoColor.clear();
-    CustomNavigationBarService.turnExpandedOff(context);
     consultar();
   }
 

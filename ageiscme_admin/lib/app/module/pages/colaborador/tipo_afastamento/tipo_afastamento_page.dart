@@ -10,11 +10,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class TipoAfastamentoPage extends StatefulWidget {
-  TipoAfastamentoPage({super.key});
+  const TipoAfastamentoPage({super.key});
 
   @override
   State<TipoAfastamentoPage> createState() => _TipoAfastamentoPageState();
@@ -100,33 +101,47 @@ class _TipoAfastamentoPageState extends State<TipoAfastamentoPage> {
     );
   }
 
-  void openModal(BuildContext context, TipoAfastamentoModel tipoAfastamento) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: TipoAfastamentoPageFrm(
-            tipoAfastamento: tipoAfastamento,
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadTipoAfastamento();
-    });
+  Future openModal(
+    BuildContext context,
+    TipoAfastamentoModel tipoAfastamento,
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Tipo de Afastamento',
+      widget: TipoAfastamentoPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        tipoAfastamento: tipoAfastamento,
+      ),
+    );
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadTipoAfastamento();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void delete(
     BuildContext context,
     TipoAfastamentoModel tipoAfastamento,
   ) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Tipo de Afastamento\n${tipoAfastamento.cod} - ${tipoAfastamento.motivo}',
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Tipo de Afastamento\n${tipoAfastamento.cod} - ${tipoAfastamento.motivo}',
+      onConfirm: () => onConfirmDelete(tipoAfastamento),
     );
-    if (confirmacao) bloc.delete(tipoAfastamento);
+  }
+
+  void onConfirmDelete(
+    TipoAfastamentoModel tipoAfastamento,
+  ) async {
+    bloc.delete(tipoAfastamento);
   }
 
   void deleted(TipoAfastamentoPageState state) {

@@ -7,7 +7,9 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class UsuarioPageFilter extends StatelessWidget {
-  UsuarioPageFilter({Key? key});
+  UsuarioPageFilter({
+    Key? key,
+  });
 
   @override
   Widget build(BuildContext context) {

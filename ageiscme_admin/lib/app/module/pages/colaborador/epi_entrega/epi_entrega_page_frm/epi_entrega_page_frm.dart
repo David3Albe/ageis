@@ -10,7 +10,6 @@ import 'package:ageiscme_models/dto/authentication_result/authentication_result_
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/list_field/list_field_widget.dart';
@@ -34,11 +33,15 @@ class EpiEntregaPageFrm extends StatefulWidget {
     required this.epiEntrega,
     required this.usuarios,
     required this.episDescritores,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final EpiEntregaModel epiEntrega;
   final List<UsuarioModel> usuarios;
   final List<EpiDescritorModel> episDescritores;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<EpiEntregaPageFrm> createState() =>
@@ -144,320 +147,356 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
       setarConferenciaVisual?.call(epiEntrega.conferenciaVisual ?? false);
       epiEntrega.controlarValidade = selectedEpiEntrega.controlarValidade;
       setarControlaValidade?.call(epiEntrega.controlarValidade ?? false);
+
+      EpiDescritorModel? epiDescritor = widget.episDescritores
+          .where(
+            (element) => element.cod == epiEntrega.codDescritorEpi,
+          )
+          .firstOrNull;
+      if (epiDescritor != null) setarEpi(epiDescritor);
     });
   }
 
   late bool Function() validateEPI;
   final ScrollController scroll = ScrollController();
+  late void Function(EpiDescritorModel) setarEpi;
 
   @override
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocConsumer<EpiEntregaPageFrmCubit, EpiEntregaPageFrmState>(
+    return BlocBuilder<EpiEntregaPageFrmCubit, EpiEntregaPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
       builder: (context, state) {
-        return AlertDialog(
-          contentPadding: const EdgeInsets.all(8.0),
-          titlePadding: const EdgeInsets.all(8.0),
-          actionsPadding: const EdgeInsets.all(8.0),
-          title: Row(
-            children: [
-              Expanded(
-                child: TitleWidget(
-                  text: titulo,
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: TitleWidget(
+                    text: titulo,
+                  ),
                 ),
-              ),
-              const Spacer(),
-              CloseButtonWidget(
-                onPressed: () => Navigator.of(context).pop((false, '')),
-              ),
-            ],
-          ),
-          content: Container(
-            constraints: BoxConstraints(
-              minWidth: size.width * .5,
-              minHeight: size.height * .5,
-              maxHeight: size.height * .8,
+              ],
             ),
-            child: SingleChildScrollView(
-              controller: scroll,
-              child: Column(
+            Expanded(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Builder(
-                            builder: (context) {
-                              UsuarioModel? usuario = widget.usuarios
-                                  .where(
-                                    (element) =>
-                                        element.cod == epiEntrega.codUsuario,
-                                  )
-                                  .firstOrNull;
+                  Expanded(
+                    child: Container(
+                      constraints: BoxConstraints(
+                        minWidth: size.width * .5,
+                        minHeight: size.height * .5,
+                        maxHeight: size.height * .8,
+                      ),
+                      child: SingleChildScrollView(
+                        controller: scroll,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Builder(
+                                      builder: (context) {
+                                        UsuarioModel? usuario = widget.usuarios
+                                            .where(
+                                              (element) =>
+                                                  element.cod ==
+                                                  epiEntrega.codUsuario,
+                                            )
+                                            .firstOrNull;
 
-                              widget.usuarios.sort(
-                                (a, b) => a.nome!.compareTo(b.nome!),
-                              );
-                              return DropDownSearchWidget(
-                                textFunction: (p0) => p0.NomeText(),
-                                readOnly: true,
-                                initialValue: usuario,
-                                sourceList: widget.usuarios,
-                                onChanged: (value) =>
-                                    epiEntrega.codUsuario = value?.cod,
-                                placeholder: 'Colaborador',
-                              );
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 50.0),
-                        Expanded(
-                          child: Builder(
-                            builder: (context) {
-                              EpiDescritorModel? epiDescritor =
-                                  widget.episDescritores
-                                      .where(
-                                        (element) =>
-                                            element.cod ==
-                                            epiEntrega.codDescritorEpi,
-                                      )
-                                      .firstOrNull;
-                              widget.episDescritores.sort(
-                                (a, b) => a.descricao!.compareTo(b.descricao!),
-                              );
+                                        widget.usuarios.sort(
+                                          (a, b) => a.nome!.compareTo(b.nome!),
+                                        );
+                                        return DropDownSearchWidget(
+                                          textFunction: (p0) => p0.NomeText(),
+                                          readOnly: true,
+                                          initialValue: usuario,
+                                          sourceList: widget.usuarios,
+                                          onChanged: (value) => epiEntrega
+                                              .codUsuario = value?.cod,
+                                          placeholder: 'Colaborador',
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Expanded(
+                                    child: Builder(
+                                      builder: (context) {
+                                        EpiDescritorModel? epiDescritor = widget
+                                            .episDescritores
+                                            .where(
+                                              (element) =>
+                                                  element.cod ==
+                                                  epiEntrega.codDescritorEpi,
+                                            )
+                                            .firstOrNull;
+                                        widget.episDescritores.sort(
+                                          (a, b) => a.descricao!
+                                              .compareTo(b.descricao!),
+                                        );
 
-                              return DropDownSearchWidget(
-                                textFunction: (p0) => p0.GetDropDownText(),
-                                validator: (obj) =>
-                                    obj == null ? 'Obrigatório' : null,
-                                validateBuilder:
-                                    (context, validateMethodBuilder) =>
-                                        validateEPI = validateMethodBuilder,
-                                initialValue: epiDescritor,
-                                sourceList: widget.episDescritores,
-                                onChanged: (value) =>
-                                    epiEntrega.codDescritorEpi = value?.cod,
-                                placeholder: 'EPI',
-                              );
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: dtpLimiteValidade,
-                        ),
-                        const SizedBox(width: 50.0),
-                        Expanded(
-                          child: dtpDataDescarte,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: CustomCheckboxWidget(
-                      checked: epiEntrega.conferenciaVisual,
-                      onClick: (value) => epiEntrega.conferenciaVisual = value,
-                      setValue: (context, setValueWidget) =>
-                          setarConferenciaVisual = setValueWidget,
-                      text: 'Conferência Visual',
-                      align: MainAxisAlignment.start,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: CustomCheckboxWidget(
-                      checked: epiEntrega.controlarValidade,
-                      onClick: (value) => epiEntrega.controlarValidade = value,
-                      setValue: (context, setValueWidget) =>
-                          setarControlaValidade = setValueWidget,
-                      text: 'Controlar Validade',
-                      align: MainAxisAlignment.start,
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: txtResponsavel,
-                        ),
-                        const SizedBox(width: 50.0),
-                        Expanded(
-                          child: dtpDataEntrega,
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 15.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'EPIs Entregues na Validade',
-                            style: Fontes.getRoboto(),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                        const SizedBox(width: 50.0),
-                        Expanded(
-                          child: Text(
-                            'EPIs Entregues e Descartados',
-                            style: Fontes.getRoboto(),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5.0),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: BlocBuilder<EpiEntregaCubit, EpiEntregaState>(
-                            bloc: epiEntregaCubit,
-                            builder: (context, state) {
-                              if (state.loading) {
-                                return const LoadingWidget();
-                              }
-                              List<EpiEntregaModel> episEntregas = state.itens;
-                              List<EpiEntregaModel> epiEntreguesValidade = [];
-                              if (episEntregas.isNotEmpty) {
-                                epiEntreguesValidade =
-                                    getEpisValidade().toList();
-                              }
+                                        return DropDownSearchWidget(
+                                          setSelectedItemBuilder: (
+                                            context,
+                                            setSelectedItemMethod,
+                                          ) =>
+                                              setarEpi = setSelectedItemMethod,
+                                          textFunction: (p0) =>
+                                              p0.GetDropDownText(),
+                                          validator: (obj) => obj == null
+                                              ? 'Obrigatório'
+                                              : null,
+                                          validateBuilder: (
+                                            context,
+                                            validateMethodBuilder,
+                                          ) =>
+                                              validateEPI =
+                                                  validateMethodBuilder,
+                                          initialValue: epiDescritor,
+                                          sourceList: widget.episDescritores,
+                                          onChanged: (value) => epiEntrega
+                                              .codDescritorEpi = value?.cod,
+                                          placeholder: 'EPI',
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: dtpLimiteValidade,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Expanded(
+                                    child: dtpDataDescarte,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: CustomCheckboxWidget(
+                                checked: epiEntrega.conferenciaVisual,
+                                onClick: (value) =>
+                                    epiEntrega.conferenciaVisual = value,
+                                setValue: (context, setValueWidget) =>
+                                    setarConferenciaVisual = setValueWidget,
+                                text: 'Conferência Visual',
+                                align: MainAxisAlignment.start,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: CustomCheckboxWidget(
+                                checked: epiEntrega.controlarValidade,
+                                onClick: (value) =>
+                                    epiEntrega.controlarValidade = value,
+                                setValue: (context, setValueWidget) =>
+                                    setarControlaValidade = setValueWidget,
+                                text: 'Controlar Validade',
+                                align: MainAxisAlignment.start,
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: txtResponsavel,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Expanded(
+                                    child: dtpDataEntrega,
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 15.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      'EPIs Entregues na Validade',
+                                      style: Fontes.getRoboto(),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Expanded(
+                                    child: Text(
+                                      'EPIs Entregues e Descartados',
+                                      style: Fontes.getRoboto(),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: BlocBuilder<EpiEntregaCubit,
+                                        EpiEntregaState>(
+                                      bloc: epiEntregaCubit,
+                                      builder: (context, state) {
+                                        if (state.loading) {
+                                          return const LoadingWidget();
+                                        }
+                                        List<EpiEntregaModel> episEntregas =
+                                            state.itens;
+                                        List<EpiEntregaModel>
+                                            epiEntreguesValidade = [];
+                                        if (episEntregas.isNotEmpty) {
+                                          epiEntreguesValidade =
+                                              getEpisValidade().toList();
+                                        }
 
-                              return ListFieldWidget<EpiEntregaModel>(
-                                sourceList: epiEntreguesValidade,
-                                permitReselect: true,
-                                removeButton: false,
-                                onItemSelected: (value) {
-                                  updateFields(value!);
-                                },
-                                itemText: (value) {
-                                  final episDescritores =
-                                      widget.episDescritores;
+                                        return ListFieldWidget<EpiEntregaModel>(
+                                          sourceList: epiEntreguesValidade,
+                                          permitReselect: true,
+                                          removeButton: false,
+                                          onItemSelected: (value) {
+                                            updateFields(value!);
+                                          },
+                                          itemText: (value) {
+                                            final episDescritores =
+                                                widget.episDescritores;
 
-                                  if (episDescritores.isEmpty) {
-                                    return '';
-                                  }
-                                  final epiDescritor = episDescritores
-                                      .where(
-                                        (epi) =>
-                                            epi.cod == value.codDescritorEpi,
-                                      )
-                                      .firstOrNull;
-                                  String descricao =
-                                      epiDescritor?.descricao ?? '';
-                                  String data = '';
-                                  if (value.dataLimiteValidade != null) {
-                                    data = DateFormat('dd/MM/yyyy')
-                                        .format(value.dataLimiteValidade!);
-                                  }
-                                  if (descricao.isNotEmpty && data.isNotEmpty) {
-                                    descricao += ' - ';
-                                  }
-                                  descricao += data;
-                                  return descricao;
-                                },
-                              );
-                            },
-                          ),
+                                            if (episDescritores.isEmpty) {
+                                              return '';
+                                            }
+                                            final epiDescritor = episDescritores
+                                                .where(
+                                                  (epi) =>
+                                                      epi.cod ==
+                                                      value.codDescritorEpi,
+                                                )
+                                                .firstOrNull;
+                                            String descricao =
+                                                epiDescritor?.descricao ?? '';
+                                            String data = '';
+                                            if (value.dataLimiteValidade !=
+                                                null) {
+                                              data = DateFormat('dd/MM/yyyy')
+                                                  .format(
+                                                value.dataLimiteValidade!,
+                                              );
+                                            }
+                                            if (descricao.isNotEmpty &&
+                                                data.isNotEmpty) {
+                                              descricao += ' - ';
+                                            }
+                                            descricao += data;
+                                            return descricao;
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Expanded(
+                                    child: BlocBuilder<EpiEntregaCubit,
+                                        EpiEntregaState>(
+                                      bloc: epiEntregaCubit,
+                                      builder: (context, entregaState) {
+                                        List<EpiEntregaModel>
+                                            epiEntreguesDescartados = [];
+                                        if (entregaState.loading) {
+                                          return const LoadingWidget();
+                                        }
+                                        List<EpiEntregaModel> episEntregas =
+                                            entregaState.itens;
+
+                                        if (episEntregas.isNotEmpty) {
+                                          epiEntreguesDescartados =
+                                              episEntregas.where((entrega) {
+                                            final isDataDescarteNotNull =
+                                                entrega.dataDescarte != null;
+                                            final isDataLimiteValidadeNow =
+                                                entrega.dataLimiteValidade ==
+                                                    DateTime.now();
+                                            final isDataLimiteValidadeBeforeNow =
+                                                entrega.dataLimiteValidade!
+                                                    .isBefore(DateTime.now());
+
+                                            return entrega.codUsuario ==
+                                                    epiEntrega.codUsuario &&
+                                                (isDataDescarteNotNull ||
+                                                    isDataLimiteValidadeNow ||
+                                                    isDataLimiteValidadeBeforeNow);
+                                          }).toList();
+                                        }
+
+                                        return ListFieldWidget<EpiEntregaModel>(
+                                          sourceList: epiEntreguesDescartados,
+                                          removeButton: false,
+                                          permitReselect: true,
+                                          onItemSelected: (value) {
+                                            updateFields(value!);
+                                          },
+                                          itemText: (value) {
+                                            final episDescritores =
+                                                widget.episDescritores;
+
+                                            if (episDescritores.isEmpty) {
+                                              return '';
+                                            }
+                                            final epiDescritor = episDescritores
+                                                .where(
+                                                  (epi) =>
+                                                      epi.cod! ==
+                                                      value.codDescritorEpi!,
+                                                )
+                                                .firstOrNull;
+                                            String descricao =
+                                                epiDescritor?.descricao ?? '';
+                                            String data = '';
+                                            if (value.dataLimiteValidade !=
+                                                null) {
+                                              data = DateFormat('dd/MM/yyyy')
+                                                  .format(
+                                                value.dataLimiteValidade!,
+                                              );
+                                            }
+                                            if (descricao.isNotEmpty &&
+                                                data.isNotEmpty) {
+                                              descricao += ' - ';
+                                            }
+                                            descricao += data;
+                                            return descricao;
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 50.0),
-                        Expanded(
-                          child: BlocBuilder<EpiEntregaCubit, EpiEntregaState>(
-                            bloc: epiEntregaCubit,
-                            builder: (context, entregaState) {
-                              List<EpiEntregaModel> epiEntreguesDescartados =
-                                  [];
-                              if (entregaState.loading) {
-                                return const LoadingWidget();
-                              }
-                              List<EpiEntregaModel> episEntregas =
-                                  entregaState.itens;
-
-                              if (episEntregas.isNotEmpty) {
-                                epiEntreguesDescartados =
-                                    episEntregas.where((entrega) {
-                                  final isDataDescarteNotNull =
-                                      entrega.dataDescarte != null;
-                                  final isDataLimiteValidadeNow =
-                                      entrega.dataLimiteValidade ==
-                                          DateTime.now();
-                                  final isDataLimiteValidadeBeforeNow = entrega
-                                      .dataLimiteValidade!
-                                      .isBefore(DateTime.now());
-
-                                  return entrega.codUsuario ==
-                                          epiEntrega.codUsuario &&
-                                      (isDataDescarteNotNull ||
-                                          isDataLimiteValidadeNow ||
-                                          isDataLimiteValidadeBeforeNow);
-                                }).toList();
-                              }
-
-                              return ListFieldWidget<EpiEntregaModel>(
-                                sourceList: epiEntreguesDescartados,
-                                removeButton: false,
-                                permitReselect: true,
-                                onItemSelected: (value) {
-                                  updateFields(value!);
-                                },
-                                itemText: (value) {
-                                  final episDescritores =
-                                      widget.episDescritores;
-
-                                  if (episDescritores.isEmpty) {
-                                    return '';
-                                  }
-                                  final epiDescritor = episDescritores
-                                      .where(
-                                        (epi) =>
-                                            epi.cod! == value.codDescritorEpi!,
-                                      )
-                                      .firstOrNull;
-                                  String descricao =
-                                      epiDescritor?.descricao ?? '';
-                                  String data = '';
-                                  if (value.dataLimiteValidade != null) {
-                                    data = DateFormat('dd/MM/yyyy')
-                                        .format(value.dataLimiteValidade!);
-                                  }
-                                  if (descricao.isNotEmpty && data.isNotEmpty) {
-                                    descricao += ' - ';
-                                  }
-                                  descricao += data;
-                                  return descricao;
-                                },
-                              );
-                            },
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ],
               ),
             ),
-          ),
-          actions: [
             Row(
               children: [
                 CustomPopupMenuWidget(
@@ -496,7 +535,7 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: CancelButtonUnfilledWidget(
-                    onPressed: () => {Navigator.of(context).pop((false, ''))},
+                    onPressed: widget.onCancel,
                   ),
                 ),
               ],
@@ -558,14 +597,14 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
   void salvar() {
     bool epiValid = validateEPI();
     bool limiteValidadeValid = limiteValidadeValidate();
-    if(!epiValid ){
+    if (!epiValid) {
       scroll.jumpTo(0);
-    }else if(!limiteValidadeValid){
+    } else if (!limiteValidadeValid) {
       scroll.jumpTo(50);
     }
     if (!epiValid || !limiteValidadeValid) {
       return;
     }
-    cubit.save(epiEntrega);
+    cubit.save(epiEntrega, widget.onSaved);
   }
 }

@@ -95,7 +95,7 @@ class _ConfirmButtonWidgetState extends State<ConfirmButtonWidget> {
   void handleClick() {
     if (widget.onPressed == null) return;
     EasyThrottle.throttle(
-      'save-button',
+      'confirm-button',
       const Duration(seconds: 4),
       widget.onPressed!,
     );

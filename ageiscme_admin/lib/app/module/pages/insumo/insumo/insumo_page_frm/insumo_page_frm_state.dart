@@ -12,10 +12,11 @@ class InsumoPageFrmCubit extends Cubit<InsumoPageFrmState> {
           InsumoPageFrmState(insumo: insumoModel),
         );
 
-  void save(InsumoModel insumo) async {
+  void save(InsumoModel insumo, void Function(String) onSaved) async {
     try {
       (String message, InsumoModel insumo)? result = await service.save(insumo);
       if (result == null) return;
+      onSaved(result.$1);
       emit(
         InsumoPageFrmState(
           message: result.$1,

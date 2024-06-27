@@ -4,7 +4,6 @@ import 'package:ageiscme_data/services/kit_cor/kit_cor_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
@@ -19,9 +18,13 @@ class KitCorPageFrm extends StatefulWidget {
   const KitCorPageFrm({
     Key? key,
     required this.kitCor,
+    required this.onSaved,
+    required this.onCancel,
   }) : super(key: key);
 
   final KitCorModel kitCor;
+  final void Function(String) onSaved;
+  final void Function() onCancel;
 
   @override
   State<KitCorPageFrm> createState() => _KitCorPageFrmState(kitCor: kitCor);
@@ -133,116 +136,102 @@ class _KitCorPageFrmState extends State<KitCorPageFrm> {
   Widget build(BuildContext context) {
     setFields();
     Size size = MediaQuery.of(context).size;
-    return BlocListener<KitCorPageFrmCubit, KitCorPageFrmState>(
+    return BlocBuilder<KitCorPageFrmCubit, KitCorPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
-      child: BlocBuilder<KitCorPageFrmCubit, KitCorPageFrmState>(
-        bloc: cubit,
-        builder: (context, state) {
-          return Container(
-            constraints: BoxConstraints(
-              minWidth: size.width * .5,
-              minHeight: size.height * .5,
-              maxHeight: size.height * .8,
-            ),
-            child: Stack(
-              children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TitleWidget(
-                            text: titulo,
-                          ),
+      builder: (context, state) {
+        return Container(
+          constraints: BoxConstraints(
+            minWidth: size.width * .5,
+            minHeight: size.height * .5,
+            maxHeight: size.height * .8,
+          ),
+          child: Stack(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Row(
+                    children: [
+                      Expanded(
+                        child: TitleWidget(
+                          text: titulo,
                         ),
-                        const Spacer(),
-                        CloseButtonWidget(
-                          onPressed: () =>
-                              Navigator.of(context).pop((false, '')),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 7.0),
-                      child: txtNomeCor,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 7.0),
-                      child: txtCorRed,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 7.0),
-                      child: txtCorGreen,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 7.0),
-                      child: txtCorBlue,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 7.0),
-                      child: Row(
-                        children: [
-                          CustomCheckboxWidget(
-                            checked: kitCor.ativo,
-                            onClick: (value) => kitCor.ativo = value,
-                            text: 'Ativo',
-                          ),
-                        ],
                       ),
-                    ),
-                    const Spacer(),
-                    Row(
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 7.0),
+                    child: txtNomeCor,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 7.0),
+                    child: txtCorRed,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 7.0),
+                    child: txtCorGreen,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 7.0),
+                    child: txtCorBlue,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 7.0),
+                    child: Row(
                       children: [
-                        if (kitCor.cod != null && kitCor.cod != 0)
-                          CustomPopupMenuWidget(
-                            items: [
-                              CustomPopupItemHistoryModel.getHistoryItem(
-                                child: HistoricoPage(
-                                  pk: kitCor.cod!,
-                                  termo: 'KIT_COR',
-                                ),
-                                context: context,
-                              ),
-                            ],
-                          ),
-                        const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: SaveButtonWidget(
-                            onPressed: () => {salvar()},
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: CleanButtonWidget(
-                            onPressed: () => {
-                              setState(() {
-                                kitCor = KitCorModel.empty();
-                              }),
-                            },
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 16.0),
-                          child: CancelButtonUnfilledWidget(
-                            onPressed: () =>
-                                {Navigator.of(context).pop((false, ''))},
-                          ),
+                        CustomCheckboxWidget(
+                          checked: kitCor.ativo,
+                          onClick: (value) => kitCor.ativo = value,
+                          text: 'Ativo',
                         ),
                       ],
                     ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        },
-      ),
+                  ),
+                  const Spacer(),
+                  Row(
+                    children: [
+                      if (kitCor.cod != null && kitCor.cod != 0)
+                        CustomPopupMenuWidget(
+                          items: [
+                            CustomPopupItemHistoryModel.getHistoryItem(
+                              child: HistoricoPage(
+                                pk: kitCor.cod!,
+                                termo: 'KIT_COR',
+                              ),
+                              context: context,
+                            ),
+                          ],
+                        ),
+                      const Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: SaveButtonWidget(
+                          onPressed: () => {salvar()},
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: CleanButtonWidget(
+                          onPressed: () => {
+                            setState(() {
+                              kitCor = KitCorModel.empty();
+                            }),
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 16.0),
+                        child: CancelButtonUnfilledWidget(
+                          onPressed: widget.onCancel,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -251,10 +240,9 @@ class _KitCorPageFrmState extends State<KitCorPageFrm> {
     bool corGreenValid = txtCorGreen.valid;
     bool corRedValid = txtCorRed.valid;
     bool corBlueValid = txtCorBlue.valid;
-    if (!nomeCorValid ||
-        !corGreenValid ||
-        !corRedValid ||
-        !corBlueValid) return;
-    cubit.save(kitCor);
+    if (!nomeCorValid || !corGreenValid || !corRedValid || !corBlueValid) {
+      return;
+    }
+    cubit.save(kitCor, widget.onSaved);
   }
 }

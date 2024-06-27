@@ -123,6 +123,12 @@ class ProcessoPageObjectReaderWidget extends StatelessWidget {
     ProcessoLeituraMontagemModel processo,
   ) {
     ItemProcessoModel? item = processo.getItemSelecionado();
-    return item?.getProprietario(processo);
+    if (item != null) return item.getProprietario(processo);
+    KitProcessoModel? kit = processo.getKitLidoOuNull();
+    print(kit?.itens?.map((e) => e.getProprietario(processo)));
+    return kit?.itens
+        ?.where((element) => element.getProprietario(processo) != null)
+        .firstOrNull
+        ?.getProprietario(processo);
   }
 }

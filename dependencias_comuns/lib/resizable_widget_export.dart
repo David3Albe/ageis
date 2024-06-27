@@ -1,0 +1,1 @@
+export 'package:resizable_widget/resizable_widget.dart';

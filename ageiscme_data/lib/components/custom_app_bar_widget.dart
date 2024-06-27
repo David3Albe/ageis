@@ -25,7 +25,6 @@ class CustomAppBarWidget extends StatefulWidget {
 }
 
 class _CustomAppBarWidgetState extends State<CustomAppBarWidget> {
-
   @override
   void initState() {
     super.initState();

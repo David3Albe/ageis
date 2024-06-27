@@ -19,18 +19,16 @@ class ItemDescritorButtonFilterWidget extends StatelessWidget {
   }
 
   Future openModalFilter(BuildContext context) async {
-    ItemDescritorCubitFilter filterCubit = context.read<ItemDescritorCubitFilter>();
-    bool? result = await showDialog<bool>(
-      barrierDismissible: false,
+    ItemDescritorCubitFilter filterCubit =
+        context.read<ItemDescritorCubitFilter>();
+    bool? confirm = await showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return BlocProvider<ItemDescritorCubitFilter>.value(
-          value: filterCubit,
-          child: ItemDescritorPageFilter(),
-        );
-      },
+      builder: (context) => BlocProvider<ItemDescritorCubitFilter>.value(
+        value: filterCubit,
+        child: ItemDescritorPageFilter(),
+      ),
     );
-    if (result != true) return;
+    if (confirm != true) return;
     ItemDescritorPageCubit cubit = context.read<ItemDescritorPageCubit>();
     filterCubit = context.read<ItemDescritorCubitFilter>();
     ItemDescritorFilter dto = filterCubit.state;

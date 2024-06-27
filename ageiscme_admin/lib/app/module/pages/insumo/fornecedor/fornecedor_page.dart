@@ -10,11 +10,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class FornecedorPage extends StatefulWidget {
-  FornecedorPage({super.key});
+  const FornecedorPage({super.key});
 
   @override
   State<FornecedorPage> createState() => _FornecedorPageState();
@@ -89,30 +90,42 @@ class _FornecedorPageState extends State<FornecedorPage> {
     );
   }
 
-  void openModal(BuildContext context, FornecedorModel fornecedor) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: FornecedorPageFrm(
-            fornecedor: fornecedor,
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadFornecedor();
-    });
+  Future openModal(
+    BuildContext context,
+    FornecedorModel fornecedor,
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Fornecedor',
+      widget: FornecedorPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        fornecedor: fornecedor,
+      ),
+    );
   }
 
-  void delete(BuildContext context, FornecedorModel fornecedor) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Fornecedor\n${fornecedor.cod} - ${fornecedor.nome}',
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadFornecedor();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
+  }
+
+  void delete(BuildContext context, FornecedorModel fornecedor) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Fornecedor\n${fornecedor.cod} - ${fornecedor.nome}',
+      onConfirm: () => confirmDelete(fornecedor),
     );
-    if (confirmacao) bloc.delete(fornecedor);
+  }
+
+  void confirmDelete(FornecedorModel fornecedor) async {
+    bloc.delete(fornecedor);
   }
 
   void deleted(FornecedorPageState state) {

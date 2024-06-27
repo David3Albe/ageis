@@ -12,11 +12,14 @@ class PecaPageFrmCubit extends Cubit<PecaPageFrmState> {
           PecaPageFrmState(peca: pecaModel),
         );
 
-  void save(PecaModel peca) async {
+  void save(
+    PecaModel peca,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, PecaModel peca)? result = await service.save(peca);
       if (result == null) return;
-
+      onSaved(result.$1);
       emit(
         PecaPageFrmState(
           message: result.$1,

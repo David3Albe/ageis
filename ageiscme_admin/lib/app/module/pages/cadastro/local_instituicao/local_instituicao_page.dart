@@ -10,11 +10,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class LocalInstituicaoPage extends StatefulWidget {
-  LocalInstituicaoPage({super.key});
+  const LocalInstituicaoPage({super.key});
 
   @override
   State<LocalInstituicaoPage> createState() => _LocalInstituicaoPageState();
@@ -119,30 +120,42 @@ class _LocalInstituicaoPageState extends State<LocalInstituicaoPage> {
   }
 
   void openModal(BuildContext context, LocalInstituicaoModel localInstituicao) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return LocalInstituicaoPageFrm(
-          localInstituicao: localInstituicao,
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadLocalInstituicao();
-    });
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      theme: Theme.of(context),
+      title: 'Cadastro/Edição Locais da Instituição',
+      widget: LocalInstituicaoPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        localInstituicao: localInstituicao,
+      ),
+    );
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadLocalInstituicao();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void delete(
     BuildContext context,
     LocalInstituicaoModel localInstituicao,
-  ) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Local da Instituição\n${localInstituicao.cod} - ${localInstituicao.nome}',
+  ) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Local da Instituição\n${localInstituicao.cod} - ${localInstituicao.nome}',
+      onConfirm: () => onConfirmDelete(localInstituicao),
     );
-    if (confirmacao) bloc.delete(localInstituicao);
+  }
+
+  void onConfirmDelete(LocalInstituicaoModel obj) {
+    bloc.delete(obj);
   }
 
   void deleted(LocalInstituicaoPageState state) {

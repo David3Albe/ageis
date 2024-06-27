@@ -14,6 +14,7 @@ import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/modular_export.dart';
 import 'package:flutter/material.dart';
 
@@ -97,14 +98,23 @@ class SiglaPageWidget extends StatelessWidget {
     required BuildContext context,
     required Function() resetarGrid,
   }) async {
-    bool confirma = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a exclusão da Sigla: \n${item.cod} - ${item.sigla}',
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message: 'Confirma a exclusão da Sigla: \n${item.cod} - ${item.sigla}',
+      onConfirm: () => onConfirmRemover(
+        context: context,
+        item: item,
+        resetarGrid: resetarGrid,
+      ),
     );
-    if (confirma != true) return;
+  }
 
-    SiglaRemoveDTO dto =
-        SiglaRemoveDTO(cod: item.cod, tstamp: item.tstamp);
+  void onConfirmRemover({
+    required SiglaQueryItemResponseDTO item,
+    required BuildContext context,
+    required Function() resetarGrid,
+  }) async {
+    SiglaRemoveDTO dto = SiglaRemoveDTO(cod: item.cod, tstamp: item.tstamp);
 
     LoadingController loading = LoadingController(context: context);
     (String, SiglaRemoveResponseDTO)? result =
@@ -131,18 +141,26 @@ class SiglaPageWidget extends StatelessWidget {
     required Function() resetarGrid,
     int? cod,
   }) async {
-    bool alterou = await showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: SiglaFrmPage(
-            cod: cod,
-          ),
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Sigla',
+      widget: SiglaFrmPage(
+        onCancel: () => onCancel(chave),
+        onSaved: () => onSaved(resetarGrid: resetarGrid, chave: chave),
+        cod: cod,
+      ),
     );
-    if (alterou != true) return;
+  }
+
+  void onSaved({
+    required Function() resetarGrid,
+    required int chave,
+  }) {
+    WindowsHelper.RemoverWidget(chave);
     resetarGrid();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 }

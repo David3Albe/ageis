@@ -4,8 +4,15 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class AnormalidadeTipoFrmPage extends StatefulWidget {
-  const AnormalidadeTipoFrmPage({required this.cod, super.key});
+  const AnormalidadeTipoFrmPage({
+    required this.cod,
+    required this.onSaved,
+    required this.onCancel,
+    super.key,
+  });
   final int? cod;
+  final void Function() onSaved;
+  final void Function() onCancel;
 
   @override
   State<AnormalidadeTipoFrmPage> createState() =>
@@ -40,7 +47,10 @@ class _AnormalidadeTipoFrmPageState extends State<AnormalidadeTipoFrmPage> {
       providers: [
         BlocProvider.value(value: cubit),
       ],
-      child: const AnormalidadeTipoFrmPageWidget(),
+      child: AnormalidadeTipoFrmPageWidget(
+        onCancel: widget.onCancel,
+        onSaved: widget.onSaved,
+      ),
     );
   }
 }

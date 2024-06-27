@@ -25,12 +25,12 @@ import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
-import 'package:compartilhados/query_dialog/query_dialog_widget.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ConsultaProcessosLeituraRetiradoPage extends StatefulWidget {
-  ConsultaProcessosLeituraRetiradoPage({super.key});
+  const ConsultaProcessosLeituraRetiradoPage({super.key});
 
   @override
   State<ConsultaProcessosLeituraRetiradoPage> createState() =>
@@ -157,7 +157,7 @@ class _ConsultaProcessosLeituraRetiradoPageState
                         );
                       }
 
-                      openModalRedirect(
+                      await openModalRedirect(
                         context,
                         obj.codBarraKit,
                       );
@@ -175,8 +175,8 @@ class _ConsultaProcessosLeituraRetiradoPageState
   void onError(ConsultaProcessosLeituraRetiradoPageState state) =>
       ErrorUtils.showErrorDialog(context, [state.error]);
 
-  void openModal(BuildContext context) {
-    showDialog<bool>(
+  Future openModal(BuildContext context) async {
+    bool? confirm = await showDialog<bool>(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
@@ -330,43 +330,39 @@ class _ConsultaProcessosLeituraRetiradoPageState
           ),
         );
       },
-    ).then((result) {
-      if (result == true) {
-        bloc.loadProcessosLeituraRetirado(filter);
-      }
-    });
+    );
+    if (confirm != true) return;
+    bloc.loadProcessosLeituraRetirado(filter);
   }
 
-  void openModalRedirect(BuildContext context, String? codBarraKit) {
-    showDialog<bool>(
-      barrierDismissible: true,
-      context: context,
-      barrierColor: Colors.white,
-      builder: (BuildContext context) {
-        return QueryDialogWidget(
-          child: ConsultaItemPage(
-            filter: ConsultaItemFilter(
-              codKit: null,
-              cmInicio: null,
-              cmTermino: null,
-              codGrupo: null,
-              codItem: null,
-              codItemDescritor: null,
-              codProprietario: null,
-              codSituacao: null,
-              considerarRepositorio: null,
-              descarte: null,
-              descricaoCurtaItem: null,
-              implantavel: null,
-              numeroPatrimonio: null,
-              repositorio: null,
-              rotulado: null,
-              codBarraKitContem: codBarraKit,
-              idEtiquetaContem: null,
-            ),
-          ),
-        );
-      },
+  Future openModalRedirect(
+    BuildContext context,
+    String? codBarraKit,
+  ) async {
+    WindowsHelper.OpenDefaultWindows(
+      title: 'Consulta Item',
+      widget: ConsultaItemPage(
+        filter: ConsultaItemFilter(
+          codKit: null,
+          cmInicio: null,
+          cmTermino: null,
+          codGrupo: null,
+          codItem: null,
+          codItemDescritor: null,
+          codProprietario: null,
+          codSituacao: null,
+          considerarRepositorio: null,
+          descarte: null,
+          descricaoCurtaItem: null,
+          implantavel: null,
+          numeroPatrimonio: null,
+          repositorio: null,
+          rotulado: null,
+          codBarraKitContem: codBarraKit,
+          idEtiquetaContem: null,
+        ),
+      ),
     );
   }
+
 }

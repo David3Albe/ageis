@@ -7,11 +7,14 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class TreinamentoRegistroPageFilter extends StatelessWidget {
-  TreinamentoRegistroPageFilter({Key? key});
+  TreinamentoRegistroPageFilter({
+    Key? key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    TreinamentoRegistroFilter dto = context.watch<TreinamentoRegistroCubitFilter>().state;
+    TreinamentoRegistroFilter dto =
+        context.watch<TreinamentoRegistroCubitFilter>().state;
     return FilterDialogWidget(
       child: Column(
         children: [

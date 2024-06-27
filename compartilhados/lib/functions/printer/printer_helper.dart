@@ -51,7 +51,7 @@ class PrinterHelper {
     Printer? printer =
         printers.where((element) => element.isDefault).firstOrNull;
     if (printer == null) {
-      await ErrorUtils.showErrorDialog(
+      ErrorUtils.showErrorDialog(
         context,
         [
           'Defina a impressora padrão, após isso clique em OK para tentar realizar a impressão novamente',

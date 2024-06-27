@@ -21,11 +21,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class RegistroServicoPage extends StatefulWidget {
-  RegistroServicoPage({this.cod, super.key});
+  const RegistroServicoPage({this.cod, super.key});
   final int? cod;
 
   @override
@@ -173,68 +174,63 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
     );
   }
 
-  void openModalFilter(BuildContext context) {
-    showDialog<bool>(
-      barrierDismissible: false,
+  Future openModalFilter(BuildContext context) async {
+    bool confirm = await showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return FilterDialogWidget(
-          child: Column(
-            children: [
-              DatePickerWidget(
-                placeholder: 'Data Inicio',
-                onDateSelected: (value) => filter.startDate = value,
-                initialValue: filter.startDate,
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              DatePickerWidget(
-                placeholder: 'Data Término',
-                onDateSelected: (value) => filter.finalDate = value,
-                initialValue: filter.finalDate,
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<EquipamentoCubit, EquipamentoState>(
-                bloc: equipamentoCubit,
-                builder: (context, equipamentoState) {
-                  if (equipamentoState.loading) {
-                    return const LoadingWidget();
-                  }
-                  List<EquipamentoModel> equipamentos = equipamentoState.objs;
-                  equipamentos.sort(
-                    (a, b) => a.nome!.compareTo(b.nome!),
-                  );
-                  EquipamentoModel? equipamento = equipamentos
-                      .where(
-                        (element) => element.cod == filter.codEquipamento,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<EquipamentoModel>(
-                    textFunction: (equipamento) =>
-                        equipamento.EquipamentoNomeText(),
-                    initialValue: equipamento,
-                    sourceList: equipamentos,
-                    onChanged: (value) => filter.codEquipamento = value?.cod,
-                    placeholder: 'Equipamento',
-                  );
-                },
-              ),
-              const Padding(padding: EdgeInsets.only(top: 4)),
-              TextFieldNumberWidget(
-                startValue: filter.numeroRegistros,
-                placeholder: 'Número Registros',
-                onChanged: (str) => {
-                  filter.numeroRegistros = str.isEmpty ? null : int.parse(str),
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == true) {
-        bloc.loadRegistroServicoFilter(filter);
-      }
-    });
+      builder: (context) => FilterDialogWidget(
+        child: Column(
+          children: [
+            DatePickerWidget(
+              placeholder: 'Data Inicio',
+              onDateSelected: (value) => filter.startDate = value,
+              initialValue: filter.startDate,
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            DatePickerWidget(
+              placeholder: 'Data Término',
+              onDateSelected: (value) => filter.finalDate = value,
+              initialValue: filter.finalDate,
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            BlocBuilder<EquipamentoCubit, EquipamentoState>(
+              bloc: equipamentoCubit,
+              builder: (context, equipamentoState) {
+                if (equipamentoState.loading) {
+                  return const LoadingWidget();
+                }
+                List<EquipamentoModel> equipamentos = equipamentoState.objs;
+                equipamentos.sort(
+                  (a, b) => a.nome!.compareTo(b.nome!),
+                );
+                EquipamentoModel? equipamento = equipamentos
+                    .where(
+                      (element) => element.cod == filter.codEquipamento,
+                    )
+                    .firstOrNull;
+                return DropDownSearchWidget<EquipamentoModel>(
+                  textFunction: (equipamento) =>
+                      equipamento.EquipamentoNomeText(),
+                  initialValue: equipamento,
+                  sourceList: equipamentos,
+                  onChanged: (value) => filter.codEquipamento = value?.cod,
+                  placeholder: 'Equipamento',
+                );
+              },
+            ),
+            const Padding(padding: EdgeInsets.only(top: 4)),
+            TextFieldNumberWidget(
+              startValue: filter.numeroRegistros,
+              placeholder: 'Número Registros',
+              onChanged: (str) => {
+                filter.numeroRegistros = str.isEmpty ? null : int.parse(str),
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+    if (confirm != true) return;
+    bloc.loadRegistroServicoFilter(filter);
   }
 
   void loadEquipamentoCubit() {
@@ -263,7 +259,7 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
     );
   }
 
-  Future<void> openModal(
+  Future openModal(
     BuildContext context,
     RegistroServicoModel registroServico,
   ) async {
@@ -282,35 +278,48 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
       }
     }
     loading.close(context, mounted);
-
-    (bool, String)? result = await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return RegistroServicoPageFrm(
-          equipamentoCubit: equipamentoCubit,
-          itemFilter: ItemFilter(
-            apenasAtivos: true,
-            ordenarPorNomeCrescente: true,
-          ),
-          registroServico: registroServicoModel!,
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Monitoramento',
+      widget: RegistroServicoPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        equipamentoCubit: equipamentoCubit,
+        itemFilter: ItemFilter(
+          apenasAtivos: true,
+          ordenarPorNomeCrescente: true,
+        ),
+        registroServico: registroServicoModel,
+      ),
     );
-    if (result == null || !result.$1) return;
-    ToastUtils.showCustomToastSucess(context, result.$2);
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
     bloc.loadRegistroServicoFilter(filter);
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void delete(
     BuildContext context,
     RegistroServicoModel registroServico,
-  ) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Registro do Serviço\n${registroServico.cod}',
+  ) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Registro do Serviço\n${registroServico.cod}',
+      onConfirm: () => confirmDelete(registroServico),
     );
-    if (confirmacao) bloc.delete(registroServico);
+  }
+
+  void confirmDelete(
+    RegistroServicoModel registroServico,
+  ) async {
+    bloc.delete(registroServico);
   }
 
   void deleted(RegistroServicoPageState state) {

@@ -25,12 +25,12 @@ import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_footer_type.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
-import 'package:compartilhados/query_dialog/query_dialog_widget.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ConsultaItemInventarioPage extends StatefulWidget {
-  ConsultaItemInventarioPage({super.key});
+  const ConsultaItemInventarioPage({super.key});
 
   @override
   State<ConsultaItemInventarioPage> createState() =>
@@ -138,7 +138,7 @@ class _ConsultaItemInventarioPageState
                         );
                       }
 
-                      openModalRedirect(
+                      await openModalRedirect(
                         context,
                         obj.codItemDescritor,
                       );
@@ -156,207 +156,195 @@ class _ConsultaItemInventarioPageState
   void onError(ConsultaItemInventarioPageState state) =>
       ErrorUtils.showErrorDialog(context, [state.error]);
 
-  void openModal(BuildContext context) {
-    showDialog<bool>(
-      barrierDismissible: false,
+  Future openModal(BuildContext context) async {
+    bool? confirm = await showDialog<bool>(
       context: context,
-      builder: (BuildContext context) {
-        return FilterDialogWidget(
-          child: Column(
-            children: [
-              DropDownSearchApiWidget<ItemDescritorDropDownSearchResponseDTO>(
-                search: (str) async =>
-                    (await ItemDescritorService().getDropDownSearch(
-                      ItemDescritorDropDownSearchDTO(
-                        numeroRegistros: 30,
-                        termoPesquisa: str,
-                        apenasAtivos: true,
-                      ),
-                    ))
-                        ?.$2 ??
-                    [],
-                textFunction: (itemDescritor) => itemDescritor.Nome(),
-                initialValue: filter.itemDescritor == null
-                    ? null
-                    : ItemDescritorDropDownSearchResponseDTO(
-                        cod: filter.itemDescritor!.cod,
-                        nome: filter.itemDescritor?.nome,
-                      ),
-                onChanged: (value) {
-                  filter.codItemDescritor = value?.cod;
-                  filter.itemDescritor = value;
-                },
-                placeholder: 'Item Descritor',
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              Builder(
-                builder: (context) {
-                  return DropDownSearchWidget<
-                      ConsultaItemInventarioStatusOption>(
-                    sourceList:
-                        ConsultaItemInventarioStatusOption.situacaoOptions,
-                    initialValue:
-                        ConsultaItemInventarioStatusOption.situacaoOptions
-                            .where(
-                              (element) => element.cod == filter.situacao,
-                            )
-                            .firstOrNull,
-                    placeholder: 'Situação',
-                    onChanged: (value) => filter.situacao = value?.cod,
-                  );
-                },
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<GrupoMaterialCubit, GrupoMaterialState>(
-                bloc: grupoMaterialBloc,
-                builder: (context, state) {
-                  if (state.loading) {
-                    return const Center(
-                      child: LoadingWidget(),
-                    );
-                  }
-                  List<GrupoMaterialModel> gruposMateriais = state.grupoMateriais;
-                  gruposMateriais.sort(
-                    (a, b) => a.nome!.compareTo(b.nome!),
-                  );
-                  GrupoMaterialModel? grupoMaterial = gruposMateriais
-                      .where(
-                        (element) => element.cod == filter.codGrupoItem,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<GrupoMaterialModel>(
-                    textFunction: (grupoMaterial) =>
-                        grupoMaterial.GetGrupoNomeText(),
-                    initialValue: grupoMaterial,
-                    sourceList: gruposMateriais
-                        .where((element) => element.ativo == true)
-                        .toList(),
-                    onChanged: (value) => filter.codGrupoItem = value?.cod,
-                    placeholder: 'Grupo',
-                  );
-                },
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              BlocBuilder<ProprietarioCubit, ProprietarioState>(
-                bloc: proprietarioBloc,
-                builder: (context, proprietarioState) {
-                  if (proprietarioState.loading) return const LoadingWidget();
-                  List<ProprietarioModel> proprietarios =
-                      proprietarioState.proprietarios;
-                  proprietarios.sort(
-                    (a, b) => a.nome!.compareTo(b.nome!),
-                  );
-                  ProprietarioModel? proprietario = proprietarios
-                      .where(
-                        (element) => element.cod == filter.codProprietario,
-                      )
-                      .firstOrNull;
-                  return DropDownSearchWidget<ProprietarioModel>(
-                    textFunction: (proprietario) =>
-                        proprietario.ProprietarioText(),
-                    initialValue: proprietario,
-                    sourceList: proprietarios
-                        .where((element) => element.ativo == true)
-                        .toList(),
-                    onChanged: (value) => filter.codProprietario = value?.cod,
-                    placeholder: 'Proprietário',
-                  );
-                },
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 2.0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: TextFieldNumberFloatWidget(
-                        placeholder: 'De (CM)',
-                        onChanged: (value) =>
-                            filter.cmInicio = double.parse(value),
-                      ),
+      builder: (context) => FilterDialogWidget(
+        child: Column(
+          children: [
+            DropDownSearchApiWidget<ItemDescritorDropDownSearchResponseDTO>(
+              search: (str) async =>
+                  (await ItemDescritorService().getDropDownSearch(
+                    ItemDescritorDropDownSearchDTO(
+                      numeroRegistros: 30,
+                      termoPesquisa: str,
+                      apenasAtivos: true,
                     ),
-                    const SizedBox(width: 50.0),
-                    Expanded(
-                      child: TextFieldNumberFloatWidget(
-                        placeholder: 'Até (CM)',
-                        onChanged: (value) =>
-                            filter.cmFinal = double.parse(value),
-                      ),
+                  ))
+                      ?.$2 ??
+                  [],
+              textFunction: (itemDescritor) => itemDescritor.Nome(),
+              initialValue: filter.itemDescritor == null
+                  ? null
+                  : ItemDescritorDropDownSearchResponseDTO(
+                      cod: filter.itemDescritor!.cod,
+                      nome: filter.itemDescritor?.nome,
                     ),
-                  ],
-                ),
+              onChanged: (value) {
+                filter.codItemDescritor = value?.cod;
+                filter.itemDescritor = value;
+              },
+              placeholder: 'Item Descritor',
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            Builder(
+              builder: (context) {
+                return DropDownSearchWidget<ConsultaItemInventarioStatusOption>(
+                  sourceList:
+                      ConsultaItemInventarioStatusOption.situacaoOptions,
+                  initialValue:
+                      ConsultaItemInventarioStatusOption.situacaoOptions
+                          .where(
+                            (element) => element.cod == filter.situacao,
+                          )
+                          .firstOrNull,
+                  placeholder: 'Situação',
+                  onChanged: (value) => filter.situacao = value?.cod,
+                );
+              },
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            BlocBuilder<GrupoMaterialCubit, GrupoMaterialState>(
+              bloc: grupoMaterialBloc,
+              builder: (context, state) {
+                if (state.loading) {
+                  return const Center(
+                    child: LoadingWidget(),
+                  );
+                }
+                List<GrupoMaterialModel> gruposMateriais = state.grupoMateriais;
+                gruposMateriais.sort(
+                  (a, b) => a.nome!.compareTo(b.nome!),
+                );
+                GrupoMaterialModel? grupoMaterial = gruposMateriais
+                    .where(
+                      (element) => element.cod == filter.codGrupoItem,
+                    )
+                    .firstOrNull;
+                return DropDownSearchWidget<GrupoMaterialModel>(
+                  textFunction: (grupoMaterial) =>
+                      grupoMaterial.GetGrupoNomeText(),
+                  initialValue: grupoMaterial,
+                  sourceList: gruposMateriais
+                      .where((element) => element.ativo == true)
+                      .toList(),
+                  onChanged: (value) => filter.codGrupoItem = value?.cod,
+                  placeholder: 'Grupo',
+                );
+              },
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            BlocBuilder<ProprietarioCubit, ProprietarioState>(
+              bloc: proprietarioBloc,
+              builder: (context, proprietarioState) {
+                if (proprietarioState.loading) return const LoadingWidget();
+                List<ProprietarioModel> proprietarios =
+                    proprietarioState.proprietarios;
+                proprietarios.sort(
+                  (a, b) => a.nome!.compareTo(b.nome!),
+                );
+                ProprietarioModel? proprietario = proprietarios
+                    .where(
+                      (element) => element.cod == filter.codProprietario,
+                    )
+                    .firstOrNull;
+                return DropDownSearchWidget<ProprietarioModel>(
+                  textFunction: (proprietario) =>
+                      proprietario.ProprietarioText(),
+                  initialValue: proprietario,
+                  sourceList: proprietarios
+                      .where((element) => element.ativo == true)
+                      .toList(),
+                  onChanged: (value) => filter.codProprietario = value?.cod,
+                  placeholder: 'Proprietário',
+                );
+              },
+            ),
+            Padding(
+              padding: const EdgeInsets.only(top: 2.0),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextFieldNumberFloatWidget(
+                      placeholder: 'De (CM)',
+                      onChanged: (value) =>
+                          filter.cmInicio = double.parse(value),
+                    ),
+                  ),
+                  const SizedBox(width: 50.0),
+                  Expanded(
+                    child: TextFieldNumberFloatWidget(
+                      placeholder: 'Até (CM)',
+                      onChanged: (value) =>
+                          filter.cmFinal = double.parse(value),
+                    ),
+                  ),
+                ],
               ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              CustomCheckboxWidget(
-                checked: filter.repositorio,
-                onClick: (value) => filter.repositorio = value,
-                text: 'Função Armazenar Itens',
-                align: MainAxisAlignment.start,
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              CustomCheckboxWidget(
-                checked: filter.descartado,
-                onClick: (value) => filter.descartado = value,
-                text: 'Descartados',
-                align: MainAxisAlignment.start,
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              CustomCheckboxWidget(
-                checked: filter.implantavel,
-                onClick: (value) => filter.implantavel = value,
-                text: 'Implántaveis',
-                align: MainAxisAlignment.start,
-              ),
-              const Padding(padding: EdgeInsets.only(top: 2)),
-              CustomCheckboxWidget(
-                checked: filter.complementar,
-                onClick: (value) => filter.complementar = value,
-                text: 'Itens Complementares',
-                align: MainAxisAlignment.start,
-              ),
-            ],
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == true) {
-        bloc.loadItemInventario(filter);
-      }
-    });
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            CustomCheckboxWidget(
+              checked: filter.repositorio,
+              onClick: (value) => filter.repositorio = value,
+              text: 'Função Armazenar Itens',
+              align: MainAxisAlignment.start,
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            CustomCheckboxWidget(
+              checked: filter.descartado,
+              onClick: (value) => filter.descartado = value,
+              text: 'Descartados',
+              align: MainAxisAlignment.start,
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            CustomCheckboxWidget(
+              checked: filter.implantavel,
+              onClick: (value) => filter.implantavel = value,
+              text: 'Implántaveis',
+              align: MainAxisAlignment.start,
+            ),
+            const Padding(padding: EdgeInsets.only(top: 2)),
+            CustomCheckboxWidget(
+              checked: filter.complementar,
+              onClick: (value) => filter.complementar = value,
+              text: 'Itens Complementares',
+              align: MainAxisAlignment.start,
+            ),
+          ],
+        ),
+      ),
+    );
+    if (confirm != true) return;
+    bloc.loadItemInventario(filter);
   }
 
-  void openModalRedirect(
+  Future openModalRedirect(
     BuildContext context,
     int? codItem,
-  ) {
-    showDialog<bool>(
-      barrierDismissible: true,
-      context: context,
-      barrierColor: Colors.white,
-      builder: (BuildContext context) {
-        return QueryDialogWidget(
-          child: ConsultaItemPage(
-            filter: ConsultaItemFilter(
-              cmInicio: null,
-              cmTermino: null,
-              codGrupo: filter.codGrupoItem,
-              codItem: null,
-              codItemDescritor: codItem,
-              codKit: null,
-              codProprietario: null,
-              codSituacao: filter.situacao,
-              considerarRepositorio: null,
-              descricaoCurtaItem: null,
-              numeroPatrimonio: null,
-              repositorio: filter.repositorio,
-              descarte: filter.descartado,
-              implantavel: null,
-              rotulado: null,
-              codBarraKitContem: null,
-              idEtiquetaContem: null,
-            ),
-          ),
-        );
-      },
+  ) async {
+    WindowsHelper.OpenDefaultWindows(
+      title: 'Consulta Item',
+      widget: ConsultaItemPage(
+        filter: ConsultaItemFilter(
+          cmInicio: null,
+          cmTermino: null,
+          codGrupo: filter.codGrupoItem,
+          codItem: null,
+          codItemDescritor: codItem,
+          codKit: null,
+          codProprietario: null,
+          codSituacao: filter.situacao,
+          considerarRepositorio: null,
+          descricaoCurtaItem: null,
+          numeroPatrimonio: null,
+          repositorio: filter.repositorio,
+          descarte: filter.descartado,
+          implantavel: null,
+          rotulado: null,
+          codBarraKitContem: null,
+          idEtiquetaContem: null,
+        ),
+      ),
     );
   }
 }

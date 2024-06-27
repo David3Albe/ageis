@@ -24,12 +24,12 @@ import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
-import 'package:compartilhados/query_dialog/query_dialog_widget.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class ConsultaEstoqueDisponivelPage extends StatefulWidget {
-  ConsultaEstoqueDisponivelPage({super.key});
+  const ConsultaEstoqueDisponivelPage({super.key});
 
   @override
   State<ConsultaEstoqueDisponivelPage> createState() =>
@@ -117,6 +117,7 @@ class _ConsultaEstoqueDisponivelPageState
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    orderAscendingFieldColumn: 'dataValidade',
                     smallRows: true,
                     columns: colunas,
                     items: state.estoquesDisponiveis,
@@ -133,11 +134,11 @@ class _ConsultaEstoqueDisponivelPageState
                         );
                       }
 
-                      openModalRedirect(
+                      await openModalRedirect(
                         context,
                         obj.dataEntrada,
-                        obj.codKit,
-                        obj.codItem,
+                        obj.codBarraKit,
+                        obj.idEtiqueta,
                       );
                     },
                   ),
@@ -153,8 +154,8 @@ class _ConsultaEstoqueDisponivelPageState
   void onError(ConsultaEstoqueDisponivelPageState state) =>
       ErrorUtils.showErrorDialog(context, [state.error]);
 
-  void openModal(BuildContext context) {
-    showDialog<bool>(
+  Future openModal(BuildContext context) async {
+    bool? confirm = await showDialog<bool>(
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
@@ -279,45 +280,37 @@ class _ConsultaEstoqueDisponivelPageState
           ),
         );
       },
-    ).then((result) {
-      if (result == true) {
-        bloc.loadEstoqueDisponivel(filter);
-      }
-    });
+    );
+    if (confirm != true) return;
+    bloc.loadEstoqueDisponivel(filter);
   }
 
-  void openModalRedirect(
+  Future openModalRedirect(
     BuildContext context,
     DateTime? startDate,
-    int? codKit,
-    int? codItem,
-  ) {
-    showDialog<bool>(
-      barrierDismissible: true,
-      context: context,
-      barrierColor: Colors.white,
-      builder: (BuildContext context) {
-        return QueryDialogWidget(
-          child: ConsultaProcessosLeituraPage(
-            filter: ConsultaProcessosLeituraFilter(
-              startDate: startDate?.add(const Duration(hours: -24)),
-              finalDate: DateTime.now(),
-              codKit: codKit,
-              codItem: codItem,
-              finalTime: null,
-              startTime: null,
-              biologico: null,
-              codEtapaProcesso: null,
-              implantavel: null,
-              indicador: null,
-              lote: null,
-              prontuario: null,
-              idEtiquetaContem: null,
-              codBarraKitContem: null,
-            ),
-          ),
-        );
-      },
+    String? codBarraKit,
+    String? idEtiqueta,
+  ) async {
+    WindowsHelper.OpenDefaultWindows(
+      title: 'Consulta Processo Leitura - Estoque',
+      widget: ConsultaProcessosLeituraPage(
+        filter: ConsultaProcessosLeituraFilter(
+          startDate: startDate?.add(const Duration(hours: -24)),
+          finalDate: DateTime.now(),
+          codKit: null,
+          codItem: null,
+          finalTime: null,
+          startTime: null,
+          biologico: null,
+          codEtapaProcesso: null,
+          implantavel: null,
+          indicador: null,
+          lote: null,
+          prontuario: null,
+          idEtiquetaContem: idEtiqueta,
+          codBarraKitContem: codBarraKit,
+        ),
+      ),
     );
   }
 }

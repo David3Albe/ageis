@@ -14,10 +14,14 @@ class InstituicaoPageFrmImpressao extends StatefulWidget {
     Key? key,
     required this.instituicao,
     required this.locais,
+    required this.onPrinted,
+    required this.onCancel,
   }) : super(key: key);
 
   final InstituicaoModel instituicao;
   final List<LocalInstituicaoModel> locais;
+  final void Function() onPrinted;
+  final void Function() onCancel;
 
   @override
   State<InstituicaoPageFrmImpressao> createState() =>
@@ -63,56 +67,63 @@ class _InstituicaoPageFrmImpressaoState
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return AlertDialog(
-      contentPadding: const EdgeInsets.all(8.0),
-      titlePadding: const EdgeInsets.all(8.0),
-      actionsPadding: const EdgeInsets.all(8.0),
-      title: Row(
-        children: [
-          const Expanded(
-            child: TitleWidget(
-              text: 'Seleção para impressão',
+    return Column(
+      children: [
+        Row(
+          children: [
+            const Expanded(
+              child: TitleWidget(
+                text: 'Seleção para impressão',
+              ),
             ),
-          ),
-          const Spacer(),
-          CloseButtonWidget(
-            onPressed: () => Navigator.of(context).pop(),
-          ),
-        ],
-      ),
-      content: Container(
-        constraints: BoxConstraints(
-          minWidth: size.width * .5,
-          maxWidth: size.width * .5,
-          minHeight: size.height * .5,
-          maxHeight: size.height * .8,
+            const Spacer(),
+            CloseButtonWidget(
+              onPressed: widget.onCancel,
+            ),
+          ],
         ),
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.only(right: 14),
-          child: Column(
+        Expanded(
+          child: Row(
             children: [
-              Container(
-                constraints: BoxConstraints(
-                  minHeight: size.height * .3,
-                  maxHeight: size.height * .5,
-                ),
-                child: PlutoGridWidget(
-                  refreshWidgetBuilder: (context, refreshWidget) =>
-                      _controller.refreshMethod = refreshWidget,
-                  columns: colunas,
-                  items: _controller.printLocals,
+              Expanded(
+                child: Container(
+                  constraints: BoxConstraints(
+                    minWidth: size.width * .5,
+                    maxWidth: size.width * .5,
+                    minHeight: size.height * .5,
+                    maxHeight: size.height * .8,
+                  ),
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.only(right: 14),
+                    child: Column(
+                      children: [
+                        Container(
+                          constraints: BoxConstraints(
+                            minHeight: size.height * .3,
+                            maxHeight: size.height * .5,
+                          ),
+                          child: PlutoGridWidget(
+                            refreshWidgetBuilder: (context, refreshWidget) =>
+                                _controller.refreshMethod = refreshWidget,
+                            columns: colunas,
+                            items: _controller.printLocals,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             ],
           ),
         ),
-      ),
-      actions: [
         Row(
           children: [
-            CancelButtonUnfilledWidget(onPressed: Navigator.of(context).pop),
+            CancelButtonUnfilledWidget(onPressed: widget.onCancel),
             const Spacer(),
-            PrintButtonWidget(onPressed: () => _controller.print(context)),
+            PrintButtonWidget(
+              onPressed: () => _controller.print(context, widget.onPrinted),
+            ),
           ],
         ),
       ],

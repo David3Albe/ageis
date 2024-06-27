@@ -15,14 +15,14 @@ class MotivoRemoverReporItemPageFrmCubit
           ),
         );
 
-  void save(MotivoRemoverReporItemModel motivoRemoverReporItem) async {
+  void save(MotivoRemoverReporItemModel motivoRemoverReporItem,void Function(String) onSaved) async {
     try {
       (
         String message,
         MotivoRemoverReporItemModel motivoRemoverReporItem
       )? result = await service.save(motivoRemoverReporItem);
       if (result == null) return;
-
+      onSaved(result.$1);
       emit(
         MotivoRemoverReporItemPageFrmState(
           message: result.$1,

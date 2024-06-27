@@ -12,12 +12,15 @@ class RegistroServicoPageFrmCubit extends Cubit<RegistroServicoPageFrmState> {
           RegistroServicoPageFrmState(registroServico: registroServicoModel),
         );
 
-  void save(RegistroServicoModel registroServico) async {
+  void save(
+    RegistroServicoModel registroServico,
+    void Function(String) onSaved,
+  ) async {
     try {
       (String message, RegistroServicoModel registroServico)? result =
           await service.save(registroServico);
       if (result == null) return;
-
+      onSaved(result.$1);
       emit(
         RegistroServicoPageFrmState(
           message: result.$1,

@@ -10,11 +10,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class TipoDocumentoPage extends StatefulWidget {
-  TipoDocumentoPage({super.key});
+  const TipoDocumentoPage({super.key});
 
   @override
   State<TipoDocumentoPage> createState() => _TipoDocumentoPageState();
@@ -89,30 +90,43 @@ class _TipoDocumentoPageState extends State<TipoDocumentoPage> {
     );
   }
 
-  void openModal(BuildContext context, TipoDocumentoModel tipoDocumento) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: TipoDocumentoPageFrm(
-            tipoDocumento: tipoDocumento,
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadTipoDocumento();
-    });
+  Future openModal(
+    BuildContext context,
+    TipoDocumentoModel tipoDocumento,
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      theme: Theme.of(context),
+      title: 'Cadastro/Edição Tipo de Documento',
+      widget: TipoDocumentoPageFrm(
+        tipoDocumento: tipoDocumento,
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+      ),
+    );
   }
 
-  void delete(BuildContext context, TipoDocumentoModel tipoDocumento) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção do Tipo de Documento\n${tipoDocumento.cod} - ${tipoDocumento.descricao}',
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadTipoDocumento();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
+  }
+
+  void delete(BuildContext context, TipoDocumentoModel tipoDocumento) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção do Tipo de Documento\n${tipoDocumento.cod} - ${tipoDocumento.descricao}',
+      onConfirm: () => onConfirmDelete(tipoDocumento),
     );
-    if (confirmacao) bloc.delete(tipoDocumento);
+  }
+
+  void onConfirmDelete(TipoDocumentoModel tipoDocumento) {
+    bloc.delete(tipoDocumento);
   }
 
   void deleted(TipoDocumentoPageState state) {

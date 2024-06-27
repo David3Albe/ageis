@@ -25,12 +25,13 @@ import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/cores/cores.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
 class ConsultaManutencaoPage extends StatefulWidget {
-  ConsultaManutencaoPage({super.key});
+  const ConsultaManutencaoPage({super.key});
 
   @override
   State<ConsultaManutencaoPage> createState() => _ConsultaManutencaoPageState();
@@ -244,233 +245,228 @@ class _ConsultaManutencaoPageState extends State<ConsultaManutencaoPage> {
   void onError(ConsultaManutencaoPageState state) =>
       ErrorUtils.showErrorDialog(context, [state.error]);
 
-  void openModal(BuildContext context) {
-    showDialog<bool>(
-      barrierDismissible: false,
+  Future openModal(BuildContext context) async {
+    bool? confirm = await showDialog<bool>(
       context: context,
-      builder: (BuildContext context) {
-        return FilterDialogWidget(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    Expanded(
-                      child: DatePickerWidget(
-                        placeholder: 'Data Inicio',
-                        onDateSelected: (value) => filter.startDate = value,
-                        initialValue: filter.startDate,
-                      ),
+      builder: (context) => FilterDialogWidget(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: DatePickerWidget(
+                      placeholder: 'Data Inicio',
+                      onDateSelected: (value) => filter.startDate = value,
+                      initialValue: filter.startDate,
                     ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 40),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 40),
+                  ),
+                  Expanded(
+                    child: TimePickerWidget(
+                      placeholder: 'Hora Início',
+                      initialValue: filter.startTime == null
+                          ? null
+                          : TimeOfDay(
+                              hour: filter.startTime!.hour,
+                              minute: filter.startTime!.minute,
+                            ),
+                      onTimeSelected: (selectedTime) {
+                        if (selectedTime == null) {
+                          filter.startTime = null;
+                          return;
+                        }
+                        filter.startTime = DateTime(
+                          DateTime.now().year,
+                          DateTime.now().month,
+                          DateTime.now().day,
+                          selectedTime.hour,
+                          selectedTime.minute,
+                        );
+                      },
                     ),
-                    Expanded(
-                      child: TimePickerWidget(
-                        placeholder: 'Hora Início',
-                        initialValue: filter.startTime == null
-                            ? null
-                            : TimeOfDay(
-                                hour: filter.startTime!.hour,
-                                minute: filter.startTime!.minute,
-                              ),
-                        onTimeSelected: (selectedTime) {
-                          if (selectedTime == null) {
-                            filter.startTime = null;
-                            return;
-                          }
-                          filter.startTime = DateTime(
-                            DateTime.now().year,
-                            DateTime.now().month,
-                            DateTime.now().day,
-                            selectedTime.hour,
-                            selectedTime.minute,
+                  ),
+                  const Spacer(),
+                ],
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              Row(
+                children: [
+                  Expanded(
+                    child: DatePickerWidget(
+                      readOnly: filter.apenasSemTermino == true,
+                      setReadonlyBuilder: (context, setReadonlyBuilder) =>
+                          setReadonlyDataTermino = setReadonlyBuilder,
+                      placeholder: 'Data Término',
+                      onDateSelected: (value) => filter.finalDate = value,
+                      initialValue: filter.finalDate,
+                    ),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 40),
+                  ),
+                  Expanded(
+                    child: TimePickerWidget(
+                      setReadonlyBuilder: (context, setReadonlyBuilder) =>
+                          setReadonlyHoraTermino = setReadonlyBuilder,
+                      placeholder: 'Hora Fim',
+                      initialValue: filter.finalTime == null
+                          ? null
+                          : TimeOfDay(
+                              hour: filter.finalTime!.hour,
+                              minute: filter.finalTime!.minute,
+                            ),
+                      onTimeSelected: (selectedTime) {
+                        if (selectedTime == null) {
+                          filter.finalTime = null;
+                          return;
+                        }
+                        filter.finalTime = DateTime(
+                          DateTime.now().year,
+                          DateTime.now().month,
+                          DateTime.now().day,
+                          selectedTime.hour,
+                          selectedTime.minute,
+                        );
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 16, top: 6),
+                      child: CustomCheckboxWidget(
+                        checked: filter.apenasSemTermino,
+                        onClick: (value) {
+                          filter.apenasSemTermino = value;
+                          setReadonlyDataTermino(
+                            filter.apenasSemTermino == true,
+                            false,
+                          );
+                          setReadonlyHoraTermino(
+                            filter.apenasSemTermino == true,
                           );
                         },
+                        text: 'Apenas sem término',
                       ),
                     ),
-                    const Spacer(),
-                  ],
-                ),
-                const Padding(padding: EdgeInsets.only(top: 2)),
-                Row(
-                  children: [
-                    Expanded(
-                      child: DatePickerWidget(
-                        readOnly: filter.apenasSemTermino == true,
-                        setReadonlyBuilder: (context, setReadonlyBuilder) =>
-                            setReadonlyDataTermino = setReadonlyBuilder,
-                        placeholder: 'Data Término',
-                        onDateSelected: (value) => filter.finalDate = value,
-                        initialValue: filter.finalDate,
-                      ),
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.only(left: 40),
-                    ),
-                    Expanded(
-                      child: TimePickerWidget(
-                        setReadonlyBuilder: (context, setReadonlyBuilder) =>
-                            setReadonlyHoraTermino = setReadonlyBuilder,
-                        placeholder: 'Hora Fim',
-                        initialValue: filter.finalTime == null
-                            ? null
-                            : TimeOfDay(
-                                hour: filter.finalTime!.hour,
-                                minute: filter.finalTime!.minute,
-                              ),
-                        onTimeSelected: (selectedTime) {
-                          if (selectedTime == null) {
-                            filter.finalTime = null;
-                            return;
-                          }
-                          filter.finalTime = DateTime(
-                            DateTime.now().year,
-                            DateTime.now().month,
-                            DateTime.now().day,
-                            selectedTime.hour,
-                            selectedTime.minute,
-                          );
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.only(left: 16, top: 6),
-                        child: CustomCheckboxWidget(
-                          checked: filter.apenasSemTermino,
-                          onClick: (value) {
-                            filter.apenasSemTermino = value;
-                            setReadonlyDataTermino(
-                              filter.apenasSemTermino == true,
-                              false,
-                            );
-                            setReadonlyHoraTermino(
-                              filter.apenasSemTermino == true,
-                            );
-                          },
-                          text: 'Apenas sem término',
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                const Padding(padding: EdgeInsets.only(top: 2)),
-                BlocBuilder<EquipamentoCubit, EquipamentoState>(
-                  bloc: equipamentoBloc,
-                  builder: (context, equipamentoState) {
-                    if (equipamentoState.loading) {
-                      return const LoadingWidget();
-                    }
-                    List<EquipamentoModel> equipamentos = equipamentoState.objs;
-                    equipamentos.sort(
-                      (a, b) => a.nome!.compareTo(b.nome!),
+                  ),
+                ],
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              BlocBuilder<EquipamentoCubit, EquipamentoState>(
+                bloc: equipamentoBloc,
+                builder: (context, equipamentoState) {
+                  if (equipamentoState.loading) {
+                    return const LoadingWidget();
+                  }
+                  List<EquipamentoModel> equipamentos = equipamentoState.objs;
+                  equipamentos.sort(
+                    (a, b) => a.nome!.compareTo(b.nome!),
+                  );
+                  EquipamentoModel? equipamento = equipamentos
+                      .where(
+                        (element) => element.cod == filter.codEquipamento,
+                      )
+                      .firstOrNull;
+                  return DropDownSearchWidget(
+                    textFunction: (equipamento) =>
+                        equipamento.EquipamentoNomeText(),
+                    initialValue: equipamento,
+                    sourceList: equipamentos
+                        .where((element) => element.ativo == true)
+                        .toList(),
+                    onChanged: (value) => filter.codEquipamento = value?.cod,
+                    placeholder: 'Equipamento',
+                  );
+                },
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              BlocBuilder<ServicoTipoCubit, ServicoTipoState>(
+                bloc: servicoTipoBloc,
+                builder: (context, state) {
+                  List<ServicoTipoModel> servicosTipos = state.tiposServico;
+
+                  servicosTipos.sort(
+                    (a, b) => a.nome!.compareTo(b.nome!),
+                  );
+                  ServicoTipoModel? servicoTipo = servicosTipos
+                      .where(
+                        (element) => element.cod == filter.codServicosTipo,
+                      )
+                      .firstOrNull;
+                  return DropDownSearchWidget<ServicoTipoModel>(
+                    textFunction: (servicoTipo) =>
+                        servicoTipo.ServicoTipoNomeText(),
+                    initialValue: servicoTipo,
+                    sourceList: servicosTipos
+                        .where((element) => element.ativo == true)
+                        .toList(),
+                    onChanged: (value) => filter.codServicosTipo = value?.cod,
+                    placeholder: 'Tipo de Serviço',
+                  );
+                },
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              BlocBuilder<PecaCubit, PecaState>(
+                bloc: pecaBloc,
+                builder: (context, state) {
+                  if (state.loading == true) {
+                    return const Center(
+                      child: LoadingWidget(),
                     );
-                    EquipamentoModel? equipamento = equipamentos
+                  }
+                  List<PecaModel> pecas = state.pecas;
+                  pecas.sort(
+                    (a, b) => a.peca!.compareTo(b.peca!),
+                  );
+                  PecaModel? peca = pecas
+                      .where(
+                        (element) => element.cod == filter.codPeca,
+                      )
+                      .firstOrNull;
+                  return DropDownSearchWidget<PecaModel>(
+                    textFunction: (peca) => peca.PecaNomeText(),
+                    initialValue: peca,
+                    sourceList: pecas,
+                    onChanged: (value) => filter.codPeca = value?.cod,
+                    placeholder: 'Peça',
+                  );
+                },
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              TextFieldStringWidget(
+                placeholder: 'Num. Nf',
+                onChanged: (value) => filter.numNF = value,
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              TextFieldStringWidget(
+                placeholder: 'Num. Série',
+                onChanged: (value) => filter.numSerie = value,
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              Builder(
+                builder: (context) {
+                  return DropDownSearchWidget<RegistroServicoResultOption>(
+                    sourceList: RegistroServicoResultOption.resultOptions,
+                    initialValue: RegistroServicoResultOption.resultOptions
                         .where(
                           (element) => element.cod == filter.codEquipamento,
                         )
-                        .firstOrNull;
-                    return DropDownSearchWidget(
-                      textFunction: (equipamento) =>
-                          equipamento.EquipamentoNomeText(),
-                      initialValue: equipamento,
-                      sourceList: equipamentos
-                          .where((element) => element.ativo == true)
-                          .toList(),
-                      onChanged: (value) => filter.codEquipamento = value?.cod,
-                      placeholder: 'Equipamento',
-                    );
-                  },
-                ),
-                const Padding(padding: EdgeInsets.only(top: 2)),
-                BlocBuilder<ServicoTipoCubit, ServicoTipoState>(
-                  bloc: servicoTipoBloc,
-                  builder: (context, state) {
-                    List<ServicoTipoModel> servicosTipos = state.tiposServico;
-
-                    servicosTipos.sort(
-                      (a, b) => a.nome!.compareTo(b.nome!),
-                    );
-                    ServicoTipoModel? servicoTipo = servicosTipos
-                        .where(
-                          (element) => element.cod == filter.codServicosTipo,
-                        )
-                        .firstOrNull;
-                    return DropDownSearchWidget<ServicoTipoModel>(
-                      textFunction: (servicoTipo) =>
-                          servicoTipo.ServicoTipoNomeText(),
-                      initialValue: servicoTipo,
-                      sourceList: servicosTipos
-                          .where((element) => element.ativo == true)
-                          .toList(),
-                      onChanged: (value) => filter.codServicosTipo = value?.cod,
-                      placeholder: 'Tipo de Serviço',
-                    );
-                  },
-                ),
-                const Padding(padding: EdgeInsets.only(top: 2)),
-                BlocBuilder<PecaCubit, PecaState>(
-                  bloc: pecaBloc,
-                  builder: (context, state) {
-                    if (state.loading == true) {
-                      return const Center(
-                        child: LoadingWidget(),
-                      );
-                    }
-                    List<PecaModel> pecas = state.pecas;
-                    pecas.sort(
-                      (a, b) => a.peca!.compareTo(b.peca!),
-                    );
-                    PecaModel? peca = pecas
-                        .where(
-                          (element) => element.cod == filter.codPeca,
-                        )
-                        .firstOrNull;
-                    return DropDownSearchWidget<PecaModel>(
-                      textFunction: (peca) => peca.PecaNomeText(),
-                      initialValue: peca,
-                      sourceList: pecas,
-                      onChanged: (value) => filter.codPeca = value?.cod,
-                      placeholder: 'Peça',
-                    );
-                  },
-                ),
-                const Padding(padding: EdgeInsets.only(top: 2)),
-                TextFieldStringWidget(
-                  placeholder: 'Num. Nf',
-                  onChanged: (value) => filter.numNF = value,
-                ),
-                const Padding(padding: EdgeInsets.only(top: 2)),
-                TextFieldStringWidget(
-                  placeholder: 'Num. Série',
-                  onChanged: (value) => filter.numSerie = value,
-                ),
-                const Padding(padding: EdgeInsets.only(top: 2)),
-                Builder(
-                  builder: (context) {
-                    return DropDownSearchWidget<RegistroServicoResultOption>(
-                      sourceList: RegistroServicoResultOption.resultOptions,
-                      initialValue: RegistroServicoResultOption.resultOptions
-                          .where(
-                            (element) => element.cod == filter.codEquipamento,
-                          )
-                          .firstOrNull,
-                      placeholder: 'Resultado',
-                      onChanged: (value) => filter.codResultado = value?.cod,
-                    );
-                  },
-                ),
-              ],
-            ),
+                        .firstOrNull,
+                    placeholder: 'Resultado',
+                    onChanged: (value) => filter.codResultado = value?.cod,
+                  );
+                },
+              ),
+            ],
           ),
-        );
-      },
-    ).then((result) {
-      if (result == true) {
-        bloc.loadManutencao(filter);
-      }
-    });
+        ),
+      ),
+    );
+    if (confirm != true) return;
+    bloc.loadManutencao(filter);
   }
 
   Future<EquipamentoManutencaoModel?> getFilter(int cod) async {
@@ -481,7 +477,10 @@ class _ConsultaManutencaoPageState extends State<ConsultaManutencaoPage> {
     );
   }
 
-  Future<void> openModalRedirect(BuildContext context, int cod) async {
+  Future openModalRedirect(
+    BuildContext context,
+    int cod,
+  ) async {
     LoadingController loading = LoadingController(context: context);
 
     EquipamentoManutencaoModel? manutencao;
@@ -492,17 +491,25 @@ class _ConsultaManutencaoPageState extends State<ConsultaManutencaoPage> {
       return;
     }
     loading.close(context, mounted);
-
-    await showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return EquipamentoManutencaoPageFrm(
-          equipamentoCubit: equipamentoBloc,
-          equipamentoManutencao: manutencao!,
-        );
-      },
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Manutenção',
+      widget: EquipamentoManutencaoPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        equipamentoCubit: equipamentoBloc,
+        equipamentoManutencao: manutencao,
+      ),
     );
+  }
+
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void notFoundError() {

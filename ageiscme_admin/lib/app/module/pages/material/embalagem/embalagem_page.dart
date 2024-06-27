@@ -13,11 +13,12 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class EmbalagemPage extends StatefulWidget {
-  EmbalagemPage({super.key});
+  const EmbalagemPage({super.key});
 
   @override
   State<EmbalagemPage> createState() => _EmbalagemPageState();
@@ -132,30 +133,42 @@ class _EmbalagemPageState extends State<EmbalagemPage> {
     );
   }
 
-  void openModal(BuildContext context, EmbalagemModel embalagem) {
-    showDialog<(bool, String)>(
-      barrierDismissible: false,
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          content: EmbalagemPageFrm(
-            embalagem: embalagem,
-          ),
-        );
-      },
-    ).then((result) {
-      if (result == null || !result.$1) return;
-      ToastUtils.showCustomToastSucess(context, result.$2);
-      bloc.loadEmbalagem();
-    });
+  Future openModal(
+    BuildContext context,
+    EmbalagemModel embalagem,
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Embalagem',
+      widget: EmbalagemPageFrm(
+        onCancel: () => onCancel(chave),
+        onSaved: (str) => onSaved(str, chave),
+        embalagem: embalagem,
+      ),
+    );
   }
 
-  void delete(BuildContext context, EmbalagemModel embalagem) async {
-    bool confirmacao = await ConfirmDialogUtils.showConfirmAlertDialog(
-      context,
-      'Confirma a remoção da Embalagem\n${embalagem.cod} - ${embalagem.nome}',
+  void onSaved(String message, int chave) {
+    WindowsHelper.RemoverWidget(chave);
+    ToastUtils.showCustomToastSucess(context, message);
+    bloc.loadEmbalagem();
+  }
+
+  void onCancel(int chave) {
+    WindowsHelper.RemoverWidget(chave);
+  }
+
+  void delete(BuildContext context, EmbalagemModel embalagem) {
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message:
+          'Confirma a remoção da Embalagem\n${embalagem.cod} - ${embalagem.nome}',
+      onConfirm: () => confirmDelete(embalagem),
     );
-    if (confirmacao) bloc.delete(embalagem);
+  }
+
+  void confirmDelete(EmbalagemModel embalagem) async {
+    bloc.delete(embalagem);
   }
 
   void deleted(EmbalagemPageState state) {
