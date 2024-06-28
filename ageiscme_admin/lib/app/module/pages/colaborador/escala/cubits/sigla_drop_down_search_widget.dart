@@ -23,7 +23,6 @@ class _SiglaDropDownSearchWidgetState extends State<SiglaDropDownSearchWidget> {
   Widget build(BuildContext context) {
     return DropdownSearch<SiglaShortResponseDTO>(
       onBeforeChange: (prevItem, nextItem) async {
-        print(nextItem);
         if (nextItem?.cod == 0) {
           setState(() {
             widget.renderContext.cell.value = null;

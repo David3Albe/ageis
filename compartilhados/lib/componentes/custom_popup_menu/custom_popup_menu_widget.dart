@@ -3,8 +3,12 @@ import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup
 import 'package:flutter/material.dart';
 
 class CustomPopupMenuWidget extends StatelessWidget {
-  CustomPopupMenuWidget({required this.items});
+  CustomPopupMenuWidget({
+    required this.items,
+    this.tooltip = 'Ações extras',
+  });
   final List<CustomPopupItemModel> items;
+  final String tooltip;
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +16,7 @@ class CustomPopupMenuWidget extends StatelessWidget {
     List<PopupMenuItem> menuItems =
         controller.convertModelToItems(items, context);
     return PopupMenuButton(
-      tooltip: 'Ações extras',
+      tooltip: tooltip,
       itemBuilder: (ctx) => menuItems,
     );
   }

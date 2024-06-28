@@ -150,7 +150,7 @@ class _DepositoInsumoPageFrmState extends State<DepositoInsumoPageFrm> {
                         locaisState.locaisInstituicoes;
 
                     locaisInstituicao.sort(
-                      (a, b) => a.nome.compareTo(b.nome),
+                      (a, b) => (a.nome ?? '').compareTo(b.nome ?? ''),
                     );
                     LocalInstituicaoModel? local = locaisInstituicao
                         .where(

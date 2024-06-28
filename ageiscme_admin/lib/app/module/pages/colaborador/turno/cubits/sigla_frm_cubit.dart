@@ -87,7 +87,6 @@ class TurnoFrmCubit extends Cubit<TurnoFrmState> {
     if (result == null) return;
     onSaved();
     ToastUtils.showCustomToastSucess(context, result.$1);
-    Navigator.of(context).pop(true);
   }
 
   void _setDTO() {

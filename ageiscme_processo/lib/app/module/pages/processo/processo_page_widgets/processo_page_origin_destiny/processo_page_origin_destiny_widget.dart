@@ -47,7 +47,7 @@ class ProcessoPageOriginDestinyWidget extends StatelessWidget {
                     ],
                   ),
                   Text(
-                    local == null ? ' ' : local.nome,
+                    local == null ? ' ' : local.nome!,
                     style: Fontes.getSegoe(
                       fontSize: 20 * scale * escalaFonte,
                       cor: Cores.CorTextCards,

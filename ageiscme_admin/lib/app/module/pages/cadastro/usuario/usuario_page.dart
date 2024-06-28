@@ -207,11 +207,10 @@ class _UsuarioPageState extends State<UsuarioPage> {
 
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
-      theme: Theme.of(context),
       title: 'Cadastro/Edição de Usuários',
       widget: UsuarioPageFrm(
         onCancel: () => onCancel(chave),
-        onSaved: (str) => onSaved(str, chave),
+        onSaved: (str) => onSaved(str, chave, context),
         usuario: usuario,
       ),
     );
@@ -221,12 +220,11 @@ class _UsuarioPageState extends State<UsuarioPage> {
     WindowsHelper.RemoverWidget(chave);
   }
 
-  Future onSaved(String message, int chave) async {
+  Future onSaved(String message, int chave, BuildContext context) async {
     WindowsHelper.RemoverWidget(chave);
     UsuarioCubitFilter filterCubit = context.read<UsuarioCubitFilter>();
     ToastUtils.showCustomToastSucess(context, message);
     UsuarioPageCubit userCubit = context.read<UsuarioPageCubit>();
-    filterCubit = context.read<UsuarioCubitFilter>();
     UsuarioFilter dto = filterCubit.state;
     await userCubit.loadFilter(dto);
   }
@@ -236,11 +234,11 @@ class _UsuarioPageState extends State<UsuarioPage> {
       context: context,
       message:
           'Confirma a remoção do  Usuário\n${usuario.cod} - ${usuario.nome}',
-      onConfirm: () => onConfirmDelete(usuario),
+      onConfirm: () => onConfirmDelete(usuario, context),
     );
   }
 
-  void onConfirmDelete(UsuarioModel usuario) {
+  void onConfirmDelete(UsuarioModel usuario, BuildContext context) {
     bloc.delete(context, usuario);
   }
 }

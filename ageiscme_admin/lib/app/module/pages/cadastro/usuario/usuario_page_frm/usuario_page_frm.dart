@@ -213,13 +213,8 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return BlocConsumer<UsuarioPageFrmCubit, UsuarioPageFrmState>(
+    return BlocBuilder<UsuarioPageFrmCubit, UsuarioPageFrmState>(
       bloc: cubit,
-      listener: (context, state) {
-        if (state.saved) {
-          Navigator.of(context).pop((state.saved, state.message));
-        }
-      },
       builder: (context, state) {
         return Column(
           children: [

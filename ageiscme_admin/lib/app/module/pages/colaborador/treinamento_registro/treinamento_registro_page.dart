@@ -181,14 +181,14 @@ class _TreinamentoRegistroPageState extends State<TreinamentoRegistroPage> {
       title: 'Cadastro/Edição Registro de Treinamento',
       widget: TreinamentoRegistroPageFrm(
         onCancel: () => onCancel(chave),
-        onSaved: (str) => onSaved(str, chave),
+        onSaved: (str) => onSaved(str, chave, context),
         usuarioCubit: usuarioCubit,
         treinamentoRegistro: treinamento,
       ),
     );
   }
 
-  Future onSaved(String message, int chave) async {
+  Future onSaved(String message, int chave, BuildContext context) async {
     WindowsHelper.RemoverWidget(chave);
     ToastUtils.showCustomToastSucess(context, message);
     TreinamentoRegistroCubitFilter filterCubit =

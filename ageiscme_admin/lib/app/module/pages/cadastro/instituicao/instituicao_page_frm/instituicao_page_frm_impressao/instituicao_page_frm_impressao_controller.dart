@@ -20,7 +20,7 @@ class InstituicaoPageFrmImpressaoController {
     printLocals = locais
         .map(
           (local) => CompanyLocalsPrintLocalDTO(
-            name: local.nome,
+            name: local.nome ?? '',
             tagId: local.codBarra!,
             selected: false,
           ),

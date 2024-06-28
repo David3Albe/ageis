@@ -38,7 +38,7 @@ import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/fontes/fontes.dart';
-import 'package:compartilhados/query_dialog/query_dialog_widget.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -605,19 +605,19 @@ class _KitPageFrmState extends State<KitPageFrm> {
     await _carregarItensKit();
   }
 
-  Future _detalharItem(int? codItem) async {
-    await showDialog<bool>(
-      barrierDismissible: false,
-      context: context,
-      barrierColor: Colors.white,
-      builder: (BuildContext context) {
-        return QueryDialogWidget(
-          child: ItemPage(
-            frmType: ItemPageFrmtype.Items,
-            codItem: codItem,
-          ),
-        );
-      },
+  Future _detalharItem(
+    int? codItem,
+  ) async {
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title: 'Cadastro/Edição Item - Kit ${kit.descritor?.descricao} ',
+      widget: ItemPage(
+        detailModalName:
+            'Cadastro/Edição Item - Kit ${kit.descritor?.descricao}',
+        frmType: ItemPageFrmtype.Items,
+        afterDetail: () => WindowsHelper.RemoverWidget(chave),
+        codItem: codItem,
+      ),
     );
   }
 

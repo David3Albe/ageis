@@ -5,6 +5,11 @@ import 'package:compartilhados/icones/icones.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+typedef SetReadonlyBuilder = void Function(
+  BuildContext context,
+  Function(bool) setReadonly,
+);
+
 class TextFieldNumberFloatWidget extends StatefulWidget {
   TextFieldNumberFloatWidget({
     required this.placeholder,
@@ -12,6 +17,7 @@ class TextFieldNumberFloatWidget extends StatefulWidget {
     this.onChanged,
     this.readOnly = false,
     this.negative = false,
+    this.setReadonlyBuilder,
   });
 
   final String placeholder;
@@ -19,6 +25,7 @@ class TextFieldNumberFloatWidget extends StatefulWidget {
   final bool password;
   final List<String Function(String str)> validators = [];
   final TextEditingController _controller = TextEditingController();
+  final SetReadonlyBuilder? setReadonlyBuilder;
   final GlobalKey<_TextFieldNumberFloatWidgetState> key =
       GlobalKey<_TextFieldNumberFloatWidgetState>();
   final void Function(String str)? onChanged;
@@ -37,6 +44,7 @@ class TextFieldNumberFloatWidget extends StatefulWidget {
       _TextFieldNumberFloatWidgetState(
         key: key,
         onChanged: onChanged,
+        readonly: readOnly,
       );
 }
 
@@ -48,11 +56,26 @@ class _TextFieldNumberFloatWidgetState
   String errorText = '';
   TextEditingController controller = TextEditingController();
   final void Function(String str)? onChanged;
+  bool readonly;
 
-  _TextFieldNumberFloatWidgetState({required Key key, this.onChanged});
+  _TextFieldNumberFloatWidgetState({
+    required Key key,
+    required this.readonly,
+    this.onChanged,
+  });
+
+  void setReadonly(bool readonly) {
+    setState(() {
+      this.readonly = readonly;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    widget.setReadonlyBuilder?.call(
+      context,
+      setReadonly,
+    );
     String negative = widget.negative ? '-' : '';
     String expressao = '[0-9,.$negative]';
     RegExp regex = RegExp(expressao);
@@ -122,8 +145,8 @@ class _TextFieldNumberFloatWidgetState
                   )
                 : null,
           ),
-          readOnly: widget.readOnly,
-          enabled: !widget.readOnly,
+          readOnly: readonly,
+          enabled: !readonly,
         ),
         Visibility(
           visible: errorText.isNotEmpty,

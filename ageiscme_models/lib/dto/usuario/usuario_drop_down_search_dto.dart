@@ -10,6 +10,7 @@ sealed class UsuarioDropDownSearchDTO with _$UsuarioDropDownSearchDTO {
     String? search,
     bool? apenasColaboradores,
     bool? apenasAtivos,
+    List<int>? codigos,
   }) = _UsuarioDropDownSearchDTO;
 
   factory UsuarioDropDownSearchDTO.fromJson(Map<String, Object?> json) =>

@@ -29,6 +29,8 @@ mixin _$UsuarioDropDownSearchDTO {
   set apenasColaboradores(bool? value) => throw _privateConstructorUsedError;
   bool? get apenasAtivos => throw _privateConstructorUsedError;
   set apenasAtivos(bool? value) => throw _privateConstructorUsedError;
+  List<int>? get codigos => throw _privateConstructorUsedError;
+  set codigos(List<int>? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -46,7 +48,8 @@ abstract class $UsuarioDropDownSearchDTOCopyWith<$Res> {
       {int numeroRegistros,
       String? search,
       bool? apenasColaboradores,
-      bool? apenasAtivos});
+      bool? apenasAtivos,
+      List<int>? codigos});
 }
 
 /// @nodoc
@@ -67,6 +70,7 @@ class _$UsuarioDropDownSearchDTOCopyWithImpl<$Res,
     Object? search = freezed,
     Object? apenasColaboradores = freezed,
     Object? apenasAtivos = freezed,
+    Object? codigos = freezed,
   }) {
     return _then(_value.copyWith(
       numeroRegistros: null == numeroRegistros
@@ -85,6 +89,10 @@ class _$UsuarioDropDownSearchDTOCopyWithImpl<$Res,
           ? _value.apenasAtivos
           : apenasAtivos // ignore: cast_nullable_to_non_nullable
               as bool?,
+      codigos: freezed == codigos
+          ? _value.codigos
+          : codigos // ignore: cast_nullable_to_non_nullable
+              as List<int>?,
     ) as $Val);
   }
 }
@@ -102,7 +110,8 @@ abstract class _$$UsuarioDropDownSearchDTOImplCopyWith<$Res>
       {int numeroRegistros,
       String? search,
       bool? apenasColaboradores,
-      bool? apenasAtivos});
+      bool? apenasAtivos,
+      List<int>? codigos});
 }
 
 /// @nodoc
@@ -122,6 +131,7 @@ class __$$UsuarioDropDownSearchDTOImplCopyWithImpl<$Res>
     Object? search = freezed,
     Object? apenasColaboradores = freezed,
     Object? apenasAtivos = freezed,
+    Object? codigos = freezed,
   }) {
     return _then(_$UsuarioDropDownSearchDTOImpl(
       numeroRegistros: null == numeroRegistros
@@ -140,6 +150,10 @@ class __$$UsuarioDropDownSearchDTOImplCopyWithImpl<$Res>
           ? _value.apenasAtivos
           : apenasAtivos // ignore: cast_nullable_to_non_nullable
               as bool?,
+      codigos: freezed == codigos
+          ? _value.codigos
+          : codigos // ignore: cast_nullable_to_non_nullable
+              as List<int>?,
     ));
   }
 }
@@ -151,7 +165,8 @@ class _$UsuarioDropDownSearchDTOImpl implements _UsuarioDropDownSearchDTO {
       {required this.numeroRegistros,
       this.search,
       this.apenasColaboradores,
-      this.apenasAtivos});
+      this.apenasAtivos,
+      this.codigos});
 
   factory _$UsuarioDropDownSearchDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$UsuarioDropDownSearchDTOImplFromJson(json);
@@ -164,10 +179,12 @@ class _$UsuarioDropDownSearchDTOImpl implements _UsuarioDropDownSearchDTO {
   bool? apenasColaboradores;
   @override
   bool? apenasAtivos;
+  @override
+  List<int>? codigos;
 
   @override
   String toString() {
-    return 'UsuarioDropDownSearchDTO(numeroRegistros: $numeroRegistros, search: $search, apenasColaboradores: $apenasColaboradores, apenasAtivos: $apenasAtivos)';
+    return 'UsuarioDropDownSearchDTO(numeroRegistros: $numeroRegistros, search: $search, apenasColaboradores: $apenasColaboradores, apenasAtivos: $apenasAtivos, codigos: $codigos)';
   }
 
   @JsonKey(ignore: true)
@@ -190,7 +207,8 @@ abstract class _UsuarioDropDownSearchDTO implements UsuarioDropDownSearchDTO {
       {required int numeroRegistros,
       String? search,
       bool? apenasColaboradores,
-      bool? apenasAtivos}) = _$UsuarioDropDownSearchDTOImpl;
+      bool? apenasAtivos,
+      List<int>? codigos}) = _$UsuarioDropDownSearchDTOImpl;
 
   factory _UsuarioDropDownSearchDTO.fromJson(Map<String, dynamic> json) =
       _$UsuarioDropDownSearchDTOImpl.fromJson;
@@ -207,6 +225,9 @@ abstract class _UsuarioDropDownSearchDTO implements UsuarioDropDownSearchDTO {
   @override
   bool? get apenasAtivos;
   set apenasAtivos(bool? value);
+  @override
+  List<int>? get codigos;
+  set codigos(List<int>? value);
   @override
   @JsonKey(ignore: true)
   _$$UsuarioDropDownSearchDTOImplCopyWith<_$UsuarioDropDownSearchDTOImpl>

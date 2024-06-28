@@ -160,7 +160,7 @@ class _ArsenalEstoquePageFrmState extends State<ArsenalEstoquePageFrm> {
                             locaisState.locaisInstituicoes;
 
                         locaisInstituicao.sort(
-                          (a, b) => a.nome.compareTo(b.nome),
+                          (a, b) => (a.nome ?? '').compareTo(b.nome ?? ''),
                         );
                         LocalInstituicaoModel? local = locaisInstituicao
                             .where(

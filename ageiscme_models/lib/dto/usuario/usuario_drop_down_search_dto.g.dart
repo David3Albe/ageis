@@ -13,6 +13,9 @@ _$UsuarioDropDownSearchDTOImpl _$$UsuarioDropDownSearchDTOImplFromJson(
       search: json['search'] as String?,
       apenasColaboradores: json['apenasColaboradores'] as bool?,
       apenasAtivos: json['apenasAtivos'] as bool?,
+      codigos: (json['codigos'] as List<dynamic>?)
+          ?.map((e) => (e as num).toInt())
+          .toList(),
     );
 
 Map<String, dynamic> _$$UsuarioDropDownSearchDTOImplToJson(
@@ -22,4 +25,5 @@ Map<String, dynamic> _$$UsuarioDropDownSearchDTOImplToJson(
       'search': instance.search,
       'apenasColaboradores': instance.apenasColaboradores,
       'apenasAtivos': instance.apenasAtivos,
+      'codigos': instance.codigos,
     };

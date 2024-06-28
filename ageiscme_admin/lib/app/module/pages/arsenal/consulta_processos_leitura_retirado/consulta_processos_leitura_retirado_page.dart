@@ -272,7 +272,7 @@ class _ConsultaProcessosLeituraRetiradoPageState
                       locaisState.locaisInstituicoes;
 
                   locaisInstituicoes.sort(
-                    (a, b) => a.nome.compareTo(b.nome),
+                    (a, b) => (a.nome ?? '').compareTo(b.nome ?? ''),
                   );
                   LocalInstituicaoModel? local = locaisInstituicoes
                       .where(
@@ -364,5 +364,4 @@ class _ConsultaProcessosLeituraRetiradoPageState
       ),
     );
   }
-
 }

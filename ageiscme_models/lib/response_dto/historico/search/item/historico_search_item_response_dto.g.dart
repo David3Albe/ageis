@@ -16,6 +16,7 @@ _$HistoricoSearchItemResponseDTOImpl
           termo: json['termo'] as String,
           pk: (json['pk'] as num).toInt(),
           dados: json['dados'] as String,
+          processo: json['processo'] as bool?,
         );
 
 Map<String, dynamic> _$$HistoricoSearchItemResponseDTOImplToJson(
@@ -28,4 +29,5 @@ Map<String, dynamic> _$$HistoricoSearchItemResponseDTOImplToJson(
       'termo': instance.termo,
       'pk': instance.pk,
       'dados': instance.dados,
+      'processo': instance.processo,
     };

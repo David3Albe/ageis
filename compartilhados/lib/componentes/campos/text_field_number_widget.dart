@@ -155,9 +155,9 @@ class _TextFieldNumberWidgetState extends State<TextFieldNumberWidget> {
                     ),
                   )
                 : null,
-            enabled: !widget.readOnly,
+            enabled: !readonly,
           ),
-          readOnly: widget.readOnly,
+          readOnly: readonly,
         ),
         Visibility(
           visible: errorText.isNotEmpty,

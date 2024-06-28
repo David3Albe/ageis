@@ -4,9 +4,12 @@ import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento_manutenc
 import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento_manutencao/equipamento_manutencao_page_state.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento_manutencao/filter/equipamento_manutencao_filter_button_widget.dart';
 import 'package:ageiscme_data/services/equipamento_manutencao/equipamento_manutencao_service.dart';
+import 'package:ageiscme_data/services/usuario/usuario_service.dart';
+import 'package:ageiscme_models/dto/usuario/usuario_drop_down_search_dto.dart';
 import 'package:ageiscme_models/filters/equipamento/equipamento_filter.dart';
 import 'package:ageiscme_models/filters/equipamento_manutencao/equipamento_manutencao_filter.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
@@ -205,6 +208,33 @@ class _EquipamentoManutencaoPageState extends State<EquipamentoManutencaoPage> {
         notFoundError();
         return;
       }
+      List<int> codigos = [];
+      int? usuarioDetectadoPor =
+          int.tryParse(equipamentoMan.detectadoPor ?? '');
+      if (usuarioDetectadoPor != null) {
+        codigos.add(usuarioDetectadoPor);
+      }
+      int? usuarioTecnico = int.tryParse(equipamentoMan.tecnico ?? '');
+      if (usuarioTecnico != null) {
+        codigos.add(usuarioTecnico);
+      }
+      List<UsuarioDropDownSearchResponseDTO> usuarios =
+          (await UsuarioService().getDropDownSearch(
+                UsuarioDropDownSearchDTO(numeroRegistros: 30, codigos: codigos),
+              ))
+                  ?.$2 ??
+              [];
+      equipamentoMan.usuarioDetectadoPor = usuarios
+          .where(
+            (element) => element.cod.toString() == equipamentoMan?.detectadoPor,
+          )
+          .firstOrNull;
+
+      equipamentoMan.usuarioTecnico = usuarios
+          .where(
+            (element) => element.cod.toString() == equipamentoMan?.tecnico,
+          )
+          .firstOrNull;
     }
     loading.close(context, mounted);
     late int chave;

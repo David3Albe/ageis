@@ -177,19 +177,22 @@ class _EscalaPageGridWidgetState extends State<EscalaPageGridWidget> {
     for (PlutoRow row in stateManager.iterateRowAndGroup) {
       TurnoShortResponseDTO? turno = event.row.cells['turno']!.value;
       TurnoShortResponseDTO? turnoRow = row.cells['turno']!.value;
-      if (turnoRow?.descricao != turno?.descricao) {
+      if (turnoRow?.cod != turno?.cod) {
         continue;
       }
 
       UsuarioDropDownSearchResponseDTO? usuario = event.value;
       UsuarioDropDownSearchResponseDTO? usuarioRow =
-          row.cells['usuario']!.value;
-      if (usuario?.cod == usuarioRow?.cod && event != row) {
+          row.cells['usuario']!.value is UsuarioDropDownSearchResponseDTO
+              ? row.cells['usuario']!.value
+              : null;
+      if (usuario?.cod == usuarioRow?.cod && event.row != row) {
         ToastUtils.showCustomToastWarning(
           context,
           'Usuário já está adicionado a esse turno',
         );
         stateManager.removeRows([event.row]);
+        return;
       }
     }
   }

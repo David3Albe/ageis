@@ -27,7 +27,7 @@ class UsuarioPageCubit extends Cubit<UsuarioPageState> {
     if (result == null) return;
     ToastUtils.showCustomToastSucess(
       context,
-      state.message,
+      result.$1,
     );
     UsuarioCubitFilter filterCubit = context.read<UsuarioCubitFilter>();
     UsuarioPageCubit userCubit = context.read<UsuarioPageCubit>();

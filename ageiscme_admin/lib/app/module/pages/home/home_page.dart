@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
 
   Future showOverlayInsumos(int chave) async {
     bool permissao = await AccessUserService.validateUserHasRight(
-      DireitoEnum.PermissaoVisualizacaoPopUp,
+      DireitoEnum.InsumosSaldosConsulta,
     );
     if (!permissao) return;
 
@@ -62,9 +62,11 @@ class _HomePageState extends State<HomePage> {
 
     final Widget widget =
         InsumosPopupPage(cubit: searchCubit, onClose: () => {});
-    Widget? window;
+    CustomDefaultWindowComponent? window;
+    final GlobalKey<CustomDefaultWindowComponentState> key =
+        GlobalKey<CustomDefaultWindowComponentState>();
     window = CustomDefaultWindowComponent(
-      key: UniqueKey(),
+      key: key,
       chave: chave,
       title: 'Insumos expirados e a expirar',
       height: height,
@@ -76,10 +78,19 @@ class _HomePageState extends State<HomePage> {
       setToFirst: WindowsHelper.SetToFirst,
     );
 
-    WindowsHelper.AdicionarOverlayCustomizada(chave: chave, overlay: window);
+    WindowsHelper.AdicionarOverlayCustomizada(
+      key: key,
+      chave: chave,
+      overlay: window,
+      title: 'Insumos expirados e a expirar',
+    );
   }
 
   Future showOverlayRegistrosExpirar(int chave) async {
+    bool permissao = await AccessUserService.validateUserHasRight(
+      DireitoEnum.PermissaoVisualizacaoPopUp,
+    );
+    if (!permissao) return;
     List<RegistrosExpirarSearchResponseDTO> registros =
         await RegistrosExpirarService()
             .searchExpirar(RegistrosExpirarSearchDTO());
@@ -93,8 +104,10 @@ class _HomePageState extends State<HomePage> {
 
     final Widget widget =
         RegistrosPopupPage(cubit: searchCubit, onClose: () => {});
-    Widget window = CustomDefaultWindowComponent(
-      key: UniqueKey(),
+    final GlobalKey<CustomDefaultWindowComponentState> key =
+        GlobalKey<CustomDefaultWindowComponentState>();
+    CustomDefaultWindowComponent window = CustomDefaultWindowComponent(
+      key: key,
       chave: chave,
       remove: WindowsHelper.RemoverWidget,
       setToFirst: WindowsHelper.SetToFirst,
@@ -106,6 +119,11 @@ class _HomePageState extends State<HomePage> {
       child: widget,
     );
 
-    WindowsHelper.AdicionarOverlayCustomizada(chave: chave, overlay: window);
+    WindowsHelper.AdicionarOverlayCustomizada(
+      key: key,
+      chave: chave,
+      overlay: window,
+      title: 'Documentos vencidos e a vencer',
+    );
   }
 }

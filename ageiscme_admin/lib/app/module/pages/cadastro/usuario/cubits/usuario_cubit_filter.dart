@@ -9,6 +9,7 @@ class UsuarioCubitFilter extends Cubit<UsuarioFilter> {
             carregarFoto: false,
             numeroRegistros: 500,
             ordenarPorAtivosPrimeiro: true,
+            ordenarPorCodDecrescente: true,
           ),
         );
 }

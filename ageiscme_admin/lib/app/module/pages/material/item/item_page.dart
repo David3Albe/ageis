@@ -34,11 +34,15 @@ class ItemPage extends StatefulWidget {
   const ItemPage({
     super.key,
     required this.frmType,
+    this.afterDetail,
+    this.detailModalName = 'Cadastro/Edição Item',
     this.codItem,
   });
 
   final ItemPageFrmtype frmType;
   final int? codItem;
+  final void Function()? afterDetail;
+  final String detailModalName;
 
   @override
   State<ItemPage> createState() => _ItemPageState();
@@ -312,25 +316,24 @@ class _ItemPageState extends State<ItemPage> {
     loading.close(context, mounted);
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
-      title: 'Cadastro/Edição Item',
+      title: widget.detailModalName,
       widget: ItemPageFrm(
         onCancel: () => onCancel(chave),
-        onSaved: (str, codItem) => onSaved(str, chave, codItem, itemModel!),
+        onSaved: (codItem) => onSaved(chave, codItem, itemModel!),
         proprietarioCubit: proprietarioCubit,
         item: itemModel,
         frmType: widget.frmType,
       ),
     );
+    if (widget.afterDetail != null) widget.afterDetail!();
   }
 
   Future onSaved(
-    String message,
     int chave,
     int? codItem,
     ItemModel item,
   ) async {
     WindowsHelper.RemoverWidget(chave);
-    ToastUtils.showCustomToastSucess(context, message);
     if (codItem != null) {
       item.tstamp = null;
       await bloc.loadItemFilter(filter);

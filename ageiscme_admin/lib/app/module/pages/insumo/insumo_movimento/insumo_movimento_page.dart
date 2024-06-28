@@ -35,7 +35,27 @@ class _InsumoMovimentoPageState extends State<InsumoMovimentoPage> {
       type: CustomDataColumnType.Number,
       width: 100,
     ),
-    CustomDataColumn(text: 'Cód. Barra', field: 'codBarra'),
+    CustomDataColumn(
+      width: 92,
+      text: 'Operação',
+      field: 'flagEntradaSaida',
+      valueConverter: (value) {
+        switch (value) {
+          case '1':
+            return 'Entrada';
+          case '2':
+            return 'Saída';
+          case '0':
+            return 'Ajuste';
+          default:
+            return 'Não definido';
+        }
+      },
+    ),
+    CustomDataColumn(
+      text: 'Cód. Barra',
+      field: 'codBarra',
+    ),
     CustomDataColumn(
       text: 'Insumo',
       field: 'insumo',

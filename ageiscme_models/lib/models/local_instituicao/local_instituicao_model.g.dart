@@ -9,7 +9,7 @@ part of 'local_instituicao_model.dart';
 _$LocalInstituicaoModelImpl _$$LocalInstituicaoModelImplFromJson(Map json) =>
     _$LocalInstituicaoModelImpl(
       cod: (json['cod'] as num?)?.toInt(),
-      nome: json['nome'] as String,
+      nome: json['nome'] as String?,
       localizacao: json['localizacao'] as String?,
       responsavel: json['responsavel'] as String?,
       contato: json['contato'] as String?,

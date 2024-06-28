@@ -250,8 +250,7 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
                                             if (proprietario
                                                     .proprietariosLocais !=
                                                 null) {
-                                              proprietario
-                                                  .proprietariosLocais!
+                                              proprietario.proprietariosLocais!
                                                   .removeWhere(
                                                 (element) =>
                                                     element.codLocal ==
@@ -275,25 +274,22 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
                                       text: 'Adicionar',
                                       icon: Icons.arrow_back,
                                       onPressed: () {
-                                        if (localInstituicaoAdicionar !=
-                                            null) {
+                                        if (localInstituicaoAdicionar != null) {
                                           setState(() {
                                             if (proprietario
                                                     .proprietariosLocais ==
                                                 null) {
-                                              proprietario
-                                                  .proprietariosLocais = [];
+                                              proprietario.proprietariosLocais =
+                                                  [];
                                             }
                                             ProprietarioLocalModel
                                                 proprietarioLocal =
-                                                ProprietarioLocalModel
-                                                    .empty();
+                                                ProprietarioLocalModel.empty();
                                             proprietarioLocal.codLocal =
-                                                localInstituicaoAdicionar!
-                                                    .cod;
+                                                localInstituicaoAdicionar!.cod;
                                             proprietario.proprietariosLocais!
                                                 .add(proprietarioLocal);
-    
+
                                             localInstituicaoAdicionar = null;
                                           });
                                         } else {
@@ -322,18 +318,17 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
                                         }
                                         List<LocalInstituicaoModel> locais =
                                             locaisState.locaisInstituicoes;
-    
+
                                         List<LocalInstituicaoModel>
                                             locaisAdicionado = [];
-                                        if (proprietario
-                                                .proprietariosLocais !=
+                                        if (proprietario.proprietariosLocais !=
                                             null) {
                                           for (final proprietarioLocal
                                               in proprietario
                                                   .proprietariosLocais!) {
                                             final codLocal =
                                                 proprietarioLocal.codLocal;
-    
+
                                             if (locais.isNotEmpty) {
                                               final proprietarioLocalAdicionado =
                                                   locais
@@ -353,11 +348,12 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
                                             }
                                           }
                                         }
-    
+
                                         locaisAdicionado.sort(
-                                          (a, b) => a.nome.compareTo(b.nome),
+                                          (a, b) => (a.nome ?? '')
+                                              .compareTo(b.nome ?? ''),
                                         );
-    
+
                                         return ListFieldWidget<
                                             LocalInstituicaoModel>(
                                           sourceList: locaisAdicionado,
@@ -370,7 +366,7 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
                                             });
                                           },
                                           itemText: (proprietarioLocal) {
-                                            return proprietarioLocal.nome;
+                                            return proprietarioLocal.nome ?? '';
                                           },
                                         );
                                       },
@@ -387,14 +383,12 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
                                         }
                                         List<LocalInstituicaoModel> locais =
                                             locaisState.locaisInstituicoes;
-    
-                                        if (proprietario
-                                                .proprietariosLocais ==
+
+                                        if (proprietario.proprietariosLocais ==
                                             null) {
-                                          proprietario.proprietariosLocais =
-                                              [];
+                                          proprietario.proprietariosLocais = [];
                                         }
-    
+
                                         List<LocalInstituicaoModel>
                                             locaisDisponiveis = locais
                                                 .where(
@@ -409,11 +403,12 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
                                                   ),
                                                 )
                                                 .toList();
-    
+
                                         locaisDisponiveis.sort(
-                                          (a, b) => a.nome.compareTo(b.nome),
+                                          (a, b) => (a.nome ?? '')
+                                              .compareTo(b.nome ?? ''),
                                         );
-    
+
                                         return ListFieldWidget<
                                             LocalInstituicaoModel>(
                                           sourceList: locaisDisponiveis,
@@ -426,7 +421,7 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
                                             });
                                           },
                                           itemText: (propritarioLocal) {
-                                            return propritarioLocal.nome;
+                                            return propritarioLocal.nome ?? '';
                                           },
                                         );
                                       },
@@ -491,8 +486,7 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
                                                   .removeWhere(
                                                 (element) =>
                                                     element.codEstoque ==
-                                                    arsenalEstoqueRemover!
-                                                        .cod,
+                                                    arsenalEstoqueRemover!.cod,
                                               );
                                             }
                                           });
@@ -525,10 +519,9 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
                                                     .empty();
                                             proprietarioArsenal.codEstoque =
                                                 arsenalEstoqueAdicionar!.cod;
-                                            proprietario
-                                                .proprietariosArsenais!
+                                            proprietario.proprietariosArsenais!
                                                 .add(proprietarioArsenal);
-    
+
                                             arsenalEstoqueAdicionar = null;
                                           });
                                         } else {
@@ -557,7 +550,7 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
                                         }
                                         List<ArsenalEstoqueModel> arsenais =
                                             arsenaisState.arsenaisEstoques;
-    
+
                                         List<ArsenalEstoqueModel>
                                             arsenaisAdicionado = [];
                                         if (proprietario
@@ -567,9 +560,8 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
                                               in proprietario
                                                   .proprietariosArsenais!) {
                                             final codEstoque =
-                                                proprietarioArsenal
-                                                    .codEstoque;
-    
+                                                proprietarioArsenal.codEstoque;
+
                                             if (arsenais.isNotEmpty) {
                                               final proprietarioArsenalAdicionado =
                                                   arsenais
@@ -589,12 +581,11 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
                                             }
                                           }
                                         }
-    
+
                                         arsenaisAdicionado.sort(
-                                          (a, b) =>
-                                              a.nome!.compareTo(b.nome!),
+                                          (a, b) => a.nome!.compareTo(b.nome!),
                                         );
-    
+
                                         return ListFieldWidget<
                                             ArsenalEstoqueModel>(
                                           sourceList: arsenaisAdicionado,
@@ -624,14 +615,14 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
                                         }
                                         List<ArsenalEstoqueModel> arsenais =
                                             arsenaisState.arsenaisEstoques;
-    
+
                                         if (proprietario
                                                 .proprietariosArsenais ==
                                             null) {
                                           proprietario.proprietariosArsenais =
                                               [];
                                         }
-    
+
                                         List<ArsenalEstoqueModel>
                                             arsenaisDisponiveis = arsenais
                                                 .where(
@@ -646,12 +637,11 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
                                                   ),
                                                 )
                                                 .toList();
-    
+
                                         arsenaisDisponiveis.sort(
-                                          (a, b) =>
-                                              a.nome!.compareTo(b.nome!),
+                                          (a, b) => a.nome!.compareTo(b.nome!),
                                         );
-    
+
                                         return ListFieldWidget<
                                             ArsenalEstoqueModel>(
                                           sourceList: arsenaisDisponiveis,

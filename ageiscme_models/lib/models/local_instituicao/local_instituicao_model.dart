@@ -20,7 +20,7 @@ abstract class LocalInstituicaoModel
 
   factory LocalInstituicaoModel({
     required int? cod,
-    required String nome,
+    required String? nome,
     required String? localizacao,
     required String? responsavel,
     required String? contato,
@@ -59,7 +59,7 @@ abstract class LocalInstituicaoModel
         centroCusto: null,
       );
 
-  String GetDropDownText() => nome == null ? '' : nome;
+  String GetDropDownText() => nome == null ? '' : nome!;
 
   List<DropDownFilterModel<LocalInstituicaoModel>> GetDropDownFilters(
           String filter) =>
@@ -67,12 +67,12 @@ abstract class LocalInstituicaoModel
         DropDownFilterModel(
           (object) =>
               object.nome != null &&
-              object.nome.toUpperCase().endsWith(filter.toUpperCase()),
+              object.nome!.toUpperCase().endsWith(filter.toUpperCase()),
         ),
         DropDownFilterModel(
           (object) =>
               object.nome == null ||
-              object.nome.toUpperCase().contains(filter.toUpperCase()),
+              object.nome!.toUpperCase().contains(filter.toUpperCase()),
         ),
       ];
 

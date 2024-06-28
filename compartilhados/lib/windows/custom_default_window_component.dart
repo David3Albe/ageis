@@ -1,12 +1,13 @@
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/cores/cores.dart';
 import 'package:compartilhados/fontes/fontes.dart';
+import 'package:compartilhados/windows/window_extra_actions_widget.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class CustomDefaultWindowComponent extends StatefulWidget {
-  const CustomDefaultWindowComponent({
+  CustomDefaultWindowComponent({
     required this.child,
     required this.title,
     required this.setToLast,
@@ -34,18 +35,37 @@ class CustomDefaultWindowComponent extends StatefulWidget {
 
   @override
   State<CustomDefaultWindowComponent> createState() =>
-      _CustomDefaultWindowComponentState(
+      CustomDefaultWindowComponentState(
         height: height,
         width: width,
       );
 }
 
-class _CustomDefaultWindowComponentState
+class CustomDefaultWindowComponentState
     extends State<CustomDefaultWindowComponent> {
-  _CustomDefaultWindowComponentState({
+  CustomDefaultWindowComponentState({
     required this.width,
     required this.height,
   });
+
+  void setAbsorbing(bool absorbing) {
+    setState(() {
+      this.absorbing = absorbing;
+    });
+  }
+
+  void setWindow({
+    required double width,
+    required double height,
+    required Offset offset,
+  }) {
+    normalizar();
+    setState(() {
+      this.width = width;
+      this.height = height;
+      this.offset = offset;
+    });
+  }
 
   late Offset offset = widget.ofssetBase;
   double scale = 1;
@@ -54,6 +74,7 @@ class _CustomDefaultWindowComponentState
   bool maximizado = false;
   bool maximizadoMetade = false;
   bool minimizado = false;
+  bool absorbing = true;
 
   @override
   void initState() {
@@ -129,14 +150,15 @@ class _CustomDefaultWindowComponentState
         child: Column(
           children: [
             MouseRegion(
-              onEnter: onEnter,
               cursor: maximizado == true || maximizadoMetade
                   ? SystemMouseCursors.basic
                   : SystemMouseCursors.move,
               child: Row(
                 children: [
                   GestureDetector(
+                    onTap: onEnter,
                     onPanUpdate: (details) {
+                      WindowsHelper.SetToLast(widget.chave);
                       setState(() {
                         double newOffsetY = offset.dy + details.delta.dy;
                         if (newOffsetY < -10) {
@@ -161,7 +183,9 @@ class _CustomDefaultWindowComponentState
                           : maximizadoMetade
                               ? getMaximizedMetadeWidth(size) + 30
                               : width + 28,
-                      color: Colors.grey.shade100,
+                      color: absorbing
+                          ? Colors.grey.shade300
+                          : Colors.grey.shade100,
                       child: Row(
                         children: [
                           const Padding(
@@ -172,40 +196,56 @@ class _CustomDefaultWindowComponentState
                             style: Fontes.getRoboto(fontSize: 14),
                           ),
                           const Spacer(),
+                          const Padding(
+                            padding: EdgeInsets.only(right: 8.0),
+                            child: WindowExtraActions(),
+                          ),
                           Padding(
                             padding: const EdgeInsets.only(right: 8.0),
-                            child: IconButton(
-                              onPressed: minimizado ? normalizar : minimizar,
-                              icon: minimizado
-                                  ? const Icon(Icons.splitscreen)
-                                  : const Icon(Icons.minimize),
+                            child: Tooltip(
+                              message: 'Minimizar',
+                              child: IconButton(
+                                onPressed: minimizado ? normalizar : minimizar,
+                                icon: minimizado
+                                    ? const Icon(Icons.splitscreen)
+                                    : const Icon(Icons.minimize),
+                              ),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(right: 8.0),
-                            child: IconButton(
-                              onPressed: maximizado ? normalizar : maximizar,
-                              icon: maximizado
-                                  ? const Icon(Icons.fit_screen)
-                                  : const Icon(Icons.fullscreen),
+                            child: Tooltip(
+                              message: 'Tela cheia',
+                              child: IconButton(
+                                onPressed: maximizado ? normalizar : maximizar,
+                                icon: maximizado
+                                    ? const Icon(Icons.fit_screen)
+                                    : const Icon(Icons.fullscreen),
+                              ),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(right: 8.0),
-                            child: IconButton(
-                              onPressed: maximizadoMetade
-                                  ? normalizar
-                                  : maximizarMetade,
-                              icon: maximizadoMetade
-                                  ? const Icon(Icons.screen_lock_landscape)
-                                  : const Icon(Icons.smart_screen),
+                            child: Tooltip(
+                              message: 'Expandir',
+                              child: IconButton(
+                                onPressed: maximizadoMetade
+                                    ? normalizar
+                                    : maximizarMetade,
+                                icon: maximizadoMetade
+                                    ? const Icon(Icons.screen_lock_landscape)
+                                    : const Icon(Icons.smart_screen),
+                              ),
                             ),
                           ),
                           Padding(
                             padding: const EdgeInsets.only(right: 8.0),
-                            child: IconButton(
-                              onPressed: () => widget.remove(widget.chave),
-                              icon: const Icon(Symbols.close),
+                            child: Tooltip(
+                              message: 'Fechar',
+                              child: IconButton(
+                                onPressed: () => widget.remove(widget.chave),
+                                icon: const Icon(Symbols.close),
+                              ),
                             ),
                           ),
                         ],
@@ -234,34 +274,37 @@ class _CustomDefaultWindowComponentState
                     onPanUpdate: onPanUpdate,
                     padding: const EdgeInsets.only(bottom: 6),
                     widget: MouseRegion(
-                      onEnter: onEnter,
                       cursor: SystemMouseCursors.basic,
                       child: GestureDetector(
                         onPanUpdate: (details) {},
-                        child: Theme(
-                          data: Theme.of(ToastUtils.routerOutletContext!),
-                          child: Material(
-                            elevation: 0,
-                            color: Cores.materialCorPrincipal.shade300,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    height: maximizado || maximizadoMetade
-                                        ? getMaximizedHeight(size)
-                                        : height,
-                                    width: maximizado
-                                        ? getMaximizedWidth(size)
-                                        : maximizadoMetade
-                                            ? getMaximizedMetadeWidth(size)
-                                            : width,
-                                    child: widget.child,
+                        onTap: onEnter,
+                        child: IgnorePointer(
+                          ignoring: absorbing,
+                          child: Theme(
+                            data: Theme.of(ToastUtils.routerOutletContext!),
+                            child: Material(
+                              elevation: 0,
+                              color: Cores.materialCorPrincipal.shade300,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      height: maximizado || maximizadoMetade
+                                          ? getMaximizedHeight(size)
+                                          : height,
+                                      width: maximizado
+                                          ? getMaximizedWidth(size)
+                                          : maximizadoMetade
+                                              ? getMaximizedMetadeWidth(size)
+                                              : width,
+                                      child: widget.child,
+                                    ),
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -283,6 +326,7 @@ class _CustomDefaultWindowComponentState
       maximizadoMetade = false;
       minimizado = false;
     });
+    WindowsHelper.SetToLast(widget.chave);
   }
 
   void maximizarMetade() {
@@ -291,6 +335,7 @@ class _CustomDefaultWindowComponentState
       maximizadoMetade = true;
       minimizado = false;
     });
+    WindowsHelper.SetToLast(widget.chave);
   }
 
   void normalizar() {
@@ -323,8 +368,7 @@ class _CustomDefaultWindowComponentState
     });
   }
 
-  void onEnter(PointerEnterEvent event) {
-    if (maximizado == true || maximizadoMetade) return;
+  void onEnter() {
     widget.setToLast(widget.chave);
   }
 }
@@ -342,7 +386,7 @@ class BorderWindowWidget extends StatefulWidget {
   final void Function(DragUpdateDetails details) onPanUpdate;
   final EdgeInsets padding;
   final MouseCursor cursor;
-  final void Function(PointerEnterEvent) onEnter;
+  final void Function() onEnter;
   @override
   State<BorderWindowWidget> createState() => _BorderWindowWidgetState();
 }
@@ -351,9 +395,9 @@ class _BorderWindowWidgetState extends State<BorderWindowWidget> {
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      onEnter: widget.onEnter,
       cursor: widget.cursor,
       child: GestureDetector(
+        onTap: widget.onEnter,
         onPanUpdate: widget.onPanUpdate,
         child: Container(
           padding: widget.padding,

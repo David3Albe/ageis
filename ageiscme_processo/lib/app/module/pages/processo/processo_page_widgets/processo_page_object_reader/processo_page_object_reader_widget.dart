@@ -125,10 +125,30 @@ class ProcessoPageObjectReaderWidget extends StatelessWidget {
     ItemProcessoModel? item = processo.getItemSelecionado();
     if (item != null) return item.getProprietario(processo);
     KitProcessoModel? kit = processo.getKitLidoOuNull();
-    print(kit?.itens?.map((e) => e.getProprietario(processo)));
-    return kit?.itens
-        ?.where((element) => element.getProprietario(processo) != null)
+    if (kit?.itens == null) return null;
+    Map<int, int> proprietariosVezes = {};
+    int maximoProprietarioVezes = 0;
+    for (ItemProcessoModel item in kit!.itens!) {
+      ProprietarioModel? proprietario = item.getProprietario(processo);
+      if (proprietario == null) continue;
+      if (!proprietariosVezes.containsKey(proprietario.cod)) {
+        proprietariosVezes.addAll({proprietario.cod!: 0});
+      }
+      proprietariosVezes[proprietario.cod!] =
+          proprietariosVezes[proprietario.cod!]! + 1;
+      if (proprietariosVezes[proprietario.cod]! > maximoProprietarioVezes) {
+        maximoProprietarioVezes = proprietariosVezes[proprietario.cod]!;
+      }
+    }
+
+    if (maximoProprietarioVezes == 0) return null;
+    int? codProprietario = proprietariosVezes.entries
+        .where((element) => element.value == maximoProprietarioVezes)
         .firstOrNull
-        ?.getProprietario(processo);
+        ?.key;
+    if (codProprietario == null) return null;
+    return processo.leituraAtual.proprietarios
+        ?.where((element) => element.cod == codProprietario)
+        .firstOrNull;
   }
 }

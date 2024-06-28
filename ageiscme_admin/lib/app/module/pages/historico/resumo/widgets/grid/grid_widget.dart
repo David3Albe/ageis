@@ -6,6 +6,7 @@ import 'package:ageiscme_models/response_dto/historico/search/item/historico_sea
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
+import 'package:compartilhados/cores/cores.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
@@ -35,33 +36,68 @@ class GridWidget extends StatelessWidget {
     );
   }
 
+  static Widget getCustomRenderer(
+    PlutoColumnRendererContext renderContext, {
+    TextAlign? textAlign = TextAlign.start,
+  }) {
+    Color cor = Cores.corTexto;
+    if ((renderContext.row.cells['processo']?.value.toString() ?? '') ==
+        'Sim') {
+      cor = Cores.corTextoVermelho;
+    }
+
+    return Text(
+      renderContext.cell.value.toString(),
+      textAlign: textAlign,
+      style: TextStyle(
+        overflow: TextOverflow.ellipsis,
+        color: cor,
+        fontSize: renderContext.stateManager.style.cellTextStyle.fontSize,
+      ),
+    );
+  }
+
   List<CustomDataColumn> getColunas(BuildContext context) {
     HistoricoSearchResponseDTO? response =
         context.read<SearchCubit>().state.response;
     return [
       CustomDataColumn(
+        customRenderer: getCustomRenderer,
         text: 'Data',
         field: 'data',
         type: CustomDataColumnType.DateTime,
-        width: 135,
+        width: 130,
       ),
       CustomDataColumn(
+        customRenderer: getCustomRenderer,
         text: ' Usuário',
         field: 'codUsuario',
         valueConverter: (value) => response?.usuarios[value]?.nome ?? '',
       ),
       CustomDataColumn(
+        customRenderer: getCustomRenderer,
         text: 'Operação',
         field: 'operacao',
         valueConverter: (value) => value.toString(),
+        width: 135,
       ),
       CustomDataColumn(
+        customRenderer: getCustomRenderer,
         text: 'Termo',
         field: 'termo',
       ),
       CustomDataColumn(
+        customRenderer: getCustomRenderer,
         text: 'Pk',
+        width: 135,
         field: 'pk',
+      ),
+      CustomDataColumn(
+        customRenderer: getCustomRenderer,
+        text: 'Processo',
+        width: 135,
+        field: 'processo',
+        valueConverter: (value) => value == true ? 'Sim' : 'Não',
       ),
     ];
   }

@@ -13,6 +13,16 @@ class HistoricoResumoPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const FilterWidget(),
+        const Padding(
+          padding: const EdgeInsets.only(top: 4.0),
+          child: const Text(
+            'Registros destacados em vermelho são proveniente de atualizações via Processo Leitura',
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.red,
+            ),
+          ),
+        ),
         Expanded(
           child: Row(
             children: [

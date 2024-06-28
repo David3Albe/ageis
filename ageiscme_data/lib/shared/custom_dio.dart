@@ -293,7 +293,7 @@ class CustomDio {
         if (throwed) return null;
         if (!throwed) throw CustomBaseException(result.message);
       }
-      return (result.message, deserializerFunction(resp.data));
+      return (result.message, deserializerFunction(result.data));
     } on Exception catch (ex) {
       (int, bool) throwed = await throwDefaultException(
         ex,

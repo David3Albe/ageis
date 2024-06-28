@@ -14,6 +14,7 @@ sealed class HistoricoSearchItemResponseDTO with _$HistoricoSearchItemResponseDT
        required String termo,
        required int pk,
        required String dados,
+       required bool? processo,
   }) = _HistoricoSearchItemResponseDTO;
 
   factory HistoricoSearchItemResponseDTO.fromJson(Map<String, Object?> json) =>

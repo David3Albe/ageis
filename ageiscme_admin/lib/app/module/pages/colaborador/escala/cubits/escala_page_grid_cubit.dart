@@ -29,7 +29,9 @@ class EscalaPageGridCubit extends Cubit<EscalaPageGridState> {
           ),
         );
 
-  void setStateManager({required PlutoGridStateManager stateManager}) {
+  void setStateManager({
+    required PlutoGridStateManager stateManager,
+  }) {
     emit(
       EscalaPageGridState(
         columns: state.columns,
@@ -58,7 +60,7 @@ class EscalaPageGridCubit extends Cubit<EscalaPageGridState> {
         title: 'Turno',
         field: 'turno',
         frozen: PlutoColumnFrozen.start,
-        width: 140,
+        width: 150,
         readOnly: true,
         type: PlutoColumnType.select(
           enableColumnFilter: true,
@@ -378,6 +380,5 @@ class EscalaPageGridCubit extends Cubit<EscalaPageGridState> {
         siglas: siglas,
       ),
     );
-    print(turno);
   }
 }

@@ -214,7 +214,7 @@ class _ConsultaProcessosLeituraRetiradosDivLocalPageState
                   List<LocalInstituicaoModel> locaisInstituicoes =
                       locaisState.locaisInstituicoes;
                   locaisInstituicoes.sort(
-                    (a, b) => a.nome.compareTo(b.nome),
+                    (a, b) => (a.nome ?? '').compareTo(b.nome ?? ''),
                   );
                   LocalInstituicaoModel? localInstituicao = locaisInstituicoes
                       .where(

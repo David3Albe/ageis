@@ -168,7 +168,7 @@ class _ConsultaProcessosLeituraTamanhoPageState
                       locaisState.locaisInstituicoes;
 
                   locais.sort(
-                    (a, b) => a.nome.compareTo(b.nome),
+                    (a, b) => (a.nome ?? '').compareTo(b.nome ?? ''),
                   );
                   LocalInstituicaoModel? local = locais
                       .where(

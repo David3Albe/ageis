@@ -12,6 +12,7 @@ import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_pop
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_image_model.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_open_doc_model.dart';
 import 'package:compartilhados/componentes/images/image_widget.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/functions/image_helper/image_object_model.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
@@ -232,6 +233,13 @@ class _ImagemPageFrmState extends State<ImagemPageFrm> {
   void salvar() {
     bool identificadorValido = validateIdentificador();
     if (!identificadorValido) return;
+    if (imagem.foto == null || imagem.foto!.isEmpty) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'É necessário anexar uma imagem nas ações extras para salvar',
+      );
+      return;
+    }
     cubit.save(imagem, widget.onSaved);
   }
 }

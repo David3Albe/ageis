@@ -72,7 +72,7 @@ class ItemPageFrm extends StatefulWidget {
   final ItemModel item;
   final ProprietarioCubit proprietarioCubit;
   final ItemPageFrmtype frmType;
-  final void Function(String, int?)? onSaved;
+  final void Function(int?)? onSaved;
   final void Function() onCancel;
 
   @override
@@ -1072,7 +1072,7 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
 
   void onSaved(String message, int chave) {
     WindowsHelper.RemoverWidget(chave);
-    if (widget.onSaved != null) widget.onSaved!(message, item.cod);
+    if (widget.onSaved != null) widget.onSaved!(item.cod);
   }
 
   void onCancel(int chave) {
@@ -1104,7 +1104,7 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
       },
     );
     if (trocou?.$1 != true) return;
-    if (widget.onSaved != null) widget.onSaved!('', item.cod);
+    if (widget.onSaved != null) widget.onSaved!(item.cod);
   }
 
   Future _telaEtiquetas() async {

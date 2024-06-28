@@ -18,7 +18,6 @@ import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
-import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -686,37 +685,38 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
     );
   }
 
-  void _imprimir() async {
-    late int chave;
-    chave = WindowsHelper.openDefaultDialog(
-      widget: BlocBuilder<LocalInstituicaoCubit, LocalInstituicaoState>(
+  void _imprimir() {
+    showDialog(
+      context: context,
+      builder: (context) =>
+          BlocBuilder<LocalInstituicaoCubit, LocalInstituicaoState>(
         bloc: localInstituicaoCubit,
         builder: (context, state) {
           return InstituicaoPageFrmImpressao(
             instituicao: instituicao,
             locais: state.locaisInstituicoes,
-            onCancel: () => onCancelImpressao(chave),
-            onPrinted: () => onPrinted(chave),
+            onCancel: () => onCancelImpressao(context),
+            onPrinted: () => onPrinted(context),
           );
         },
       ),
     );
   }
 
-  void onPrinted(int chave) {
-    WindowsHelper.RemoverWidget(chave);
+  void onPrinted(BuildContext context) {
+    Navigator.of(context).pop();
   }
 
-  void onCancelImpressao(int chave) {
-    WindowsHelper.RemoverWidget(chave);
+  void onCancelImpressao(BuildContext context) {
+    Navigator.of(context).pop();
   }
 
   void _selectLocal() {
-    late int chave;
-    chave = WindowsHelper.openDefaultDialog(
-      widget: LocalInstituicaoPageFrm(
-        onSaved: (str) => onSaved(str, chave),
-        onCancel: () => onCancel(chave),
+    showDialog<bool>(
+      context: context,
+      builder: (context) => LocalInstituicaoPageFrm(
+        onSaved: (str) => onSaved(str, context),
+        onCancel: () => onCancel(context),
         localInstituicao: LocalInstituicaoModel(
           cod: 0,
           ativo: true,
@@ -737,13 +737,13 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
     );
   }
 
-  void onSaved(String message, int chave) {
-    WindowsHelper.RemoverWidget(chave);
+  void onSaved(String message, BuildContext context) {
+    Navigator.of(context).pop();
     ToastUtils.showCustomToastSucess(context, message);
   }
 
-  void onCancel(int chave) {
-    WindowsHelper.RemoverWidget(chave);
+  void onCancel(BuildContext context) {
+    Navigator.of(context).pop();
   }
 
   void salvar() {

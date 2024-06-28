@@ -35,6 +35,8 @@ mixin _$HistoricoSearchItemResponseDTO {
   set pk(int value) => throw _privateConstructorUsedError;
   String get dados => throw _privateConstructorUsedError;
   set dados(String value) => throw _privateConstructorUsedError;
+  bool? get processo => throw _privateConstructorUsedError;
+  set processo(bool? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -57,7 +59,8 @@ abstract class $HistoricoSearchItemResponseDTOCopyWith<$Res> {
       String tipo,
       String termo,
       int pk,
-      String dados});
+      String dados,
+      bool? processo});
 }
 
 /// @nodoc
@@ -81,6 +84,7 @@ class _$HistoricoSearchItemResponseDTOCopyWithImpl<$Res,
     Object? termo = null,
     Object? pk = null,
     Object? dados = null,
+    Object? processo = freezed,
   }) {
     return _then(_value.copyWith(
       data: null == data
@@ -111,6 +115,10 @@ class _$HistoricoSearchItemResponseDTOCopyWithImpl<$Res,
           ? _value.dados
           : dados // ignore: cast_nullable_to_non_nullable
               as String,
+      processo: freezed == processo
+          ? _value.processo
+          : processo // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 }
@@ -131,7 +139,8 @@ abstract class _$$HistoricoSearchItemResponseDTOImplCopyWith<$Res>
       String tipo,
       String termo,
       int pk,
-      String dados});
+      String dados,
+      bool? processo});
 }
 
 /// @nodoc
@@ -154,6 +163,7 @@ class __$$HistoricoSearchItemResponseDTOImplCopyWithImpl<$Res>
     Object? termo = null,
     Object? pk = null,
     Object? dados = null,
+    Object? processo = freezed,
   }) {
     return _then(_$HistoricoSearchItemResponseDTOImpl(
       data: null == data
@@ -184,6 +194,10 @@ class __$$HistoricoSearchItemResponseDTOImplCopyWithImpl<$Res>
           ? _value.dados
           : dados // ignore: cast_nullable_to_non_nullable
               as String,
+      processo: freezed == processo
+          ? _value.processo
+          : processo // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -200,7 +214,8 @@ class _$HistoricoSearchItemResponseDTOImpl
       required this.tipo,
       required this.termo,
       required this.pk,
-      required this.dados});
+      required this.dados,
+      required this.processo});
 
   factory _$HistoricoSearchItemResponseDTOImpl.fromJson(
           Map<String, dynamic> json) =>
@@ -220,10 +235,12 @@ class _$HistoricoSearchItemResponseDTOImpl
   int pk;
   @override
   String dados;
+  @override
+  bool? processo;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'HistoricoSearchItemResponseDTO(data: $data, codUsuario: $codUsuario, operacao: $operacao, tipo: $tipo, termo: $termo, pk: $pk, dados: $dados)';
+    return 'HistoricoSearchItemResponseDTO(data: $data, codUsuario: $codUsuario, operacao: $operacao, tipo: $tipo, termo: $termo, pk: $pk, dados: $dados, processo: $processo)';
   }
 
   @override
@@ -237,7 +254,8 @@ class _$HistoricoSearchItemResponseDTOImpl
       ..add(DiagnosticsProperty('tipo', tipo))
       ..add(DiagnosticsProperty('termo', termo))
       ..add(DiagnosticsProperty('pk', pk))
-      ..add(DiagnosticsProperty('dados', dados));
+      ..add(DiagnosticsProperty('dados', dados))
+      ..add(DiagnosticsProperty('processo', processo));
   }
 
   @JsonKey(ignore: true)
@@ -265,7 +283,8 @@ abstract class _HistoricoSearchItemResponseDTO
       required String tipo,
       required String termo,
       required int pk,
-      required String dados}) = _$HistoricoSearchItemResponseDTOImpl;
+      required String dados,
+      required bool? processo}) = _$HistoricoSearchItemResponseDTOImpl;
 
   factory _HistoricoSearchItemResponseDTO.fromJson(Map<String, dynamic> json) =
       _$HistoricoSearchItemResponseDTOImpl.fromJson;
@@ -291,6 +310,9 @@ abstract class _HistoricoSearchItemResponseDTO
   @override
   String get dados;
   set dados(String value);
+  @override
+  bool? get processo;
+  set processo(bool? value);
   @override
   @JsonKey(ignore: true)
   _$$HistoricoSearchItemResponseDTOImplCopyWith<

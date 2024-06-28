@@ -23,8 +23,8 @@ LocalInstituicaoModel _$LocalInstituicaoModelFromJson(
 mixin _$LocalInstituicaoModel {
   int? get cod => throw _privateConstructorUsedError;
   set cod(int? value) => throw _privateConstructorUsedError;
-  String get nome => throw _privateConstructorUsedError;
-  set nome(String value) => throw _privateConstructorUsedError;
+  String? get nome => throw _privateConstructorUsedError;
+  set nome(String? value) => throw _privateConstructorUsedError;
   String? get localizacao => throw _privateConstructorUsedError;
   set localizacao(String? value) => throw _privateConstructorUsedError;
   String? get responsavel => throw _privateConstructorUsedError;
@@ -67,7 +67,7 @@ abstract class $LocalInstituicaoModelCopyWith<$Res> {
   @useResult
   $Res call(
       {int? cod,
-      String nome,
+      String? nome,
       String? localizacao,
       String? responsavel,
       String? contato,
@@ -99,7 +99,7 @@ class _$LocalInstituicaoModelCopyWithImpl<$Res,
   @override
   $Res call({
     Object? cod = freezed,
-    Object? nome = null,
+    Object? nome = freezed,
     Object? localizacao = freezed,
     Object? responsavel = freezed,
     Object? contato = freezed,
@@ -118,10 +118,10 @@ class _$LocalInstituicaoModelCopyWithImpl<$Res,
           ? _value.cod
           : cod // ignore: cast_nullable_to_non_nullable
               as int?,
-      nome: null == nome
+      nome: freezed == nome
           ? _value.nome
           : nome // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       localizacao: freezed == localizacao
           ? _value.localizacao
           : localizacao // ignore: cast_nullable_to_non_nullable
@@ -197,7 +197,7 @@ abstract class _$$LocalInstituicaoModelImplCopyWith<$Res>
   @useResult
   $Res call(
       {int? cod,
-      String nome,
+      String? nome,
       String? localizacao,
       String? responsavel,
       String? contato,
@@ -228,7 +228,7 @@ class __$$LocalInstituicaoModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? cod = freezed,
-    Object? nome = null,
+    Object? nome = freezed,
     Object? localizacao = freezed,
     Object? responsavel = freezed,
     Object? contato = freezed,
@@ -247,10 +247,10 @@ class __$$LocalInstituicaoModelImplCopyWithImpl<$Res>
           ? _value.cod
           : cod // ignore: cast_nullable_to_non_nullable
               as int?,
-      nome: null == nome
+      nome: freezed == nome
           ? _value.nome
           : nome // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       localizacao: freezed == localizacao
           ? _value.localizacao
           : localizacao // ignore: cast_nullable_to_non_nullable
@@ -330,7 +330,7 @@ class _$LocalInstituicaoModelImpl extends _LocalInstituicaoModel
   @override
   int? cod;
   @override
-  String nome;
+  String? nome;
   @override
   String? localizacao;
   @override
@@ -401,7 +401,7 @@ class _$LocalInstituicaoModelImpl extends _LocalInstituicaoModel
 abstract class _LocalInstituicaoModel extends LocalInstituicaoModel {
   factory _LocalInstituicaoModel(
       {required int? cod,
-      required String nome,
+      required String? nome,
       required String? localizacao,
       required String? responsavel,
       required String? contato,
@@ -423,8 +423,8 @@ abstract class _LocalInstituicaoModel extends LocalInstituicaoModel {
   int? get cod;
   set cod(int? value);
   @override
-  String get nome;
-  set nome(String value);
+  String? get nome;
+  set nome(String? value);
   @override
   String? get localizacao;
   set localizacao(String? value);

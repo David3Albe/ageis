@@ -96,6 +96,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
     service: InsumoMovimentoService(),
   );
 
+  late void Function(bool) setReadonlyInsumo;
   late final TextFieldNumberWidget txtCodigoInsumo = TextFieldNumberWidget(
     placeholder: 'Código Insumo',
     onChanged: (String? str) {
@@ -110,41 +111,47 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
         checkAndCallPopulaCampos();
       });
     },
+    setReadonlyBuilder: (context, setReadonly) =>
+        setReadonlyInsumo = setReadonly,
     readOnly:
         insumoMovimento.cod != 0 || baseSolicitacao == true ? true : false,
   );
 
+  late void Function(bool) setReadonlyLote;
   late final TextFieldStringWidget txtLote = TextFieldStringWidget(
     placeholder: 'Lote *',
     onChanged: (String? str) {
       insumoMovimento.lote = txtLote.text;
     },
+    setReadonlyBuilder: (context, setReadonly) => setReadonlyLote = setReadonly,
     readOnly: insumoMovimento.cod != 0 ? true : false,
   );
 
   late bool Function() dataValidadeValidate;
+  late void Function(bool, bool) setReadonlyValidade;
   late final DatePickerWidget dtpDataValidade = DatePickerWidget(
     placeholder: 'Data Validade *',
     onDateSelected: (value) => insumoMovimento.dataValidade = value,
     validateBuilder: (context, validateMethodBuilder) =>
         dataValidadeValidate = validateMethodBuilder,
     validator: (date) {
-      if (date == null) {
+      if (date == null && insumoMovimento.flagEntradaSaida == '1') {
         return 'Obrigatório';
       }
-      if (insumoMovimento.flagEntradaSaida == '0' &&
+      if (insumoMovimento.flagEntradaSaida != '1' &&
+          date != null &&
           date.isBefore(DateTime.now())) {
         return 'Não pode ser antes da data atual';
       }
       return null;
     },
     initialValue: insumoMovimento.dataValidade,
-    readOnly:
-        insumoMovimento.cod != 0 && insumoMovimento.flagEntradaSaida != '1'
-            ? true
-            : false,
+    setReadonlyBuilder: (context, setReadonlyBuilder) =>
+        setReadonlyValidade = setReadonlyBuilder,
+    readOnly: insumoMovimento.flagEntradaSaida != '1' ? true : false,
   );
 
+  late void Function(bool) setReadonlyQuantidade;
   late final TextFieldNumberFloatWidget txtQuantidade =
       TextFieldNumberFloatWidget(
     negative: true,
@@ -154,21 +161,27 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
           ? null
           : double.tryParse(txtQuantidade.text);
     },
+    setReadonlyBuilder: (context, setReadonly) =>
+        setReadonlyQuantidade = setReadonly,
     readOnly: insumoMovimento.cod != 0 ? true : false,
   );
 
   late bool Function() dataFabricacaoValidate;
+  late void Function(bool, bool) setReadonlyFabricacao;
   late final DatePickerWidget dtpDataFabricacao = DatePickerWidget(
     placeholder: 'Data Fabricação *',
-    validator: (date) => date == null ? 'Obrigatório' : null,
+    validator: (date) {
+      return date == null && insumoMovimento.flagEntradaSaida == '1'
+          ? 'Obrigatório'
+          : null;
+    },
     validateBuilder: (context, validateMethodBuilder) =>
         dataFabricacaoValidate = validateMethodBuilder,
     onDateSelected: (value) => insumoMovimento.dataFabricacao = value,
     initialValue: insumoMovimento.dataFabricacao,
-    readOnly:
-        insumoMovimento.cod != 0 && insumoMovimento.flagEntradaSaida != '1'
-            ? true
-            : false,
+    setReadonlyBuilder: (context, setReadonlyBuilder) =>
+        setReadonlyFabricacao = setReadonlyBuilder,
+    readOnly: insumoMovimento.flagEntradaSaida != '1' ? true : false,
   );
 
   late final TextFieldStringWidget txtNroNotaFiscal = TextFieldStringWidget(
@@ -342,6 +355,25 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
     txtRegistro.text = insumoMovimento.cod?.toString() ?? '';
     txtNroNotaFiscal.text = insumoMovimento.nroTotalFiscal?.toString() ?? '';
     txtLote.text = insumoMovimento.lote?.toString() ?? '';
+    if (!inInit) {
+      setReadonlyQuantidade(
+        insumoMovimento.cod != null && insumoMovimento.cod != 0,
+      );
+      setReadonlyInsumo(
+        insumoMovimento.cod != 0 || baseSolicitacao == true,
+      );
+      setReadonlyLote(insumoMovimento.cod != 0);
+      if (insumoMovimento.flagEntradaSaida != '1') {
+        setReadonlyValidade(
+          insumoMovimento.flagEntradaSaida != '1' ? true : false,
+          false,
+        );
+        setReadonlyFabricacao(
+          insumoMovimento.flagEntradaSaida != '1' ? true : false,
+          false,
+        );
+      }
+    }
     if (!inInit) txtLote.valid;
     if (!inInit) setFieldsAfterInit();
 
@@ -1233,7 +1265,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
       );
     }
 
-    if (insumoMovimento.cod == 0) {
+    if (insumoMovimento.cod == 0 && confirmouCriacaoLote != true) {
       if (insumoSaldo == null) {
         if (insumoMovimento.flagEntradaSaida == '1') {
           ConfirmDialogUtils.showConfirmAlertDialog(
