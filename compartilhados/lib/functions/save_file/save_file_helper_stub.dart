@@ -5,9 +5,10 @@ class SaveFileHelperStub implements SaveFileInterface {
   Future save({
     required BuildContext context,
     required String docString,
-    required String docName,
+    required String? docName,
     required bool openAfterSave,
     bool encodeAsUtf8 = false,
+    List<String>? allowedExtensions,
   }) {
     throw UnimplementedError('getSaveFileInterface');
   }

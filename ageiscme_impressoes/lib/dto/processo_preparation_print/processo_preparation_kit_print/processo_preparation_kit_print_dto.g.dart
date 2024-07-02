@@ -12,11 +12,11 @@ _$ProcessoPreparationKitPrintDTOImpl
     _$$ProcessoPreparationKitPrintDTOImplFromJson(Map json) =>
         _$ProcessoPreparationKitPrintDTOImpl(
           nomeDescritor: json['nomeDescritor'] as String,
-          itensLidos: json['itensLidos'] as int,
-          itensTotalKit: json['itensTotalKit'] as int,
+          itensLidos: (json['itensLidos'] as num).toInt(),
+          itensTotalKit: (json['itensTotalKit'] as num).toInt(),
           nomeProprietario: json['nomeProprietario'] as String,
           nomeProcesso: json['nomeProcesso'] as String,
-          validadeEmbalagem: json['validadeEmbalagem'] as int,
+          validadeEmbalagem: (json['validadeEmbalagem'] as num).toInt(),
           tagId: json['tagId'] as String,
           urgency: json['urgency'] as bool,
         );

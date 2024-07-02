@@ -1,4 +1,6 @@
 import 'package:ageiscme_models/models/fornecedor/fornecedor_model.dart';
+import 'package:compartilhados/mixins/drop_down_filter/drop_down_filter_mixin.dart';
+import 'package:compartilhados/mixins/drop_down_filter/drop_down_filter_model.dart';
 import 'package:compartilhados/mixins/drop_down_text.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -6,7 +8,7 @@ part 'epi_descritor_model.freezed.dart';
 part 'epi_descritor_model.g.dart';
 
 @unfreezed
-abstract class EpiDescritorModel with _$EpiDescritorModel, DropDownText {
+abstract class EpiDescritorModel with _$EpiDescritorModel, DropDownText,DropDownFilterMixin<EpiDescritorModel> {
   const EpiDescritorModel._();
 
   factory EpiDescritorModel({
@@ -49,6 +51,19 @@ abstract class EpiDescritorModel with _$EpiDescritorModel, DropDownText {
 
   String get GetTipoEpiText =>
       tipoEpi == null ? '' : EpiDescritorTipoEpiOption.getOpcaoFromId(tipoEpi!);
+
+  List<DropDownFilterModel<EpiDescritorModel>> GetDropDownFilters(String filter) => [
+        DropDownFilterModel(
+          (object) =>
+              object.descricao != null &&
+              object.descricao.toString().endsWith(filter),
+        ),
+        DropDownFilterModel(
+          (object) =>
+              object.descricao == null ||
+              object.descricao!.toUpperCase().contains(filter.toUpperCase()),
+        ),
+      ];
 }
 
 class EpiDescritorTipoEpiOption with DropDownText {

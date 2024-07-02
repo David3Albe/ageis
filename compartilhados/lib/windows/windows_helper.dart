@@ -105,6 +105,7 @@ class WindowsHelper {
         offset: offsetWindow,
       );
       overlay.key.currentState?.setAbsorbing(false);
+      overlay.key.currentState?.alinhadoHorizontal = true;
       count++;
       if (count == 2) return;
     }
@@ -129,6 +130,7 @@ class WindowsHelper {
         offset: offsetWindow,
       );
       overlay.key.currentState?.setAbsorbing(false);
+      overlay.key.currentState?.alinhadoVertical = true;
       count++;
       if (count == 2) return;
     }
@@ -163,11 +165,16 @@ class WindowsHelper {
   }
 
   static void RemoverWidget(int key) {
-    overlays.removeWhere((item) => item.chave == key);
-    cubitOverlay.refresh();
-    List<CustomOverlayWindow> windows = overlays;
-    windows.sort((a, b) => a.ultimaEntrada.compareTo(b.ultimaEntrada));
-    windows.lastOrNull?.key.currentState?.setAbsorbing(false);
+    CustomOverlayWindow? overlay =
+        overlays.where((element) => element.chave == key).firstOrNull;
+    overlay?.key.currentState?.setTooltipDisabled();
+    Future.delayed(const Duration(milliseconds: 100)).then((value) {
+      overlays.remove(overlay);
+      cubitOverlay.refresh();
+      List<CustomOverlayWindow> windows = overlays;
+      windows.sort((a, b) => a.ultimaEntrada.compareTo(b.ultimaEntrada));
+      windows.lastOrNull?.key.currentState?.setAbsorbing(false);
+    });
   }
 
   static void SetToLast(int key) {
@@ -176,7 +183,21 @@ class WindowsHelper {
     if (widget == null) return;
     widget.ultimaEntrada = DateTime.now();
     cubitOverlay.refresh();
-    overlays.forEach((e) => e.key.currentState?.setAbsorbing(e.chave != key));
+    overlays.forEach((e) {
+      e.key.currentState?.setAbsorbing(e.chave != key);
+      if (e.chave == key && e.key.currentState?.minimizado == true) {
+        e.key.currentState?.normalizar();
+      }
+    });
+  }
+
+  static void MaximizouExpandiu(int key) {
+    overlays.forEach((e) {
+      if (e.key.currentState?.alinhadoHorizontal == true ||
+          e.key.currentState?.alinhadoVertical == true) {
+        e.key.currentState?.minimizar();
+      }
+    });
   }
 
   static bool isFirst(int key) {
@@ -204,6 +225,31 @@ class WindowsHelper {
     }
     cubitOverlay.refresh();
     widget.key.currentState?.setAbsorbing(true);
+
+    List<CustomOverlayWindow> janelasMinimizadas = overlays
+        .where((element) => element.key.currentState?.minimizado == true)
+        .toList();
+
+    Size size = MediaQuery.of(windowContext!).size;
+    double fullWidth = size.width * 0.4;
+    double fullHeight = size.height * 0.6;
+
+    int count = 0;
+    janelasMinimizadas
+        .sort((a, b) => a.ultimaEntrada.compareTo(b.ultimaEntrada));
+    for (CustomOverlayWindow overlay in janelasMinimizadas) {
+      Offset offsetWindow = Offset(
+        280.0 + (45.0 * count),
+        15.0 + (20.0 * count),
+      );
+      overlay.key.currentState?.setWindowSizeOfsset(
+        height: fullHeight,
+        width: fullWidth,
+        offset: offsetWindow,
+      );
+      count++;
+    }
+
     List<CustomOverlayWindow> windows = overlays;
     windows.sort((a, b) => a.ultimaEntrada.compareTo(b.ultimaEntrada));
     windows.lastOrNull?.key.currentState?.setAbsorbing(false);

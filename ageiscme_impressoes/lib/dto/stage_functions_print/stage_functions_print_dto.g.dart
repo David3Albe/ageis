@@ -10,9 +10,9 @@ part of 'stage_functions_print_dto.dart';
 
 _$StageFunctionsPrintDTOImpl _$$StageFunctionsPrintDTOImplFromJson(Map json) =>
     _$StageFunctionsPrintDTOImpl(
-      stageCod: json['stageCod'] as int,
+      stageCod: (json['stageCod'] as num).toInt(),
       instituitionName: json['instituitionName'] as String?,
-      instituitionCod: json['instituitionCod'] as int?,
+      instituitionCod: (json['instituitionCod'] as num?)?.toInt(),
       localName: json['localName'] as String?,
       localTag: json['localTag'] as String?,
       printTagLocal: json['printTagLocal'] as bool?,

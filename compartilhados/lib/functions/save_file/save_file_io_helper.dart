@@ -15,12 +15,15 @@ class SaveFileIo implements SaveFileInterface {
   Future save({
     required BuildContext context,
     required String docString,
-    required String docName,
+    required String? docName,
     required bool openAfterSave,
     bool encodeAsUtf8 = false,
+    List<String>? allowedExtensions,
   }) async {
     String? path = await FilePicker.platform.saveFile(
       fileName: docName,
+      allowedExtensions: allowedExtensions,
+      type: FileType.custom,
     );
 
     if (path == null) {
@@ -35,6 +38,15 @@ class SaveFileIo implements SaveFileInterface {
       String decodedString = utf8.decode(bytes);
       bytes = Uint8List.fromList(decodedString.codeUnits);
     }
+    if (allowedExtensions != null && allowedExtensions.isNotEmpty && allowedExtensions.length==1) {
+      String firstExtension = allowedExtensions.first;
+      if (!path.endsWith(firstExtension)) {
+        if (!path.endsWith('.')) {
+          path += '.';
+        }
+        path += firstExtension;
+      }
+    }
 
     final file = File(path);
     await file.writeAsBytes(bytes);
@@ -42,7 +54,7 @@ class SaveFileIo implements SaveFileInterface {
       context: context,
       message: 'Abrir arquivo?',
       onCancel: () => {},
-      onConfirm: () => onConfirm(openAfterSave, path),
+      onConfirm: () => onConfirm(openAfterSave, path!),
     );
   }
 

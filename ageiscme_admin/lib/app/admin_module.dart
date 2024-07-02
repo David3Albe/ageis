@@ -22,6 +22,7 @@ import 'package:ageiscme_admin/app/module/pages/cadastro/perfil_acesso/perfil_ac
 import 'package:ageiscme_admin/app/module/pages/cadastro/proprietario/proprietario_page.dart';
 import 'package:ageiscme_admin/app/module/pages/cadastro/tipo_documento/tipo_documento_page.dart';
 import 'package:ageiscme_admin/app/module/pages/cadastro/usuario/usuario_page.dart';
+import 'package:ageiscme_admin/app/module/pages/colaborador/afastamento/afastamento_page.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/atestado_saude_ocupacional/atestado_saude_ocupacional_page.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/consulta_historico_colaborador/consulta_historico_colaborador_page.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/consulta_processo_resposta_epcepi/consulta_processo_resposta_epcepi_page.dart';
@@ -242,6 +243,12 @@ class AdminModule extends Module {
         createParallelRoute(
           '/colaborador/atestado-saude-ocupacional',
           child: (context) => AtestadoSaudeOcupacionalPage(
+            cod: r.args.data,
+          ),
+        ),
+        createParallelRoute(
+          '/colaborador/afastamento',
+          child: (context) => AfastamentoPage(
             cod: r.args.data,
           ),
         ),

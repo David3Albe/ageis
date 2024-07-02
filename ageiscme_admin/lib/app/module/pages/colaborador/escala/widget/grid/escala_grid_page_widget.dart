@@ -9,6 +9,7 @@ import 'package:compartilhados/exporters/pluto_grid_csv_export.dart';
 import 'package:compartilhados/exporters/pluto_grid_pdf_export.dart';
 import 'package:compartilhados/exporters/pluto_grid_xml_export.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:dependencias_comuns/easy_debounce_export.dart';
 import 'package:dependencias_comuns/font_awesome_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
@@ -169,31 +170,33 @@ class _EscalaPageGridWidgetState extends State<EscalaPageGridWidget> {
     required PlutoGridOnChangedEvent event,
     required BuildContext context,
   }) {
-    PlutoGridStateManager? stateManager =
-        BlocProvider.of<EscalaPageGridCubit>(context).state.stateManager;
-    if (stateManager == null) return;
-    if (event.oldValue == event.value) return;
-    if (event.column.field != 'usuario') return;
-    for (PlutoRow row in stateManager.iterateRowAndGroup) {
-      TurnoShortResponseDTO? turno = event.row.cells['turno']!.value;
-      TurnoShortResponseDTO? turnoRow = row.cells['turno']!.value;
-      if (turnoRow?.cod != turno?.cod) {
-        continue;
-      }
+    EasyThrottle.throttle('on-change', const Duration(seconds: 2), () {
+      PlutoGridStateManager? stateManager =
+          BlocProvider.of<EscalaPageGridCubit>(context).state.stateManager;
+      if (stateManager == null) return;
+      if (event.oldValue == event.value) return;
+      if (event.column.field != 'usuario') return;
+      for (PlutoRow row in stateManager.iterateRowAndGroup) {
+        TurnoShortResponseDTO? turno = event.row.cells['turno']!.value;
+        TurnoShortResponseDTO? turnoRow = row.cells['turno']!.value;
+        if (turnoRow?.cod != turno?.cod) {
+          continue;
+        }
 
-      UsuarioDropDownSearchResponseDTO? usuario = event.value;
-      UsuarioDropDownSearchResponseDTO? usuarioRow =
-          row.cells['usuario']!.value is UsuarioDropDownSearchResponseDTO
-              ? row.cells['usuario']!.value
-              : null;
-      if (usuario?.cod == usuarioRow?.cod && event.row != row) {
-        ToastUtils.showCustomToastWarning(
-          context,
-          'Usuário já está adicionado a esse turno',
-        );
-        stateManager.removeRows([event.row]);
-        return;
+        UsuarioDropDownSearchResponseDTO? usuario = event.value;
+        UsuarioDropDownSearchResponseDTO? usuarioRow =
+            row.cells['usuario']!.value is UsuarioDropDownSearchResponseDTO
+                ? row.cells['usuario']!.value
+                : null;
+        if (usuario?.cod == usuarioRow?.cod && event.row != row) {
+          ToastUtils.showCustomToastWarning(
+            context,
+            'Usuário já está adicionado a esse turno',
+          );
+          stateManager.removeRows([event.row]);
+          return;
+        }
       }
-    }
+    });
   }
 }

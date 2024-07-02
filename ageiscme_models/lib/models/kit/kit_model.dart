@@ -67,7 +67,7 @@ abstract class KitModel
         ultimaAlteracao: null,
         tStamp: '',
         descritor: null,
-        itens: [],
+        itens: null,
         cor1: null,
         cor2: null,
         cor3: null,

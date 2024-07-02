@@ -44,7 +44,9 @@ _$ConsultaProcessosLeituraEntradaAutomaticaModelImpl
           motivo: json['motivo'] as String?,
           motivoQuebraFluxo: json['motivoQuebraFluxo'] as String?,
           observacoes: json['observacoes'] as String?,
+          tstamp: json['tstamp'] as String?,
           cancelar: json['cancelar'] as bool?,
+          codSituacao: (json['codSituacao'] as num?)?.toInt(),
         );
 
 Map<String, dynamic>
@@ -84,5 +86,7 @@ Map<String, dynamic>
           'motivo': instance.motivo,
           'motivoQuebraFluxo': instance.motivoQuebraFluxo,
           'observacoes': instance.observacoes,
+          'tstamp': instance.tstamp,
           'cancelar': instance.cancelar,
+          'codSituacao': instance.codSituacao,
         };

@@ -28,6 +28,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 
 class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
   final LoadingController loadingController;
+  late final FocusNode focus;
   final List<String> filaLeituras = [];
   late final ProcessoLeituraService service =
       ProcessoLeituraService(loading: loadingController);
@@ -48,6 +49,10 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
 
   void setHandleKey(dynamic Function(String) onEnter) {
     loadingController.setHandleKeyFunction(onEnter);
+  }
+
+  void setFocus(FocusNode focus){
+    this.focus = focus;
   }
 
   void adicionarItemAFila(String? codigo) {
@@ -388,6 +393,7 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
         rebuildType: ProcessoLeituraRebuildType.Kit,
       ),
     );
+    focus.requestFocus();
   }
 
   void toogleStatusKit(KitProcessoModel kit, int status) {
@@ -408,6 +414,7 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
         rebuildType: ProcessoLeituraRebuildType.Kit,
       ),
     );
+    focus.requestFocus();
   }
 
   Future showKit(KitProcessoModel kit) async {
@@ -422,6 +429,7 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
     );
     montagem.leituraAtual.decisao = DecisaoEnum.SelecionouKitItemLista;
     await readCode('SELECAOKIT');
+    focus.requestFocus();
   }
 
   Future showItem(ItemProcessoModel item) async {
@@ -436,6 +444,7 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
     );
     montagem.leituraAtual.decisao = DecisaoEnum.SelecionouKitItemLista;
     await readCode('SELECAOITEM');
+    focus.requestFocus();
   }
 
   void emitLoading() {

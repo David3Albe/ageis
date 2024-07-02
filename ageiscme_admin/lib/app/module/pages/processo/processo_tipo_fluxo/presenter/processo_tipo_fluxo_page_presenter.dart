@@ -1,10 +1,15 @@
 import 'package:ageiscme_admin/app/module/pages/processo/processo_tipo_fluxo/controller/processo_tipo_fluxo_page_controller.dart';
+import 'package:ageiscme_impressoes/dto/fluxo_print/fluxo_print_dto.dart';
+import 'package:ageiscme_impressoes/prints/fluxo_printer/fluxo_printer_controller.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/custom_default_button_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
+import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/diagram/custom_diagram/custom_diagram_widget.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:dependencias_comuns/main.dart';
+import 'package:dependencias_comuns/screenshot_export.dart';
 import 'package:flutter/material.dart';
 
 class ProcessoTipoFluxoPagePresenter extends StatefulWidget {
@@ -30,11 +35,13 @@ class ProcessoTipoFluxoPagePresenter extends StatefulWidget {
 class _ProcessoTipoFluxoPagePresenterState
     extends State<ProcessoTipoFluxoPagePresenter> {
   late final ProcessoTipoFluxoPageController controller;
+  late final ScreenshotController screenshotController;
 
   @override
   void initState() {
     controller =
         ProcessoTipoFluxoPageController(processoTipo: widget.processoTipo);
+    screenshotController = ScreenshotController();
     controller.inicializar();
     super.initState();
   }
@@ -57,6 +64,7 @@ class _ProcessoTipoFluxoPagePresenterState
             children: [
               Expanded(
                 child: CustomDiagramWidget(
+                  screenshotController: screenshotController,
                   onDetailSearchItems: widget.onDetailSearchItems,
                   canEdit: widget.canEdit,
                   objects: controller.getRects,
@@ -73,6 +81,12 @@ class _ProcessoTipoFluxoPagePresenterState
         ),
         Row(
           children: [
+            if (widget.canEdit)
+              CustomPopupMenuWidget(
+                items: [
+                  CustomPopupItemModel(text: 'Imprimir', onTap: screenshot),
+                ],
+              ),
             const Spacer(),
             if (widget.canEdit)
               Padding(
@@ -107,5 +121,17 @@ class _ProcessoTipoFluxoPagePresenterState
         ),
       ],
     );
+  }
+
+  void screenshot() {
+    screenshotController.capture(pixelRatio: 2).then((value) {
+      if (value == null) return;
+      FluxoPrinterController(
+        context: context,
+        dto: FluxoPrintDTO(
+          imageBytes: value,
+        ),
+      ).print();
+    });
   }
 }

@@ -21,9 +21,10 @@ class PlutoGridCsvExport {
     String base64String = base64Encode(exported);
     SaveFileInterface saveFile = SaveFileInterface();
     await saveFile.save(
+      allowedExtensions: ['csv'],
       context: context,
       docString: base64String,
-      docName: 'Consulta.csv',
+      docName: null,
       openAfterSave: true,
       encodeAsUtf8: true,
     );

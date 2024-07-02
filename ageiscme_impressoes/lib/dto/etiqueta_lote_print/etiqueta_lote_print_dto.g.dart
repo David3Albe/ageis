@@ -10,11 +10,11 @@ part of 'etiqueta_lote_print_dto.dart';
 
 _$EtiquetaLotePrintDTOImpl _$$EtiquetaLotePrintDTOImplFromJson(Map json) =>
     _$EtiquetaLotePrintDTOImpl(
-      codRegistroProcesso: json['codRegistroProcesso'] as int,
+      codRegistroProcesso: (json['codRegistroProcesso'] as num).toInt(),
       dataAtual: DateTime.parse(json['dataAtual'] as String),
       nomeEquipamento: json['nomeEquipamento'] as String,
       nomeUsuario: json['nomeUsuario'] as String,
-      impressoes: json['impressoes'] as int,
+      impressoes: (json['impressoes'] as num).toInt(),
       userDoc: json['userDoc'] as String?,
       codLote: json['codLote'] as String?,
     );

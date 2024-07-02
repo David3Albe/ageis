@@ -12,7 +12,7 @@ class EntradaAutomaticaPageCubit extends Cubit<EntradaAutomaticaPageState> {
           EntradaAutomaticaPageState(entradaAutomatica: entradaAutomaticaModel),
         );
 
-  void save(EntradaAutomaticaModel entradaAutomatica) async {
+  Future save(EntradaAutomaticaModel entradaAutomatica) async {
     try {
       (String message, EntradaAutomaticaModel entradaAutomatica)? result =
           await service.save(entradaAutomatica);

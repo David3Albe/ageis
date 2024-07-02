@@ -13,7 +13,7 @@ _$EstoqueItemConsignadoPrintDTOImpl
         _$EstoqueItemConsignadoPrintDTOImpl(
           cod: json['cod'] as String,
           nome: json['nome'] as String,
-          quantidade: json['quantidade'] as int,
+          quantidade: (json['quantidade'] as num).toInt(),
         );
 
 Map<String, dynamic> _$$EstoqueItemConsignadoPrintDTOImplToJson(

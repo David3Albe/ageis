@@ -12,7 +12,7 @@ _$PackagingsPackagingPrintDTOImpl _$$PackagingsPackagingPrintDTOImplFromJson(
         Map json) =>
     _$PackagingsPackagingPrintDTOImpl(
       name: json['name'] as String,
-      tagId: json['tagId'] as int,
+      tagId: (json['tagId'] as num).toInt(),
       selected: json['selected'] as bool,
     );
 

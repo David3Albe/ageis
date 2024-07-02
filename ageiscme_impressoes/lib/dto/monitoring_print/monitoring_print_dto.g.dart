@@ -10,8 +10,8 @@ part of 'monitoring_print_dto.dart';
 
 _$MonitoringPrintDTOImpl _$$MonitoringPrintDTOImplFromJson(Map json) =>
     _$MonitoringPrintDTOImpl(
-      cod: json['cod'] as int,
-      companyCod: json['companyCod'] as int,
+      cod: (json['cod'] as num).toInt(),
+      companyCod: (json['companyCod'] as num).toInt(),
       companyName: json['companyName'] as String,
       dataAtual: DateTime.parse(json['dataAtual'] as String),
       userName: json['userName'] as String,

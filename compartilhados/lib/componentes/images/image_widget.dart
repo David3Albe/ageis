@@ -13,9 +13,9 @@ class ImageDisplayWidget extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return Container(
       constraints: BoxConstraints(
-        minWidth: size.width * .1,
-        minHeight: size.height * .1,
-        maxHeight: size.height * .2,
+        minWidth: size.width * .3,
+        minHeight: size.height * .3,
+        maxHeight: size.height * .4,
       ),
       decoration: BoxDecoration(
         border: Border.all(

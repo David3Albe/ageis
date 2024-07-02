@@ -67,7 +67,7 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
 
   late bool Function() limiteValidadeValidate;
   late final DatePickerWidget dtpLimiteValidade = DatePickerWidget(
-    placeholder: 'Data Limite da Validade',
+    placeholder: 'Data Limite da Validade *',
     validator: (date) => date == null ? 'Obrigatório' : null,
     validateBuilder: (context, validateMethodBuilder) =>
         limiteValidadeValidate = validateMethodBuilder,
@@ -98,6 +98,9 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
     setDateValueBuilder: (context, setDateMethod) =>
         setarDataEntrega = setDateMethod,
   );
+
+  late void Function(EpiEntregaModel? epi) setSelectedEpiEntregueValidade;
+  late void Function(EpiEntregaModel? epi) setSelectedEpiEntregueDescartado;
 
   Future<AuthenticationResultDTO?> recuperaUsuario() async {
     return await Modular.get<AuthenticationStore>().GetAuthenticated();
@@ -132,20 +135,22 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
     }
   }
 
-  void updateFields(EpiEntregaModel selectedEpiEntrega) {
+  void updateFields(EpiEntregaModel? selectedEpiEntrega) {
     setState(() {
-      epiEntrega.cod = selectedEpiEntrega.cod;
-      epiEntrega.tstamp = selectedEpiEntrega.tstamp;
-      epiEntrega.codDescritorEpi = selectedEpiEntrega.codDescritorEpi;
-      epiEntrega.dataLimiteValidade = selectedEpiEntrega.dataLimiteValidade;
+      epiEntrega.cod = selectedEpiEntrega?.cod ?? 0;
+      epiEntrega.tstamp = selectedEpiEntrega?.tstamp;
+      epiEntrega.codDescritorEpi = selectedEpiEntrega?.codDescritorEpi;
+      epiEntrega.dataLimiteValidade = selectedEpiEntrega?.dataLimiteValidade;
       setarDataValidade?.call(epiEntrega.dataLimiteValidade);
-      epiEntrega.dataDescarte = selectedEpiEntrega.dataDescarte;
+      epiEntrega.dataDescarte = selectedEpiEntrega?.dataDescarte;
       setarDataDescarte?.call(epiEntrega.dataDescarte);
-      epiEntrega.dataEntrega = selectedEpiEntrega.dataEntrega;
+      epiEntrega.dataEntrega = selectedEpiEntrega?.dataEntrega;
       setarDataEntrega?.call(epiEntrega.dataEntrega);
-      epiEntrega.conferenciaVisual = selectedEpiEntrega.conferenciaVisual;
+      epiEntrega.conferenciaVisual =
+          selectedEpiEntrega?.conferenciaVisual ?? false;
       setarConferenciaVisual?.call(epiEntrega.conferenciaVisual ?? false);
-      epiEntrega.controlarValidade = selectedEpiEntrega.controlarValidade;
+      epiEntrega.controlarValidade =
+          selectedEpiEntrega?.controlarValidade ?? false;
       setarControlaValidade?.call(epiEntrega.controlarValidade ?? false);
 
       EpiDescritorModel? epiDescritor = widget.episDescritores
@@ -153,13 +158,13 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
             (element) => element.cod == epiEntrega.codDescritorEpi,
           )
           .firstOrNull;
-      if (epiDescritor != null) setarEpi(epiDescritor);
+      setarEpi(epiDescritor);
     });
   }
 
   late bool Function() validateEPI;
   final ScrollController scroll = ScrollController();
-  late void Function(EpiDescritorModel) setarEpi;
+  late void Function(EpiDescritorModel?) setarEpi;
 
   @override
   Widget build(BuildContext context) {
@@ -265,7 +270,7 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
                                           sourceList: widget.episDescritores,
                                           onChanged: (value) => epiEntrega
                                               .codDescritorEpi = value?.cod,
-                                          placeholder: 'EPI',
+                                          placeholder: 'EPI *',
                                         );
                                       },
                                     ),
@@ -369,11 +374,18 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
                                         }
 
                                         return ListFieldWidget<EpiEntregaModel>(
+                                          setSelected: (
+                                            context,
+                                            setSelectedItemMethod,
+                                          ) =>
+                                              setSelectedEpiEntregueValidade =
+                                                  setSelectedItemMethod,
                                           sourceList: epiEntreguesValidade,
-                                          permitReselect: true,
+                                          disableUnselect: false,
                                           removeButton: false,
                                           onItemSelected: (value) {
-                                            updateFields(value!);
+                                            setSelectedEpiEntregueDescartado(null);
+                                            updateFields(value);
                                           },
                                           itemText: (value) {
                                             final episDescritores =
@@ -445,11 +457,19 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
                                         }
 
                                         return ListFieldWidget<EpiEntregaModel>(
+                                          setSelected: (
+                                            context,
+                                            setSelectedItemMethod,
+                                          ) =>
+                                              setSelectedEpiEntregueDescartado =
+                                                  setSelectedItemMethod,
+                                          disableUnselect: false,
                                           sourceList: epiEntreguesDescartados,
                                           removeButton: false,
-                                          permitReselect: true,
+                                          permitReselect: false,
                                           onItemSelected: (value) {
-                                            updateFields(value!);
+                                            setSelectedEpiEntregueValidade(null);
+                                            updateFields(value);
                                           },
                                           itemText: (value) {
                                             final episDescritores =
@@ -525,11 +545,7 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: CleanButtonWidget(
-                    onPressed: () => {
-                      setState(() {
-                        epiEntrega = EpiEntregaModel.empty();
-                      }),
-                    },
+                    onPressed: limpar,
                   ),
                 ),
                 Padding(
@@ -544,6 +560,12 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
         );
       },
     );
+  }
+
+  void limpar() {
+    setSelectedEpiEntregueDescartado(null);
+    setSelectedEpiEntregueValidade(null);
+    updateFields(null);
   }
 
   Iterable<EpiEntregaModel> getEpisValidade() {

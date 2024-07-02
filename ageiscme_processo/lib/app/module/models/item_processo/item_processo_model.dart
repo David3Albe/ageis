@@ -99,7 +99,7 @@ abstract class ItemProcessoModel with _$ItemProcessoModel {
   ) {
     if (processoLeitura.leituraAtual.etapas == null) return null;
     return processoLeitura.leituraAtual.etapas
-        ?.where((element) => element.cod == codDescritor)
+        ?.where((element) => element.cod == codEtapa)
         .firstOrNull;
   }
 

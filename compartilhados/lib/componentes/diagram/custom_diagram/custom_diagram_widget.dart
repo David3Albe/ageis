@@ -4,6 +4,7 @@ import 'package:compartilhados/componentes/diagram/custom_diagram/model/custom_d
 import 'package:compartilhados/componentes/diagram/custom_diagram/model/custom_diagram_rect_model.dart';
 import 'package:compartilhados/componentes/diagram/custom_diagram/selected_process_type_detail/cubits/selected_cubit.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:dependencias_comuns/screenshot_export.dart';
 import 'package:flutter/material.dart';
 
 class CustomDiagramWidget extends StatelessWidget {
@@ -17,6 +18,7 @@ class CustomDiagramWidget extends StatelessWidget {
   final bool canEdit;
   final int? initialClickOn;
   final Future<List<String>> Function({required int id})? onDetailSearchItems;
+  final ScreenshotController screenshotController;
   const CustomDiagramWidget({
     required this.objects,
     required this.itemsAddable,
@@ -24,6 +26,7 @@ class CustomDiagramWidget extends StatelessWidget {
     required this.defaultWidth,
     required this.clearWidgetBuilder,
     required this.canEdit,
+    required this.screenshotController,
     this.initialClickOn,
     this.onDetailSearchItems,
     this.defaultAddedNewRectBackColor = const Color.fromARGB(255, 3, 169, 244),
@@ -40,6 +43,7 @@ class CustomDiagramWidget extends StatelessWidget {
         ),
       ],
       child: CustomDiagramWidgetPresenter(
+        screenshotController: screenshotController,
         initialClickOn: initialClickOn,
         canEdit: canEdit,
         defaultAddedNewRectBackColor: defaultAddedNewRectBackColor,

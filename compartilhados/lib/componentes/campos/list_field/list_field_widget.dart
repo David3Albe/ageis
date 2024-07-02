@@ -2,6 +2,11 @@ import 'package:compartilhados/componentes/campos/text_field_string_widget.dart'
 import 'package:compartilhados/functions/helper_functions.dart';
 import 'package:flutter/material.dart';
 
+typedef SetSelectedItemBuilder<T> = void Function(
+  BuildContext context,
+  void Function(T? item) setSelectedItemMethod,
+);
+
 class ListFieldWidget<T> extends StatefulWidget {
   final List<T> sourceList;
   final ValueChanged<T?> onItemSelected;
@@ -11,6 +16,8 @@ class ListFieldWidget<T> extends StatefulWidget {
   final bool? disableUnselect;
   final bool? permitReselect;
   final double fontSize;
+  final SetSelectedItemBuilder<T>? setSelected;
+  final void Function(T)? onRemove;
 
   ListFieldWidget({
     required this.sourceList,
@@ -21,6 +28,8 @@ class ListFieldWidget<T> extends StatefulWidget {
     this.permitReselect,
     this.onDoubleTap,
     this.fontSize = 14,
+    this.setSelected,
+    this.onRemove,
   });
 
   @override
@@ -41,8 +50,20 @@ class _ListFieldWidgetState<T> extends State<ListFieldWidget<T>> {
     super.initState();
   }
 
+  void setSelected(T? item) {
+    setState(() {
+      selectedItem = item;
+    });
+  }
+
+  void onRemove(T item) {}
+
   @override
   Widget build(BuildContext context) {
+    widget.setSelected?.call(
+      context,
+      setSelected,
+    );
     List<T> items = buscarFiltros();
     Size size = MediaQuery.of(context).size;
     return Container(
@@ -112,6 +133,9 @@ class _ListFieldWidgetState<T> extends State<ListFieldWidget<T>> {
                                     icon: const Icon(Icons.delete),
                                     onPressed: () {
                                       setState(() {
+                                        if (widget.onRemove != null) {
+                                          widget.onRemove!(item);
+                                        }
                                         widget.sourceList.remove(item);
                                         filteredItems?.remove(item);
                                         if (isSelected) {

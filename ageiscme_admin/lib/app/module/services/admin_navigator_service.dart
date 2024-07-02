@@ -22,6 +22,7 @@ import 'package:ageiscme_admin/app/module/pages/cadastro/perfil_acesso/perfil_ac
 import 'package:ageiscme_admin/app/module/pages/cadastro/proprietario/proprietario_page.dart';
 import 'package:ageiscme_admin/app/module/pages/cadastro/tipo_documento/tipo_documento_page.dart';
 import 'package:ageiscme_admin/app/module/pages/cadastro/usuario/usuario_page.dart';
+import 'package:ageiscme_admin/app/module/pages/colaborador/afastamento/afastamento_page.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/atestado_saude_ocupacional/atestado_saude_ocupacional_page.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/consulta_historico_colaborador/consulta_historico_colaborador_page.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/consulta_processo_resposta_epcepi/consulta_processo_resposta_epcepi_page.dart';
@@ -93,8 +94,8 @@ import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:flutter/material.dart';
 
 abstract class AdminNavigatorService {
-  static void navigateTo(ItemMenuModel itemMenu,BuildContext context) {
-    openRoute(itemMenu: itemMenu,context: context);
+  static void navigateTo(ItemMenuModel itemMenu, BuildContext context) {
+    openRoute(itemMenu: itemMenu, context: context);
   }
 
   static void navigateToHome() {
@@ -196,6 +197,10 @@ abstract class AdminNavigatorService {
         return const EpiDescritorPage();
       case '/colaborador/atestado-saude-ocupacional/':
         return AtestadoSaudeOcupacionalPage(
+          cod: data,
+        );
+      case '/colaborador/afastamento/':
+        return AfastamentoPage(
           cod: data,
         );
       case '/material/item-descritor/':
@@ -333,7 +338,7 @@ abstract class AdminNavigatorService {
       case '/processo/consulta-anormalidade/':
         return const ConsultaAnormalidadePage();
       case '/colaborador/sigla/':
-        return const  SiglaPage();
+        return const SiglaPage();
       case '/colaborador/turno/':
         return const TurnoPage();
       case '/colaborador/escala/':

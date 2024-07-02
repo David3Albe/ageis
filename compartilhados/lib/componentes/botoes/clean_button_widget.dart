@@ -68,7 +68,7 @@ class _CleanButtonWidgetState extends State<CleanButtonWidget> {
           children: [
             const Flexible(
               child: FittedBox(
-                fit: BoxFit.scaleDown,
+                fit: BoxFit.fitWidth,
                 child: Icon(
                   Symbols.undo,
                   color: Cores.corIconeBranco,
@@ -78,7 +78,7 @@ class _CleanButtonWidgetState extends State<CleanButtonWidget> {
             ),
             Flexible(
               child: FittedBox(
-                fit: BoxFit.scaleDown,
+                fit: BoxFit.fitWidth,
                 child: Text(
                   'Limpar',
                   style: TextStyle(

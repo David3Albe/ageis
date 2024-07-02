@@ -1,5 +1,6 @@
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_processo/app/module/models/item_processo/item_processo_model.dart';
+import 'package:ageiscme_processo/app/module/models/processo_leitura/processo_leitura_montagem_model.dart';
 import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
@@ -55,8 +56,8 @@ abstract class KitProcessoModel with _$KitProcessoModel {
     required bool? impressaoRelatorioRetiradaRealizada,
     required int? codUsuarioAcaoOcorrencia,
     required int? codAcaoOcorrencia,
-            required int? itensLidosCalculado,
-        required int? itensTotalKitCalculado,
+    required int? itensLidosCalculado,
+    required int? itensTotalKitCalculado,
   }) = _KitProcessoModel;
 
   factory KitProcessoModel.fromJson(Map<String, Object?> json) =>
@@ -89,6 +90,15 @@ abstract class KitProcessoModel with _$KitProcessoModel {
     cores.add(getCor3());
     cores.add(getCor4());
     return cores;
+  }
+
+  ProcessoEtapaModel? getEtapa(
+    ProcessoLeituraMontagemModel processoLeitura,
+  ) {
+    if (processoLeitura.leituraAtual.etapas == null) return null;
+    return processoLeitura.leituraAtual.etapas
+        ?.where((element) => element.cod == codEtapa)
+        .firstOrNull;
   }
 
   List<ItemProcessoModel>? get itensLidos =>

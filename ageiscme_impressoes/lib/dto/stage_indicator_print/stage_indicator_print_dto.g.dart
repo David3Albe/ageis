@@ -10,8 +10,8 @@ part of 'stage_indicator_print_dto.dart';
 
 _$StageIndicatorPrintDTOImpl _$$StageIndicatorPrintDTOImplFromJson(Map json) =>
     _$StageIndicatorPrintDTOImpl(
-      instituitionCod: json['instituitionCod'] as int,
-      quantity: json['quantity'] as int,
+      instituitionCod: (json['instituitionCod'] as num).toInt(),
+      quantity: (json['quantity'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$StageIndicatorPrintDTOImplToJson(

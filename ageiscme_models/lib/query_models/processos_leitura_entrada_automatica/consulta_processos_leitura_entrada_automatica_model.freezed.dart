@@ -88,8 +88,12 @@ mixin _$ConsultaProcessosLeituraEntradaAutomaticaModel {
   set motivoQuebraFluxo(String? value) => throw _privateConstructorUsedError;
   String? get observacoes => throw _privateConstructorUsedError;
   set observacoes(String? value) => throw _privateConstructorUsedError;
+  String? get tstamp => throw _privateConstructorUsedError;
+  set tstamp(String? value) => throw _privateConstructorUsedError;
   bool? get cancelar => throw _privateConstructorUsedError;
   set cancelar(bool? value) => throw _privateConstructorUsedError;
+  int? get codSituacao => throw _privateConstructorUsedError;
+  set codSituacao(int? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -140,7 +144,9 @@ abstract class $ConsultaProcessosLeituraEntradaAutomaticaModelCopyWith<$Res> {
       String? motivo,
       String? motivoQuebraFluxo,
       String? observacoes,
-      bool? cancelar});
+      String? tstamp,
+      bool? cancelar,
+      int? codSituacao});
 }
 
 /// @nodoc
@@ -191,7 +197,9 @@ class _$ConsultaProcessosLeituraEntradaAutomaticaModelCopyWithImpl<$Res,
     Object? motivo = freezed,
     Object? motivoQuebraFluxo = freezed,
     Object? observacoes = freezed,
+    Object? tstamp = freezed,
     Object? cancelar = freezed,
+    Object? codSituacao = freezed,
   }) {
     return _then(_value.copyWith(
       dataHora: freezed == dataHora
@@ -326,10 +334,18 @@ class _$ConsultaProcessosLeituraEntradaAutomaticaModelCopyWithImpl<$Res,
           ? _value.observacoes
           : observacoes // ignore: cast_nullable_to_non_nullable
               as String?,
+      tstamp: freezed == tstamp
+          ? _value.tstamp
+          : tstamp // ignore: cast_nullable_to_non_nullable
+              as String?,
       cancelar: freezed == cancelar
           ? _value.cancelar
           : cancelar // ignore: cast_nullable_to_non_nullable
               as bool?,
+      codSituacao: freezed == codSituacao
+          ? _value.codSituacao
+          : codSituacao // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -379,7 +395,9 @@ abstract class _$$ConsultaProcessosLeituraEntradaAutomaticaModelImplCopyWith<
       String? motivo,
       String? motivoQuebraFluxo,
       String? observacoes,
-      bool? cancelar});
+      String? tstamp,
+      bool? cancelar,
+      int? codSituacao});
 }
 
 /// @nodoc
@@ -429,7 +447,9 @@ class __$$ConsultaProcessosLeituraEntradaAutomaticaModelImplCopyWithImpl<$Res>
     Object? motivo = freezed,
     Object? motivoQuebraFluxo = freezed,
     Object? observacoes = freezed,
+    Object? tstamp = freezed,
     Object? cancelar = freezed,
+    Object? codSituacao = freezed,
   }) {
     return _then(_$ConsultaProcessosLeituraEntradaAutomaticaModelImpl(
       dataHora: freezed == dataHora
@@ -564,10 +584,18 @@ class __$$ConsultaProcessosLeituraEntradaAutomaticaModelImplCopyWithImpl<$Res>
           ? _value.observacoes
           : observacoes // ignore: cast_nullable_to_non_nullable
               as String?,
+      tstamp: freezed == tstamp
+          ? _value.tstamp
+          : tstamp // ignore: cast_nullable_to_non_nullable
+              as String?,
       cancelar: freezed == cancelar
           ? _value.cancelar
           : cancelar // ignore: cast_nullable_to_non_nullable
               as bool?,
+      codSituacao: freezed == codSituacao
+          ? _value.codSituacao
+          : codSituacao // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -610,7 +638,9 @@ class _$ConsultaProcessosLeituraEntradaAutomaticaModelImpl
       required this.motivo,
       required this.motivoQuebraFluxo,
       required this.observacoes,
-      required this.cancelar})
+      required this.tstamp,
+      required this.cancelar,
+      required this.codSituacao})
       : super._();
 
   factory _$ConsultaProcessosLeituraEntradaAutomaticaModelImpl.fromJson(
@@ -684,11 +714,15 @@ class _$ConsultaProcessosLeituraEntradaAutomaticaModelImpl
   @override
   String? observacoes;
   @override
+  String? tstamp;
+  @override
   bool? cancelar;
+  @override
+  int? codSituacao;
 
   @override
   String toString() {
-    return 'ConsultaProcessosLeituraEntradaAutomaticaModel(dataHora: $dataHora, codRegistroProcesso: $codRegistroProcesso, codEntradaAut: $codEntradaAut, situacao: $situacao, observacao: $observacao, codBarraKit: $codBarraKit, nomeKit: $nomeKit, idEtiqueta: $idEtiqueta, descricaoItem: $descricaoItem, nomeProprietario: $nomeProprietario, entradaSaida: $entradaSaida, nomeEquipamento: $nomeEquipamento, nomeEtapaProcesso: $nomeEtapaProcesso, nomeTipoProcesso: $nomeTipoProcesso, nivelPrioridade: $nivelPrioridade, nomeUsuario: $nomeUsuario, prontuario: $prontuario, origem: $origem, destino: $destino, circulante: $circulante, confVisual: $confVisual, nomeRespLibKitIncomp: $nomeRespLibKitIncomp, nomeRespLibQuebFluxo: $nomeRespLibQuebFluxo, indicador: $indicador, lote: $lote, embalagem: $embalagem, codItem: $codItem, codKit2: $codKit2, codEtapaProcesso: $codEtapaProcesso, codLeitura: $codLeitura, motivo: $motivo, motivoQuebraFluxo: $motivoQuebraFluxo, observacoes: $observacoes, cancelar: $cancelar)';
+    return 'ConsultaProcessosLeituraEntradaAutomaticaModel(dataHora: $dataHora, codRegistroProcesso: $codRegistroProcesso, codEntradaAut: $codEntradaAut, situacao: $situacao, observacao: $observacao, codBarraKit: $codBarraKit, nomeKit: $nomeKit, idEtiqueta: $idEtiqueta, descricaoItem: $descricaoItem, nomeProprietario: $nomeProprietario, entradaSaida: $entradaSaida, nomeEquipamento: $nomeEquipamento, nomeEtapaProcesso: $nomeEtapaProcesso, nomeTipoProcesso: $nomeTipoProcesso, nivelPrioridade: $nivelPrioridade, nomeUsuario: $nomeUsuario, prontuario: $prontuario, origem: $origem, destino: $destino, circulante: $circulante, confVisual: $confVisual, nomeRespLibKitIncomp: $nomeRespLibKitIncomp, nomeRespLibQuebFluxo: $nomeRespLibQuebFluxo, indicador: $indicador, lote: $lote, embalagem: $embalagem, codItem: $codItem, codKit2: $codKit2, codEtapaProcesso: $codEtapaProcesso, codLeitura: $codLeitura, motivo: $motivo, motivoQuebraFluxo: $motivoQuebraFluxo, observacoes: $observacoes, tstamp: $tstamp, cancelar: $cancelar, codSituacao: $codSituacao)';
   }
 
   @JsonKey(ignore: true)
@@ -745,7 +779,9 @@ abstract class _ConsultaProcessosLeituraEntradaAutomaticaModel
           required String? motivo,
           required String? motivoQuebraFluxo,
           required String? observacoes,
-          required bool? cancelar}) =
+          required String? tstamp,
+          required bool? cancelar,
+          required int? codSituacao}) =
       _$ConsultaProcessosLeituraEntradaAutomaticaModelImpl;
   _ConsultaProcessosLeituraEntradaAutomaticaModel._() : super._();
 
@@ -853,8 +889,14 @@ abstract class _ConsultaProcessosLeituraEntradaAutomaticaModel
   String? get observacoes;
   set observacoes(String? value);
   @override
+  String? get tstamp;
+  set tstamp(String? value);
+  @override
   bool? get cancelar;
   set cancelar(bool? value);
+  @override
+  int? get codSituacao;
+  set codSituacao(int? value);
   @override
   @JsonKey(ignore: true)
   _$$ConsultaProcessosLeituraEntradaAutomaticaModelImplCopyWith<

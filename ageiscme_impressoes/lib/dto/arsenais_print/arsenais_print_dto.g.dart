@@ -10,7 +10,7 @@ part of 'arsenais_print_dto.dart';
 
 _$ArsenaisPrintDTOImpl _$$ArsenaisPrintDTOImplFromJson(Map json) =>
     _$ArsenaisPrintDTOImpl(
-      companyCod: json['companyCod'] as int,
+      companyCod: (json['companyCod'] as num).toInt(),
       companyName: json['companyName'] as String,
       arsenais: (json['arsenais'] as List<dynamic>)
           .map((e) =>

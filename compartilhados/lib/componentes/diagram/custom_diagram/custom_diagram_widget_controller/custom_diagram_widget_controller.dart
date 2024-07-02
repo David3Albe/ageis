@@ -37,15 +37,26 @@ class CustomDiagramWidgetController {
       break;
     }
     if (rectRemove == null) return false;
+    Map<CustomDiagramRectModel, List<CustomDiagramLinkModel>> linksToRemove =
+        {};
     for (CustomDiagramRectModel rect in objects) {
       if (rect.links == null || rect.links!.isEmpty) continue;
       for (CustomDiagramLinkModel link in rect.links!) {
         if (link.destiny != rectRemove) continue;
-        rect.links!.remove(link);
+        if (!linksToRemove.containsKey(rect)) linksToRemove.addAll({rect: []});
+        linksToRemove[rect]!.add(link);
       }
     }
-    objects.remove(rectRemove);
-    setState(() => {});
+
+    setState(() {
+      for (MapEntry<CustomDiagramRectModel,
+          List<CustomDiagramLinkModel>> linkToRemove in linksToRemove.entries) {
+        linkToRemove.value.forEach((element) {
+          linkToRemove.key.links?.remove(element);
+        });
+      }
+      objects.remove(rectRemove);
+    });
     return true;
   }
 
@@ -173,8 +184,11 @@ class CustomDiagramWidgetController {
     }
   }
 
-  void _addLinks(BuildContext context, List<CustomDiagramRectModel> rects,
-      List<Widget> widgets) {
+  void _addLinks(
+    BuildContext context,
+    List<CustomDiagramRectModel> rects,
+    List<Widget> widgets,
+  ) {
     for (CustomDiagramRectModel rect in rects) {
       if (rect.links == null || rect.links!.isEmpty) continue;
       rect.links!

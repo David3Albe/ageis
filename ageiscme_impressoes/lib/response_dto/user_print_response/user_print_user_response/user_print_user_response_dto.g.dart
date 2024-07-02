@@ -12,8 +12,8 @@ _$UserPrintUserResponseDTOImpl _$$UserPrintUserResponseDTOImplFromJson(
         Map json) =>
     _$UserPrintUserResponseDTOImpl(
       userName: json['userName'] as String,
-      rg: json['rg'] as int,
-      tagId: json['tagId'] as int,
+      rg: (json['rg'] as num).toInt(),
+      tagId: (json['tagId'] as num).toInt(),
     );
 
 Map<String, dynamic> _$$UserPrintUserResponseDTOImplToJson(

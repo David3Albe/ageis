@@ -14,10 +14,10 @@ _$ConsignmentsWithdrawalConsignmentPrintDTOImpl
           prontuary: json['prontuary'] as String?,
           tagId: json['tagId'] as String,
           name: json['name'] as String,
-          consignedItemId: json['consignedItemId'] as int,
+          consignedItemId: (json['consignedItemId'] as num).toInt(),
           consignedItemDescription: json['consignedItemDescription'] as String,
-          received: json['received'] as int,
-          consumed: json['consumed'] as int,
+          received: (json['received'] as num).toInt(),
+          consumed: (json['consumed'] as num).toInt(),
         );
 
 Map<String, dynamic> _$$ConsignmentsWithdrawalConsignmentPrintDTOImplToJson(

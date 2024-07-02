@@ -5,6 +5,7 @@ import 'package:ageiscme_models/dto/escala/save/escala_save_dto.dart';
 import 'package:ageiscme_models/response_dto/turno/short/turno_short_response_dto.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:dependencias_comuns/easy_debounce_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
@@ -106,18 +107,20 @@ class EscalaGridPageHeaderWidgetState
   }
 
   void handleRemoveSelectedRowsButton() {
-    EscalaSaveDTO? escala =
-        BlocProvider.of<EscalaPageCubit>(context).state.escala;
-    if (escala == null) {
-      ToastUtils.showCustomToastNotice(
-        context,
-        'Carregue a escala para remover linhas',
-      );
-      return;
-    }
-    PlutoRow? row = widget.stateManager.currentCell?.row;
-    if (row == null) return;
-    widget.stateManager.removeRows([row]);
+    EasyThrottle.throttle('on-change', const Duration(seconds: 1), () {
+      EscalaSaveDTO? escala =
+          BlocProvider.of<EscalaPageCubit>(context).state.escala;
+      if (escala == null) {
+        ToastUtils.showCustomToastNotice(
+          context,
+          'Carregue a escala para remover linhas',
+        );
+        return;
+      }
+      PlutoRow? row = widget.stateManager.currentCell?.row;
+      if (row == null) return;
+      widget.stateManager.removeRows([row]);
+    });
   }
 
   void handleExpandAll() {

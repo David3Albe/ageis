@@ -103,14 +103,11 @@ class AlertConfirmDialog extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 24.0),
-                child: Row(
+                child: Stack(
                   children: [
-                    FittedBox(
-                      fit: BoxFit.scaleDown,
-                      child: Text(
-                        message,
-                        style: const TextStyle(fontSize: 14),
-                      ),
+                    Text(
+                      message,
+                      style: const TextStyle(fontSize: 14),
                     ),
                   ],
                 ),

@@ -186,9 +186,8 @@ class __$$TipoAfastamentoModelImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$TipoAfastamentoModelImpl
-    with DiagnosticableTreeMixin
-    implements _TipoAfastamentoModel {
+class _$TipoAfastamentoModelImpl extends _TipoAfastamentoModel
+    with DiagnosticableTreeMixin {
   _$TipoAfastamentoModelImpl(
       {required this.cod,
       required this.motivo,
@@ -196,7 +195,8 @@ class _$TipoAfastamentoModelImpl
       required this.cat,
       required this.codInstituicao,
       required this.ultimaAlteracao,
-      @JsonKey(name: 'tStamp') required this.tstamp});
+      @JsonKey(name: 'tStamp') required this.tstamp})
+      : super._();
 
   factory _$TipoAfastamentoModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$TipoAfastamentoModelImplFromJson(json);
@@ -252,7 +252,7 @@ class _$TipoAfastamentoModelImpl
   }
 }
 
-abstract class _TipoAfastamentoModel implements TipoAfastamentoModel {
+abstract class _TipoAfastamentoModel extends TipoAfastamentoModel {
   factory _TipoAfastamentoModel(
           {required int? cod,
           required String? motivo,
@@ -262,6 +262,7 @@ abstract class _TipoAfastamentoModel implements TipoAfastamentoModel {
           required DateTime? ultimaAlteracao,
           @JsonKey(name: 'tStamp') required String? tstamp}) =
       _$TipoAfastamentoModelImpl;
+  _TipoAfastamentoModel._() : super._();
 
   factory _TipoAfastamentoModel.fromJson(Map<String, dynamic> json) =
       _$TipoAfastamentoModelImpl.fromJson;

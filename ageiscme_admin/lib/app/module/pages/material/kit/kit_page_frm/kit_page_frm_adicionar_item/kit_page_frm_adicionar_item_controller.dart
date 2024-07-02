@@ -16,9 +16,8 @@ class KitPageFrmAdicionarItemController extends ChangeNotifier {
 
   KitPageFrmAdicionarItemController({
     required this.context,
-  }) {
-    itens = [];
-  }
+    required this.itens,
+  });
 
   void cancelarAdicao(BuildContext context) {
     Navigator.of(context).pop(null);
@@ -26,6 +25,10 @@ class KitPageFrmAdicionarItemController extends ChangeNotifier {
 
   void confirmarLeituras(BuildContext context) {
     Navigator.of(context).pop(itens);
+  }
+
+  void removeItem(int cod) {
+    itens.removeWhere((element) => element.cod == cod);
   }
 
   Future onRead(String barCode, BuildContext context) async {
@@ -50,6 +53,13 @@ class KitPageFrmAdicionarItemController extends ChangeNotifier {
       ToastUtils.showCustomToastWarning(
         context,
         'Item rotulado não pode ser adicionado a um Kit!',
+      );
+      return;
+    }
+    if (item.dataDescarte != null) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'Item está descartado e não pode ser adicionado!',
       );
       return;
     }

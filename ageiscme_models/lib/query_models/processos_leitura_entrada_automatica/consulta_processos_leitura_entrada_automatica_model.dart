@@ -44,7 +44,9 @@ sealed class ConsultaProcessosLeituraEntradaAutomaticaModel
     required String? motivo,
     required String? motivoQuebraFluxo,
     required String? observacoes,
+    required String? tstamp,
     required bool? cancelar,
+    required int? codSituacao,
   }) = _ConsultaProcessosLeituraEntradaAutomaticaModel;
 
   factory ConsultaProcessosLeituraEntradaAutomaticaModel.fromJson(

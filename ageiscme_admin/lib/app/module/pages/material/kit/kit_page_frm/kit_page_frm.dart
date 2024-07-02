@@ -425,7 +425,7 @@ class _KitPageFrmState extends State<KitPageFrm> {
                               padding: const EdgeInsets.only(top: 5.0),
                               child: txtConjuntoAtual,
                             ),
-                            if (kit.itens!.isNotEmpty) ...{
+                            if (kit.itens != null && kit.itens!.isNotEmpty) ...{
                               Padding(
                                 padding: const EdgeInsets.only(top: 5.0),
                                 child: Text(
@@ -435,22 +435,14 @@ class _KitPageFrmState extends State<KitPageFrm> {
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(top: 5.0),
-                                child: Builder(
-                                  builder: (context) {
-                                    List<ItemModel>? itens = [];
-
-                                    itens.addAll(kit.itens!);
-
-                                    return ListFieldWidget<ItemModel>(
-                                      sourceList: itens,
-                                      removeButton: false,
-                                      onItemSelected: (value) {},
-                                      onDoubleTap: (ItemModel item) =>
-                                          _detalharItem(item.cod),
-                                      itemText: (value) {
-                                        return '${value.descricao}, ${value.idEtiqueta}';
-                                      },
-                                    );
+                                child: ListFieldWidget<ItemModel>(
+                                  sourceList: kit.itens ?? [],
+                                  removeButton: false,
+                                  onItemSelected: (value) {},
+                                  onDoubleTap: (ItemModel item) =>
+                                      _detalharItem(item.cod),
+                                  itemText: (value) {
+                                    return '${value.descricao}, ${value.idEtiqueta}';
                                   },
                                 ),
                               ),
@@ -626,17 +618,23 @@ class _KitPageFrmState extends State<KitPageFrm> {
       barrierDismissible: false,
       context: context,
       builder: (BuildContext context) {
-        return const KitPageFrmAdicionarItemPage();
+        return KitPageFrmAdicionarItemPage(
+          kit: kit,
+        );
       },
     );
-    if (itensAdicionados == null || itensAdicionados.isEmpty) return;
-    _adicionarItensKit(itensAdicionados);
+    _adicionarItensKit(itensAdicionados ?? []);
   }
 
   void _adicionarItensKit(List<ItemModel> itens) {
     if (kit.itens == null) kit.itens = [];
     setState(() {
-      kit.itens!.addAll(itens);
+      for (ItemModel item in itens) {
+        if (kit.itens?.where((it) => it.cod == item.cod).firstOrNull != null) {
+          continue;
+        }
+        kit.itens!.add(item);
+      }
     });
   }
 

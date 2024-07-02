@@ -290,21 +290,12 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
       return '';
     });
 
-    recuperaUsuario().then((value) {
-      if (value == null ||
-          value.usuario == null ||
-          value.usuario!.cod == null) {
-        return;
-      }
-      txtUsuarioCadastro.text = value.usuario!.nome ?? '';
-      item.codUsuarioCadastro = value.usuario!.cod;
-    });
-
     setFields();
     super.initState();
   }
 
   void setFields() {
+    print(item.kit);
     String? usuario = item.usuario?.nome;
     if (usuario == null && txtUsuarioCadastro.text.isNotEmpty) {
       usuario = txtUsuarioCadastro.text;
@@ -1021,7 +1012,9 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
     ToastUtils.showCustomToastSucess(context, itemSave.$1);
     await _printConsignado(itemSave.$2.item);
     setState(() {
+      KitModel? kit = item.kit;
       item = itemSave.$2.item;
+      item.kit = kit;
       setFields();
     });
   }

@@ -10,7 +10,7 @@ part of 'user_tag_print_dto.dart';
 
 _$UserTagPrintDTOImpl _$$UserTagPrintDTOImplFromJson(Map json) =>
     _$UserTagPrintDTOImpl(
-      tagId: json['tagId'] as int,
+      tagId: (json['tagId'] as num).toInt(),
       userName: json['userName'] as String,
     );
 

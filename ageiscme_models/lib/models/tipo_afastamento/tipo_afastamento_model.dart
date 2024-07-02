@@ -6,6 +6,7 @@ part 'tipo_afastamento_model.g.dart';
 
 @unfreezed
 abstract class TipoAfastamentoModel with _$TipoAfastamentoModel {
+  const TipoAfastamentoModel._();
   factory TipoAfastamentoModel({
     required int? cod,
     required String? motivo,
@@ -21,6 +22,8 @@ abstract class TipoAfastamentoModel with _$TipoAfastamentoModel {
 
   static TipoAfastamentoModel copy(TipoAfastamentoModel tipoAfastamento) =>
       TipoAfastamentoModel.fromJson(tipoAfastamento.toJson());
+
+  String GetDropDownText() => motivo == null ? '' : motivo!;
 
   factory TipoAfastamentoModel.empty() => TipoAfastamentoModel(
         cod: 0,

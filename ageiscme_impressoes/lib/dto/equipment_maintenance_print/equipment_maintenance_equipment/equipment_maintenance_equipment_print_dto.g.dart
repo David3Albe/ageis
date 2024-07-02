@@ -11,7 +11,7 @@ part of 'equipment_maintenance_equipment_print_dto.dart';
 _$EquipmentMaintenanceEquipmentPrintDTOImpl
     _$$EquipmentMaintenanceEquipmentPrintDTOImplFromJson(Map json) =>
         _$EquipmentMaintenanceEquipmentPrintDTOImpl(
-          cod: json['cod'] as int,
+          cod: (json['cod'] as num).toInt(),
           name: json['name'] as String,
         );
 

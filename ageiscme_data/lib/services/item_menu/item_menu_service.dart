@@ -264,6 +264,21 @@ class ItemMenuService {
       );
     }
 
+    if (direitosUsuario.contains(DireitoEnum.AfastamentosConsulta) ||
+        direitosUsuario.contains(DireitoEnum.AfastamentosManutencao) ||
+        ignorarDireitos) {
+      menuItemColaborador.addChildren(
+        ItemMenuModel(
+          'Registro de Afastamento',
+          route: '/colaborador/afastamento',
+          rights: [
+            DireitoEnum.AfastamentosConsulta,
+            DireitoEnum.AfastamentosManutencao,
+          ],
+        ),
+      );
+    }
+
     if (direitosUsuario.contains(DireitoEnum.TreinamentosRegistrosConsulta) ||
         direitosUsuario.contains(DireitoEnum.TreinamentosRegistrosManutencao) ||
         ignorarDireitos) {

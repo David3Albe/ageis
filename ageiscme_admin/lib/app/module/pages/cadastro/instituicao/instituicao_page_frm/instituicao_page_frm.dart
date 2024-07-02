@@ -362,7 +362,7 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
                         minHeight: 600,
                         maxHeight: 1000,
                       ),
-                      height: size.height * 0.9,
+                      height: size.height * 0.7,
                       width: size.width * 0.9,
                       child: SingleChildScrollView(
                         padding: const EdgeInsets.only(right: 14),
@@ -692,11 +692,13 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
           BlocBuilder<LocalInstituicaoCubit, LocalInstituicaoState>(
         bloc: localInstituicaoCubit,
         builder: (context, state) {
-          return InstituicaoPageFrmImpressao(
-            instituicao: instituicao,
-            locais: state.locaisInstituicoes,
-            onCancel: () => onCancelImpressao(context),
-            onPrinted: () => onPrinted(context),
+          return AlertDialog(
+            content: InstituicaoPageFrmImpressao(
+              instituicao: instituicao,
+              locais: state.locaisInstituicoes,
+              onCancel: () => onCancelImpressao(context),
+              onPrinted: () => onPrinted(context),
+            ),
           );
         },
       ),

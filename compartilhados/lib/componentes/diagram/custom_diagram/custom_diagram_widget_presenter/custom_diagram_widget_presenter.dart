@@ -5,6 +5,7 @@ import 'package:compartilhados/componentes/diagram/custom_diagram/model/custom_d
 import 'package:compartilhados/componentes/diagram/custom_diagram/selected_process_type_detail/cubits/selected_cubit.dart';
 import 'package:compartilhados/componentes/diagram/custom_diagram/selected_process_type_detail/selected_process_type_detail_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:dependencias_comuns/screenshot_export.dart';
 import 'package:flutter/material.dart';
 
 class CustomDiagramWidgetPresenter extends StatefulWidget {
@@ -17,6 +18,7 @@ class CustomDiagramWidgetPresenter extends StatefulWidget {
   final Color defaultAddedNewRectForeColor;
   final int? initialClickOn;
   final bool canEdit;
+  final ScreenshotController screenshotController;
   const CustomDiagramWidgetPresenter({
     required this.canEdit,
     required this.objects,
@@ -27,6 +29,7 @@ class CustomDiagramWidgetPresenter extends StatefulWidget {
     required this.defaultAddedNewRectBackColor,
     required this.defaultAddedNewRectForeColor,
     required this.initialClickOn,
+    required this.screenshotController,
   });
 
   @override
@@ -63,8 +66,11 @@ class _CustomDiagramWidgetState extends State<CustomDiagramWidgetPresenter> {
     );
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      BlocProvider.of<SelectedCubit>(context).select(widget.initialClickOn);
+      if (widget.initialClickOn != null) {
+        BlocProvider.of<SelectedCubit>(context).select(widget.initialClickOn);
+      }
     });
+    focus.requestFocus();
   }
 
   @override
@@ -75,6 +81,7 @@ class _CustomDiagramWidgetState extends State<CustomDiagramWidgetPresenter> {
     );
     return RawKeyboardListener(
       onKey: controller.handleKey,
+      includeSemantics: true,
       autofocus: true,
       focusNode: focus,
       child: Container(
@@ -115,15 +122,19 @@ class _CustomDiagramWidgetState extends State<CustomDiagramWidgetPresenter> {
                 minScale: 0.1,
                 maxScale: 3,
                 child: Container(
-                  width: 2000,
-                  height: 1200,
+                  width: 1000,
+                  height: 1000,
                   child: Column(
                     children: [
                       Expanded(
                         child: DragTarget(
                           builder: (context, candidateData, rejectedData) {
-                            return Stack(
-                              children: controller.getWidgets(context: context),
+                            return Screenshot(
+                              controller: widget.screenshotController,
+                              child: Stack(
+                                children:
+                                    controller.getWidgets(context: context),
+                              ),
                             );
                           },
                           onAcceptWithDetails: (details) =>

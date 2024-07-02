@@ -14,10 +14,10 @@ _$ProcessoPreparationItemPrintDTOImpl
           nome: json['nome'] as String,
           nomeProprietario: json['nomeProprietario'] as String,
           nomeProcesso: json['nomeProcesso'] as String,
-          validadeEmbalagem: json['validadeEmbalagem'] as int,
+          validadeEmbalagem: (json['validadeEmbalagem'] as num).toInt(),
           tagId: json['tagId'] as String,
           urgency: json['urgency'] as bool,
-          ordemLeitura: json['ordemLeitura'] as int,
+          ordemLeitura: (json['ordemLeitura'] as num).toInt(),
         );
 
 Map<String, dynamic> _$$ProcessoPreparationItemPrintDTOImplToJson(

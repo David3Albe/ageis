@@ -78,6 +78,7 @@ class _ProcessoPageState extends State<ProcessoPage> {
   void initState() {
     final ProcessoLeituraCubit _cubit =
         BlocProvider.of<ProcessoLeituraCubit>(context);
+    _cubit.setFocus(_textNode);
     TIMER_REFRESH_LEITURAS = Timer.periodic(TIMER_REFRESH_DURATION, (Timer t) {
       if (!t.isActive) return;
       updateLastRefreshTime();

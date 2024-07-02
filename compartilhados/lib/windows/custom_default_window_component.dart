@@ -54,12 +54,30 @@ class CustomDefaultWindowComponentState
     });
   }
 
+  void setTooltipDisabled() {
+    setState(() {
+      tooltipDisabled = true;
+    });
+  }
+
   void setWindow({
     required double width,
     required double height,
     required Offset offset,
   }) {
     normalizar();
+    setState(() {
+      this.width = width;
+      this.height = height;
+      this.offset = offset;
+    });
+  }
+
+  void setWindowSizeOfsset({
+    required double width,
+    required double height,
+    required Offset offset,
+  }) {
     setState(() {
       this.width = width;
       this.height = height;
@@ -75,6 +93,16 @@ class CustomDefaultWindowComponentState
   bool maximizadoMetade = false;
   bool minimizado = false;
   bool absorbing = true;
+  bool tooltipDisabled = false;
+  bool alinhadoHorizontal = false;
+  bool alinhadoVertical = false;
+  late Tooltip tooltipFechar = Tooltip(
+    message: 'Fechar',
+    child: IconButton(
+      onPressed: () => widget.remove(widget.chave),
+      icon: const Icon(Symbols.close),
+    ),
+  );
 
   @override
   void initState() {
@@ -240,12 +268,20 @@ class CustomDefaultWindowComponentState
                           ),
                           Padding(
                             padding: const EdgeInsets.only(right: 8.0),
-                            child: Tooltip(
-                              message: 'Fechar',
-                              child: IconButton(
-                                onPressed: () => widget.remove(widget.chave),
-                                icon: const Icon(Symbols.close),
-                              ),
+                            child: Stack(
+                              children: [
+                                TooltipVisibility(
+                                  visible: !tooltipDisabled,
+                                  child: Tooltip(
+                                    message: 'Fechar',
+                                    child: IconButton(
+                                      onPressed: () =>
+                                          widget.remove(widget.chave),
+                                      icon: const Icon(Symbols.close),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -325,8 +361,11 @@ class CustomDefaultWindowComponentState
       maximizado = true;
       maximizadoMetade = false;
       minimizado = false;
+      alinhadoHorizontal = false;
+      alinhadoVertical = false;
     });
     WindowsHelper.SetToLast(widget.chave);
+    WindowsHelper.MaximizouExpandiu(widget.chave);
   }
 
   void maximizarMetade() {
@@ -334,8 +373,11 @@ class CustomDefaultWindowComponentState
       maximizado = false;
       maximizadoMetade = true;
       minimizado = false;
+      alinhadoHorizontal = false;
+      alinhadoVertical = false;
     });
     WindowsHelper.SetToLast(widget.chave);
+    WindowsHelper.MaximizouExpandiu(widget.chave);
   }
 
   void normalizar() {
@@ -343,6 +385,8 @@ class CustomDefaultWindowComponentState
       maximizadoMetade = false;
       maximizado = false;
       minimizado = false;
+      alinhadoHorizontal = false;
+      alinhadoVertical = false;
     });
   }
 
@@ -351,6 +395,8 @@ class CustomDefaultWindowComponentState
       maximizadoMetade = false;
       maximizado = false;
       minimizado = true;
+      alinhadoHorizontal = false;
+      alinhadoVertical = false;
     });
     widget.setToFirst(widget.chave);
   }

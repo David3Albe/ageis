@@ -6,6 +6,8 @@ import 'package:ageiscme_admin/app/module/pages/material/item/item_page_state.da
 import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
 import 'package:ageiscme_data/services/item/item_service.dart';
 import 'package:ageiscme_data/services/kit/kit_service.dart';
+import 'package:ageiscme_data/stores/authentication/authentication_store.dart';
+import 'package:ageiscme_models/dto/authentication_result/authentication_result_dto.dart';
 import 'package:ageiscme_models/dto/kit/drop_down_search/kit_drop_down_search_dto.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/filters/proprietario/proprietario_filter.dart';
@@ -28,6 +30,7 @@ import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
 import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:dependencias_comuns/modular_export.dart';
 import 'package:flutter/material.dart';
 
 class ItemPage extends StatefulWidget {
@@ -285,7 +288,6 @@ class _ItemPageState extends State<ItemPage> {
     return service.FilterOne(
       ItemFilter(
         cod: item.cod,
-        tStamp: item.tstamp,
         carregarKit: true,
         carregarDescritor: true,
         carregarUsuarios: true,
@@ -293,6 +295,10 @@ class _ItemPageState extends State<ItemPage> {
         carregarItensConsignado: widget.frmType == ItemPageFrmtype.Consigned,
       ),
     );
+  }
+
+  Future<AuthenticationResultDTO?> recuperaUsuario() async {
+    return await Modular.get<AuthenticationStore>().GetAuthenticated();
   }
 
   Future openModal(
@@ -312,6 +318,15 @@ class _ItemPageState extends State<ItemPage> {
         notFoundError();
         return;
       }
+    } else {
+      AuthenticationResultDTO? value = await recuperaUsuario();
+      if (value == null ||
+          value.usuario == null ||
+          value.usuario!.cod == null) {
+        return;
+      }
+      item.codUsuarioCadastro = value.usuario!.cod;
+      item.usuario = value.usuario;
     }
     loading.close(context, mounted);
     late int chave;

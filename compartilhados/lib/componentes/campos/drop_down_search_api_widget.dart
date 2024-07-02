@@ -14,6 +14,11 @@ typedef ValidateBuilder<T> = void Function(
   bool Function() validateMethodBuilder,
 );
 
+typedef SetSelectedItemBuilder<T> = void Function(
+  BuildContext context,
+  void Function(T? item) setSelectedItemMethod,
+);
+
 class DropDownSearchApiWidget<T> extends StatefulWidget {
   DropDownSearchApiWidget({
     required this.search,
@@ -25,6 +30,7 @@ class DropDownSearchApiWidget<T> extends StatefulWidget {
     this.readOnly = false,
     this.validator,
     this.validateBuilder,
+    this.setSelectedItemBuilder,
   });
   final T? initialValue;
   final String? placeholder;
@@ -36,6 +42,7 @@ class DropDownSearchApiWidget<T> extends StatefulWidget {
   final bool readOnly;
   final String? Function(T? val)? validator;
   late final ValidateBuilder<T>? validateBuilder;
+  final SetSelectedItemBuilder<T>? setSelectedItemBuilder;
 
   @override
   DropDownSearchApiWidgetState<T> createState() =>
@@ -93,8 +100,19 @@ class DropDownSearchApiWidgetState<T>
     return errorText == null || errorText!.isEmpty;
   }
 
+  void setSelected(T? item) {
+    setState(() {
+      selectedItem = item;
+      if (widget.onChanged != null) widget.onChanged!(item);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    widget.setSelectedItemBuilder?.call(
+      context,
+      setSelected,
+    );
     widget.validateBuilder?.call(
       context,
       valid,

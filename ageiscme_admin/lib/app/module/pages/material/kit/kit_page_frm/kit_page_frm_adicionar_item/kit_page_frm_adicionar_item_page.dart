@@ -1,6 +1,7 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/motivo_remover_repor_item/motivo_remover_repor_item.dart';
 import 'package:ageiscme_admin/app/module/pages/material/kit/kit_page_frm/kit_page_frm_adicionar_item/kit_page_frm_adicionar_item_controller.dart';
 import 'package:ageiscme_models/models/item/item_model.dart';
+import 'package:ageiscme_models/models/kit/kit_model.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/confirm_button_widget.dart';
 import 'package:compartilhados/componentes/campos/list_field/list_field_widget.dart';
@@ -13,9 +14,11 @@ import 'package:dependencias_comuns/provider_export.dart';
 
 class KitPageFrmAdicionarItemPage extends StatefulWidget {
   const KitPageFrmAdicionarItemPage({
+    required this.kit,
     Key? key,
   }) : super(key: key);
 
+  final KitModel? kit;
   @override
   State<KitPageFrmAdicionarItemPage> createState() =>
       _KitPageFrmAdicionarItemPageState();
@@ -29,8 +32,8 @@ class _KitPageFrmAdicionarItemPageState
   void initState() {
     _controller = KitPageFrmAdicionarItemController(
       context: context,
+      itens: widget.kit?.itens ?? [],
     );
-
     super.initState();
   }
 
@@ -86,8 +89,9 @@ class _KitPageFrmAdicionarItemPageState
                           padding: const EdgeInsets.only(top: 5.0),
                         ),
                         ListFieldWidget<ItemModel>(
+                          onRemove: (item) => _controller.removeItem(item.cod!),
                           sourceList: value.itens,
-                          removeButton: false,
+                          removeButton: true,
                           onItemSelected: (value) {},
                           itemText: (value) =>
                               '${value.descricao}, ${value.idEtiqueta}',

@@ -84,7 +84,8 @@ class PlutoGridXmlExport {
     await saveFile.save(
       context: context,
       docString: base64String,
-      docName: 'Consulta.xml',
+      allowedExtensions: ['xml'],
+      docName: null,
       openAfterSave: true,
     );
   }

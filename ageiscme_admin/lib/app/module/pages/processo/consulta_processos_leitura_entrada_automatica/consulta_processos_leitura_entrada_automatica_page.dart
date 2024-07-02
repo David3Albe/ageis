@@ -55,8 +55,7 @@ class _ConsultaProcessosLeituraEntradaAutomaticaPageState
   late final ConsultaProcessosLeituraEntradaAutomaticaFilter filter;
   late final ProcessoEtapaCubit processoEtapaBloc;
   late final EntradaAutomaticaModel entradaAutomatica;
-  late final ConsultaProcessosLeituraEntradaAutomaticaModel
-      consultaEntradaAutomatica;
+  late ConsultaProcessosLeituraEntradaAutomaticaModel consultaEntradaAutomatica;
   late final PlutoGridWidget grid;
   int? codUsuario;
 
@@ -283,11 +282,12 @@ class _ConsultaProcessosLeituraEntradaAutomaticaPageState
       List<ConsultaProcessosLeituraEntradaAutomaticaModel> registrosMarcados =
           bloc.state.entradasAutomaticas
               .where(
-                (entrada) => entrada.cancelar == true && entrada.situacao == 0,
+                (entrada) =>
+                    entrada.cancelar == true && entrada.codSituacao == 0,
               )
               .toList();
 
-      salvar(registrosMarcados);
+      await salvar(registrosMarcados);
     } else {
       return ToastUtils.showCustomToastWarning(
         context,
@@ -296,15 +296,15 @@ class _ConsultaProcessosLeituraEntradaAutomaticaPageState
     }
   }
 
-  void salvar(
+  Future salvar(
     List<ConsultaProcessosLeituraEntradaAutomaticaModel> registrosMarcados,
-  ) {
+  ) async {
     String? observacao = entradaAutomatica.observacao;
     for (ConsultaProcessosLeituraEntradaAutomaticaModel registro
         in registrosMarcados) {
       EntradaAutomaticaModel entradaAutomatica = EntradaAutomaticaModel(
         codRegistroProcesso: registro.codRegistroProcesso,
-        cod: 0,
+        cod: registro.codEntradaAut,
         DataHora: registro.dataHora,
         codEtapa: registro.codEtapaProcesso,
         codInstituicao: 0,
@@ -312,7 +312,7 @@ class _ConsultaProcessosLeituraEntradaAutomaticaPageState
         observacao: observacao,
         codUsuario: codUsuario,
         situacao: 2,
-        tstamp: '',
+        tstamp: registro.tstamp,
         ultimaAlteracao: null,
         usuario: null,
         processoEtapa: null,
@@ -320,8 +320,12 @@ class _ConsultaProcessosLeituraEntradaAutomaticaPageState
         processoRegistro: null,
       );
 
-      entradaAutomaticaBloc.save(entradaAutomatica);
+      await entradaAutomaticaBloc.save(entradaAutomatica);
     }
+    ToastUtils.showCustomToastSucess(
+      context,
+      'Registros da entrada automática cancelados!',
+    );
     bloc.loadEntradaAutomatica(filter);
   }
 

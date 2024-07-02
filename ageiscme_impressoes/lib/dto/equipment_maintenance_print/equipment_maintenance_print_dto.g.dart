@@ -11,7 +11,7 @@ part of 'equipment_maintenance_print_dto.dart';
 _$EquipmentMaintenancePrintDTOImpl _$$EquipmentMaintenancePrintDTOImplFromJson(
         Map json) =>
     _$EquipmentMaintenancePrintDTOImpl(
-      cod: json['cod'] as int,
+      cod: (json['cod'] as num).toInt(),
       company: EquipmentMaintenanceCompanyPrintDTO.fromJson(
           Map<String, Object?>.from(json['company'] as Map)),
       employeer: EquipmentMaintenanceEmployeerPrintDTO.fromJson(
