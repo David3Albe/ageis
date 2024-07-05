@@ -32,8 +32,8 @@ class TrocarEtiquetaPageWidget extends StatelessWidget {
           const TitleWidget(text: 'Trocar etiqueta item'),
         ],
       ),
-      content: RawKeyboardListener(
-        onKey: coletorHelper.handleKey,
+      content: KeyboardListener(
+        onKeyEvent: coletorHelper.handleKey,
         autofocus: true,
         focusNode: focusNode,
         child: Container(

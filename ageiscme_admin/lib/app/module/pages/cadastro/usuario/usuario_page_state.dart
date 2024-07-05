@@ -16,7 +16,8 @@ class UsuarioPageCubit extends Cubit<UsuarioPageState> {
           ),
         );
 
-  Future loadFilter(UsuarioFilter filter) async {
+  Future loadFilter(UsuarioFilter? filter) async {
+    if(filter==null) return;
     emit(UsuarioPageState(loading: true, usuarios: []));
     List<UsuarioModel> usuarios = await service.Filter(filter);
     emit(UsuarioPageState(loading: false, usuarios: usuarios));
@@ -32,7 +33,7 @@ class UsuarioPageCubit extends Cubit<UsuarioPageState> {
     UsuarioCubitFilter filterCubit = context.read<UsuarioCubitFilter>();
     UsuarioPageCubit userCubit = context.read<UsuarioPageCubit>();
     filterCubit = context.read<UsuarioCubitFilter>();
-    UsuarioFilter dto = filterCubit.state;
+    UsuarioFilter? dto = filterCubit.state;
     await userCubit.loadFilter(dto);
   }
 }

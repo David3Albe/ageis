@@ -240,7 +240,7 @@ class WindowsHelper {
     for (CustomOverlayWindow overlay in janelasMinimizadas) {
       Offset offsetWindow = Offset(
         280.0 + (45.0 * count),
-        15.0 + (20.0 * count),
+        5.0 + (30.0 * count),
       );
       overlay.key.currentState?.setWindowSizeOfsset(
         height: fullHeight,
@@ -280,7 +280,7 @@ class WindowsHelper {
     );
     RemoverJanelsExcessivas();
     cubitOverlay.refresh();
-    key.currentState?.setAbsorbing(true);
+    key.currentState?.setAbsorbing(false);
   }
 
   static int GetNextChave() {

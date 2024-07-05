@@ -11,6 +11,7 @@ _$UsuarioDropDownSearchResponseDTOImpl
         _$UsuarioDropDownSearchResponseDTOImpl(
           cod: (json['cod'] as num).toInt(),
           codBarra: (json['codBarra'] as num).toInt(),
+          docClasse: json['docClasse'] as String?,
           nome: json['nome'] as String?,
         );
 
@@ -19,5 +20,6 @@ Map<String, dynamic> _$$UsuarioDropDownSearchResponseDTOImplToJson(
     <String, dynamic>{
       'cod': instance.cod,
       'codBarra': instance.codBarra,
+      'docClasse': instance.docClasse,
       'nome': instance.nome,
     };

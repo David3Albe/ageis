@@ -19,7 +19,9 @@ dependencies:
   shared_preferences: ^2.2.0
   url_launcher: ^6.1.12
   intl: any
-  audioplayers: ^6.0.0
+  audioplayers: ^5.2.1
+  media_kit: ^1.1.10+1
+  media_kit_libs_audio: ^1.0.4
   path_provider: ^2.1.1
   easy_stepper: ^0.8.1
   flutter_localizations:

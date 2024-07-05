@@ -57,8 +57,8 @@ class _ProcessoPageProntuaryDialogState
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return RawKeyboardListener(
-      onKey: coletorHelper.handleKey,
+    return KeyboardListener(
+      onKeyEvent: coletorHelper.handleKey,
       focusNode: _textNode,
       child: AlertDialog(
         titlePadding: const EdgeInsets.all(16),

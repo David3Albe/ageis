@@ -202,8 +202,8 @@ class _ProcessoPageState extends State<ProcessoPage> {
         ],
         child: LayoutBuilder(
           builder: (context, constraints) {
-            return RawKeyboardListener(
-              onKey: coletorHelper.handleKey,
+            return KeyboardListener(
+              onKeyEvent: coletorHelper.handleKey,
               autofocus: true,
               focusNode: _textNode,
               child: Padding(
@@ -446,13 +446,15 @@ class _ProcessoPageState extends State<ProcessoPage> {
     await _cubit.readCode(barCode);
   }
 
-  void _playAudio(ProcessoLeituraMontagemModel processoLeitura) {
+  void _playAudio(ProcessoLeituraMontagemModel processoLeitura) async {
     if (processoLeitura.leituraCodigo.avisosSonoro.isEmpty) return;
+    List<CustomAudio> audios = [];
     for (int codAudio in processoLeitura.leituraCodigo.avisosSonoro) {
       CustomAudio? audio = CustomAudio.getOneFromCode(codAudio);
       if (audio == null) return;
-      CustomAudioPlayer.playAudioFromAsset(audio.path);
+      audios.add(audio);
     }
+    await CustomAudioPlayer.playAudiosFromAsset(audios.map((e) => e.path).toList());
   }
 
   void _toogleManualReadingsOverlay(bool visible) {

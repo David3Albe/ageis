@@ -11,7 +11,7 @@ import 'package:dependencias_comuns/modular_export.dart';
 import 'package:flutter/material.dart';
 
 class EscalaPageCubit extends Cubit<EscalaPageState> {
-  EscalaPageCubit() : super(EscalaPageState());
+  EscalaPageCubit() : super(EscalaPageState(gridKey: UniqueKey()));
 
   Future queryOne({
     required BuildContext context,
@@ -27,14 +27,14 @@ class EscalaPageCubit extends Cubit<EscalaPageState> {
     LoadingController loading = LoadingController(context: context);
 
     date = DateTime(date.year, date.month, 1);
-    emit(EscalaPageState(loading: true, data: date));
+    emit(EscalaPageState(loading: true, data: date, gridKey: UniqueKey()));
     (String, EscalaSaveDTO)? result =
         await Modular.get<EscalaService>().queryOne(
       dto: EscalaQueryOneDTO(
         anoMes: date,
       ),
     );
-    emit(EscalaPageState(escala: result?.$2, data: date));
+    emit(EscalaPageState(escala: result?.$2, data: date, gridKey: UniqueKey()));
     await BlocProvider.of<EscalaPageGridCubit>(context)
         .montaGrid(context: context);
     loading.closeDefault();
@@ -46,6 +46,7 @@ class EscalaPageCubit extends Cubit<EscalaPageState> {
         data: data,
         escala: state.escala,
         loading: state.loading,
+        gridKey: UniqueKey(),
       ),
     );
   }

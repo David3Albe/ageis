@@ -19,6 +19,7 @@ import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
 import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:dependencias_comuns/modular_export.dart';
 import 'package:flutter/material.dart';
 
 class UsuarioPage extends StatefulWidget {
@@ -54,6 +55,8 @@ class _UsuarioPageState extends State<UsuarioPage> {
   ];
 
   late final UsuarioPageCubit bloc;
+  final UsuarioCubitFilter filterBloc = UsuarioCubitFilter();
+  bool possuiPerfilRestrito = false;
 
   @override
   void initState() {
@@ -63,15 +66,18 @@ class _UsuarioPageState extends State<UsuarioPage> {
 
   Future load() async {
     bloc = UsuarioPageCubit(service: UsuarioService());
-    await bloc.loadFilter(
-      UsuarioFilter(
-        tipoQuery: UsuarioFilterTipoQuery.SemFoto,
-        carregarFoto: false,
-        numeroRegistros: 500,
-        ordenarPorAtivosPrimeiro: true,
-        ordenarPorCodDecrescente: true,
-      ),
+    possuiPerfilRestrito =
+        await Modular.get<UsuarioService>().UsuarioAtualPossuiPerfilRestrito();
+    UsuarioFilter usuarioFilter = UsuarioFilter(
+      ignorarUsuariosPerfilRestrito: possuiPerfilRestrito != true,
+      tipoQuery: UsuarioFilterTipoQuery.SemFoto,
+      carregarFoto: false,
+      numeroRegistros: 500,
+      ordenarPorAtivosPrimeiro: true,
+      ordenarPorCodDecrescente: true,
     );
+    filterBloc.setFilter(usuarioFilter);
+    await bloc.loadFilter(usuarioFilter);
   }
 
   @override
@@ -84,8 +90,8 @@ class _UsuarioPageState extends State<UsuarioPage> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => UsuarioCubitFilter(),
+        BlocProvider.value(
+          value: filterBloc,
         ),
         BlocProvider.value(
           value: bloc,
@@ -209,6 +215,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
     chave = WindowsHelper.OpenDefaultWindows(
       title: 'Cadastro/Edição de Usuários',
       widget: UsuarioPageFrm(
+        usuarioAtualPossuiPerfilRestrito: possuiPerfilRestrito,
         onCancel: () => onCancel(chave),
         onSaved: (str) => onSaved(str, chave, context),
         usuario: usuario,
@@ -222,10 +229,11 @@ class _UsuarioPageState extends State<UsuarioPage> {
 
   Future onSaved(String message, int chave, BuildContext context) async {
     WindowsHelper.RemoverWidget(chave);
-    UsuarioCubitFilter filterCubit = context.read<UsuarioCubitFilter>();
+    UsuarioCubitFilter filterCubit =
+        BlocProvider.of<UsuarioCubitFilter>(context);
     ToastUtils.showCustomToastSucess(context, message);
-    UsuarioPageCubit userCubit = context.read<UsuarioPageCubit>();
-    UsuarioFilter dto = filterCubit.state;
+    UsuarioPageCubit userCubit = BlocProvider.of<UsuarioPageCubit>(context);
+    UsuarioFilter dto = filterCubit.state!;
     await userCubit.loadFilter(dto);
   }
 

@@ -716,24 +716,26 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
   void _selectLocal() {
     showDialog<bool>(
       context: context,
-      builder: (context) => LocalInstituicaoPageFrm(
-        onSaved: (str) => onSaved(str, context),
-        onCancel: () => onCancel(context),
-        localInstituicao: LocalInstituicaoModel(
-          cod: 0,
-          ativo: true,
-          codBarra: '',
-          codInstituicao: 0,
-          centroCusto: null,
-          codCentroCusto: null,
-          contato: '',
-          exigeProntuario: false,
-          localConferencia: false,
-          localizacao: '',
-          nome: '',
-          responsavel: '',
-          ultimaAlteracao: null,
-          tstamp: '',
+      builder: (context) => AlertDialog(
+        content: LocalInstituicaoPageFrm(
+          onSaved: (str) => onSaved(str, context),
+          onCancel: () => onCancel(context),
+          localInstituicao: LocalInstituicaoModel(
+            cod: 0,
+            ativo: true,
+            codBarra: '',
+            codInstituicao: 0,
+            centroCusto: null,
+            codCentroCusto: null,
+            contato: '',
+            exigeProntuario: false,
+            localConferencia: false,
+            localizacao: '',
+            nome: '',
+            responsavel: '',
+            ultimaAlteracao: null,
+            tstamp: '',
+          ),
         ),
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/atestado_saude_ocupacional/atestado-saude_ocupacional_page_frm/atestado_saude_ocupacional_page_frm_state.dart';
+import 'package:ageiscme_admin/app/module/pages/colaborador/atestado_saude_ocupacional_exame/atestado_saude_ocupacional_exame_page.dart';
 import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_data/services/atestado_saude_ocupacional/atestado_saude_ocupacional_service.dart';
 import 'package:ageiscme_models/main.dart';
@@ -22,9 +23,11 @@ import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_pop
 import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/images/image_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/functions/file_helper/file_object_model.dart';
 import 'package:compartilhados/functions/image_helper/image_object_model.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -338,6 +341,12 @@ class _AtestadoSaudeOcupacionalFrmState
               children: [
                 CustomPopupMenuWidget(
                   items: [
+                    if (atestadoSaudeOcupacional.cod != null &&
+                        atestadoSaudeOcupacional.cod != 0)
+                      CustomPopupItemModel(
+                        text: 'Exames',
+                        onTap: abrirExames,
+                      ),
                     CustomPopupItemImageModel.getImageItem(
                       'Anexar ASO',
                       salvarASO,
@@ -410,6 +419,23 @@ class _AtestadoSaudeOcupacionalFrmState
           ],
         );
       },
+    );
+  }
+
+  void abrirExames() async {
+    if (atestadoSaudeOcupacional.cod == null ||
+        atestadoSaudeOcupacional.cod == 0) {
+      ToastUtils.showCustomToastNotice(
+        context,
+        'Não é possível ver os exames de uma ASO não cadastrada',
+      );
+      return;
+    }
+    WindowsHelper.OpenDefaultWindows(
+      title: 'Exames da ASO ${atestadoSaudeOcupacional.cod}',
+      widget: AtestadoSaudeOcupacionalExamePage(
+        aso: atestadoSaudeOcupacional,
+      ),
     );
   }
 

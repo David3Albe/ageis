@@ -17,7 +17,11 @@ class CustomPlutoGridDefaultPdfExport
     this.logoDireita,
     this.colorByData,
     this.fontsFallback = const [],
-  });
+    this.colorByColumn,
+    this.getHeaderWidgetByColumn,
+    this.margin,
+    final String Function(PlutoColumn)? customTitleByColumn,
+  }) : super();
 
   final String title;
   final String? creator;
@@ -26,14 +30,21 @@ class CustomPlutoGridDefaultPdfExport
   pluto.Widget? logoEsquerda;
   pluto.Widget? logoDireita;
   final pluto.PdfColor? Function(dynamic data)? colorByData;
+  final pluto.PdfColor? Function(PlutoColumn data)? colorByColumn;
   final List<pluto.Font> fontsFallback;
+  final pluto.EdgeInsets? margin;
+  final pluto.Widget? Function(PlutoColumn, pluto.TextStyle?)?
+      getHeaderWidgetByColumn;
 
   @override
   Future<Uint8List> export(PlutoGridStateManager state) async {
     return GenericPdfController(
+      getHeaderWidgetByColumn: getHeaderWidgetByColumn,
+      margin: margin,
       fontsFallback: fontsFallback,
       title: title,
       colorByData: colorByData,
+      colorByColumn: colorByColumn,
       logoEsquerda: logoEsquerda,
       logoDireita: logoDireita,
       creator: creator ?? 'https://pub.dev/packages/pluto_grid',

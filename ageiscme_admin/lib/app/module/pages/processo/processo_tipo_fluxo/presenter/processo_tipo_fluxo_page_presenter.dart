@@ -2,13 +2,13 @@ import 'package:ageiscme_admin/app/module/pages/processo/processo_tipo_fluxo/con
 import 'package:ageiscme_impressoes/dto/fluxo_print/fluxo_print_dto.dart';
 import 'package:ageiscme_impressoes/prints/fluxo_printer/fluxo_printer_controller.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/custom_default_button_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/diagram/custom_diagram/custom_diagram_widget.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
-import 'package:dependencias_comuns/main.dart';
 import 'package:dependencias_comuns/screenshot_export.dart';
 import 'package:flutter/material.dart';
 
@@ -109,12 +109,9 @@ class _ProcessoTipoFluxoPagePresenterState
               ),
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
-              child: CustomDefaultButtonWidget(
-                icon: Symbols.cancel,
-                text: widget.canEdit ? 'Cancelar' : 'Fechar',
+              child: CancelButtonUnfilledWidget(
+                // text: widget.canEdit ? 'Cancelar' : 'Fechar',
                 onPressed: widget.onCancel,
-                cor: Colors.red.shade400,
-                corHovered: Colors.red.shade500,
               ),
             ),
           ],

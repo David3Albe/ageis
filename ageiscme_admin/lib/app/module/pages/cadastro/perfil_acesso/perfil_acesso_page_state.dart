@@ -1,6 +1,8 @@
 import 'package:ageiscme_data/services/perfil_acesso/perfil_acesso_service.dart';
+import 'package:ageiscme_data/services/usuario/usuario_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:dependencias_comuns/modular_export.dart';
 
 class PerfilAcessoPageCubit extends Cubit<PerfilAcessoPageState> {
   final PerfilAcessoService service;
@@ -15,7 +17,14 @@ class PerfilAcessoPageCubit extends Cubit<PerfilAcessoPageState> {
   void loadPerfilAcesso() async {
     emit(PerfilAcessoPageState(loading: true, perfisAcessos: []));
     try {
+      bool possuiPerfilRestrito = await Modular.get<UsuarioService>()
+          .UsuarioAtualPossuiPerfilRestrito();
       List<PerfilAcessoModel> perfisAcessos = await service.GetAll();
+      if (!possuiPerfilRestrito) {
+        perfisAcessos = perfisAcessos
+            .where((element) => element.perfilRestrito != true)
+            .toList();
+      }
       emit(PerfilAcessoPageState(loading: false, perfisAcessos: perfisAcessos));
     } on Exception catch (ex) {
       emit(

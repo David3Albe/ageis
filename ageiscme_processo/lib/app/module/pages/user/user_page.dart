@@ -18,8 +18,8 @@ class UserPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: Cores.corFundoAgeis,
-      body: RawKeyboardListener(
-        onKey: coletorHelper.handleKey,
+      body: KeyboardListener(
+        onKeyEvent: coletorHelper.handleKey,
         autofocus: true,
         focusNode: _textNode,
         child: FutureBuilder(

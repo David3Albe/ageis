@@ -44,8 +44,12 @@ class WindowExtraActions extends StatelessWidget {
         }
 
         return CustomPopupMenuWidget(
-          tooltip: 'Janelas',
+          icon: const Tooltip(
+            message: 'Janelas',
+            child: const Icon(Icons.window_sharp),
+          ),
           items: items,
+          tooltip: 'Janelas',
         );
       },
     );

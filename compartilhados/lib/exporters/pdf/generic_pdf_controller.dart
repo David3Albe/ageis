@@ -5,7 +5,6 @@ import 'package:dependencias_comuns/main.dart';
 import 'package:dependencias_comuns/pluto_grid_data_export.dart';
 import 'package:flutter/services.dart';
 
-/// GenericPdfController
 class GenericPdfController extends PdfController {
   static const PdfColor borderColor = PdfColors.black;
   static const PdfColor headerBackground = PdfColors.teal100;
@@ -19,6 +18,10 @@ class GenericPdfController extends PdfController {
     required this.format,
     required this.columns,
     required this.rows,
+    this.colorByColumn,
+    this.getHeaderWidgetByColumn,
+    this.margin,
+    this.groups,
     this.themeData,
     this.logoEsquerda,
     this.logoDireita,
@@ -29,13 +32,17 @@ class GenericPdfController extends PdfController {
   final String title;
   final String creator;
   final PdfPageFormat format;
-  final Map<dynamic, String> columns;
+  final Map<PlutoColumn, String> columns;
   final List<Map<dynamic, String?>> rows;
+  final List<PlutoColumnGroup>? groups;
   final ThemeData? themeData;
   final Widget? logoEsquerda;
   final Widget? logoDireita;
   final PdfColor? Function(dynamic data)? colorByData;
+  final PdfColor? Function(PlutoColumn column)? colorByColumn;
   final List<Font> fontsFallback;
+  final EdgeInsets? margin;
+  final Widget? Function(PlutoColumn, TextStyle?)? getHeaderWidgetByColumn;
 
   @override
   PageOrientation getPageOrientation() {
@@ -86,13 +93,15 @@ class GenericPdfController extends PdfController {
   @override
   List<Widget> exportInternal(Context context) {
     return [
-      _table(columns, rows),
+      _table(columns, rows, groups),
     ];
   }
 
-  Widget _table(
-      Map<dynamic, String> columns, List<Map<dynamic, String?>> rows) {
+  Widget _table(Map<PlutoColumn, String> columns,
+      List<Map<dynamic, String?>> rows, List<PlutoColumnGroup>? groups) {
     return CustomTableHelper.fromTextArray(
+      getHeaderWidgetByColumn: getHeaderWidgetByColumn,
+      getColorByColumn: colorByColumn,
       border: null,
       cellAlignment: Alignment.center,
       headerCellDecoration: BoxDecoration(
@@ -121,7 +130,7 @@ class GenericPdfController extends PdfController {
       cellStyle: TextStyle(
         color: baseTextColor,
         fontFallback: fontsFallback,
-        fontSize: 8,
+        fontSize: 7.5,
       ),
       oddRowDecoration: const BoxDecoration(color: oddRowColor),
       cellDecoration: (index, data, rowNum) => BoxDecoration(
@@ -166,6 +175,7 @@ class GenericPdfController extends PdfController {
 
     doc.addPage(
       MultiPage(
+        margin: margin,
         maxPages: 50,
         pageFormat: getPageFormat(),
         orientation: getPageOrientation(),

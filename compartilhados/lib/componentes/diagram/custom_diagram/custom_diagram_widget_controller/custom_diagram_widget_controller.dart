@@ -78,8 +78,8 @@ class CustomDiagramWidgetController {
     });
   }
 
-  void handleKey(RawKeyEvent key) {
-    if (key is RawKeyUpEvent) return;
+  void handleKey(KeyEvent key) {
+    if (key is KeyUpEvent) return;
     if (key.logicalKey != LogicalKeyboardKey.delete) return;
     bool rectRemoved = removeRect();
     if (rectRemoved) return;

@@ -1,5 +1,4 @@
 import 'package:compartilhados/cores/cores.dart';
-import 'package:compartilhados/fontes/fontes.dart';
 import 'package:compartilhados/functions/helper_functions.dart';
 import 'package:flutter/material.dart';
 
@@ -8,7 +7,7 @@ class PrintButtonWidget extends StatefulWidget {
     required this.onPressed,
     this.elevation = 5,
     this.paddingHeight = 6,
-    this.paddingWidth = 12,
+    this.paddingWidth = 8,
     Key? key,
   });
 
@@ -27,57 +26,72 @@ class _PrintButtonWidgetState extends State<PrintButtonWidget> {
   Widget build(BuildContext context) {
     double scaleH = MediaQuery.of(context).size.height / 1080;
     double scaleW = MediaQuery.of(context).size.width / 1920;
-    return Material(
-      type: MaterialType.transparency,
-      elevation: widget.elevation,
-      child: InkWell(
-        onTap: widget.onPressed,
-        onHover: (bool hover) => setState(() => hovered = hover),
-        mouseCursor: SystemMouseCursors.click,
-        child: Container(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(Radius.circular(5)),
-            border: Border.all(color: Cores.corBotaoImprimir),
-            color: hovered ? Cores.corBotaoImprimir : Colors.white,
-          ),
-          child: Padding(
-            padding: EdgeInsets.symmetric(
-              horizontal: widget.paddingWidth * scaleW,
-              vertical: widget.paddingHeight * scaleH,
+    return ElevatedButton(
+      onHover: (bool hover) => setState(() => hovered = hover),
+      style: hovered
+          ? ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                side: hovered
+                    ? BorderSide.none
+                    : const BorderSide(color: Cores.corBotaoImprimir, width: 1),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(5),
+                ),
+              ),
+              elevation: widget.elevation,
+              backgroundColor: Cores.corBotaoImprimir,
+            )
+          : ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                side: hovered
+                    ? BorderSide.none
+                    : const BorderSide(color: Cores.corBotaoImprimir, width: 1),
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(5),
+                ),
+              ),
+              elevation: widget.elevation,
+              backgroundColor: Colors.white,
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Flexible(
-                  child: FittedBox(
-                    fit: BoxFit.fitWidth,
-                    child: Icon(
-                      Icons.print,
-                      size: 20,
-                      color: hovered
-                          ? Cores.corIconeBranco
-                          : Cores.corBotaoImprimir,
+      onPressed: widget.onPressed,
+      child: Padding(
+        padding: EdgeInsetsDirectional.symmetric(
+          horizontal: widget.paddingWidth * scaleW,
+          vertical: widget.paddingHeight * scaleH,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+              child: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Icon(
+                  Icons.print,
+                  color:
+                      hovered ? Cores.corIconeBranco : Cores.corBotaoImprimir,
+                  size: 20,
+                ),
+              ),
+            ),
+            Flexible(
+              child: FittedBox(
+                fit: BoxFit.fitWidth,
+                child: Text(
+                  'Imprimir',
+                  style: TextStyle(
+                    color:
+                        hovered ? Cores.corTextoBranco : Cores.corBotaoImprimir,
+                    fontSize: HelperFunctions.calculaFontSize(
+                      context,
+                      14,
                     ),
                   ),
                 ),
-                Flexible(
-                  child: FittedBox(
-                    fit: BoxFit.fitWidth,
-                    child: Text(
-                      'Imprimir',
-                      style: Fontes.getRoboto(
-                        cor: hovered
-                            ? Cores.corTextoBranco
-                            : Cores.corBotaoImprimir,
-                        fontSize: HelperFunctions.calculaFontSize(context, 14),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

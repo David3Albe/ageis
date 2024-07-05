@@ -152,8 +152,10 @@ class ProcessoPageTreeViewKitStatusWidget extends StatelessWidget {
     required ItemProcessoModel item,
     required int cod,
   }) {
-    ProcessoEtapaModel? etapa = item.getKit(processoLeitura)?.getEtapa(processoLeitura);
+    ProcessoEtapaModel? etapa =
+        item.getKit(processoLeitura)?.getEtapa(processoLeitura);
     if (item.pendenteRecepcao == 1 &&
+        item.lido != true &&
         processoLeitura.leituraAtual.codUsuarioQuebraFluxo == null &&
         item.status != ItemProcessoStatus.Pendente &&
         kit.preparado == false &&

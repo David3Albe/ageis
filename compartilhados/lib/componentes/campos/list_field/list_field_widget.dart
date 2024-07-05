@@ -18,6 +18,7 @@ class ListFieldWidget<T> extends StatefulWidget {
   final double fontSize;
   final SetSelectedItemBuilder<T>? setSelected;
   final void Function(T)? onRemove;
+  final bool Function(T)? ignorarExibicaoItens;
 
   ListFieldWidget({
     required this.sourceList,
@@ -30,6 +31,7 @@ class ListFieldWidget<T> extends StatefulWidget {
     this.fontSize = 14,
     this.setSelected,
     this.onRemove,
+    this.ignorarExibicaoItens,
   });
 
   @override
@@ -64,7 +66,7 @@ class _ListFieldWidgetState<T> extends State<ListFieldWidget<T>> {
       context,
       setSelected,
     );
-    List<T> items = buscarFiltros();
+    List<T> items = buscarFiltrosComItensIgnorados();
     Size size = MediaQuery.of(context).size;
     return Container(
       decoration: BoxDecoration(
@@ -184,6 +186,16 @@ class _ListFieldWidgetState<T> extends State<ListFieldWidget<T>> {
     });
   }
 
+  List<T> buscarFiltrosComItensIgnorados() {
+    List<T> items = buscarFiltros();
+    List<T> itensFinais = [];
+    for (T item in items) {
+      if (ignorarItem(item)) continue;
+      itensFinais.add(item);
+    }
+    return itensFinais;
+  }
+
   List<T> buscarFiltros() {
     List<T> items = widget.sourceList;
     if (filtro == null || filtro!.isEmpty) {
@@ -196,6 +208,11 @@ class _ListFieldWidgetState<T> extends State<ListFieldWidget<T>> {
               ),
         )
         .toList();
+  }
+
+  bool ignorarItem(T item) {
+    if (widget.ignorarExibicaoItens == null) return false;
+    return widget.ignorarExibicaoItens!(item);
   }
 }
 

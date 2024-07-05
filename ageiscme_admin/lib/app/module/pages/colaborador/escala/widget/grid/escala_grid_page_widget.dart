@@ -13,6 +13,7 @@ import 'package:dependencias_comuns/easy_debounce_export.dart';
 import 'package:dependencias_comuns/font_awesome_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
+import 'package:dependencias_comuns/pluto_grid_data_export.dart' as pluto;
 
 class EscalaPageGridWidget extends StatefulWidget {
   const EscalaPageGridWidget({
@@ -80,6 +81,8 @@ class _EscalaPageGridWidgetState extends State<EscalaPageGridWidget> {
               ],
             ),
             child: PlutoGrid(
+              key: BlocProvider.of<EscalaPageCubit>(context).state.gridKey,
+              columnGroups: state.groups,
               configuration: const PlutoGridConfiguration(
                 localeText: PlutoGridLocaleText.brazilianPortuguese(),
                 style: PlutoGridStyleConfig(
@@ -102,6 +105,18 @@ class _EscalaPageGridWidgetState extends State<EscalaPageGridWidget> {
                 context: context,
               ),
               onLoaded: (e) {
+                print('loaded');
+                List<PlutoColumn> columns = [];
+                if (e.stateManager.columns.isNotEmpty) {
+                  columns = [e.stateManager.columns[0]];
+                }
+                e.stateManager.setRowGroup(
+                  PlutoRowGroupByColumnDelegate(
+                    enableCompactCount: true,
+                    columns: columns,
+                    showFirstExpandableIcon: false,
+                  ),
+                );
                 BlocProvider.of<EscalaPageGridCubit>(context)
                     .setStateManager(stateManager: e.stateManager);
               },
@@ -157,13 +172,54 @@ class _EscalaPageGridWidgetState extends State<EscalaPageGridWidget> {
     DateFormat format = DateFormat('MM/yyyy');
     String anoMes = format.format(data);
     PlutoGridPdfExport pdfExport = PlutoGridPdfExport(
+      margin: const pluto.EdgeInsets.only(
+        top: 30,
+        left: 10,
+        right: 10,
+        bottom: 30,
+      ),
+      getHeaderWidgetByColumn: (column, style) =>
+          getCustomTitleByColumn(column, style, stateManager),
       title: 'Escala $anoMes',
       colorByData: (data) => BlocProvider.of<EscalaPageGridCubit>(context)
           .getPdfColorFromData(data: data, context: context),
+      colorByColumn: (column) => BlocProvider.of<EscalaPageGridCubit>(context)
+          .getColorByColumn(column, stateManager, data),
       context: context,
       stateManager: stateManager,
     );
     pdfExport.export();
+  }
+
+  pluto.Widget? getCustomTitleByColumn(
+    PlutoColumn column,
+    pluto.TextStyle? style,
+    PlutoGridStateManager state,
+  ) {
+    int? field = int.tryParse(column.field);
+    if (field == null) return null;
+    PlutoColumnGroup? group = state.columnGroups
+        .where((element) => element.fields!.contains(column.field))
+        .firstOrNull;
+    if (group == null) return null;
+    return pluto.RichText(
+      textAlign: pluto.TextAlign.center,
+      text: pluto.TextSpan(
+        children: [
+          pluto.TextSpan(
+            text: group.title.substring(0, 3) + '\n',
+            style: style?.copyWith(
+              fontSize: 5,
+              fontWeight: pluto.FontWeight.normal,
+            ),
+          ),
+          pluto.TextSpan(
+            text: column.title,
+            style: style,
+          ),
+        ],
+      ),
+    );
   }
 
   void onChanged({
@@ -188,6 +244,7 @@ class _EscalaPageGridWidgetState extends State<EscalaPageGridWidget> {
             row.cells['usuario']!.value is UsuarioDropDownSearchResponseDTO
                 ? row.cells['usuario']!.value
                 : null;
+        event.row.cells['docClasse']!.value = usuario?.docClasse ?? '';
         if (usuario?.cod == usuarioRow?.cod && event.row != row) {
           ToastUtils.showCustomToastWarning(
             context,

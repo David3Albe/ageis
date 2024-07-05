@@ -10,10 +10,12 @@ _$ChaveValorDTOImpl _$$ChaveValorDTOImplFromJson(Map json) =>
     _$ChaveValorDTOImpl(
       chave: json['chave'] as String,
       valor: json['valor'] as String,
+      diferente: json['diferente'] as bool?,
     );
 
 Map<String, dynamic> _$$ChaveValorDTOImplToJson(_$ChaveValorDTOImpl instance) =>
     <String, dynamic>{
       'chave': instance.chave,
       'valor': instance.valor,
+      'diferente': instance.diferente,
     };

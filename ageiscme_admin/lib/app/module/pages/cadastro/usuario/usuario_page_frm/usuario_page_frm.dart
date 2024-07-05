@@ -37,11 +37,13 @@ class UsuarioPageFrm extends StatefulWidget {
     required this.usuario,
     required this.onSaved,
     required this.onCancel,
+    required this.usuarioAtualPossuiPerfilRestrito,
   }) : super(key: key);
 
   final UsuarioModel usuario;
   final void Function(String) onSaved;
   final void Function() onCancel;
+  final bool usuarioAtualPossuiPerfilRestrito;
 
   @override
   State<UsuarioPageFrm> createState() => _UsuarioPageFrmState(usuario: usuario);
@@ -530,6 +532,10 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
                                               )
                                               .toList(),
                                           removeButton: false,
+                                          ignorarExibicaoItens: (p0) =>
+                                              p0.perfilRestrito == true &&
+                                              widget.usuarioAtualPossuiPerfilRestrito !=
+                                                  true,
                                           onItemSelected:
                                               (selectedPerfilUsuario) {
                                             setState(() {

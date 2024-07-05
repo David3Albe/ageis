@@ -10,6 +10,7 @@ sealed class UsuarioDropDownSearchResponseDTO
   factory UsuarioDropDownSearchResponseDTO({
     required int cod,
     required int codBarra,
+    String? docClasse,
     String? nome,
   }) = _UsuarioDropDownSearchResponseDTO;
 

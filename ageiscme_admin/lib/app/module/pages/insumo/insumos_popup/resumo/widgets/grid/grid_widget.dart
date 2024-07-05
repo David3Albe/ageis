@@ -1,11 +1,11 @@
 import 'package:ageiscme_admin/app/module/pages/insumo/insumos_popup/resumo/cubits/search_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/insumos_popup/resumo/states/search_state.dart';
+import 'package:ageiscme_admin/app/module/services/admin_navigator_service.dart';
 import 'package:ageiscme_models/response_dto/insumo/expirar/insumo_expirar_search_response_dto.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
-import 'package:compartilhados/navigator/navigator_service.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +32,7 @@ class GridWidget extends StatelessWidget {
           columns: colunas,
           smallRows: true,
           items: itens ?? [],
-          onDetail: onDetail,
+          onDetail: (event, obj) => onDetail(event, context, obj),
         ),
       ),
     );
@@ -40,11 +40,13 @@ class GridWidget extends StatelessWidget {
 
   Future onDetail(
     PlutoGridOnRowDoubleTapEvent event,
+    BuildContext context,
     InsumoExpirarSearchResponseDTO obj,
   ) async {
     onClose();
-    NavigatorService.navigateToArguments(
+    AdminNavigatorService.navigateToArguments(
       '/admin/insumo/consulta-insumo-saldo',
+      context,
       obj.codInsumo,
     );
   }

@@ -10,6 +10,7 @@ abstract class ChaveValorDTO
   factory ChaveValorDTO({
     required String chave,
     required String valor,
+    bool? diferente,
   }) = _ChaveValorDTO;
 
   factory ChaveValorDTO.fromJson(Map<String, Object?> json) =>

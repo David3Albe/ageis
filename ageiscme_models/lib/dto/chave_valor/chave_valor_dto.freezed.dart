@@ -24,6 +24,8 @@ mixin _$ChaveValorDTO {
   set chave(String value) => throw _privateConstructorUsedError;
   String get valor => throw _privateConstructorUsedError;
   set valor(String value) => throw _privateConstructorUsedError;
+  bool? get diferente => throw _privateConstructorUsedError;
+  set diferente(bool? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -37,7 +39,7 @@ abstract class $ChaveValorDTOCopyWith<$Res> {
           ChaveValorDTO value, $Res Function(ChaveValorDTO) then) =
       _$ChaveValorDTOCopyWithImpl<$Res, ChaveValorDTO>;
   @useResult
-  $Res call({String chave, String valor});
+  $Res call({String chave, String valor, bool? diferente});
 }
 
 /// @nodoc
@@ -55,6 +57,7 @@ class _$ChaveValorDTOCopyWithImpl<$Res, $Val extends ChaveValorDTO>
   $Res call({
     Object? chave = null,
     Object? valor = null,
+    Object? diferente = freezed,
   }) {
     return _then(_value.copyWith(
       chave: null == chave
@@ -65,6 +68,10 @@ class _$ChaveValorDTOCopyWithImpl<$Res, $Val extends ChaveValorDTO>
           ? _value.valor
           : valor // ignore: cast_nullable_to_non_nullable
               as String,
+      diferente: freezed == diferente
+          ? _value.diferente
+          : diferente // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 }
@@ -77,7 +84,7 @@ abstract class _$$ChaveValorDTOImplCopyWith<$Res>
       __$$ChaveValorDTOImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String chave, String valor});
+  $Res call({String chave, String valor, bool? diferente});
 }
 
 /// @nodoc
@@ -93,6 +100,7 @@ class __$$ChaveValorDTOImplCopyWithImpl<$Res>
   $Res call({
     Object? chave = null,
     Object? valor = null,
+    Object? diferente = freezed,
   }) {
     return _then(_$ChaveValorDTOImpl(
       chave: null == chave
@@ -103,6 +111,10 @@ class __$$ChaveValorDTOImplCopyWithImpl<$Res>
           ? _value.valor
           : valor // ignore: cast_nullable_to_non_nullable
               as String,
+      diferente: freezed == diferente
+          ? _value.diferente
+          : diferente // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -112,7 +124,8 @@ class __$$ChaveValorDTOImplCopyWithImpl<$Res>
 class _$ChaveValorDTOImpl
     with DiagnosticableTreeMixin
     implements _ChaveValorDTO {
-  _$ChaveValorDTOImpl({required this.chave, required this.valor});
+  _$ChaveValorDTOImpl(
+      {required this.chave, required this.valor, this.diferente});
 
   factory _$ChaveValorDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$ChaveValorDTOImplFromJson(json);
@@ -121,10 +134,12 @@ class _$ChaveValorDTOImpl
   String chave;
   @override
   String valor;
+  @override
+  bool? diferente;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ChaveValorDTO(chave: $chave, valor: $valor)';
+    return 'ChaveValorDTO(chave: $chave, valor: $valor, diferente: $diferente)';
   }
 
   @override
@@ -133,7 +148,8 @@ class _$ChaveValorDTOImpl
     properties
       ..add(DiagnosticsProperty('type', 'ChaveValorDTO'))
       ..add(DiagnosticsProperty('chave', chave))
-      ..add(DiagnosticsProperty('valor', valor));
+      ..add(DiagnosticsProperty('valor', valor))
+      ..add(DiagnosticsProperty('diferente', diferente));
   }
 
   @JsonKey(ignore: true)
@@ -151,8 +167,10 @@ class _$ChaveValorDTOImpl
 }
 
 abstract class _ChaveValorDTO implements ChaveValorDTO {
-  factory _ChaveValorDTO({required String chave, required String valor}) =
-      _$ChaveValorDTOImpl;
+  factory _ChaveValorDTO(
+      {required String chave,
+      required String valor,
+      bool? diferente}) = _$ChaveValorDTOImpl;
 
   factory _ChaveValorDTO.fromJson(Map<String, dynamic> json) =
       _$ChaveValorDTOImpl.fromJson;
@@ -163,6 +181,9 @@ abstract class _ChaveValorDTO implements ChaveValorDTO {
   @override
   String get valor;
   set valor(String value);
+  @override
+  bool? get diferente;
+  set diferente(bool? value);
   @override
   @JsonKey(ignore: true)
   _$$ChaveValorDTOImplCopyWith<_$ChaveValorDTOImpl> get copyWith =>

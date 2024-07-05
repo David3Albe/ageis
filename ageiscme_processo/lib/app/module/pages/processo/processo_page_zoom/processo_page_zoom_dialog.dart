@@ -17,8 +17,8 @@ class ProcessoPageZoomDialog extends StatelessWidget {
       titlePadding: const EdgeInsets.all(0),
       actionsPadding: const EdgeInsets.all(0),
       contentPadding: const EdgeInsets.all(0),
-      content: RawKeyboardListener(
-        onKey: coletorHelper.handleKey,
+      content: KeyboardListener(
+        onKeyEvent: coletorHelper.handleKey,
         autofocus: true,
         focusNode: focusNode,
         child: Container(

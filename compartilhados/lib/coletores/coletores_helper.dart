@@ -6,9 +6,9 @@ class ColetoresHelper {
 
   ColetoresHelper({this.onEnter});
 
-  void handleKey(RawKeyEvent key) {
+  void handleKey(KeyEvent key) {
     if (onEnter == null) return;
-    if (key is RawKeyUpEvent) return;
+    if (key is KeyUpEvent) return;
     if (key.logicalKey == LogicalKeyboardKey.enter) {
       String _barSendCode = barCode;
       barCode = '';

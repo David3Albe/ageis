@@ -59,8 +59,8 @@ class _AlertReadDialogState extends State<_AlertReadDialog> {
     final coletorHelper =
         ColetoresHelper(onEnter: (str) => _handleKey(str, context));
     Size size = MediaQuery.of(context).size;
-    return RawKeyboardListener(
-      onKey: coletorHelper.handleKey,
+    return KeyboardListener(
+      onKeyEvent: coletorHelper.handleKey,
       autofocus: true,
       focusNode: _textNode,
       child: Stack(

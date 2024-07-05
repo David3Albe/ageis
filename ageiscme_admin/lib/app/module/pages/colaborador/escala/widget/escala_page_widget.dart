@@ -54,7 +54,7 @@ class EscalaPageWidget extends StatelessWidget {
         ),
         const Expanded(
           child: Padding(
-            padding: const EdgeInsets.only(top: 16.0, bottom: 16),
+            padding: const EdgeInsets.only(top: 16.0, bottom: 8),
             child: EscalaPageGridWidget(),
           ),
         ),
@@ -68,7 +68,7 @@ class EscalaPageWidget extends StatelessWidget {
             ),
           ],
         ),
-        const Padding(padding: EdgeInsets.only(top: 8)),
+        const Padding(padding: EdgeInsets.only(top: 2)),
       ],
     );
   }

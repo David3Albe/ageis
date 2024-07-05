@@ -23,6 +23,7 @@ class EscalaPageGridCubit extends Cubit<EscalaPageGridState> {
   EscalaPageGridCubit()
       : super(
           EscalaPageGridState(
+            groups: [],
             columns: [],
             rows: [],
             stateManager: null,
@@ -34,6 +35,7 @@ class EscalaPageGridCubit extends Cubit<EscalaPageGridState> {
   }) {
     emit(
       EscalaPageGridState(
+        groups: [],
         columns: state.columns,
         rows: state.rows,
         stateManager: stateManager,
@@ -47,6 +49,7 @@ class EscalaPageGridCubit extends Cubit<EscalaPageGridState> {
       emit(
         EscalaPageGridState(
           columns: [],
+          groups: [],
           rows: [],
           stateManager: state.stateManager,
         ),
@@ -76,12 +79,39 @@ class EscalaPageGridCubit extends Cubit<EscalaPageGridState> {
           BlocProvider.of<UsuarioDropDownSearchCubit>(context).state.usuarios,
         ),
       ),
+      PlutoColumn(
+        title: 'Doc. Classe',
+        width: 120,
+        field: 'docClasse',
+        readOnly: true,
+        frozen: PlutoColumnFrozen.start,
+        type: PlutoColumnType.text(),
+      ),
     ];
 
     List<DateTime> days = getDaysInMonth(dto.anoMes.year, dto.anoMes.month);
+    List<PlutoColumnGroup> groups = [];
+    PlutoColumnGroup group = PlutoColumnGroup(
+      title: 'Turno / Funcionário',
+      fields: [
+        'usuario',
+        'turno',
+        'docClasse',
+      ],
+    );
+    groups.add(group);
     for (DateTime day in days) {
+      PlutoColumnGroup group = PlutoColumnGroup(
+        title: getDayNameByDate(day),
+        backgroundColor: isWekendDay(day) ? Colors.yellow.shade200 : null,
+        fields: [
+          day.day.toString(),
+        ],
+      );
+      groups.add(group);
       DateFormat format = DateFormat('dd');
       PlutoColumn clm = PlutoColumn(
+        backgroundColor: isWekendDay(day) ? Colors.yellow.shade200 : null,
         width: 115,
         enableEditingMode: false,
         title: format.format(day),
@@ -93,6 +123,7 @@ class EscalaPageGridCubit extends Cubit<EscalaPageGridState> {
     }
     emit(
       EscalaPageGridState(
+        groups: groups,
         columns: columns,
         stateManager: state.stateManager,
         rows: montaLinhas(
@@ -102,6 +133,30 @@ class EscalaPageGridCubit extends Cubit<EscalaPageGridState> {
         ),
       ),
     );
+  }
+
+  String getDayNameByDate(DateTime date) {
+    switch (date.weekday) {
+      case 1:
+        return 'Segunda';
+      case 2:
+        return 'Terça';
+      case 3:
+        return 'Quarta';
+      case 4:
+        return 'Quinta';
+      case 5:
+        return 'Sexta';
+      case 6:
+        return 'Sábado';
+      case 7:
+        return 'Domingo';
+    }
+    return '';
+  }
+
+  bool isWekendDay(DateTime data) {
+    return data.weekday == 6 || data.weekday == 7;
   }
 
   List<Future> getFutures({
@@ -130,6 +185,22 @@ class EscalaPageGridCubit extends Cubit<EscalaPageGridState> {
       ),
     );
     return futures;
+  }
+
+  pluto.PdfColor? getColorByColumn(
+    PlutoColumn column,
+    PlutoGridStateManager state,
+    DateTime dataBase,
+  ) {
+    int? field = int.tryParse(column.field);
+    if (field == null) return null;
+    DateTime dataAtual = DateTime(dataBase.year, dataBase.month, field);
+    if (dataAtual.weekday == 6 || dataAtual.weekday == 7) {
+      return flutterToHex(
+        Colors.yellow.shade200,
+      );
+    }
+    return null;
   }
 
   pluto.PdfColor? getPdfColorFromData({
@@ -244,9 +315,12 @@ class EscalaPageGridCubit extends Cubit<EscalaPageGridState> {
           Map<String, PlutoCell> cells = {
             'turno': PlutoCell(value: turno.turno),
             'usuario': PlutoCell(value: usuario.usuario),
+            'docClasse': PlutoCell(value: usuario.usuario?.docClasse ?? ''),
           };
           for (PlutoColumn column in columns) {
-            if (column.field == 'usuario' || column.field == 'turno') continue;
+            if (column.field == 'usuario' ||
+                column.field == 'turno' ||
+                column.field == 'docClasse') continue;
             DateTime date = DateTime(
               dto.anoMes.year,
               dto.anoMes.month,
@@ -280,7 +354,7 @@ class EscalaPageGridCubit extends Cubit<EscalaPageGridState> {
     Map<String, PlutoCell> cells = {};
     for (PlutoColumn column in columns) {
       dynamic value;
-      if (column.field == 'usuario') value = '';
+      if (column.field == 'usuario' || column.field == 'docClasse') value = '';
       cells.addAll({column.field: PlutoCell(value: value)});
     }
     return PlutoRow(

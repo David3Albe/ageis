@@ -98,6 +98,18 @@ abstract class AdminNavigatorService {
     openRoute(itemMenu: itemMenu, context: context);
   }
 
+  static void navigateToArguments(
+    String route,
+    BuildContext context,
+    dynamic data,
+  ) {
+    openRouteArguments(
+      route: route,
+      context: context,
+      data: data,
+    );
+  }
+
   static void navigateToHome() {
     NavigatorService.navigateTo('/admin/home');
   }
@@ -115,7 +127,8 @@ abstract class AdminNavigatorService {
     required ItemMenuModel itemMenu,
     required BuildContext context,
   }) {
-    Widget widget = getWidgetParams(data: null, itemMenu: itemMenu);
+    String route = itemMenu.route + '/';
+    Widget widget = getWidgetParams(data: null, route: route);
     ItemMenuModel? father = itemMenu.getFather();
     String text = father != null ? '${father.text} > ' : '';
     text += itemMenu.text;
@@ -126,14 +139,28 @@ abstract class AdminNavigatorService {
     );
   }
 
+  static void openRouteArguments({
+    required String route,
+    required BuildContext context,
+    required dynamic data,
+  }) {
+    route += '/';
+    route = route.replaceAll('/admin', '');
+    Widget widget = getWidgetParams(data: data, route: route);
+    WindowsHelper.OpenDefaultWindows(
+      widget: widget,
+      title: route,
+      theme: Theme.of(context),
+    );
+  }
+
   static void navigateToModuleSelection() =>
       NavigatorService.navigateToModuleSelection();
 
   static Widget getWidgetParams({
-    required ItemMenuModel itemMenu,
+    required String route,
     required final dynamic data,
   }) {
-    String route = itemMenu.route + '/';
     switch (route) {
       case '/home/':
         return const HomePage();

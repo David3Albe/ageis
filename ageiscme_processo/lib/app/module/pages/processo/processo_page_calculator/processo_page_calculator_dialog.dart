@@ -77,8 +77,8 @@ class _ProcessoPageCalculatorDialogState
     }
   }
 
-  void handleCustomkey(RawKeyEvent key) {
-    if (key is RawKeyUpEvent) return;
+  void handleCustomkey(KeyEvent key) {
+    if (key is KeyUpEvent) return;
     String? keyChar = key.character;
     if (keyChar != null) {
       int? parseado = int.tryParse(keyChar);
@@ -106,8 +106,8 @@ class _ProcessoPageCalculatorDialogState
             cancel();
           }
         },
-        child: RawKeyboardListener(
-          onKey: handleCustomkey,
+        child: KeyboardListener(
+          onKeyEvent: handleCustomkey,
           autofocus: true,
           focusNode: _textNode,
           child: Container(

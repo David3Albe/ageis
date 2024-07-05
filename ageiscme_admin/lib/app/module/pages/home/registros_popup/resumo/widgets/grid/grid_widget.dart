@@ -1,11 +1,11 @@
 import 'package:ageiscme_admin/app/module/pages/home/registros_popup/resumo/cubits/search_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/home/registros_popup/resumo/states/search_state.dart';
+import 'package:ageiscme_admin/app/module/services/admin_navigator_service.dart';
 import 'package:ageiscme_models/response_dto/registros/expirar/registros_expirar_search_response_dto.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
-import 'package:compartilhados/navigator/navigator_service.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +32,7 @@ class GridWidget extends StatelessWidget {
           columns: colunas,
           smallRows: true,
           items: itens ?? [],
-          onDetail: onDetail,
+          onDetail: (event, obj) => onDetail(event, context, obj),
         ),
       ),
     );
@@ -40,36 +40,42 @@ class GridWidget extends StatelessWidget {
 
   Future onDetail(
     PlutoGridOnRowDoubleTapEvent event,
+    BuildContext context,
     RegistrosExpirarSearchResponseDTO obj,
   ) async {
     onClose();
     if (obj.codTipo == 5) {
-      NavigatorService.navigateToArguments(
+      AdminNavigatorService.navigateToArguments(
         '/admin/equipamento/equipamento-manutencao',
+        context,
         obj.codTabela,
       );
     }
     if (obj.codTipo == 4) {
-      NavigatorService.navigateToArguments(
+      AdminNavigatorService.navigateToArguments(
         '/admin/equipamento/registro-servico',
+        context,
         obj.codTabela,
       );
     }
     if (obj.codTipo == 3) {
-      NavigatorService.navigateToArguments(
+      AdminNavigatorService.navigateToArguments(
         '/admin/colaborador/epi-entrega',
+        context,
         obj.codUsuario,
       );
     }
     if (obj.codTipo == 2) {
-      NavigatorService.navigateToArguments(
+      AdminNavigatorService.navigateToArguments(
         '/admin/colaborador/atestado-saude-ocupacional',
+        context,
         obj.codTabela,
       );
     }
     if (obj.codTipo == 1) {
-      NavigatorService.navigateToArguments(
+      AdminNavigatorService.navigateToArguments(
         '/admin/biblioteca/documento',
+        context,
         obj.codTabela,
       );
     }

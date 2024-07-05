@@ -135,7 +135,7 @@ class CustomDefaultWindowComponentState
   }
 
   double getMaximizedHeight(Size size) {
-    return size.height - getToolbarHeight(size) - 55;
+    return size.height - getToolbarHeight(size) - 67.5;
   }
 
   double getMaximizedWidth(Size size) {
@@ -156,7 +156,7 @@ class CustomDefaultWindowComponentState
 
   double getMaximizedMetadeWidth(Size size) {
     (double, double) width = getWidthAppBar(size);
-    return size.width - 30 - width.$1;
+    return size.width - 32 - width.$1;
   }
 
   @override
@@ -166,7 +166,7 @@ class CustomDefaultWindowComponentState
       left: maximizado
           ? 0
           : maximizadoMetade
-              ? getWidthAppBar(size).$1 + 1
+              ? getWidthAppBar(size).$1 + 0.5
               : offset.dx,
       top: maximizado
           ? 0
@@ -206,30 +206,36 @@ class CustomDefaultWindowComponentState
                       });
                     },
                     child: Container(
+                      decoration: BoxDecoration(
+                        border:
+                            Border.all(color: Colors.grey.shade400, width: 1.5),
+                        color: absorbing
+                            ? Colors.grey.shade200
+                            : Colors.grey.shade100,
+                      ),
                       width: maximizado
                           ? getMaximizedWidth(size) + 30
                           : maximizadoMetade
-                              ? getMaximizedMetadeWidth(size) + 30
-                              : width + 28,
-                      color: absorbing
-                          ? Colors.grey.shade300
-                          : Colors.grey.shade100,
+                              ? getMaximizedMetadeWidth(size) + 30.5
+                              : width + 31,
                       child: Row(
                         children: [
                           const Padding(
                             padding: EdgeInsets.only(left: 8),
                           ),
-                          Text(
-                            widget.title,
-                            style: Fontes.getRoboto(fontSize: 14),
+                          Expanded(
+                            child: Text(
+                              widget.title,
+                              overflow: TextOverflow.ellipsis,
+                              style: Fontes.getRoboto(fontSize: 14),
+                            ),
                           ),
-                          const Spacer(),
                           const Padding(
-                            padding: EdgeInsets.only(right: 8.0),
+                            padding: EdgeInsets.only(right: 5.0),
                             child: WindowExtraActions(),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
+                            padding: const EdgeInsets.only(right: 5.0),
                             child: Tooltip(
                               message: 'Minimizar',
                               child: IconButton(
@@ -241,7 +247,7 @@ class CustomDefaultWindowComponentState
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
+                            padding: const EdgeInsets.only(right: 5.0),
                             child: Tooltip(
                               message: 'Tela cheia',
                               child: IconButton(
@@ -253,7 +259,7 @@ class CustomDefaultWindowComponentState
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
+                            padding: const EdgeInsets.only(right: 5.0),
                             child: Tooltip(
                               message: 'Expandir',
                               child: IconButton(
@@ -267,7 +273,7 @@ class CustomDefaultWindowComponentState
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.only(right: 8.0),
+                            padding: const EdgeInsets.only(right: 5.0),
                             child: Stack(
                               children: [
                                 TooltipVisibility(
@@ -294,52 +300,59 @@ class CustomDefaultWindowComponentState
             Visibility(
               visible: minimizado == false,
               maintainState: true,
-              child: BorderWindowWidget(
-                onEnter: onEnter,
-                cursor: SystemMouseCursors.resizeRight,
-                onPanUpdate: onPanUpdate,
-                padding: const EdgeInsets.only(right: 6),
-                widget: BorderWindowWidget(
+              child: Container(
+                decoration: BoxDecoration(
+                  color:
+                      absorbing ? Colors.grey.shade200 : Colors.grey.shade100,
+                  border: Border.all(color: Colors.grey.shade400, width: 1.5),
+                ),
+                child: BorderWindowWidget(
                   onEnter: onEnter,
-                  cursor: SystemMouseCursors.resizeLeft,
-                  onPanUpdate: onPanUpdate,
-                  padding: const EdgeInsets.only(left: 6),
+                  cursor: SystemMouseCursors.resizeRight,
+                  onPanUpdate: (details) => onPanUpdate(details, false),
+                  padding: const EdgeInsets.only(right: 6),
                   widget: BorderWindowWidget(
                     onEnter: onEnter,
-                    cursor: SystemMouseCursors.resizeDown,
-                    onPanUpdate: onPanUpdate,
-                    padding: const EdgeInsets.only(bottom: 6),
-                    widget: MouseRegion(
-                      cursor: SystemMouseCursors.basic,
-                      child: GestureDetector(
-                        onPanUpdate: (details) {},
-                        onTap: onEnter,
-                        child: IgnorePointer(
-                          ignoring: absorbing,
-                          child: Theme(
-                            data: Theme.of(ToastUtils.routerOutletContext!),
-                            child: Material(
-                              elevation: 0,
-                              color: Cores.materialCorPrincipal.shade300,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Container(
-                                      height: maximizado || maximizadoMetade
-                                          ? getMaximizedHeight(size)
-                                          : height,
-                                      width: maximizado
-                                          ? getMaximizedWidth(size)
-                                          : maximizadoMetade
-                                              ? getMaximizedMetadeWidth(size)
-                                              : width,
-                                      child: widget.child,
+                    cursor: SystemMouseCursors.resizeLeft,
+                    onPanUpdate: (details) => onPanUpdate(details, true),
+                    padding: const EdgeInsets.only(left: 6),
+                    widget: BorderWindowWidget(
+                      onEnter: onEnter,
+                      cursor: SystemMouseCursors.resizeDown,
+                      onPanUpdate: (details) => onPanUpdate(details, false),
+                      padding: const EdgeInsets.only(bottom: 6),
+                      widget: MouseRegion(
+                        cursor: SystemMouseCursors.basic,
+                        child: GestureDetector(
+                          onPanUpdate: (details) {},
+                          onTap: onEnter,
+                          child: IgnorePointer(
+                            ignoring: absorbing,
+                            child: Theme(
+                              data: Theme.of(ToastUtils.routerOutletContext!),
+                              child: Material(
+                                elevation: 0,
+                                color: Cores.materialCorPrincipal.shade300,
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        height: maximizado || maximizadoMetade
+                                            ? getMaximizedHeight(size)
+                                            : height,
+                                        width: maximizado
+                                            ? getMaximizedWidth(size)
+                                            : maximizadoMetade
+                                                ? getMaximizedMetadeWidth(size)
+                                                : width,
+                                        child: widget.child,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -388,6 +401,7 @@ class CustomDefaultWindowComponentState
       alinhadoHorizontal = false;
       alinhadoVertical = false;
     });
+    WindowsHelper.SetToLast(widget.chave);
   }
 
   void minimizar() {
@@ -401,15 +415,26 @@ class CustomDefaultWindowComponentState
     widget.setToFirst(widget.chave);
   }
 
-  void onPanUpdate(DragUpdateDetails details) {
-    double newWidth = width + details.delta.dx;
+  void onPanUpdate(DragUpdateDetails details, bool reverse) {
     double newHeight = height + details.delta.dy;
+    double newWidth;
+    if (reverse) {
+      newWidth = width - details.delta.dx;
+    } else {
+      newWidth = width + details.delta.dx;
+    }
     setState(() {
       if (newWidth >= 475 || newWidth > width) {
         width = newWidth;
       }
       if (newHeight >= 400 || newHeight > height) {
         height = newHeight;
+      }
+      if (reverse && newWidth <= width) {
+        offset = Offset(
+          offset.dx + details.delta.dx,
+          offset.dy,
+        );
       }
     });
   }

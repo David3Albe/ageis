@@ -79,8 +79,8 @@ class _CustomDiagramWidgetState extends State<CustomDiagramWidgetPresenter> {
       context,
       () => controller.clear(),
     );
-    return RawKeyboardListener(
-      onKey: controller.handleKey,
+    return KeyboardListener(
+      onKeyEvent: controller.handleKey,
       includeSemantics: true,
       autofocus: true,
       focusNode: focus,

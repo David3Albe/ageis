@@ -13,13 +13,19 @@ class PlutoGridPdfExport {
   PlutoGridStateManager stateManager;
   BuildContext context;
   final pw.PdfColor? Function(dynamic data)? colorByData;
+  final pw.PdfColor? Function(PlutoColumn data)? colorByColumn;
   final String title;
+  final pw.Widget? Function(PlutoColumn, pw.TextStyle?)? getHeaderWidgetByColumn;
+  final pw.EdgeInsets? margin;
 
   PlutoGridPdfExport({
     required this.stateManager,
     required this.context,
     this.title = 'Consulta',
     this.colorByData,
+    this.colorByColumn,
+    this.getHeaderWidgetByColumn,
+    this.margin,
   });
 
   Future export({
@@ -40,7 +46,10 @@ class PlutoGridPdfExport {
     final font = await rootBundle.load('fonts/Arial/Arial.ttf');
     final ttf = pw.Font.ttf(font);
     var plutoGridPdfExport = CustomPlutoGridDefaultPdfExport(
+      margin: margin,
+      colorByColumn: colorByColumn,
       fontsFallback: [ttf],
+      getHeaderWidgetByColumn: getHeaderWidgetByColumn,
       colorByData: colorByData,
       title: title,
       creator: 'AGEISCME',

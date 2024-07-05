@@ -20,8 +20,8 @@ class SolicitacaoMaterialConfirmacaoSemUsuarioPage extends StatelessWidget {
       contentPadding: const EdgeInsets.all(16),
       title:
           const TitleWidget(text: 'Gerar solicitação sem usuário autorização'),
-      content: RawKeyboardListener(
-        onKey: _controller.coletorHelper.handleKey,
+      content: KeyboardListener(
+        onKeyEvent: _controller.coletorHelper.handleKey,
         autofocus: true,
         focusNode: _controller.textNode,
         child: Container(

@@ -6,7 +6,7 @@ export 'package:shared_preferences/shared_preferences.dart';
 export 'package:url_launcher/url_launcher.dart';
 export 'package:intl/intl.dart';
 export 'package:path_provider/path_provider.dart';
-export 'package:audioplayers/audioplayers.dart';
+export 'package:media_kit/media_kit.dart';
 export 'package:easy_stepper/easy_stepper.dart';
 export 'package:flutter_localizations/flutter_localizations.dart';
 export 'package:pluto_grid/pluto_grid.dart';

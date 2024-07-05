@@ -5,11 +5,14 @@ abstract class CustomAbstractTextExport<T> {
 
   T export(PlutoGridStateManager state);
 
-  Map<PlutoColumn, String> getColumnTitles(PlutoGridStateManager state) {
+  Map<PlutoColumn, String> getColumnTitles(
+    PlutoGridStateManager state,
+  ) {
     Iterable<PlutoColumn> columns = visibleColumns(state);
     Map<PlutoColumn, String> map = {};
     for (PlutoColumn column in columns) {
-      map.addAll({column: column.title});
+      String title = column.title;
+      map.addAll({column: title});
     }
     return map;
   }

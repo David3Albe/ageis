@@ -41,8 +41,8 @@ class LoadingController {
         color: Colors.black.withOpacity(0.2),
         width: size.width,
         height: size.height,
-        child: RawKeyboardListener(
-          onKey: coletorHelper.handleKey,
+        child: KeyboardListener(
+          onKeyEvent: coletorHelper.handleKey,
           autofocus: true,
           focusNode: _textNode,
           child: const Center(

@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
+import 'package:dependencias_comuns/main.dart' as pluto;
 import 'package:dependencias_comuns/pluto_grid_data_export.dart';
 
 mixin CustomTableHelper {
+  static const PdfColor borderColor = PdfColors.black;
   static TextAlign _textAlign(Alignment align) {
     if (align.x == 0) {
       return TextAlign.center;
@@ -39,13 +41,15 @@ mixin CustomTableHelper {
     OnCellFormat? cellFormat,
     OnCellDecoration? cellDecoration,
     int headerCount = 1,
-    Map<dynamic, dynamic>? headers,
+    Map<pluto.PlutoColumn, dynamic>? headers,
+    List<pluto.PlutoColumnGroup>? groups,
     EdgeInsetsGeometry? headerPadding,
     double? headerHeight,
     AlignmentGeometry headerAlignment = Alignment.center,
     Map<int, AlignmentGeometry>? headerAlignments,
     TextStyle? headerStyle,
     OnCellFormat? headerFormat,
+    Widget? Function(pluto.PlutoColumn, TextStyle?)? getHeaderWidgetByColumn,
     TableBorder? border = const TableBorder(
       left: BorderSide(),
       right: BorderSide(),
@@ -63,6 +67,7 @@ mixin CustomTableHelper {
     BoxDecoration? oddRowDecoration,
     TextDirection? headerDirection,
     TextDirection? tableDirection,
+    final PdfColor? Function(pluto.PlutoColumn)? getColorByColumn,
   }) {
     assert(headerCount >= 0);
 
@@ -84,23 +89,40 @@ mixin CustomTableHelper {
     var rowNum = 0;
     if (headers != null) {
       final tableRow = <Widget>[];
-
-      for (final MapEntry<dynamic, dynamic> cell in headers.entries) {
+      for (final MapEntry<pluto.PlutoColumn, dynamic> cell in headers.entries) {
+        PdfColor? colorByColumn;
+        if (getColorByColumn != null) {
+          colorByColumn = getColorByColumn(cell.key);
+        }
+        Widget? headerWidget;
+        if (getHeaderWidgetByColumn != null) {
+          headerWidget = getHeaderWidgetByColumn(cell.key, headerStyle);
+        }
         tableRow.add(
           Container(
             alignment: headerAlignments[tableRow.length] ?? headerAlignment,
             padding: headerPadding,
-            decoration: headerCellDecoration,
+            decoration: colorByColumn != null
+                ? BoxDecoration(
+                    color: colorByColumn,
+                    border: Border.all(
+                      color: borderColor,
+                      width: 0.5,
+                    ),
+                  )
+                : headerCellDecoration,
             constraints: BoxConstraints(minHeight: headerHeight),
-            child: cell.value is Widget
-                ? cell.value
-                : Text(
-                    headerFormat == null
-                        ? cell.value.toString()
-                        : headerFormat(tableRow.length, cell.value),
-                    style: headerStyle,
-                    textDirection: headerDirection,
-                  ),
+            child: headerWidget != null
+                ? headerWidget
+                : cell.value is Widget
+                    ? cell.value
+                    : Text(
+                        headerFormat == null
+                            ? cell.value.toString()
+                            : headerFormat(tableRow.length, cell.value),
+                        style: headerStyle,
+                        textDirection: headerDirection,
+                      ),
           ),
         );
       }

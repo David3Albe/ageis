@@ -148,7 +148,6 @@ class _ItemDescritorPageState extends State<ItemDescritorPage> {
     return service.FilterOne(
       ItemDescritorFilter(
         cod: itemDescritor.cod,
-        tStamp: itemDescritor.tstamp,
         carregarImagem: true,
         carregarItensConsignados: true,
       ),

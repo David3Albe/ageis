@@ -3,6 +3,7 @@ import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_wi
 import 'package:ageiscme_models/filters/usuario_filter/usuario_filter.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
+import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +14,17 @@ class UsuarioPageFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    UsuarioFilter dto = context.watch<UsuarioCubitFilter>().state;
+    UsuarioFilter? dto = context.watch<UsuarioCubitFilter>().state;
+    if (dto == null) {
+      return const FilterDialogWidget(
+        child: Column(
+          children: [
+            Center(child: LoadingWidget()),
+          ],
+        ),
+      );
+    }
+    
     return FilterDialogWidget(
       child: Column(
         children: [

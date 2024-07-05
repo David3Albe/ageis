@@ -22,6 +22,7 @@ sealed class UsuarioFilter with _$UsuarioFilter {
     bool? ordenarPorAtivosPrimeiro,
     String? termoPesquisa,
     bool? ordenarPorCodDecrescente,
+    bool? ignorarUsuariosPerfilRestrito,
   }) = _UsuarioFilter;
 
   factory UsuarioFilter.fromJson(Map<String, Object?> json) =>

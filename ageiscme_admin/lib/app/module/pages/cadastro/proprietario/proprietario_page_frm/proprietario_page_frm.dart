@@ -195,7 +195,7 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
                                             proprietario.manutencaoLiberada,
                                         onClick: (value) => proprietario
                                             .manutencaoLiberada = value,
-                                        text: 'manutenção Liberada',
+                                        text: 'Manutenção Liberada',
                                       ),
                                     ],
                                   ),

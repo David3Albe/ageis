@@ -39,7 +39,7 @@ class _UsuarioButtonFilterWidgetState extends State<UsuarioButtonFilterWidget> {
     if (confirm != true) return;
     UsuarioPageCubit userCubit = context.read<UsuarioPageCubit>();
     filterCubit = context.read<UsuarioCubitFilter>();
-    UsuarioFilter dto = filterCubit.state;
+    UsuarioFilter? dto = filterCubit.state;
     await userCubit.loadFilter(dto);
   }
 }

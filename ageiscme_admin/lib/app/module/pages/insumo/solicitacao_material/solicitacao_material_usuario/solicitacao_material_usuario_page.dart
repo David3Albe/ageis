@@ -41,8 +41,8 @@ class _SolicitacaoMaterialUsuarioPageState
       actionsPadding: const EdgeInsets.all(16),
       contentPadding: const EdgeInsets.all(16),
       title: const TitleWidget(text: 'Identificar Usuário'),
-      content: RawKeyboardListener(
-        onKey: _controller.coletorHelper.handleKey,
+      content: KeyboardListener(
+        onKeyEvent: _controller.coletorHelper.handleKey,
         autofocus: true,
         focusNode: _controller.textNode,
         child: Container(

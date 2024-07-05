@@ -21,7 +21,9 @@ class GridWidget extends StatelessWidget {
     SearchState state = context.watch<SearchCubit>().state;
     HistoricoSearchResponseDTO? dto = state.response;
     if (state.loading == true) return const Center(child: LoadingWidget());
-    context.read<DetailedCubit>().detail(state.response?.itens.firstOrNull);
+    context
+        .read<DetailedCubit>()
+        .detail(state.response?.itens.firstOrNull, null);
     return Expanded(
       flex: 2,
       child: Padding(
@@ -30,7 +32,8 @@ class GridWidget extends StatelessWidget {
           columns: colunas,
           items: dto?.itens ?? [],
           mode: PlutoGridMode.selectWithOneTap,
-          onSelected: context.read<DetailedCubit>().detail,
+          onSelected: (item) =>
+              context.read<DetailedCubit>().detail(item, state.response?.itens),
         ),
       ),
     );
