@@ -179,7 +179,6 @@ class _AtestadoSaudeOcupacionalPageState
       AtestadoSaudeOcupacionalFilter(
         cod: atestado.cod,
         carregarUsuario: true,
-        tStamp: atestado.tstamp,
       ),
     );
   }

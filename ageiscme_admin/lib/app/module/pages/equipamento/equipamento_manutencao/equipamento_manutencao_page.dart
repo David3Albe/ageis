@@ -186,7 +186,6 @@ class _EquipamentoManutencaoPageState extends State<EquipamentoManutencaoPage> {
     return service.FilterOne(
       EquipamentoManutencaoFilter(
         cod: equipamentoManutencao.cod,
-        tStamp: equipamentoManutencao.tstamp,
       ),
     );
   }

@@ -23,7 +23,7 @@ class GridWidget extends StatelessWidget {
     if (state.loading == true) return const Center(child: LoadingWidget());
     context
         .read<DetailedCubit>()
-        .detail(state.response?.itens.firstOrNull, null);
+        .detail(state.response?.itens.firstOrNull, state.response?.itens);
     return Expanded(
       flex: 2,
       child: Padding(

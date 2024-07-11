@@ -109,7 +109,6 @@ class _ImagemPageState extends State<ImagemPage> {
     return service.FilterOne(
       ImagemFilter(
         cod: imagem.cod,
-        tStamp: imagem.tstamp,
       ),
     );
   }

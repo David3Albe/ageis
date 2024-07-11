@@ -164,7 +164,6 @@ class _KitDescritorPageState extends State<KitDescritorPage> {
       KitDescritorFilter(
         cod: kitDescritor.cod,
         carregarProcessoTipo: true,
-        tStamp: kitDescritor.tstamp,
       ),
     );
   }

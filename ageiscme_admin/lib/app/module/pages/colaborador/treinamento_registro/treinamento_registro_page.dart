@@ -151,7 +151,6 @@ class _TreinamentoRegistroPageState extends State<TreinamentoRegistroPage> {
       TreinamentoRegistroFilter(
         cod: treinamentoRegistro.cod,
         carregarUsuario: true,
-        tStamp: treinamentoRegistro.tstamp,
       ),
     );
   }

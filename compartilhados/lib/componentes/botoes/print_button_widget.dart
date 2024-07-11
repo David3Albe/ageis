@@ -38,7 +38,6 @@ class _PrintButtonWidgetState extends State<PrintButtonWidget> {
                   Radius.circular(5),
                 ),
               ),
-              elevation: widget.elevation,
               backgroundColor: Cores.corBotaoImprimir,
             )
           : ElevatedButton.styleFrom(
@@ -50,7 +49,6 @@ class _PrintButtonWidgetState extends State<PrintButtonWidget> {
                   Radius.circular(5),
                 ),
               ),
-              elevation: widget.elevation,
               backgroundColor: Colors.white,
             ),
       onPressed: widget.onPressed,

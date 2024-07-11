@@ -251,7 +251,6 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
     return service.FilterOne(
       RegistroServicoFilter(
         cod: registroServico.cod,
-        tStamp: registroServico.tstamp,
         carregarImagens: true,
         carregarUsuario: true,
         carregarItem: true,

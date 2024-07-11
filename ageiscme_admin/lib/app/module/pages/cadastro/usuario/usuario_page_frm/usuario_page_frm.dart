@@ -8,7 +8,6 @@ import 'package:ageiscme_data/services/alterar_senha_padrao/alterar_senha_padrao
 import 'package:ageiscme_data/services/usuario/usuario_service.dart';
 import 'package:ageiscme_models/dto/alterar_senha_padrao/alterar_senha_padrao_dto.dart';
 import 'package:ageiscme_models/main.dart';
-import 'package:ageiscme_models/response_dto/alterar_senha_padrao/alterar_senha_padrao_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/list_button_widget.dart';
@@ -659,13 +658,15 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
   }
 
   void onConfirmResetPasssword() async {
-    (String, AlterarSenhaPadraoResponseDTO)? result =
+    (String, UsuarioModel)? result =
         await AlterarSenhaPadraoService().changePassword(
       AlterarSenhaPadraoDTO(
         codUsuario: usuario.cod!,
       ),
     );
     if (result == null) return;
+    usuario.tstamp = result.$2.tstamp;
+    print(result.$2.tstamp);
     ToastUtils.showCustomToastSucess(context, result.$1);
   }
 

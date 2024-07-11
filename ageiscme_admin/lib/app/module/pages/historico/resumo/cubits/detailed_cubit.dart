@@ -26,9 +26,9 @@ class DetailedCubit extends Cubit<DetailedState> {
   ) {
     if (item == null || itens == null) return null;
     List<HistoricoSearchItemResponseDTO> itensDepoisDoItem =
-        itens.where((element) => element.data.isAfter(item.data)).toList();
+        itens.where((element) => element.data.isBefore(item.data)).toList();
     itensDepoisDoItem.sort(
-      (a, b) => a.data.compareTo(b.data),
+      (a, b) => b.data.compareTo(a.data),
     );
     return itensDepoisDoItem.firstOrNull;
   }

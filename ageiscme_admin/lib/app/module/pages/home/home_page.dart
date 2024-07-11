@@ -70,7 +70,7 @@ class _HomePageState extends State<HomePage> {
       chave: chave,
       title: 'Insumos expirados e a expirar',
       height: height,
-      ofssetBase: Offset(right, 60),
+      ofssetBase: Offset(right, 10),
       width: width,
       child: widget,
       remove: WindowsHelper.RemoverWidget,
@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
       title: 'Documentos vencidos e a vencer',
       width: width,
       height: height,
-      ofssetBase: Offset(right, 60),
+      ofssetBase: Offset(right, 10),
       child: widget,
     );
 

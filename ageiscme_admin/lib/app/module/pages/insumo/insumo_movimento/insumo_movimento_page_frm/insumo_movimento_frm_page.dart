@@ -138,7 +138,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
       if (date == null && insumoMovimento.flagEntradaSaida == '1') {
         return 'Obrigatório';
       }
-      if (insumoMovimento.flagEntradaSaida != '1' &&
+      if (insumoMovimento.flagEntradaSaida == '1' &&
           date != null &&
           date.isBefore(DateTime.now())) {
         return 'Não pode ser antes da data atual';

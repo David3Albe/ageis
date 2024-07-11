@@ -111,6 +111,7 @@ class EscalaPageGridCubit extends Cubit<EscalaPageGridState> {
       groups.add(group);
       DateFormat format = DateFormat('dd');
       PlutoColumn clm = PlutoColumn(
+        enableColumnDrag: false,
         backgroundColor: isWekendDay(day) ? Colors.yellow.shade200 : null,
         width: 115,
         enableEditingMode: false,

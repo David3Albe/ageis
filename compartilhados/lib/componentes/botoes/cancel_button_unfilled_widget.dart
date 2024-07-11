@@ -5,13 +5,13 @@ import 'package:flutter/material.dart';
 class CancelButtonUnfilledWidget extends StatefulWidget {
   const CancelButtonUnfilledWidget({
     required this.onPressed,
-    this.elevation = 3,
+    this.elevation,
     this.paddingHeight = 6,
     this.paddingWidth = 8,
     Key? key,
   });
 
-  final double elevation;
+  final double? elevation;
   final double paddingHeight;
   final double paddingWidth;
   final void Function()? onPressed;

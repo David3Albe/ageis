@@ -172,7 +172,6 @@ class _UsuarioPageState extends State<UsuarioPage> {
       await UsuarioService().FilterOne(
         UsuarioFilter(
           cod: usuario.cod,
-          tStamp: usuario.tstamp,
           incluirDireitos: true,
           carregarFoto: true,
           tipoQuery: UsuarioFilterTipoQuery.SemFoto,

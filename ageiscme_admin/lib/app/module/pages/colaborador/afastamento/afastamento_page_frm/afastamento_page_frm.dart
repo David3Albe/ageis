@@ -201,6 +201,7 @@ class _AfastamentoPageFrmState extends State<AfastamentoPageFrm> {
                                       UsuarioDropDownSearchDTO(
                                         numeroRegistros: 30,
                                         search: str,
+                                        apenasAtivos: true,
                                       ),
                                     ))
                                         ?.$2 ??

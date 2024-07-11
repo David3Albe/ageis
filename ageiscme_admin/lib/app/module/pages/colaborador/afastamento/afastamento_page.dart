@@ -180,7 +180,6 @@ class _AfastamentoPageState extends State<AfastamentoPage> {
         cod: atestado.cod,
         carregarUsuario: true,
         carregarUsuarioRegistro: true,
-        tstamp: atestado.tstamp,
       ),
     );
   }

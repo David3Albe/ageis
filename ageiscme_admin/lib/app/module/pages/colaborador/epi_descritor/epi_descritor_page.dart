@@ -127,7 +127,6 @@ class _EpiDescritorPageState extends State<EpiDescritorPage> {
     return service.FilterOne(
       EpiDescritorFilter(
         cod: epiDescritor.cod,
-        tStamp: epiDescritor.tstamp,
       ),
     );
   }
