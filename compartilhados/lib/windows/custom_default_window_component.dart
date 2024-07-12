@@ -309,17 +309,20 @@ class CustomDefaultWindowComponentState
                 child: BorderWindowWidget(
                   onEnter: onEnter,
                   cursor: SystemMouseCursors.resizeRight,
-                  onPanUpdate: (details) => onPanUpdate(details, false),
+                  onPanUpdate: (details) =>
+                      onPanUpdate(details, false, absorbing),
                   padding: const EdgeInsets.only(right: 6),
                   widget: BorderWindowWidget(
                     onEnter: onEnter,
                     cursor: SystemMouseCursors.resizeLeft,
-                    onPanUpdate: (details) => onPanUpdate(details, true),
+                    onPanUpdate: (details) =>
+                        onPanUpdate(details, true, absorbing),
                     padding: const EdgeInsets.only(left: 6),
                     widget: BorderWindowWidget(
                       onEnter: onEnter,
                       cursor: SystemMouseCursors.resizeDown,
-                      onPanUpdate: (details) => onPanUpdate(details, false),
+                      onPanUpdate: (details) =>
+                          onPanUpdate(details, false, absorbing),
                       padding: const EdgeInsets.only(bottom: 6),
                       widget: MouseRegion(
                         cursor: SystemMouseCursors.basic,
@@ -415,7 +418,8 @@ class CustomDefaultWindowComponentState
     widget.setToFirst(widget.chave);
   }
 
-  void onPanUpdate(DragUpdateDetails details, bool reverse) {
+  void onPanUpdate(DragUpdateDetails details, bool reverse, bool absorbing) {
+    if (absorbing) return;
     double newHeight = height + details.delta.dy;
     double newWidth;
     if (reverse) {
