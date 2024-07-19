@@ -1,3 +1,4 @@
+import 'package:compartilhados/componentes/botoes/button_constraints.dart';
 import 'package:compartilhados/cores/cores.dart';
 import 'package:compartilhados/functions/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -24,39 +25,37 @@ class _PrintButtonWidgetState extends State<PrintButtonWidget> {
   bool hovered = false;
   @override
   Widget build(BuildContext context) {
-    double scaleH = MediaQuery.of(context).size.height / 1080;
-    double scaleW = MediaQuery.of(context).size.width / 1920;
-    return ElevatedButton(
-      onHover: (bool hover) => setState(() => hovered = hover),
-      style: hovered
-          ? ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                side: hovered
-                    ? BorderSide.none
-                    : const BorderSide(color: Cores.corBotaoImprimir, width: 1),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(5),
+    return SizedBox(
+      width: ButtonConstraints.SMALL_BUTTON_WIDTH,
+      height: ButtonConstraints.SMALL_BUTTON_HEIGHT,
+      child: ElevatedButton(
+        onHover: (bool hover) => setState(() => hovered = hover),
+        style: hovered
+            ? ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  side: hovered
+                      ? BorderSide.none
+                      : const BorderSide(
+                          color: Cores.corBotaoImprimir, width: 1),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(5),
+                  ),
                 ),
-              ),
-              backgroundColor: Cores.corBotaoImprimir,
-            )
-          : ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                side: hovered
-                    ? BorderSide.none
-                    : const BorderSide(color: Cores.corBotaoImprimir, width: 1),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(5),
+                backgroundColor: Cores.corBotaoImprimir,
+              )
+            : ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  side: hovered
+                      ? BorderSide.none
+                      : const BorderSide(
+                          color: Cores.corBotaoImprimir, width: 1),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(5),
+                  ),
                 ),
+                backgroundColor: Colors.white,
               ),
-              backgroundColor: Colors.white,
-            ),
-      onPressed: widget.onPressed,
-      child: Padding(
-        padding: EdgeInsetsDirectional.symmetric(
-          horizontal: widget.paddingWidth * scaleW,
-          vertical: widget.paddingHeight * scaleH,
-        ),
+        onPressed: widget.onPressed,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

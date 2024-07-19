@@ -2,6 +2,7 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/kit_cor/kit_c
 import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_admin/app/module/pages/material/item/item_page.dart';
 import 'package:ageiscme_admin/app/module/pages/material/item/item_page_frm_type.dart';
+import 'package:ageiscme_admin/app/module/pages/material/kit/kit_page_frm/kit_mesma_cor_page/kit_mesma_cor_page_widget.dart';
 import 'package:ageiscme_admin/app/module/pages/material/kit/kit_page_frm/kit_page_frm_adicionar_item/kit_page_frm_adicionar_item_page.dart';
 import 'package:ageiscme_admin/app/module/pages/material/kit/kit_page_frm/kit_page_frm_remover_item/kit_page_frm_remover_item_page.dart';
 import 'package:ageiscme_admin/app/module/pages/material/kit/kit_page_frm/kit_page_frm_repor_item/kit_page_frm_repor_item_page.dart';
@@ -15,9 +16,11 @@ import 'package:ageiscme_impressoes/dto/processo_preparation_print/processo_prep
 import 'package:ageiscme_impressoes/prints/kit_tag_printer/kit_tag_printer_controller.dart';
 import 'package:ageiscme_impressoes/prints/processo_preparation_printer/processo_preparation_printer_controller.dart';
 import 'package:ageiscme_models/dto/kit/kit_etiqueta_preparo/kit_etiqueta_preparo_dto.dart';
+import 'package:ageiscme_models/dto/kit/mesma_cor/kit_mesma_cor_dto.dart';
 import 'package:ageiscme_models/dto/kit_descritor/drop_down_search/kit_descritor_drop_down_search_dto.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/response_dto/kit/mesma_cor/kit_mesma_cor_response_dto.dart';
 import 'package:ageiscme_models/response_dto/kit_descritor/drop_down_search/kit_descritor_drop_down_search_response_dto.dart';
 import 'package:ageiscme_models/response_dto/kit_etiqueta_preparo_response/kit_etiqueta_preparo_kit_response/kit_etiqueta_preparo_kit_response_dto.dart';
 import 'package:ageiscme_models/response_dto/kit_etiqueta_preparo_response/kit_etiqueta_preparo_response_dto.dart';
@@ -77,16 +80,16 @@ class _KitPageFrmState extends State<KitPageFrm> {
   );
 
   late final TextFieldStringWidget txtRestricao = TextFieldStringWidget(
-    placeholder: 'Restrição',
+    placeholder: 'Observação',
     onChanged: (String? str) {
       kit.restricao = txtRestricao.text;
     },
   );
 
-  late final TextFieldStringWidget txtConjuntoAtual = TextFieldStringWidget(
-    placeholder: 'Conjunto Atual',
-    readOnly: true,
-  );
+  // late final TextFieldStringWidget txtConjuntoAtual = TextFieldStringWidget(
+  //   placeholder: 'Conjunto Atual',
+  //   readOnly: true,
+  // );
 
   late final TextFieldStringWidget txtPreparo = TextFieldStringWidget(
     placeholder: 'Sit. Preparo',
@@ -138,7 +141,7 @@ class _KitPageFrmState extends State<KitPageFrm> {
     txtCodBarra.text = kit.codBarra.toString();
     txtPreparo.text = kit.preparo.toString();
     txtCodEmbalagem.text = kit.codEmbalagem?.toString() ?? '';
-    txtConjuntoAtual.text = kit.codConjunto?.toString() ?? '';
+    // txtConjuntoAtual.text = kit.codConjunto?.toString() ?? '';
     txtProcessoLeitura.text = kit.codProcessoLeitura?.toString() ?? '';
     txtRestricao.text = kit.restricao?.toString() ?? '';
 
@@ -419,12 +422,16 @@ class _KitPageFrmState extends State<KitPageFrm> {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 5.0),
-                              child: txtRestricao,
+                              child: dtpDataDescarte,
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 5.0),
-                              child: txtConjuntoAtual,
+                              child: txtRestricao,
                             ),
+                            // Padding(
+                            //   padding: const EdgeInsets.only(top: 5.0),
+                            //   child: txtConjuntoAtual,
+                            // ),
                             if (kit.itens != null && kit.itens!.isNotEmpty) ...{
                               Padding(
                                 padding: const EdgeInsets.only(top: 5.0),
@@ -638,7 +645,7 @@ class _KitPageFrmState extends State<KitPageFrm> {
     });
   }
 
-  void salvar() {
+  void salvar() async {
     bool restricaoValid = txtRestricao.valid;
     bool descritorKitValid = validateDescritor();
     bool situacaoValid = validateSituacao();
@@ -648,11 +655,40 @@ class _KitPageFrmState extends State<KitPageFrm> {
       scroll.jumpTo(150);
     }
     if (!restricaoValid || !descritorKitValid || !situacaoValid) return;
+    if ((kit.cod == null || kit.cod == 0) && kit.itens == null ||
+        kit.itens!.isEmpty) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'Não é possível adicionar um kit sem itens',
+      );
+      return;
+    }
+    bool? corIgual = await _validaKitsMesmaCor();
+    if (corIgual != true) return;
     Function(KitModel)? afterSave;
     if (kit.cod == 0 || kit.cod == null) {
       afterSave = (kitImprimir) => _imprimirTagKit(kitImprimir: kitImprimir);
     }
-    cubit.save(kit, afterSave, widget.onSaved);
+    await cubit.save(kit, afterSave, widget.onSaved);
+  }
+
+  Future<bool?> _validaKitsMesmaCor() async {
+    (String, KitMesmaCorResponseDTO)? result = await KitService().mesmaCor(
+      dto: KitMesmaCorDTO(
+        codCor1: kit.codCor1,
+        codCor2: kit.codCor2,
+        codCor3: kit.codCor3,
+        codCor4: kit.codCor4,
+        codKit: kit.cod,
+      ),
+    );
+    if (result == null) return false;
+    if (result.$2.kits.isEmpty) return true;
+    return await showDialog<bool>(
+      barrierDismissible: false,
+      context: context,
+      builder: (context) => KitMesmaCorPageWidget(mesmaCor: result.$2),
+    );
   }
 
   Future _imprimirTagKit({KitModel? kitImprimir}) async {

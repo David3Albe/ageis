@@ -3,6 +3,7 @@ import 'package:ageiscme_admin/app/module/pages/insumo/insumos_popup/insumos_pop
 import 'package:ageiscme_admin/app/module/pages/insumo/insumos_popup/resumo/cubits/search_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/home/registros_popup/resumo/cubits/search_cubit.dart'
     as registros_expirar;
+import 'package:ageiscme_admin/app/module/services/admin_navigator_service.dart';
 import 'package:ageiscme_data/services/access_user/access_user_service.dart';
 import 'package:ageiscme_data/services/insumo_saldo/insumo_saldo_service.dart';
 import 'package:ageiscme_data/services/registros_expirar/registros_expirar_service.dart';
@@ -29,14 +30,19 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    AdminNavigatorService.goingToHome = loadPopups;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
-      int chaveInsumo = WindowsHelper.GetNextChave();
-      int chaveRegistroExpirar = WindowsHelper.GetNextChave();
-      await Future.wait([
-        showOverlayInsumos(chaveInsumo),
-        showOverlayRegistrosExpirar(chaveRegistroExpirar),
-      ]);
+      await loadPopups();
     });
+  }
+
+  Future loadPopups() async {
+    int chaveInsumo = WindowsHelper.GetNextChave();
+    int chaveRegistroExpirar = WindowsHelper.GetNextChave();
+    await Future.wait([
+      showOverlayInsumos(chaveInsumo),
+      showOverlayRegistrosExpirar(chaveRegistroExpirar),
+    ]);
   }
 
   @override

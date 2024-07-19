@@ -70,7 +70,7 @@ abstract class ItemDescritorModel
         codEmbalagem: 0,
         codInstituicao: 0,
         limiteProcessos: null,
-        cm: 0,
+        cm: null,
         peso: 0,
         volume: 0,
         ativo: true,

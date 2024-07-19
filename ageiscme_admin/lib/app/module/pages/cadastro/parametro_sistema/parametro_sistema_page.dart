@@ -2,6 +2,7 @@ import 'package:ageiscme_admin/app/module/pages/cadastro/parametro_sistema/param
 import 'package:ageiscme_admin/app/module/pages/cadastro/parametro_sistema/parametro_sistema_page_state.dart';
 import 'package:ageiscme_data/services/parametro_sistema/parametro_sistema_service.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -65,6 +66,13 @@ class _ParametroSistemaPageState extends State<ParametroSistemaPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: bloc.loadParametroSistema,
+            ),
+          ],
+        ),
         BlocListener<ParametroSistemaPageCubit, ParametroSistemaPageState>(
           bloc: bloc,
           listener: (context, state) {

@@ -69,7 +69,7 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
   late final TextFieldNumberWidget txtCodBarra = TextFieldNumberWidget(
     placeholder: 'Código de Barra',
     onChanged: (String? str) {
-      proprietario.codBarra = int.parse(txtCodBarra.text);
+      proprietario.codBarra = int.tryParse(txtCodBarra.text);
     },
   );
 
@@ -96,6 +96,15 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
         return 'Obrigatório';
       } else if (str.length > 400) {
         return 'Pode ter no máximo 400 caracteres';
+      }
+      return '';
+    });
+
+    txtCodBarra.addValidator((String str) {
+      if (str.isEmpty) {
+        return '';
+      } else if (int.tryParse(str) == null) {
+        return 'Número inválido';
       }
       return '';
     });
@@ -183,23 +192,23 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
                                     ],
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.only(
-                                    top: 5.0,
-                                    left: 16.0,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      CustomCheckboxWidget(
-                                        checked:
-                                            proprietario.manutencaoLiberada,
-                                        onClick: (value) => proprietario
-                                            .manutencaoLiberada = value,
-                                        text: 'Manutenção Liberada',
-                                      ),
-                                    ],
-                                  ),
-                                ),
+                                // Padding(
+                                //   padding: const EdgeInsets.only(
+                                //     top: 5.0,
+                                //     left: 16.0,
+                                //   ),
+                                //   child: Row(
+                                //     children: [
+                                //       CustomCheckboxWidget(
+                                //         checked:
+                                //             proprietario.manutencaoLiberada,
+                                //         onClick: (value) => proprietario
+                                //             .manutencaoLiberada = value,
+                                //         text: 'Manutenção Liberada',
+                                //       ),
+                                //     ],
+                                //   ),
+                                // ),
                               ],
                             ),
                             Padding(
@@ -719,12 +728,15 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
   void salvar() {
     bool nomeValid = txtNome.valid;
     bool contatoValid = txtContato.valid;
+    bool codBarraValid = txtCodBarra.valid;
     if (!nomeValid) {
       scroll.jumpTo(0);
     } else if (!contatoValid) {
       scroll.jumpTo(90);
+    } else if (!codBarraValid) {
+      scroll.jumpTo(50);
     }
-    if (!nomeValid || !contatoValid) return;
+    if (!nomeValid || !contatoValid || !codBarraValid) return;
 
     final registrarProprietarioLocal = <ProprietarioLocalModel>[];
     final registrarProprietarioArsenal = <ProprietarioArsenalModel>[];

@@ -3,6 +3,7 @@ import 'package:ageiscme_admin/app/module/pages/material/unidade_medida/unidade_
 import 'package:ageiscme_data/services/unidade_medida/unidade_medida_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -47,13 +48,21 @@ class _UnidadeMedidaPageState extends State<UnidadeMedidaPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              UnidadeMedidaModel.empty(),
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: bloc.loadUnidadeMedida,
             ),
-          },
+            const Padding(padding: EdgeInsets.only(left: 5)),
+            AddButtonWidget(
+              onPressed: () => {
+                openModal(
+                  context,
+                  UnidadeMedidaModel.empty(),
+                ),
+              },
+            ),
+          ],
         ),
         BlocListener<UnidadeMedidaPageCubit, UnidadeMedidaPageState>(
           bloc: bloc,

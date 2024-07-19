@@ -171,7 +171,7 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
       initialValue: item.dataAquisicao,
     );
     txtRestricao = TextFieldStringWidget(
-      placeholder: 'Restrição',
+      placeholder: 'Observação',
       onChanged: (String? str) => item.restricao = str,
     );
     dtpDataDescarte = DatePickerWidget(

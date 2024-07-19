@@ -21,6 +21,7 @@ import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/fontes/fontes.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
 class PerfilAcessoPageFrm extends StatefulWidget {
@@ -182,59 +183,129 @@ class _PerfilAcessoPageFrmState extends State<PerfilAcessoPageFrm> {
                               child: Row(
                                 children: [
                                   Expanded(
-                                    child: ListButtonWidget(
-                                      text: 'Remover Direito',
-                                      icon: Icons.arrow_forward,
-                                      onPressed: () {
-                                        if (direitoRemover != null) {
-                                          setState(() {
-                                            if (perfilAcesso.perfilDireitos !=
-                                                null) {
-                                              perfilAcesso.perfilDireitos!
-                                                  .removeWhere(
-                                                (element) =>
-                                                    element.codDireito ==
-                                                    direitoRemover!.cod,
-                                              );
-                                            }
-                                          });
-                                        } else {
-                                          ToastUtils.showCustomToastError(
-                                            context,
-                                            'Nenhum Direito selecionado',
-                                          );
-                                        }
-                                      },
+                                    child: Row(
+                                      children: [
+                                        Expanded(
+                                          child: ListButtonWidget(
+                                            text: 'Remover Todos',
+                                            icon: Symbols.forward,
+                                            onPressed: () {
+                                              setState(() {
+                                                perfilAcesso.perfilDireitos =
+                                                    [];
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                        const Padding(
+                                          padding: EdgeInsets.only(left: 16),
+                                        ),
+                                        Expanded(
+                                          child: ListButtonWidget(
+                                            text: 'Remover Direito',
+                                            icon: Icons.arrow_forward,
+                                            onPressed: () {
+                                              if (direitoRemover?.cod != null) {
+                                                removerDireito(
+                                                  direitoRemover!.cod!,
+                                                );
+                                                direitoRemover = null;
+                                              } else {
+                                                ToastUtils.showCustomToastError(
+                                                  context,
+                                                  'Nenhum Direito selecionado',
+                                                );
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                   const SizedBox(width: 25.0),
                                   Expanded(
-                                    child: ListButtonWidget(
-                                      text: 'Incluir Direito',
-                                      icon: Icons.arrow_back,
-                                      onPressed: () {
-                                        if (direitoAdicionar != null) {
-                                          setState(() {
-                                            if (perfilAcesso.perfilDireitos ==
-                                                null) {
-                                              perfilAcesso.perfilDireitos = [];
+                                    child: Row(
+                                      children: [
+                                        BlocBuilder<DireitoCubit, DireitoState>(
+                                          bloc: widget.direitoCubit,
+                                          builder: (context, state) {
+                                            if (state.loading) {
+                                              return const Center(
+                                                child: LoadingWidget(),
+                                              );
                                             }
-                                            PerfilDireitoModel perfilDireito =
-                                                PerfilDireitoModel.empty();
-                                            perfilDireito.codDireito =
-                                                direitoAdicionar!.cod;
-                                            perfilAcesso.perfilDireitos!
-                                                .add(perfilDireito);
+                                            List<DireitoModel> direitos =
+                                                state.direitos;
+                                            return Expanded(
+                                              child: ListButtonWidget(
+                                                text: 'Incluir Todos',
+                                                icon: Symbols.reply_all,
+                                                onPressed: () {
+                                                  setState(() {
+                                                    if (perfilAcesso
+                                                            .perfilDireitos ==
+                                                        null) {
+                                                      perfilAcesso
+                                                          .perfilDireitos = [];
+                                                    }
 
-                                            direitoAdicionar = null;
-                                          });
-                                        } else {
-                                          ToastUtils.showCustomToastError(
-                                            context,
-                                            'Nenhum Direito selecionado',
-                                          );
-                                        }
-                                      },
+                                                    List<DireitoModel>
+                                                        direitosDisponiveis =
+                                                        direitos
+                                                            .where(
+                                                              (direito) =>
+                                                                  !perfilAcesso
+                                                                      .perfilDireitos!
+                                                                      .any(
+                                                                (direitoPerfil) =>
+                                                                    direitoPerfil
+                                                                        .codDireito ==
+                                                                    direito.cod,
+                                                              ),
+                                                            )
+                                                            .toList();
+                                                    for (DireitoModel direito
+                                                        in direitosDisponiveis) {
+                                                      PerfilDireitoModel
+                                                          perfilDireito =
+                                                          PerfilDireitoModel
+                                                              .empty();
+                                                      perfilDireito.codDireito =
+                                                          direito.cod;
+                                                      perfilAcesso
+                                                          .perfilDireitos!
+                                                          .add(perfilDireito);
+                                                    }
+                                                  });
+                                                },
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                        const Padding(
+                                          padding: EdgeInsets.only(left: 16),
+                                        ),
+                                        Expanded(
+                                          child: ListButtonWidget(
+                                            text: 'Incluir Direito',
+                                            icon: Icons.arrow_back,
+                                            onPressed: () {
+                                              if (direitoAdicionar?.cod !=
+                                                  null) {
+                                                incluirDireito(
+                                                  direitoAdicionar!.cod!,
+                                                );
+                                                direitoAdicionar = null;
+                                              } else {
+                                                ToastUtils.showCustomToastError(
+                                                  context,
+                                                  'Nenhum Direito selecionado',
+                                                );
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
@@ -284,6 +355,11 @@ class _PerfilAcessoPageFrmState extends State<PerfilAcessoPageFrm> {
                                         }
 
                                         return ListFieldWidget<DireitoModel>(
+                                          onDoubleTap: (p0) {
+                                            removerDireito(
+                                              p0.cod!,
+                                            );
+                                          },
                                           sourceList: direitosAdicionado,
                                           removeButton: false,
                                           onItemSelected: (selectedDireito) {
@@ -332,6 +408,9 @@ class _PerfilAcessoPageFrmState extends State<PerfilAcessoPageFrm> {
                                                 .toList();
 
                                         return ListFieldWidget<DireitoModel>(
+                                          onDoubleTap: (p0) {
+                                            incluirDireito(p0.cod!);
+                                          },
                                           sourceList: direitosDisponiveis,
                                           removeButton: false,
                                           onItemSelected: (selectedDireito) {
@@ -402,6 +481,27 @@ class _PerfilAcessoPageFrmState extends State<PerfilAcessoPageFrm> {
         );
       },
     );
+  }
+
+  void removerDireito(int codDireito) {
+    setState(() {
+      if (perfilAcesso.perfilDireitos != null) {
+        perfilAcesso.perfilDireitos!.removeWhere(
+          (element) => element.codDireito == codDireito,
+        );
+      }
+    });
+  }
+
+  void incluirDireito(int codDireito) {
+    setState(() {
+      if (perfilAcesso.perfilDireitos == null) {
+        perfilAcesso.perfilDireitos = [];
+      }
+      PerfilDireitoModel perfilDireito = PerfilDireitoModel.empty();
+      perfilDireito.codDireito = codDireito;
+      perfilAcesso.perfilDireitos!.add(perfilDireito);
+    });
   }
 
   void salvar() {

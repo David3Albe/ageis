@@ -2,10 +2,12 @@ import 'package:ageiscme_admin/app/module/pages/material/item_descritor/cubits/i
 import 'package:ageiscme_admin/app/module/pages/material/item_descritor/filter/item_descritor_filter_button_widget.dart';
 import 'package:ageiscme_admin/app/module/pages/material/item_descritor/item_descritor_page_frm/item_descritor_page_frm.dart';
 import 'package:ageiscme_admin/app/module/pages/material/item_descritor/item_descritor_page_state.dart';
+import 'package:ageiscme_data/services/instituicao/instituicao_service.dart';
 import 'package:ageiscme_data/services/item_descritor/item_descritor_service.dart';
 import 'package:ageiscme_models/filters/item_descritor/item_descritor_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
@@ -54,11 +56,11 @@ class _ItemDescritorPageState extends State<ItemDescritorPage> {
       valueConverter: (value) => value != null ? value['nome'] : '',
     ),
     CustomDataColumn(text: 'Tamanho', field: 'tamanhoSigla'),
-    CustomDataColumn(
-      text: 'Embalagem',
-      field: 'embalagem',
-      valueConverter: (value) => value != null ? value['nome'] : '',
-    ),
+    // CustomDataColumn(
+    //   text: 'Embalagem',
+    //   field: 'embalagem',
+    //   valueConverter: (value) => value != null ? value['nome'] : '',
+    // ),
     CustomDataColumn(
       text: 'Valor Peso',
       field: 'centroCusto',
@@ -84,6 +86,14 @@ class _ItemDescritorPageState extends State<ItemDescritorPage> {
     super.initState();
   }
 
+  Future refresh(BuildContext context) async {
+    ItemDescritorPageCubit cubit = context.read<ItemDescritorPageCubit>();
+    ItemDescritorCubitFilter filterCubit =
+        context.read<ItemDescritorCubitFilter>();
+    ItemDescritorFilter dto = filterCubit.state;
+    await cubit.getScreenData(dto);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -91,53 +101,68 @@ class _ItemDescritorPageState extends State<ItemDescritorPage> {
         BlocProvider.value(value: cubitFilter),
         BlocProvider.value(value: bloc),
       ],
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+      child: Builder(
+        builder: (context) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const ItemDescritorButtonFilterWidget(),
-              const Padding(padding: EdgeInsets.only(left: 8)),
-              AddButtonWidget(
-                onPressed: () => {
-                  openModal(
-                    context,
-                    ItemDescritorModel.empty(),
+              Row(
+                children: [
+                  RefreshButtonWidget(
+                    onPressed: () => refresh(context),
                   ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 8),
+                  ),
+                  const ItemDescritorButtonFilterWidget(),
+                  const Padding(padding: EdgeInsets.only(left: 8)),
+                  AddButtonWidget(
+                    onPressed: () => {
+                      openModal(
+                        context,
+                        ItemDescritorModel.empty(),
+                      ),
+                    },
+                  ),
+                ],
+              ),
+              BlocConsumer<ItemDescritorPageCubit, ItemDescritorPageState>(
+                bloc: bloc,
+                listener: (context, state) {
+                  if (state.deleted) deleted(state);
+                  if (state.error.isNotEmpty) onError(state);
+                },
+                builder: (context, state) {
+                  if (state.loading) {
+                    return const Center(
+                      child: LoadingWidget(),
+                    );
+                  }
+                  return Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 16.0, bottom: 16),
+                      child: PlutoGridWidget(
+                        orderDescendingFieldColumn: 'cod',
+                        filterOnlyActives: true,
+                        onEdit: (ItemDescritorModel objeto) => {
+                          openModal(
+                            context,
+                            ItemDescritorModel.copy(objeto),
+                          ),
+                        },
+                        onDelete: (ItemDescritorModel objeto) =>
+                            {delete(context, objeto)},
+                        columns: colunas,
+                        items: state.itensDescritor,
+                      ),
+                    ),
+                  );
                 },
               ),
             ],
-          ),
-          BlocConsumer<ItemDescritorPageCubit, ItemDescritorPageState>(
-            bloc: bloc,
-            listener: (context, state) {
-              if (state.deleted) deleted(state);
-              if (state.error.isNotEmpty) onError(state);
-            },
-            builder: (context, state) {
-              if (state.loading) {
-                return const Center(
-                  child: LoadingWidget(),
-                );
-              }
-              return Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 16.0, bottom: 16),
-                  child: PlutoGridWidget(
-                    filterOnlyActives: true,
-                    onEdit: (ItemDescritorModel objeto) =>
-                        {openModal(context, ItemDescritorModel.copy(objeto))},
-                    onDelete: (ItemDescritorModel objeto) =>
-                        {delete(context, objeto)},
-                    columns: colunas,
-                    items: state.itensDescritor,
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -161,6 +186,14 @@ class _ItemDescritorPageState extends State<ItemDescritorPage> {
     LoadingController loading = LoadingController(context: context);
 
     ItemDescritorModel? item = itemDescritor;
+    InstituicaoModel? instituicao = await InstituicaoService().findFirst();
+    if (instituicao == null) {
+      ErrorUtils.showOneErrorDialog(
+        context,
+        'É necessário ter uma instituição cadastrada para abrir o cadastro de item',
+      );
+      return;
+    }
     if (itemDescritor.cod != 0) {
       item = await getFilter(
         itemDescritor,
@@ -177,14 +210,15 @@ class _ItemDescritorPageState extends State<ItemDescritorPage> {
     chave = WindowsHelper.OpenDefaultWindows(
       title: 'Cadastro/Edição Descritor de Item',
       widget: ItemDescritorPageFrm(
+        instituicao: instituicao,
         onCancel: () => onCancel(chave),
-        onSaved: (str) => onSaved(str, chave),
+        onSaved: (str) => onSaved(str, chave, context),
         itemDescritor: item,
       ),
     );
   }
 
-  Future onSaved(String message, int chave) async {
+  Future onSaved(String message, int chave, BuildContext context) async {
     WindowsHelper.RemoverWidget(chave);
     ToastUtils.showCustomToastSucess(context, message);
     ItemDescritorFilter filter = context.read<ItemDescritorCubitFilter>().state;

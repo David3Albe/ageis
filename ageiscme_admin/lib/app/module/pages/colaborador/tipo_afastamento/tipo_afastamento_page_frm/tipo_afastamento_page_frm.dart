@@ -5,6 +5,7 @@ import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
@@ -44,10 +45,11 @@ class _TipoAfastamentoPageFrmState extends State<TipoAfastamentoPageFrm> {
       tipoAfastamento.motivo = txtMotivo.text;
     },
   );
-  late final TextFieldStringWidget txtDiasConcedido = TextFieldStringWidget(
+  late final TextFieldNumberWidget txtDiasConcedido = TextFieldNumberWidget(
     placeholder: 'Dias Concedidos *',
     onChanged: (String? str) {
-      tipoAfastamento.diasConcedido = int.parse(txtDiasConcedido.text);
+      tipoAfastamento.diasConcedido =
+          str == null || str.isEmpty ? null : int.parse(txtDiasConcedido.text);
     },
   );
 

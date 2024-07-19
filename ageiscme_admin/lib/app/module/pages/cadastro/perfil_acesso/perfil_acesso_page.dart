@@ -5,6 +5,7 @@ import 'package:ageiscme_data/services/perfil_acesso/perfil_acesso_service.dart'
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/filters/direito/direito_filter.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -68,13 +69,23 @@ class _PerfilAcessoPageState extends State<PerfilAcessoPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              PerfilAcessoModel.empty(),
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: refresh,
             ),
-          },
+            const Padding(
+              padding: EdgeInsets.only(left: 8),
+            ),
+            AddButtonWidget(
+              onPressed: () => {
+                openModal(
+                  context,
+                  PerfilAcessoModel.empty(),
+                ),
+              },
+            ),
+          ],
         ),
         BlocListener<PerfilAcessoPageCubit, PerfilAcessoPageState>(
           bloc: bloc,
@@ -110,6 +121,10 @@ class _PerfilAcessoPageState extends State<PerfilAcessoPage> {
         ),
       ],
     );
+  }
+
+  Future refresh() async {
+    bloc.loadPerfilAcesso();
   }
 
   void loadDireitoCubit() {

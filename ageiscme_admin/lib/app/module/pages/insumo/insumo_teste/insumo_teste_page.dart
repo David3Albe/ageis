@@ -2,6 +2,7 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuar
 import 'package:ageiscme_models/dto/usuario/usuario_drop_down_search_dto.dart';
 import 'package:ageiscme_models/filters/insumo/insumo_filter.dart';
 import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:flutter/material.dart';
@@ -117,6 +118,10 @@ class _InsumoTestePageState extends State<InsumoTestePage> {
       children: [
         Row(
           children: [
+            RefreshButtonWidget(
+              onPressed: () => bloc.filter(filter),
+            ),
+            const Padding(padding: EdgeInsets.only(left: 5)),
             FilterButtonWidget(
               onPressed: () => {
                 openModalFilter(context),

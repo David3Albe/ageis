@@ -3,6 +3,7 @@ import 'package:ageiscme_admin/app/module/pages/cadastro/tipo_documento/tipo_doc
 import 'package:ageiscme_data/services/tipo_documento/tipo_documento_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -47,13 +48,21 @@ class _TipoDocumentoPageState extends State<TipoDocumentoPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              TipoDocumentoModel.empty(),
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: bloc.loadTipoDocumento,
             ),
-          },
+            const Padding(padding: EdgeInsets.only(left: 8)),
+            AddButtonWidget(
+              onPressed: () => {
+                openModal(
+                  context,
+                  TipoDocumentoModel.empty(),
+                ),
+              },
+            ),
+          ],
         ),
         BlocListener<TipoDocumentoPageCubit, TipoDocumentoPageState>(
           bloc: bloc,

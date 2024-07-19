@@ -9,6 +9,7 @@ import 'package:ageiscme_models/filters/afastamento/afastamento_filter.dart';
 import 'package:ageiscme_models/models/afastamento/afastamento_model.dart';
 import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
@@ -121,6 +122,10 @@ class _AfastamentoPageState extends State<AfastamentoPage> {
       children: [
         Row(
           children: [
+            RefreshButtonWidget(
+              onPressed: () => bloc.getScreenData(filter),
+            ),
+            const Padding(padding: EdgeInsets.only(left: 8)),
             AfastamentoFilterButtonWidget(
               cubit: bloc,
               filter: filter,
@@ -172,6 +177,8 @@ class _AfastamentoPageState extends State<AfastamentoPage> {
     );
   }
 
+  void loadData() {}
+
   Future<AfastamentoModel?> getFilter(
     AfastamentoModel atestado,
   ) async {
@@ -204,11 +211,12 @@ class _AfastamentoPageState extends State<AfastamentoPage> {
       final AuthenticationResultDTO? authentication =
           await Modular.get<AuthenticationStore>().GetAuthenticated();
       afastamento.usuarioRegistro = UsuarioDropDownSearchResponseDTO(
+        ativo: authentication?.usuario?.ativo ?? false,
         cod: authentication?.usuario?.cod ?? 0,
         codBarra: authentication?.usuario?.codBarra ?? 0,
         nome: authentication?.usuario?.nome ?? '',
       );
-      afastamento.codUsuarioRegistro = authentication?.usuario?.cod??0;
+      afastamento.codUsuarioRegistro = authentication?.usuario?.cod ?? 0;
       afastamento.dataRegistro = DateTime.now();
     }
     loading.close(context, mounted);

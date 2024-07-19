@@ -3,6 +3,7 @@ import 'package:ageiscme_admin/app/module/pages/colaborador/tipo_afastamento/tip
 import 'package:ageiscme_data/services/tipo_afastamento/tipo_afastamento_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -57,13 +58,21 @@ class _TipoAfastamentoPageState extends State<TipoAfastamentoPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              TipoAfastamentoModel.empty(),
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: bloc.loadTipoAfastamento,
             ),
-          },
+            const Padding(padding: EdgeInsets.only(left: 4)),
+            AddButtonWidget(
+              onPressed: () => {
+                openModal(
+                  context,
+                  TipoAfastamentoModel.empty(),
+                ),
+              },
+            ),
+          ],
         ),
         BlocListener<TipoAfastamentoPageCubit, TipoAfastamentoPageState>(
           bloc: bloc,

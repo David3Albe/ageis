@@ -76,7 +76,11 @@ class EscalaPageGridCubit extends Cubit<EscalaPageGridState> {
         frozen: PlutoColumnFrozen.start,
         type: PlutoColumnType.select(
           enableColumnFilter: true,
-          BlocProvider.of<UsuarioDropDownSearchCubit>(context).state.usuarios,
+          BlocProvider.of<UsuarioDropDownSearchCubit>(context)
+              .state
+              .usuarios
+              .where((element) => element.ativo == true)
+              .toList(),
         ),
       ),
       PlutoColumn(

@@ -974,6 +974,13 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
                                 Expanded(
                                   child: txtQuantidade,
                                 ),
+                                if (insumoMovimento.flagEntradaSaida ==
+                                    '1') ...{
+                                  const SizedBox(width: DEFAULT_HEIGHT),
+                                  Expanded(
+                                    child: txtPrecoUnitario,
+                                  ),
+                                },
                                 if (insumoMovimento.flagEntradaSaida != '1' &&
                                     insumoMovimento.cod == 0) ...{
                                   const SizedBox(width: DEFAULT_HEIGHT),
@@ -1020,25 +1027,36 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
                             //   ),
                             // },
                             if (insumoMovimento.flagEntradaSaida == '1') ...{
-                              Row(
+                              Column(
                                 children: [
-                                  Expanded(
-                                    child: txtNroNotaFiscal,
+                                  const SizedBox(height: 50),
+                                  const Row(
+                                    children: [
+                                      Expanded(
+                                        child: const Text(
+                                          'Documento de Entrada',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                  const SizedBox(width: DEFAULT_HEIGHT),
-                                  Expanded(
-                                    child: txtPrecoNotaFiscal,
-                                  ),
-                                ],
-                              ),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: txtPrecoUnitario,
-                                  ),
-                                  const SizedBox(width: DEFAULT_HEIGHT),
-                                  Expanded(
-                                    child: dtpDataNotaFiscal,
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: txtNroNotaFiscal,
+                                      ),
+                                      const SizedBox(width: DEFAULT_HEIGHT),
+                                      Expanded(
+                                        child: txtPrecoNotaFiscal,
+                                      ),
+                                      const SizedBox(width: DEFAULT_HEIGHT),
+                                      Expanded(
+                                        child: dtpDataNotaFiscal,
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
@@ -1152,6 +1170,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
 
   void populaCampos() async {
     bool ajuste = insumoMovimento.flagEntradaSaida == '0';
+    bool saida = insumoMovimento.flagEntradaSaida == '2';
     InsumoSaldoModel? insumoSaldo = await InsumoSaldoService().filterOne(
       InsumoSaldoFilter(
         codDeposito: insumoMovimento.codDeposito,
@@ -1160,6 +1179,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
         qtdeMaiorQueZero: true,
         numeroRegistros: 1,
         ordenarPorDataValidadeAscendente: true,
+        status: saida ? '0' : null,
       ),
     );
 
@@ -1361,15 +1381,24 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
   }
 
   Future salvar() async {
-    InsumoMovimentoModel? insumo = await cubit.save(
+    InsumoModel? insumo = insumoMovimento.insumo;
+    InsumoMovimentoModel? movInsumo = await cubit.save(
       insumoMovimento,
       numeroSolicitacaoItem,
       widget.onSaved,
     );
-    if (insumo == null) return;
-    ToastUtils.showCustomToastSucess(context, 'Movimentação salva!');
+    if (movInsumo == null) return;
+    if (insumo?.testeInsumoObrigatorio == true &&
+        movInsumo.flagEntradaSaida == '1') {
+      ToastUtils.showCustomToastSucessBig(
+        context,
+        'MOV. ENTRADA: Este Insumo exige Teste de Conformidade e somente será liberado após o registro do Teste!',
+      );
+    } else {
+      ToastUtils.showCustomToastSucess(context, 'Movimentação salva!');
+    }
     setState(() {
-      insumoMovimento = insumo;
+      insumoMovimento = movInsumo;
       setFields(false);
     });
   }

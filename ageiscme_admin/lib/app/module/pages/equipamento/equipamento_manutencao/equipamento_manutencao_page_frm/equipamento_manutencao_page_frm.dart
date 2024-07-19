@@ -29,6 +29,7 @@ import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_pop
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_open_doc_model.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/functions/file_helper/file_object_model.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
@@ -315,7 +316,7 @@ class _EquipamentoManutencaoPageFrmState
     placeholder: 'Hora Término',
     initialValue: equipamentoManutencao.dataTermino != null
         ? TimeOfDay.fromDateTime(equipamentoManutencao.dataTermino!)
-        : const TimeOfDay(hour: 0, minute: 0),
+        : null,
     onTimeSelected: (value) {
       if (equipamentoManutencao.dataTermino == null) {
         return;
@@ -352,7 +353,7 @@ class _EquipamentoManutencaoPageFrmState
     placeholder: 'Hora Parada',
     initialValue: equipamentoManutencao.dataParada != null
         ? TimeOfDay.fromDateTime(equipamentoManutencao.dataParada!)
-        : const TimeOfDay(hour: 0, minute: 0),
+        : null,
     onTimeSelected: (value) {
       dataHoraParadaSelecionada = DateTime(
         dataHoraParadaSelecionada!.year,
@@ -373,6 +374,7 @@ class _EquipamentoManutencaoPageFrmState
   late bool Function() validateEquipamento;
   late bool Function() validateResultado;
   late bool Function() validateTecnico;
+  late void Function() refreshServicosTipoMethod;
 
   void initState() {
     _controller = EquipamentoManutencaoPageFrmController();
@@ -592,6 +594,8 @@ class _EquipamentoManutencaoPageFrmState
                                                 )
                                                 .firstOrNull;
                                         return DropDownSearchWidget(
+                                          readOnly: equipamentoManutencao.cod != null &&
+                                              equipamentoManutencao.cod != 0,
                                           validateBuilder: (
                                             context,
                                             validateMethodBuilder,
@@ -605,9 +609,14 @@ class _EquipamentoManutencaoPageFrmState
                                               equipamento.EquipamentoNomeText(),
                                           initialValue: equipamento,
                                           sourceList: equipamentos,
-                                          onChanged: (value) =>
-                                              equipamentoManutencao
-                                                  .codEquipamento = value?.cod,
+                                          onChanged: (value) {
+                                            equipamentoManutencao
+                                                .codEquipamento = value?.cod;
+                                            equipamentoManutencao.equipamento =
+                                                value;
+                                            servicoTipoCubit.reload();
+                                            refreshServicosTipoMethod.call();
+                                          },
                                           placeholder: 'Equipamento *',
                                         );
                                       },
@@ -626,11 +635,7 @@ class _EquipamentoManutencaoPageFrmState
                                         }
                                         List<ServicoTipoModel> servicosTipos =
                                             state.tiposServico;
-
-                                        servicosTipos.sort(
-                                          (a, b) => a.nome!.compareTo(b.nome!),
-                                        );
-                                        ServicoTipoModel? servicoTipo =
+                                        equipamentoManutencao.servicoTipo =
                                             servicosTipos
                                                 .where(
                                                   (element) =>
@@ -639,6 +644,27 @@ class _EquipamentoManutencaoPageFrmState
                                                           .codServicosTipo,
                                                 )
                                                 .firstOrNull;
+                                        servicosTipos.sort(
+                                          (a, b) => a.nome!.compareTo(b.nome!),
+                                        );
+                                        List<ServicoTipoModel> servicos =
+                                            buscarServicosEquipamento(
+                                          servicosTipos,
+                                        );
+                                        if (state.reloaded == true) {
+                                          if (servicos.isNotEmpty &&
+                                              !servicos
+                                                  .map((e) => e.cod)
+                                                  .contains(
+                                                    equipamentoManutencao
+                                                        .codServicosTipo,
+                                                  )) {
+                                            equipamentoManutencao.servicoTipo =
+                                                null;
+                                            equipamentoManutencao
+                                                .codServicosTipo = null;
+                                          }
+                                        }
                                         return DropDownSearchWidget(
                                           validateBuilder: (
                                             context,
@@ -646,20 +672,20 @@ class _EquipamentoManutencaoPageFrmState
                                           ) =>
                                               validateTipoServico =
                                                   validateMethodBuilder,
+                                          refreshSourceListBuilder: (
+                                            context,
+                                            refreshTipoServicoSourceList,
+                                          ) =>
+                                              refreshServicosTipoMethod =
+                                                  refreshTipoServicoSourceList,
                                           validator: (val) => val == null
                                               ? 'Obrigatório'
                                               : null,
                                           textFunction: (p0) =>
                                               p0.GetDropDownText(),
-                                          initialValue: servicoTipo,
-                                          sourceList: servicosTipos
-                                              .where(
-                                                (element) =>
-                                                    element.ativo == true &&
-                                                    element.servicosEquipamentos ==
-                                                        true,
-                                              )
-                                              .toList(),
+                                          initialValue:
+                                              equipamentoManutencao.servicoTipo,
+                                          sourceList: servicos,
                                           onChanged: (value) =>
                                               equipamentoManutencao
                                                   .codServicosTipo = value?.cod,
@@ -667,6 +693,20 @@ class _EquipamentoManutencaoPageFrmState
                                         );
                                       },
                                     ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: dtpDataParada,
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Expanded(
+                                    child: tmpHoraParada,
                                   ),
                                 ],
                               ),
@@ -695,20 +735,6 @@ class _EquipamentoManutencaoPageFrmState
                                   const SizedBox(width: 50.0),
                                   Expanded(
                                     child: tmpHoraTermino,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: dtpDataParada,
-                                  ),
-                                  const SizedBox(width: 50.0),
-                                  Expanded(
-                                    child: tmpHoraParada,
                                   ),
                                 ],
                               ),
@@ -1183,6 +1209,9 @@ class _EquipamentoManutencaoPageFrmState
                                     'Documento Anexado: ${equipamentoManutencao.nfAnexa == null ? 'Nenhum Documento Encontrado' : equipamentoManutencao.nfAnexaNome}',
                               ),
                             ),
+                            const Padding(
+                              padding: EdgeInsets.only(top: 8),
+                            ),
                           ],
                         ),
                       ),
@@ -1190,6 +1219,9 @@ class _EquipamentoManutencaoPageFrmState
                   ),
                 ],
               ),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(top: 8),
             ),
             Row(
               children: [
@@ -1258,6 +1290,34 @@ class _EquipamentoManutencaoPageFrmState
         );
       },
     );
+  }
+
+  List<ServicoTipoModel> buscarServicosEquipamento(
+    List<ServicoTipoModel> servicosTipos,
+  ) {
+    List<ServicoTipoModel> servicos = [];
+    if (equipamentoManutencao.equipamento != null) {
+      servicos = servicosTipos
+          .where(
+            (element) =>
+                equipamentoManutencao.equipamento?.equipamentosServicos
+                    ?.where(
+                      (eq) => eq.codServico == element.cod,
+                    )
+                    .firstOrNull !=
+                null,
+          )
+          .toList();
+    }
+    if (servicos.isEmpty) {
+      servicos = servicosTipos
+          .where(
+            (element) =>
+                element.ativo == true && element.servicosEquipamentos == true,
+          )
+          .toList();
+    }
+    return servicos;
   }
 
   void salvarArquivo(Future<FileObjectModel?> Function() onSelectFile) async {
@@ -1330,6 +1390,18 @@ class _EquipamentoManutencaoPageFrmState
         !tipoServicoValid ||
         !equipamentoValid) {
       return;
+    }
+
+    if (equipamentoManutencao.dataTermino != null &&
+        equipamentoManutencao.dataInicio != null) {
+      if (equipamentoManutencao.dataInicio!
+          .isAfter(equipamentoManutencao.dataTermino!)) {
+        ToastUtils.showCustomToastWarning(
+          context,
+          'Data Término não pode ser antes da Data Inicial',
+        );
+        return;
+      }
     }
     cubit.save(
       equipamentoManutencao,

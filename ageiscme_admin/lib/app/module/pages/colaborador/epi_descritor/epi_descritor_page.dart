@@ -4,6 +4,7 @@ import 'package:ageiscme_data/services/epi_descritor/epi_descritor_service.dart'
 import 'package:ageiscme_models/filters/epi_descritor/epi_descritor_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
@@ -43,11 +44,11 @@ class _EpiDescritorPageState extends State<EpiDescritorPage> {
       valueConverter: (dynamic value) =>
           EpiDescritorTipoEpiOption.getOpcaoFromId(value),
     ),
-    CustomDataColumn(
-      text: 'Prazo Validade',
-      field: 'prazoValidade',
-      type: CustomDataColumnType.Date,
-    ),
+    // CustomDataColumn(
+    //   text: 'Prazo Validade',
+    //   field: 'prazoValidade',
+    //   type: CustomDataColumnType.Date,
+    // ),
     CustomDataColumn(
       text: 'Conferência Visual',
       field: 'conferenciaVisual',
@@ -77,13 +78,21 @@ class _EpiDescritorPageState extends State<EpiDescritorPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              EpiDescritorModel.empty(),
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: bloc.loadEpiDescritor,
             ),
-          },
+            const Padding(padding: EdgeInsets.only(left: 4)),
+            AddButtonWidget(
+              onPressed: () => {
+                openModal(
+                  context,
+                  EpiDescritorModel.empty(),
+                ),
+              },
+            ),
+          ],
         ),
         BlocListener<EpiDescritorPageCubit, EpiDescritorPageState>(
           bloc: bloc,
@@ -130,7 +139,6 @@ class _EpiDescritorPageState extends State<EpiDescritorPage> {
       ),
     );
   }
-
 
   Future openModal(
     BuildContext context,

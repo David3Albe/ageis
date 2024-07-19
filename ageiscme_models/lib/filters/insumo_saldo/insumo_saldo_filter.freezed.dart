@@ -37,6 +37,8 @@ mixin _$InsumoSaldoFilter {
       throw _privateConstructorUsedError;
   set ordenarPorDataValidadeAscendente(bool? value) =>
       throw _privateConstructorUsedError;
+  String? get status => throw _privateConstructorUsedError;
+  set status(String? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -57,7 +59,8 @@ abstract class $InsumoSaldoFilterCopyWith<$Res> {
       bool? qtdeMaiorQueZero,
       bool? dataVaidadeMaiorQueAtual,
       int? numeroRegistros,
-      bool? ordenarPorDataValidadeAscendente});
+      bool? ordenarPorDataValidadeAscendente,
+      String? status});
 }
 
 /// @nodoc
@@ -80,6 +83,7 @@ class _$InsumoSaldoFilterCopyWithImpl<$Res, $Val extends InsumoSaldoFilter>
     Object? dataVaidadeMaiorQueAtual = freezed,
     Object? numeroRegistros = freezed,
     Object? ordenarPorDataValidadeAscendente = freezed,
+    Object? status = freezed,
   }) {
     return _then(_value.copyWith(
       codInsumo: freezed == codInsumo
@@ -111,6 +115,10 @@ class _$InsumoSaldoFilterCopyWithImpl<$Res, $Val extends InsumoSaldoFilter>
           ? _value.ordenarPorDataValidadeAscendente
           : ordenarPorDataValidadeAscendente // ignore: cast_nullable_to_non_nullable
               as bool?,
+      status: freezed == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -130,7 +138,8 @@ abstract class _$$InsumoSaldoFilterImplCopyWith<$Res>
       bool? qtdeMaiorQueZero,
       bool? dataVaidadeMaiorQueAtual,
       int? numeroRegistros,
-      bool? ordenarPorDataValidadeAscendente});
+      bool? ordenarPorDataValidadeAscendente,
+      String? status});
 }
 
 /// @nodoc
@@ -151,6 +160,7 @@ class __$$InsumoSaldoFilterImplCopyWithImpl<$Res>
     Object? dataVaidadeMaiorQueAtual = freezed,
     Object? numeroRegistros = freezed,
     Object? ordenarPorDataValidadeAscendente = freezed,
+    Object? status = freezed,
   }) {
     return _then(_$InsumoSaldoFilterImpl(
       codInsumo: freezed == codInsumo
@@ -182,6 +192,10 @@ class __$$InsumoSaldoFilterImplCopyWithImpl<$Res>
           ? _value.ordenarPorDataValidadeAscendente
           : ordenarPorDataValidadeAscendente // ignore: cast_nullable_to_non_nullable
               as bool?,
+      status: freezed == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -196,7 +210,8 @@ class _$InsumoSaldoFilterImpl implements _InsumoSaldoFilter {
       this.qtdeMaiorQueZero,
       this.dataVaidadeMaiorQueAtual,
       this.numeroRegistros,
-      this.ordenarPorDataValidadeAscendente});
+      this.ordenarPorDataValidadeAscendente,
+      this.status});
 
   factory _$InsumoSaldoFilterImpl.fromJson(Map<String, dynamic> json) =>
       _$$InsumoSaldoFilterImplFromJson(json);
@@ -215,10 +230,12 @@ class _$InsumoSaldoFilterImpl implements _InsumoSaldoFilter {
   int? numeroRegistros;
   @override
   bool? ordenarPorDataValidadeAscendente;
+  @override
+  String? status;
 
   @override
   String toString() {
-    return 'InsumoSaldoFilter(codInsumo: $codInsumo, lote: $lote, codDeposito: $codDeposito, qtdeMaiorQueZero: $qtdeMaiorQueZero, dataVaidadeMaiorQueAtual: $dataVaidadeMaiorQueAtual, numeroRegistros: $numeroRegistros, ordenarPorDataValidadeAscendente: $ordenarPorDataValidadeAscendente)';
+    return 'InsumoSaldoFilter(codInsumo: $codInsumo, lote: $lote, codDeposito: $codDeposito, qtdeMaiorQueZero: $qtdeMaiorQueZero, dataVaidadeMaiorQueAtual: $dataVaidadeMaiorQueAtual, numeroRegistros: $numeroRegistros, ordenarPorDataValidadeAscendente: $ordenarPorDataValidadeAscendente, status: $status)';
   }
 
   @JsonKey(ignore: true)
@@ -244,7 +261,8 @@ abstract class _InsumoSaldoFilter implements InsumoSaldoFilter {
       bool? qtdeMaiorQueZero,
       bool? dataVaidadeMaiorQueAtual,
       int? numeroRegistros,
-      bool? ordenarPorDataValidadeAscendente}) = _$InsumoSaldoFilterImpl;
+      bool? ordenarPorDataValidadeAscendente,
+      String? status}) = _$InsumoSaldoFilterImpl;
 
   factory _InsumoSaldoFilter.fromJson(Map<String, dynamic> json) =
       _$InsumoSaldoFilterImpl.fromJson;
@@ -270,6 +288,9 @@ abstract class _InsumoSaldoFilter implements InsumoSaldoFilter {
   @override
   bool? get ordenarPorDataValidadeAscendente;
   set ordenarPorDataValidadeAscendente(bool? value);
+  @override
+  String? get status;
+  set status(String? value);
   @override
   @JsonKey(ignore: true)
   _$$InsumoSaldoFilterImplCopyWith<_$InsumoSaldoFilterImpl> get copyWith =>

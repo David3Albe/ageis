@@ -33,7 +33,7 @@ class RegistroServicePageFrmController {
 
   RegistroServicePageFrmController({required this.registroServico});
 
-  void setFields() {
+  void setFields(bool clear) {
     txtDescricaoServico.text = registroServico.descricao?.toString() ?? '';
     txtUsuarioRegistro.text = registroServico.usuario?.nome?.toString() ?? '';
     txtLote.text = registroServico.lote?.toString() ?? '';
@@ -43,6 +43,14 @@ class RegistroServicePageFrmController {
     txtUmidade.text = registroServico.umidade?.toString() ?? '';
     txtUmidadeMax.text = registroServico.umidadeMax?.toString() ?? '';
     txtUmidadeMin.text = registroServico.umidadeMin?.toString() ?? '';
+    if (clear) {
+      dtpDataInicio.setValue(registroServico.dataInicio);
+      tmpHoraInicio.setValue(TimeOfDay.now());
+      dtpDataTermino.setValue(registroServico.dataTermino);
+      tmpHoraTermino.setValue(null);
+      dtpDataValidade.setValue(null);
+      dtpDataRegistro.setValue(registroServico.dataRegistro);
+    }
 
     titulo = 'Monitoramento';
     if (registroServico.cod != 0) {
@@ -65,7 +73,7 @@ class RegistroServicePageFrmController {
     txtUsuarioRegistro.text = usuarioRegistroController.text;
     registroServico.indicador = 'zerado';
     _criaValidators();
-    setFields();
+    setFields(false);
   }
 
   void _criaTxts() {
@@ -185,7 +193,7 @@ class RegistroServicePageFrmController {
       },
       initialValue: registroServico.dataTermino != null
           ? TimeOfDay.fromDateTime(registroServico.dataTermino!)
-          : const TimeOfDay(hour: 0, minute: 0),
+          : null,
     );
   }
 

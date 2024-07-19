@@ -14,6 +14,7 @@ import 'package:ageiscme_models/query_filters/item_inventario/consulta_item_inve
 import 'package:ageiscme_models/query_models/item_inventario/consulta_item_inventario_model.dart';
 import 'package:ageiscme_models/response_dto/item_descritor/drop_down_search/item_descritor_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_float_widget.dart';
@@ -92,10 +93,18 @@ class _ConsultaItemInventarioPageState
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FilterButtonWidget(
-          onPressed: () => {
-            openModal(context),
-          },
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: () => bloc.loadItemInventario(filter),
+            ),
+            const Padding(padding: EdgeInsets.only(left: 5)),
+            FilterButtonWidget(
+              onPressed: () => {
+                openModal(context),
+              },
+            ),
+          ],
         ),
         BlocListener<ConsultaItemInventarioPageCubit,
             ConsultaItemInventarioPageState>(

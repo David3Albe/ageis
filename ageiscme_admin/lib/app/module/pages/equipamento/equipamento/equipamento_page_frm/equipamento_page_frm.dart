@@ -599,7 +599,7 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
     registroServicoModel.dataInicio = DateTime.now();
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
-      title: 'Cadastro/Edição Equipamento',
+      title: 'Cadastro/Edição Monitoramento - ${equipamento.nome ?? 'Sem Descrição'}',
       widget: RegistroServicoPageFrm(
         equipamentoReadOnly: true,
         itemReadOnly: true,

@@ -2,6 +2,7 @@ import 'package:ageiscme_admin/app/module/pages/cadastro/instituicao/instituicao
 import 'package:ageiscme_admin/app/module/pages/cadastro/instituicao/instituicao_page_state.dart';
 import 'package:ageiscme_data/services/instituicao/instituicao_service.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -69,6 +70,13 @@ class _InstituicaoPageState extends State<InstituicaoPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: bloc.loadInstituicao,
+            ),
+          ],
+        ),
         BlocListener<InstituicaoPageCubit, InstituicaoPageState>(
           bloc: bloc,
           listener: (context, state) {

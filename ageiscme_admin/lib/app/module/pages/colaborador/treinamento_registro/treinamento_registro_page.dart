@@ -7,6 +7,7 @@ import 'package:ageiscme_data/services/treinamento_registro/treinamento_registro
 import 'package:ageiscme_models/filters/usuario_filter/usuario_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
@@ -17,6 +18,7 @@ import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
 import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
 class TreinamentoRegistroPage extends StatefulWidget {
@@ -28,7 +30,34 @@ class TreinamentoRegistroPage extends StatefulWidget {
 }
 
 class _TreinamentoRegistroPageState extends State<TreinamentoRegistroPage> {
-  final List<CustomDataColumn> colunas = [
+  Widget getCustomRendererCargaHoraria(
+    PlutoColumnRendererContext renderContext,
+  ) {
+    double? cargaHoraria = renderContext.cell.value;
+    String value = '';
+    if (cargaHoraria != null) {
+      value = decimalToString(cargaHoraria);
+    }
+
+    return Text(
+      value,
+      textAlign: TextAlign.start,
+      style: TextStyle(
+        overflow: TextOverflow.ellipsis,
+        fontSize: renderContext.stateManager.style.cellTextStyle.fontSize,
+      ),
+    );
+  }
+
+  static String decimalToString(double decimal) {
+    int hours = decimal.truncate();
+    int minutes = ((decimal - hours) * 60).round();
+    String hoursStr = hours.toString().padLeft(2, '0');
+    String minutesStr = minutes.toString().padLeft(2, '0');
+    return '$hoursStr:$minutesStr';
+  }
+
+  late final List<CustomDataColumn> colunas = [
     CustomDataColumn(
       text: 'Cód',
       field: 'cod',
@@ -44,7 +73,8 @@ class _TreinamentoRegistroPageState extends State<TreinamentoRegistroPage> {
     CustomDataColumn(
       text: 'Carga Horária',
       field: 'cargaHoraria',
-      type: CustomDataColumnType.Number,
+      type: CustomDataColumnType.Text,
+      customRenderer: getCustomRendererCargaHoraria,
     ),
   ];
 
@@ -78,6 +108,10 @@ class _TreinamentoRegistroPageState extends State<TreinamentoRegistroPage> {
             children: [
               Row(
                 children: [
+                  RefreshButtonWidget(
+                    onPressed: () => refresh(context),
+                  ),
+                  const Padding(padding: EdgeInsets.only(left: 4)),
                   const TreinamentoRegistroFilterButtonWidget(),
                   const Padding(padding: EdgeInsets.only(left: 4)),
                   AddButtonWidget(
@@ -129,6 +163,14 @@ class _TreinamentoRegistroPageState extends State<TreinamentoRegistroPage> {
         },
       ),
     );
+  }
+
+  Future refresh(BuildContext context) async{
+      TreinamentoRegistroPageCubit treinamentoCubit =
+        context.read<TreinamentoRegistroPageCubit>();
+    TreinamentoRegistroCubitFilter filterCubit = context.read<TreinamentoRegistroCubitFilter>();
+    TreinamentoRegistroFilter dto = filterCubit.state;
+    await treinamentoCubit.filterScreen(dto);
   }
 
   void loadUserCubit() {

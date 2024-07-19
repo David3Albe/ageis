@@ -1,7 +1,7 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/local_instituicao/local_instituicao_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/cadastro/instituicao/instituicao_page_frm/instituicao_page_frm_impressao/instituicao_page_frm_impressao.dart';
 import 'package:ageiscme_admin/app/module/pages/cadastro/instituicao/instituicao_page_frm/instituicao_page_frm_state.dart';
-import 'package:ageiscme_admin/app/module/pages/cadastro/local_instituicao/local_instituicao_page_frm/local_instituicao_page_frm.dart';
+import 'package:ageiscme_admin/app/module/pages/cadastro/local_instituicao/local_instituicao_page.dart';
 import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_data/services/instituicao/instituicao_service.dart';
 import 'package:ageiscme_models/main.dart';
@@ -18,6 +18,7 @@ import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -422,13 +423,13 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
                                       const Padding(
                                         padding: EdgeInsets.only(top: 5.0),
                                       ),
-                                      CustomCheckboxWidget(
-                                        checked: instituicao.imprimeQrCode,
-                                        onClick: (value) =>
-                                            instituicao.imprimeQrCode = value,
-                                        text: 'Imprime',
-                                        align: MainAxisAlignment.start,
-                                      ),
+                                      // CustomCheckboxWidget(
+                                      //   checked: instituicao.imprimeQrCode,
+                                      //   onClick: (value) =>
+                                      //       instituicao.imprimeQrCode = value,
+                                      //   text: 'Imprime',
+                                      //   align: MainAxisAlignment.start,
+                                      // ),
                                       const Padding(
                                         padding: EdgeInsets.only(top: 5.0),
                                       ),
@@ -714,30 +715,10 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
   }
 
   void _selectLocal() {
-    showDialog<bool>(
-      context: context,
-      builder: (context) => AlertDialog(
-        content: LocalInstituicaoPageFrm(
-          onSaved: (str) => onSaved(str, context),
-          onCancel: () => onCancel(context),
-          localInstituicao: LocalInstituicaoModel(
-            cod: 0,
-            ativo: true,
-            codBarra: '',
-            codInstituicao: 0,
-            centroCusto: null,
-            codCentroCusto: null,
-            contato: '',
-            exigeProntuario: false,
-            localConferencia: false,
-            localizacao: '',
-            nome: '',
-            responsavel: '',
-            ultimaAlteracao: null,
-            tstamp: '',
-          ),
-        ),
-      ),
+    WindowsHelper.OpenDefaultWindows(
+      theme: Theme.of(context),
+      title: 'Locais da Instituição',
+      widget: const LocalInstituicaoPage(),
     );
   }
 

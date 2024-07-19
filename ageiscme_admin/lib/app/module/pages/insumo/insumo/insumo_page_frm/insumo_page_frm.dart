@@ -9,9 +9,7 @@ import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/insumo/insumo_page_frm/insumo_page_frm_state.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/insumo_teste/insumo_teste_page_frm/insumo_teste_page_frm.dart';
 import 'package:ageiscme_data/services/insumo/insumo_service.dart';
-import 'package:ageiscme_data/services/item/item_service.dart';
 import 'package:ageiscme_models/dto/usuario/usuario_drop_down_search_dto.dart';
-import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/models/insumo_teste/insumo_teste_model.dart';
 import 'package:compartilhados/alert_dialog/form_alert_dialog_widget.dart';
@@ -19,7 +17,6 @@ import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/close_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
-import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
@@ -361,24 +358,24 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                               padding: const EdgeInsets.only(top: 5.0),
                               child: txtDescricaoItem,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: DropDownSearchApiWidget<ItemModel>(
-                                initialValue: insumo.item,
-                                search: (str) => ItemService().Filter(
-                                  ItemFilter(
-                                    numeroRegistros: 30,
-                                    termoPesquisa: str,
-                                    idEtiquetaComecaCom: 'ZI',
-                                  ),
-                                ),
-                                onChanged: (value) {
-                                  insumo.codItem = value!.cod!;
-                                  insumo.item = value;
-                                },
-                                placeholder: 'Item',
-                              ),
-                            ),
+                            // Padding(
+                            //   padding: const EdgeInsets.only(top: 5.0),
+                            //   child: DropDownSearchApiWidget<ItemModel>(
+                            //     initialValue: insumo.item,
+                            //     search: (str) => ItemService().Filter(
+                            //       ItemFilter(
+                            //         numeroRegistros: 30,
+                            //         termoPesquisa: str,
+                            //         idEtiquetaComecaCom: 'ZI',
+                            //       ),
+                            //     ),
+                            //     onChanged: (value) {
+                            //       insumo.codItem = value!.cod!;
+                            //       insumo.item = value;
+                            //     },
+                            //     placeholder: 'Item',
+                            //   ),
+                            // ),
                             Padding(
                               padding: const EdgeInsets.only(top: 5.0),
                               child: Row(
@@ -433,8 +430,7 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                                             unidadeMedidas =
                                             state.unidadeMedidas;
                                         unidadeMedidas.sort(
-                                          (a, b) =>
-                                              a.nome!.compareTo(b.nome!),
+                                          (a, b) => a.nome!.compareTo(b.nome!),
                                         );
                                         UnidadeMedidaModel? unidadeMedida =
                                             unidadeMedidas
@@ -450,8 +446,8 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                                           sourceList: unidadeMedidas,
                                           textFunction: (p0) =>
                                               p0.GetDropDownText(),
-                                          onChanged: (value) => insumo
-                                              .codFabricante = value?.cod,
+                                          onChanged: (value) =>
+                                              insumo.codUnidadeMedida = value?.cod,
                                           placeholder: 'Unidade Medida',
                                         );
                                       },
@@ -471,7 +467,7 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                                   }
                                   List<DestinoResiduoModel> destinos =
                                       destinoState.objs;
-    
+
                                   destinos.sort(
                                     (a, b) => a.nome!.compareTo(b.nome!),
                                   );
@@ -498,8 +494,8 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                                           (element) => element.ativo == true,
                                         )
                                         .toList(),
-                                    onChanged: (value) => insumo
-                                        .codDestinoResiduo = value?.cod!,
+                                    onChanged: (value) =>
+                                        insumo.codDestinoResiduo = value?.cod!,
                                     placeholder: 'Destino Resíduos *',
                                   );
                                 },
@@ -536,15 +532,14 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                                         List<FabricanteModel> fabricantes =
                                             fabricanteState.fabricantes;
                                         fabricantes.sort(
-                                          (a, b) =>
-                                              a.nome!.compareTo(b.nome!),
+                                          (a, b) => a.nome!.compareTo(b.nome!),
                                         );
                                         FabricanteModel? fabricante =
                                             fabricantes
                                                 .where(
                                                   (element) =>
                                                       element.cod ==
-                                                      insumo.codFabricante,
+                                                      insumo.codFabricantes,
                                                 )
                                                 .firstOrNull;
                                         return DropDownSearchWidget<
@@ -555,7 +550,7 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                                           sourceList: fabricantes,
                                           onChanged: (value) {
                                             insumo.fabricanteItem = value;
-                                            insumo.codFabricante = value?.cod;
+                                            insumo.codFabricantes = value?.cod;
                                           },
                                           placeholder: 'Fabricante',
                                         );
@@ -576,15 +571,14 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                                         List<FornecedorModel> fornecedores =
                                             stateFornecedor.fornecedores;
                                         fornecedores.sort(
-                                          (a, b) =>
-                                              a.nome!.compareTo(b.nome!),
+                                          (a, b) => a.nome!.compareTo(b.nome!),
                                         );
                                         FornecedorModel? fornecedor =
                                             fornecedores
                                                 .where(
                                                   (element) =>
                                                       element.cod ==
-                                                      insumo.codFornecedor,
+                                                      insumo.codFornecedores,
                                                 )
                                                 .firstOrNull;
                                         insumo.fornecedorItem = fornecedor;
@@ -606,8 +600,7 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                                               );
                                               txtNomeitem.text =
                                                   insumo.nome ?? '';
-                                              insumo.codFornecedor =
-                                                  value?.cod;
+                                              insumo.codFornecedores = value?.cod;
                                               if (insumo.nome == null ||
                                                   value?.nome == null) return;
                                               insumo.nome = insumo.nome! +
@@ -646,8 +639,7 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                                   child: Row(
                                     children: [
                                       CustomCheckboxWidget(
-                                        checked:
-                                            insumo.testeInsumoObrigatorio,
+                                        checked: insumo.testeInsumoObrigatorio,
                                         onClick: (value) => insumo
                                             .testeInsumoObrigatorio = value,
                                         text: 'Teste Obrigatório',
@@ -908,6 +900,12 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
           !estoqueMaximoValid ||
           !prazoEntregaValid ||
           !pontoReposicaoValid) return;
+    } else {
+      insumo.estoqueMaximo = null;
+      insumo.estoqueMinimo = null;
+      insumo.pontoReposicao = null;
+      insumo.prazoEntregaDias = null;
+      insumo.validadeAposAtivacaoDias = null;
     }
     if (!codBarraValid ||
         !nomeItemValid ||

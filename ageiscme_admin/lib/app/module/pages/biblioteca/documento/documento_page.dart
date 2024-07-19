@@ -4,6 +4,7 @@ import 'package:ageiscme_data/services/documento/documento_service.dart';
 import 'package:ageiscme_models/filters/documento/documento_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
@@ -78,13 +79,21 @@ class _DocumentoPageState extends State<DocumentoPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              DocumentoModel.empty(),
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: () => bloc.loadDocumento(),
             ),
-          },
+            const Padding(padding: EdgeInsets.only(left: 5)),
+            AddButtonWidget(
+              onPressed: () => {
+                openModal(
+                  context,
+                  DocumentoModel.empty(),
+                ),
+              },
+            ),
+          ],
         ),
         BlocListener<DocumentoPageCubit, DocumentoPageState>(
           bloc: bloc,

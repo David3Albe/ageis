@@ -22,7 +22,7 @@ class WindowExtraActions extends StatelessWidget {
             onTap: () => WindowsHelper.Cascate(context),
           ),
           CustomPopupItemModel(
-            text: 'Alinhar Horizontal',
+            text: 'Alinhar Lado a Lado',
             onTap: () => WindowsHelper.Horizontal(context),
           ),
           CustomPopupItemModel(

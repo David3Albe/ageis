@@ -170,6 +170,8 @@ _$ProcessoLeituraAtualModelImpl _$$ProcessoLeituraAtualModelImplFromJson(
           .toList(),
       localNaoCompativel: LocalNaoCompativelModel.fromJson(
           json['localNaoCompativel'] as Map<String, dynamic>),
+      localizacaoEstoque: LocalizacaoEstoqueModel.fromJson(
+          json['localizacaoEstoque'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$ProcessoLeituraAtualModelImplToJson(
@@ -237,4 +239,5 @@ Map<String, dynamic> _$$ProcessoLeituraAtualModelImplToJson(
       'defineAcaoOcorrencia': instance.defineAcaoOcorrencia,
       'acoesOcorrencia': instance.acoesOcorrencia,
       'localNaoCompativel': instance.localNaoCompativel,
+      'localizacaoEstoque': instance.localizacaoEstoque,
     };

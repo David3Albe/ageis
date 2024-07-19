@@ -6,6 +6,7 @@ import 'package:ageiscme_models/response_dto/sigla/query/item/sigla_query_item_r
 import 'package:ageiscme_models/response_dto/sigla/query/sigla_query_response_dto.dart';
 import 'package:ageiscme_models/response_dto/sigla/remove/sigla_remove_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid_api/models/pluto_grid_api_model.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid_api/pluto_grid_api_widget.dart';
@@ -44,12 +45,20 @@ class SiglaPageWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AddButtonWidget(
-          onPressed: () => openModal(
-            context: context,
-            resetarGrid: resetarGrid,
-            cod: -1,
-          ),
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: () => resetarGrid(),
+            ),
+            const Padding(padding: EdgeInsets.only(left: 8)),
+            AddButtonWidget(
+              onPressed: () => openModal(
+                context: context,
+                resetarGrid: resetarGrid,
+                cod: -1,
+              ),
+            ),
+          ],
         ),
         Expanded(
           child: Padding(

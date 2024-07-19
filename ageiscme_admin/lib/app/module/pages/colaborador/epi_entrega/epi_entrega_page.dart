@@ -4,9 +4,13 @@ import 'package:ageiscme_admin/app/module/pages/colaborador/epi_entrega/epi_entr
 import 'package:ageiscme_admin/app/module/pages/colaborador/epi_entrega/epi_entrega_page_state.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/epi_entrega/filter/epi_entrega_filter_button_widget.dart';
 import 'package:ageiscme_data/services/epi_descritor/epi_descritor_service.dart';
+import 'package:ageiscme_data/services/epi_perfil/epi_perfil_service.dart';
 import 'package:ageiscme_data/services/usuario/usuario_service.dart';
+import 'package:ageiscme_models/dto/epi_perfil/find_by_user/epi_perfil_find_by_user_dto.dart';
 import 'package:ageiscme_models/filters/usuario_filter/usuario_filter.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/response_dto/epi_perfil/find_by_user/epi_perfil_find_by_user_response_dto.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -15,6 +19,7 @@ import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
 import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:dependencias_comuns/modular_export.dart';
 import 'package:flutter/material.dart';
 
 class EpiEntregaPage extends StatefulWidget {
@@ -95,7 +100,15 @@ class _EpiEntregaPageState extends State<EpiEntregaPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Row(children: [EpiEntregaFilterButtonWidget()]),
+              Row(
+                children: [
+                  RefreshButtonWidget(
+                    onPressed: () => refresh(context),
+                  ),
+                  const Padding(padding: EdgeInsets.only(left: 4)),
+                  const EpiEntregaFilterButtonWidget(),
+                ],
+              ),
               BlocListener<EpiEntregaUsuarioPageCubit,
                   EpiEntregaUsuarioPageState>(
                 listener: (context, state) {
@@ -143,6 +156,15 @@ class _EpiEntregaPageState extends State<EpiEntregaPage> {
     );
   }
 
+  Future refresh(BuildContext context) async {
+    EpiEntregaUsuarioPageCubit epiEntregaCubit =
+        BlocProvider.of<EpiEntregaUsuarioPageCubit>(context);
+    EpiEntregaFilterCubit filterCubit =
+        BlocProvider.of<EpiEntregaFilterCubit>(context);
+    UsuarioFilter dto = filterCubit.state;
+    await epiEntregaCubit.filter(dto);
+  }
+
   Future openModal(
     BuildContext context,
     UsuarioModel? usuario,
@@ -165,9 +187,17 @@ class _EpiEntregaPageState extends State<EpiEntregaPage> {
       epiDescritor: null,
       tstamp: '',
     );
+    (String, EpiPerfilFindByUserResponseDTO)? episNecessarios =
+        await Modular.get<EpiPerfilService>().findByUser(
+      EpiPerfilFindByUserDTO(
+        codUsuario: usuario.cod!,
+      ),
+    );
+    if (episNecessarios == null) return;
     chave = WindowsHelper.OpenDefaultWindows(
       title: 'Cadastro/Edição Entrega de Epi',
       widget: EpiEntregaPageFrm(
+        episNecessarios: episNecessarios.$2.epis,
         onCancel: () => onCancel(chave),
         onSaved: (str) => onSaved(str, chave),
         epiEntrega: epiEntrega,

@@ -4,6 +4,7 @@ import 'package:ageiscme_data/services/imagem/imagem_service.dart';
 import 'package:ageiscme_models/filters/imagem/imagem_filter.dart';
 import 'package:ageiscme_models/models/imagem/imagem_model.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
@@ -57,13 +58,21 @@ class _ImagemPageState extends State<ImagemPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AddButtonWidget(
-          onPressed: () async => {
-            await openModal(
-              context,
-              ImagemModel.empty(),
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: bloc.loadImagem,
             ),
-          },
+            const Padding(padding: EdgeInsets.only(left: 8)),
+            AddButtonWidget(
+              onPressed: () async => {
+                await openModal(
+                  context,
+                  ImagemModel.empty(),
+                ),
+              },
+            ),
+          ],
         ),
         BlocListener<ImagemPageCubit, ImagemPageState>(
           bloc: bloc,

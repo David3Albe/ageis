@@ -459,6 +459,7 @@ class _AfastamentoPageFrmState extends State<AfastamentoPageFrm> {
     final AuthenticationResultDTO? authentication =
         await Modular.get<AuthenticationStore>().GetAuthenticated();
     afastamento.usuarioRegistro = UsuarioDropDownSearchResponseDTO(
+      ativo: authentication?.usuario?.ativo ?? false,
       cod: authentication?.usuario?.cod ?? 0,
       codBarra: authentication?.usuario?.codBarra ?? 0,
       nome: authentication?.usuario?.nome ?? '',

@@ -127,6 +127,7 @@ class _ProcessoTipoFluxoPagePresenterState
         context: context,
         dto: FluxoPrintDTO(
           imageBytes: value,
+          nomeFluxo: widget.processoTipo.nome,
         ),
       ).print();
     });

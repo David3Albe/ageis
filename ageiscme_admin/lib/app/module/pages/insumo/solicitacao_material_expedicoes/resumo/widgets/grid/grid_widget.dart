@@ -13,6 +13,7 @@ import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
 import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
 class GridWidget extends StatelessWidget {
@@ -20,6 +21,8 @@ class GridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    late SolicitacaoMaterialSearchItemResponseDTO? Function(PlutoRow)
+        getObjByRow;
     List<CustomDataColumn> colunas = getColunas(context);
     SearchState state = context.watch<SearchCubit>().state;
     SolicitacaoMaterialSearchResponseDTO? dto = state.response;
@@ -28,6 +31,16 @@ class GridWidget extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.only(top: 16.0, bottom: 16),
         child: PlutoGridWidget<SolicitacaoMaterialSearchItemResponseDTO>(
+          getObjectByRowMethod: (context, getObjectByRowMethod) =>
+              getObjByRow = getObjectByRowMethod,
+          rowColorCallback: (rowContext) {
+            SolicitacaoMaterialSearchItemResponseDTO? solicitacao =
+                getObjByRow(rowContext.row);
+                if(solicitacao?.dataEntrega==null){
+                  return Colors.red.shade200;
+                }
+                return const Color(0xffF4F4F4);
+          },
           orderDescendingFieldColumn: 'dataSolicitacao',
           columns: colunas,
           items: dto?.itens ?? [],

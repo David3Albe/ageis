@@ -44,11 +44,11 @@ class ImagemService with ImageServiceMixin {
   Future<ImagemModel?> getLogoIdentificador({
     required String identificador,
   }) async {
-    return ImagemModel.fromJson(
-      await _client.getOne(
-        BASE_URL + 'get-one-by-identificador/$identificador',
-      ),
+    dynamic response = await _client.getOne(
+      BASE_URL + 'get-one-by-identificador/$identificador',
     );
+    if (response == null || response.toString().isEmpty) return null;
+    return ImagemModel.fromJson(response);
   }
 
   Future<ImagemModel?> getLogoAgeis() async {

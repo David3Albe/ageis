@@ -175,6 +175,7 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
   }
 
   late Function() validateTipoProcesso;
+  late Function() validateServicoTipo;
   final ScrollController scroll = ScrollController();
 
   @override
@@ -567,7 +568,7 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                           });
                                         },
                                         text:
-                                            'Disponibiliza  Funções de Preparo',
+                                            'Preparo',
                                         align: MainAxisAlignment.start,
                                       ),
                                       const Padding(
@@ -763,6 +764,7 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                           }
                                           List<ServicoTipoModel> servicosTipos =
                                               state.tiposServico;
+                                          print(processoEtapa.codServicosTipo);
 
                                           ServicoTipoModel? servicoTipo =
                                               servicosTipos
@@ -770,15 +772,27 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                                     (element) =>
                                                         element.cod ==
                                                         processoEtapa
-                                                            .codServicoTipo,
+                                                            .codServicosTipo,
                                                   )
                                                   .firstOrNull;
                                           return DropDownSearchWidget<
                                               ServicoTipoModel>(
+                                            validateBuilder: (
+                                              context,
+                                              validateMethodBuilder,
+                                            ) =>
+                                                validateServicoTipo =
+                                                    validateMethodBuilder,
+                                            validator: (val) => val == null
+                                                ? 'Obrigatório'
+                                                : null,
                                             initialValue: servicoTipo,
                                             sourceList: servicosTipos,
-                                            onChanged: (value) => processoEtapa
-                                                .codServicoTipo = value?.cod,
+                                            onChanged: (value) {
+                                              processoEtapa.servicoTipo = value;
+                                              processoEtapa.codServicosTipo =
+                                                  value?.cod;
+                                            },
                                             placeholder: 'Tipo Serviço *',
                                             textFunction: (p0) =>
                                                 p0.GetDropDownText(),
@@ -1053,7 +1067,6 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
     );
     if (result == null || !result.$1) return;
     int? indicadores = result.$2;
-    print(indicadores);
     if (indicadores == null || indicadores == 0) {
       ToastUtils.showCustomToastWarning(
         context,
@@ -1089,6 +1102,10 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
     bool etiquetaPreparoValid = txtEtiquetaPreparo.valid;
     bool tempoCicloValid = txtTempoCicloProcesso.valid;
     bool tipoProcessoValid = validateTipoProcesso();
+    bool servicoTipoValid = true;
+    if (processoEtapa.exigeTesteBiologico == true) {
+      servicoTipoValid = validateServicoTipo();
+    }
 
     if (!tipoProcessoValid) {
       scroll.jumpTo(0);
@@ -1096,13 +1113,16 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
       scroll.jumpTo(50);
     } else if (!tempoCicloValid || !etiquetaPreparoValid) {
       scroll.jumpTo(200);
+    } else if (!servicoTipoValid) {
+      scroll.jumpTo(350);
     }
 
     if (!nomeValid ||
         !descricaoValid ||
         !etiquetaPreparoValid ||
         !tempoCicloValid ||
-        !tipoProcessoValid) return;
+        !tipoProcessoValid || 
+        !servicoTipoValid) return;
 
     if (processoEtapa.codEquipamento == null &&
         processoEtapa.codEstoque == null) {

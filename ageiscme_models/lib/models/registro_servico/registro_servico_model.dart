@@ -47,11 +47,11 @@ abstract class RegistroServicoModel with _$RegistroServicoModel {
     bool? controlarValidade,
     DateTime? ultimaAlteracao,
     @JsonKey(name: 'tStamp') String? tstamp,
-     EquipamentoModel? equipamento,
-     ItemModel? item,
-     ServicoTipoModel? servicoTipo,
-     UsuarioModel? usuario,
-     UsuarioDropDownSearchResponseDTO? usuarioDropDown,
+    EquipamentoModel? equipamento,
+    ItemModel? item,
+    ServicoTipoModel? servicoTipo,
+    UsuarioModel? usuario,
+    UsuarioDropDownSearchResponseDTO? usuarioDropDown,
   }) = _RegistroServicoModel;
 
   factory RegistroServicoModel.fromJson(Map<String, Object?> json) =>
@@ -128,6 +128,10 @@ class RegistroServicoResultOption with DropDownText {
     } else {
       return result.first.text;
     }
+  }
+
+  static RegistroServicoResultOption getLiberado() {
+    return RegistroServicoResultOption('Liberado', '1');
   }
 
   @override

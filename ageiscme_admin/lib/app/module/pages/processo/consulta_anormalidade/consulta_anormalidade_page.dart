@@ -13,6 +13,7 @@ import 'package:ageiscme_models/query_filters/anormalidade/consulta_anormalidade
 import 'package:ageiscme_models/query_models/anormalidade/consulta_anormalidade_model.dart';
 import 'package:ageiscme_models/response_dto/anormalidade_tipo/short/anormalidade_tipo_short_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/campos/custom_autocomplete/custom_autocomplete_selectable_widget.dart';
 import 'package:compartilhados/componentes/campos/custom_autocomplete/custom_autocomplete_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
@@ -139,10 +140,20 @@ class _ConsultaAnormalidadePageState extends State<ConsultaAnormalidadePage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FilterButtonWidget(
-          onPressed: () => {
-            openModal(context),
-          },
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: () => resetarPaginacaoGrid(),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 5),
+            ),
+            FilterButtonWidget(
+              onPressed: () => {
+                openModal(context),
+              },
+            ),
+          ],
         ),
         Expanded(
           child: Padding(

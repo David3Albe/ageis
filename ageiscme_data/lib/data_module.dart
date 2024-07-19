@@ -2,6 +2,7 @@ import 'package:ageiscme_data/local_storage/local_storage.dart';
 import 'package:ageiscme_data/services/anormalidade/anormalidade_service.dart';
 import 'package:ageiscme_data/services/anormalidade_tipo/anormalidade_tipo_service.dart';
 import 'package:ageiscme_data/services/atestado_saude_ocupacional_exame/atestado_saude_ocupacional_exame_service.dart';
+import 'package:ageiscme_data/services/epi_perfil/epi_perfil_service.dart';
 import 'package:ageiscme_data/services/escala/escala_service.dart';
 import 'package:ageiscme_data/services/gerar_licenca/gerar_licenca_service.dart';
 import 'package:ageiscme_data/services/historico/historico_service.dart';
@@ -51,5 +52,6 @@ class DataModule extends Module {
     injector.add(EscalaService.new);
     injector.add(UsuarioService.new);
     injector.add(AtestadoSaudeOcupacionalExameService.new);
+    injector.add(EpiPerfilService.new);
   }
 }

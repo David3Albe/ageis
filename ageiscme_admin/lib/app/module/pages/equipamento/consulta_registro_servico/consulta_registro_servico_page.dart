@@ -13,6 +13,7 @@ import 'package:ageiscme_models/filters/registro_servico/registro_servico_filter
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/query_filters/registro_servico/consulta_registro_servico_filter.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/campos/custom_autocomplete/custom_autocomplete_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
@@ -156,10 +157,20 @@ class _ConsultaRegistroServicoPageState
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FilterButtonWidget(
-          onPressed: () => {
-            openModal(context),
-          },
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: () => bloc.loadRegistroServico(filter),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 5),
+            ),
+            FilterButtonWidget(
+              onPressed: () => {
+                openModal(context),
+              },
+            ),
+          ],
         ),
         BlocListener<ConsultaRegistroServicoPageCubit,
             ConsultaRegistroServicoPageState>(

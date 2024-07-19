@@ -428,7 +428,7 @@ class CustomDefaultWindowComponentState
       newWidth = width + details.delta.dx;
     }
     setState(() {
-      if (newWidth >= 475 || newWidth > width) {
+      if (newWidth >= 630 || newWidth > width) {
         width = newWidth;
       }
       if (newHeight >= 400 || newHeight > height) {

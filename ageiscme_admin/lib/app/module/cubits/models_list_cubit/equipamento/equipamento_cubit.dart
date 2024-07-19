@@ -28,6 +28,17 @@ class EquipamentoCubit extends Cubit<EquipamentoState> {
     );
   }
 
+  Future refresh() async {
+    List<EquipamentoModel> equipamentos = state.objs;
+    emit(EquipamentoState(objs: [], loading: true));
+    await Future.delayed(const Duration(milliseconds: 50));
+    emit(
+      EquipamentoState(
+        objs: equipamentos,
+      ),
+    );
+  }
+
   void clear() => emit(EquipamentoState(objs: []));
 }
 

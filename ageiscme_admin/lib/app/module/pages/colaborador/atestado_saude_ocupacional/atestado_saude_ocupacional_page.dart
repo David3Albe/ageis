@@ -6,6 +6,7 @@ import 'package:ageiscme_models/filters/atestado_saude_ocupacional/atestado_saud
 import 'package:ageiscme_models/filters/usuario_filter/usuario_filter.dart';
 import 'package:ageiscme_models/models/atestado_saude_ocupacional/atestado_saude_ocupacional_model.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
@@ -110,13 +111,21 @@ class _AtestadoSaudeOcupacionalPageState
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AddButtonWidget(
-          onPressed: () async => {
-            await openModal(
-              context,
-              AtestadoSaudeOcupacionalModel.empty(),
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: bloc.loadAtestadoSaudeOcupacional,
             ),
-          },
+            const Padding(padding: EdgeInsets.only(left: 8)),
+            AddButtonWidget(
+              onPressed: () async => {
+                await openModal(
+                  context,
+                  AtestadoSaudeOcupacionalModel.empty(),
+                ),
+              },
+            ),
+          ],
         ),
         BlocListener<AtestadoSaudeOcupacionalPageCubit,
             AtestadoSaudeOcupacionalPageState>(

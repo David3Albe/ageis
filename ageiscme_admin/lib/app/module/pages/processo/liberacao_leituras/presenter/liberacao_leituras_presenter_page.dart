@@ -1,6 +1,7 @@
 import 'package:ageiscme_admin/app/module/pages/processo/liberacao_leituras/cubit/liberacao_leituras_page_cubit.dart';
 import 'package:ageiscme_data/services/processo_leitura_andamento/processo_leitura_andamento_service.dart';
 import 'package:ageiscme_models/models/processo_leitura_andamento/processo_leitura_andamento_model.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -59,6 +60,13 @@ class _LiberacaoLeiturasPresenterPageState
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: bloc.loadLeiturasEmAndamento,
+            ),
+          ],
+        ),
         BlocListener<LiberacaoLeiturasPageCubit, LiberacaoLeiturasPageState>(
           bloc: bloc,
           listener: (context, state) {

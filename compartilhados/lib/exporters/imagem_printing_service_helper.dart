@@ -29,8 +29,11 @@ class ImagemPrintingServiceHelper {
   static Future<Image?> loadImagemNetwork({
     required String identificador,
   }) async {
+    print('tentou');
     ImagemMixin? imagem = await Modular.get<ImageServiceMixin>()
         .getLogoIdentificador(identificador: identificador);
+        print('imagem');
+        print(imagem);
     return loadImagem(imagem: imagem);
   }
 }

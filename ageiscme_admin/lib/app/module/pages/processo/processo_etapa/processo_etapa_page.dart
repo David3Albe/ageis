@@ -3,6 +3,7 @@ import 'package:ageiscme_admin/app/module/pages/processo/processo_etapa/processo
 import 'package:ageiscme_data/services/processo_etapa/processo_etapa_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -66,13 +67,23 @@ class _ProcessoEtapaPageState extends State<ProcessoEtapaPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              ProcessoEtapaModel.empty(),
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: bloc.loadProcessoEtapa,
             ),
-          },
+            const Padding(
+              padding: EdgeInsets.only(left: 5),
+            ),
+            AddButtonWidget(
+              onPressed: () => {
+                openModal(
+                  context,
+                  ProcessoEtapaModel.empty(),
+                ),
+              },
+            ),
+          ],
         ),
         BlocListener<ProcessoEtapaPageCubit, ProcessoEtapaPageState>(
           bloc: bloc,

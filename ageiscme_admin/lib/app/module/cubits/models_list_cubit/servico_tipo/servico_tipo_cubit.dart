@@ -13,17 +13,32 @@ class ServicoTipoCubit extends Cubit<ServicoTipoState> {
 
   void clear() => emit(ServicoTipoState(tiposServico: []));
 
-  void reload() => emit(
-        ServicoTipoState(
-          tiposServico: state.tiposServico,
-          loading: state.loading,
-        ),
-      );
+  Future reload() async {
+    List<ServicoTipoModel> servicos = state.tiposServico;
+    emit(
+      ServicoTipoState(
+        tiposServico: [],
+        loading: true,
+      ),
+    );
+    await Future.delayed(const Duration(milliseconds: 100));
+    emit(
+      ServicoTipoState(
+        tiposServico: servicos,
+        reloaded: true,
+      ),
+    );
+  }
 }
 
 class ServicoTipoState {
   List<ServicoTipoModel> tiposServico;
   bool loading;
+  bool reloaded;
 
-  ServicoTipoState({required this.tiposServico, this.loading = false});
+  ServicoTipoState({
+    required this.tiposServico,
+    this.loading = false,
+    this.reloaded = false,
+  });
 }

@@ -11,6 +11,7 @@ import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/query_filters/documento/consulta_documento_filter.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/open_doc/open_doc_interface.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
@@ -110,10 +111,18 @@ class _ConsultaDocumentoPageState extends State<ConsultaDocumentoPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FilterButtonWidget(
-          onPressed: () => {
-            openModal(context),
-          },
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: () => bloc.loadDocumento(filter),
+            ),
+            const Padding(padding: EdgeInsets.only(left: 5)),
+            FilterButtonWidget(
+              onPressed: () => {
+                openModal(context),
+              },
+            ),
+          ],
         ),
         BlocListener<ConsultaDocumentoPageCubit, ConsultaDocumentoPageState>(
           bloc: bloc,

@@ -17,6 +17,7 @@ class UsuarioDropDownSearchCubit extends Cubit<UsuarioDropDownSearchState> {
     (String, List<UsuarioDropDownSearchResponseDTO>)? result =
         await UsuarioService().getDropDownSearch(filter);
     if (result == null) return;
+    result.$2.sort((a, b) => (a.nome ?? '').compareTo(b.nome ?? ''));
     List<UsuarioDropDownSearchResponseDTO> usuarios = result.$2;
     emit(
       UsuarioDropDownSearchState(

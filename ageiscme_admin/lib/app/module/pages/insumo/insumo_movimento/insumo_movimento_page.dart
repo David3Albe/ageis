@@ -7,6 +7,7 @@ import 'package:ageiscme_models/filters/insumo_movimento/insumo_movimento_filter
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
@@ -114,6 +115,10 @@ class _InsumoMovimentoPageState extends State<InsumoMovimentoPage> {
       children: [
         Row(
           children: [
+            RefreshButtonWidget(
+              onPressed: carregarDados,
+            ),
+            const Padding(padding: EdgeInsets.only(left: 5)),
             FilterButtonWidget(
               onPressed: () => {
                 openModalFilter(context),
@@ -149,6 +154,7 @@ class _InsumoMovimentoPageState extends State<InsumoMovimentoPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
                   child: PlutoGridWidget(
+             
                     orderDescendingFieldColumn: 'dataHora',
                     onEdit: (InsumoMovimentoModel objeto) =>
                         {openModal(context, InsumoMovimentoModel.copy(objeto))},

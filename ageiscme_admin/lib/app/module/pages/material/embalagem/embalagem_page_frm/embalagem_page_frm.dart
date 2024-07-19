@@ -68,8 +68,10 @@ class _EmbalagemPageFrmState extends State<EmbalagemPageFrm> {
         return 'Obrigatório';
       } else if (str == '0') {
         return 'Validade do processo não pode ser zero';
-      } else if (str.length > 10) {
-        return 'Pode ser até no máximo 9999999999';
+      }
+      int? converteu = int.tryParse(str);
+      if (converteu == null) {
+        return 'Número inválido';
       }
       return '';
     });

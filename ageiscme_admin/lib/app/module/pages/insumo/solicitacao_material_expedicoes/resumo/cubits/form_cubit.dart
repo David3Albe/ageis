@@ -123,6 +123,7 @@ class FormCubit extends Cubit<form.FormState> {
       dataHora: DateTime.now(),
       codInstituicao: store!.instituicao!.cod,
       codEquipamentoInsumo: item.codEquipamento,
+      quantidade: item.quantidadeSolicitada,
     );
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(

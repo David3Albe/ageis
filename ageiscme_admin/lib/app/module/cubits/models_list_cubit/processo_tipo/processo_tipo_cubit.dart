@@ -13,6 +13,17 @@ class ProcessoTipoCubit extends Cubit<ProcessoTipoState> {
     emit(ProcessoTipoState(processosTipos: processosTipos, loaded: true));
   }
 
+  Future refresh() async {
+    List<ProcessoTipoModel> processos = state.processosTipos;
+    emit(
+      ProcessoTipoState(processosTipos: [], loading: true),
+    );
+    await Future.delayed(const Duration(milliseconds: 10));
+    emit(
+      ProcessoTipoState(processosTipos: processos),
+    );
+  }
+
   void loadFilter(ProcessoTipoFilter filter) async {
     emit(
       ProcessoTipoState(

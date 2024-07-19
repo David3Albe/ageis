@@ -393,20 +393,22 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
             },
             Row(
               children: [
-                Text(
-                  item == null ? widget.placeholder ?? '' : text,
-                  style: Fontes.getRoboto(
-                    cor: errorText != null && !errorText!.isEmpty
-                        ? Colors.red
-                        : widget.readOnly
-                            ? Colors.grey
-                            : null,
-                    fontSize: HelperFunctions.calculaFontSize(context, 14),
+                Expanded(
+                  child: Text(
+                    item == null ? widget.placeholder ?? '' : text,
+                    style: Fontes.getRoboto(
+                      overflow: TextOverflow.ellipsis,
+                      cor: errorText != null && !errorText!.isEmpty
+                          ? Colors.red
+                          : widget.readOnly
+                              ? Colors.grey
+                              : null,
+                      fontSize: HelperFunctions.calculaFontSize(context, 14),
+                    ),
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
                 if (item != null) ...{
-                  const Spacer(),
                   SizedBox(
                     child: InkWell(
                       child: const Icon(Symbols.close),

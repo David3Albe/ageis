@@ -72,6 +72,14 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
   late final RegistroServicePageFrmController controller;
   late bool Function() validateTipoServico;
   late bool Function() validateResultado;
+  late void Function(EquipamentoModel?) setEquipamento;
+  late void Function(ItemModel?) setItem;
+  late void Function(ServicoTipoModel?) setServicoTipo;
+  late void Function(DateTime?) setDataInicio;
+  late void Function(DateTime?) setDataTermino;
+  late void Function(UsuarioDropDownSearchResponseDTO?) setUsuarioResponsavel;
+  late void Function(bool) setControlarValidade;
+  late void Function(RegistroServicoResultOption?) setResultado;
 
   void initState() {
     readonlyCubit = ReadonlyCubit();
@@ -169,9 +177,17 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                                                   )
                                                   .firstOrNull;
                                           return DropDownSearchWidget(
-                                            readOnly:
-                                                widget.equipamentoReadOnly ??
-                                                    false,
+                                            setSelectedItemBuilder: (
+                                              context,
+                                              setSelectedItemMethod,
+                                            ) =>
+                                                setEquipamento =
+                                                    setSelectedItemMethod,
+                                            readOnly: widget
+                                                        .equipamentoReadOnly ==
+                                                    true ||
+                                                (registroServico.cod != null &&
+                                                    registroServico.cod != 0),
                                             textFunction: (equipamento) =>
                                                 equipamento
                                                     .EquipamentoNomeText(),
@@ -210,7 +226,12 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                                   children: [
                                     Expanded(
                                       child: DropDownSearchApiWidget(
-                                        readOnly: widget.itemReadOnly ?? false,
+                                        setSelectedItemBuilder:
+                                            (context, setSelectedItemMethod) =>
+                                                setItem = setSelectedItemMethod,
+                                        readOnly: widget.itemReadOnly == true ||
+                                            (registroServico.cod != null &&
+                                                registroServico.cod != 0),
                                         textFunction: (item) =>
                                             item.EtiquetaDescricaoText(),
                                         initialValue: registroServico.item,
@@ -238,6 +259,7 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                                               child: LoadingWidget(),
                                             );
                                           }
+
                                           List<ServicoTipoModel> servicosTipos =
                                               state.tiposServico;
                                           registroServico.servicoTipo =
@@ -258,9 +280,29 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                                                   .buscarServicosEquipamento(
                                             servicosTipos,
                                           );
+                                          if (state.reloaded == true) {
+                                            if (servicos.isNotEmpty &&
+                                                !servicos
+                                                    .map((e) => e.cod)
+                                                    .contains(
+                                                      registroServico
+                                                          .codServicosTipos,
+                                                    )) {
+                                              registroServico.servicoTipo =
+                                                  null;
+                                              registroServico.codServicosTipos =
+                                                  null;
+                                            }
+                                          }
 
                                           return DropDownSearchWidget<
                                               ServicoTipoModel>(
+                                            setSelectedItemBuilder: (
+                                              context,
+                                              setSelectedItemMethod,
+                                            ) =>
+                                                setServicoTipo =
+                                                    setSelectedItemMethod,
                                             validateBuilder: (
                                               context,
                                               validateMethodBuilder,
@@ -291,6 +333,7 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                                                   value;
                                               registroServico.codServicosTipos =
                                                   value?.cod;
+                                              widget.equipamentoCubit.refresh();
                                             },
                                             placeholder: 'Tipo do Serviço *',
                                           );
@@ -375,6 +418,10 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                                     Expanded(
                                       child: DropDownSearchApiWidget<
                                           UsuarioDropDownSearchResponseDTO>(
+                                        setSelectedItemBuilder:
+                                            (context, setSelectedItemMethod) =>
+                                                setUsuarioResponsavel =
+                                                    setSelectedItemMethod,
                                         search: (str) async =>
                                             (await UsuarioService()
                                                     .getDropDownSearch(
@@ -389,17 +436,8 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                                             [],
                                         textFunction: (usuario) =>
                                             usuario.NomeText(),
-                                        initialValue: registroServico.usuario !=
-                                                null
-                                            ? UsuarioDropDownSearchResponseDTO(
-                                                cod:
-                                                    registroServico.codUsuario!,
-                                                nome: registroServico
-                                                    .usuario!.nome,
-                                                codBarra: registroServico
-                                                    .usuario!.codBarra!,
-                                              )
-                                            : registroServico.usuarioDropDown,
+                                        initialValue:
+                                            registroServico.usuarioDropDown,
                                         onChanged: (value) {
                                           registroServico.usuarioDropDown =
                                               value;
@@ -413,6 +451,10 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                                     Expanded(
                                       child: DropDownSearchWidget<
                                           RegistroServicoResultOption>(
+                                        setSelectedItemBuilder:
+                                            (context, setSelectedItemMethod) =>
+                                                setResultado =
+                                                    setSelectedItemMethod,
                                         validator: (obj) =>
                                             obj == null ? 'Obrigatório' : null,
                                         validateBuilder:
@@ -452,6 +494,10 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                                       child: Row(
                                         children: [
                                           CustomCheckboxWidget(
+                                            setValue:
+                                                (context, setValueWidget) =>
+                                                    setControlarValidade =
+                                                        setValueWidget,
                                             checked: registroServico
                                                 .controlarValidade,
                                             onClick: (value) => registroServico
@@ -546,12 +592,7 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                         },
                       ),
                       CleanButtonWidget(
-                        onPressed: () => {
-                          setState(() {
-                            registroServico = RegistroServicoModel.empty();
-                            controller.setFields();
-                          }),
-                        },
+                        onPressed: limparCampos,
                       ),
                       CancelButtonUnfilledWidget(
                         onPressed: widget.onCancel,
@@ -565,6 +606,60 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
         },
       ),
     );
+  }
+
+  Future limparCampos() async {
+    final AuthenticationResultDTO? authentication =
+        await Modular.get<AuthenticationStore>().GetAuthenticated();
+    if (authentication?.usuario == null) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'Usuário atual não identificado, entre novamente no sistema',
+      );
+      return;
+    }
+    setState(() {
+      registroServico.cod = 0;
+      registroServico.codEquipamento = null;
+      registroServico.equipamento = null;
+      setEquipamento(null);
+      registroServico.item = null;
+      registroServico.codItem = null;
+      setItem(null);
+      registroServico.lote = null;
+      registroServico.codServicosTipos = null;
+      registroServico.servicoTipo = null;
+      setServicoTipo(null);
+      registroServico.dataInicio = DateTime.now();
+      registroServico.dataEnvio = null;
+      registroServico.dataTermino = null;
+      registroServico.dataValidade = null;
+      registroServico.descricao = null;
+      registroServico.temperatura = null;
+      registroServico.temperaturaMax = null;
+      registroServico.temperaturaMin = null;
+      registroServico.umidade = null;
+      registroServico.umidadeMin = null;
+      registroServico.umidadeMax = null;
+      registroServico.usuarioDropDown = null;
+      registroServico.codUsuarioLiberado = null;
+      registroServico.controlarValidade = false;
+      setControlarValidade(false);
+      registroServico.docAnexa = null;
+      registroServico.docAnexaNome = null;
+      registroServico.imagemDocAnexo = null;
+      registroServico.tecnico = null;
+      setUsuarioResponsavel(null);
+      registroServico.usuarioRegistro = authentication!.usuario!.nome;
+      registroServico.codUsuario = authentication.usuario!.cod;
+      registroServico.usuario = authentication.usuario;
+      registroServico.dataRegistro = DateTime.now();
+      RegistroServicoResultOption liberado =
+          RegistroServicoResultOption.getLiberado();
+      setResultado(liberado);
+      registroServico.resultado = liberado.cod.toString();
+      controller.setFields(true);
+    });
   }
 
   Future printTag() async {
@@ -631,6 +726,17 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
         !tipoServicoValid ||
         !resultadoValid) {
       return;
+    }
+
+    if (registroServico.dataTermino != null &&
+        registroServico.dataInicio != null) {
+      if (registroServico.dataInicio!.isAfter(registroServico.dataTermino!)) {
+        ToastUtils.showCustomToastWarning(
+          context,
+          'Data Término não pode ser antes da Data Inicial',
+        );
+        return;
+      }
     }
 
     if (registroServico.codItem == null &&

@@ -9,6 +9,7 @@ import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/query_filters/processos_leitura_devolvido/consulta_processos_leitura_devolvido_filter.dart';
 import 'package:ageiscme_models/query_filters/processos_leitura_devolvido_sub/consulta_processos_leitura_devolvido_sub_filter.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
@@ -66,10 +67,18 @@ class _ConsultaProcessosLeituraDevolvidoPageState
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FilterButtonWidget(
-          onPressed: () => {
-            openModal(context),
-          },
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: () => bloc.loadProcessosLeituraDevolvido(filter),
+            ),
+            const Padding(padding: EdgeInsets.only(left: 5)),
+            FilterButtonWidget(
+              onPressed: () => {
+                openModal(context),
+              },
+            ),
+          ],
         ),
         BlocListener<ConsultaProcessosLeituraDevolvidoPageCubit,
             ConsultaProcessosLeituraDevolvidoPageState>(

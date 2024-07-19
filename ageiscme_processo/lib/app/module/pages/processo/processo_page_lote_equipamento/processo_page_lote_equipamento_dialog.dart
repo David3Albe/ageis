@@ -41,10 +41,12 @@ class _ProcessoPageLoteEquipamentoDialogState
       contentPadding: const EdgeInsets.all(16),
       title: const TitleWidget(text: 'Informe o lote do equipamento'),
       content: Container(
-        constraints: BoxConstraints(
-          minHeight: size.height * 0.4,
-          minWidth: size.width * .4,
+        constraints: const BoxConstraints(
+          minHeight: 500,
+          minWidth: 500,
         ),
+        width: size.width * 0.5,
+        height: size.height * 0.5,
         child: Column(
           children: [
             TextFieldStringWidget(
@@ -86,7 +88,10 @@ class _ProcessoPageLoteEquipamentoDialogState
       ToastUtils.showCustomToastWarning(context, 'O Loté é obrigátorio');
       return false;
     } else if (codLote.length > 20) {
-      ToastUtils.showCustomToastWarning(context, 'O Lote pode conter até 20 Letras');
+      ToastUtils.showCustomToastWarning(
+        context,
+        'O Lote pode conter até 20 Letras',
+      );
       return false;
     }
     return true;

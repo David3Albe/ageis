@@ -4,12 +4,15 @@ import 'package:ageiscme_admin/app/module/pages/equipamento/registro_servico/reg
 import 'package:ageiscme_admin/app/module/pages/equipamento/registro_servico/registro_servico_page_state.dart';
 import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
 import 'package:ageiscme_data/services/registro_servico/registro_servico_service.dart';
+import 'package:ageiscme_data/services/usuario/usuario_service.dart';
+import 'package:ageiscme_models/dto/usuario/usuario_drop_down_search_dto.dart';
 import 'package:ageiscme_models/filters/equipamento/equipamento_filter.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/filters/registro_servico/registro_servico_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
@@ -114,6 +117,10 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
         children: [
           Row(
             children: [
+              RefreshButtonWidget(
+                onPressed: () => bloc.loadRegistroServicoFilter(filter),
+              ),
+              const Padding(padding: EdgeInsets.only(left: 5)),
               FilterButtonWidget(
                 onPressed: () => {
                   openModalFilter(context),
@@ -258,6 +265,20 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
     );
   }
 
+  Future setTecnico(RegistroServicoModel registroServico) async {
+    if (registroServico.tecnico == null) return;
+    registroServico.usuarioDropDown = (await UsuarioService().getDropDownSearch(
+      UsuarioDropDownSearchDTO(
+        numeroRegistros: 1,
+        codigos: [
+          int.parse(registroServico.tecnico!),
+        ],
+      ),
+    ))
+        ?.$2
+        .firstOrNull;
+  }
+
   Future openModal(
     BuildContext context,
     RegistroServicoModel registroServico,
@@ -275,6 +296,7 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
         notFoundError();
         return;
       }
+      await setTecnico(registroServicoModel);
     }
     loading.close(context, mounted);
     late int chave;

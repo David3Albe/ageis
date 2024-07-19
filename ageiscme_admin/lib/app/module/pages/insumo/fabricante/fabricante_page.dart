@@ -3,6 +3,7 @@ import 'package:ageiscme_admin/app/module/pages/insumo/fabricante/fabricante_pag
 import 'package:ageiscme_data/services/fabricante/fabricante_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -47,13 +48,21 @@ class _FabricantePageState extends State<FabricantePage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              FabricanteModel.empty(),
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: bloc.loadFabricante,
             ),
-          },
+            const Padding(padding: EdgeInsets.only(left: 5)),
+            AddButtonWidget(
+              onPressed: () => {
+                openModal(
+                  context,
+                  FabricanteModel.empty(),
+                ),
+              },
+            ),
+          ],
         ),
         BlocListener<FabricantePageCubit, FabricantePageState>(
           bloc: bloc,

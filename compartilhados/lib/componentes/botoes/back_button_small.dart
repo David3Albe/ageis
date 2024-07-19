@@ -1,3 +1,4 @@
+import 'package:compartilhados/componentes/botoes/button_constraints.dart';
 import 'package:compartilhados/cores/cores.dart';
 import 'package:compartilhados/functions/helper_functions.dart';
 import 'package:dependencias_comuns/main.dart';
@@ -18,37 +19,35 @@ class _BackButtonSmallWidgetState extends State<BackButtonSmallWidget> {
   bool hovered = false;
   @override
   Widget build(BuildContext context) {
-    double scaleH = MediaQuery.of(context).size.height / 1080;
-    double scaleW = MediaQuery.of(context).size.width / 1920;
-    return ElevatedButton(
-      onHover: (bool hover) => setState(() => hovered = hover),
-      style: hovered
-          ? ElevatedButton.styleFrom(
-              shape: const RoundedRectangleBorder(
-                side: BorderSide.none,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(5),
+    // double scaleH = MediaQuery.of(context).size.height / 1080;
+    // double scaleW = MediaQuery.of(context).size.width / 1920;
+    return SizedBox(
+      width: ButtonConstraints.SMALL_BUTTON_WIDTH,
+      height: ButtonConstraints.SMALL_BUTTON_HEIGHT,
+      child: ElevatedButton(
+        onHover: (bool hover) => setState(() => hovered = hover),
+        style: hovered
+            ? ElevatedButton.styleFrom(
+                shape: const RoundedRectangleBorder(
+                  side: BorderSide.none,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5),
+                  ),
                 ),
-              ),
-              elevation: 0,
-              backgroundColor: Cores.corBotaoVoltarSelecionado,
-            )
-          : ElevatedButton.styleFrom(
-              shape: const RoundedRectangleBorder(
-                side: BorderSide.none,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(5),
+                elevation: 0,
+                backgroundColor: Cores.corBotaoVoltarSelecionado,
+              )
+            : ElevatedButton.styleFrom(
+                shape: const RoundedRectangleBorder(
+                  side: BorderSide.none,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(5),
+                  ),
                 ),
+                elevation: 0,
+                backgroundColor: Cores.corBotaoVoltar,
               ),
-              elevation: 0,
-              backgroundColor: Cores.corBotaoVoltar,
-            ),
-      onPressed: widget.onPressed,
-      child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 12.0 * scaleW,
-          vertical: 6.0 * scaleH,
-        ),
+        onPressed: widget.onPressed,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

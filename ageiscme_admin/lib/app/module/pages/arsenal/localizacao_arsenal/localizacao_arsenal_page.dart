@@ -3,6 +3,7 @@ import 'package:ageiscme_admin/app/module/pages/arsenal/localizacao_arsenal/loca
 import 'package:ageiscme_data/services/localizacao_arsenal/localizacao_arsenal_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -62,13 +63,21 @@ class _LocalizacaoArsenalPageState extends State<LocalizacaoArsenalPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              LocalizacaoArsenalModel.empty(),
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: () => bloc.loadLocalizacaoArsenal(),
             ),
-          },
+            const Padding(padding: EdgeInsets.only(left: 5)),
+            AddButtonWidget(
+              onPressed: () => {
+                openModal(
+                  context,
+                  LocalizacaoArsenalModel.empty(),
+                ),
+              },
+            ),
+          ],
         ),
         BlocListener<LocalizacaoArsenalPageCubit, LocalizacaoArsenalPageState>(
           bloc: bloc,

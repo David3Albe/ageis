@@ -105,6 +105,7 @@ class EscalaGridPageHeaderWidgetState
     if (sigla == null) return;
     for (PlutoRow row in widget.stateManager.rows) {
       for (PlutoColumn column in widget.stateManager.columns) {
+        if (row.cells['usuario']?.value == null) continue;
         int? parseou = int.tryParse(column.field);
         if (parseou == null) continue;
         if (row.cells[column.field]?.value != null &&

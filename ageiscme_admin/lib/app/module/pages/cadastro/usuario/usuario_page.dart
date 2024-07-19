@@ -7,6 +7,7 @@ import 'package:ageiscme_data/services/usuario/usuario_service.dart';
 import 'package:ageiscme_models/filters/usuario_filter/usuario_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
@@ -105,6 +106,10 @@ class _UsuarioPageState extends State<UsuarioPage> {
             children: [
               Row(
                 children: [
+                  RefreshButtonWidget(
+                    onPressed: ()=>loadData(context),
+                  ),
+                  const Padding(padding: EdgeInsets.only(left: 8)),
                   const UsuarioButtonFilterWidget(),
                   const Padding(padding: EdgeInsets.only(left: 8)),
                   AddButtonWidget(
@@ -156,6 +161,14 @@ class _UsuarioPageState extends State<UsuarioPage> {
         },
       ),
     );
+  }
+
+  Future loadData(BuildContext context) async {
+    UsuarioPageCubit userCubit = BlocProvider.of<UsuarioPageCubit>(context);
+    UsuarioCubitFilter filterCubit =
+        BlocProvider.of<UsuarioCubitFilter>(context);
+    UsuarioFilter? dto = filterCubit.state;
+    await userCubit.loadFilter(dto);
   }
 
   Future imprimirUsuarios() async {

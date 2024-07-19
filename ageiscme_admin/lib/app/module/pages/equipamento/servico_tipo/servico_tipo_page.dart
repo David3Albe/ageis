@@ -3,6 +3,7 @@ import 'package:ageiscme_admin/app/module/pages/equipamento/servico_tipo/servico
 import 'package:ageiscme_data/services/servico_tipo/servico_tipo_service.dart';
 import 'package:ageiscme_models/models/servico_tipo/servico_tipo_model.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -62,13 +63,21 @@ class _ServicoTipoPageState extends State<ServicoTipoPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              ServicoTipoModel.empty(),
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: bloc.loadServicoTipo,
             ),
-          },
+            const Padding(padding: EdgeInsets.only(left: 5)),
+            AddButtonWidget(
+              onPressed: () => {
+                openModal(
+                  context,
+                  ServicoTipoModel.empty(),
+                ),
+              },
+            ),
+          ],
         ),
         BlocListener<ServicoTipoPageCubit, ServicoTipoPageState>(
           bloc: bloc,

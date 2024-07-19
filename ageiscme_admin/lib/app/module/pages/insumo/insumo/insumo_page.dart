@@ -3,6 +3,7 @@ import 'package:ageiscme_admin/app/module/pages/insumo/insumo/insumo_page_state.
 import 'package:ageiscme_data/services/insumo/insumo_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -66,13 +67,21 @@ class _InsumoPageState extends State<InsumoPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              InsumoModel.empty(),
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: bloc.loadInsumo,
             ),
-          },
+            const Padding(padding: EdgeInsets.only(left: 4)),
+            AddButtonWidget(
+              onPressed: () => {
+                openModal(
+                  context,
+                  InsumoModel.empty(),
+                ),
+              },
+            ),
+          ],
         ),
         BlocListener<InsumoPageCubit, InsumoPageState>(
           bloc: bloc,

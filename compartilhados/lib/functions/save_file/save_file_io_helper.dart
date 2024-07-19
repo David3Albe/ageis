@@ -23,7 +23,9 @@ class SaveFileIo implements SaveFileInterface {
     String? path = await FilePicker.platform.saveFile(
       fileName: docName,
       allowedExtensions: allowedExtensions,
-      type: FileType.custom,
+      type: allowedExtensions == null || allowedExtensions.isEmpty
+          ? FileType.any
+          : FileType.custom,
     );
 
     if (path == null) {
@@ -38,7 +40,9 @@ class SaveFileIo implements SaveFileInterface {
       String decodedString = utf8.decode(bytes);
       bytes = Uint8List.fromList(decodedString.codeUnits);
     }
-    if (allowedExtensions != null && allowedExtensions.isNotEmpty && allowedExtensions.length==1) {
+    if (allowedExtensions != null &&
+        allowedExtensions.isNotEmpty &&
+        allowedExtensions.length == 1) {
       String firstExtension = allowedExtensions.first;
       if (!path.endsWith(firstExtension)) {
         if (!path.endsWith('.')) {

@@ -22,6 +22,7 @@ import 'package:ageiscme_models/query_models/processos_consignado/consulta_proce
 import 'package:ageiscme_models/response_dto/item_descritor/drop_down_search/item_descritor_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/print_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/campos/custom_autocomplete/custom_autocomplete_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
@@ -186,6 +187,12 @@ class _ConsultaProcessosConsignadoPageState
       children: [
         Row(
           children: [
+            RefreshButtonWidget(
+              onPressed: () => bloc.loadProcessosConsignado(filter),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 5),
+            ),
             FilterButtonWidget(
               onPressed: () => {
                 openModal(context),

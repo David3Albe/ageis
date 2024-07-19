@@ -1,5 +1,5 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/centro_custo/centro_custo_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/embalagem/embalagem_cubit.dart';
+// import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/embalagem/embalagem_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/item_descritor/item_descritor_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/processo_tipo/processo_tipo_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/tamanho/tamanho_cubit.dart';
@@ -38,6 +38,7 @@ class KitDescritorPageFrm extends StatefulWidget {
     required this.itemDescritorCubit,
     required this.onSaved,
     required this.onCancel,
+    required this.instituicao,
   }) : super(key: key);
 
   final KitDescritorModel kitDescritor;
@@ -45,6 +46,7 @@ class KitDescritorPageFrm extends StatefulWidget {
   final ItemDescritorCubit itemDescritorCubit;
   final void Function(String) onSaved;
   final void Function() onCancel;
+  final InstituicaoModel instituicao;
 
   @override
   State<KitDescritorPageFrm> createState() =>
@@ -57,7 +59,7 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
   late String titulo;
   KitDescritorModel kitDescritor;
   late final TamanhoCubit tamanhoCubit;
-  late final EmbalagemCubit embalagemCubit;
+  // late final EmbalagemCubit embalagemCubit;
   late final ProcessoTipoCubit processoTipoCubit;
   late final CentroCustoCubit centroCustoCubit;
   // late final ItemDescritorCubit itemDescritorCubit;
@@ -95,8 +97,8 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
   void initState() {
     tamanhoCubit = TamanhoCubit();
     tamanhoCubit.loadAll();
-    embalagemCubit = EmbalagemCubit();
-    embalagemCubit.loadAll();
+    // embalagemCubit = EmbalagemCubit();
+    // embalagemCubit.loadAll();
     processoTipoCubit = ProcessoTipoCubit();
     processoTipoCubit.loadAll();
     centroCustoCubit = CentroCustoCubit();
@@ -219,46 +221,46 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
                                       },
                                     ),
                                   ),
-                                  const SizedBox(width: 16.0),
-                                  Expanded(
-                                    child: BlocBuilder<EmbalagemCubit,
-                                        EmbalagemState>(
-                                      bloc: embalagemCubit,
-                                      builder: (context, state) {
-                                        if (state.loading) {
-                                          return const Center(
-                                            child: LoadingWidget(),
-                                          );
-                                        }
-                                        List<EmbalagemModel> embalagens =
-                                            state.embalagens;
-                                        embalagens.sort(
-                                          (a, b) => a.nome!.compareTo(b.nome!),
-                                        );
-                                        EmbalagemModel? embalagem = embalagens
-                                            .where(
-                                              (element) =>
-                                                  element.cod ==
-                                                  kitDescritor.codEmbalagem,
-                                            )
-                                            .firstOrNull;
-                                        return DropDownSearchWidget(
-                                          initialValue: embalagem,
-                                          textFunction: (p0) =>
-                                              p0.GetDropDownText(),
-                                          sourceList: embalagens
-                                              .where(
-                                                (element) =>
-                                                    element.ativo == true,
-                                              )
-                                              .toList(),
-                                          onChanged: (value) => kitDescritor
-                                              .codEmbalagem = value?.cod,
-                                          placeholder: 'Embalagem',
-                                        );
-                                      },
-                                    ),
-                                  ),
+                                  // const SizedBox(width: 16.0),
+                                  // Expanded(
+                                  //   child: BlocBuilder<EmbalagemCubit,
+                                  //       EmbalagemState>(
+                                  //     bloc: embalagemCubit,
+                                  //     builder: (context, state) {
+                                  //       if (state.loading) {
+                                  //         return const Center(
+                                  //           child: LoadingWidget(),
+                                  //         );
+                                  //       }
+                                  //       List<EmbalagemModel> embalagens =
+                                  //           state.embalagens;
+                                  //       embalagens.sort(
+                                  //         (a, b) => a.nome!.compareTo(b.nome!),
+                                  //       );
+                                  //       EmbalagemModel? embalagem = embalagens
+                                  //           .where(
+                                  //             (element) =>
+                                  //                 element.cod ==
+                                  //                 kitDescritor.codEmbalagem,
+                                  //           )
+                                  //           .firstOrNull;
+                                  //       return DropDownSearchWidget(
+                                  //         initialValue: embalagem,
+                                  //         textFunction: (p0) =>
+                                  //             p0.GetDropDownText(),
+                                  //         sourceList: embalagens
+                                  //             .where(
+                                  //               (element) =>
+                                  //                   element.ativo == true,
+                                  //             )
+                                  //             .toList(),
+                                  //         onChanged: (value) => kitDescritor
+                                  //             .codEmbalagem = value?.cod,
+                                  //         placeholder: 'Embalagem',
+                                  //       );
+                                  //     },
+                                  //   ),
+                                  // ),
                                 ],
                               ),
                             ),
@@ -299,8 +301,24 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
                                           (element) => element.ativo == true,
                                         )
                                         .toList(),
-                                    onChanged: (value) => kitDescritor
-                                        .codTipoProcessoNormal = value?.cod,
+                                    onChanged: (value) {
+                                     kitDescritor.codTipoProcessoNormal =
+                                          value?.cod;
+                                      kitDescritor.tipoProcesso = value;
+                                      if (widget.instituicao.fluxoAlternado !=
+                                          true) {
+                                        kitDescritor.codTipoProcessoUrgencia =
+                                            value?.cod;
+                                        kitDescritor.tipoProcessoUrgencia =
+                                            value;
+                                        kitDescritor
+                                                .codTipoProcessoEmergencia =
+                                            value?.cod;
+                                        kitDescritor.tipoProcessoEmergencia =
+                                            value;
+                                        processoTipoCubit.refresh();
+                                      }
+                                    },
                                     placeholder:
                                         'Tipo de Processo para prioridade Normal *',
                                   );
@@ -332,6 +350,9 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
                                           )
                                           .firstOrNull;
                                   return DropDownSearchWidget(
+                                    readOnly:
+                                        widget.instituicao.fluxoAlternado !=
+                                            true,
                                     validateBuilder:
                                         (context, validateMethodBuilder) =>
                                             validaTipoProcessoUrgencia =

@@ -82,6 +82,7 @@ _$ItemProcessoModelImpl _$$ItemProcessoModelImplFromJson(
       codUsuarioAcaoOcorrencia:
           (json['codUsuarioAcaoOcorrencia'] as num?)?.toInt(),
       codAcaoOcorrencia: (json['codAcaoOcorrencia'] as num?)?.toInt(),
+      codLocalizacaoEstoque: (json['codLocalizacaoEstoque'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$ItemProcessoModelImplToJson(
@@ -136,4 +137,5 @@ Map<String, dynamic> _$$ItemProcessoModelImplToJson(
           instance.impressaoRelatorioRetiradaRealizada,
       'codUsuarioAcaoOcorrencia': instance.codUsuarioAcaoOcorrencia,
       'codAcaoOcorrencia': instance.codAcaoOcorrencia,
+      'codLocalizacaoEstoque': instance.codLocalizacaoEstoque,
     };

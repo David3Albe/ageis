@@ -1,13 +1,17 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/fornecedor/fornecedor_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/epi_descritor/epi_descritor_page_frm/epi_descritor_page_frm_state.dart';
+import 'package:ageiscme_admin/app/module/pages/colaborador/epi_descritor/perfis/epi_descritor_page_perfis_frm.dart';
 import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_data/services/epi_descritor/epi_descritor_service.dart';
+import 'package:ageiscme_data/services/epi_perfil/epi_perfil_service.dart';
+import 'package:ageiscme_data/services/perfil_acesso/perfil_acesso_service.dart';
+import 'package:ageiscme_models/dto/epi_perfil/find_by_epi/epi_perfil_find_by_epi_dto.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/response_dto/epi_perfil/find_by_epi/epi_perfil_find_by_epi_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
-import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
@@ -16,9 +20,12 @@ import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_pop
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_open_doc_model.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
 import 'package:compartilhados/componentes/images/image_widget.dart';
+import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/functions/image_helper/image_object_model.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -60,15 +67,15 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
       epiDescritor.numeroCA = txtNumeroCA.text;
     },
   );
-  late bool Function() prazoValidadeValidation;
-  late final DatePickerWidget dtpPrazoValidade = DatePickerWidget(
-    validator: (date) => date == null ? 'Obrigatório' : null,
-    placeholder: 'Prazo Validade *',
-    onDateSelected: (value) => epiDescritor.prazoValidade = value,
-    initialValue: epiDescritor.prazoValidade,
-    validateBuilder: (context, validateMethodBuilder) =>
-        prazoValidadeValidation = validateMethodBuilder,
-  );
+  // late bool Function() prazoValidadeValidation;
+  // late final DatePickerWidget dtpPrazoValidade = DatePickerWidget(
+  //   validator: (date) => date == null ? 'Obrigatório' : null,
+  //   placeholder: 'Prazo Validade *',
+  //   onDateSelected: (value) => epiDescritor.prazoValidade = value,
+  //   initialValue: epiDescritor.prazoValidade,
+  //   validateBuilder: (context, validateMethodBuilder) =>
+  //       prazoValidadeValidation = validateMethodBuilder,
+  // );
 
   late FornecedorCubit fornecedorCubit;
 
@@ -215,10 +222,10 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
                                 );
                               },
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: dtpPrazoValidade,
-                            ),
+                            // Padding(
+                            //   padding: const EdgeInsets.only(top: 5.0),
+                            //   child: dtpPrazoValidade,
+                            // ),
                             Padding(
                               padding: const EdgeInsets.only(top: 5.0),
                               child: Row(
@@ -275,6 +282,10 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
                       'arquivo sem nome.Webp',
                     ),
                     CustomPopupItemModel(
+                      text: 'Perfis',
+                      onTap: () => openPerfis(context),
+                    ),
+                    CustomPopupItemModel(
                       text: 'Excluir Imagem',
                       onTap: excluirImagem,
                     ),
@@ -317,6 +328,36 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
     );
   }
 
+  Future openPerfis(BuildContext context) async {
+    if (epiDescritor.cod == 0 || epiDescritor.cod == null) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'Não é possível vincular os perfis do EPI sem salvar o EPI',
+      );
+      return;
+    }
+    LoadingController loading = LoadingController(context: context);
+    List<PerfilAcessoModel> perfisAcesso = await PerfilAcessoService().GetAll();
+    (String, EpiPerfilFindByEpiResponseDTO)? result = await EpiPerfilService()
+        .findByEpi(EpiPerfilFindByEpiDTO(codEpiDescritor: epiDescritor.cod!));
+    loading.close(context, mounted);
+    if (result == null) return;
+
+    late int chave;
+    chave = WindowsHelper.OpenDefaultWindows(
+      title:
+          'Cadastro/Edição Perfis do EPI - ${epiDescritor.descricao ?? 'Sem Descrição'}',
+      widget: EpiDescritorPagePerfisFrm(
+        onClose: () {
+          WindowsHelper.RemoverWidget(chave);
+        },
+        codDescritor: epiDescritor.cod!,
+        perfisAcesso: perfisAcesso,
+        perfisVinculados: result.$2.perfis,
+      ),
+    );
+  }
+
   void salvarImagem(Future<ImageObjectModel?> Function() onSelectImage) async {
     ImageObjectModel? imageNew = await onSelectImage();
     if (imageNew == null) return;
@@ -335,7 +376,7 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
     bool descricaoValid = txtDescricao.valid;
     bool numeroCAValid = txtNumeroCA.valid;
     bool tipoEpiValid = tipoEpiValidation();
-    bool prazoValidadeValid = prazoValidadeValidation();
+    // bool prazoValidadeValid = prazoValidadeValidation();
 
     if (!descricaoValid) {
       scroll.jumpTo(0);
@@ -343,13 +384,11 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
       scroll.jumpTo(50);
     } else if (!numeroCAValid) {
       scroll.jumpTo(100);
-    } else if (!prazoValidadeValid) {
-      scroll.jumpTo(200);
     }
-    if (!descricaoValid ||
-        !numeroCAValid ||
-        !tipoEpiValid ||
-        !prazoValidadeValid) return;
+    // else if (!prazoValidadeValid) {
+    //   scroll.jumpTo(200);
+    // }
+    if (!descricaoValid || !numeroCAValid || !tipoEpiValid) return;
 
     cubit.save(epiDescritor, widget.onSaved);
   }

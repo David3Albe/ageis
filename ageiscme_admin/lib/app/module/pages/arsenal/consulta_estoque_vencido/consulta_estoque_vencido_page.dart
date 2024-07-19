@@ -15,6 +15,7 @@ import 'package:ageiscme_models/query_filters/estoque_vencido/consulta_estoque_v
 import 'package:ageiscme_models/query_filters/processos_leitura/consulta_processos_leitura_filter.dart';
 import 'package:ageiscme_models/response_dto/kit/drop_down_search/kit_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/campos/custom_autocomplete/custom_autocomplete_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
@@ -93,10 +94,18 @@ class _ConsultaEstoqueVencidoPageState
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FilterButtonWidget(
-          onPressed: () => {
-            openModal(context),
-          },
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: () => bloc.loadEstoqueVencido(filter),
+            ),
+            const Padding(padding: EdgeInsets.only(left: 5)),
+            FilterButtonWidget(
+              onPressed: () => {
+                openModal(context),
+              },
+            ),
+          ],
         ),
         BlocListener<ConsultaEstoqueVencidoPageCubit,
             ConsultaEstoqueVencidoPageState>(

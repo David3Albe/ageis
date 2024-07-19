@@ -3,6 +3,7 @@ import 'package:ageiscme_admin/app/module/pages/processo/acao_ocorrencia/acao_oc
 import 'package:ageiscme_data/services/acao_ocorrencia/acao_ocorrencia_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -62,13 +63,23 @@ class _AcaoOcorrenciaPageState extends State<AcaoOcorrenciaPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              AcaoOcorrenciaModel.empty(),
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: () => bloc.loadAcaoOcorrencia,
             ),
-          },
+            const Padding(
+              padding: EdgeInsets.only(left: 5),
+            ),
+            AddButtonWidget(
+              onPressed: () => {
+                openModal(
+                  context,
+                  AcaoOcorrenciaModel.empty(),
+                ),
+              },
+            ),
+          ],
         ),
         BlocListener<AcaoOcorrenciaPageCubit, AcaoOcorrenciaPageState>(
           bloc: bloc,

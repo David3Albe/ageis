@@ -123,13 +123,16 @@ class _ProcessoTipoConsultaPageState extends State<ProcessoTipoConsultaPage> {
               ),
             ),
             const Spacer(),
-            Flexible(
-              child: DefaultButtonWidget(
-                text: 'Consultar',
-                onPressed: _consultar,
-                cor: Colors.blue.shade400,
-                corHovered: Colors.blue.shade600,
-                icon: Icons.search,
+            Align(
+              alignment: Alignment.centerRight,
+              child: Flexible(
+                child: DefaultButtonWidget(
+                  text: 'Consultar',
+                  onPressed: _consultar,
+                  cor: Colors.blue.shade400,
+                  corHovered: Colors.blue.shade600,
+                  icon: Icons.search,
+                ),
               ),
             ),
           ],

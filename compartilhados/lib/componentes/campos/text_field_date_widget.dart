@@ -1,11 +1,9 @@
-// ignore_for_file: unnecessary_import
 import 'package:compartilhados/cores/cores.dart';
 import 'package:compartilhados/fontes/fontes.dart';
 import 'package:compartilhados/functions/helper_functions.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 
 typedef SetDateValueBuilder = void Function(
   BuildContext context,
@@ -187,6 +185,17 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
     setState(() {
       DateTime? data;
       data = format.parse(maskedtext);
+      if (data.year <= 1800) {
+        data = null;
+        textController.text = '';
+        textController.selection = TextSelection.fromPosition(
+          TextPosition(offset: textController.text.length),
+        );
+        selectedDate = null;
+        _validate();
+        if (widget.onDateSelected != null) widget.onDateSelected!(selectedDate);
+        return;
+      }
       textController.text = format.format(data);
       textController.selection = TextSelection.fromPosition(
         TextPosition(offset: textController.text.length),

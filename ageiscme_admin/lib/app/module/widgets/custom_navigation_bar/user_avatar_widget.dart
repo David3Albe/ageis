@@ -21,7 +21,8 @@ class UserAvatarWidget extends StatelessWidget {
           company = authentication.instituicao!.nome!;
         }
         return InkWell(
-          onTap: AdminNavigatorService.navigateToHome,
+          onTap: () =>
+              AdminNavigatorService.navigateToHomeValidaTrocaSenha(context),
           child: Padding(
             padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
             child: Tooltip(

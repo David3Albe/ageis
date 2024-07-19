@@ -9,6 +9,7 @@ import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/query_filters/processos_leitura_dispensado/consulta_processos_leitura_dispensado_filter.dart';
 import 'package:ageiscme_models/response_dto/kit/drop_down_search/kit_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/campos/custom_autocomplete/custom_autocomplete_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
@@ -40,10 +41,18 @@ class ConsultaProcessosLeituraDispensadoPage extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FilterButtonWidget(
-          onPressed: () => {
-            openModal(context),
-          },
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: () => bloc.loadProcessosLeituraDispensado(filter),
+            ),
+            const Padding(padding: EdgeInsets.only(left: 5)),
+            FilterButtonWidget(
+              onPressed: () => {
+                openModal(context),
+              },
+            ),
+          ],
         ),
         BlocListener<ConsultaProcessosLeituraDispensadoPageCubit,
             ConsultaProcessosLeituraDispensadoPageState>(
@@ -90,78 +99,78 @@ class ConsultaProcessosLeituraDispensadoPage extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return FilterDialogWidget(
-        child: Column(
-          children: [
-            DatePickerWidget(
-              placeholder: 'Data Inicio',
-              onDateSelected: (value) => filter.startDate = value,
-              initialValue: filter.startDate,
-            ),
-            const Padding(padding: EdgeInsets.only(top: 2)),
-            DatePickerWidget(
-              placeholder: 'Data Término',
-              onDateSelected: (value) => filter.finalDate = value,
-              initialValue: filter.finalDate,
-            ),
-            const Padding(padding: EdgeInsets.only(top: 2)),
-            BlocBuilder<LocalInstituicaoCubit, LocalInstituicaoState>(
-              bloc: localInstituicaoBloc,
-              builder: (context, locaisState) {
-                if (locaisState.loading) {
-                  return const LoadingWidget();
-                }
-                List<LocalInstituicaoModel> locais =
-                    locaisState.locaisInstituicoes;
-
-                LocalInstituicaoModel? local = locais
-                    .where(
-                      (element) => element.cod == filter.codLocal,
-                    )
-                    .firstOrNull;
-                return DropDownSearchWidget<LocalInstituicaoModel>(
-                  textFunction: (local) => local.LocalInstituicaoText(),
-                  initialValue: local,
-                  sourceList: locais,
-                  onChanged: (value) => filter.codLocal = value?.cod,
-                  placeholder: 'Local',
-                );
-              },
-            ),
-            const Padding(padding: EdgeInsets.only(top: 2)),
-            CustomAutocompleteWidget<KitDropDownSearchResponseDTO>(
-              initialValue: filter.codBarraKitContem,
-              onChange: (str) => filter.codBarraKitContem = str,
-              onItemSelectedText: (kit) => kit.codBarra,
-              label: 'Kit',
-              title: (p0) => Text(p0.CodBarraDescritorText()),
-              suggestionsCallback: (str) async {
-                return (await KitService().getDropDownSearchKits(
-                      KitDropDownSearchDTO(
-                        search: str,
-                        numeroRegistros: 30,
-                      ),
-                    ))
-                        ?.$2 ??
-                    [];
-              },
-            ),
-            const Padding(padding: EdgeInsets.only(top: 2)),
-            CustomAutocompleteWidget<ItemModel>(
-              initialValue: filter.idEtiquetaContem,
-              onChange: (str) => filter.idEtiquetaContem = str,
-              onItemSelectedText: (item) => item.idEtiqueta ?? null,
-              label: 'Item',
-              title: (p0) => Text(p0.EtiquetaDescricaoText()),
-              suggestionsCallback: (str) => ItemService().Filter(
-                ItemFilter(numeroRegistros: 30, termoPesquisa: str),
+          child: Column(
+            children: [
+              DatePickerWidget(
+                placeholder: 'Data Inicio',
+                onDateSelected: (value) => filter.startDate = value,
+                initialValue: filter.startDate,
               ),
-            ),
-          ],
-        ),
-      );
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              DatePickerWidget(
+                placeholder: 'Data Término',
+                onDateSelected: (value) => filter.finalDate = value,
+                initialValue: filter.finalDate,
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              BlocBuilder<LocalInstituicaoCubit, LocalInstituicaoState>(
+                bloc: localInstituicaoBloc,
+                builder: (context, locaisState) {
+                  if (locaisState.loading) {
+                    return const LoadingWidget();
+                  }
+                  List<LocalInstituicaoModel> locais =
+                      locaisState.locaisInstituicoes;
+
+                  LocalInstituicaoModel? local = locais
+                      .where(
+                        (element) => element.cod == filter.codLocal,
+                      )
+                      .firstOrNull;
+                  return DropDownSearchWidget<LocalInstituicaoModel>(
+                    textFunction: (local) => local.LocalInstituicaoText(),
+                    initialValue: local,
+                    sourceList: locais,
+                    onChanged: (value) => filter.codLocal = value?.cod,
+                    placeholder: 'Local',
+                  );
+                },
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              CustomAutocompleteWidget<KitDropDownSearchResponseDTO>(
+                initialValue: filter.codBarraKitContem,
+                onChange: (str) => filter.codBarraKitContem = str,
+                onItemSelectedText: (kit) => kit.codBarra,
+                label: 'Kit',
+                title: (p0) => Text(p0.CodBarraDescritorText()),
+                suggestionsCallback: (str) async {
+                  return (await KitService().getDropDownSearchKits(
+                        KitDropDownSearchDTO(
+                          search: str,
+                          numeroRegistros: 30,
+                        ),
+                      ))
+                          ?.$2 ??
+                      [];
+                },
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              CustomAutocompleteWidget<ItemModel>(
+                initialValue: filter.idEtiquetaContem,
+                onChange: (str) => filter.idEtiquetaContem = str,
+                onItemSelectedText: (item) => item.idEtiqueta ?? null,
+                label: 'Item',
+                title: (p0) => Text(p0.EtiquetaDescricaoText()),
+                suggestionsCallback: (str) => ItemService().Filter(
+                  ItemFilter(numeroRegistros: 30, termoPesquisa: str),
+                ),
+              ),
+            ],
+          ),
+        );
       },
     );
-    if(confirm!=true) return;
+    if (confirm != true) return;
     bloc.loadProcessosLeituraDispensado(filter);
   }
 }

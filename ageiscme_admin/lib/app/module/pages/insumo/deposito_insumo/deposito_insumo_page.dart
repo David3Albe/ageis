@@ -3,6 +3,7 @@ import 'package:ageiscme_admin/app/module/pages/insumo/deposito_insumo/deposito_
 import 'package:ageiscme_data/services/deposito_insumo/deposito_insumo_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -68,13 +69,21 @@ class _DepositoInsumoPageState extends State<DepositoInsumoPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              DepositoInsumoModel.empty(),
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: bloc.loadDepositoInsumo,
             ),
-          },
+            const Padding(padding: EdgeInsets.only(left: 4)),
+            AddButtonWidget(
+              onPressed: () => {
+                openModal(
+                  context,
+                  DepositoInsumoModel.empty(),
+                ),
+              },
+            ),
+          ],
         ),
         BlocListener<DepositoInsumoPageCubit, DepositoInsumoPageState>(
           bloc: bloc,

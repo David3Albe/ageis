@@ -19,6 +19,7 @@ _$ItemDescritorFilterImpl _$$ItemDescritorFilterImplFromJson(Map json) =>
       termoPesquisa: json['termoPesquisa'] as String?,
       nomeContem: json['nomeContem'] as String?,
       ordenarAtivosPrimeiro: json['ordenarAtivosPrimeiro'] as bool?,
+      ordenarCodigoDesc: json['ordenarCodigoDesc'] as bool?,
       tStamp: json['tStamp'] as String?,
     );
 
@@ -36,5 +37,6 @@ Map<String, dynamic> _$$ItemDescritorFilterImplToJson(
       'termoPesquisa': instance.termoPesquisa,
       'nomeContem': instance.nomeContem,
       'ordenarAtivosPrimeiro': instance.ordenarAtivosPrimeiro,
+      'ordenarCodigoDesc': instance.ordenarCodigoDesc,
       'tStamp': instance.tStamp,
     };

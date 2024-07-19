@@ -61,6 +61,7 @@ abstract class ItemProcessoModel with _$ItemProcessoModel {
     required bool? impressaoRelatorioRetiradaRealizada,
     required int? codUsuarioAcaoOcorrencia,
     required int? codAcaoOcorrencia,
+    int? codLocalizacaoEstoque,
   }) = _ItemProcessoModel;
 
   factory ItemProcessoModel.fromJson(Map<String, Object?> json) =>

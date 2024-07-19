@@ -86,6 +86,7 @@ _$KitProcessoModelImpl _$$KitProcessoModelImplFromJson(
       codAcaoOcorrencia: (json['codAcaoOcorrencia'] as num?)?.toInt(),
       itensLidosCalculado: (json['itensLidosCalculado'] as num?)?.toInt(),
       itensTotalKitCalculado: (json['itensTotalKitCalculado'] as num?)?.toInt(),
+      codLocalizacaoEstoque: (json['codLocalizacaoEstoque'] as num?)?.toInt(),
     );
 
 Map<String, dynamic> _$$KitProcessoModelImplToJson(
@@ -140,4 +141,5 @@ Map<String, dynamic> _$$KitProcessoModelImplToJson(
       'codAcaoOcorrencia': instance.codAcaoOcorrencia,
       'itensLidosCalculado': instance.itensLidosCalculado,
       'itensTotalKitCalculado': instance.itensTotalKitCalculado,
+      'codLocalizacaoEstoque': instance.codLocalizacaoEstoque,
     };

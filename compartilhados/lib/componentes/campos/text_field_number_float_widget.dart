@@ -1,5 +1,6 @@
 import 'package:compartilhados/cores/cores.dart';
 import 'package:compartilhados/fontes/fontes.dart';
+import 'package:compartilhados/functions/format/number_format_parser.dart';
 import 'package:compartilhados/functions/helper_functions.dart';
 import 'package:compartilhados/icones/icones.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +58,7 @@ class _TextFieldNumberFloatWidgetState
   TextEditingController controller = TextEditingController();
   final void Function(String str)? onChanged;
   bool readonly;
+  FocusNode focusNode = FocusNode();
 
   _TextFieldNumberFloatWidgetState({
     required Key key,
@@ -64,10 +66,33 @@ class _TextFieldNumberFloatWidgetState
     this.onChanged,
   });
 
+  @override
+  void initState() {
+    focusNode.addListener(() {
+      if (!focusNode.hasFocus) {
+        onEditComplete();
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose(){
+    focusNode.dispose();
+    super.dispose();
+  }
+
   void setReadonly(bool readonly) {
     setState(() {
       this.readonly = readonly;
     });
+  }
+
+  void onEditComplete() {
+    if (widget._controller.text.isEmpty) return;
+    double? value = double.tryParse(
+        widget._controller.text.replaceAll('.', '').replaceAll(',', '.'));
+    widget._controller.text = NumberFormatParser.toFixed(value, 2);
   }
 
   @override
@@ -82,6 +107,7 @@ class _TextFieldNumberFloatWidgetState
     return Column(
       children: [
         TextFormField(
+          focusNode: focusNode,
           controller: widget._controller,
           onChanged: (String? str) {
             validate();
@@ -91,6 +117,7 @@ class _TextFieldNumberFloatWidgetState
               );
             }
           },
+          onEditingComplete: onEditComplete,
           inputFormatters: <TextInputFormatter>[
             FilteringTextInputFormatter.allow(regex),
           ],
@@ -174,7 +201,8 @@ class _TextFieldNumberFloatWidgetState
   void validate() {
     String error = '';
     for (String Function(String str) validador in widget.validators) {
-      error = validador(widget._controller.text);
+      error = validador(
+          widget._controller.text.replaceAll('.', '').replaceAll(',', '.'));
     }
     setState(() => errorText = error);
   }

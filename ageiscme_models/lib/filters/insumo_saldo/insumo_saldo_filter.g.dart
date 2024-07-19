@@ -16,6 +16,7 @@ _$InsumoSaldoFilterImpl _$$InsumoSaldoFilterImplFromJson(Map json) =>
       numeroRegistros: (json['numeroRegistros'] as num?)?.toInt(),
       ordenarPorDataValidadeAscendente:
           json['ordenarPorDataValidadeAscendente'] as bool?,
+      status: json['status'] as String?,
     );
 
 Map<String, dynamic> _$$InsumoSaldoFilterImplToJson(
@@ -29,4 +30,5 @@ Map<String, dynamic> _$$InsumoSaldoFilterImplToJson(
       'numeroRegistros': instance.numeroRegistros,
       'ordenarPorDataValidadeAscendente':
           instance.ordenarPorDataValidadeAscendente,
+      'status': instance.status,
     };

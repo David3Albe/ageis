@@ -310,7 +310,7 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
                                         onClick: (value) =>
                                             usuario.colaborador = value,
                                         text:
-                                            'Colaborador - Validar EPI ao Registrar Acesso',
+                                            'Colaborador - Registro de EPI/',
                                         align: MainAxisAlignment.start,
                                       ),
                                     ],
@@ -379,17 +379,7 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
                                       icon: Icons.arrow_forward,
                                       onPressed: () {
                                         if (perflAcessoRemover != null) {
-                                          setState(() {
-                                            if (usuario.usuariosPerfis !=
-                                                null) {
-                                              usuario.usuariosPerfis!
-                                                  .removeWhere(
-                                                (element) =>
-                                                    element.codPerfil ==
-                                                    perflAcessoRemover!.cod,
-                                              );
-                                            }
-                                          });
+                                          removerDireitoUsuario();
                                         } else {
                                           ToastUtils.showCustomToastError(
                                             context,
@@ -406,20 +396,7 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
                                       icon: Icons.arrow_back,
                                       onPressed: () {
                                         if (perfilAcessoAdicionar != null) {
-                                          setState(() {
-                                            if (usuario.usuariosPerfis ==
-                                                null) {
-                                              usuario.usuariosPerfis = [];
-                                            }
-                                            UsuarioPerfilModel usuarioPerfil =
-                                                UsuarioPerfilModel.empty();
-                                            usuarioPerfil.codPerfil =
-                                                perfilAcessoAdicionar!.cod;
-                                            usuario.usuariosPerfis!
-                                                .add(usuarioPerfil);
-
-                                            perfilAcessoAdicionar = null;
-                                          });
+                                          adicionarDireitoUsuario();
                                         } else {
                                           ToastUtils.showCustomToastError(
                                             context,
@@ -476,6 +453,8 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
 
                                         return ListFieldWidget<
                                             PerfilAcessoModel>(
+                                          onDoubleTap: (p0) =>
+                                              removerDireitoUsuarioPerfil(p0),
                                           sourceList: perfisAcessosAdicionado,
                                           removeButton: false,
                                           onItemSelected:
@@ -524,6 +503,8 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
 
                                         return ListFieldWidget<
                                             PerfilAcessoModel>(
+                                          onDoubleTap: (p0) =>
+                                              adicionarDireitoUsuarioPerfil(p0),
                                           sourceList: perfisAcessosDisponiveis
                                               .where(
                                                 (element) =>
@@ -623,6 +604,39 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
         );
       },
     );
+  }
+
+  void adicionarDireitoUsuario() {
+    if (perfilAcessoAdicionar == null) return;
+    adicionarDireitoUsuarioPerfil(perfilAcessoAdicionar!);
+    perfilAcessoAdicionar = null;
+  }
+
+  void adicionarDireitoUsuarioPerfil(PerfilAcessoModel perfil) {
+    setState(() {
+      if (usuario.usuariosPerfis == null) {
+        usuario.usuariosPerfis = [];
+      }
+      UsuarioPerfilModel usuarioPerfil = UsuarioPerfilModel.empty();
+      usuarioPerfil.codPerfil = perfil.cod;
+      usuario.usuariosPerfis!.add(usuarioPerfil);
+    });
+  }
+
+  void removerDireitoUsuario() {
+    if (perflAcessoRemover == null) return;
+    removerDireitoUsuarioPerfil(perflAcessoRemover!);
+    perflAcessoRemover = null;
+  }
+
+  void removerDireitoUsuarioPerfil(PerfilAcessoModel perfil) {
+    setState(() {
+      if (usuario.usuariosPerfis != null) {
+        usuario.usuariosPerfis!.removeWhere(
+          (element) => element.codPerfil == perfil.cod,
+        );
+      }
+    });
   }
 
   void salvarFoto(Future<ImageObjectModel?> Function() onSelectImage) async {

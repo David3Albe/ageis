@@ -81,4 +81,9 @@ class DecisaoEnum {
   static const int ConfirmaAcaoMotivoNaoConformidade = 151;
   static const int DefinirResponsavelLocalNaoCompativelItem = 152;
   static const int ProsseguirComLocalDestinoDivergenteItem = 153;
+  static const int DefinirLocalizacaoItem = 154;
+  static const int DefinirLocalizacaoKit = 155;
+  static const int DefinirLocalizacaoConfirmaItem = 156;
+  static const int DefinirLocalizacaoConfirmaKit = 157;
+  static const int DefinirLocalizacaoCancela = 158;
 }

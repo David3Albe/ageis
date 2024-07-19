@@ -13,7 +13,7 @@ import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/label_string_widget.dart';
 import 'package:compartilhados/componentes/campos/list_field/list_field_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
-import 'package:compartilhados/componentes/campos/text_field_number_float_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_hour_minute_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_area_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
@@ -99,14 +99,36 @@ class _TreinamentoRegistroPageFrmState
     initialValue: treinamentoRegistro.data,
   );
 
-  late TextFieldNumberFloatWidget txtCargaHoraria = TextFieldNumberFloatWidget(
-    placeholder: 'Carga Horária (hs) *',
-    onChanged: (String? str) {
-      treinamentoRegistro.cargaHoraria = double.parse(txtCargaHoraria.text);
+  late TextFieldHourMinuteWidget txtCargaHoraria = TextFieldHourMinuteWidget(
+    placeholder: 'Carga Horária (Horas) *',
+    initialValue: treinamentoRegistro.cargaHoraria == null
+        ? null
+        : decimalToString(treinamentoRegistro.cargaHoraria!),
+    onComplete: (text) {
+      if (text.isEmpty) {
+        treinamentoRegistro.cargaHoraria = null;
+        return;
+      }
+      treinamentoRegistro.cargaHoraria = stringToDecimal(text);
     },
   );
 
-  late final TextFieldStringWidget txtObservacao = TextFieldStringWidget(
+  double stringToDecimal(String time) {
+    List<String> parts = time.split(':');
+    int hours = int.parse(parts[0]);
+    int minutes = int.parse(parts[1]);
+    return hours + (minutes / 60.0);
+  }
+
+  String decimalToString(double decimal) {
+    int hours = decimal.truncate();
+    int minutes = ((decimal - hours) * 60).round();
+    String hoursStr = hours.toString().padLeft(2, '0');
+    String minutesStr = minutes.toString().padLeft(2, '0');
+    return '$hoursStr:$minutesStr';
+  }
+
+  late final TextFieldStringAreaWidget txtObservacao = TextFieldStringAreaWidget(
     placeholder: 'Observação',
     onChanged: (String? str) {
       treinamentoRegistro.observacao = txtObservacao.text;
@@ -166,7 +188,8 @@ class _TreinamentoRegistroPageFrmState
     if (treinamentoRegistro.cargaHoraria == null) {
       txtCargaHoraria.text = '';
     } else {
-      txtCargaHoraria.text = treinamentoRegistro.cargaHoraria.toString();
+      txtCargaHoraria.text =
+          decimalToString(treinamentoRegistro.cargaHoraria!);
     }
 
     titulo = 'Registros de Treinamentos';
@@ -280,18 +303,7 @@ class _TreinamentoRegistroPageFrmState
                                       icon: Icons.arrow_forward,
                                       onPressed: () {
                                         if (usuarioRemover != null) {
-                                          setState(() {
-                                            if (treinamentoRegistro
-                                                    .usuariosTreinamentos !=
-                                                null) {
-                                              treinamentoRegistro.usuariosTreinamentos!
-                                                  .removeWhere(
-                                                (element) =>
-                                                    element.codUsuario ==
-                                                    usuarioRemover!.cod,
-                                              );
-                                            }
-                                          });
+                                          removerUsuarioTreinamento();
                                         } else {
                                           ToastUtils.showCustomToastError(
                                             context,
@@ -308,22 +320,7 @@ class _TreinamentoRegistroPageFrmState
                                       icon: Icons.arrow_back,
                                       onPressed: () {
                                         if (usuarioAdicionar != null) {
-                                          setState(() {
-                                            if (treinamentoRegistro
-                                                    .usuariosTreinamentos ==
-                                                null) {
-                                              treinamentoRegistro.usuariosTreinamentos =
-                                                  [];
-                                            }
-                                            TreinamentoUsuarioModel treinamentoUsuario =
-                                                TreinamentoUsuarioModel.empty();
-                                            treinamentoUsuario.codUsuario =
-                                                usuarioAdicionar!.cod;
-                                            treinamentoRegistro.usuariosTreinamentos!
-                                                .add(treinamentoUsuario);
-                    
-                                            usuarioAdicionar = null;
-                                          });
+                                          adicionarUsuarioTreinamento();
                                         } else {
                                           ToastUtils.showCustomToastError(
                                             context,
@@ -341,38 +338,49 @@ class _TreinamentoRegistroPageFrmState
                               child: Row(
                                 children: [
                                   Expanded(
-                                    child: BlocBuilder<UsuarioCubit, UsuarioState>(
+                                    child:
+                                        BlocBuilder<UsuarioCubit, UsuarioState>(
                                       bloc: widget.usuarioCubit,
                                       builder: (context, usuarioState) {
                                         if (usuarioState.loading) {
-                                          return const Center(child: LoadingWidget());
+                                          return const Center(
+                                            child: LoadingWidget(),
+                                          );
                                         }
                                         List<UsuarioModel> usuarios =
                                             usuarioState.usuarios;
-                                        List<UsuarioModel> usuariosPresentes = [];
-                                        if (treinamentoRegistro.usuariosTreinamentos !=
+                                        List<UsuarioModel> usuariosPresentes =
+                                            [];
+                                        if (treinamentoRegistro
+                                                .usuariosTreinamentos !=
                                             null) {
                                           for (final treinamentoUsuario
                                               in treinamentoRegistro
                                                   .usuariosTreinamentos!) {
                                             final codUsuario =
                                                 treinamentoUsuario.codUsuario;
-                    
+
                                             if (usuarios.isNotEmpty) {
                                               final usuarioPresente = usuarios
                                                   .where(
                                                     (usuario) =>
-                                                        usuario.cod == codUsuario,
+                                                        usuario.cod ==
+                                                        codUsuario,
                                                   )
                                                   .firstOrNull;
                                               if (usuarioPresente != null) {
-                                                usuariosPresentes.add(usuarioPresente);
+                                                usuariosPresentes
+                                                    .add(usuarioPresente);
                                               }
                                             }
                                           }
                                         }
-                    
+
                                         return ListFieldWidget<UsuarioModel>(
+                                          onDoubleTap: (p0) =>
+                                              removerUsuarioTreinamentoUsuario(
+                                            p0,
+                                          ),
                                           sourceList: usuariosPresentes,
                                           removeButton: false,
                                           onItemSelected: (selectedUsuario) {
@@ -389,36 +397,48 @@ class _TreinamentoRegistroPageFrmState
                                   ),
                                   const SizedBox(width: 25.0),
                                   Expanded(
-                                    child: BlocBuilder<UsuarioCubit, UsuarioState>(
+                                    child:
+                                        BlocBuilder<UsuarioCubit, UsuarioState>(
                                       bloc: widget.usuarioCubit,
                                       builder: (context, usuarioState) {
                                         if (usuarioState.loading) {
-                                          return const Center(child: LoadingWidget());
+                                          return const Center(
+                                            child: LoadingWidget(),
+                                          );
                                         }
                                         List<UsuarioModel> usuarios =
                                             usuarioState.usuarios;
-                                        if (treinamentoRegistro.usuariosTreinamentos ==
+                                        if (treinamentoRegistro
+                                                .usuariosTreinamentos ==
                                             null) {
-                                          treinamentoRegistro.usuariosTreinamentos = [];
+                                          treinamentoRegistro
+                                              .usuariosTreinamentos = [];
                                         }
-                                        List<UsuarioModel> colaboradoresAusentes =
-                                            usuarios
+                                        List<UsuarioModel>
+                                            colaboradoresAusentes = usuarios
                                                 .where(
-                                                  (usuario) => !treinamentoRegistro
-                                                      .usuariosTreinamentos!
-                                                      .any(
+                                                  (usuario) =>
+                                                      !treinamentoRegistro
+                                                          .usuariosTreinamentos!
+                                                          .any(
                                                     (treinamento) =>
-                                                        treinamento.codUsuario ==
+                                                        treinamento
+                                                            .codUsuario ==
                                                         usuario.cod,
                                                   ),
                                                 )
                                                 .toList();
                                         return ListFieldWidget<UsuarioModel>(
+                                          onDoubleTap: (p0) =>
+                                              adicionarUsuarioTreinamentoUsuario(
+                                            p0,
+                                          ),
                                           sourceList: colaboradoresAusentes,
                                           removeButton: false,
                                           onItemSelected: (selectedUsuario) {
                                             setState(() {
-                                              usuarioAdicionar = selectedUsuario;
+                                              usuarioAdicionar =
+                                                  selectedUsuario;
                                             });
                                           },
                                           itemText: (usuario) {
@@ -504,6 +524,40 @@ class _TreinamentoRegistroPageFrmState
         );
       },
     );
+  }
+
+  void removerUsuarioTreinamento() {
+    if (usuarioRemover == null) return;
+    removerUsuarioTreinamentoUsuario(usuarioRemover!);
+    usuarioRemover = null;
+  }
+
+  void removerUsuarioTreinamentoUsuario(UsuarioModel usuario) {
+    setState(() {
+      if (treinamentoRegistro.usuariosTreinamentos != null) {
+        treinamentoRegistro.usuariosTreinamentos!.removeWhere(
+          (element) => element.codUsuario == usuarioRemover!.cod,
+        );
+      }
+    });
+  }
+
+  void adicionarUsuarioTreinamento() {
+    if (usuarioAdicionar == null) return;
+    adicionarUsuarioTreinamentoUsuario(usuarioAdicionar!);
+    usuarioAdicionar = null;
+  }
+
+  void adicionarUsuarioTreinamentoUsuario(UsuarioModel usuario) {
+    setState(() {
+      if (treinamentoRegistro.usuariosTreinamentos == null) {
+        treinamentoRegistro.usuariosTreinamentos = [];
+      }
+      TreinamentoUsuarioModel treinamentoUsuario =
+          TreinamentoUsuarioModel.empty();
+      treinamentoUsuario.codUsuario = usuario.cod;
+      treinamentoRegistro.usuariosTreinamentos!.add(treinamentoUsuario);
+    });
   }
 
   Future print() async {

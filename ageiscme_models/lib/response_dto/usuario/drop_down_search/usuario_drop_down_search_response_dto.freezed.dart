@@ -25,6 +25,8 @@ mixin _$UsuarioDropDownSearchResponseDTO {
   set cod(int value) => throw _privateConstructorUsedError;
   int get codBarra => throw _privateConstructorUsedError;
   set codBarra(int value) => throw _privateConstructorUsedError;
+  bool get ativo => throw _privateConstructorUsedError;
+  set ativo(bool value) => throw _privateConstructorUsedError;
   String? get docClasse => throw _privateConstructorUsedError;
   set docClasse(String? value) => throw _privateConstructorUsedError;
   String? get nome => throw _privateConstructorUsedError;
@@ -44,7 +46,8 @@ abstract class $UsuarioDropDownSearchResponseDTOCopyWith<$Res> {
       _$UsuarioDropDownSearchResponseDTOCopyWithImpl<$Res,
           UsuarioDropDownSearchResponseDTO>;
   @useResult
-  $Res call({int cod, int codBarra, String? docClasse, String? nome});
+  $Res call(
+      {int cod, int codBarra, bool ativo, String? docClasse, String? nome});
 }
 
 /// @nodoc
@@ -63,6 +66,7 @@ class _$UsuarioDropDownSearchResponseDTOCopyWithImpl<$Res,
   $Res call({
     Object? cod = null,
     Object? codBarra = null,
+    Object? ativo = null,
     Object? docClasse = freezed,
     Object? nome = freezed,
   }) {
@@ -75,6 +79,10 @@ class _$UsuarioDropDownSearchResponseDTOCopyWithImpl<$Res,
           ? _value.codBarra
           : codBarra // ignore: cast_nullable_to_non_nullable
               as int,
+      ativo: null == ativo
+          ? _value.ativo
+          : ativo // ignore: cast_nullable_to_non_nullable
+              as bool,
       docClasse: freezed == docClasse
           ? _value.docClasse
           : docClasse // ignore: cast_nullable_to_non_nullable
@@ -96,7 +104,8 @@ abstract class _$$UsuarioDropDownSearchResponseDTOImplCopyWith<$Res>
       __$$UsuarioDropDownSearchResponseDTOImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int cod, int codBarra, String? docClasse, String? nome});
+  $Res call(
+      {int cod, int codBarra, bool ativo, String? docClasse, String? nome});
 }
 
 /// @nodoc
@@ -114,6 +123,7 @@ class __$$UsuarioDropDownSearchResponseDTOImplCopyWithImpl<$Res>
   $Res call({
     Object? cod = null,
     Object? codBarra = null,
+    Object? ativo = null,
     Object? docClasse = freezed,
     Object? nome = freezed,
   }) {
@@ -126,6 +136,10 @@ class __$$UsuarioDropDownSearchResponseDTOImplCopyWithImpl<$Res>
           ? _value.codBarra
           : codBarra // ignore: cast_nullable_to_non_nullable
               as int,
+      ativo: null == ativo
+          ? _value.ativo
+          : ativo // ignore: cast_nullable_to_non_nullable
+              as bool,
       docClasse: freezed == docClasse
           ? _value.docClasse
           : docClasse // ignore: cast_nullable_to_non_nullable
@@ -143,7 +157,11 @@ class __$$UsuarioDropDownSearchResponseDTOImplCopyWithImpl<$Res>
 class _$UsuarioDropDownSearchResponseDTOImpl
     extends _UsuarioDropDownSearchResponseDTO {
   _$UsuarioDropDownSearchResponseDTOImpl(
-      {required this.cod, required this.codBarra, this.docClasse, this.nome})
+      {required this.cod,
+      required this.codBarra,
+      required this.ativo,
+      this.docClasse,
+      this.nome})
       : super._();
 
   factory _$UsuarioDropDownSearchResponseDTOImpl.fromJson(
@@ -154,6 +172,8 @@ class _$UsuarioDropDownSearchResponseDTOImpl
   int cod;
   @override
   int codBarra;
+  @override
+  bool ativo;
   @override
   String? docClasse;
   @override
@@ -180,6 +200,7 @@ abstract class _UsuarioDropDownSearchResponseDTO
   factory _UsuarioDropDownSearchResponseDTO(
       {required int cod,
       required int codBarra,
+      required bool ativo,
       String? docClasse,
       String? nome}) = _$UsuarioDropDownSearchResponseDTOImpl;
   _UsuarioDropDownSearchResponseDTO._() : super._();
@@ -194,6 +215,9 @@ abstract class _UsuarioDropDownSearchResponseDTO
   @override
   int get codBarra;
   set codBarra(int value);
+  @override
+  bool get ativo;
+  set ativo(bool value);
   @override
   String? get docClasse;
   set docClasse(String? value);

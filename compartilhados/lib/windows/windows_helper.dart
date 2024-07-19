@@ -263,12 +263,14 @@ class WindowsHelper {
     overlays.removeWhere((item) => item.chave == firstWindow.chave);
   }
 
-  static void AdicionarOverlayCustomizada({
+  static int AdicionarOverlayCustomizada({
     required int chave,
     required final CustomDefaultWindowComponent overlay,
     required final String title,
     required final GlobalKey<CustomDefaultWindowComponentState> key,
   }) {
+    CustomOverlayWindow? existWindow = setFirstIfTitleExist(title: title);
+    if (existWindow != null) return existWindow.chave;
     overlays.add(
       CustomOverlayWindow(
         key: key,
@@ -281,6 +283,7 @@ class WindowsHelper {
     RemoverJanelsExcessivas();
     cubitOverlay.refresh();
     key.currentState?.setAbsorbing(false);
+    return chave;
   }
 
   static int GetNextChave() {

@@ -10,6 +10,7 @@ import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/response_dto/kit/kit_search/kit_search_kit/kit_search_kit_response_dto.dart';
 import 'package:ageiscme_models/response_dto/kit/kit_search/kit_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
@@ -90,6 +91,13 @@ class _KitPageState extends State<KitPage> {
     super.initState();
   }
 
+  Future refresh() async {
+    KitPageCubit kitCubit = context.read<KitPageCubit>();
+    KitCubitFilter filterCubit = context.read<KitCubitFilter>();
+    KitSearchDTO dto = filterCubit.state;
+    await kitCubit.searchKits(dto);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -105,6 +113,12 @@ class _KitPageState extends State<KitPage> {
             children: [
               Row(
                 children: [
+                  RefreshButtonWidget(
+                    onPressed: () => refresh(),
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 8),
+                  ),
                   const KitButtonFilterWidget(),
                   const Padding(padding: EdgeInsets.only(left: 8)),
                   AddButtonWidget(
@@ -185,7 +199,7 @@ class _KitPageState extends State<KitPage> {
     LoadingController loading = LoadingController(context: context);
     loadKitCorCubit();
 
-    KitModel? kitModel = KitModel.empty().copyWith(status: '1');
+    KitModel? kitModel = KitModel.empty().copyWith(status: '1', itens: []);
     if (kit != null && kit.cod != 0) {
       kitModel = await getFilter(
         kit,

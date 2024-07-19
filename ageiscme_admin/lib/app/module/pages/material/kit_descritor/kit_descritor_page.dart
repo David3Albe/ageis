@@ -4,12 +4,14 @@ import 'package:ageiscme_admin/app/module/pages/material/kit_descritor/cubits/ki
 import 'package:ageiscme_admin/app/module/pages/material/kit_descritor/filter/kit_descritor_filter_button_widget.dart';
 import 'package:ageiscme_admin/app/module/pages/material/kit_descritor/kit_descritor_page_frm/kit_descritor_page_frm.dart';
 import 'package:ageiscme_admin/app/module/pages/material/kit_descritor/kit_descritor_page_state.dart';
+import 'package:ageiscme_data/services/instituicao/instituicao_service.dart';
 import 'package:ageiscme_data/services/kit_descritor/kit_descritor_service.dart';
 import 'package:ageiscme_models/filters/item_descritor/item_descritor_filter.dart';
 import 'package:ageiscme_models/filters/kit_descritor/kit_descritor_filter.dart';
 import 'package:ageiscme_models/filters/processo_tipo/processo_tipo_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
@@ -73,6 +75,14 @@ class _KitDescritorPageState extends State<KitDescritorPage> {
     await bloc.getScreenData(cubitFilter.state);
   }
 
+  Future loadData(BuildContext context) async {
+    KitDescritorPageCubit kitCubit = context.read<KitDescritorPageCubit>();
+    KitDescritorCubitFilter filterCubit =
+        context.read<KitDescritorCubitFilter>();
+    KitDescritorFilter dto = filterCubit.state;
+    await kitCubit.getScreenData(dto);
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -80,58 +90,68 @@ class _KitDescritorPageState extends State<KitDescritorPage> {
         BlocProvider.value(value: bloc),
         BlocProvider.value(value: cubitFilter),
       ],
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+      child: Builder(
+        builder: (context) {
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const KitDescritorButtonFilterWidget(),
-              const Padding(padding: EdgeInsets.only(left: 8)),
-              AddButtonWidget(
-                onPressed: () => {
-                  openModal(
-                    context,
-                    KitDescritorModel.empty(),
+              Row(
+                children: [
+                  RefreshButtonWidget(
+                    onPressed: () => loadData(context),
                   ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 8),
+                  ),
+                  const KitDescritorButtonFilterWidget(),
+                  const Padding(padding: EdgeInsets.only(left: 8)),
+                  AddButtonWidget(
+                    onPressed: () => {
+                      openModal(
+                        context,
+                        KitDescritorModel.empty(),
+                      ),
+                    },
+                  ),
+                ],
+              ),
+              BlocConsumer<KitDescritorPageCubit, KitDescritorPageState>(
+                bloc: bloc,
+                listener: (context, state) {
+                  if (state.deleted) deleted(state);
+                  if (state.error.isNotEmpty) onError(state);
+                },
+                builder: (context, state) {
+                  if (state.loading) {
+                    return const Center(
+                      child: LoadingWidget(),
+                    );
+                  }
+                  return Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 16.0, bottom: 16),
+                      child: PlutoGridWidget(
+                        orderDescendingFieldColumn: 'cod',
+                        filterOnlyActives: true,
+                        onEdit: (KitDescritorModel objeto) => {
+                          openModal(
+                            context,
+                            KitDescritorModel.copy(objeto),
+                          ),
+                        },
+                        onDelete: (KitDescritorModel objeto) =>
+                            {delete(context, objeto)},
+                        columns: colunas,
+                        items: state.kitsDescritor,
+                      ),
+                    ),
+                  );
                 },
               ),
             ],
-          ),
-          BlocConsumer<KitDescritorPageCubit, KitDescritorPageState>(
-            bloc: bloc,
-            listener: (context, state) {
-              if (state.deleted) deleted(state);
-              if (state.error.isNotEmpty) onError(state);
-            },
-            builder: (context, state) {
-              if (state.loading) {
-                return const Center(
-                  child: LoadingWidget(),
-                );
-              }
-              return Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 16.0, bottom: 16),
-                  child: PlutoGridWidget(
-                    orderDescendingFieldColumn: 'cod',
-                    filterOnlyActives: true,
-                    onEdit: (KitDescritorModel objeto) => {
-                      openModal(
-                        context,
-                        KitDescritorModel.copy(objeto),
-                      ),
-                    },
-                    onDelete: (KitDescritorModel objeto) =>
-                        {delete(context, objeto)},
-                    columns: colunas,
-                    items: state.kitsDescritor,
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
+          );
+        },
       ),
     );
   }
@@ -176,6 +196,15 @@ class _KitDescritorPageState extends State<KitDescritorPage> {
     loadProcessoTipo();
     loadItemDescritor();
 
+    InstituicaoModel? instituicao = await InstituicaoService().findFirst();
+    if (instituicao == null) {
+      ErrorUtils.showOneErrorDialog(
+        context,
+        'É necessário ter uma instituição cadastrada para abrir o cadastro de descritor de kit',
+      );
+      return;
+    }
+
     KitDescritorModel? kit = kitDescritor;
     if (kitDescritor.cod != 0) {
       kit = await getFilter(
@@ -192,6 +221,7 @@ class _KitDescritorPageState extends State<KitDescritorPage> {
     chave = WindowsHelper.OpenDefaultWindows(
       title: 'Cadastro/Edição Descritor de Kit',
       widget: KitDescritorPageFrm(
+        instituicao: instituicao,
         onCancel: () => onCancel(chave),
         onSaved: (str) => onSaved(str, chave),
         processoTipoCubit: processoTipoCubit,

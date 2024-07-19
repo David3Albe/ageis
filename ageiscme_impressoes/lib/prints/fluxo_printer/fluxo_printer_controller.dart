@@ -35,12 +35,34 @@ class FluxoPrinterController {
       pw.Page(
         margin: pw.EdgeInsets.zero,
         build: (pw.Context context) {
-          return pw.Center(
-            child: pw.Image(
-              pw.MemoryImage(
-                dto.imageBytes,
+          return pw.Column(
+            children: [
+              pw.Padding(padding: const pw.EdgeInsets.only(top: 15)),
+              pw.Row(
+                children: [
+                  pw.Expanded(
+                    child: pw.Center(
+                      child: pw.Text(
+                        dto.nomeFluxo,
+                        style: pw.TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
+              pw.Expanded(
+                child: pw.Center(
+                  child: pw.Image(
+                    pw.MemoryImage(
+                      dto.imageBytes,
+                    ),
+                  ),
+                ),
+              ),
+            ],
           );
         },
       ),

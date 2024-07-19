@@ -3,6 +3,7 @@ import 'package:ageiscme_admin/app/module/pages/insumo/destino_residuo/destino_r
 import 'package:ageiscme_data/services/destino_residuo/destino_residuo_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -52,13 +53,21 @@ class _DestinoResiduoPageState extends State<DestinoResiduoPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              DestinoResiduoModel.empty(),
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: bloc.loadDestinoResiduo,
             ),
-          },
+            const Padding(padding: EdgeInsets.only(left: 5)),
+            AddButtonWidget(
+              onPressed: () => {
+                openModal(
+                  context,
+                  DestinoResiduoModel.empty(),
+                ),
+              },
+            ),
+          ],
         ),
         BlocListener<DestinoResiduoPageCubit, DestinoResiduoPageState>(
           bloc: bloc,

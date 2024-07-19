@@ -20,6 +20,7 @@ import 'package:ageiscme_processo/app/module/models/item_processo/item_processo_
 import 'package:ageiscme_processo/app/module/models/kit_processo/kit_processo_model.dart';
 import 'package:ageiscme_processo/app/module/models/processo_leitura/processo_leitura_montagem_model.dart';
 import 'package:ageiscme_processo/app/module/pages/processo/processo_page_action_compliance/processo_page_action_compliance_dialog.dart';
+import 'package:ageiscme_processo/app/module/pages/processo/processo_page_arsenal_localization/processo_page_arsenal_localization_dialog.dart';
 import 'package:ageiscme_processo/app/module/pages/processo/processo_page_calculator/processo_page_calculator_dialog.dart';
 import 'package:ageiscme_processo/app/module/pages/processo/processo_page_consigned_items/processo_page_consigned_items_dialog.dart';
 import 'package:ageiscme_processo/app/module/pages/processo/processo_page_lote_equipamento/processo_page_lote_equipamento_dialog.dart';
@@ -175,6 +176,7 @@ class _ProcessoPageState extends State<ProcessoPage> {
                 case (ProcessoLeituraRebuildType.All):
                   _playAudio(state.processo);
                   await _showProntuaryDialog(state.processo);
+                  await _showArsenalLocalizationSelectDialog(state.processo);
                   _showLoteEquipamento(state.processo);
                   _showReasonForNonComplianceItemDialog(state.processo);
                   _showReasonForNonComplianceKitDialog(state.processo);
@@ -454,7 +456,9 @@ class _ProcessoPageState extends State<ProcessoPage> {
       if (audio == null) return;
       audios.add(audio);
     }
-    await CustomAudioPlayer.playAudiosFromAsset(audios.map((e) => e.path).toList());
+    await CustomAudioPlayer.playAudiosFromAsset(
+      audios.map((e) => e.path).toList(),
+    );
   }
 
   void _toogleManualReadingsOverlay(bool visible) {
@@ -547,6 +551,30 @@ class _ProcessoPageState extends State<ProcessoPage> {
       String lastCode = cubit.state.processo.filaLeituras!.removeLast();
       cubit.readCode(lastCode);
     });
+  }
+
+  Future _showArsenalLocalizationSelectDialog(
+    ProcessoLeituraMontagemModel processoLeitura,
+  ) async {
+    if (processoLeitura.leituraAtual.decisao !=
+            DecisaoEnum.DefinirLocalizacaoItem &&
+        processoLeitura.leituraAtual.decisao !=
+            DecisaoEnum.DefinirLocalizacaoKit) {
+      return;
+    }
+    await showDialog<bool>(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return ProcessoPageArsenalLocalizationDialog(
+          processoLeitura: processoLeitura,
+        );
+      },
+    );
+    final ProcessoLeituraCubit cubit =
+        BlocProvider.of<ProcessoLeituraCubit>(context);
+    String lastCode = cubit.state.processo.filaLeituras!.last;
+    await cubit.readCode(lastCode);
   }
 
   void _showReasonForNonComplianceKitDialog(

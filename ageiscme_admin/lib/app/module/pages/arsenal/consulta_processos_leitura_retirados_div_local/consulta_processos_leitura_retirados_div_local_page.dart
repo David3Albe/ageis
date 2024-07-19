@@ -6,6 +6,7 @@ import 'package:ageiscme_data/query_services/processos_leitura_retirados_div_loc
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/query_filters/processos_leitura_retirados_div_local/consulta_processos_leitura_retirados_div_local_filter.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_time_widget.dart';
@@ -77,10 +78,19 @@ class _ConsultaProcessosLeituraRetiradosDivLocalPageState
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FilterButtonWidget(
-          onPressed: () => {
-            openModal(context),
-          },
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: () =>
+                  bloc.loadMotivoProcessosLeituraRetiradosDivLocal(filter),
+            ),
+            const Padding(padding: EdgeInsets.only(left: 5)),
+            FilterButtonWidget(
+              onPressed: () => {
+                openModal(context),
+              },
+            ),
+          ],
         ),
         BlocListener<ConsultaProcessosLeituraRetiradosDivLocalPageCubit,
             ConsultaProcessosLeituraRetiradosDivLocalPageState>(

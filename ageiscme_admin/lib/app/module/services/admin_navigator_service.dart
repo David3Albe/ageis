@@ -89,11 +89,15 @@ import 'package:ageiscme_admin/app/module/pages/processo/processo_motivo/process
 import 'package:ageiscme_admin/app/module/pages/processo/processo_tipo/processo_tipo_page.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/processo_tipo_consulta/processo_tipo_consulta_page.dart';
 import 'package:ageiscme_models/models/item_menu/item_menu_model.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/navigator/navigator_service.dart';
 import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:flutter/material.dart';
 
 abstract class AdminNavigatorService {
+  static void Function()? goingToHome;
+
+  static bool ObrigatorioTrocaSenha = false;
   static void navigateTo(ItemMenuModel itemMenu, BuildContext context) {
     openRoute(itemMenu: itemMenu, context: context);
   }
@@ -111,12 +115,26 @@ abstract class AdminNavigatorService {
   }
 
   static void navigateToHome() {
+    ObrigatorioTrocaSenha = false;
+    NavigatorService.navigateTo('/admin/home');
+  }
+
+  static void navigateToHomeValidaTrocaSenha(BuildContext context) {
+    if (ObrigatorioTrocaSenha == true) {
+      ToastUtils.showCustomToastNotice(
+        context,
+        'Obrigatório troca de senhas para acessar outras telas',
+      );
+      return;
+    }
+    if (goingToHome != null) goingToHome!();
     NavigatorService.navigateTo('/admin/home');
   }
 
   static void navigateToChangePassword({
     required String actualPassword,
   }) {
+    ObrigatorioTrocaSenha = true;
     NavigatorService.navigateToArguments(
       '/admin/cadastro/alterar-senha',
       actualPassword,
@@ -127,6 +145,13 @@ abstract class AdminNavigatorService {
     required ItemMenuModel itemMenu,
     required BuildContext context,
   }) {
+    if (ObrigatorioTrocaSenha == true) {
+      ToastUtils.showCustomToastNotice(
+        context,
+        'Obrigatório troca de senhas para trocar de tela',
+      );
+      return;
+    }
     String route = itemMenu.route + '/';
     Widget widget = getWidgetParams(data: null, route: route);
     ItemMenuModel? father = itemMenu.getFather();
@@ -144,6 +169,13 @@ abstract class AdminNavigatorService {
     required BuildContext context,
     required dynamic data,
   }) {
+    if (ObrigatorioTrocaSenha == true) {
+      ToastUtils.showCustomToastNotice(
+        context,
+        'Obrigatório troca de senhas para trocar de tela',
+      );
+      return;
+    }
     route += '/';
     route = route.replaceAll('/admin', '');
     Widget widget = getWidgetParams(data: data, route: route);

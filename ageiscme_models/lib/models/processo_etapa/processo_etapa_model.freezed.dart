@@ -32,8 +32,8 @@ mixin _$ProcessoEtapaModel {
   set tempoCicloProcesso(int? value) => throw _privateConstructorUsedError;
   int? get codInstituicao => throw _privateConstructorUsedError;
   set codInstituicao(int? value) => throw _privateConstructorUsedError;
-  int? get codServicoTipo => throw _privateConstructorUsedError;
-  set codServicoTipo(int? value) => throw _privateConstructorUsedError;
+  int? get codServicosTipo => throw _privateConstructorUsedError;
+  set codServicosTipo(int? value) => throw _privateConstructorUsedError;
   int? get codEstoqueAut => throw _privateConstructorUsedError;
   set codEstoqueAut(int? value) => throw _privateConstructorUsedError;
   String? get nome => throw _privateConstructorUsedError;
@@ -162,7 +162,7 @@ abstract class $ProcessoEtapaModelCopyWith<$Res> {
       int? codEstoque,
       int? tempoCicloProcesso,
       int? codInstituicao,
-      int? codServicoTipo,
+      int? codServicosTipo,
       int? codEstoqueAut,
       String? nome,
       String? descricao,
@@ -236,7 +236,7 @@ class _$ProcessoEtapaModelCopyWithImpl<$Res, $Val extends ProcessoEtapaModel>
     Object? codEstoque = freezed,
     Object? tempoCicloProcesso = freezed,
     Object? codInstituicao = freezed,
-    Object? codServicoTipo = freezed,
+    Object? codServicosTipo = freezed,
     Object? codEstoqueAut = freezed,
     Object? nome = freezed,
     Object? descricao = freezed,
@@ -310,9 +310,9 @@ class _$ProcessoEtapaModelCopyWithImpl<$Res, $Val extends ProcessoEtapaModel>
           ? _value.codInstituicao
           : codInstituicao // ignore: cast_nullable_to_non_nullable
               as int?,
-      codServicoTipo: freezed == codServicoTipo
-          ? _value.codServicoTipo
-          : codServicoTipo // ignore: cast_nullable_to_non_nullable
+      codServicosTipo: freezed == codServicosTipo
+          ? _value.codServicosTipo
+          : codServicosTipo // ignore: cast_nullable_to_non_nullable
               as int?,
       codEstoqueAut: freezed == codEstoqueAut
           ? _value.codEstoqueAut
@@ -570,7 +570,7 @@ abstract class _$$ProcessoEtapaModelImplCopyWith<$Res>
       int? codEstoque,
       int? tempoCicloProcesso,
       int? codInstituicao,
-      int? codServicoTipo,
+      int? codServicosTipo,
       int? codEstoqueAut,
       String? nome,
       String? descricao,
@@ -646,7 +646,7 @@ class __$$ProcessoEtapaModelImplCopyWithImpl<$Res>
     Object? codEstoque = freezed,
     Object? tempoCicloProcesso = freezed,
     Object? codInstituicao = freezed,
-    Object? codServicoTipo = freezed,
+    Object? codServicosTipo = freezed,
     Object? codEstoqueAut = freezed,
     Object? nome = freezed,
     Object? descricao = freezed,
@@ -720,9 +720,9 @@ class __$$ProcessoEtapaModelImplCopyWithImpl<$Res>
           ? _value.codInstituicao
           : codInstituicao // ignore: cast_nullable_to_non_nullable
               as int?,
-      codServicoTipo: freezed == codServicoTipo
-          ? _value.codServicoTipo
-          : codServicoTipo // ignore: cast_nullable_to_non_nullable
+      codServicosTipo: freezed == codServicosTipo
+          ? _value.codServicosTipo
+          : codServicosTipo // ignore: cast_nullable_to_non_nullable
               as int?,
       codEstoqueAut: freezed == codEstoqueAut
           ? _value.codEstoqueAut
@@ -928,7 +928,7 @@ class _$ProcessoEtapaModelImpl extends _ProcessoEtapaModel
       required this.codEstoque,
       required this.tempoCicloProcesso,
       required this.codInstituicao,
-      required this.codServicoTipo,
+      required this.codServicosTipo,
       required this.codEstoqueAut,
       required this.nome,
       required this.descricao,
@@ -994,7 +994,7 @@ class _$ProcessoEtapaModelImpl extends _ProcessoEtapaModel
   @override
   int? codInstituicao;
   @override
-  int? codServicoTipo;
+  int? codServicosTipo;
   @override
   int? codEstoqueAut;
   @override
@@ -1093,7 +1093,7 @@ class _$ProcessoEtapaModelImpl extends _ProcessoEtapaModel
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ProcessoEtapaModel(cod: $cod, codProcessoTipo: $codProcessoTipo, codEquipamento: $codEquipamento, codEstoque: $codEstoque, tempoCicloProcesso: $tempoCicloProcesso, codInstituicao: $codInstituicao, codServicoTipo: $codServicoTipo, codEstoqueAut: $codEstoqueAut, nome: $nome, descricao: $descricao, descricaoEtiquetaPreparo: $descricaoEtiquetaPreparo, localizacaoX: $localizacaoX, localizacaoY: $localizacaoY, liberaKitIncompleto: $liberaKitIncompleto, exigeLeituraEntrada: $exigeLeituraEntrada, exigeLeituraSaida: $exigeLeituraSaida, usuarioColocaNaoRetira: $usuarioColocaNaoRetira, conferenciaVisualPermitida: $conferenciaVisualPermitida, imprimirEtiquetaLote: $imprimirEtiquetaLote, ativo: $ativo, autorizaQuebraFluxo: $autorizaQuebraFluxo, exigeTesteIndicador: $exigeTesteIndicador, preparo: $preparo, areaEsteril: $areaEsteril, exigeEpcEntrada: $exigeEpcEntrada, exigeEpcSaida: $exigeEpcSaida, flag1: $flag1, flag2: $flag2, transfere: $transfere, recebe: $recebe, testeIndicadorEntrada: $testeIndicadorEntrada, etiquetaSaida: $etiquetaSaida, etiquetaEntrada: $etiquetaEntrada, testeIndicadorSaida: $testeIndicadorSaida, exigeLoteEquipamento: $exigeLoteEquipamento, responsavelLocalNaoCompativel: $responsavelLocalNaoCompativel, exigeTesteBiologico: $exigeTesteBiologico, biologicoEntrada: $biologicoEntrada, biologicoSaida: $biologicoSaida, testeBiologicoEntrada: $testeBiologicoEntrada, testeBiologicoSaida: $testeBiologicoSaida, pacote: $pacote, relatorioRetiradaMateriais: $relatorioRetiradaMateriais, naoAlterarStatusItemPendente: $naoAlterarStatusItemPendente, integradorKit: $integradorKit, solicitacaoCirculante: $solicitacaoCirculante, permiteLiberacaoDataMatrixComCrachaPreparo: $permiteLiberacaoDataMatrixComCrachaPreparo, ultimaAlteracao: $ultimaAlteracao, tstamp: $tstamp, tipoProcesso: $tipoProcesso, equipamento: $equipamento, arsenal: $arsenal, servicoTipo: $servicoTipo, sequencias: $sequencias)';
+    return 'ProcessoEtapaModel(cod: $cod, codProcessoTipo: $codProcessoTipo, codEquipamento: $codEquipamento, codEstoque: $codEstoque, tempoCicloProcesso: $tempoCicloProcesso, codInstituicao: $codInstituicao, codServicosTipo: $codServicosTipo, codEstoqueAut: $codEstoqueAut, nome: $nome, descricao: $descricao, descricaoEtiquetaPreparo: $descricaoEtiquetaPreparo, localizacaoX: $localizacaoX, localizacaoY: $localizacaoY, liberaKitIncompleto: $liberaKitIncompleto, exigeLeituraEntrada: $exigeLeituraEntrada, exigeLeituraSaida: $exigeLeituraSaida, usuarioColocaNaoRetira: $usuarioColocaNaoRetira, conferenciaVisualPermitida: $conferenciaVisualPermitida, imprimirEtiquetaLote: $imprimirEtiquetaLote, ativo: $ativo, autorizaQuebraFluxo: $autorizaQuebraFluxo, exigeTesteIndicador: $exigeTesteIndicador, preparo: $preparo, areaEsteril: $areaEsteril, exigeEpcEntrada: $exigeEpcEntrada, exigeEpcSaida: $exigeEpcSaida, flag1: $flag1, flag2: $flag2, transfere: $transfere, recebe: $recebe, testeIndicadorEntrada: $testeIndicadorEntrada, etiquetaSaida: $etiquetaSaida, etiquetaEntrada: $etiquetaEntrada, testeIndicadorSaida: $testeIndicadorSaida, exigeLoteEquipamento: $exigeLoteEquipamento, responsavelLocalNaoCompativel: $responsavelLocalNaoCompativel, exigeTesteBiologico: $exigeTesteBiologico, biologicoEntrada: $biologicoEntrada, biologicoSaida: $biologicoSaida, testeBiologicoEntrada: $testeBiologicoEntrada, testeBiologicoSaida: $testeBiologicoSaida, pacote: $pacote, relatorioRetiradaMateriais: $relatorioRetiradaMateriais, naoAlterarStatusItemPendente: $naoAlterarStatusItemPendente, integradorKit: $integradorKit, solicitacaoCirculante: $solicitacaoCirculante, permiteLiberacaoDataMatrixComCrachaPreparo: $permiteLiberacaoDataMatrixComCrachaPreparo, ultimaAlteracao: $ultimaAlteracao, tstamp: $tstamp, tipoProcesso: $tipoProcesso, equipamento: $equipamento, arsenal: $arsenal, servicoTipo: $servicoTipo, sequencias: $sequencias)';
   }
 
   @override
@@ -1107,7 +1107,7 @@ class _$ProcessoEtapaModelImpl extends _ProcessoEtapaModel
       ..add(DiagnosticsProperty('codEstoque', codEstoque))
       ..add(DiagnosticsProperty('tempoCicloProcesso', tempoCicloProcesso))
       ..add(DiagnosticsProperty('codInstituicao', codInstituicao))
-      ..add(DiagnosticsProperty('codServicoTipo', codServicoTipo))
+      ..add(DiagnosticsProperty('codServicosTipo', codServicosTipo))
       ..add(DiagnosticsProperty('codEstoqueAut', codEstoqueAut))
       ..add(DiagnosticsProperty('nome', nome))
       ..add(DiagnosticsProperty('descricao', descricao))
@@ -1187,7 +1187,7 @@ abstract class _ProcessoEtapaModel extends ProcessoEtapaModel {
           required int? codEstoque,
           required int? tempoCicloProcesso,
           required int? codInstituicao,
-          required int? codServicoTipo,
+          required int? codServicosTipo,
           required int? codEstoqueAut,
           required String? nome,
           required String? descricao,
@@ -1260,8 +1260,8 @@ abstract class _ProcessoEtapaModel extends ProcessoEtapaModel {
   int? get codInstituicao;
   set codInstituicao(int? value);
   @override
-  int? get codServicoTipo;
-  set codServicoTipo(int? value);
+  int? get codServicosTipo;
+  set codServicosTipo(int? value);
   @override
   int? get codEstoqueAut;
   set codEstoqueAut(int? value);

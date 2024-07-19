@@ -6,6 +6,7 @@ import 'package:ageiscme_models/dto/usuario/usuario_drop_down_search_dto.dart';
 import 'package:ageiscme_models/query_filters/historico_colaborador/consulta_historico_colaborador_filter.dart';
 import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
@@ -64,10 +65,18 @@ class _ConsultaHistoricoColaboradorPageState
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FilterButtonWidget(
-          onPressed: () => {
-            openModal(context),
-          },
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: refresh,
+            ),
+            const Padding(padding: EdgeInsets.only(left: 4)),
+            FilterButtonWidget(
+              onPressed: () => {
+                openModal(context),
+              },
+            ),
+          ],
         ),
         BlocListener<ConsultaHistoricoColaboradorPageCubit,
             ConsultaHistoricoColaboradorPageState>(
@@ -100,6 +109,10 @@ class _ConsultaHistoricoColaboradorPageState
         ),
       ],
     );
+  }
+
+  void refresh() {
+    bloc.loadHistoricoColaborador(filter);
   }
 
   void onError(ConsultaHistoricoColaboradorPageState state) =>

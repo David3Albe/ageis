@@ -7,6 +7,7 @@ class ItemDescritorCubitFilter extends Cubit<ItemDescritorFilter> {
           ItemDescritorFilter(
             numeroMaximoRegistros: 500,
             ordenarAtivosPrimeiro: true,
+            ordenarCodigoDesc: true,
           ),
         );
 }

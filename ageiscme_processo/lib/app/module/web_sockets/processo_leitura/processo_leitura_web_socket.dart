@@ -63,6 +63,7 @@ class ProcessoLeituraWebSocket {
       },
       (event) {
         if (event == 'pong') return;
+        calculateTraficResponse(event);
         CommandResultModel result =
             CommandResultModel.fromJson(jsonDecode(event));
         if (!result.success) {
@@ -77,6 +78,18 @@ class ProcessoLeituraWebSocket {
       },
       cancelOnError: false,
     );
+  }
+
+  int calculateTraficRequest(String event) {
+    int size = utf8.encode(event).length;
+    print('Request Processo: ' + size.toString());
+    return size;
+  }
+
+  int calculateTraficResponse(String event) {
+    int size = utf8.encode(event).length;
+    print('Response Processo: ' + size.toString());
+    return size;
   }
 
   void close() {
@@ -100,6 +113,7 @@ class ProcessoLeituraWebSocket {
     int? awaitTimeSeconds,
   }) async {
     await tryConnect();
+    calculateTraficRequest(json);
     _webSocket?.sink.add(json);
   }
 

@@ -18,6 +18,7 @@ import 'package:ageiscme_models/query_filters/processos_leitura_detalhe_kit/cons
 import 'package:ageiscme_models/query_models/processos_leitura/consulta_processos_leitura/consulta_processos_leitura_model.dart';
 import 'package:ageiscme_models/response_dto/kit/drop_down_search/kit_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/campos/custom_autocomplete/custom_autocomplete_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
@@ -308,10 +309,20 @@ class _ConsultaProcessosLeituraPageState
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          FilterButtonWidget(
-            onPressed: () => {
-              openModal(context),
-            },
+          Row(
+            children: [
+              RefreshButtonWidget(
+                onPressed: () => resetarPaginacaoGrid(),
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 5),
+              ),
+              FilterButtonWidget(
+                onPressed: () => {
+                  openModal(context),
+                },
+              ),
+            ],
           ),
           BlocConsumer<ConsultaProcessosLeituraPageCubit,
               ConsultaProcessosLeituraPageState>(

@@ -4,6 +4,7 @@ import 'package:ageiscme_admin/app/module/pages/material/embalagem/embalagem_pag
 import 'package:ageiscme_data/services/embalagem/embalagem_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
@@ -62,6 +63,12 @@ class _EmbalagemPageState extends State<EmbalagemPage> {
       children: [
         Row(
           children: [
+            RefreshButtonWidget(
+              onPressed: () => bloc.loadEmbalagem(),
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 5),
+            ),
             AddButtonWidget(
               onPressed: () => {
                 openModal(

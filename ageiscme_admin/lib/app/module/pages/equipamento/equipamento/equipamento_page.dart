@@ -4,6 +4,7 @@ import 'package:ageiscme_data/services/equipamento/equipamento_service.dart';
 import 'package:ageiscme_models/filters/equipamento/equipamento_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -62,11 +63,7 @@ class _EquipamentoPageState extends State<EquipamentoPage> {
 
   @override
   void initState() {
-    bloc.loadFilter(
-      EquipamentoFilter(
-        incluirTipoServicos: true,
-      ),
-    );
+    load();
     super.initState();
   }
 
@@ -76,13 +73,21 @@ class _EquipamentoPageState extends State<EquipamentoPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              EquipamentoModel.empty(),
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: load,
             ),
-          },
+            const Padding(padding: EdgeInsets.only(left: 5)),
+            AddButtonWidget(
+              onPressed: () => {
+                openModal(
+                  context,
+                  EquipamentoModel.empty(),
+                ),
+              },
+            ),
+          ],
         ),
         BlocConsumer<EquipamentoPageCubit, EquipamentoPageState>(
           bloc: bloc,
@@ -117,6 +122,14 @@ class _EquipamentoPageState extends State<EquipamentoPage> {
     );
   }
 
+  void load() {
+    bloc.loadFilter(
+      EquipamentoFilter(
+        incluirTipoServicos: true,
+      ),
+    );
+  }
+
   Future openModal(
     BuildContext context,
     EquipamentoModel equipamento,
@@ -135,7 +148,7 @@ class _EquipamentoPageState extends State<EquipamentoPage> {
   void onSaved(String message, int chave) {
     WindowsHelper.RemoverWidget(chave);
     ToastUtils.showCustomToastSucess(context, message);
-    bloc.loadEquipamento();
+    load();
   }
 
   void onCancel(int chave) {
@@ -160,7 +173,7 @@ class _EquipamentoPageState extends State<EquipamentoPage> {
       context,
       state.message,
     );
-    bloc.loadEquipamento();
+    load();
   }
 
   void onError(EquipamentoPageState state) {

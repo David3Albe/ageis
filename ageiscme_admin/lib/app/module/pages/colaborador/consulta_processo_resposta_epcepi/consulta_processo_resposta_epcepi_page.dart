@@ -8,6 +8,7 @@ import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/query_filters/processo_resposta_epcepi/consulta_processo_resposta_epcepi_filter.dart';
 import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
@@ -73,10 +74,18 @@ class _ConsultaProcessoRespostaEPCEPIPageState
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FilterButtonWidget(
-          onPressed: () => {
-            openModal(context),
-          },
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: () => bloc.loadMotivoRemoverReporItem(filter),
+            ),
+            const Padding(padding: EdgeInsets.only(left: 4)),
+            FilterButtonWidget(
+              onPressed: () => {
+                openModal(context),
+              },
+            ),
+          ],
         ),
         BlocListener<ConsultaProcessoRespostaEPCEPIPageCubit,
             ConsultaProcessoRespostaEPCEPIPageState>(
@@ -298,7 +307,7 @@ class _ConsultaProcessoRespostaEPCEPIPageState
         ),
       ),
     );
-    if(confirm!=true) return;
+    if (confirm != true) return;
     bloc.loadMotivoRemoverReporItem(filter);
   }
 }

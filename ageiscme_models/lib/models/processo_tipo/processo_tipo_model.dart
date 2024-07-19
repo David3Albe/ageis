@@ -1,6 +1,8 @@
 // ignore_for_file: unnecessary_null_comparison
 
 import 'package:ageiscme_models/models/processo_etapa/processo_etapa_model.dart';
+import 'package:compartilhados/mixins/drop_down_filter/drop_down_filter_mixin.dart';
+import 'package:compartilhados/mixins/drop_down_filter/drop_down_filter_model.dart';
 import 'package:compartilhados/mixins/drop_down_text.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:flutter/foundation.dart';
@@ -9,7 +11,11 @@ part 'processo_tipo_model.freezed.dart';
 part 'processo_tipo_model.g.dart';
 
 @unfreezed
-abstract class ProcessoTipoModel with _$ProcessoTipoModel, DropDownText {
+abstract class ProcessoTipoModel
+    with
+        _$ProcessoTipoModel,
+        DropDownText,
+        DropDownFilterMixin<ProcessoTipoModel> {
   const ProcessoTipoModel._();
 
   factory ProcessoTipoModel({
@@ -54,6 +60,21 @@ abstract class ProcessoTipoModel with _$ProcessoTipoModel, DropDownText {
       );
 
   String GetDropDownText() => nome == null ? '' : nome;
+
+  List<DropDownFilterModel<ProcessoTipoModel>> GetDropDownFilters(
+          String filter) =>
+      [
+        DropDownFilterModel(
+          (object) =>
+              object.nome == null ||
+              object.nome.toUpperCase().contains(filter.toUpperCase()),
+        ),
+         DropDownFilterModel(
+          (object) =>
+              object.descricao == null ||
+              object.descricao!.toUpperCase().contains(filter.toUpperCase()),
+        ),
+      ];
 }
 
 class ProcessoTipoPrioriodadeOption with DropDownText {

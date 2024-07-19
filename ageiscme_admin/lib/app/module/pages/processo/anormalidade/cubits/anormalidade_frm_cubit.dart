@@ -50,7 +50,8 @@ class AnormalidadeFrmCubit extends Cubit<AnormalidadeFrmState> {
       return dto;
     }
     dto.usuario = UsuarioDropDownSearchResponseDTO(
-      cod: result!.usuario!.cod!,
+      ativo: result!.usuario!.ativo ?? false,
+      cod: result.usuario!.cod!,
       codBarra: result.usuario!.codBarra!,
       nome: result.usuario!.nome,
     );

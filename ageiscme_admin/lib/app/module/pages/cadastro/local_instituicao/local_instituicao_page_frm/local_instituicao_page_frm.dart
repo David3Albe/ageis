@@ -213,6 +213,17 @@ class _LocalInstituicaoPageFrmState extends State<LocalInstituicaoPageFrm> {
                                               localInstituicao.codCentroCusto,
                                         )
                                         .firstOrNull;
+                                    List<CentroCustoModel> centrosCustoAtivos =
+                                        centrosCusto
+                                            .where(
+                                              (element) =>
+                                                  element.ativo == true,
+                                            )
+                                            .toList();
+                                    centrosCustoAtivos.sort(
+                                      (a, b) => (a.centroCusto ?? '')
+                                          .compareTo(b.centroCusto ?? ''),
+                                    );
 
                                     return DropDownSearchWidget<
                                         CentroCustoModel>(

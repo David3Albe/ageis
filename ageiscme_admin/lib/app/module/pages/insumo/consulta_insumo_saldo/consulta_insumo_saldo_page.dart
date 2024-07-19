@@ -11,6 +11,7 @@ import 'package:ageiscme_models/models/insumo_saldo/insumo_saldo_model.dart';
 import 'package:ageiscme_models/query_filters/insumo_saldo/consulta_insumo_saldo_filter.dart';
 import 'package:ageiscme_models/query_filters/movimento_estoque/consulta_movimentacao_estoque_filter.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
@@ -118,10 +119,18 @@ class _ConsultaInsumoSaldoPageState extends State<ConsultaInsumoSaldoPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FilterButtonWidget(
-          onPressed: () => {
-            openModal(context),
-          },
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: () => bloc.loadInsumoSaldo(filter),
+            ),
+            const Padding(padding: EdgeInsets.only(left: 5)),
+            FilterButtonWidget(
+              onPressed: () => {
+                openModal(context),
+              },
+            ),
+          ],
         ),
         BlocListener<ConsultaInsumoSaldoPageCubit,
             ConsultaInsumoSaldoPageState>(

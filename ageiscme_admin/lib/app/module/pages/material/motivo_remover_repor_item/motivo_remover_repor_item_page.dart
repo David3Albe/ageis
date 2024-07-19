@@ -3,6 +3,7 @@ import 'package:ageiscme_admin/app/module/pages/material/motivo_remover_repor_it
 import 'package:ageiscme_data/services/motivo_remover_repor_item/motivo_remover_repor_item_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -64,13 +65,21 @@ class _MotivoRemoverReporItemPageState
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              MotivoRemoverReporItemModel.empty(),
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: () => bloc.loadMotivoRemoverReporItem(),
             ),
-          },
+            const Padding(padding: EdgeInsets.only(left: 5)),
+            AddButtonWidget(
+              onPressed: () => {
+                openModal(
+                  context,
+                  MotivoRemoverReporItemModel.empty(),
+                ),
+              },
+            ),
+          ],
         ),
         BlocListener<MotivoRemoverReporItemPageCubit,
             MotivoRemoverReporItemPageState>(

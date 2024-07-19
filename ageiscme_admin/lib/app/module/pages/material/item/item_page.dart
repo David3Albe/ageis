@@ -16,6 +16,7 @@ import 'package:ageiscme_models/response_dto/item_rotulado_response/item_rotulad
 import 'package:ageiscme_models/response_dto/kit/drop_down_search/kit_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/campos/custom_autocomplete/custom_autocomplete_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
@@ -129,6 +130,10 @@ class _ItemPageState extends State<ItemPage> {
       children: [
         Row(
           children: [
+            RefreshButtonWidget(
+              onPressed: () => bloc.loadItemFilter(filter),
+            ),
+            const Padding(padding: EdgeInsets.only(left: 5)),
             FilterButtonWidget(
               onPressed: () => {
                 openModalFilter(context),

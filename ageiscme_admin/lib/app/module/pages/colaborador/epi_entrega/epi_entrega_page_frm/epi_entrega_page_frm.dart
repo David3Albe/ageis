@@ -8,6 +8,7 @@ import 'package:ageiscme_impressoes/dto/epi_delivery/epi_delivery_print_dto.dart
 import 'package:ageiscme_impressoes/prints/epi_delivery/epi_delivery_printer_controller.dart';
 import 'package:ageiscme_models/dto/authentication_result/authentication_result_dto.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/response_dto/epi_perfil/find_by_user/epis/epi_perfil_find_by_user_epi_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
@@ -35,11 +36,13 @@ class EpiEntregaPageFrm extends StatefulWidget {
     required this.episDescritores,
     required this.onSaved,
     required this.onCancel,
+    required this.episNecessarios,
   }) : super(key: key);
 
   final EpiEntregaModel epiEntrega;
   final List<UsuarioModel> usuarios;
   final List<EpiDescritorModel> episDescritores;
+  final List<EpiPerfilFindByUserEpiResponseDTO> episNecessarios;
   final void Function(String) onSaved;
   final void Function() onCancel;
 
@@ -101,6 +104,7 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
 
   late void Function(EpiEntregaModel? epi) setSelectedEpiEntregueValidade;
   late void Function(EpiEntregaModel? epi) setSelectedEpiEntregueDescartado;
+  late void Function(EpiDescritorModel? epi) setSelectedEpiDescritor;
 
   Future<AuthenticationResultDTO?> recuperaUsuario() async {
     return await Modular.get<AuthenticationStore>().GetAuthenticated();
@@ -159,6 +163,31 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
           )
           .firstOrNull;
       setarEpi(epiDescritor);
+    });
+  }
+
+  void updateFieldsDescritorEpi(EpiDescritorModel? epiDescritor) {
+    setState(() {
+      epiEntrega.cod = 0;
+      epiEntrega.tstamp = null;
+      epiEntrega.codDescritorEpi = epiDescritor?.cod;
+      epiEntrega.dataLimiteValidade = null;
+      setarDataValidade?.call(null);
+      epiEntrega.dataDescarte = null;
+      setarDataDescarte?.call(null);
+      epiEntrega.dataEntrega = null;
+      setarDataEntrega?.call(null);
+      epiEntrega.conferenciaVisual = false;
+      setarConferenciaVisual?.call(false);
+      epiEntrega.controlarValidade = false;
+      setarControlaValidade?.call(false);
+
+      EpiDescritorModel? epiDescritorCbx = widget.episDescritores
+          .where(
+            (element) => element.cod == epiEntrega.codDescritorEpi,
+          )
+          .firstOrNull;
+      setarEpi(epiDescritorCbx);
     });
   }
 
@@ -336,7 +365,7 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
                                 children: [
                                   Expanded(
                                     child: Text(
-                                      'EPIs Entregues na Validade',
+                                      'EPIs Necessários',
                                       style: Fontes.getRoboto(),
                                       textAlign: TextAlign.center,
                                     ),
@@ -344,7 +373,15 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
                                   const SizedBox(width: 50.0),
                                   Expanded(
                                     child: Text(
-                                      'EPIs Entregues e Descartados',
+                                      'EPIs em Uso',
+                                      style: Fontes.getRoboto(),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Expanded(
+                                    child: Text(
+                                      'EPIs Descartados',
                                       style: Fontes.getRoboto(),
                                       textAlign: TextAlign.center,
                                     ),
@@ -384,7 +421,10 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
                                           disableUnselect: false,
                                           removeButton: false,
                                           onItemSelected: (value) {
-                                            setSelectedEpiEntregueDescartado(null);
+                                            setSelectedEpiEntregueDescartado(
+                                              null,
+                                            );
+                                            setSelectedEpiDescritor(null);
                                             updateFields(value);
                                           },
                                           itemText: (value) {
@@ -468,7 +508,10 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
                                           removeButton: false,
                                           permitReselect: false,
                                           onItemSelected: (value) {
-                                            setSelectedEpiEntregueValidade(null);
+                                            setSelectedEpiEntregueValidade(
+                                              null,
+                                            );
+                                            setSelectedEpiDescritor(null);
                                             updateFields(value);
                                           },
                                           itemText: (value) {
@@ -501,6 +544,85 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
                                             }
                                             descricao += data;
                                             return descricao;
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Expanded(
+                                    child: BlocBuilder<EpiEntregaCubit,
+                                        EpiEntregaState>(
+                                      bloc: epiEntregaCubit,
+                                      builder: (context, state) {
+                                        if (state.loading) {
+                                          return const LoadingWidget();
+                                        }
+                                        List<EpiEntregaModel> episEntregas =
+                                            state.itens;
+                                        List<EpiEntregaModel>
+                                            epiEntreguesValidade = [];
+                                        if (episEntregas.isNotEmpty) {
+                                          epiEntreguesValidade =
+                                              getEpisValidade().toList();
+                                        }
+                                        List<int> codEpisEntregueValidade =
+                                            epiEntreguesValidade
+                                                .where(
+                                                  (element) =>
+                                                      element.codDescritorEpi !=
+                                                      null,
+                                                )
+                                                .map((e) => e.codDescritorEpi!)
+                                                .toList();
+                                        Iterable<
+                                                EpiPerfilFindByUserEpiResponseDTO>
+                                            epiNecessario =
+                                            widget.episNecessarios.where(
+                                          (epi) => !codEpisEntregueValidade
+                                              .contains(epi.codEpiDescritor),
+                                        );
+                                        List<EpiDescritorModel?> epis =
+                                            epiNecessario
+                                                .map(
+                                                  (epi) =>
+                                                      widget.episDescritores
+                                                          .where(
+                                                            (element) =>
+                                                                element.cod ==
+                                                                epi.codEpiDescritor,
+                                                          )
+                                                          .firstOrNull,
+                                                )
+                                                .toList();
+                                        return ListFieldWidget<
+                                            EpiDescritorModel?>(
+                                          setSelected: (
+                                            context,
+                                            setSelectedItemMethod,
+                                          ) =>
+                                              setSelectedEpiDescritor =
+                                                  setSelectedItemMethod,
+                                          disableUnselect: false,
+                                          sourceList: epis
+                                              .where(
+                                                (element) => element != null,
+                                              )
+                                              .toList(),
+                                          removeButton: false,
+                                          permitReselect: false,
+                                          onItemSelected: (value) {
+                                            setSelectedEpiEntregueValidade(
+                                              null,
+                                            );
+                                            setSelectedEpiEntregueDescartado(
+                                              null,
+                                            );
+                                            updateFieldsDescritorEpi(value);
+                                          },
+                                          itemText: (value) {
+                                            return value?.descricao ??
+                                                'Epi Descritor sem Descrição';
                                           },
                                         );
                                       },

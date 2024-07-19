@@ -5,12 +5,14 @@ abstract class Fontes {
     double? fontSize,
     Color? cor,
     double? letterSpacing,
+    TextOverflow? overflow,
   }) {
     return TextStyle(
       fontFamily: 'Roboto',
       fontSize: fontSize,
       color: cor,
       letterSpacing: letterSpacing,
+      overflow: overflow,
     );
   }
 

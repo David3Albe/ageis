@@ -61,10 +61,10 @@ mixin _$InsumoModel {
   set testeInsumoObrigatorio(bool? value) => throw _privateConstructorUsedError;
   bool? get ativo => throw _privateConstructorUsedError;
   set ativo(bool? value) => throw _privateConstructorUsedError;
-  int? get codFabricante => throw _privateConstructorUsedError;
-  set codFabricante(int? value) => throw _privateConstructorUsedError;
-  int? get codFornecedor => throw _privateConstructorUsedError;
-  set codFornecedor(int? value) => throw _privateConstructorUsedError;
+  int? get codFabricantes => throw _privateConstructorUsedError;
+  set codFabricantes(int? value) => throw _privateConstructorUsedError;
+  int? get codFornecedores => throw _privateConstructorUsedError;
+  set codFornecedores(int? value) => throw _privateConstructorUsedError;
   int? get codUnidadeMedida => throw _privateConstructorUsedError;
   set codUnidadeMedida(int? value) => throw _privateConstructorUsedError;
   int? get codInstituicao => throw _privateConstructorUsedError;
@@ -123,8 +123,8 @@ abstract class $InsumoModelCopyWith<$Res> {
       bool? controleEstoque,
       bool? testeInsumoObrigatorio,
       bool? ativo,
-      int? codFabricante,
-      int? codFornecedor,
+      int? codFabricantes,
+      int? codFornecedores,
       int? codUnidadeMedida,
       int? codInstituicao,
       DateTime? ultimaAlteracao,
@@ -174,8 +174,8 @@ class _$InsumoModelCopyWithImpl<$Res, $Val extends InsumoModel>
     Object? controleEstoque = freezed,
     Object? testeInsumoObrigatorio = freezed,
     Object? ativo = freezed,
-    Object? codFabricante = freezed,
-    Object? codFornecedor = freezed,
+    Object? codFabricantes = freezed,
+    Object? codFornecedores = freezed,
     Object? codUnidadeMedida = freezed,
     Object? codInstituicao = freezed,
     Object? ultimaAlteracao = freezed,
@@ -267,13 +267,13 @@ class _$InsumoModelCopyWithImpl<$Res, $Val extends InsumoModel>
           ? _value.ativo
           : ativo // ignore: cast_nullable_to_non_nullable
               as bool?,
-      codFabricante: freezed == codFabricante
-          ? _value.codFabricante
-          : codFabricante // ignore: cast_nullable_to_non_nullable
+      codFabricantes: freezed == codFabricantes
+          ? _value.codFabricantes
+          : codFabricantes // ignore: cast_nullable_to_non_nullable
               as int?,
-      codFornecedor: freezed == codFornecedor
-          ? _value.codFornecedor
-          : codFornecedor // ignore: cast_nullable_to_non_nullable
+      codFornecedores: freezed == codFornecedores
+          ? _value.codFornecedores
+          : codFornecedores // ignore: cast_nullable_to_non_nullable
               as int?,
       codUnidadeMedida: freezed == codUnidadeMedida
           ? _value.codUnidadeMedida
@@ -393,8 +393,8 @@ abstract class _$$InsumoModelImplCopyWith<$Res>
       bool? controleEstoque,
       bool? testeInsumoObrigatorio,
       bool? ativo,
-      int? codFabricante,
-      int? codFornecedor,
+      int? codFabricantes,
+      int? codFornecedores,
       int? codUnidadeMedida,
       int? codInstituicao,
       DateTime? ultimaAlteracao,
@@ -446,8 +446,8 @@ class __$$InsumoModelImplCopyWithImpl<$Res>
     Object? controleEstoque = freezed,
     Object? testeInsumoObrigatorio = freezed,
     Object? ativo = freezed,
-    Object? codFabricante = freezed,
-    Object? codFornecedor = freezed,
+    Object? codFabricantes = freezed,
+    Object? codFornecedores = freezed,
     Object? codUnidadeMedida = freezed,
     Object? codInstituicao = freezed,
     Object? ultimaAlteracao = freezed,
@@ -539,13 +539,13 @@ class __$$InsumoModelImplCopyWithImpl<$Res>
           ? _value.ativo
           : ativo // ignore: cast_nullable_to_non_nullable
               as bool?,
-      codFabricante: freezed == codFabricante
-          ? _value.codFabricante
-          : codFabricante // ignore: cast_nullable_to_non_nullable
+      codFabricantes: freezed == codFabricantes
+          ? _value.codFabricantes
+          : codFabricantes // ignore: cast_nullable_to_non_nullable
               as int?,
-      codFornecedor: freezed == codFornecedor
-          ? _value.codFornecedor
-          : codFornecedor // ignore: cast_nullable_to_non_nullable
+      codFornecedores: freezed == codFornecedores
+          ? _value.codFornecedores
+          : codFornecedores // ignore: cast_nullable_to_non_nullable
               as int?,
       codUnidadeMedida: freezed == codUnidadeMedida
           ? _value.codUnidadeMedida
@@ -611,8 +611,8 @@ class _$InsumoModelImpl extends _InsumoModel with DiagnosticableTreeMixin {
       required this.controleEstoque,
       required this.testeInsumoObrigatorio,
       required this.ativo,
-      required this.codFabricante,
-      required this.codFornecedor,
+      required this.codFabricantes,
+      required this.codFornecedores,
       required this.codUnidadeMedida,
       required this.codInstituicao,
       required this.ultimaAlteracao,
@@ -668,9 +668,9 @@ class _$InsumoModelImpl extends _InsumoModel with DiagnosticableTreeMixin {
   @override
   bool? ativo;
   @override
-  int? codFabricante;
+  int? codFabricantes;
   @override
-  int? codFornecedor;
+  int? codFornecedores;
   @override
   int? codUnidadeMedida;
   @override
@@ -693,7 +693,7 @@ class _$InsumoModelImpl extends _InsumoModel with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'InsumoModel(cod: $cod, codErp3Albe: $codErp3Albe, nome: $nome, descricao: $descricao, unidadeMedida: $unidadeMedida, embalagem: $embalagem, fabricante: $fabricante, fornecedor: $fornecedor, registroAnvisa: $registroAnvisa, codBarra: $codBarra, qtdeEmbalagem: $qtdeEmbalagem, estoqueMaximo: $estoqueMaximo, estoqueMinimo: $estoqueMinimo, pontoReposicao: $pontoReposicao, codItem: $codItem, prazoEntregaDias: $prazoEntregaDias, validadeAposAtivacaoDias: $validadeAposAtivacaoDias, controleEstoque: $controleEstoque, testeInsumoObrigatorio: $testeInsumoObrigatorio, ativo: $ativo, codFabricante: $codFabricante, codFornecedor: $codFornecedor, codUnidadeMedida: $codUnidadeMedida, codInstituicao: $codInstituicao, ultimaAlteracao: $ultimaAlteracao, tstamp: $tstamp, item: $item, fabricanteItem: $fabricanteItem, fornecedorItem: $fornecedorItem, unidadeMedidaItem: $unidadeMedidaItem, codDestinoResiduo: $codDestinoResiduo)';
+    return 'InsumoModel(cod: $cod, codErp3Albe: $codErp3Albe, nome: $nome, descricao: $descricao, unidadeMedida: $unidadeMedida, embalagem: $embalagem, fabricante: $fabricante, fornecedor: $fornecedor, registroAnvisa: $registroAnvisa, codBarra: $codBarra, qtdeEmbalagem: $qtdeEmbalagem, estoqueMaximo: $estoqueMaximo, estoqueMinimo: $estoqueMinimo, pontoReposicao: $pontoReposicao, codItem: $codItem, prazoEntregaDias: $prazoEntregaDias, validadeAposAtivacaoDias: $validadeAposAtivacaoDias, controleEstoque: $controleEstoque, testeInsumoObrigatorio: $testeInsumoObrigatorio, ativo: $ativo, codFabricantes: $codFabricantes, codFornecedores: $codFornecedores, codUnidadeMedida: $codUnidadeMedida, codInstituicao: $codInstituicao, ultimaAlteracao: $ultimaAlteracao, tstamp: $tstamp, item: $item, fabricanteItem: $fabricanteItem, fornecedorItem: $fornecedorItem, unidadeMedidaItem: $unidadeMedidaItem, codDestinoResiduo: $codDestinoResiduo)';
   }
 
   @override
@@ -723,8 +723,8 @@ class _$InsumoModelImpl extends _InsumoModel with DiagnosticableTreeMixin {
       ..add(
           DiagnosticsProperty('testeInsumoObrigatorio', testeInsumoObrigatorio))
       ..add(DiagnosticsProperty('ativo', ativo))
-      ..add(DiagnosticsProperty('codFabricante', codFabricante))
-      ..add(DiagnosticsProperty('codFornecedor', codFornecedor))
+      ..add(DiagnosticsProperty('codFabricantes', codFabricantes))
+      ..add(DiagnosticsProperty('codFornecedores', codFornecedores))
       ..add(DiagnosticsProperty('codUnidadeMedida', codUnidadeMedida))
       ..add(DiagnosticsProperty('codInstituicao', codInstituicao))
       ..add(DiagnosticsProperty('ultimaAlteracao', ultimaAlteracao))
@@ -772,8 +772,8 @@ abstract class _InsumoModel extends InsumoModel {
       required bool? controleEstoque,
       required bool? testeInsumoObrigatorio,
       required bool? ativo,
-      required int? codFabricante,
-      required int? codFornecedor,
+      required int? codFabricantes,
+      required int? codFornecedores,
       required int? codUnidadeMedida,
       required int? codInstituicao,
       required DateTime? ultimaAlteracao,
@@ -849,11 +849,11 @@ abstract class _InsumoModel extends InsumoModel {
   bool? get ativo;
   set ativo(bool? value);
   @override
-  int? get codFabricante;
-  set codFabricante(int? value);
+  int? get codFabricantes;
+  set codFabricantes(int? value);
   @override
-  int? get codFornecedor;
-  set codFornecedor(int? value);
+  int? get codFornecedores;
+  set codFornecedores(int? value);
   @override
   int? get codUnidadeMedida;
   set codUnidadeMedida(int? value);

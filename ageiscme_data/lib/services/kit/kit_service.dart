@@ -2,10 +2,12 @@ import 'package:ageiscme_data/shared/custom_dio.dart';
 import 'package:ageiscme_models/dto/kit/drop_down_search/kit_drop_down_search_dto.dart';
 import 'package:ageiscme_models/dto/kit/kit_etiqueta_preparo/kit_etiqueta_preparo_dto.dart';
 import 'package:ageiscme_models/dto/kit/kit_search/kit_search_dto.dart';
+import 'package:ageiscme_models/dto/kit/mesma_cor/kit_mesma_cor_dto.dart';
 import 'package:ageiscme_models/filters/kit/kit_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/response_dto/kit/drop_down_search/kit_drop_down_search_response_dto.dart';
 import 'package:ageiscme_models/response_dto/kit/kit_search/kit_search_response_dto.dart';
+import 'package:ageiscme_models/response_dto/kit/mesma_cor/kit_mesma_cor_response_dto.dart';
 import 'package:ageiscme_models/response_dto/kit_etiqueta_preparo_response/kit_etiqueta_preparo_response_dto.dart';
 
 class KitService {
@@ -54,6 +56,15 @@ class KitService {
         _baseRoute + 'etiqueta-preparo',
         dto,
         (dynamic json) => KitEtiquetaPreparoResponseDTO.fromJson(json),
+      );
+
+  Future<(String, KitMesmaCorResponseDTO)?> mesmaCor({
+    required KitMesmaCorDTO dto,
+  }) async =>
+      await _client.post(
+        _baseRoute + 'mesma-cor',
+        dto,
+        (dynamic json) => KitMesmaCorResponseDTO.fromJson(json),
       );
 
   Future<(String message, KitModel kit)?> save(

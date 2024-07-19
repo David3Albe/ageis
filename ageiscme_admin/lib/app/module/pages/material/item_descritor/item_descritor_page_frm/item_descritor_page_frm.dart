@@ -1,5 +1,4 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/centro_custo/centro_custo_cubit.dart';
-import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/embalagem/embalagem_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/grupo_material/grupo_material_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/processo_tipo/processo_tipo_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/tamanho/tamanho_cubit.dart';
@@ -14,6 +13,7 @@ import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_number_float_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
@@ -25,6 +25,7 @@ import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
+import 'package:compartilhados/functions/format/number_format_parser.dart';
 import 'package:compartilhados/functions/image_helper/image_object_model.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
@@ -35,9 +36,11 @@ class ItemDescritorPageFrm extends StatefulWidget {
     required this.itemDescritor,
     required this.onSaved,
     required this.onCancel,
+    required this.instituicao,
   }) : super(key: key);
 
   final ItemDescritorModel itemDescritor;
+  final InstituicaoModel instituicao;
   final void Function(String) onSaved;
   final void Function() onCancel;
 
@@ -49,7 +52,7 @@ class ItemDescritorPageFrm extends StatefulWidget {
 class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
   _ItemDescritorPageFrmState({required this.itemDescritor});
   late final GrupoMaterialCubit grupoMaterialCubit;
-  late final EmbalagemCubit embalagemCubit;
+  // late final EmbalagemCubit embalagemCubit;
   late final CentroCustoCubit centroCustoCubit;
   late final ProcessoTipoCubit processoTipoCubit;
   late final TamanhoCubit tamanhoCubit;
@@ -72,10 +75,12 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
     },
   );
 
-  late final TextFieldNumberWidget txtCM = TextFieldNumberWidget(
-    placeholder: '(CM)',
+  late final TextFieldNumberFloatWidget txtCM = TextFieldNumberFloatWidget(
+    placeholder: 'CM *',
     onChanged: (String? str) {
-      itemDescritor.cm = double.parse(txtCM.text);
+      itemDescritor.cm = str == null || str.isEmpty
+          ? null
+          : double.parse(str.replaceAll('.', '').replaceAll(',', '.'));
       _updateDescricaoCompleta();
     },
   );
@@ -88,6 +93,7 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
   );
 
   late final TextFieldStringWidget txtDescricaoCompleta = TextFieldStringWidget(
+    readOnly: true,
     placeholder: 'Descrição Completa',
     onChanged: (String? str) {
       itemDescritor.descricaoCompleta = txtDescricaoCompleta.text;
@@ -133,7 +139,7 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
   late bool Function() validateTipoProcessoNormal;
   late bool Function() validateTipoProcessoUrgencia;
   late bool Function() validateGrupoMaterial;
-  late bool Function() validateEmbalagem;
+  // late bool Function() validateEmbalagem;
 
   final ScrollController scroll = ScrollController();
 
@@ -141,14 +147,26 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
   void initState() {
     grupoMaterialCubit = GrupoMaterialCubit();
     grupoMaterialCubit.loadAll();
-    embalagemCubit = EmbalagemCubit();
-    embalagemCubit.loadAll();
+    // embalagemCubit = EmbalagemCubit();
+    // embalagemCubit.loadAll();
     centroCustoCubit = CentroCustoCubit();
     centroCustoCubit.loadAll();
     processoTipoCubit = ProcessoTipoCubit();
     processoTipoCubit.loadAll();
     tamanhoCubit = TamanhoCubit();
     tamanhoCubit.loadAll();
+
+    txtCM.validators.add((str) {
+      if (str.isEmpty) {
+        return 'Obrigatório';
+      }
+      double? cm =
+          double.tryParse(str.replaceAll('.', '').replaceAll(',', '.'));
+      if (cm == null) {
+        return 'Número inválido';
+      }
+      return '';
+    });
 
     txtDescricaoCurta.addValidator((String str) {
       if (str.isEmpty) {
@@ -199,16 +217,24 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
 
   void _updateDescricaoCompleta() {
     final descricaoCurta = txtDescricaoCurta.text;
-    final cm = txtCM.text;
+    String cm = txtCM.text;
+    String newCM = '';
+    if (cm.isNotEmpty) {
+      newCM = cm.replaceAll('.', '').replaceAll(',', '.');
+      double? value = double.tryParse(newCM);
+      if (value != null) {
+        newCM = NumberFormatParser.toFixed(value, 2);
+      }
+    }
 
-    if (descricaoCurta.isNotEmpty && cm.isNotEmpty) {
-      txtDescricaoCompleta.text = '$descricaoCurta - $cm';
+    if (descricaoCurta.isNotEmpty && newCM.isNotEmpty) {
+      txtDescricaoCompleta.text = '$descricaoCurta - $newCM CM';
       itemDescritor.descricaoCompleta = txtDescricaoCompleta.text;
-    } else if (descricaoCurta.isNotEmpty && cm.isEmpty) {
+    } else if (descricaoCurta.isNotEmpty && newCM.isEmpty) {
       txtDescricaoCompleta.text = '$descricaoCurta';
       itemDescritor.descricaoCompleta = txtDescricaoCompleta.text;
-    } else if (descricaoCurta.isEmpty && cm.isNotEmpty) {
-      txtDescricaoCompleta.text = '$cm';
+    } else if (descricaoCurta.isEmpty && newCM.isNotEmpty) {
+      txtDescricaoCompleta.text = '$newCM CM';
       itemDescritor.descricaoCompleta = txtDescricaoCompleta.text;
     }
   }
@@ -229,11 +255,9 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
     descricaoCurtaController.text = itemDescritor.descricaoCurta.toString();
     cmController.text = itemDescritor.cm.toString();
 
-    if (itemDescritor.cm == 0 || itemDescritor.cm == null) {
-      txtCM.text = '';
-    } else {
-      txtCM.text = itemDescritor.cm.toString();
-    }
+    txtCM.text = itemDescritor.cm == null
+        ? ''
+        : NumberFormatParser.toFixed(itemDescritor.cm, 2);
 
     if (itemDescritor.peso == 0 || itemDescritor.peso == null) {
       txtPeso.text = '';
@@ -294,63 +318,12 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(top: 5.0),
-                              child: txtDescricaoCurta,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: BlocBuilder<GrupoMaterialCubit,
-                                  GrupoMaterialState>(
-                                bloc: grupoMaterialCubit,
-                                builder: (context, state) {
-                                  if (state.loading) {
-                                    return const Center(
-                                      child: LoadingWidget(),
-                                    );
-                                  }
-                                  List<GrupoMaterialModel> gruposMateriais =
-                                      state.grupoMateriais;
-                                  gruposMateriais.sort(
-                                    (a, b) => a.nome!.compareTo(b.nome!),
-                                  );
-                                  GrupoMaterialModel? grupoMaterial =
-                                      gruposMateriais
-                                          .where(
-                                            (element) =>
-                                                element.cod ==
-                                                itemDescritor.codGrupoItem,
-                                          )
-                                          .firstOrNull;
-                                  return DropDownSearchWidget(
-                                    validator: (val) =>
-                                        val == null ? 'Obrigatório' : null,
-                                    validateBuilder:
-                                        (context, validateMethodBuilder) =>
-                                            validateGrupoMaterial =
-                                                validateMethodBuilder,
-                                    initialValue: grupoMaterial,
-                                    sourceList: gruposMateriais
-                                        .where(
-                                          (element) => element.ativo == true,
-                                        )
-                                        .toList(),
-                                    textFunction: (p0) => p0.GetGrupoNomeText(),
-                                    onChanged: (value) =>
-                                        itemDescritor.codGrupoItem = value?.cod,
-                                    placeholder: 'Grupo Item *',
-                                  );
-                                },
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
                               child: Row(
                                 children: [
-                                  Expanded(
-                                    child: txtCM,
-                                  ),
+                                  Expanded(child: txtDescricaoCurta),
                                   const SizedBox(width: 16.0),
                                   Expanded(
-                                    child: txtPeso,
+                                    child: txtCM,
                                   ),
                                 ],
                               ),
@@ -358,6 +331,68 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                             Padding(
                               padding: const EdgeInsets.only(top: 5.0),
                               child: txtDescricaoCompleta,
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: BlocBuilder<GrupoMaterialCubit,
+                                        GrupoMaterialState>(
+                                      bloc: grupoMaterialCubit,
+                                      builder: (context, state) {
+                                        if (state.loading) {
+                                          return const Center(
+                                            child: LoadingWidget(),
+                                          );
+                                        }
+                                        List<GrupoMaterialModel>
+                                            gruposMateriais =
+                                            state.grupoMateriais;
+                                        gruposMateriais.sort(
+                                          (a, b) => a.nome!.compareTo(b.nome!),
+                                        );
+                                        GrupoMaterialModel? grupoMaterial =
+                                            gruposMateriais
+                                                .where(
+                                                  (element) =>
+                                                      element.cod ==
+                                                      itemDescritor
+                                                          .codGrupoItem,
+                                                )
+                                                .firstOrNull;
+                                        return DropDownSearchWidget(
+                                          validator: (val) => val == null
+                                              ? 'Obrigatório'
+                                              : null,
+                                          validateBuilder: (
+                                            context,
+                                            validateMethodBuilder,
+                                          ) =>
+                                              validateGrupoMaterial =
+                                                  validateMethodBuilder,
+                                          initialValue: grupoMaterial,
+                                          sourceList: gruposMateriais
+                                              .where(
+                                                (element) =>
+                                                    element.ativo == true,
+                                              )
+                                              .toList(),
+                                          textFunction: (p0) =>
+                                              p0.GetGrupoNomeText(),
+                                          onChanged: (value) => itemDescritor
+                                              .codGrupoItem = value?.cod,
+                                          placeholder: 'Grupo Item *',
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 16.0),
+                                  Expanded(
+                                    child: txtPeso,
+                                  ),
+                                ],
+                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 5.0),
@@ -470,8 +505,24 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                                           (element) => element.ativo == true,
                                         )
                                         .toList(),
-                                    onChanged: (value) => itemDescritor
-                                        .codTipoProcessoNormal = value?.cod,
+                                    onChanged: (value) {
+                                      itemDescritor.codTipoProcessoNormal =
+                                          value?.cod;
+                                      itemDescritor.tipoProcesso = value;
+                                      if (widget.instituicao.fluxoAlternado !=
+                                          true) {
+                                        itemDescritor.codTipoProcessoUrgencia =
+                                            value?.cod;
+                                        itemDescritor.tipoProcessoUrgencia =
+                                            value;
+                                        itemDescritor
+                                                .codTipoProcessoEmergencia =
+                                            value?.cod;
+                                        itemDescritor.tipoProcessoEmergencia =
+                                            value;
+                                        processoTipoCubit.refresh();
+                                      }
+                                    },
                                     placeholder:
                                         'Tipo do Processo para prioridade Normal *',
                                   );
@@ -502,6 +553,9 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                                           )
                                           .firstOrNull;
                                   return DropDownSearchWidget(
+                                    readOnly:
+                                        widget.instituicao.fluxoAlternado !=
+                                            true,
                                     initialValue: processoTipo,
                                     validateBuilder:
                                         (context, validateMethodBuilder) =>
@@ -514,8 +568,12 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                                           (element) => element.ativo == true,
                                         )
                                         .toList(),
-                                    onChanged: (value) => itemDescritor
-                                        .codTipoProcessoUrgencia = value?.cod,
+                                    onChanged: (value) {
+                                      itemDescritor.codTipoProcessoUrgencia =
+                                          value?.cod;
+                                      itemDescritor.tipoProcessoUrgencia =
+                                          value;
+                                    },
                                     placeholder:
                                         'Tipo do Processo para prioridade Urgência *',
                                   );
@@ -559,55 +617,55 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                               padding: const EdgeInsets.only(top: 5.0),
                               child: Row(
                                 children: [
-                                  Expanded(
-                                    child: BlocBuilder<EmbalagemCubit,
-                                        EmbalagemState>(
-                                      bloc: embalagemCubit,
-                                      builder: (context, state) {
-                                        if (state.loading == true) {
-                                          return const Center(
-                                            child: LoadingWidget(),
-                                          );
-                                        }
-                                        List<EmbalagemModel> embalagens =
-                                            state.embalagens;
-                                        embalagens.sort(
-                                          (a, b) => a.nome!.compareTo(b.nome!),
-                                        );
-                                        EmbalagemModel? embalagem = embalagens
-                                            .where(
-                                              (element) =>
-                                                  element.cod ==
-                                                  itemDescritor.codEmbalagem,
-                                            )
-                                            .firstOrNull;
-                                        return DropDownSearchWidget(
-                                          initialValue: embalagem,
-                                          validator: (val) => val == null
-                                              ? 'Obrigatório'
-                                              : null,
-                                          validateBuilder: (
-                                            context,
-                                            validateMethodBuilder,
-                                          ) =>
-                                              validateEmbalagem =
-                                                  validateMethodBuilder,
-                                          textFunction: (p0) =>
-                                              p0.GetDropDownText(),
-                                          sourceList: embalagens
-                                              .where(
-                                                (element) =>
-                                                    element.ativo == true,
-                                              )
-                                              .toList(),
-                                          onChanged: (value) => itemDescritor
-                                              .codEmbalagem = value?.cod,
-                                          placeholder: 'Embalagem *',
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                  const SizedBox(width: 16.0),
+                                  // Expanded(
+                                  //   child: BlocBuilder<EmbalagemCubit,
+                                  //       EmbalagemState>(
+                                  //     bloc: embalagemCubit,
+                                  //     builder: (context, state) {
+                                  //       if (state.loading == true) {
+                                  //         return const Center(
+                                  //           child: LoadingWidget(),
+                                  //         );
+                                  //       }
+                                  //       List<EmbalagemModel> embalagens =
+                                  //           state.embalagens;
+                                  //       embalagens.sort(
+                                  //         (a, b) => a.nome!.compareTo(b.nome!),
+                                  //       );
+                                  //       EmbalagemModel? embalagem = embalagens
+                                  //           .where(
+                                  //             (element) =>
+                                  //                 element.cod ==
+                                  //                 itemDescritor.codEmbalagem,
+                                  //           )
+                                  //           .firstOrNull;
+                                  //       return DropDownSearchWidget(
+                                  //         initialValue: embalagem,
+                                  //         validator: (val) => val == null
+                                  //             ? 'Obrigatório'
+                                  //             : null,
+                                  //         validateBuilder: (
+                                  //           context,
+                                  //           validateMethodBuilder,
+                                  //         ) =>
+                                  //             validateEmbalagem =
+                                  //                 validateMethodBuilder,
+                                  //         textFunction: (p0) =>
+                                  //             p0.GetDropDownText(),
+                                  //         sourceList: embalagens
+                                  //             .where(
+                                  //               (element) =>
+                                  //                   element.ativo == true,
+                                  //             )
+                                  //             .toList(),
+                                  //         onChanged: (value) => itemDescritor
+                                  //             .codEmbalagem = value?.cod,
+                                  //         placeholder: 'Embalagem *',
+                                  //       );
+                                  //     },
+                                  //   ),
+                                  // ),
+                                  // const SizedBox(width: 16.0),
                                   Expanded(
                                     child: BlocBuilder<CentroCustoCubit,
                                         CentroCustoState>(
@@ -815,8 +873,9 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
     bool tipoProcessoNormalValid = validateTipoProcessoNormal();
     bool tipoProcessoUrgenciaValid = validateTipoProcessoUrgencia();
     bool grupoMaterialValid = validateGrupoMaterial();
-    bool embalagemValid = validateEmbalagem();
-    if (!descricaoCurtaValid) {
+    // bool embalagemValid = validateEmbalagem();
+    bool cmValid = txtCM.valid;
+    if (!descricaoCurtaValid || !cmValid) {
       scroll.jumpTo(0);
     } else if (!grupoMaterialValid) {
       scroll.jumpTo(50);
@@ -826,16 +885,18 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
       scroll.jumpTo(300);
     } else if (!tipoProcessoUrgenciaValid) {
       scroll.jumpTo(350);
-    } else if (!embalagemValid) {
-      scroll.jumpTo(350);
-    }
+    } 
+    // else if (!embalagemValid) {
+    //   scroll.jumpTo(350);
+    // }
     if (!descricaoCurtaValid ||
         !descricaoCompletaValid ||
         !limiteProcessoValid ||
         !tipoProcessoNormalValid ||
         !tipoProcessoUrgenciaValid ||
         !grupoMaterialValid ||
-        !embalagemValid) return;
+        // !embalagemValid ||
+        !cmValid) return;
     bool valido = await validaItensConsignados();
     if (!valido) return;
     cubit.save(itemDescritor, widget.onSaved);

@@ -84,14 +84,16 @@ class _CustomNavigationBarWidgetState extends State<CustomNavigationBarWidget>
       child: BlocBuilder<ItemsMenuCubit, List<ItemMenuModel>>(
         bloc: cubit,
         builder: (context, itens) {
-          return BlocConsumer<CustomNavigationBarCubit,
-              CustomNavigationBarState>(
-            listener: (context, state) => changeExpanded(state.expanded),
-            builder: (context, state) => CustomNavigationBarAnimated(
-              listenable: _widthAnimation,
-              itens: itens,
-              expanded: state.expanded,
-              toogleExpand: setExpanded,
+          return ExcludeFocusTraversal(
+            child: BlocConsumer<CustomNavigationBarCubit,
+                CustomNavigationBarState>(
+              listener: (context, state) => changeExpanded(state.expanded),
+              builder: (context, state) => CustomNavigationBarAnimated(
+                listenable: _widthAnimation,
+                itens: itens,
+                expanded: state.expanded,
+                toogleExpand: setExpanded,
+              ),
             ),
           );
         },

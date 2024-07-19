@@ -7,7 +7,9 @@ import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_wi
 import 'package:ageiscme_data/query_services/insumo_estoque/consulta_insumo_estoque_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/query_filters/insumo_estoque/consulta_insumo_estoque_filter.dart';
+import 'package:ageiscme_models/query_models/insumo_estoque/consulta_insumo_estoque_model.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
@@ -29,17 +31,24 @@ class ConsultaInsumoEstoquePage extends StatefulWidget {
 }
 
 class _ConsultaInsumoEstoquePageState extends State<ConsultaInsumoEstoquePage> {
-  static Widget getCustomRenderer(
+  late ConsultaInsumoEstoqueModel? Function(PlutoRow) getRowObj;
+
+  Widget getCustomRenderer(
     PlutoColumnRendererContext renderContext, {
     TextAlign? textAlign = TextAlign.start,
   }) {
+    ConsultaInsumoEstoqueModel? insumo = getRowObj(renderContext.row);
     Color cor = Cores.corTexto;
-    if (renderContext.row.cells['qtdeDisponivel']?.value <
-        renderContext.row.cells['estoqueMinimo']?.value) {
+    double? qtdeDisponivel = insumo?.qtdeDisponivel;
+    double? estoqueMinimo = insumo?.estoqueMinimo;
+    if (qtdeDisponivel != null &&
+        estoqueMinimo != null &&
+        qtdeDisponivel < estoqueMinimo) {
       cor = Cores.corTextoVermelho;
     }
+
     return Text(
-      renderContext.cell.value.toString(),
+      renderContext.cell.value?.toString() ?? '',
       textAlign: textAlign,
       style: TextStyle(
         overflow: TextOverflow.ellipsis,
@@ -48,7 +57,7 @@ class _ConsultaInsumoEstoquePageState extends State<ConsultaInsumoEstoquePage> {
     );
   }
 
-  final List<CustomDataColumn> colunas = [
+  late final List<CustomDataColumn> colunas = [
     CustomDataColumn(
       text: 'Insumo',
       field: 'nomeInsumo',
@@ -80,29 +89,29 @@ class _ConsultaInsumoEstoquePageState extends State<ConsultaInsumoEstoquePage> {
     CustomDataColumn(
       text: 'Estoque Minímo',
       field: 'estoqueMinimo',
+      type: CustomDataColumnType.Number,
       customRenderer: (context) => getCustomRenderer(
         context,
         textAlign: TextAlign.end,
       ),
-      type: CustomDataColumnType.Number,
     ),
     CustomDataColumn(
       text: 'Estoque Máximo',
       field: 'estoqueMaximo',
+      type: CustomDataColumnType.Number,
       customRenderer: (context) => getCustomRenderer(
         context,
         textAlign: TextAlign.end,
       ),
-      type: CustomDataColumnType.Number,
     ),
     CustomDataColumn(
       text: 'Prazo Entrega (Dias)',
       field: 'prazoEntregaDias',
+      type: CustomDataColumnType.Number,
       customRenderer: (context) => getCustomRenderer(
         context,
         textAlign: TextAlign.end,
       ),
-      type: CustomDataColumnType.Number,
     ),
   ];
 
@@ -131,10 +140,18 @@ class _ConsultaInsumoEstoquePageState extends State<ConsultaInsumoEstoquePage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        FilterButtonWidget(
-          onPressed: () => {
-            openModal(context),
-          },
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: () => bloc.loadInsumoEstoque(filter),
+            ),
+            const Padding(padding: EdgeInsets.only(left: 5)),
+            FilterButtonWidget(
+              onPressed: () => {
+                openModal(context),
+              },
+            ),
+          ],
         ),
         BlocListener<ConsultaInsumoEstoquePageCubit,
             ConsultaInsumoEstoquePageState>(
@@ -155,6 +172,8 @@ class _ConsultaInsumoEstoquePageState extends State<ConsultaInsumoEstoquePage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    getObjectByRowMethod: (context, getObjectByRowMethod) =>
+                        getRowObj = getObjectByRowMethod,
                     smallRows: true,
                     columns: colunas,
                     items: state.insumosEstoques,

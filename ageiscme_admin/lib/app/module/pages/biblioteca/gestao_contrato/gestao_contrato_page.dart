@@ -3,6 +3,7 @@ import 'package:ageiscme_admin/app/module/pages/biblioteca/gestao_contrato/gesta
 import 'package:ageiscme_data/services/gestao_contrato/gestao_contrato_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -48,13 +49,21 @@ class _GestaoContratoPageState extends State<GestaoContratoPage> {
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        AddButtonWidget(
-          onPressed: () => {
-            openModal(
-              context,
-              GestaoContratoModel.empty(),
+        Row(
+          children: [
+            RefreshButtonWidget(
+              onPressed: () => bloc.loadGestaoContrato(),
             ),
-          },
+            const Padding(padding: EdgeInsets.only(left: 5)),
+            AddButtonWidget(
+              onPressed: () => {
+                openModal(
+                  context,
+                  GestaoContratoModel.empty(),
+                ),
+              },
+            ),
+          ],
         ),
         BlocListener<GestaoContratoPageCubit, GestaoContratoPageState>(
           bloc: bloc,

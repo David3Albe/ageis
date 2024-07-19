@@ -13,6 +13,7 @@ sealed class InsumoSaldoFilter with _$InsumoSaldoFilter {
     bool? dataVaidadeMaiorQueAtual,
     int? numeroRegistros,
     bool? ordenarPorDataValidadeAscendente,
+    String? status,
   }) = _InsumoSaldoFilter;
 
   factory InsumoSaldoFilter.fromJson(Map<String, Object?> json) =>
