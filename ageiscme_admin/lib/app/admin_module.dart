@@ -33,6 +33,7 @@ import 'package:ageiscme_admin/app/module/pages/colaborador/sigla/sigla_page.dar
 import 'package:ageiscme_admin/app/module/pages/colaborador/tipo_afastamento/tipo_afastamento_page.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/treinamento_registro/treinamento_registro_page.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/turno/turno_page.dart';
+import 'package:ageiscme_admin/app/module/pages/equipamento/consulta_ciclos/consulta_ciclos_page.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/consulta_manutencao/consulta_manutencao_page.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/consulta_registro_servico/consulta_registro_servico_page.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento/equipamento_page.dart';
@@ -518,6 +519,10 @@ class AdminModule extends Module {
         createParallelRoute(
           '/colaborador/escala',
           child: (context) => const EscalaPage(),
+        ),
+        createParallelRoute(
+          '/equipamento/consulta-ciclos',
+          child: (context) => const ConsultaCiclosPage(),
         ),
       ],
     );

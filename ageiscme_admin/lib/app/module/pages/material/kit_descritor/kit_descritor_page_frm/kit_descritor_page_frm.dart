@@ -302,7 +302,7 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
                                         )
                                         .toList(),
                                     onChanged: (value) {
-                                     kitDescritor.codTipoProcessoNormal =
+                                      kitDescritor.codTipoProcessoNormal =
                                           value?.cod;
                                       kitDescritor.tipoProcesso = value;
                                       if (widget.instituicao.fluxoAlternado !=
@@ -311,8 +311,7 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
                                             value?.cod;
                                         kitDescritor.tipoProcessoUrgencia =
                                             value;
-                                        kitDescritor
-                                                .codTipoProcessoEmergencia =
+                                        kitDescritor.codTipoProcessoEmergencia =
                                             value?.cod;
                                         kitDescritor.tipoProcessoEmergencia =
                                             value;
@@ -552,6 +551,7 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
                     ),
                     if (kitDescritor.cod != null && kitDescritor.cod != 0)
                       CustomPopupItemHistoryModel.getHistoryItem(
+                        title: 'Descritor de Kit ${kitDescritor.cod}',
                         child: HistoricoPage(
                           pk: kitDescritor.cod!,
                           termo: 'KIT_DESCRITOR',

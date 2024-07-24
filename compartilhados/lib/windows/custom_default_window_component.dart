@@ -15,6 +15,7 @@ class CustomDefaultWindowComponent extends StatefulWidget {
     required this.remove,
     required this.chave,
     required this.ofssetBase,
+    required this.customWindow,
     this.height = 400,
     this.width = 400,
     this.onEnter,
@@ -32,6 +33,7 @@ class CustomDefaultWindowComponent extends StatefulWidget {
   final void Function(int) setToLast;
   final void Function(int) setToFirst;
   final void Function(int) remove;
+  final bool customWindow;
 
   @override
   State<CustomDefaultWindowComponent> createState() =>
@@ -175,186 +177,192 @@ class CustomDefaultWindowComponentState
               : offset.dy,
       child: Material(
         elevation: 5,
-        child: Column(
-          children: [
-            MouseRegion(
-              cursor: maximizado == true || maximizadoMetade
-                  ? SystemMouseCursors.basic
-                  : SystemMouseCursors.move,
-              child: Row(
-                children: [
-                  GestureDetector(
-                    onTap: onEnter,
-                    onPanUpdate: (details) {
-                      WindowsHelper.SetToLast(widget.chave);
-                      setState(() {
-                        double newOffsetY = offset.dy + details.delta.dy;
-                        if (newOffsetY < -10) {
-                          setState(() {
-                            maximizado = true;
-                            offset = Offset(
-                              offset.dx + details.delta.dx,
-                              20,
-                            );
-                          });
-                          return;
-                        }
-                        offset = Offset(
-                          offset.dx + details.delta.dx,
-                          offset.dy + details.delta.dy,
-                        );
-                      });
-                    },
-                    child: Container(
-                      decoration: BoxDecoration(
-                        border:
-                            Border.all(color: Colors.grey.shade400, width: 1.5),
-                        color: absorbing
-                            ? Colors.grey.shade200
-                            : Colors.grey.shade100,
-                      ),
-                      width: maximizado
-                          ? getMaximizedWidth(size) + 30
-                          : maximizadoMetade
-                              ? getMaximizedMetadeWidth(size) + 30.5
-                              : width + 31,
-                      child: Row(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.only(left: 8),
-                          ),
-                          Expanded(
-                            child: Text(
-                              widget.title,
-                              overflow: TextOverflow.ellipsis,
-                              style: Fontes.getRoboto(fontSize: 14),
+        child: ExcludeFocusTraversal(
+          excluding: absorbing || !WindowsHelper.isFirst(widget.chave),
+          child: Column(
+            children: [
+              MouseRegion(
+                cursor: maximizado == true || maximizadoMetade
+                    ? SystemMouseCursors.basic
+                    : SystemMouseCursors.move,
+                child: Row(
+                  children: [
+                    GestureDetector(
+                      onTap: onEnter,
+                      onPanUpdate: (details) {
+                        WindowsHelper.SetToLast(widget.chave);
+                        setState(() {
+                          double newOffsetY = offset.dy + details.delta.dy;
+                          if (newOffsetY < -10) {
+                            setState(() {
+                              maximizado = true;
+                              offset = Offset(
+                                offset.dx + details.delta.dx,
+                                20,
+                              );
+                            });
+                            return;
+                          }
+                          offset = Offset(
+                            offset.dx + details.delta.dx,
+                            offset.dy + details.delta.dy,
+                          );
+                        });
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                              color: Colors.grey.shade400, width: 1.5),
+                          color: absorbing
+                              ? Colors.grey.shade200
+                              : Colors.grey.shade100,
+                        ),
+                        width: maximizado
+                            ? getMaximizedWidth(size) + 30
+                            : maximizadoMetade
+                                ? getMaximizedMetadeWidth(size) + 30.5
+                                : width + 31,
+                        child: Row(
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.only(left: 8),
                             ),
-                          ),
-                          const Padding(
-                            padding: EdgeInsets.only(right: 5.0),
-                            child: WindowExtraActions(),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 5.0),
-                            child: Tooltip(
-                              message: 'Minimizar',
-                              child: IconButton(
-                                onPressed: minimizado ? normalizar : minimizar,
-                                icon: minimizado
-                                    ? const Icon(Icons.splitscreen)
-                                    : const Icon(Icons.minimize),
+                            Expanded(
+                              child: Text(
+                                widget.title,
+                                overflow: TextOverflow.ellipsis,
+                                style: Fontes.getRoboto(fontSize: 14),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 5.0),
-                            child: Tooltip(
-                              message: 'Tela cheia',
-                              child: IconButton(
-                                onPressed: maximizado ? normalizar : maximizar,
-                                icon: maximizado
-                                    ? const Icon(Icons.fit_screen)
-                                    : const Icon(Icons.fullscreen),
-                              ),
+                            const Padding(
+                              padding: EdgeInsets.only(right: 5.0),
+                              child: WindowExtraActions(),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 5.0),
-                            child: Tooltip(
-                              message: 'Expandir',
-                              child: IconButton(
-                                onPressed: maximizadoMetade
-                                    ? normalizar
-                                    : maximizarMetade,
-                                icon: maximizadoMetade
-                                    ? const Icon(Icons.screen_lock_landscape)
-                                    : const Icon(Icons.smart_screen),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(right: 5.0),
-                            child: Stack(
-                              children: [
-                                TooltipVisibility(
-                                  visible: !tooltipDisabled,
-                                  child: Tooltip(
-                                    message: 'Fechar',
-                                    child: IconButton(
-                                      onPressed: () =>
-                                          widget.remove(widget.chave),
-                                      icon: const Icon(Symbols.close),
-                                    ),
-                                  ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 5.0),
+                              child: Tooltip(
+                                message: 'Minimizar',
+                                child: IconButton(
+                                  onPressed:
+                                      minimizado ? normalizar : minimizar,
+                                  icon: minimizado
+                                      ? const Icon(Icons.splitscreen)
+                                      : const Icon(Icons.minimize),
                                 ),
-                              ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Visibility(
-              visible: minimizado == false,
-              maintainState: true,
-              child: Container(
-                decoration: BoxDecoration(
-                  color:
-                      absorbing ? Colors.grey.shade200 : Colors.grey.shade100,
-                  border: Border.all(color: Colors.grey.shade400, width: 1.5),
-                ),
-                child: BorderWindowWidget(
-                  onEnter: onEnter,
-                  cursor: SystemMouseCursors.resizeRight,
-                  onPanUpdate: (details) =>
-                      onPanUpdate(details, false, absorbing),
-                  padding: const EdgeInsets.only(right: 6),
-                  widget: BorderWindowWidget(
-                    onEnter: onEnter,
-                    cursor: SystemMouseCursors.resizeLeft,
-                    onPanUpdate: (details) =>
-                        onPanUpdate(details, true, absorbing),
-                    padding: const EdgeInsets.only(left: 6),
-                    widget: BorderWindowWidget(
-                      onEnter: onEnter,
-                      cursor: SystemMouseCursors.resizeDown,
-                      onPanUpdate: (details) =>
-                          onPanUpdate(details, false, absorbing),
-                      padding: const EdgeInsets.only(bottom: 6),
-                      widget: MouseRegion(
-                        cursor: SystemMouseCursors.basic,
-                        child: GestureDetector(
-                          onPanUpdate: (details) {},
-                          onTap: onEnter,
-                          child: IgnorePointer(
-                            ignoring: absorbing,
-                            child: Theme(
-                              data: Theme.of(ToastUtils.routerOutletContext!),
-                              child: Material(
-                                elevation: 0,
-                                color: Cores.materialCorPrincipal.shade300,
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                        height: maximizado || maximizadoMetade
-                                            ? getMaximizedHeight(size)
-                                            : height,
-                                        width: maximizado
-                                            ? getMaximizedWidth(size)
-                                            : maximizadoMetade
-                                                ? getMaximizedMetadeWidth(size)
-                                                : width,
-                                        child: widget.child,
+                            Padding(
+                              padding: const EdgeInsets.only(right: 5.0),
+                              child: Tooltip(
+                                message: 'Tela cheia',
+                                child: IconButton(
+                                  onPressed:
+                                      maximizado ? normalizar : maximizar,
+                                  icon: maximizado
+                                      ? const Icon(Icons.fit_screen)
+                                      : const Icon(Icons.fullscreen),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 5.0),
+                              child: Tooltip(
+                                message: 'Expandir',
+                                child: IconButton(
+                                  onPressed: maximizadoMetade
+                                      ? normalizar
+                                      : maximizarMetade,
+                                  icon: maximizadoMetade
+                                      ? const Icon(Icons.screen_lock_landscape)
+                                      : const Icon(Icons.smart_screen),
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 5.0),
+                              child: Stack(
+                                children: [
+                                  TooltipVisibility(
+                                    visible: !tooltipDisabled,
+                                    child: Tooltip(
+                                      message: 'Fechar',
+                                      child: IconButton(
+                                        onPressed: () =>
+                                            widget.remove(widget.chave),
+                                        icon: const Icon(Symbols.close),
                                       ),
                                     ),
-                                  ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Visibility(
+                visible: minimizado == false,
+                maintainState: true,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color:
+                        absorbing ? Colors.grey.shade200 : Colors.grey.shade100,
+                    border: Border.all(color: Colors.grey.shade400, width: 1.5),
+                  ),
+                  child: BorderWindowWidget(
+                    onEnter: onEnter,
+                    cursor: SystemMouseCursors.resizeRight,
+                    onPanUpdate: (details) =>
+                        onPanUpdate(details, false, absorbing),
+                    padding: const EdgeInsets.only(right: 6),
+                    widget: BorderWindowWidget(
+                      onEnter: onEnter,
+                      cursor: SystemMouseCursors.resizeLeft,
+                      onPanUpdate: (details) =>
+                          onPanUpdate(details, true, absorbing),
+                      padding: const EdgeInsets.only(left: 6),
+                      widget: BorderWindowWidget(
+                        onEnter: onEnter,
+                        cursor: SystemMouseCursors.resizeDown,
+                        onPanUpdate: (details) =>
+                            onPanUpdate(details, false, absorbing),
+                        padding: const EdgeInsets.only(bottom: 6),
+                        widget: MouseRegion(
+                          cursor: SystemMouseCursors.basic,
+                          child: GestureDetector(
+                            onPanUpdate: (details) {},
+                            onTap: onEnter,
+                            child: IgnorePointer(
+                              ignoring: absorbing ,
+                              child: Theme(
+                                data: Theme.of(ToastUtils.routerOutletContext!),
+                                child: Material(
+                                  elevation: 0,
+                                  color: Cores.materialCorPrincipal.shade300,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                          height: maximizado || maximizadoMetade
+                                              ? getMaximizedHeight(size)
+                                              : height,
+                                          width: maximizado
+                                              ? getMaximizedWidth(size)
+                                              : maximizadoMetade
+                                                  ? getMaximizedMetadeWidth(
+                                                      size)
+                                                  : width,
+                                          child: widget.child,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
@@ -365,8 +373,8 @@ class CustomDefaultWindowComponentState
                   ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

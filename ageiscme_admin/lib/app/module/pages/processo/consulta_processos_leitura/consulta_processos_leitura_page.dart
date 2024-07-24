@@ -70,7 +70,7 @@ class _ConsultaProcessosLeituraPageState
     }
 
     return Text(
-      renderContext.cell.value.toString(),
+      renderContext.cell.value?.toString() ?? '',
       textAlign: textAlign,
       style: TextStyle(
         overflow: TextOverflow.ellipsis,
@@ -105,6 +105,7 @@ class _ConsultaProcessosLeituraPageState
         field: 'codBarraKit',
         customRenderer: getCustomRenderer,
         width: 160,
+        type: CustomDataColumnType.Text,
       ),
       CustomDataColumn(
         text: 'Kit',

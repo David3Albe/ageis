@@ -17,9 +17,9 @@ class PlutoGridXmlExport {
     required this.columnsToIgnore,
   });
 
-  void export() {
-    LoadingController loading = LoadingController(context: context);
-    Future.delayed(const Duration(milliseconds: 200)).then((value) {
+  Future export() async{
+    LoadingController? loading = LoadingController(context: context);
+    await Future.delayed(const Duration(milliseconds: 200)).then((value) {
       _export().then((value) => loading.closeDefault());
     });
   }

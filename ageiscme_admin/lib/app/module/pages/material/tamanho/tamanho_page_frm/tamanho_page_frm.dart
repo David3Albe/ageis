@@ -143,6 +143,7 @@ class _TamanhoPageFrmState extends State<TamanhoPageFrm> {
                         CustomPopupMenuWidget(
                           items: [
                             CustomPopupItemHistoryModel.getHistoryItem(
+                              title: 'Tamanho ${tamanho.cod}',
                               child: HistoricoPage(
                                 pk: tamanho.cod!,
                                 termo: 'TAMANHO',

@@ -80,7 +80,7 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
     onChanged: (String? str) {
       itemDescritor.cm = str == null || str.isEmpty
           ? null
-          : double.parse(str.replaceAll('.', '').replaceAll(',', '.'));
+          : double.parse(str);
       _updateDescricaoCompleta();
     },
   );
@@ -811,6 +811,7 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                     ),
                     if (itemDescritor.cod != null && itemDescritor.cod != 0)
                       CustomPopupItemHistoryModel.getHistoryItem(
+                        title: 'Descritor de Item ${itemDescritor.cod}',
                         child: HistoricoPage(
                           pk: itemDescritor.cod!,
                           termo: 'ITEM_DESCRITOR',
@@ -885,7 +886,7 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
       scroll.jumpTo(300);
     } else if (!tipoProcessoUrgenciaValid) {
       scroll.jumpTo(350);
-    } 
+    }
     // else if (!embalagemValid) {
     //   scroll.jumpTo(350);
     // }

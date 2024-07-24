@@ -134,6 +134,7 @@ class _GrupoMaterialPageFrmState extends State<GrupoMaterialPageFrm> {
                         CustomPopupMenuWidget(
                           items: [
                             CustomPopupItemHistoryModel.getHistoryItem(
+                              title: 'Grupo de Material ${grupoMaterial.cod}',
                               child: HistoricoPage(
                                 pk: grupoMaterial.cod!,
                                 termo: 'GRUPO_MATERIAL',

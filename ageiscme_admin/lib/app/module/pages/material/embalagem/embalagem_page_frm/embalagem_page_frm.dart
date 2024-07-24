@@ -145,6 +145,7 @@ class _EmbalagemPageFrmState extends State<EmbalagemPageFrm> {
                         CustomPopupMenuWidget(
                           items: [
                             CustomPopupItemHistoryModel.getHistoryItem(
+                              title: 'Embalagem ${embalagem.cod}',
                               child: HistoricoPage(
                                 pk: embalagem.cod!,
                                 termo: 'EMBALAGEM',

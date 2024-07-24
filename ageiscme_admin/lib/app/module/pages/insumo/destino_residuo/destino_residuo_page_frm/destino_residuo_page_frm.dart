@@ -117,6 +117,7 @@ class _DestinoResiduoPageFrmState extends State<DestinoResiduoPageFrm> {
                           if (destinoResiduo.cod != null &&
                               destinoResiduo.cod != 0)
                             CustomPopupItemHistoryModel.getHistoryItem(
+                              title: 'Destino de Resíduo ${destinoResiduo.cod}',
                               child: HistoricoPage(
                                 pk: destinoResiduo.cod!,
                                 termo: 'DESTINO_RESIDUO',

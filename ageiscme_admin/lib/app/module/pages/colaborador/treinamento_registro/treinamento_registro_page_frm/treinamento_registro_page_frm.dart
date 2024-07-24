@@ -128,7 +128,8 @@ class _TreinamentoRegistroPageFrmState
     return '$hoursStr:$minutesStr';
   }
 
-  late final TextFieldStringAreaWidget txtObservacao = TextFieldStringAreaWidget(
+  late final TextFieldStringAreaWidget txtObservacao =
+      TextFieldStringAreaWidget(
     placeholder: 'Observação',
     onChanged: (String? str) {
       treinamentoRegistro.observacao = txtObservacao.text;
@@ -188,8 +189,7 @@ class _TreinamentoRegistroPageFrmState
     if (treinamentoRegistro.cargaHoraria == null) {
       txtCargaHoraria.text = '';
     } else {
-      txtCargaHoraria.text =
-          decimalToString(treinamentoRegistro.cargaHoraria!);
+      txtCargaHoraria.text = decimalToString(treinamentoRegistro.cargaHoraria!);
     }
 
     titulo = 'Registros de Treinamentos';
@@ -488,6 +488,8 @@ class _TreinamentoRegistroPageFrmState
                     if (treinamentoRegistro.cod != null &&
                         treinamentoRegistro.cod != 0)
                       CustomPopupItemHistoryModel.getHistoryItem(
+                        title:
+                            'Registro de Treinamento ${treinamentoRegistro.cod}',
                         child: HistoricoPage(
                           pk: treinamentoRegistro.cod!,
                           termo: 'TREINAMENTO_REGISTRO',

@@ -16,11 +16,13 @@ class TextFieldNumberWidget extends StatefulWidget {
     this.password = false,
     this.onChanged,
     this.readOnly = false,
+    this.negative = false,
     this.startValue,
     this.setReadonlyBuilder,
   });
 
   final String placeholder;
+  final bool negative;
   final bool password;
   final bool readOnly;
   final List<String Function(String str)> validators = [];
@@ -67,7 +69,8 @@ class _TextFieldNumberWidgetState extends State<TextFieldNumberWidget> {
   @override
   void initState() {
     if (widget.startValue != null) {
-      widget._controller.text = widget.startValue.toString();
+      widget._controller.text =
+          widget.startValue.toString().replaceAll('.', '').replaceAll(',', '');
     }
     super.initState();
   }
@@ -95,6 +98,9 @@ class _TextFieldNumberWidgetState extends State<TextFieldNumberWidget> {
       context,
       setReadonly,
     );
+    String negative = widget.negative ? '-' : '';
+    String expressao = '[0-9$negative]';
+    RegExp regex = RegExp(expressao);
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -102,7 +108,7 @@ class _TextFieldNumberWidgetState extends State<TextFieldNumberWidget> {
           controller: widget._controller,
           onChanged: changed,
           inputFormatters: <TextInputFormatter>[
-            FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+            FilteringTextInputFormatter.allow(regex),
             FilteringTextInputFormatter.digitsOnly,
           ],
           keyboardType: TextInputType.number,

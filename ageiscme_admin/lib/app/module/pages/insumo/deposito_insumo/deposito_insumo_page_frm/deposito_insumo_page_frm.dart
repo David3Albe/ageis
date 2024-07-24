@@ -210,6 +210,7 @@ class _DepositoInsumoPageFrmState extends State<DepositoInsumoPageFrm> {
                     items: [
                       if (depositoInsumo.cod != null && depositoInsumo.cod != 0)
                         CustomPopupItemHistoryModel.getHistoryItem(
+                          title: 'Deposito de Insumo ${depositoInsumo.cod}',
                           child: HistoricoPage(
                             pk: depositoInsumo.cod!,
                             termo: 'DEPOSITO_INSUMO',

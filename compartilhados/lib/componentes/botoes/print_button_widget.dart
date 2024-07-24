@@ -9,6 +9,7 @@ class PrintButtonWidget extends StatefulWidget {
     this.elevation = 5,
     this.paddingHeight = 6,
     this.paddingWidth = 8,
+    this.readonly = false,
     Key? key,
   });
 
@@ -16,6 +17,7 @@ class PrintButtonWidget extends StatefulWidget {
   final double paddingHeight;
   final double paddingWidth;
   final void Function()? onPressed;
+  final bool readonly;
 
   @override
   State<PrintButtonWidget> createState() => _PrintButtonWidgetState();
@@ -55,7 +57,7 @@ class _PrintButtonWidgetState extends State<PrintButtonWidget> {
                 ),
                 backgroundColor: Colors.white,
               ),
-        onPressed: widget.onPressed,
+        onPressed: widget.readonly ? null : widget.onPressed,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

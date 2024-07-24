@@ -190,6 +190,7 @@ class _LocalizacaoArsenalPageFrmState extends State<LocalizacaoArsenalPageFrm> {
                           if (localizacaoArsenal.cod != null &&
                               localizacaoArsenal.cod != 0)
                             CustomPopupItemHistoryModel.getHistoryItem(
+                              title: 'Localização Arsenal ${localizacaoArsenal.cod!}',
                               child: HistoricoPage(
                                 pk: localizacaoArsenal.cod!,
                                 termo: 'LOCALIZACAO_ARSENAL',

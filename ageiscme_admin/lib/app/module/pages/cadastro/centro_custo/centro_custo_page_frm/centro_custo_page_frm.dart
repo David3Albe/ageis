@@ -131,6 +131,7 @@ class _CentroCustoPageFrmState extends State<CentroCustoPageFrm> {
                         items: [
                           if (centroCusto.cod != null && centroCusto.cod != 0)
                             CustomPopupItemHistoryModel.getHistoryItem(
+                              title: 'Centro Custo ${centroCusto.cod!}',
                               child: HistoricoPage(
                                 pk: centroCusto.cod!,
                                 termo: 'CENTRO_CUSTO',

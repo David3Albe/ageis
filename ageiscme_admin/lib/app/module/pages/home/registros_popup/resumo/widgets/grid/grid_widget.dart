@@ -49,6 +49,7 @@ class GridWidget extends StatelessWidget {
         '/admin/equipamento/equipamento-manutencao',
         context,
         obj.codTabela,
+        'Manutenção de Equipamento',
       );
     }
     if (obj.codTipo == 4) {
@@ -56,6 +57,7 @@ class GridWidget extends StatelessWidget {
         '/admin/equipamento/registro-servico',
         context,
         obj.codTabela,
+        'Monitoramento',
       );
     }
     if (obj.codTipo == 3) {
@@ -63,6 +65,7 @@ class GridWidget extends StatelessWidget {
         '/admin/colaborador/epi-entrega',
         context,
         obj.codUsuario,
+        'Entrega de Epi',
       );
     }
     if (obj.codTipo == 2) {
@@ -70,6 +73,7 @@ class GridWidget extends StatelessWidget {
         '/admin/colaborador/atestado-saude-ocupacional',
         context,
         obj.codTabela,
+        'Registro de ASO',
       );
     }
     if (obj.codTipo == 1) {
@@ -77,6 +81,7 @@ class GridWidget extends StatelessWidget {
         '/admin/biblioteca/documento',
         context,
         obj.codTabela,
+        'Documentos',
       );
     }
   }

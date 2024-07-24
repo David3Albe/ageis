@@ -141,6 +141,7 @@ class _ServicoTipoPageFrmState extends State<ServicoTipoPageFrm> {
                         CustomPopupMenuWidget(
                           items: [
                             CustomPopupItemHistoryModel.getHistoryItem(
+                              title: 'Tipo de Serviço ${servicoTipo.cod}',
                               child: HistoricoPage(
                                 pk: servicoTipo.cod!,
                                 termo: 'SERVICO_TIPO',

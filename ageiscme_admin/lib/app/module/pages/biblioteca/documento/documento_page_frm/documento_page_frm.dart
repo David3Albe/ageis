@@ -241,6 +241,7 @@ class _DocumentoPageFrmState extends State<DocumentoPageFrm> {
                       ),
                     if (documento.cod != null && documento.cod != 0)
                       CustomPopupItemHistoryModel.getHistoryItem(
+                        title: 'Documento ${documento.cod!}',
                         child: HistoricoPage(
                           pk: documento.cod!,
                           termo: 'DOCUMENTO',

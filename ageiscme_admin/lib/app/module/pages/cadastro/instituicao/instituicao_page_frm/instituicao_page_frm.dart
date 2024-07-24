@@ -657,6 +657,7 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
                     ),
                     if (instituicao.cod != null && instituicao.cod != 0)
                       CustomPopupItemHistoryModel.getHistoryItem(
+                        title: 'Institução ${instituicao.cod!}',
                         child: HistoricoPage(
                           pk: instituicao.cod!,
                           termo: 'INSTITUICAO',

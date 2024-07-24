@@ -193,6 +193,7 @@ class _KitCorPageFrmState extends State<KitCorPageFrm> {
                         CustomPopupMenuWidget(
                           items: [
                             CustomPopupItemHistoryModel.getHistoryItem(
+                              title: 'Cor de Kit ${kitCor.cod}',
                               child: HistoricoPage(
                                 pk: kitCor.cod!,
                                 termo: 'KIT_COR',

@@ -793,6 +793,7 @@ class _ProcessoPageState extends State<ProcessoPage> {
     );
   }
 
+  DateTime? dataPreparo;
   Future _printPreparoPdf(ProcessoLeituraMontagemModel processoLeitura) async {
     if (processoLeitura.leituraAtual.decisao !=
             DecisaoEnum.ImprimirItemPreparo &&
@@ -889,9 +890,12 @@ class _ProcessoPageState extends State<ProcessoPage> {
         ),
       );
     }
+    if (dataPreparo == null) {
+      dataPreparo = DateTime.now();
+    }
     return ProcessoPreparationPrintDTO(
       companyName: processoLeitura.leituraAtual.instituicao!.nome!,
-      actualTime: DateTime.now(),
+      actualTime: dataPreparo!,
       userName: processoLeitura.leituraAtual.usuario!.nome!,
       kits: kits,
       itens: itens,
@@ -909,6 +913,7 @@ class _ProcessoPageState extends State<ProcessoPage> {
     return tipoProcessoEmergencia!;
   }
 
+  DateTime? dataHoraEtiquetaLote;
   Future _printEtiquetaLotePdf(
     ProcessoLeituraMontagemModel processoLeitura,
   ) async {
@@ -941,10 +946,13 @@ class _ProcessoPageState extends State<ProcessoPage> {
       impressoes++;
     }
     impressoes = impressoes + 2;
+    if (dataHoraEtiquetaLote == null) {
+      dataHoraEtiquetaLote = DateTime.now();
+    }
 
     return EtiquetaLotePrintDTO(
       codRegistroProcesso: processoLeitura.leituraAtual.processoRegistro!.cod!,
-      dataAtual: DateTime.now(),
+      dataAtual: dataHoraEtiquetaLote!,
       nomeEquipamento: processoLeitura.leituraAtual.equipamento!.nome!,
       nomeUsuario: processoLeitura.leituraAtual.usuario!.nome!,
       impressoes: impressoes,

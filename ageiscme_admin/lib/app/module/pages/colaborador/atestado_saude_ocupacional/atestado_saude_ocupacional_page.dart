@@ -35,6 +35,7 @@ class _AtestadoSaudeOcupacionalPageState
       text: 'Cód',
       field: 'cod',
       type: CustomDataColumnType.Number,
+      width: 120,
     ),
     CustomDataColumn(
       text: 'Colaborador',

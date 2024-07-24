@@ -139,6 +139,8 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
     txtSenha.addValidator((String str) {
       if (usuario.cod == 0 && str.isEmpty) {
         return 'Obrigatório para novos usuários';
+      } else if (str.isNotEmpty && str != '123456' && str.length <= 7) {
+        return 'Deve ter no mínimo 8 caracteres';
       } else if (str.length > 50) {
         return 'Pode ter no máximo 50 caracteres';
       }
@@ -310,7 +312,7 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
                                         onClick: (value) =>
                                             usuario.colaborador = value,
                                         text:
-                                            'Colaborador - Registro de EPI/',
+                                            'Colaborador - Registro de EPI / Manutenção',
                                         align: MainAxisAlignment.start,
                                       ),
                                     ],
@@ -566,6 +568,7 @@ class _UsuarioPageFrmState extends State<UsuarioPageFrm> {
                       ),
                     if (usuario.cod != null && usuario.cod != 0)
                       CustomPopupItemHistoryModel.getHistoryItem(
+                        title: 'Usuário ${usuario.cod!}',
                         child: HistoricoPage(
                           pk: usuario.cod!,
                           termo: 'USUARIO',

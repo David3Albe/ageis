@@ -418,8 +418,9 @@ class AnormalidadeFrmPageWidget extends StatelessWidget {
                     items: [
                       if (dto?.cod != null && dto?.cod != 0)
                         CustomPopupItemHistoryModel.getHistoryItem(
+                          title: 'Anormalidade ${dto!.cod}',
                           child: HistoricoPage(
-                            pk: dto!.cod,
+                            pk: dto.cod,
                             termo: 'ANORMALIDADE',
                           ),
                           context: context,

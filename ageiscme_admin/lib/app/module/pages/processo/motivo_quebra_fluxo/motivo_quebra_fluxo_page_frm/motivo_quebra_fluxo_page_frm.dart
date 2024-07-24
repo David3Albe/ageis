@@ -119,6 +119,7 @@ class _MotivoQuebraFluxoPageFrmState extends State<MotivoQuebraFluxoPageFrm> {
                         CustomPopupMenuWidget(
                           items: [
                             CustomPopupItemHistoryModel.getHistoryItem(
+                          title: 'Motivo de Quebra Fluxo ${motivoQuebraFluxo.cod}',
                               child: HistoricoPage(
                                 pk: motivoQuebraFluxo.cod!,
                                 termo: 'MOTIVO_QUEBRA_FLUXO',

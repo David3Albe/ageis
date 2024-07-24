@@ -109,8 +109,9 @@ class TurnoFrmPageWidget extends StatelessWidget {
                             items: [
                               if (dto?.cod != null && dto?.cod != -1)
                                 CustomPopupItemHistoryModel.getHistoryItem(
+                                  title: 'Turno ${dto!.cod}',
                                   child: HistoricoPage(
-                                    pk: dto!.cod,
+                                    pk: dto.cod,
                                     termo: 'TURNO',
                                   ),
                                   context: context,

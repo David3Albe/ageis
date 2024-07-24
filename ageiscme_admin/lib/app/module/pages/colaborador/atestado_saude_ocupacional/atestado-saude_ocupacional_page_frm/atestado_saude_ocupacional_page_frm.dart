@@ -361,7 +361,7 @@ class _AtestadoSaudeOcupacionalFrmState
                         'Abrir ASO',
                         context,
                         atestadoSaudeOcupacional.anexo,
-                        'aso ${atestadoSaudeOcupacional.usuario?.nome}.png',
+                        'ASO ${atestadoSaudeOcupacional.cod ?? 0}.png',
                       ),
                     CustomPopupItemFileModel.getFileItem(
                       'Anexar DOC',
@@ -384,6 +384,8 @@ class _AtestadoSaudeOcupacionalFrmState
                     if (atestadoSaudeOcupacional.cod != null &&
                         atestadoSaudeOcupacional.cod != 0)
                       CustomPopupItemHistoryModel.getHistoryItem(
+                        title:
+                            'Atestado Saúde Ocupacional ${atestadoSaudeOcupacional.cod}',
                         child: HistoricoPage(
                           pk: atestadoSaudeOcupacional.cod!,
                           termo: 'ATESTADO_SAUDE_OCUPACIONAL',

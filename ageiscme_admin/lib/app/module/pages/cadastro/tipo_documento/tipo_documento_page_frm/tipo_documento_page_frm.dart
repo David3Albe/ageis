@@ -105,6 +105,7 @@ class _TipoDocumentoPageFrmState extends State<TipoDocumentoPageFrm> {
                           if (tipoDocumento.cod != null &&
                               tipoDocumento.cod != 0)
                             CustomPopupItemHistoryModel.getHistoryItem(
+                              title: 'Tipo Documento ${tipoDocumento.cod!}',
                               child: HistoricoPage(
                                 pk: tipoDocumento.cod!,
                                 termo: 'TIPO_DOCUMENTO',
@@ -149,6 +150,6 @@ class _TipoDocumentoPageFrmState extends State<TipoDocumentoPageFrm> {
 
   void salvar() {
     if (!txtDescricao.valid) return;
-    cubit.save(tipoDocumento,widget.onSaved);
+    cubit.save(tipoDocumento, widget.onSaved);
   }
 }

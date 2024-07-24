@@ -409,6 +409,85 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
                                           epiEntreguesValidade =
                                               getEpisValidade().toList();
                                         }
+                                        List<int> codEpisEntregueValidade =
+                                            epiEntreguesValidade
+                                                .where(
+                                                  (element) =>
+                                                      element.codDescritorEpi !=
+                                                      null,
+                                                )
+                                                .map((e) => e.codDescritorEpi!)
+                                                .toList();
+                                        Iterable<
+                                                EpiPerfilFindByUserEpiResponseDTO>
+                                            epiNecessario =
+                                            widget.episNecessarios.where(
+                                          (epi) => !codEpisEntregueValidade
+                                              .contains(epi.codEpiDescritor),
+                                        );
+                                        List<EpiDescritorModel?> epis =
+                                            epiNecessario
+                                                .map(
+                                                  (epi) =>
+                                                      widget.episDescritores
+                                                          .where(
+                                                            (element) =>
+                                                                element.cod ==
+                                                                epi.codEpiDescritor,
+                                                          )
+                                                          .firstOrNull,
+                                                )
+                                                .toList();
+                                        return ListFieldWidget<
+                                            EpiDescritorModel?>(
+                                          setSelected: (
+                                            context,
+                                            setSelectedItemMethod,
+                                          ) =>
+                                              setSelectedEpiDescritor =
+                                                  setSelectedItemMethod,
+                                          disableUnselect: false,
+                                          sourceList: epis
+                                              .where(
+                                                (element) => element != null,
+                                              )
+                                              .toList(),
+                                          removeButton: false,
+                                          permitReselect: false,
+                                          onItemSelected: (value) {
+                                            setSelectedEpiEntregueValidade(
+                                              null,
+                                            );
+                                            setSelectedEpiEntregueDescartado(
+                                              null,
+                                            );
+                                            updateFieldsDescritorEpi(value);
+                                          },
+                                          itemText: (value) {
+                                            return value?.descricao ??
+                                                'Epi Descritor sem Descrição';
+                                          },
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  const SizedBox(width: 50.0),
+                                  Expanded(
+                                    child: BlocBuilder<EpiEntregaCubit,
+                                        EpiEntregaState>(
+                                      bloc: epiEntregaCubit,
+                                      builder: (context, state) {
+                                        if (state.loading) {
+                                          return const LoadingWidget();
+                                        }
+                                        List<EpiEntregaModel> episEntregas =
+                                            state.itens;
+                                        List<EpiEntregaModel>
+                                            epiEntreguesValidade = [];
+                                        if (episEntregas.isNotEmpty) {
+                                          epiEntreguesValidade =
+                                              getEpisValidade().toList();
+                                        }
 
                                         return ListFieldWidget<EpiEntregaModel>(
                                           setSelected: (
@@ -549,85 +628,6 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
                                       },
                                     ),
                                   ),
-                                  const SizedBox(width: 50.0),
-                                  Expanded(
-                                    child: BlocBuilder<EpiEntregaCubit,
-                                        EpiEntregaState>(
-                                      bloc: epiEntregaCubit,
-                                      builder: (context, state) {
-                                        if (state.loading) {
-                                          return const LoadingWidget();
-                                        }
-                                        List<EpiEntregaModel> episEntregas =
-                                            state.itens;
-                                        List<EpiEntregaModel>
-                                            epiEntreguesValidade = [];
-                                        if (episEntregas.isNotEmpty) {
-                                          epiEntreguesValidade =
-                                              getEpisValidade().toList();
-                                        }
-                                        List<int> codEpisEntregueValidade =
-                                            epiEntreguesValidade
-                                                .where(
-                                                  (element) =>
-                                                      element.codDescritorEpi !=
-                                                      null,
-                                                )
-                                                .map((e) => e.codDescritorEpi!)
-                                                .toList();
-                                        Iterable<
-                                                EpiPerfilFindByUserEpiResponseDTO>
-                                            epiNecessario =
-                                            widget.episNecessarios.where(
-                                          (epi) => !codEpisEntregueValidade
-                                              .contains(epi.codEpiDescritor),
-                                        );
-                                        List<EpiDescritorModel?> epis =
-                                            epiNecessario
-                                                .map(
-                                                  (epi) =>
-                                                      widget.episDescritores
-                                                          .where(
-                                                            (element) =>
-                                                                element.cod ==
-                                                                epi.codEpiDescritor,
-                                                          )
-                                                          .firstOrNull,
-                                                )
-                                                .toList();
-                                        return ListFieldWidget<
-                                            EpiDescritorModel?>(
-                                          setSelected: (
-                                            context,
-                                            setSelectedItemMethod,
-                                          ) =>
-                                              setSelectedEpiDescritor =
-                                                  setSelectedItemMethod,
-                                          disableUnselect: false,
-                                          sourceList: epis
-                                              .where(
-                                                (element) => element != null,
-                                              )
-                                              .toList(),
-                                          removeButton: false,
-                                          permitReselect: false,
-                                          onItemSelected: (value) {
-                                            setSelectedEpiEntregueValidade(
-                                              null,
-                                            );
-                                            setSelectedEpiEntregueDescartado(
-                                              null,
-                                            );
-                                            updateFieldsDescritorEpi(value);
-                                          },
-                                          itemText: (value) {
-                                            return value?.descricao ??
-                                                'Epi Descritor sem Descrição';
-                                          },
-                                        );
-                                      },
-                                    ),
-                                  ),
                                 ],
                               ),
                             ),
@@ -649,6 +649,7 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
                     ),
                     if (epiEntrega.cod != null && epiEntrega.cod != 0)
                       CustomPopupItemHistoryModel.getHistoryItem(
+                        title: 'Entrega de Epi ${epiEntrega.cod}',
                         child: HistoricoPage(
                           pk: epiEntrega.cod!,
                           termo: 'EPI_ENTREGA',

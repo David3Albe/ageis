@@ -124,6 +124,7 @@ class _GestaoContratoPageFrmState extends State<GestaoContratoPageFrm> {
                           if (gestaoContrato.cod != null &&
                               gestaoContrato.cod != 0)
                             CustomPopupItemHistoryModel.getHistoryItem(
+                              title: 'Gestão Contrato ${gestaoContrato.cod!}',
                               child: HistoricoPage(
                                 pk: gestaoContrato.cod!,
                                 termo: 'GESTAO_CONTRATO',

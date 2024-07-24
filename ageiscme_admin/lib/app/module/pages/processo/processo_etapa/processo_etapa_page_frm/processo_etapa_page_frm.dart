@@ -567,8 +567,7 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                             processoEtapa.preparo = value;
                                           });
                                         },
-                                        text:
-                                            'Preparo',
+                                        text: 'Preparo',
                                         align: MainAxisAlignment.start,
                                       ),
                                       const Padding(
@@ -1005,6 +1004,7 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
     if (processoEtapa.cod != null && processoEtapa.cod != 0) {
       items.add(
         CustomPopupItemHistoryModel.getHistoryItem(
+          title: 'Etapa de Processo ${processoEtapa.cod}',
           child: HistoricoPage(
             pk: processoEtapa.cod!,
             termo: 'PROCESSO_ETAPA',
@@ -1121,7 +1121,7 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
         !descricaoValid ||
         !etiquetaPreparoValid ||
         !tempoCicloValid ||
-        !tipoProcessoValid || 
+        !tipoProcessoValid ||
         !servicoTipoValid) return;
 
     if (processoEtapa.codEquipamento == null &&

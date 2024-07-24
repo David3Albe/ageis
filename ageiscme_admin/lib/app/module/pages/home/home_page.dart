@@ -72,6 +72,7 @@ class _HomePageState extends State<HomePage> {
     final GlobalKey<CustomDefaultWindowComponentState> key =
         GlobalKey<CustomDefaultWindowComponentState>();
     window = CustomDefaultWindowComponent(
+      customWindow: true,
       key: key,
       chave: chave,
       title: 'Insumos expirados e a expirar',
@@ -113,6 +114,7 @@ class _HomePageState extends State<HomePage> {
     final GlobalKey<CustomDefaultWindowComponentState> key =
         GlobalKey<CustomDefaultWindowComponentState>();
     CustomDefaultWindowComponent window = CustomDefaultWindowComponent(
+      customWindow: true,
       key: key,
       chave: chave,
       remove: WindowsHelper.RemoverWidget,

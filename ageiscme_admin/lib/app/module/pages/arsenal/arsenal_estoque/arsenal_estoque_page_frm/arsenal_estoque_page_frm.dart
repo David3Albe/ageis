@@ -244,6 +244,7 @@ class _ArsenalEstoquePageFrmState extends State<ArsenalEstoquePageFrm> {
                               onTap: () => openLocalizacaoArsenal(context),
                             ),
                             CustomPopupItemHistoryModel.getHistoryItem(
+                              title: 'Arsenal ${arsenalEstoque.cod!}',
                               child: HistoricoPage(
                                 pk: arsenalEstoque.cod!,
                                 termo: 'ARSENAL_ESTQOUE',

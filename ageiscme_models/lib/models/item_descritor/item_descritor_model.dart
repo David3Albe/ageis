@@ -67,7 +67,7 @@ abstract class ItemDescritorModel
         codTipoProcessoUrgencia: null,
         codGrupoItem: 0,
         codCusto: 0,
-        codEmbalagem: 0,
+        codEmbalagem: null,
         codInstituicao: 0,
         limiteProcessos: null,
         cm: null,

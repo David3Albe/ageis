@@ -48,6 +48,7 @@ class GridWidget extends StatelessWidget {
       '/admin/insumo/consulta-insumo-saldo',
       context,
       obj.codInsumo,
+      'Consulta Saldo Insumo',
     );
   }
 

@@ -155,6 +155,10 @@ class PlutoGridWidget<T> extends StatelessWidget {
     stateManager?.removeAllRows();
     stateManager?.appendRows(newRows);
     this.gridCubit.setOnlyActives(this.filterOnlyActives);
+    PlutoColumn? column = stateManager?.getSortedColumn;
+    if (column == null) return;
+    if (column.sort.isAscending) stateManager!.sortAscending(column);
+    if (column.sort.isDescending) stateManager!.sortDescending(column);
   }
 
   Future submitMethod(
@@ -333,13 +337,15 @@ class PlutoGridWidget<T> extends StatelessWidget {
                 ),
                 rows: this.rows,
                 onLoaded: (event) {
-                  if (orderDescendingFieldColumn != null) {
+                  if (orderDescendingFieldColumn != null &&
+                      !event.stateManager.hasSortedColumn) {
                     event.stateManager.sortDescending(event.stateManager.columns
                         .where((element) =>
                             element.field == orderDescendingFieldColumn)
                         .first);
                   }
-                  if (orderAscendingFieldColumn != null) {
+                  if (orderAscendingFieldColumn != null &&
+                      !event.stateManager.hasSortedColumn) {
                     event.stateManager.sortAscending(event.stateManager.columns
                         .where((element) =>
                             element.field == orderAscendingFieldColumn)

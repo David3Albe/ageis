@@ -282,7 +282,9 @@ class WindowsHelper {
     );
     RemoverJanelsExcessivas();
     cubitOverlay.refresh();
-    key.currentState?.setAbsorbing(false);
+    Future.delayed(const Duration(milliseconds: 100), () {
+      key.currentState?.setAbsorbing(false);
+    });
     return chave;
   }
 
@@ -320,6 +322,7 @@ class WindowsHelper {
     final GlobalKey<CustomDefaultWindowComponentState> key =
         GlobalKey<CustomDefaultWindowComponentState>();
     CustomDefaultWindowComponent window = CustomDefaultWindowComponent(
+      customWindow: false,
       key: key,
       chave: chave,
       remove: RemoverWidget,

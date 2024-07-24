@@ -278,6 +278,7 @@ class _ProcessoTipoPageFrmState extends State<ProcessoTipoPageFrm> {
                   items: [
                     if (processoTipo.cod != null && processoTipo.cod != 0)
                       CustomPopupItemHistoryModel.getHistoryItem(
+                        title: 'Tipo de Processo ${processoTipo.cod}',
                         child: HistoricoPage(
                           pk: processoTipo.cod!,
                           termo: 'PROCESSO_TIPO',

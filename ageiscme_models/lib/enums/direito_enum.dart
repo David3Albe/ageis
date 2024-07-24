@@ -126,6 +126,8 @@ class DireitoEnum {
   static const int EtiquetasConsulta = 530;
   static const int EtiquetasManutencao = 531;
 
+  static const int ConsultaCiclosEquipamento = 532;
+
   static const int ProcessoAutorizarReporRemoverItem = 908;
 
   static const int ProcessoLeituraConsulta = 910;

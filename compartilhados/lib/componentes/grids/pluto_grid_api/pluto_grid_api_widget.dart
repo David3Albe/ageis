@@ -217,6 +217,10 @@ class _PlutoGridApiWidgetState<T> extends State<PlutoGridApiWidget<T>> {
     stateManager?.removeAllRows();
     stateManager?.appendRows(newRows);
     gridCubit.setOnlyActives(widget.filterOnlyActives);
+    PlutoColumn? column = stateManager?.getSortedColumn;
+    if (column == null) return;
+    if (column.sort.isAscending) stateManager!.sortAscending(column);
+    if (column.sort.isDescending) stateManager!.sortDescending(column);
   }
 
   Future submitMethod(
@@ -481,6 +485,7 @@ class _PlutoGridApiWidgetState<T> extends State<PlutoGridApiWidget<T>> {
     return null;
   }
 
+  bool ended = false;
   Future<PlutoInfinityScrollRowsResponse> fetch(
     PlutoInfinityScrollRowsRequest request,
   ) async {
@@ -488,6 +493,13 @@ class _PlutoGridApiWidgetState<T> extends State<PlutoGridApiWidget<T>> {
     if (request.lastRow == null) {
       page = 1;
       rowsObject.clear();
+      ended = false;
+    }
+    if (ended) {
+      return PlutoInfinityScrollRowsResponse(
+        isLast: false,
+        rows: [],
+      );
     }
 
     if (request.filterRows.isNotEmpty) {
@@ -547,7 +559,14 @@ class _PlutoGridApiWidgetState<T> extends State<PlutoGridApiWidget<T>> {
     gridRecordsCubit.setRecords(rows.records);
 
     page++;
-    if (isLast && rows.records > 0) {
+    if (loadRemaining) {
+      ended = true;
+    }
+    if (ended) {
+      page--;
+    }
+    if (!ended && isLast && rows.records > 0) {
+      ended = true;
       BuildContext? context = ToastUtils.routerOutletContext;
       if (context != null) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -613,10 +632,10 @@ class _PlutoGridApiWidgetState<T> extends State<PlutoGridApiWidget<T>> {
       );
       return;
     }
-    if (gridRecordsCubit.state.records > 10000) {
+    if (gridRecordsCubit.state.records > 1000000) {
       ToastUtils.showCustomToastNotice(
         context,
-        'Não é possível realizar a exportação de dados que contém mais de 10000 linhas, faça alguns filtros para reduzir a busca e tente novamente',
+        'Não é possível realizar a exportação de dados que contém mais de 1M linhas, faça alguns filtros para reduzir a busca e tente novamente',
       );
       return;
     }

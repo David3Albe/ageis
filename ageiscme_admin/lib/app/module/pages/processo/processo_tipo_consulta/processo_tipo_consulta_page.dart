@@ -91,6 +91,7 @@ class _ProcessoTipoConsultaPageState extends State<ProcessoTipoConsultaPage> {
         Row(
           children: [
             Flexible(
+              flex: 2,
               child: CustomAutocompleteWidget<KitDropDownSearchResponseDTO>(
                 initialValue: kit,
                 onChange: (str) => kit = str,
@@ -111,6 +112,7 @@ class _ProcessoTipoConsultaPageState extends State<ProcessoTipoConsultaPage> {
             ),
             const Padding(padding: EdgeInsets.only(left: 24)),
             Flexible(
+              flex: 2,
               child: CustomAutocompleteWidget<ItemModel>(
                 initialValue: item,
                 onChange: (str) => item = str,
@@ -123,9 +125,9 @@ class _ProcessoTipoConsultaPageState extends State<ProcessoTipoConsultaPage> {
               ),
             ),
             const Spacer(),
-            Align(
-              alignment: Alignment.centerRight,
-              child: Flexible(
+            Flexible(
+              child: Align(
+                alignment: Alignment.centerRight,
                 child: DefaultButtonWidget(
                   text: 'Consultar',
                   onPressed: _consultar,

@@ -145,6 +145,7 @@ class _TipoAfastamentoPageFrmState extends State<TipoAfastamentoPageFrm> {
                           if (tipoAfastamento.cod != null &&
                               tipoAfastamento.cod != 0)
                             CustomPopupItemHistoryModel.getHistoryItem(
+                                  title: 'Tipo Afastamento ${tipoAfastamento.cod}',
                               child: HistoricoPage(
                                 pk: tipoAfastamento.cod!,
                                 termo: 'TIPO_AFASTAMENTO',

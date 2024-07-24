@@ -254,8 +254,9 @@ class _AtestadoSaudeOcupacionalExameFrmPageWidgetState
                         ),
                       if (dto?.cod != null && dto?.cod != 0)
                         CustomPopupItemHistoryModel.getHistoryItem(
+                          title: 'Atestado Saúde Ocupacional Exame ${dto!.cod}',
                           child: HistoricoPage(
-                            pk: dto!.cod,
+                            pk: dto.cod,
                             termo: 'ATESTADO_SAUDE_OCUPACIONAL_EXAME',
                           ),
                           context: context,

@@ -20,7 +20,9 @@ class CustomPlutoGridDefaultCsvExport extends CustomAbstractTextExport<String> {
     String toCsv = const ListToCsvConverter().convert(
       [
         getColumnTitles(state).values.toList(),
-        ...mapStateToListOfRows(state).map((e) => e.values.toList()).toList(),
+        ...mapStateToListOfRows(state)
+            .map((e) => e.values.map((k) => k?.toString()).toList())
+            .toList(),
       ],
       fieldDelimiter: fieldDelimiter,
       textDelimiter: textDelimiter,

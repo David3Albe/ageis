@@ -876,6 +876,7 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
                       ),
                     if (item.cod != null && item.cod != 0)
                       CustomPopupItemHistoryModel.getHistoryItem(
+                        title: 'Item ${item.cod}',
                         child: HistoricoPage(
                           pk: item.cod!,
                           termo: 'ITEM',

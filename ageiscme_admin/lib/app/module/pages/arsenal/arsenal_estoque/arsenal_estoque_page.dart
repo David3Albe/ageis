@@ -37,7 +37,7 @@ class _ArsenalEstoquePageState extends State<ArsenalEstoquePage> {
     CustomDataColumn(
       text: 'Código Barra',
       field: 'codBarra',
-      type: CustomDataColumnType.Number,
+      type: CustomDataColumnType.Text,
     ),
     CustomDataColumn(
       text: 'CodLocal',

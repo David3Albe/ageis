@@ -564,6 +564,7 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                       if (registroServico.cod != null &&
                           registroServico.cod != 0)
                         CustomPopupItemHistoryModel.getHistoryItem(
+                          title: 'Monitoramento ${registroServico.cod}',
                           child: HistoricoPage(
                             pk: registroServico.cod!,
                             termo: 'REGISTRO_SERVICO',

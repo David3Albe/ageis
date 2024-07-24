@@ -4,21 +4,23 @@ import 'package:flutter/material.dart';
 
 class CustomPopupItemHistoryModel {
   static CustomPopupItemModel getHistoryItem({
+    required String title,
     BuildContext? context,
     Widget? child,
   }) =>
       CustomPopupItemModel(
         text: 'Histórico',
-        onTap: () => abrirHistorico(context!, child!),
+        onTap: () => abrirHistorico(context!, title, child!),
       );
 
   static void abrirHistorico(
     BuildContext context,
+    String title,
     Widget child,
   ) {
     WindowsHelper.OpenDefaultWindows(
       widget: child,
-      title: 'Histórico',
+      title: 'Histórico - $title',
     );
   }
 }

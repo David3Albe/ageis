@@ -460,6 +460,7 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
                     ),
                     if (equipamento.cod != null && equipamento.cod != 0)
                       CustomPopupItemHistoryModel.getHistoryItem(
+                        title: 'Equipamento ${equipamento.cod}',
                         child: HistoricoPage(
                           pk: equipamento.cod!,
                           termo: 'EQUIPAMENTO',

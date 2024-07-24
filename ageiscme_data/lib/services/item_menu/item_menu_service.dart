@@ -595,6 +595,19 @@ class ItemMenuService {
       );
     }
 
+    if (direitosUsuario.contains(DireitoEnum.ConsultaCiclosEquipamento) ||
+        ignorarDireitos) {
+      menuItemEquipamento.addChildren(
+        ItemMenuModel(
+          'Consulta Ciclos',
+          route: '/equipamento/consulta-ciclos',
+          rights: [
+            DireitoEnum.ConsultaCiclosEquipamento,
+          ],
+        ),
+      );
+    }
+
     if (direitosUsuario.contains(DireitoEnum.ServicosRegistrosConsulta) ||
         direitosUsuario.contains(DireitoEnum.ServicosRegistrosManutencao) ||
         direitosUsuario.contains(DireitoEnum.MonitoramentoConsultaNoCadastro) ||

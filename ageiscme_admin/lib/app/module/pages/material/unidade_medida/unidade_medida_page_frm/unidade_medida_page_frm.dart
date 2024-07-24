@@ -103,6 +103,7 @@ class _UnidadeMedidaPageFrmState extends State<UnidadeMedidaPageFrm> {
                         CustomPopupMenuWidget(
                           items: [
                             CustomPopupItemHistoryModel.getHistoryItem(
+                              title: 'Unidade Medida ${unidadeMedida.cod}',
                               child: HistoricoPage(
                                 pk: unidadeMedida.cod!,
                                 termo: 'UNIDADE_MEDIDA',

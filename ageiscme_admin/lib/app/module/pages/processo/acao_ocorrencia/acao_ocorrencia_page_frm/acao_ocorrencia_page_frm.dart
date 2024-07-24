@@ -142,6 +142,7 @@ class _AcaoOcorrenciaPageFrmState extends State<AcaoOcorrenciaPageFrm> {
                         CustomPopupMenuWidget(
                           items: [
                             CustomPopupItemHistoryModel.getHistoryItem(
+                              title: 'Ação de Ocorrência ${acaoOcorrencia.cod}',
                               child: HistoricoPage(
                                 pk: acaoOcorrencia.cod!,
                                 termo: 'ACAO_OCOORRENCIA',

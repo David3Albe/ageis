@@ -149,6 +149,8 @@ class _MotivoRemoverReporItemPageFrmState
                         CustomPopupMenuWidget(
                           items: [
                             CustomPopupItemHistoryModel.getHistoryItem(
+                              title:
+                                  'Motivo de Remover/Repor Item ${motivoRemoverReporItem.cod}',
                               child: HistoricoPage(
                                 pk: motivoRemoverReporItem.cod!,
                                 termo: 'MOTIVO_REMOVER_REPOR_ITEM',

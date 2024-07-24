@@ -164,6 +164,7 @@ class _ImagemPageFrmState extends State<ImagemPageFrm> {
                     ),
                     if (imagem.cod != null && imagem.cod != 0)
                       CustomPopupItemHistoryModel.getHistoryItem(
+                        title: 'Imagem ${imagem.cod!}',
                         child: HistoricoPage(
                           pk: imagem.cod!,
                           termo: 'IMAGEM',

@@ -511,6 +511,7 @@ class _KitPageFrmState extends State<KitPageFrm> {
                       ),
                     if (kit.cod != 0 && kit.cod != null)
                       CustomPopupItemHistoryModel.getHistoryItem(
+                        title: 'Kit ${kit.cod}',
                         child: HistoricoPage(
                           pk: kit.cod!,
                           termo: 'KIT',

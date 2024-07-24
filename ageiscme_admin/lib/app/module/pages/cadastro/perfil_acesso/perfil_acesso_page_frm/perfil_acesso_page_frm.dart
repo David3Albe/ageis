@@ -444,6 +444,7 @@ class _PerfilAcessoPageFrmState extends State<PerfilAcessoPageFrm> {
                   items: [
                     if (perfilAcesso.cod != null && perfilAcesso.cod != 0)
                       CustomPopupItemHistoryModel.getHistoryItem(
+                        title: 'Perfil Acesso ${perfilAcesso.cod!}',
                         child: HistoricoPage(
                           pk: perfilAcesso.cod!,
                           termo: 'PERFIL_ACESSO',

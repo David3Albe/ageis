@@ -166,6 +166,7 @@ class _ProcessoMotivoPageFrmState extends State<ProcessoMotivoPageFrm> {
                         CustomPopupMenuWidget(
                           items: [
                             CustomPopupItemHistoryModel.getHistoryItem(
+                              title: 'Motivo de Processo ${processoMotivo.cod}',
                               child: HistoricoPage(
                                 pk: processoMotivo.cod!,
                                 termo: 'PROCESSO_MOTIVO',

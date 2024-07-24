@@ -594,7 +594,8 @@ class _EquipamentoManutencaoPageFrmState
                                                 )
                                                 .firstOrNull;
                                         return DropDownSearchWidget(
-                                          readOnly: equipamentoManutencao.cod != null &&
+                                          readOnly: equipamentoManutencao.cod !=
+                                                  null &&
                                               equipamentoManutencao.cod != 0,
                                           validateBuilder: (
                                             context,
@@ -1252,6 +1253,7 @@ class _EquipamentoManutencaoPageFrmState
                     if (equipamentoManutencao.cod != null &&
                         equipamentoManutencao.cod != 0)
                       CustomPopupItemHistoryModel.getHistoryItem(
+                        title: 'Manutenção ${equipamentoManutencao.cod}',
                         child: HistoricoPage(
                           pk: equipamentoManutencao.cod!,
                           termo: 'EQUIPAMENTO_MANUTENCAO',

@@ -32,6 +32,7 @@ import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/read_dialog_utils.dart';
+import 'package:compartilhados/componentes/toasts/sucess_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/componentes/toasts/warning_dialog.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
@@ -152,8 +153,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
   );
 
   late void Function(bool) setReadonlyQuantidade;
-  late final TextFieldNumberFloatWidget txtQuantidade =
-      TextFieldNumberFloatWidget(
+  late final TextFieldNumberWidget txtQuantidade = TextFieldNumberWidget(
     negative: true,
     placeholder: 'Quantidade *',
     onChanged: (String? str) {
@@ -349,7 +349,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
 
   void setFields(bool inInit) async {
     txtCodigoInsumo.text = insumoMovimento.codBarra?.toString() ?? '';
-    txtQuantidade.text = insumoMovimento.quantidade?.toString() ?? '';
+    txtQuantidade.text = insumoMovimento.quantidade?.round().toString() ?? '';
     txtPrecoNotaFiscal.text = insumoMovimento.precoNotaFiscal?.toString() ?? '';
     txtPrecoUnitario.text = insumoMovimento.precoCusto3Albe?.toString() ?? '';
     txtRegistro.text = insumoMovimento.cod?.toString() ?? '';
@@ -374,9 +374,10 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
         );
       }
     }
-    if (!inInit) txtLote.valid;
-    if (!inInit) setFieldsAfterInit();
-
+    if (!inInit) {
+      txtLote.valid;
+      setFieldsAfterInit();
+    }
     titulo = 'Cadastro de Movimentos dos Insumos';
     if (insumoMovimento.cod != 0) {
       titulo = 'Edição de Movimento do Insumo: ${insumoMovimento.cod}';
@@ -1107,6 +1108,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
                   CustomPopupMenuWidget(
                     items: [
                       CustomPopupItemHistoryModel.getHistoryItem(
+                        title: 'Movimentação de Insumo ${insumoMovimento.cod}',
                         child: HistoricoPage(
                           pk: insumoMovimento.cod!,
                           termo: 'INSUMO_MOVIMENTO',
@@ -1390,9 +1392,9 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
     if (movInsumo == null) return;
     if (insumo?.testeInsumoObrigatorio == true &&
         movInsumo.flagEntradaSaida == '1') {
-      ToastUtils.showCustomToastSucessBig(
+      await SucessUtils.showSucessDialog(
         context,
-        'MOV. ENTRADA: Este Insumo exige Teste de Conformidade e somente será liberado após o registro do Teste!',
+        'MOV. ENTRADA: Este Insumo exige Teste de Conformidade e somente será liberado após o registro do Teste.\nMovimentação de Entrada Salva!',
       );
     } else {
       ToastUtils.showCustomToastSucess(context, 'Movimentação salva!');

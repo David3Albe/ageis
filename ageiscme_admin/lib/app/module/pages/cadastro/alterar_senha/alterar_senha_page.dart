@@ -64,7 +64,7 @@ class _AlterarSenhaPageState extends State<AlterarSenhaPage> {
     txtSenhaNova.addValidator((str) {
       if (str.isEmpty) return 'Obrigatória';
       if (str == '123456') return 'A senha não pode ser alterada para "123456"';
-      if (str.length < 7) return 'Deve ser não pode ter menos de 6 caracteres';
+      if (str.length <= 7) return 'deve ter ao menos 8 caracteres';
       if (str != txtConfirmaSenha.text) {
         return 'Deve ser igual a confirmação de senha';
       }

@@ -114,6 +114,7 @@ class _PecaPageFrmState extends State<PecaPageFrm> {
                         CustomPopupMenuWidget(
                           items: [
                             CustomPopupItemHistoryModel.getHistoryItem(
+                              title: 'Peça ${peca.cod}',
                               child: HistoricoPage(
                                 pk: peca.cod!,
                                 termo: 'PECA',

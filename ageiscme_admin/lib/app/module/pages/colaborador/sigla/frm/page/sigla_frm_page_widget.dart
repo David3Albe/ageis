@@ -136,8 +136,9 @@ class SiglaFrmPageWidget extends StatelessWidget {
                             items: [
                               if (dto?.cod != null && dto?.cod != -1)
                                 CustomPopupItemHistoryModel.getHistoryItem(
+                                  title: 'Sigla ${dto!.cod}',
                                   child: HistoricoPage(
-                                    pk: dto!.cod,
+                                    pk: dto.cod,
                                     termo: 'SIGLA',
                                   ),
                                   context: context,

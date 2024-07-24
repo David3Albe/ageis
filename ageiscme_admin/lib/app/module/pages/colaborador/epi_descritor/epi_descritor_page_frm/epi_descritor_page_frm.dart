@@ -291,6 +291,7 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
                     ),
                     if (epiDescritor.cod != null && epiDescritor.cod != 0)
                       CustomPopupItemHistoryModel.getHistoryItem(
+                        title: 'Descritor de Epi ${epiDescritor.cod}',
                         child: HistoricoPage(
                           pk: epiDescritor.cod!,
                           termo: 'EPI_DESCRITOR',

@@ -686,6 +686,7 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
                   items: [
                     if (proprietario.cod != null && proprietario.cod != 0)
                       CustomPopupItemHistoryModel.getHistoryItem(
+                        title: 'Proprietário ${proprietario.cod!}',
                         child: HistoricoPage(
                           pk: proprietario.cod!,
                           termo: 'PROPRIETARIO',

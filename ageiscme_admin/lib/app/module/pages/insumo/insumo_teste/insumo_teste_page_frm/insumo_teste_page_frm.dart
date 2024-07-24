@@ -443,6 +443,7 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
                   items: [
                     if (insumoTeste.cod != null && insumoTeste.cod != 0)
                       CustomPopupItemHistoryModel.getHistoryItem(
+                        title: 'Teste de Insumo ${insumoTeste.cod}',
                         child: HistoricoPage(
                           pk: insumoTeste.cod!,
                           termo: 'INSUMO_TESTE',

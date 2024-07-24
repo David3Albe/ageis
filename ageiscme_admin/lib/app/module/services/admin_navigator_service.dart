@@ -33,6 +33,7 @@ import 'package:ageiscme_admin/app/module/pages/colaborador/sigla/sigla_page.dar
 import 'package:ageiscme_admin/app/module/pages/colaborador/tipo_afastamento/tipo_afastamento_page.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/treinamento_registro/treinamento_registro_page.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/turno/turno_page.dart';
+import 'package:ageiscme_admin/app/module/pages/equipamento/consulta_ciclos/consulta_ciclos_page.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/consulta_manutencao/consulta_manutencao_page.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/consulta_registro_servico/consulta_registro_servico_page.dart';
 import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento/equipamento_page.dart';
@@ -106,11 +107,13 @@ abstract class AdminNavigatorService {
     String route,
     BuildContext context,
     dynamic data,
+    String title,
   ) {
     openRouteArguments(
       route: route,
       context: context,
       data: data,
+      title: title,
     );
   }
 
@@ -168,6 +171,7 @@ abstract class AdminNavigatorService {
     required String route,
     required BuildContext context,
     required dynamic data,
+    required String title,
   }) {
     if (ObrigatorioTrocaSenha == true) {
       ToastUtils.showCustomToastNotice(
@@ -181,7 +185,7 @@ abstract class AdminNavigatorService {
     Widget widget = getWidgetParams(data: data, route: route);
     WindowsHelper.OpenDefaultWindows(
       widget: widget,
-      title: route,
+      title: title,
       theme: Theme.of(context),
     );
   }
@@ -402,6 +406,8 @@ abstract class AdminNavigatorService {
         return const TurnoPage();
       case '/colaborador/escala/':
         return const EscalaPage();
+      case '/equipamento/consulta-ciclos/':
+        return const ConsultaCiclosPage();
     }
     return const SizedBox();
   }

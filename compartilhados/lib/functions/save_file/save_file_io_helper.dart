@@ -44,7 +44,7 @@ class SaveFileIo implements SaveFileInterface {
         allowedExtensions.isNotEmpty &&
         allowedExtensions.length == 1) {
       String firstExtension = allowedExtensions.first;
-      if (!path.endsWith(firstExtension)) {
+      if (!path.toLowerCase().endsWith(firstExtension.toLowerCase())) {
         if (!path.endsWith('.')) {
           path += '.';
         }
