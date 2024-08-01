@@ -316,6 +316,7 @@ class WindowsHelper {
     if (windows > 8) windows = 0;
     double right = 300 + (windows * 50);
     double width = size.width / 2.5;
+    if(width<630) width = 630;
     double height = size.height * 0.8;
 
     int chave = GetNextChave();

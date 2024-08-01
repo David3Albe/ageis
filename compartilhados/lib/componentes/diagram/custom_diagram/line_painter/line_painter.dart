@@ -67,13 +67,14 @@ class _LinePainterWidgetState extends State<LinePainterWidget> {
     for (CustomDiagramRectModel rect in widget.rects) {
       if (rect.links == null || rect.links!.isEmpty) continue;
       for (CustomDiagramLinkModel link in rect.links!) {
-        int index = rect.links!.indexOf(link);
+        double rectWidth = (rect.text.length * 4.5) + 20;
         Offset location1 = Offset(
-          rect.locationX + (index * 5) + 20,
+          rect.locationX + (rectWidth / 2),
           rect.locationY + (rect.height),
         );
+        double linkWidth = (link.destiny.text.length * 4.5) + 20;
         Offset location2 = Offset(
-          link.destiny.locationX + (index * 5) + 20,
+          link.destiny.locationX + (linkWidth / 2),
           link.destiny.locationY + 1,
         );
         Line line = Line(

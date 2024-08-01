@@ -26,6 +26,8 @@ mixin _$InsumoMovimentoDropDownSearchResponseDTO {
   set cod(int value) => throw _privateConstructorUsedError;
   String? get flagEntradaSaida => throw _privateConstructorUsedError;
   set flagEntradaSaida(String? value) => throw _privateConstructorUsedError;
+  int? get codDeposito => throw _privateConstructorUsedError;
+  set codDeposito(int? value) => throw _privateConstructorUsedError;
   String? get nomeInsumo => throw _privateConstructorUsedError;
   set nomeInsumo(String? value) => throw _privateConstructorUsedError;
   String? get lote => throw _privateConstructorUsedError;
@@ -51,6 +53,7 @@ abstract class $InsumoMovimentoDropDownSearchResponseDTOCopyWith<$Res> {
   $Res call(
       {int cod,
       String? flagEntradaSaida,
+      int? codDeposito,
       String? nomeInsumo,
       String? lote,
       DateTime? data});
@@ -73,6 +76,7 @@ class _$InsumoMovimentoDropDownSearchResponseDTOCopyWithImpl<$Res,
   $Res call({
     Object? cod = null,
     Object? flagEntradaSaida = freezed,
+    Object? codDeposito = freezed,
     Object? nomeInsumo = freezed,
     Object? lote = freezed,
     Object? data = freezed,
@@ -86,6 +90,10 @@ class _$InsumoMovimentoDropDownSearchResponseDTOCopyWithImpl<$Res,
           ? _value.flagEntradaSaida
           : flagEntradaSaida // ignore: cast_nullable_to_non_nullable
               as String?,
+      codDeposito: freezed == codDeposito
+          ? _value.codDeposito
+          : codDeposito // ignore: cast_nullable_to_non_nullable
+              as int?,
       nomeInsumo: freezed == nomeInsumo
           ? _value.nomeInsumo
           : nomeInsumo // ignore: cast_nullable_to_non_nullable
@@ -114,6 +122,7 @@ abstract class _$$InsumoMovimentoDropDownSearchResponseDTOImplCopyWith<$Res>
   $Res call(
       {int cod,
       String? flagEntradaSaida,
+      int? codDeposito,
       String? nomeInsumo,
       String? lote,
       DateTime? data});
@@ -134,6 +143,7 @@ class __$$InsumoMovimentoDropDownSearchResponseDTOImplCopyWithImpl<$Res>
   $Res call({
     Object? cod = null,
     Object? flagEntradaSaida = freezed,
+    Object? codDeposito = freezed,
     Object? nomeInsumo = freezed,
     Object? lote = freezed,
     Object? data = freezed,
@@ -147,6 +157,10 @@ class __$$InsumoMovimentoDropDownSearchResponseDTOImplCopyWithImpl<$Res>
           ? _value.flagEntradaSaida
           : flagEntradaSaida // ignore: cast_nullable_to_non_nullable
               as String?,
+      codDeposito: freezed == codDeposito
+          ? _value.codDeposito
+          : codDeposito // ignore: cast_nullable_to_non_nullable
+              as int?,
       nomeInsumo: freezed == nomeInsumo
           ? _value.nomeInsumo
           : nomeInsumo // ignore: cast_nullable_to_non_nullable
@@ -171,6 +185,7 @@ class _$InsumoMovimentoDropDownSearchResponseDTOImpl
   _$InsumoMovimentoDropDownSearchResponseDTOImpl(
       {required this.cod,
       this.flagEntradaSaida,
+      this.codDeposito,
       this.nomeInsumo,
       this.lote,
       this.data})
@@ -185,6 +200,8 @@ class _$InsumoMovimentoDropDownSearchResponseDTOImpl
   @override
   String? flagEntradaSaida;
   @override
+  int? codDeposito;
+  @override
   String? nomeInsumo;
   @override
   String? lote;
@@ -193,7 +210,7 @@ class _$InsumoMovimentoDropDownSearchResponseDTOImpl
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'InsumoMovimentoDropDownSearchResponseDTO(cod: $cod, flagEntradaSaida: $flagEntradaSaida, nomeInsumo: $nomeInsumo, lote: $lote, data: $data)';
+    return 'InsumoMovimentoDropDownSearchResponseDTO(cod: $cod, flagEntradaSaida: $flagEntradaSaida, codDeposito: $codDeposito, nomeInsumo: $nomeInsumo, lote: $lote, data: $data)';
   }
 
   @override
@@ -204,6 +221,7 @@ class _$InsumoMovimentoDropDownSearchResponseDTOImpl
           'type', 'InsumoMovimentoDropDownSearchResponseDTO'))
       ..add(DiagnosticsProperty('cod', cod))
       ..add(DiagnosticsProperty('flagEntradaSaida', flagEntradaSaida))
+      ..add(DiagnosticsProperty('codDeposito', codDeposito))
       ..add(DiagnosticsProperty('nomeInsumo', nomeInsumo))
       ..add(DiagnosticsProperty('lote', lote))
       ..add(DiagnosticsProperty('data', data));
@@ -231,6 +249,7 @@ abstract class _InsumoMovimentoDropDownSearchResponseDTO
   factory _InsumoMovimentoDropDownSearchResponseDTO(
       {required int cod,
       String? flagEntradaSaida,
+      int? codDeposito,
       String? nomeInsumo,
       String? lote,
       DateTime? data}) = _$InsumoMovimentoDropDownSearchResponseDTOImpl;
@@ -246,6 +265,9 @@ abstract class _InsumoMovimentoDropDownSearchResponseDTO
   @override
   String? get flagEntradaSaida;
   set flagEntradaSaida(String? value);
+  @override
+  int? get codDeposito;
+  set codDeposito(int? value);
   @override
   String? get nomeInsumo;
   set nomeInsumo(String? value);

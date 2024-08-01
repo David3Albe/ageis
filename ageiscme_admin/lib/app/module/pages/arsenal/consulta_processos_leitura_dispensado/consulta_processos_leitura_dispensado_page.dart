@@ -20,7 +20,7 @@ import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
-class ConsultaProcessosLeituraDispensadoPage extends StatelessWidget {
+class ConsultaProcessosLeituraDispensadoPage extends StatefulWidget {
   const ConsultaProcessosLeituraDispensadoPage({
     required this.colunas,
     required this.bloc,
@@ -36,6 +36,19 @@ class ConsultaProcessosLeituraDispensadoPage extends StatelessWidget {
   final ConsultaProcessosLeituraDispensadoFilter filter;
 
   @override
+  State<ConsultaProcessosLeituraDispensadoPage> createState() =>
+      _ConsultaProcessosLeituraDispensadoPageState();
+}
+
+class _ConsultaProcessosLeituraDispensadoPageState
+    extends State<ConsultaProcessosLeituraDispensadoPage> {
+  @override
+  void initState() {
+    widget.bloc.loadProcessosLeituraDispensado(widget.filter);
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -44,7 +57,8 @@ class ConsultaProcessosLeituraDispensadoPage extends StatelessWidget {
         Row(
           children: [
             RefreshButtonWidget(
-              onPressed: () => bloc.loadProcessosLeituraDispensado(filter),
+              onPressed: () =>
+                  widget.bloc.loadProcessosLeituraDispensado(widget.filter),
             ),
             const Padding(padding: EdgeInsets.only(left: 5)),
             FilterButtonWidget(
@@ -56,13 +70,13 @@ class ConsultaProcessosLeituraDispensadoPage extends StatelessWidget {
         ),
         BlocListener<ConsultaProcessosLeituraDispensadoPageCubit,
             ConsultaProcessosLeituraDispensadoPageState>(
-          bloc: bloc,
+          bloc: widget.bloc,
           listener: (context, state) {
             if (state.error.isNotEmpty) onError(state, context);
           },
           child: BlocBuilder<ConsultaProcessosLeituraDispensadoPageCubit,
               ConsultaProcessosLeituraDispensadoPageState>(
-            bloc: bloc,
+            bloc: widget.bloc,
             builder: (context, state) {
               if (state.loading) {
                 return const Center(
@@ -75,7 +89,7 @@ class ConsultaProcessosLeituraDispensadoPage extends StatelessWidget {
                   child: PlutoGridWidget(
                     orderDescendingFieldColumn: 'dataHora',
                     smallRows: true,
-                    columns: colunas,
+                    columns: widget.colunas,
                     items: state.processosLeiturasDispensados,
                   ),
                 ),
@@ -103,18 +117,18 @@ class ConsultaProcessosLeituraDispensadoPage extends StatelessWidget {
             children: [
               DatePickerWidget(
                 placeholder: 'Data Inicio',
-                onDateSelected: (value) => filter.startDate = value,
-                initialValue: filter.startDate,
+                onDateSelected: (value) => widget.filter.startDate = value,
+                initialValue: widget.filter.startDate,
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
               DatePickerWidget(
                 placeholder: 'Data Término',
-                onDateSelected: (value) => filter.finalDate = value,
-                initialValue: filter.finalDate,
+                onDateSelected: (value) => widget.filter.finalDate = value,
+                initialValue: widget.filter.finalDate,
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
               BlocBuilder<LocalInstituicaoCubit, LocalInstituicaoState>(
-                bloc: localInstituicaoBloc,
+                bloc: widget.localInstituicaoBloc,
                 builder: (context, locaisState) {
                   if (locaisState.loading) {
                     return const LoadingWidget();
@@ -124,22 +138,22 @@ class ConsultaProcessosLeituraDispensadoPage extends StatelessWidget {
 
                   LocalInstituicaoModel? local = locais
                       .where(
-                        (element) => element.cod == filter.codLocal,
+                        (element) => element.cod == widget.filter.codLocal,
                       )
                       .firstOrNull;
                   return DropDownSearchWidget<LocalInstituicaoModel>(
                     textFunction: (local) => local.LocalInstituicaoText(),
                     initialValue: local,
                     sourceList: locais,
-                    onChanged: (value) => filter.codLocal = value?.cod,
+                    onChanged: (value) => widget.filter.codLocal = value?.cod,
                     placeholder: 'Local',
                   );
                 },
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
               CustomAutocompleteWidget<KitDropDownSearchResponseDTO>(
-                initialValue: filter.codBarraKitContem,
-                onChange: (str) => filter.codBarraKitContem = str,
+                initialValue: widget.filter.codBarraKitContem,
+                onChange: (str) => widget.filter.codBarraKitContem = str,
                 onItemSelectedText: (kit) => kit.codBarra,
                 label: 'Kit',
                 title: (p0) => Text(p0.CodBarraDescritorText()),
@@ -156,8 +170,8 @@ class ConsultaProcessosLeituraDispensadoPage extends StatelessWidget {
               ),
               const Padding(padding: EdgeInsets.only(top: 2)),
               CustomAutocompleteWidget<ItemModel>(
-                initialValue: filter.idEtiquetaContem,
-                onChange: (str) => filter.idEtiquetaContem = str,
+                initialValue: widget.filter.idEtiquetaContem,
+                onChange: (str) => widget.filter.idEtiquetaContem = str,
                 onItemSelectedText: (item) => item.idEtiqueta ?? null,
                 label: 'Item',
                 title: (p0) => Text(p0.EtiquetaDescricaoText()),
@@ -171,6 +185,6 @@ class ConsultaProcessosLeituraDispensadoPage extends StatelessWidget {
       },
     );
     if (confirm != true) return;
-    bloc.loadProcessosLeituraDispensado(filter);
+    widget.bloc.loadProcessosLeituraDispensado(widget.filter);
   }
 }

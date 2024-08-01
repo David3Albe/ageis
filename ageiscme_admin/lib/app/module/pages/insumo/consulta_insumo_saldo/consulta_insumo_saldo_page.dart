@@ -106,11 +106,11 @@ class _ConsultaInsumoSaldoPageState extends State<ConsultaInsumoSaldoPage> {
     insumoBloc.loadAll();
 
     super.initState();
-    if (filter.codInsumo != null) {
+    // if (filter.codInsumo != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         bloc.loadInsumoSaldo(filter);
       });
-    }
+    // }
   }
 
   @override

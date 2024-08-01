@@ -76,6 +76,7 @@ class _LocalInstituicaoPageFrmState extends State<LocalInstituicaoPageFrm> {
   );
 
   final ScrollController scroll = ScrollController();
+  late void Function(CentroCustoModel?) setCentroCusto;
 
   @override
   void initState() {
@@ -227,6 +228,10 @@ class _LocalInstituicaoPageFrmState extends State<LocalInstituicaoPageFrm> {
 
                                     return DropDownSearchWidget<
                                         CentroCustoModel>(
+                                      setSelectedItemBuilder:
+                                          (context, setSelectedItemMethod) =>
+                                              setCentroCusto =
+                                                  setSelectedItemMethod,
                                       initialValue: centroCusto,
                                       textFunction: (p0) =>
                                           p0.CentroCustoText(),
@@ -322,6 +327,7 @@ class _LocalInstituicaoPageFrmState extends State<LocalInstituicaoPageFrm> {
                     onPressed: () => {
                       setState(() {
                         localInstituicao = LocalInstituicaoModel.empty();
+                        setCentroCusto(null);
                       }),
                     },
                   ),

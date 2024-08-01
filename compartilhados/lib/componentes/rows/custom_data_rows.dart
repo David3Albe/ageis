@@ -266,9 +266,8 @@ abstract class CustomDataRows {
       case CustomDataColumnType.Number:
       case CustomDataColumnType.Integer:
       case CustomDataColumnType.Currency:
-        return valueConverted ?? '';
       case CustomDataColumnType.Phone:
-        return valueConverted ?? '';
+        return valueConverted;
       case CustomDataColumnType.Checkbox:
         return valueConverted;
       default:

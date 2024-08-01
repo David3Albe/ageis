@@ -149,6 +149,7 @@ class _ConsultaInsumoEstoquePageState extends State<ConsultaInsumoEstoquePage> {
     insumoBloc = InsumoCubit();
     insumoBloc.loadAll();
 
+     bloc.loadInsumoEstoque(filter);
     super.initState();
   }
 

@@ -113,6 +113,8 @@ class _ConsultaProcessosLeituraAcaoOcorrenciaPageState
     filter.finalDate = DateTime.now();
     acaoOcorrenciaBloc = AcaoOcorrenciaCubit();
     acaoOcorrenciaBloc.loadAll();
+
+    bloc.loadAcaoOcorrencia(filter);
     super.initState();
   }
 
@@ -125,7 +127,7 @@ class _ConsultaProcessosLeituraAcaoOcorrenciaPageState
         Row(
           children: [
             RefreshButtonWidget(
-              onPressed: () => bloc.loadAcaoOcorrencia,
+              onPressed: () => bloc.loadAcaoOcorrencia(filter),
             ),
             const Padding(
               padding: EdgeInsets.only(left: 5),

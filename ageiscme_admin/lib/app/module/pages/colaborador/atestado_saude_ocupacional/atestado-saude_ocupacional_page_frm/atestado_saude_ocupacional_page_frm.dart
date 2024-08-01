@@ -77,6 +77,8 @@ class _AtestadoSaudeOcupacionalFrmState
 
   late bool Function() dataEmissaoValidate;
   late final DatePickerWidget dtpDataEmissao = DatePickerWidget(
+    setDateValueBuilder: (context, setDateMethod) =>
+        setDataEmissao = setDateMethod,
     validator: (date) => date == null ? 'Obrigatório' : null,
     validateBuilder: (context, validateMethodBuilder) =>
         dataEmissaoValidate = validateMethodBuilder,
@@ -86,6 +88,8 @@ class _AtestadoSaudeOcupacionalFrmState
   );
   late bool Function() dataValidadeValidate;
   late final DatePickerWidget dtpDataValidade = DatePickerWidget(
+    setDateValueBuilder: (context, setDateMethod) =>
+        setDataValidade = setDateMethod,
     validator: (date) => date == null ? 'Obrigatório' : null,
     validateBuilder: (context, validateMethodBuilder) =>
         dataValidadeValidate = validateMethodBuilder,
@@ -138,6 +142,12 @@ class _AtestadoSaudeOcupacionalFrmState
   late bool Function() tipoAsoValidate;
   late bool Function() conclusaoValidate;
 
+  late void Function(UsuarioModel?) setColaborador;
+  late void Function(AtestadoSaudeOcupacionalTipoAsoOption?) setTipoAso;
+  late void Function(DateTime?) setDataEmissao;
+  late void Function(DateTime?) setDataValidade;
+  late void Function(AtestadoSaudeOcupacionalConclusaoOption?) setConclusao;
+
   @override
   Widget build(BuildContext context) {
     double paddingHorizontalScale = MediaQuery.of(context).size.width / 1920;
@@ -184,6 +194,11 @@ class _AtestadoSaudeOcupacionalFrmState
                                   }
                                   List<UsuarioModel> usuarios = state.usuarios;
                                   return DropDownSearchWidget<UsuarioModel>(
+                                    setSelectedItemBuilder: (
+                                      context,
+                                      setSelectedItemMethod,
+                                    ) =>
+                                        setColaborador = setSelectedItemMethod,
                                     validator: (val) =>
                                         val == null ? 'Obrigatório' : null,
                                     validateBuilder: (
@@ -224,6 +239,11 @@ class _AtestadoSaudeOcupacionalFrmState
                                   Expanded(
                                     child: DropDownSearchWidget<
                                         AtestadoSaudeOcupacionalTipoAsoOption>(
+                                      setSelectedItemBuilder: (
+                                        context,
+                                        setSelectedItemMethod,
+                                      ) =>
+                                          setTipoAso = setSelectedItemMethod,
                                       validator: (obj) =>
                                           obj == null ? 'Obrigatório' : null,
                                       validateBuilder:
@@ -272,6 +292,11 @@ class _AtestadoSaudeOcupacionalFrmState
                               padding: const EdgeInsets.only(top: 5.0),
                               child: DropDownSearchWidget<
                                   AtestadoSaudeOcupacionalConclusaoOption>(
+                                setSelectedItemBuilder: (
+                                  context,
+                                  setSelectedItemMethod,
+                                ) =>
+                                    setConclusao = setSelectedItemMethod,
                                 validator: (obj) =>
                                     obj == null ? 'Obrigatório' : null,
                                 validateBuilder: (
@@ -315,9 +340,9 @@ class _AtestadoSaudeOcupacionalFrmState
                             Padding(
                               padding: const EdgeInsets.only(top: 5.0),
                               child: LabelStringWidget(
-                                text: atestadoSaudeOcupacional.docNome != null
-                                    ? 'Documento anexado'
-                                    : 'Documento não anexado',
+                                text: atestadoSaudeOcupacional.anexo != null
+                                    ? 'ASO anexada'
+                                    : '',
                               ),
                             ),
                             Padding(
@@ -394,7 +419,13 @@ class _AtestadoSaudeOcupacionalFrmState
                       ),
                   ],
                 ),
-                const Spacer(),
+                Expanded(
+                  child: LabelStringWidget(
+                    text: atestadoSaudeOcupacional.docNome != null
+                        ? 'Documento: ${atestadoSaudeOcupacional.docNome}'
+                        : '',
+                  ),
+                ),
                 Wrap(
                   spacing: 16 * paddingHorizontalScale,
                   runSpacing: 16 * paddingHorizontalScale,
@@ -404,12 +435,7 @@ class _AtestadoSaudeOcupacionalFrmState
                       onPressed: () => {salvar()},
                     ),
                     CleanButtonWidget(
-                      onPressed: () => {
-                        setState(() {
-                          atestadoSaudeOcupacional =
-                              AtestadoSaudeOcupacionalModel.empty();
-                        }),
-                      },
+                      onPressed: limpar,
                     ),
                     CancelButtonUnfilledWidget(
                       onPressed: widget.onCancel,
@@ -422,6 +448,17 @@ class _AtestadoSaudeOcupacionalFrmState
         );
       },
     );
+  }
+
+  void limpar() {
+    setState(() {
+      atestadoSaudeOcupacional = AtestadoSaudeOcupacionalModel.empty();
+    });
+    setColaborador(null);
+    setDataEmissao(null);
+    setDataValidade(null);
+    setTipoAso(null);
+    setConclusao(null);
   }
 
   void abrirExames() async {

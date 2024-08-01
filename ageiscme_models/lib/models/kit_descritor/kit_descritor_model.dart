@@ -60,7 +60,7 @@ abstract class KitDescritorModel
         codCusto: null,
         ativo: true,
         exigeProntuario: false,
-        imagem: '',
+        imagem: null,
         ultimaAlteracao: null,
         tstamp: '',
         tamanho: null,

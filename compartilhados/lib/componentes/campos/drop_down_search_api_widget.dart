@@ -19,6 +19,16 @@ typedef SetSelectedItemBuilder<T> = void Function(
   void Function(T? item) setSelectedItemMethod,
 );
 
+typedef RefreshItemBuilder<T> = void Function(
+  BuildContext context,
+  void Function() setRefreshItemMethod,
+);
+
+typedef SetReadonlyBuilder<T> = void Function(
+  BuildContext context,
+  void Function(bool readonly) setReadonlyMethod,
+);
+
 class DropDownSearchApiWidget<T> extends StatefulWidget {
   DropDownSearchApiWidget({
     required this.search,
@@ -31,6 +41,8 @@ class DropDownSearchApiWidget<T> extends StatefulWidget {
     this.validator,
     this.validateBuilder,
     this.setSelectedItemBuilder,
+    this.setRefreshItemMethod,
+    this.setReadonlyMethod,
   });
   final T? initialValue;
   final String? placeholder;
@@ -43,11 +55,14 @@ class DropDownSearchApiWidget<T> extends StatefulWidget {
   final String? Function(T? val)? validator;
   late final ValidateBuilder<T>? validateBuilder;
   final SetSelectedItemBuilder<T>? setSelectedItemBuilder;
+  final RefreshItemBuilder<T>? setRefreshItemMethod;
+  final SetReadonlyBuilder<T>? setReadonlyMethod;
 
   @override
   DropDownSearchApiWidgetState<T> createState() =>
       DropDownSearchApiWidgetState<T>(
         onChanged: onChanged,
+        readOnly: readOnly,
         key: key,
       );
 }
@@ -67,8 +82,10 @@ class DropDownSearchApiWidgetState<T>
   List<DateTime> lastTypedsTime = [];
   final Key? key;
   String? errorText;
+  bool readOnly;
 
   DropDownSearchApiWidgetState({
+    required this.readOnly,
     this.onChanged,
     this.key,
   });
@@ -89,6 +106,10 @@ class DropDownSearchApiWidgetState<T>
     super.initState();
   }
 
+  void refresh() {
+    setItems(txtFilter.text);
+  }
+
   void validate() {
     if (widget.validator == null) return;
     String? error = widget.validator!(selectedItem);
@@ -107,6 +128,10 @@ class DropDownSearchApiWidgetState<T>
     });
   }
 
+  void setReadonly(bool readonly) {
+    this.readOnly = readonly;
+  }
+
   @override
   Widget build(BuildContext context) {
     widget.setSelectedItemBuilder?.call(
@@ -117,12 +142,20 @@ class DropDownSearchApiWidgetState<T>
       context,
       valid,
     );
+    widget.setRefreshItemMethod?.call(
+      context,
+      refresh,
+    );
+    widget.setReadonlyMethod?.call(
+      context,
+      setReadonly,
+    );
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         InkWell(
           onTap: () {
-            if (!widget.readOnly) {
+            if (!readOnly) {
               showPicker(context);
             }
           },
@@ -348,7 +381,7 @@ class DropDownSearchApiWidgetState<T>
                   style: Fontes.getRoboto(
                     cor: errorText != null && !errorText!.isEmpty
                         ? Colors.red
-                        : widget.readOnly
+                        : readOnly
                             ? Colors.grey
                             : null,
                     fontSize: HelperFunctions.calculaFontSize(context, 14),
@@ -361,7 +394,7 @@ class DropDownSearchApiWidgetState<T>
                     child: InkWell(
                       child: const Icon(Symbols.close),
                       onTap: () {
-                        if (!widget.readOnly) clearItem();
+                        if (!readOnly) clearItem();
                       },
                     ),
                   ),

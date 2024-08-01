@@ -14,30 +14,36 @@ class MenuItemsWidget extends StatelessWidget {
   final List<ItemMenuModel> items;
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        UserAvatarWidget(expanded),
-        Expanded(
-          child: ListView.builder(
-            itemCount: items.length,
-            itemBuilder: (context, index) => Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  top: const BorderSide(width: 1, color: Colors.grey),
-                  bottom: index == items.indexOf(items.last)
-                      ? const BorderSide(width: 1, color: Colors.grey)
-                      : BorderSide.none,
+    return Container(
+      decoration: const BoxDecoration(
+        border: Border(
+          right: const BorderSide(width: 1, color: Colors.grey),
+        ),
+      ),
+      child: Column(
+        children: [
+          UserAvatarWidget(expanded),
+          Expanded(
+            child: ListView.builder(
+              itemCount: items.length,
+              itemBuilder: (context, index) => Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: const BorderSide(width: 1, color: Colors.grey),
+                    bottom: index == items.indexOf(items.last)
+                        ? const BorderSide(width: 1, color: Colors.grey)
+                        : BorderSide.none,
+                  ),
                 ),
-              ),
-              child: ItemMenuWidget(
-                items[index],
-                expanded,
+                child: ItemMenuWidget(
+                  items[index],
+                  expanded,
+                ),
               ),
             ),
           ),
-        ),
-        // IconExpandableNavigationBarWidget(expanded, toogleExpand),
-      ],
+        ],
+      ),
     );
   }
 }

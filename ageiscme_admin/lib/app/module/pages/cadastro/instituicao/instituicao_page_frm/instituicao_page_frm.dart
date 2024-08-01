@@ -410,16 +410,16 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
                                 Expanded(
                                   child: Column(
                                     children: [
-                                      const Padding(
-                                        padding: EdgeInsets.only(top: 5.0),
-                                      ),
-                                      CustomCheckboxWidget(
-                                        checked: instituicao.ativo,
-                                        onClick: (value) =>
-                                            instituicao.ativo = value,
-                                        text: 'Ativo',
-                                        align: MainAxisAlignment.start,
-                                      ),
+                                      // const Padding(
+                                      //   padding: EdgeInsets.only(top: 5.0),
+                                      // ),
+                                      // CustomCheckboxWidget(
+                                      //   checked: instituicao.ativo,
+                                      //   onClick: (value) =>
+                                      //       instituicao.ativo = value,
+                                      //   text: 'Ativo',
+                                      //   align: MainAxisAlignment.start,
+                                      // ),
                                       const Padding(
                                         padding: EdgeInsets.only(top: 5.0),
                                       ),

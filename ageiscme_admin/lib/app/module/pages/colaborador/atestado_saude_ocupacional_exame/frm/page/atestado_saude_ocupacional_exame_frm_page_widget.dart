@@ -186,9 +186,7 @@ class _AtestadoSaudeOcupacionalExameFrmPageWidgetState
                     Padding(
                       padding: const EdgeInsets.only(top: 5.0),
                       child: LabelStringWidget(
-                        text: dto.docNome != null
-                            ? 'Documento anexado'
-                            : 'Documento não anexado',
+                        text: dto.imagemExame != null ? 'Imagem anexada' : '',
                       ),
                     ),
                     Padding(
@@ -264,6 +262,9 @@ class _AtestadoSaudeOcupacionalExameFrmPageWidgetState
                     ],
                   );
                 },
+              ),
+              LabelStringWidget(
+                text: dto.docNome != null ? 'Documento: ${dto.docNome}' : '',
               ),
               Expanded(
                 child: Wrap(

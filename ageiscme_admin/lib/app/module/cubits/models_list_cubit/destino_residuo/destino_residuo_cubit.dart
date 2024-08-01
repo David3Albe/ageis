@@ -13,6 +13,12 @@ class DestinoResiduoCubit extends Cubit<DestinoResiduoState> {
   }
 
   void clear() => emit(DestinoResiduoState(objs: []));
+
+  void refresh() async {
+    emit(DestinoResiduoState(objs: state.objs, loading: true));
+    await Future.delayed(const Duration(milliseconds: 100));
+    emit(DestinoResiduoState(objs: state.objs));
+  }
 }
 
 class DestinoResiduoState {

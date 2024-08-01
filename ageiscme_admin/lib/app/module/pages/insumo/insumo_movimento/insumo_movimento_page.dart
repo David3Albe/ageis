@@ -22,7 +22,11 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
 class InsumoMovimentoPage extends StatefulWidget {
-  const InsumoMovimentoPage({super.key});
+  const InsumoMovimentoPage({
+    this.codInsumo,
+    super.key,
+  });
+  final int? codInsumo;
 
   @override
   State<InsumoMovimentoPage> createState() => _InsumoMovimentoPageState();
@@ -95,6 +99,11 @@ class _InsumoMovimentoPageState extends State<InsumoMovimentoPage> {
     filter = InsumoMovimentoFilter.empty();
     filter.startDate = DateTime.now().add(const Duration(days: -1));
     filter.finalDate = DateTime.now();
+    if (widget.codInsumo != null) {
+      filter.codInsumo = widget.codInsumo;
+      filter.startDate = null;
+      filter.finalDate = null;
+    }
     filter.carregarUsuarioDepoisConsulta = true;
     filter.carregarInsumo = true;
     carregarDados();
@@ -104,6 +113,15 @@ class _InsumoMovimentoPageState extends State<InsumoMovimentoPage> {
   }
 
   void carregarDados() {
+    if (filter.codInsumo == null &&
+        filter.startDate == null &&
+        filter.finalDate == null) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'Para consultar é necessário filtrar Insumo ou Data',
+      );
+      return;
+    }
     bloc.loadInsumoMovimentoFilter(filter);
   }
 
@@ -154,7 +172,6 @@ class _InsumoMovimentoPageState extends State<InsumoMovimentoPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16.0),
                   child: PlutoGridWidget(
-             
                     orderDescendingFieldColumn: 'dataHora',
                     onEdit: (InsumoMovimentoModel objeto) =>
                         {openModal(context, InsumoMovimentoModel.copy(objeto))},
@@ -244,6 +261,7 @@ class _InsumoMovimentoPageState extends State<InsumoMovimentoPage> {
     chave = WindowsHelper.OpenDefaultWindows(
       title: 'Cadastro/Edição Movimento de Insumo',
       widget: InsumoMovimentoPageFrm(
+        onSaved: (p0) => onSave(),
         onCancel: () => onCancel(chave),
         insumoMovimento: insumoMovimento,
       ),
@@ -253,6 +271,10 @@ class _InsumoMovimentoPageState extends State<InsumoMovimentoPage> {
   void onCancel(int chave) {
     bloc.loadInsumoMovimentoFilter(filter);
     WindowsHelper.RemoverWidget(chave);
+  }
+
+  void onSave() {
+    bloc.loadInsumoMovimentoFilter(filter);
   }
 
   void delete(

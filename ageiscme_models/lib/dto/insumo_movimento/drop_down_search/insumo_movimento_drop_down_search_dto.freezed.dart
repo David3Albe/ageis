@@ -23,6 +23,8 @@ InsumoMovimentoDropDownSearchDTO _$InsumoMovimentoDropDownSearchDTOFromJson(
 mixin _$InsumoMovimentoDropDownSearchDTO {
   int get numeroRegistros => throw _privateConstructorUsedError;
   set numeroRegistros(int value) => throw _privateConstructorUsedError;
+  int? get codInsumo => throw _privateConstructorUsedError;
+  set codInsumo(int? value) => throw _privateConstructorUsedError;
   String? get search => throw _privateConstructorUsedError;
   set search(String? value) => throw _privateConstructorUsedError;
 
@@ -40,7 +42,7 @@ abstract class $InsumoMovimentoDropDownSearchDTOCopyWith<$Res> {
       _$InsumoMovimentoDropDownSearchDTOCopyWithImpl<$Res,
           InsumoMovimentoDropDownSearchDTO>;
   @useResult
-  $Res call({int numeroRegistros, String? search});
+  $Res call({int numeroRegistros, int? codInsumo, String? search});
 }
 
 /// @nodoc
@@ -58,6 +60,7 @@ class _$InsumoMovimentoDropDownSearchDTOCopyWithImpl<$Res,
   @override
   $Res call({
     Object? numeroRegistros = null,
+    Object? codInsumo = freezed,
     Object? search = freezed,
   }) {
     return _then(_value.copyWith(
@@ -65,6 +68,10 @@ class _$InsumoMovimentoDropDownSearchDTOCopyWithImpl<$Res,
           ? _value.numeroRegistros
           : numeroRegistros // ignore: cast_nullable_to_non_nullable
               as int,
+      codInsumo: freezed == codInsumo
+          ? _value.codInsumo
+          : codInsumo // ignore: cast_nullable_to_non_nullable
+              as int?,
       search: freezed == search
           ? _value.search
           : search // ignore: cast_nullable_to_non_nullable
@@ -82,7 +89,7 @@ abstract class _$$InsumoMovimentoDropDownSearchDTOImplCopyWith<$Res>
       __$$InsumoMovimentoDropDownSearchDTOImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int numeroRegistros, String? search});
+  $Res call({int numeroRegistros, int? codInsumo, String? search});
 }
 
 /// @nodoc
@@ -99,6 +106,7 @@ class __$$InsumoMovimentoDropDownSearchDTOImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? numeroRegistros = null,
+    Object? codInsumo = freezed,
     Object? search = freezed,
   }) {
     return _then(_$InsumoMovimentoDropDownSearchDTOImpl(
@@ -106,6 +114,10 @@ class __$$InsumoMovimentoDropDownSearchDTOImplCopyWithImpl<$Res>
           ? _value.numeroRegistros
           : numeroRegistros // ignore: cast_nullable_to_non_nullable
               as int,
+      codInsumo: freezed == codInsumo
+          ? _value.codInsumo
+          : codInsumo // ignore: cast_nullable_to_non_nullable
+              as int?,
       search: freezed == search
           ? _value.search
           : search // ignore: cast_nullable_to_non_nullable
@@ -119,7 +131,7 @@ class __$$InsumoMovimentoDropDownSearchDTOImplCopyWithImpl<$Res>
 class _$InsumoMovimentoDropDownSearchDTOImpl
     implements _InsumoMovimentoDropDownSearchDTO {
   _$InsumoMovimentoDropDownSearchDTOImpl(
-      {required this.numeroRegistros, this.search});
+      {required this.numeroRegistros, this.codInsumo, this.search});
 
   factory _$InsumoMovimentoDropDownSearchDTOImpl.fromJson(
           Map<String, dynamic> json) =>
@@ -128,11 +140,13 @@ class _$InsumoMovimentoDropDownSearchDTOImpl
   @override
   int numeroRegistros;
   @override
+  int? codInsumo;
+  @override
   String? search;
 
   @override
   String toString() {
-    return 'InsumoMovimentoDropDownSearchDTO(numeroRegistros: $numeroRegistros, search: $search)';
+    return 'InsumoMovimentoDropDownSearchDTO(numeroRegistros: $numeroRegistros, codInsumo: $codInsumo, search: $search)';
   }
 
   @JsonKey(ignore: true)
@@ -155,6 +169,7 @@ abstract class _InsumoMovimentoDropDownSearchDTO
     implements InsumoMovimentoDropDownSearchDTO {
   factory _InsumoMovimentoDropDownSearchDTO(
       {required int numeroRegistros,
+      int? codInsumo,
       String? search}) = _$InsumoMovimentoDropDownSearchDTOImpl;
 
   factory _InsumoMovimentoDropDownSearchDTO.fromJson(
@@ -164,6 +179,9 @@ abstract class _InsumoMovimentoDropDownSearchDTO
   @override
   int get numeroRegistros;
   set numeroRegistros(int value);
+  @override
+  int? get codInsumo;
+  set codInsumo(int? value);
   @override
   String? get search;
   set search(String? value);

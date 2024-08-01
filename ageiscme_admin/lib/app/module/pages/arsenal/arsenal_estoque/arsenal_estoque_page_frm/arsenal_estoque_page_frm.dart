@@ -113,6 +113,8 @@ class _ArsenalEstoquePageFrmState extends State<ArsenalEstoquePageFrm> {
     }
   }
 
+  late void Function(LocalInstituicaoModel?) setLocal;
+
   @override
   Widget build(BuildContext context) {
     setFields();
@@ -169,6 +171,9 @@ class _ArsenalEstoquePageFrmState extends State<ArsenalEstoquePageFrm> {
                             )
                             .firstOrNull;
                         return DropDownSearchWidget<LocalInstituicaoModel>(
+                          setSelectedItemBuilder:
+                              (context, setSelectedItemMethod) =>
+                                  setLocal = setSelectedItemMethod,
                           validator: (val) =>
                               val == null ? 'Obrigatório' : null,
                           validateBuilder: (context, validateMethodBuilder) =>
@@ -247,7 +252,7 @@ class _ArsenalEstoquePageFrmState extends State<ArsenalEstoquePageFrm> {
                               title: 'Arsenal ${arsenalEstoque.cod!}',
                               child: HistoricoPage(
                                 pk: arsenalEstoque.cod!,
-                                termo: 'ARSENAL_ESTQOUE',
+                                termo: 'ARSENAL_ESTOQUE',
                               ),
                               context: context,
                             ),
@@ -267,6 +272,7 @@ class _ArsenalEstoquePageFrmState extends State<ArsenalEstoquePageFrm> {
                             setState(() {
                               arsenalEstoque = ArsenalEstoqueModel.empty();
                             }),
+                            setLocal(null),
                           },
                         ),
                       ),

@@ -232,7 +232,7 @@ class PlutoGridColumnHelper<T> {
       width: baseColumn.width ?? PlutoGridSettings.columnWidth,
       textAlign: PlutoColumnTextAlign.left,
       // textAlign: PlutoColumnTextAlign.center,
-      type: PlutoColumnType.date(format: 'dd/MM/yyyy'),
+      type: PlutoColumnType.date(format: 'dd/MM/yyyy', defaultValue: ''),
       field: baseColumn.calculatedField ?? baseColumn.field,
       renderer: baseColumn.customRenderer,
       suppressedAutoSize: true,
@@ -251,7 +251,7 @@ class PlutoGridColumnHelper<T> {
       textAlign: PlutoColumnTextAlign.left,
       enableAutoEditing: baseColumn.enableAutoEditing,
       renderer: baseColumn.customRenderer,
-      type: PlutoColumnType.date(format: 'dd/MM/yyyy HH:mm'),
+      type: PlutoColumnType.date(format: 'dd/MM/yyyy HH:mm', defaultValue: ''),
       field: baseColumn.calculatedField ?? baseColumn.field,
       readOnly: baseColumn.readonly,
     );

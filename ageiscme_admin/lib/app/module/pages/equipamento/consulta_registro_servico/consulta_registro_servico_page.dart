@@ -147,7 +147,7 @@ class _ConsultaRegistroServicoPageState
     servicoTipoBloc.loadAll();
 
     service = RegistroServicoService();
-
+    bloc.loadRegistroServico(filter);
     super.initState();
   }
 

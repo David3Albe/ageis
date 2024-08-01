@@ -1,10 +1,15 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_drop_down_search_cubit.dart';
+import 'package:ageiscme_data/services/usuario/usuario_service.dart';
+import 'package:ageiscme_data/stores/authentication/authentication_store.dart';
+import 'package:ageiscme_models/dto/authentication_result/authentication_result_dto.dart';
 import 'package:ageiscme_models/dto/usuario/usuario_drop_down_search_dto.dart';
 import 'package:ageiscme_models/filters/insumo/insumo_filter.dart';
+import 'package:ageiscme_models/filters/usuario_filter/usuario_filter.dart';
 import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/windows/windows_helper.dart';
+import 'package:dependencias_comuns/modular_export.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/deposito_insumo/deposito_insumo_cubit.dart';
@@ -261,6 +266,7 @@ class _InsumoTestePageState extends State<InsumoTestePage> {
           carregarMovimentacao: true,
         ),
       );
+
       if (insumoTesteForm == null) {
         ToastUtils.showCustomToastWarning(
           context,
@@ -268,8 +274,26 @@ class _InsumoTestePageState extends State<InsumoTestePage> {
         );
         return;
       }
-      print(insumoTesteForm.insumoMovimento);
+      insumoTesteForm.usuario = await UsuarioService().FilterOne(
+        UsuarioFilter(
+          carregarFoto: false,
+          tipoQuery: UsuarioFilterTipoQuery.SemFoto,
+          cod: insumoTesteForm.codUsuario,
+        ),
+      );
+      insumoTesteForm.usuarioLiberacao = await UsuarioService().FilterOne(
+        UsuarioFilter(
+          carregarFoto: false,
+          tipoQuery: UsuarioFilterTipoQuery.SemFoto,
+          cod: insumoTesteForm.codUsuarioLiberacao,
+        ),
+      );
       loading.closeDefault();
+    } else {
+      AuthenticationResultDTO? auth =
+          await Modular.get<AuthenticationStore>().GetAuthenticated();
+      insumoTesteForm.codUsuario = auth?.usuario?.cod;
+      insumoTesteForm.usuario = auth?.usuario;
     }
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(

@@ -63,7 +63,7 @@ class ProcessoLeituraWebSocket {
       },
       (event) {
         if (event == 'pong') return;
-        calculateTraficResponse(event);
+        // calculateTraficResponse(event);
         CommandResultModel result =
             CommandResultModel.fromJson(jsonDecode(event));
         if (!result.success) {
@@ -80,17 +80,17 @@ class ProcessoLeituraWebSocket {
     );
   }
 
-  int calculateTraficRequest(String event) {
-    int size = utf8.encode(event).length;
-    print('Request Processo: ' + size.toString());
-    return size;
-  }
+  // int calculateTraficRequest(String event) {
+  //   int size = utf8.encode(event).length;
+  //   print('Request Processo: ' + size.toString());
+  //   return size;
+  // }
 
-  int calculateTraficResponse(String event) {
-    int size = utf8.encode(event).length;
-    print('Response Processo: ' + size.toString());
-    return size;
-  }
+  // int calculateTraficResponse(String event) {
+  //   int size = utf8.encode(event).length;
+  //   print('Response Processo: ' + size.toString());
+  //   return size;
+  // }
 
   void close() {
     TIMER?.cancel();
@@ -113,7 +113,7 @@ class ProcessoLeituraWebSocket {
     int? awaitTimeSeconds,
   }) async {
     await tryConnect();
-    calculateTraficRequest(json);
+    // calculateTraficRequest(json);
     _webSocket?.sink.add(json);
   }
 

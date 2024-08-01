@@ -17,7 +17,7 @@ class CustomDefaultWindowComponent extends StatefulWidget {
     required this.ofssetBase,
     required this.customWindow,
     this.height = 400,
-    this.width = 400,
+    this.width = 630,
     this.onEnter,
     this.maximizarOnOpen = false,
     super.key,

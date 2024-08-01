@@ -59,6 +59,7 @@ class _LocalizacaoArsenalPageFrmState extends State<LocalizacaoArsenalPageFrm> {
   );
 
   late bool Function() validateEstoque;
+  late void Function(ArsenalEstoqueModel?) setArsenal;
 
   @override
   void initState() {
@@ -147,6 +148,9 @@ class _LocalizacaoArsenalPageFrmState extends State<LocalizacaoArsenalPageFrm> {
                             )
                             .firstOrNull;
                         return DropDownSearchWidget<ArsenalEstoqueModel>(
+                          setSelectedItemBuilder:
+                              (context, setSelectedItemMethod) =>
+                                  setArsenal = setSelectedItemMethod,
                           validateBuilder: (context, validateMethodBuilder) =>
                               validateEstoque = validateMethodBuilder,
                           validator: (val) =>
@@ -190,7 +194,8 @@ class _LocalizacaoArsenalPageFrmState extends State<LocalizacaoArsenalPageFrm> {
                           if (localizacaoArsenal.cod != null &&
                               localizacaoArsenal.cod != 0)
                             CustomPopupItemHistoryModel.getHistoryItem(
-                              title: 'Localização Arsenal ${localizacaoArsenal.cod!}',
+                              title:
+                                  'Localização Arsenal ${localizacaoArsenal.cod!}',
                               child: HistoricoPage(
                                 pk: localizacaoArsenal.cod!,
                                 termo: 'LOCALIZACAO_ARSENAL',
@@ -214,6 +219,7 @@ class _LocalizacaoArsenalPageFrmState extends State<LocalizacaoArsenalPageFrm> {
                               localizacaoArsenal =
                                   LocalizacaoArsenalModel.empty();
                             }),
+                            setArsenal(null),
                           },
                         ),
                       ),

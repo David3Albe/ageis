@@ -52,7 +52,7 @@ class _ConsultaEstoqueDisponivelPageState
     CustomDataColumn(
       text: 'Cod Kit',
       field: 'codKit',
-      type: CustomDataColumnType.Number,
+      type: CustomDataColumnType.Text,
     ),
     CustomDataColumn(text: 'Cod. Barras', field: 'codBarraKit'),
     CustomDataColumn(text: 'Item', field: 'nomeItem'),
@@ -85,6 +85,7 @@ class _ConsultaEstoqueDisponivelPageState
     proprietarioBloc = ProprietarioCubit();
     proprietarioBloc.loadAll();
 
+    bloc.loadEstoqueDisponivel(filter);
     super.initState();
   }
 

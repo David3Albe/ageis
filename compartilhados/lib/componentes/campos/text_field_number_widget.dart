@@ -109,7 +109,7 @@ class _TextFieldNumberWidgetState extends State<TextFieldNumberWidget> {
           onChanged: changed,
           inputFormatters: <TextInputFormatter>[
             FilteringTextInputFormatter.allow(regex),
-            FilteringTextInputFormatter.digitsOnly,
+            // FilteringTextInputFormatter.digitsOnly,
           ],
           keyboardType: TextInputType.number,
           obscureText: !visible && widget.password,

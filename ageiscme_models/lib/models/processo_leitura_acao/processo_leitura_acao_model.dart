@@ -41,10 +41,10 @@ class ProcessoLeituraAcaoModel with DropDownText {
         'Finalizar Leitura',
         precisaConterLocal: false,
       ),
-      ProcessoLeituraAcaoModel(
-        220,
-        'Montar Novo Kit',
-      ),
+      // ProcessoLeituraAcaoModel(
+      //   220,
+      //   'Montar Novo Kit',
+      // ),
       ProcessoLeituraAcaoModel(
         203,
         'Cancelar Leituras',
@@ -64,59 +64,59 @@ class ProcessoLeituraAcaoModel with DropDownText {
         'Não',
         precisaConterLocal: false,
       ),
-      ProcessoLeituraAcaoModel(
-        221,
-        'Imprimir Etiqueta',
-      ),
-      ProcessoLeituraAcaoModel(
-        222,
-        'Trocar Etiqueta',
-      ),
-      ProcessoLeituraAcaoModel(
-        223,
-        'Imprimir Indicador',
-      ),
-      ProcessoLeituraAcaoModel(
-        226,
-        'Remover Item',
-      ),
-      ProcessoLeituraAcaoModel(
-        225,
-        'Repor Item',
-      ),
-      ProcessoLeituraAcaoModel(
-        227,
-        'Gerar Etiqueta',
-        precisaConterLocal: false,
-      ),
-      ProcessoLeituraAcaoModel(
-        228,
-        'Cadastrar Consignado',
-        precisaConterLocal: false,
-      ),
-      ProcessoLeituraAcaoModel(
-        229,
-        'Transferir',
-        precisaConterLocal: false,
-      ),
-      ProcessoLeituraAcaoModel(
-        230,
-        'Receber',
-        precisaConterLocal: false,
-      ),
+      // ProcessoLeituraAcaoModel(
+      //   221,
+      //   'Imprimir Etiqueta',
+      // ),
+      // ProcessoLeituraAcaoModel(
+      //   222,
+      //   'Trocar Etiqueta',
+      // ),
+      // ProcessoLeituraAcaoModel(
+      //   223,
+      //   'Imprimir Indicador',
+      // ),
+      // ProcessoLeituraAcaoModel(
+      //   226,
+      //   'Remover Item',
+      // ),
+      // ProcessoLeituraAcaoModel(
+      //   225,
+      //   'Repor Item',
+      // ),
+      // ProcessoLeituraAcaoModel(
+      //   227,
+      //   'Gerar Etiqueta',
+      //   precisaConterLocal: false,
+      // ),
+      // ProcessoLeituraAcaoModel(
+      //   228,
+      //   'Cadastrar Consignado',
+      //   precisaConterLocal: false,
+      // ),
+      // ProcessoLeituraAcaoModel(
+      //   229,
+      //   'Transferir',
+      //   precisaConterLocal: false,
+      // ),
+      // ProcessoLeituraAcaoModel(
+      //   230,
+      //   'Receber',
+      //   precisaConterLocal: false,
+      // ),
       ProcessoLeituraAcaoModel(
         231,
         'Zoom',
         precisaConterLocal: false,
       ),
-      ProcessoLeituraAcaoModel(
-        302,
-        'Montar Conjunto',
-      ),
-      ProcessoLeituraAcaoModel(
-        303,
-        'Desmontar Conjunto',
-      ),
+      // ProcessoLeituraAcaoModel(
+      //   302,
+      //   'Montar Conjunto',
+      // ),
+      // ProcessoLeituraAcaoModel(
+      //   303,
+      //   'Desmontar Conjunto',
+      // ),
     ];
   }
 

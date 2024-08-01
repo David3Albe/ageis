@@ -35,7 +35,7 @@ abstract class DocumentoModel with _$DocumentoModel {
         observacao: '',
         usuario: '',
         documento: '',
-        nomeDocumento: '',
+        nomeDocumento: null,
         codTipo: 0,
         validade: DateTime.now(),
         controlarValidade: false,

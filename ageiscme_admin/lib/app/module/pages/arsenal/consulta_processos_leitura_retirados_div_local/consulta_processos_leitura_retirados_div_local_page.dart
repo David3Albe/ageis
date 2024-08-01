@@ -37,7 +37,7 @@ class _ConsultaProcessosLeituraRetiradosDivLocalPageState
     CustomDataColumn(
       text: 'Cód. Kit',
       field: 'codKit',
-      type: CustomDataColumnType.Number,
+      type: CustomDataColumnType.Text,
     ),
     CustomDataColumn(text: 'Kit', field: 'nomeKit'),
     CustomDataColumn(text: 'ID Item', field: 'idEtiqueta'),
@@ -69,6 +69,7 @@ class _ConsultaProcessosLeituraRetiradosDivLocalPageState
     proprietarioBloc = ProprietarioCubit();
     proprietarioBloc.loadAll();
 
+    bloc.loadMotivoProcessosLeituraRetiradosDivLocal(filter);
     super.initState();
   }
 

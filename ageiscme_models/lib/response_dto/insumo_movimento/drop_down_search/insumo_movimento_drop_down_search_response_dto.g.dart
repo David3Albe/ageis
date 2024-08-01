@@ -11,6 +11,7 @@ _$InsumoMovimentoDropDownSearchResponseDTOImpl
         _$InsumoMovimentoDropDownSearchResponseDTOImpl(
           cod: (json['cod'] as num).toInt(),
           flagEntradaSaida: json['flagEntradaSaida'] as String?,
+          codDeposito: (json['codDeposito'] as num?)?.toInt(),
           nomeInsumo: json['nomeInsumo'] as String?,
           lote: json['lote'] as String?,
           data: json['data'] == null
@@ -23,6 +24,7 @@ Map<String, dynamic> _$$InsumoMovimentoDropDownSearchResponseDTOImplToJson(
     <String, dynamic>{
       'cod': instance.cod,
       'flagEntradaSaida': instance.flagEntradaSaida,
+      'codDeposito': instance.codDeposito,
       'nomeInsumo': instance.nomeInsumo,
       'lote': instance.lote,
       'data': instance.data?.toIso8601String(),

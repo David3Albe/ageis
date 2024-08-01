@@ -86,6 +86,7 @@ class _ConsultaProcessosConsignadoPageState
     proprietarioBloc.loadAll();
     usuarioCubit = UsuarioCubit();
     itemConsignadoProcessado = ItemConsignadoProcessadoModel.empty();
+    bloc.loadProcessosConsignado(filter);
 
     recuperaUsuario().then((value) {
       if (value == null ||

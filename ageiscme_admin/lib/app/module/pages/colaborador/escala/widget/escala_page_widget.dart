@@ -7,12 +7,28 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
-class EscalaPageWidget extends StatelessWidget {
+class EscalaPageWidget extends StatefulWidget {
   const EscalaPageWidget({super.key});
 
   @override
+  State<EscalaPageWidget> createState() => _EscalaPageWidgetState();
+}
+
+class _EscalaPageWidgetState extends State<EscalaPageWidget> {
+  late bool Function() validateAnoMes;
+
+  late final TextFieldAnoMesWidget txtAnoMes = TextFieldAnoMesWidget(
+    placeholder: 'Ano/Mês *',
+    validator: (date) => date == null ? 'Obrigatório' : null,
+    validateBuilder: (context, validateMethodBuilder) =>
+        validateAnoMes = validateMethodBuilder,
+    formato: DateFormat('yyyy/MM'),
+    onDateSelected: (data) =>
+        BlocProvider.of<EscalaPageCubit>(context).setData(data: data),
+  );
+
+  @override
   Widget build(BuildContext context) {
-    late bool Function() validateAnoMes;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -20,16 +36,7 @@ class EscalaPageWidget extends StatelessWidget {
         Row(
           children: [
             Expanded(
-              child: TextFieldAnoMesWidget(
-                placeholder: 'Ano/Mês *',
-                validator: (date) => date == null ? 'Obrigatório' : null,
-                validateBuilder: (context, validateMethodBuilder) =>
-                    validateAnoMes = validateMethodBuilder,
-                formato: DateFormat('yyyy/MM'),
-                onDateSelected: (data) =>
-                    BlocProvider.of<EscalaPageCubit>(context)
-                        .setData(data: data),
-              ),
+              child: txtAnoMes,
             ),
             const Spacer(flex: 2),
             Expanded(

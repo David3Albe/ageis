@@ -123,6 +123,7 @@ class _ConsultaMovimentacaoEstoquePageState
       filter = ConsultaMovimentacaoEstoqueFilter.empty();
       filter.startDate = DateTime.now().add(const Duration(days: -1));
       filter.finalDate = DateTime.now();
+      bloc.loadMovimentacaoEstoque(filter);
     }
 
     depositoInsumoBloc = DepositoInsumoCubit();
@@ -390,6 +391,7 @@ class _ConsultaMovimentacaoEstoquePageState
     chave = WindowsHelper.OpenDefaultWindows(
       title: 'Cadastro/Edição Movimento de Insumo',
       widget: InsumoMovimentoPageFrm(
+        onSaved: (p0) => onSaved(),
         onCancel: () => onCancel(chave),
         insumoMovimento: movimento,
       ),
@@ -397,7 +399,12 @@ class _ConsultaMovimentacaoEstoquePageState
   }
 
   void onCancel(int chave) {
+    bloc.loadMovimentacaoEstoque(filter);
     WindowsHelper.RemoverWidget(chave);
+  }
+
+  void onSaved() {
+    bloc.loadMovimentacaoEstoque(filter);
   }
 
   void notFoundError() {

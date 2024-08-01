@@ -13,6 +13,7 @@ sealed class InsumoMovimentoDropDownSearchResponseDTO
   factory InsumoMovimentoDropDownSearchResponseDTO({
     required int cod,
     String? flagEntradaSaida,
+    int? codDeposito,
     String? nomeInsumo,
     String? lote,
     DateTime? data,

@@ -55,6 +55,7 @@ class _ConsultaHistoricoColaboradorPageState
     filter = ConsultaHistoricoColaboradorFilter.empty();
     filter.startDate = DateTime.now().add(const Duration(days: -1));
     filter.finalDate = DateTime.now();
+    bloc.loadHistoricoColaborador(filter);
 
     super.initState();
   }

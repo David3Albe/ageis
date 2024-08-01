@@ -154,6 +154,7 @@ class _ConsultaCiclosPageState extends State<ConsultaCiclosPage> {
     processoEtapaCubit = ProcessoEtapaCubit();
     processoEtapaCubit.loadAll();
 
+    bloc.loadManutencao(filter);
     super.initState();
   }
 
@@ -508,7 +509,7 @@ class _ConsultaCiclosPageState extends State<ConsultaCiclosPage> {
           (entrada) => entrada.imprimir == true,
         )
         .toList();
-        processosMarcados.sort((a,b)=>a.dataHora!.compareTo(b.dataHora!));
+    processosMarcados.sort((a, b) => a.dataHora!.compareTo(b.dataHora!));
     InstituicaoModel? instituicao = await InstituicaoService().findFirst();
     if (instituicao == null) {
       ToastUtils.showCustomToastError(

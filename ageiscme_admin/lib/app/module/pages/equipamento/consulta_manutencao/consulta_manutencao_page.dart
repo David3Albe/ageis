@@ -182,6 +182,7 @@ class _ConsultaManutencaoPageState extends State<ConsultaManutencaoPage> {
     pecaBloc.loadAll();
     service = EquipamentoManutencaoService();
 
+    bloc.loadManutencao(filter);
     super.initState();
   }
 

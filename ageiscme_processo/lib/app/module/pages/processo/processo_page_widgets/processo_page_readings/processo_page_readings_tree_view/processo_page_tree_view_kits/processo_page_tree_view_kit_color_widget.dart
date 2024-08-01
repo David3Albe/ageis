@@ -9,7 +9,15 @@ class ProcessoPageTreeViewKitColorWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(color: cor),
+      decoration: BoxDecoration(
+        color: cor,
+        border: cor.red == 0 && cor.green == 0 && cor.blue == 0
+            ? null
+            : Border.all(
+                color: Colors.grey,
+                width: 1,
+              ),
+      ),
     );
   }
 }

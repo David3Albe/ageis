@@ -151,6 +151,7 @@ class _ConsultaItemPageState extends State<ConsultaItemPage> {
     proprietarioBloc.loadAll();
     service = ItemService();
 
+    bloc.loadItem(filter);
     super.initState();
   }
 

@@ -1,12 +1,14 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/centro_custo/centro_custo_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/local_instituicao/local_instituicao_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/arsenal/consulta_processos_leitura_tamanho/consulta_processos_leitura_tamanho_page_state.dart';
+import 'package:ageiscme_admin/app/module/pages/arsenal/consulta_processos_leitura_tamanho/consulta_processos_leitura_tamanho_sub/consulta_processos_leitura_tamanho_sub_page.dart';
 import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
 import 'package:ageiscme_data/query_services/processos_leitura_tamanho/processos_leitura_tamanho_service.dart';
 import 'package:ageiscme_data/services/access_user/access_user_service.dart';
 import 'package:ageiscme_models/enums/direito_enum.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/query_filters/processos_leitura_tamanho/consulta_processos_leitura_tamanho_filter.dart';
+import 'package:ageiscme_models/query_filters/processos_leitura_tamanho_sub/consulta_processos_leitura_tamanho_sub_filter.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
@@ -66,6 +68,7 @@ class _ConsultaProcessosLeituraTamanhoPageState
       filter = ConsultaProcessosLeituraTamanhoFilter.empty();
       filter.startDate = DateTime.now().add(const Duration(days: -1));
       filter.finalDate = DateTime.now();
+      bloc.loadProcessosLeituraTamanho(filter);
     }
     localInstituicaoBloc = LocalInstituicaoCubit();
     localInstituicaoBloc.loadAll();
@@ -132,6 +135,7 @@ class _ConsultaProcessosLeituraTamanhoPageState
                       await openModalRedirect(
                         context,
                         obj.codLocal,
+                        obj.tamanho,
                       );
                     },
                   ),
@@ -230,15 +234,17 @@ class _ConsultaProcessosLeituraTamanhoPageState
   Future openModalRedirect(
     BuildContext context,
     int? codLocal,
+    String? tamanho,
   ) async {
     WindowsHelper.OpenDefaultWindows(
-      title: 'Consulta processo Leitura - Tamanho',
-      widget: ConsultaProcessosLeituraTamanhoPage(
-        filter: ConsultaProcessosLeituraTamanhoFilter(
+      title: 'Consulta processo Leitura - Sub Tamanho',
+      widget: ConsultaProcessosLeituraTamanhoSubPage(
+        filter: ConsultaProcessosLeituraTamanhoSubFilter(
           startDate: filter.startDate,
           finalDate: filter.finalDate,
           codLocal: codLocal,
           codCentroCusto: null,
+          tamanho: tamanho,
         ),
       ),
     );

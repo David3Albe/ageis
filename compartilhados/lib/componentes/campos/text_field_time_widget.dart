@@ -119,7 +119,6 @@ class _TimePickerWidgetState extends State<TimePickerWidget> {
 
   void _onTextChanged() {
     final text = widget._controller.text;
-    print(text);
     if (text.length == 2 && lastText.length != 3) {
       setaTextoController(text + ':');
       return;

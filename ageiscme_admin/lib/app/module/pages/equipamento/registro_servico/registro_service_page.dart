@@ -97,6 +97,7 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
     equipamentoCubit.loadAll();
     service = RegistroServicoService();
     bloc = RegistroServicoPageCubit(service: service);
+    bloc.loadRegistroServicoFilter(filter);
     super.initState();
     if (widget.cod == null) return;
     WidgetsBinding.instance.addPostFrameCallback(

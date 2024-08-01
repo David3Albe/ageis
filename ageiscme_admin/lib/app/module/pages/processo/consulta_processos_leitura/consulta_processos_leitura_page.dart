@@ -286,14 +286,16 @@ class _ConsultaProcessosLeituraPageState
 
   Color rowColorCallback(PlutoRowColorContext row) {
     ConsultaProcessosLeituraModel? leitura = getObjByRow!(row.row);
-    if (leitura?.cancelada == true) return Colors.red.shade400;
+    if (leitura?.cancelada == true) {
+      return const Color.fromARGB(48, 250, 121, 121);
+    }
     int? codRegistroProcesso = row.row.cells['codRegistroProcesso']?.value;
     if (codRegistroProcesso == null) return ultimaCor;
     if (codRegistroProcessoColor.containsKey(codRegistroProcesso)) {
       return codRegistroProcessoColor[codRegistroProcesso]!;
     }
     Color cor = ultimaCor == Colors.white
-        ? const Color.fromARGB(255, 192, 191, 191)
+        ? const Color.fromARGB(255, 241, 241, 241)
         : Colors.white;
     codRegistroProcessoColor.putIfAbsent(codRegistroProcesso, () => cor);
     ultimaCor = cor;
@@ -433,6 +435,7 @@ class _ConsultaProcessosLeituraPageState
       ErrorUtils.showErrorDialog(context, [state.error]);
 
   Future openModal(BuildContext context) async {
+    loadEtapaCubit();
     bool? confirm = await showDialog<bool>(
       context: context,
       builder: (context) => FilterDialogWidget(

@@ -13,6 +13,7 @@ import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
+import 'package:compartilhados/componentes/campos/label_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_float_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
@@ -78,9 +79,7 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
   late final TextFieldNumberFloatWidget txtCM = TextFieldNumberFloatWidget(
     placeholder: 'CM *',
     onChanged: (String? str) {
-      itemDescritor.cm = str == null || str.isEmpty
-          ? null
-          : double.parse(str);
+      itemDescritor.cm = str == null || str.isEmpty ? null : double.parse(str);
       _updateDescricaoCompleta();
     },
   );
@@ -282,6 +281,16 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
 
   late Future Function() commitEditGridMethod;
   late void Function() setStateGridMethod;
+
+  late void Function(GrupoMaterialModel?) setGrupoMaterial;
+  late void Function(TamanhoModel?) setTamanho;
+  late void Function(ProcessoTipoModel?) setProcessoTipoNormal;
+  late void Function(ProcessoTipoModel?) setProcessoTipoUrgente;
+  late void Function(CentroCustoModel?) setCentroCusto;
+  late void Function(bool) setConsignado;
+  late void Function(bool) setItensComplementares;
+  late void Function(bool) setAtivo;
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -362,6 +371,12 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                                                 )
                                                 .firstOrNull;
                                         return DropDownSearchWidget(
+                                          setSelectedItemBuilder: (
+                                            context,
+                                            setSelectedItemMethod,
+                                          ) =>
+                                              setGrupoMaterial =
+                                                  setSelectedItemMethod,
                                           validator: (val) => val == null
                                               ? 'Obrigatório'
                                               : null,
@@ -455,6 +470,12 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                                             )
                                             .firstOrNull;
                                         return DropDownSearchWidget(
+                                          setSelectedItemBuilder: (
+                                            context,
+                                            setSelectedItemMethod,
+                                          ) =>
+                                              setTamanho =
+                                                  setSelectedItemMethod,
                                           initialValue: tamanho,
                                           sourceList: tamanhos,
                                           onChanged: (value) => itemDescritor
@@ -493,6 +514,12 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                                           )
                                           .firstOrNull;
                                   return DropDownSearchWidget(
+                                    setSelectedItemBuilder: (
+                                      context,
+                                      setSelectedItemMethod,
+                                    ) =>
+                                        setProcessoTipoNormal =
+                                            setSelectedItemMethod,
                                     validateBuilder:
                                         (context, validateMethodBuilder) =>
                                             validateTipoProcessoNormal =
@@ -553,6 +580,12 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                                           )
                                           .firstOrNull;
                                   return DropDownSearchWidget(
+                                    setSelectedItemBuilder: (
+                                      context,
+                                      setSelectedItemMethod,
+                                    ) =>
+                                        setProcessoTipoUrgente =
+                                            setSelectedItemMethod,
                                     readOnly:
                                         widget.instituicao.fluxoAlternado !=
                                             true,
@@ -686,6 +719,12 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                                                 )
                                                 .firstOrNull;
                                         return DropDownSearchWidget(
+                                          setSelectedItemBuilder: (
+                                            context,
+                                            setSelectedItemMethod,
+                                          ) =>
+                                              setCentroCusto =
+                                                  setSelectedItemMethod,
                                           initialValue: centroCusto,
                                           sourceList: state.centrosCusto
                                               .where(
@@ -715,6 +754,11 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                                   child: Row(
                                     children: [
                                       CustomCheckboxWidget(
+                                        setValue: (
+                                          context,
+                                          setSelectedItemMethod,
+                                        ) =>
+                                            setAtivo = setSelectedItemMethod,
                                         checked: itemDescritor.ativo,
                                         onClick: (value) =>
                                             itemDescritor.ativo = value,
@@ -731,6 +775,12 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                                   child: Row(
                                     children: [
                                       CustomCheckboxWidget(
+                                        setValue: (
+                                          context,
+                                          setSelectedItemMethod,
+                                        ) =>
+                                            setConsignado =
+                                                setSelectedItemMethod,
                                         checked: itemDescritor.consignado,
                                         onClick: (value) {
                                           itemDescritor.consignado = value;
@@ -753,6 +803,12 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                                   child: Row(
                                     children: [
                                       CustomCheckboxWidget(
+                                        setValue: (
+                                          context,
+                                          setSelectedItemMethod,
+                                        ) =>
+                                            setItensComplementares =
+                                                setSelectedItemMethod,
                                         checked: itemDescritor.complementar,
                                         onClick: (value) =>
                                             itemDescritor.complementar = value,
@@ -762,6 +818,13 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                                   ),
                                 ),
                               ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 14.0),
+                              child: LabelStringWidget(
+                                text:
+                                    '${itemDescritor.foto == null ? '' : 'Imagem anexada'}',
+                              ),
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 14.0),
@@ -799,16 +862,18 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                       'Anexar Imagem',
                       salvarImagem,
                     ),
-                    CustomPopupItemOpenDocModel.getOpenDocItem(
-                      'Abrir Imagem',
-                      context,
-                      itemDescritor.foto,
-                      'arquivo sem nome.Webp',
-                    ),
-                    CustomPopupItemModel(
-                      text: 'Excluir Imagem',
-                      onTap: excluirImagem,
-                    ),
+                    if (itemDescritor.foto != null)
+                      CustomPopupItemOpenDocModel.getOpenDocItem(
+                        'Abrir Imagem',
+                        context,
+                        itemDescritor.foto,
+                        'arquivo sem nome.Webp',
+                      ),
+                    if (itemDescritor.foto != null)
+                      CustomPopupItemModel(
+                        text: 'Excluir Imagem',
+                        onTap: excluirImagem,
+                      ),
                     if (itemDescritor.cod != null && itemDescritor.cod != 0)
                       CustomPopupItemHistoryModel.getHistoryItem(
                         title: 'Descritor de Item ${itemDescritor.cod}',
@@ -830,12 +895,7 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: CleanButtonWidget(
-                    onPressed: () => {
-                      setState(() {
-                        itemDescritor = ItemDescritorModel.empty();
-                        setFields();
-                      }),
-                    },
+                    onPressed: limpar,
                   ),
                 ),
                 Padding(
@@ -850,6 +910,21 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
         );
       },
     );
+  }
+
+  void limpar() {
+    setState(() {
+      itemDescritor = ItemDescritorModel.empty();
+      setFields();
+    });
+    setGrupoMaterial(null);
+    setTamanho(null);
+    setProcessoTipoNormal(null);
+    setProcessoTipoUrgente(null);
+    setCentroCusto(null);
+    setConsignado(false);
+    setItensComplementares(false);
+    setAtivo(true);
   }
 
   void salvarImagem(Future<ImageObjectModel?> Function() onSelectImage) async {

@@ -68,7 +68,7 @@ class _TamanhoPageFrmState extends State<TamanhoPageFrm> {
 
     txtDescricao.addValidator((String str) {
       if (str.length > 30) {
-        'Pode ter no máximo 30 caracteres';
+        return 'Pode ter no máximo 30 caracteres';
       }
       return '';
     });

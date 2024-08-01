@@ -10,6 +10,7 @@ _$InsumoMovimentoDropDownSearchDTOImpl
     _$$InsumoMovimentoDropDownSearchDTOImplFromJson(Map json) =>
         _$InsumoMovimentoDropDownSearchDTOImpl(
           numeroRegistros: (json['numeroRegistros'] as num).toInt(),
+          codInsumo: (json['codInsumo'] as num?)?.toInt(),
           search: json['search'] as String?,
         );
 
@@ -17,5 +18,6 @@ Map<String, dynamic> _$$InsumoMovimentoDropDownSearchDTOImplToJson(
         _$InsumoMovimentoDropDownSearchDTOImpl instance) =>
     <String, dynamic>{
       'numeroRegistros': instance.numeroRegistros,
+      'codInsumo': instance.codInsumo,
       'search': instance.search,
     };

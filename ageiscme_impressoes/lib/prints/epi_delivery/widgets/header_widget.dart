@@ -10,19 +10,19 @@ class HeaderWidget extends StatelessWidget {
   Widget build(Context context) {
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Text(
-                dto.instituition,
-                style: const TextStyle(
-                  fontSize: 18,
-                ),
-              ),
-            ),
-          ],
-        ),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.start,
+        //   children: [
+        //     Expanded(
+        //       child: Text(
+        //         dto.instituition,
+        //         style: const TextStyle(
+        //           fontSize: 18,
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // ),
         Padding(padding: const EdgeInsets.only(top: 6)),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -12,6 +12,7 @@ import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
+import 'package:compartilhados/componentes/campos/label_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
@@ -120,6 +121,7 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
 
   late bool Function() tipoEpiValidation;
   final ScrollController scroll = ScrollController();
+  late void Function(EpiDescritorTipoEpiOption?) setTipoEpi;
 
   @override
   Widget build(BuildContext context) {
@@ -165,6 +167,9 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
                               padding: const EdgeInsets.only(top: 5.0),
                               child: DropDownSearchWidget<
                                   EpiDescritorTipoEpiOption>(
+                                setSelectedItemBuilder:
+                                    (context, setSelectedItemMethod) =>
+                                        setTipoEpi = setSelectedItemMethod,
                                 validator: (obj) =>
                                     obj == null ? 'Obrigatório' : null,
                                 validateBuilder: (
@@ -254,6 +259,14 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 5.0),
+                              child: LabelStringWidget(
+                                text: epiDescritor.imagem != null
+                                    ? 'Imagem anexada'
+                                    : '',
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 5.0),
                               child: ImageDisplayWidget(
                                 imageBase64: epiDescritor.imagem,
                               ),
@@ -310,10 +323,11 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
                       onPressed: () => {salvar()},
                     ),
                     CleanButtonWidget(
-                      onPressed: () => {
+                      onPressed: () {
                         setState(() {
                           epiDescritor = EpiDescritorModel.empty();
-                        }),
+                        });
+                        setTipoEpi(null);
                       },
                     ),
                     CancelButtonUnfilledWidget(

@@ -106,6 +106,7 @@ class _ConsultaRemoverReporItemPageState
     motivoRemoverReporItemCubit = MotivoRemoverReporItemCubit();
     motivoRemoverReporItemCubit.loadAll();
 
+    bloc.loadMotivoRemoverReporItem(filter);
     super.initState();
   }
 

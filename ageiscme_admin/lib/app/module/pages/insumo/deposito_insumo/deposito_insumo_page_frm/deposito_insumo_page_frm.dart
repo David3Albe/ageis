@@ -60,6 +60,8 @@ class _DepositoInsumoPageFrmState extends State<DepositoInsumoPageFrm> {
 
   late bool Function() validateLocal;
   late bool Function() validateSituacao;
+  late void Function(LocalInstituicaoModel?) setLocal;
+  late void Function(DepositoInsumoStatusOption?) setSituacao;
 
   @override
   void initState() {
@@ -158,6 +160,9 @@ class _DepositoInsumoPageFrmState extends State<DepositoInsumoPageFrm> {
                         )
                         .firstOrNull;
                     return DropDownSearchWidget<LocalInstituicaoModel>(
+                      setSelectedItemBuilder:
+                          (context, setSelectedItemMethod) =>
+                              setLocal = setSelectedItemMethod,
                       validator: (val) => val == null ? 'Obrigatório' : null,
                       validateBuilder: (context, validateMethodBuilder) =>
                           validateLocal = validateMethodBuilder,
@@ -176,6 +181,8 @@ class _DepositoInsumoPageFrmState extends State<DepositoInsumoPageFrm> {
               Padding(
                 padding: const EdgeInsets.only(top: 5.0),
                 child: DropDownSearchWidget<DepositoInsumoStatusOption>(
+                  setSelectedItemBuilder: (context, setSelectedItemMethod) =>
+                      setSituacao = setSelectedItemMethod,
                   validateBuilder: (context, validateMethodBuilder) =>
                       validateSituacao = validateMethodBuilder,
                   validator: (obj) => obj == null ? 'Obrigatório' : null,
@@ -229,10 +236,12 @@ class _DepositoInsumoPageFrmState extends State<DepositoInsumoPageFrm> {
                   Padding(
                     padding: const EdgeInsets.only(left: 16.0),
                     child: CleanButtonWidget(
-                      onPressed: () => {
+                      onPressed: () {
                         setState(() {
                           depositoInsumo = DepositoInsumoModel.empty();
-                        }),
+                        });
+                        setLocal(null);
+                        setSituacao(null);
                       },
                     ),
                   ),

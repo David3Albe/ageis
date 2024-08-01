@@ -76,6 +76,8 @@ class _ConsultaProcessosLeituraEntradaAutomaticaPageState
     processoEtapaBloc.loadAll();
     entradaAutomatica = EntradaAutomaticaModel.empty();
 
+    bloc.loadEntradaAutomatica(filter);
+
     recuperaUsuario().then((value) {
       if (value == null ||
           value.usuario == null ||

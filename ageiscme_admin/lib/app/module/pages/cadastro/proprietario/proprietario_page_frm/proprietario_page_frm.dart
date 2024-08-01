@@ -19,6 +19,7 @@ import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_pop
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
+import 'package:compartilhados/functions/conversions/conversion_helper.dart';
 import 'package:compartilhados/main.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
@@ -103,7 +104,8 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
     txtCodBarra.addValidator((String str) {
       if (str.isEmpty) {
         return '';
-      } else if (int.tryParse(str) == null) {
+      } else if (int.tryParse(str) == null ||
+          !ConversionHelper.isInt(int.tryParse(str))) {
         return 'Número inválido';
       }
       return '';

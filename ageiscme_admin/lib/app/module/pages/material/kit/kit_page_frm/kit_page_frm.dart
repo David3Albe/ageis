@@ -32,6 +32,7 @@ import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/list_field/list_field_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_string_area_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
@@ -79,7 +80,7 @@ class _KitPageFrmState extends State<KitPageFrm> {
     readOnly: true,
   );
 
-  late final TextFieldStringWidget txtRestricao = TextFieldStringWidget(
+  late final TextFieldStringAreaWidget txtRestricao = TextFieldStringAreaWidget(
     placeholder: 'Observação',
     onChanged: (String? str) {
       kit.restricao = txtRestricao.text;
@@ -154,6 +155,13 @@ class _KitPageFrmState extends State<KitPageFrm> {
   void Function(DateTime?)? setDateDescarte;
   final ScrollController scroll = ScrollController();
 
+  late void Function(KitDescritorDropDownSearchResponseDTO?) setDescritor;
+  late void Function(KitCorModel?) setCor1;
+  late void Function(KitCorModel?) setCor2;
+  late void Function(KitCorModel?) setCor3;
+  late void Function(KitCorModel?) setCor4;
+  late void Function(KitSituacaoOption?) setSituacao;
+
   @override
   Widget build(BuildContext context) {
     setFields();
@@ -196,6 +204,11 @@ class _KitPageFrmState extends State<KitPageFrm> {
                                   Expanded(
                                     child: DropDownSearchApiWidget<
                                         KitDescritorDropDownSearchResponseDTO>(
+                                      setSelectedItemBuilder: (
+                                        context,
+                                        setSelectedItemMethod,
+                                      ) =>
+                                          setDescritor = setSelectedItemMethod,
                                       validateBuilder:
                                           (context, validateMethodBuilder) =>
                                               validateDescritor =
@@ -260,6 +273,11 @@ class _KitPageFrmState extends State<KitPageFrm> {
                                             )
                                             .firstOrNull;
                                         return DropDownSearchWidget(
+                                          setSelectedItemBuilder: (
+                                            context,
+                                            setSelectedItemMethod,
+                                          ) =>
+                                              setCor1 = setSelectedItemMethod,
                                           textFunction: (kit) =>
                                               kit.GetNomeKitCorText(),
                                           initialValue: kitCor,
@@ -299,6 +317,11 @@ class _KitPageFrmState extends State<KitPageFrm> {
                                             )
                                             .firstOrNull;
                                         return DropDownSearchWidget(
+                                          setSelectedItemBuilder: (
+                                            context,
+                                            setSelectedItemMethod,
+                                          ) =>
+                                              setCor2 = setSelectedItemMethod,
                                           textFunction: (kit) =>
                                               kit.GetNomeKitCorText(),
                                           initialValue: kitCor,
@@ -342,6 +365,11 @@ class _KitPageFrmState extends State<KitPageFrm> {
                                             )
                                             .firstOrNull;
                                         return DropDownSearchWidget(
+                                          setSelectedItemBuilder: (
+                                            context,
+                                            setSelectedItemMethod,
+                                          ) =>
+                                              setCor3 = setSelectedItemMethod,
                                           textFunction: (kit) =>
                                               kit.GetNomeKitCorText(),
                                           initialValue: kitCor,
@@ -379,6 +407,11 @@ class _KitPageFrmState extends State<KitPageFrm> {
                                             )
                                             .firstOrNull;
                                         return DropDownSearchWidget(
+                                          setSelectedItemBuilder: (
+                                            context,
+                                            setSelectedItemMethod,
+                                          ) =>
+                                              setCor4 = setSelectedItemMethod,
                                           textFunction: (kit) =>
                                               kit.GetNomeKitCorText(),
                                           initialValue: kitCor,
@@ -401,6 +434,11 @@ class _KitPageFrmState extends State<KitPageFrm> {
                             Padding(
                               padding: const EdgeInsets.only(top: 5.0),
                               child: DropDownSearchWidget<KitSituacaoOption>(
+                                setSelectedItemBuilder: (
+                                  context,
+                                  setSelectedItemMethod,
+                                ) =>
+                                    setSituacao = setSelectedItemMethod,
                                 validator: (val) =>
                                     val == null ? 'Obrigatório' : null,
                                 validateBuilder: (
@@ -534,6 +572,12 @@ class _KitPageFrmState extends State<KitPageFrm> {
                       setState(() {
                         kit = KitModel.empty();
                         setDateDescarte?.call(null);
+                        setCor1(null);
+                        setCor2(null);
+                        setCor3(null);
+                        setCor4(null);
+                        setSituacao(null);
+                        setDescritor(null);
                       }),
                     },
                   ),

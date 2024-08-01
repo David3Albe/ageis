@@ -56,7 +56,7 @@ class ProcessoPageTreeViewKitColorsWidget extends StatelessWidget {
     for (Color cor in cores) {
       widgets.add(
         Padding(
-          padding: const EdgeInsets.only(left: 1.0),
+          padding: const EdgeInsets.only(left: 1.75),
           child: Container(
             height: size.width * 0.01,
             width: size.width * 0.01,

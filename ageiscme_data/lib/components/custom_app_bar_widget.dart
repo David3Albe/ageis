@@ -4,7 +4,7 @@ import 'package:ageiscme_data/components/image_widget.dart';
 import 'package:ageiscme_data/cubits/imagem_cubit/imagem_cubit.dart';
 import 'package:ageiscme_models/models/imagem/imagem_model.dart';
 import 'package:compartilhados/componentes/appbar/logout_widget.dart';
-import 'package:compartilhados/cores/cores.dart';
+// import 'package:compartilhados/cores/cores.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBarWidget extends StatefulWidget {
@@ -65,14 +65,37 @@ class _CustomAppBarWidgetState extends State<CustomAppBarWidget> {
     bool veryMicroSizeImage = size.width < 300;
     return Scaffold(
       drawer: widget.drawer,
-      appBar: AppBar(
-        toolbarHeight: height,
-        backgroundColor: Cores.materialCorPrincipal,
-        elevation: 0,
-        actions: [
-          Padding(
-            padding: EdgeInsets.only(left: resumeView ? 36.0 : 4.0),
-            child: ImageWidget(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(height),
+        child: AppBar(
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(1.0),
+            child: Container(
+              color: Colors.grey,
+              height: 1.0,
+            ),
+          ),
+          toolbarHeight: height,
+          backgroundColor: const Color.fromRGBO(216, 218, 230, 1),
+          elevation: 0,
+          actions: [
+            Padding(
+              padding: EdgeInsets.only(left: resumeView ? 36.0 : 4.0),
+              child: ImageWidget(
+                width: veryMicroSizeImage
+                    ? 70
+                    : microSizeImage
+                        ? 100
+                        : smallSizeImage
+                            ? 150
+                            : 200,
+                identificador: 'logo_esquerdo',
+              ),
+            ),
+            widget.title == null
+                ? const Spacer()
+                : Expanded(child: Center(child: widget.title!)),
+            ImageWidget(
               width: veryMicroSizeImage
                   ? 70
                   : microSizeImage
@@ -80,24 +103,12 @@ class _CustomAppBarWidgetState extends State<CustomAppBarWidget> {
                       : smallSizeImage
                           ? 150
                           : 200,
-              identificador: 'logo_esquerdo',
+              identificador: 'logo_direito',
             ),
-          ),
-          widget.title == null
-              ? const Spacer()
-              : Expanded(child: Center(child: widget.title!)),
-          ImageWidget(
-            width: veryMicroSizeImage
-                ? 70
-                : microSizeImage
-                    ? 100
-                    : smallSizeImage
-                        ? 150
-                        : 200,
-            identificador: 'logo_direito',
-          ),
-          Center(child: LogoutWidget(onLogout: widget.onLogout)),
-        ],
+            if (widget.onLogout != null)
+              Center(child: LogoutWidget(onLogout: widget.onLogout)),
+          ],
+        ),
       ),
       body: widget.body,
     );

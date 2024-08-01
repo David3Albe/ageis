@@ -153,6 +153,10 @@ class ItemSituacaoOption with DropDownText {
     ItemSituacaoOption('DataMatrix Danificado', '4'),
   ];
 
+  static ItemSituacaoOption getSituacaoLiberado() {
+    return situacaoOptions.where((element) => element.cod == '1').first;
+  }
+
   static String getSituacaoOpcaoFromId(String opcao) {
     Iterable<ItemSituacaoOption>? situacao =
         situacaoOptions.where((element) => element.cod == opcao);

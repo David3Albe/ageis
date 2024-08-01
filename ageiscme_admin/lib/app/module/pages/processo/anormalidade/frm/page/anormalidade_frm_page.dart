@@ -44,6 +44,7 @@ class AnormalidadeFrmPageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    late void Function(ProcessoEtapaModel?) setEtapa;
     final ScrollController scroll = ScrollController();
     final GlobalKey<FormState> tipoAnormalidadeForm = GlobalKey<FormState>();
     Size size = MediaQuery.of(context).size;
@@ -119,6 +120,9 @@ class AnormalidadeFrmPageWidget extends StatelessWidget {
                               bool itemSelecionado =
                                   anormalidadeState.dto?.codItem != null;
                               return DropDownSearchWidget<ProcessoEtapaModel>(
+                                setSelectedItemBuilder:
+                                    (context, setSelectedItemMethod) =>
+                                        setEtapa = setSelectedItemMethod,
                                 maxItems: 200,
                                 readOnly: itemSelecionado ||
                                     (anormalidadeState.dto?.cod ?? 0) > 0,
@@ -458,8 +462,10 @@ class AnormalidadeFrmPageWidget extends StatelessWidget {
                       ),
                     ),
                     CleanButtonWidget(
-                      onPressed:
-                          BlocProvider.of<AnormalidadeFrmCubit>(context).clear,
+                      onPressed: () {
+                        BlocProvider.of<AnormalidadeFrmCubit>(context).clear();
+                        setEtapa(null);
+                      },
                     ),
                     CancelButtonUnfilledWidget(
                       onPressed: onCancel,

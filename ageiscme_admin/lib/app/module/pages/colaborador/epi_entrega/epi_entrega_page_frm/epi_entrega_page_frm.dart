@@ -20,7 +20,11 @@ import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart'
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/models/custom_popup_item_model.dart';
+import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
+import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
+import 'package:compartilhados/componentes/toasts/warning_dialog.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/fontes/fontes.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
@@ -490,6 +494,8 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
                                         }
 
                                         return ListFieldWidget<EpiEntregaModel>(
+                                          removeListAfterPress: false,
+                                          onRemove: onRemove,
                                           setSelected: (
                                             context,
                                             setSelectedItemMethod,
@@ -498,7 +504,7 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
                                                   setSelectedItemMethod,
                                           sourceList: epiEntreguesValidade,
                                           disableUnselect: false,
-                                          removeButton: false,
+                                          removeButton: true,
                                           onItemSelected: (value) {
                                             setSelectedEpiEntregueDescartado(
                                               null,
@@ -576,6 +582,8 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
                                         }
 
                                         return ListFieldWidget<EpiEntregaModel>(
+                                          removeListAfterPress: false,
+                                          onRemove: onRemove,
                                           setSelected: (
                                             context,
                                             setSelectedItemMethod,
@@ -584,7 +592,7 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
                                                   setSelectedItemMethod,
                                           disableUnselect: false,
                                           sourceList: epiEntreguesDescartados,
-                                          removeButton: false,
+                                          removeButton: true,
                                           permitReselect: false,
                                           onItemSelected: (value) {
                                             setSelectedEpiEntregueValidade(
@@ -737,6 +745,36 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
       context: context,
       dto: dto,
     ).print();
+  }
+
+  void onRemove(EpiEntregaModel epi) async {
+    if (epi.dataDescarte != null) {
+      WarningUtils.showWarningDialog(
+        context,
+        'Não é possível remover um EPI Descartado',
+      );
+      return;
+    }
+    ConfirmDialogUtils.showConfirmAlertDialog(
+      context: context,
+      message: 'Confirma a remoção do Registro de EPI?',
+      onConfirm: () => onConfirm(epi),
+      onCancel: () => {},
+    );
+  }
+
+  void onConfirm(EpiEntregaModel epi) async {
+    LoadingController loading = LoadingController(context: context);
+    (String, EpiEntregaModel)? result = await EpiEntregaService().delete(epi);
+    loading.closeDefault();
+    if (result == null) return;
+    setSelectedEpiEntregueValidade(
+      null,
+    );
+    setSelectedEpiDescritor(null);
+    updateFields(null);
+    ToastUtils.showCustomToastSucess(context, result.$1);
+    epiEntregaCubit.loadAll();
   }
 
   void salvar() {

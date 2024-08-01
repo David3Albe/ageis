@@ -43,6 +43,10 @@ _$InsumoTesteModelImpl _$$InsumoTesteModelImplFromJson(Map json) =>
           ? null
           : UsuarioModel.fromJson(
               Map<String, Object?>.from(json['usuario'] as Map)),
+      usuarioLiberacao: json['usuarioLiberacao'] == null
+          ? null
+          : UsuarioModel.fromJson(
+              Map<String, Object?>.from(json['usuarioLiberacao'] as Map)),
     );
 
 Map<String, dynamic> _$$InsumoTesteModelImplToJson(
@@ -68,4 +72,5 @@ Map<String, dynamic> _$$InsumoTesteModelImplToJson(
       'depositoInsumo': instance.depositoInsumo?.toJson(),
       'insumo': instance.insumo?.toJson(),
       'usuario': instance.usuario?.toJson(),
+      'usuarioLiberacao': instance.usuarioLiberacao?.toJson(),
     };

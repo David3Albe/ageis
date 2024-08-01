@@ -51,7 +51,7 @@ class _LoadConsultaProcessosLeituraDispensadoPageState
       CustomDataColumn(
         text: 'Cod. Kit',
         field: 'codKit',
-        type: CustomDataColumnType.Number,
+        type: CustomDataColumnType.Text,
       ),
       CustomDataColumn(text: 'Kit', field: 'kitDescritorNome'),
       CustomDataColumn(text: 'Tamanho Kit', field: 'tamanhoKit'),

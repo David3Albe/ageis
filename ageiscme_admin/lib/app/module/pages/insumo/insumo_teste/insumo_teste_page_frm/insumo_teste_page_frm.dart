@@ -1,5 +1,8 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuario_drop_down_search_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
+import 'package:ageiscme_data/services/usuario/usuario_service.dart';
+import 'package:ageiscme_models/filters/usuario_filter/usuario_filter.dart';
+import 'package:compartilhados/componentes/campos/text_field_string_area_widget.dart';
 import 'package:flutter/material.dart';
 
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/deposito_insumo/deposito_insumo_cubit.dart';
@@ -65,29 +68,30 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
   );
   InsumoMovimentoFilterCubit insumoCubitFilter = InsumoMovimentoFilterCubit();
 
-  late final TextFieldStringWidget txtLote = TextFieldStringWidget(
-    placeholder: 'Lote',
-    onChanged: (String? str) {
-      insumoTeste.lote = txtLote.text;
-    },
-  );
+  // late final TextFieldStringWidget txtLote = TextFieldStringWidget(
+  //   placeholder: 'Lote',
+  //   onChanged: (String? str) {
+  //     insumoTeste.lote = txtLote.text;
+  //   },
+  // );
 
-  late final TextFieldStringWidget txtDescricao = TextFieldStringWidget(
+  late final TextFieldStringAreaWidget txtDescricao = TextFieldStringAreaWidget(
     placeholder: 'Descrição',
     onChanged: (String? str) {
       insumoTeste.indicador = txtDescricao.text;
     },
   );
 
-  late final TextFieldStringWidget txtComunicadoFabricante =
-      TextFieldStringWidget(
+  late final TextFieldStringAreaWidget txtComunicadoFabricante =
+      TextFieldStringAreaWidget(
     placeholder: 'Comunicado Fabricante',
     onChanged: (String? str) {
       insumoTeste.comunicadoFabricante = txtComunicadoFabricante.text;
     },
   );
 
-  late final TextFieldStringWidget txtComunicadoAnvisa = TextFieldStringWidget(
+  late final TextFieldStringAreaWidget txtComunicadoAnvisa =
+      TextFieldStringAreaWidget(
     placeholder: 'Comunicado Anvisa',
     onChanged: (String? str) {
       insumoTeste.comunicadoAnvisa = txtComunicadoAnvisa.text;
@@ -125,18 +129,39 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
   late final String nomeUsuarioLiberacao;
   late final int codUsuarioLiberacao;
 
+  late void Function(InsumoModel?) setInsumo;
+  late void Function(InsumoMovimentoDropDownSearchResponseDTO?)
+      setInsumoMovimento;
+  late void Function(DepositoInsumoModel?) setDeposito;
+  late void Function(SituacaoOption?) setSituacao;
+
+  late void Function(bool) setMovimentacaoReadonly;
+  late void Function() setRefreshMovimentacao;
+
   @override
   void initState() {
+    if (insumoTeste.insumoMovimento != null) {
+      insumoCubitFilter.setInsumoMovimento(
+        InsumoMovimentoDropDownSearchResponseDTO(
+          cod: insumoTeste.codMovimentoInsumo!,
+          data: insumoTeste.insumoMovimento!.dataHora!,
+          flagEntradaSaida: insumoTeste.insumoMovimento!.flagEntradaSaida,
+          lote: insumoTeste.insumoMovimento!.lote,
+          nomeInsumo: insumoTeste.insumoMovimento?.insumo?.nome,
+          codDeposito: insumoTeste.insumoMovimento?.codDeposito,
+        ),
+      );
+    }
     insumoCubit = InsumoCubit();
     insumoCubit.loadAll();
     insumoMovimentoService = InsumoMovimentoService();
 
-    txtLote.addValidator((String str) {
-      if (str.length > 50) {
-        return 'Pode ter no máximo 50 caracteres';
-      }
-      return '';
-    });
+    // txtLote.addValidator((String str) {
+    //   if (str.length > 50) {
+    //     return 'Pode ter no máximo 50 caracteres';
+    //   }
+    //   return '';
+    // });
 
     txtDescricao.addValidator((String str) {
       if (str.length > 50) {
@@ -146,37 +171,26 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
     });
 
     txtComunicadoAnvisa.addValidator((String str) {
-      if (str.length > 50) {
-        return 'Pode ter no máximo 50 caracteres';
+      if (str.length > 400) {
+        return 'Pode ter no máximo 400 caracteres';
       }
       return '';
     });
 
     txtComunicadoFabricante.addValidator((String str) {
-      if (str.length > 50) {
-        return 'Pode ter no máximo 50 caracteres';
+      if (str.length > 400) {
+        return 'Pode ter no máximo 400 caracteres';
       }
       return '';
     });
 
-    recuperaUsuario().then((value) {
-      if (value == null ||
-          value.usuario == null ||
-          value.usuario!.cod == null) {
-        return;
-      }
-      txtUsuario.text = value.usuario!.nome ?? '';
-      insumoTeste.codUsuario = value.usuario!.cod;
-
-      codUsuarioLiberacao = value.usuario!.cod!;
-      nomeUsuarioLiberacao = value.usuario!.nome!;
-    });
-
+    txtUsuario.text = insumoTeste.usuario?.nome ?? '';
+    txtUsuarioLiberacao.text = insumoTeste.usuarioLiberacao?.nome ?? '';
     super.initState();
   }
 
   void setFields() {
-    txtLote.text = insumoTeste.lote ?? '';
+    // txtLote.text = insumoTeste.lote ?? '';
     txtDescricao.text = insumoTeste.indicador ?? '';
     txtComunicadoFabricante.text = insumoTeste.comunicadoFabricante ?? '';
     txtComunicadoAnvisa.text = insumoTeste.comunicadoAnvisa ?? '';
@@ -185,14 +199,6 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
     if (insumoTeste.cod != 0) {
       titulo =
           'Edição de Testes de Insumos: ${insumoTeste.cod} - ${insumoTeste.codInsumo}';
-      if (insumoTeste.resultado == '0') {
-        final nomeUsuarioLiberacao =
-            widget.usuarioCubit.state.usuarios.firstWhere(
-          (user) => user.cod == insumoTeste.codUsuarioLiberacao,
-        );
-
-        txtUsuarioLiberacao.text = nomeUsuarioLiberacao.nome!;
-      }
     }
   }
 
@@ -258,6 +264,9 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
                                       )
                                       .firstOrNull;
                                   return DropDownSearchWidget<InsumoModel>(
+                                    setSelectedItemBuilder:
+                                        (context, setSelectedItemMethod) =>
+                                            setInsumo = setSelectedItemMethod,
                                     validateBuilder: (
                                       context,
                                       validateMethodBuilder,
@@ -272,6 +281,14 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
                                     sourceList: insumos,
                                     onChanged: (value) {
                                       insumoTeste.codInsumo = value?.cod!;
+                                      if (value == null) {
+                                        setMovimentacaoReadonly(true);
+                                        setInsumoMovimento(null);
+                                      } else {
+                                        setMovimentacaoReadonly(false);
+                                        setInsumoMovimento(null);
+                                        setRefreshMovimentacao();
+                                      }
                                     },
                                     placeholder: 'Insumo *',
                                   );
@@ -280,6 +297,18 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
                             ),
                             DropDownSearchApiWidget<
                                 InsumoMovimentoDropDownSearchResponseDTO>(
+                              setReadonlyMethod: (context, setReadonlyMethod) =>
+                                  setMovimentacaoReadonly = setReadonlyMethod,
+                              setRefreshItemMethod: (
+                                context,
+                                setRefreshItemMethod,
+                              ) =>
+                                  setRefreshMovimentacao = setRefreshItemMethod,
+                              setSelectedItemBuilder: (
+                                context,
+                                setSelectedItemMethod,
+                              ) =>
+                                  setInsumoMovimento = setSelectedItemMethod,
                               validator: (val) =>
                                   val == null ? 'Obrigatório' : null,
                               validateBuilder: (
@@ -300,6 +329,8 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
                                       lote: insumoTeste.insumoMovimento!.lote,
                                       nomeInsumo: insumoTeste
                                           .insumoMovimento?.insumo?.nome,
+                                      codDeposito: insumoTeste
+                                          .insumoMovimento?.codDeposito,
                                     ),
                               search: (str) async =>
                                   (await InsumoMovimentoService()
@@ -307,14 +338,15 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
                                     InsumoMovimentoDropDownSearchDTO(
                                       numeroRegistros: 30,
                                       search: str,
+                                      codInsumo: insumoTeste.codInsumo,
                                     ),
                                   ))
                                       ?.$2 ??
                                   [],
                               onChanged: (value) {
-                                InsumoMovimentoFilterCubit()
-                                    .setInsumoMovimento(value);
-                                insumoTeste.codMovimentoInsumo = value!.cod;
+                                insumoCubitFilter.setInsumoMovimento(value);
+                                insumoTeste.codMovimentoInsumo = value?.cod;
+                                widget.depositoInsumoCubit.refresh();
                               },
                               placeholder: 'Movimento *',
                             ),
@@ -337,11 +369,16 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
                                       .where(
                                         (element) =>
                                             element.cod ==
-                                            insumoTeste.codDeposito,
+                                            insumoCubitFilter.state
+                                                .insumoMovimento?.codDeposito,
                                       )
                                       .firstOrNull;
                                   return DropDownSearchWidget<
                                       DepositoInsumoModel>(
+                                    readOnly: true,
+                                    setSelectedItemBuilder:
+                                        (context, setSelectedItemMethod) =>
+                                            setDeposito = setSelectedItemMethod,
                                     textFunction: (deposito) =>
                                         deposito.GetNomeDepositoText(),
                                     initialValue: deposito,
@@ -354,10 +391,12 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
                                 },
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: txtLote,
-                            ),
+                            // Visibility(
+                            //   child: Padding(
+                            //     padding: const EdgeInsets.only(top: 5.0),
+                            //     child: txtLote,
+                            //   ),
+                            // ),
                             Padding(
                               padding: const EdgeInsets.only(top: 5.0),
                               child: txtDescricao,
@@ -365,6 +404,9 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
                             Padding(
                               padding: const EdgeInsets.only(top: 5.0),
                               child: DropDownSearchWidget<SituacaoOption>(
+                                setSelectedItemBuilder:
+                                    (context, setSelectedItemMethod) =>
+                                        setSituacao = setSelectedItemMethod,
                                 validator: (obj) =>
                                     obj == null ? 'Obrigatório' : null,
                                 validateBuilder: (
@@ -462,11 +504,7 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: CleanButtonWidget(
-                    onPressed: () => {
-                      setState(() {
-                        insumoTeste = InsumoTesteModel.empty();
-                      }),
-                    },
+                    onPressed: limpar,
                   ),
                 ),
                 Padding(
@@ -483,8 +521,42 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
     );
   }
 
-  void salvar() {
-    bool loteValid = txtLote.valid;
+  void limpar() async {
+    AuthenticationResultDTO? auth =
+        await Modular.get<AuthenticationStore>().GetAuthenticated();
+    setState(() {
+      insumoTeste.cod = 0;
+      insumoTeste.codInstituicao = auth?.instituicao?.cod;
+      insumoTeste.codMovimentoInsumo = null;
+      insumoTeste.codInsumo = 0;
+      insumoTeste.codDeposito = null;
+      insumoTeste.codUsuario = auth?.usuario?.cod;
+      insumoTeste.codUsuarioLiberacao = null;
+      insumoTeste.comunicadoAnvisa = null;
+      insumoTeste.comunicadoFabricante = null;
+      insumoTeste.data = DateTime.now();
+      insumoTeste.imagemDocAnexo = null;
+      insumoTeste.indicador = null;
+      insumoTeste.resultado = null;
+      insumoTeste.lote = null;
+      insumoTeste.tstamp = null;
+      insumoTeste.ultimaAlteracao = null;
+      insumoTeste.insumoMovimento = null;
+      insumoTeste.depositoInsumo = null;
+      insumoTeste.insumo = null;
+      insumoTeste.usuario = auth?.usuario;
+    });
+    setDeposito(null);
+    setInsumo(null);
+    setSituacao(null);
+    setInsumoMovimento(null);
+    dtpDataHora.setValue(insumoTeste.data);
+    txtUsuarioLiberacao.text = '';
+    txtUsuario.text = auth?.usuario?.nome ?? 'Usuário logado não identificado';
+  }
+
+  void salvar() async {
+    // bool loteValid = txtLote.valid;
     bool usuarioValid = txtUsuario.valid;
     bool insumoValid = insumoValidate();
     bool situacaoValid = situacaoValidate();
@@ -493,21 +565,27 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
       scroll.jumpTo(0);
     } else if (!movimentacaoValid) {
       scroll.jumpTo(50);
-    } else if (!loteValid) {
-      scroll.jumpTo(150);
     } else if (!situacaoValid) {
-      scroll.jumpTo(250);
+      scroll.jumpTo(200);
     }
 
-    if (!loteValid ||
-        !usuarioValid ||
-        !insumoValid ||
-        !situacaoValid ||
-        !movimentacaoValid) return;
+    if (!usuarioValid || !insumoValid || !situacaoValid || !movimentacaoValid) {
+      return;
+    }
 
     if (insumoTeste.resultado == '0') {
-      txtUsuarioLiberacao.text = nomeUsuarioLiberacao;
-      insumoTeste.codUsuarioLiberacao = codUsuarioLiberacao;
+      AuthenticationResultDTO? auth =
+          await Modular.get<AuthenticationStore>().GetAuthenticated();
+      txtUsuarioLiberacao.text =
+          auth?.usuario?.nome ?? 'Sem usuário logado identificado';
+      insumoTeste.codUsuarioLiberacao = auth?.usuario?.cod;
+      insumoTeste.usuarioLiberacao = await UsuarioService().FilterOne(
+        UsuarioFilter(
+          carregarFoto: false,
+          tipoQuery: UsuarioFilterTipoQuery.SemFoto,
+          cod: insumoTeste.codUsuarioLiberacao,
+        ),
+      );
     }
 
     cubit.save(insumoTeste, widget.onSaved);

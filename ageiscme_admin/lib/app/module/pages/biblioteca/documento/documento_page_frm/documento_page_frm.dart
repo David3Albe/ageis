@@ -73,6 +73,9 @@ class _DocumentoPageFrmState extends State<DocumentoPageFrm> {
 
   late bool Function() validateTipoDocumento;
 
+  late void Function(TipoDocumentoModel?) setTipoDocumento;
+  late void Function(bool) setControlarValidade;
+
   @override
   void initState() {
     tipoDocumentoCubit = TipoDocumentoCubit();
@@ -163,6 +166,10 @@ class _DocumentoPageFrmState extends State<DocumentoPageFrm> {
                                       .firstOrNull;
                                   return DropDownSearchWidget<
                                       TipoDocumentoModel>(
+                                    setSelectedItemBuilder:
+                                        (context, setSelectedItemMethod) =>
+                                            setTipoDocumento =
+                                                setSelectedItemMethod,
                                     validator: (val) =>
                                         val == null ? 'Obrigatório' : null,
                                     validateBuilder:
@@ -188,6 +195,8 @@ class _DocumentoPageFrmState extends State<DocumentoPageFrm> {
                               child: Row(
                                 children: [
                                   CustomCheckboxWidget(
+                                    setValue: (context, setValueWidget) =>
+                                        setControlarValidade = setValueWidget,
                                     checked: documento.controlarValidade,
                                     onClick: (value) =>
                                         documento.controlarValidade = value,
@@ -199,14 +208,6 @@ class _DocumentoPageFrmState extends State<DocumentoPageFrm> {
                             Padding(
                               padding: const EdgeInsets.only(top: 5.0),
                               child: txtObservacao,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: LabelStringWidget(
-                                text: documento.nomeDocumento == null
-                                    ? 'Documento não Anexado'
-                                    : 'Documento Anexado: ${documento.nomeDocumento!}',
-                              ),
                             ),
                             const Padding(padding: EdgeInsets.only(top: 24)),
                           ],
@@ -250,7 +251,14 @@ class _DocumentoPageFrmState extends State<DocumentoPageFrm> {
                       ),
                   ],
                 ),
-                const Spacer(),
+                Expanded(
+                  child: LabelStringWidget(
+                    text: documento.nomeDocumento == null ||
+                            documento.nomeDocumento!.isEmpty
+                        ? ''
+                        : 'Documento: ${documento.nomeDocumento!}',
+                  ),
+                ),
                 Wrap(
                   spacing: 16 * paddingHorizontalScale,
                   runSpacing: 16 * paddingHorizontalScale,
@@ -264,6 +272,9 @@ class _DocumentoPageFrmState extends State<DocumentoPageFrm> {
                         setState(() {
                           documento = DocumentoModel.empty();
                         }),
+                        setControlarValidade(false),
+                        txtDataValidade.setValue(null),
+                        setTipoDocumento(null),
                       },
                     ),
                     CancelButtonUnfilledWidget(

@@ -50,12 +50,12 @@ class _ConsultaProcessosLeituraRetiradoPageState
     CustomDataColumn(
       text: 'Cod. Kit',
       field: 'codKit',
-      type: CustomDataColumnType.Number,
+      type: CustomDataColumnType.Text,
     ),
     CustomDataColumn(
       text: 'Cod. Barra. Kit',
       field: 'codBarraKit',
-      type: CustomDataColumnType.Number,
+      type: CustomDataColumnType.Text,
     ),
     CustomDataColumn(
       text: 'Kit',
@@ -101,6 +101,7 @@ class _ConsultaProcessosLeituraRetiradoPageState
     filter.finalDate = DateTime.now();
     localInstituicaoBloc = LocalInstituicaoCubit();
     localInstituicaoBloc.loadAll();
+    bloc.loadProcessosLeituraRetirado(filter);
 
     super.initState();
   }

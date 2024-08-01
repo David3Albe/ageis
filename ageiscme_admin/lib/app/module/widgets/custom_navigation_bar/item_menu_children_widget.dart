@@ -117,7 +117,7 @@ class ItemMenuChildrenWidget extends AnimatedWidget {
               height: height.value,
               duration: const Duration(seconds: 1),
               curve: Curves.fastOutSlowIn,
-              color: hovered ? Colors.grey[350] : null,
+              color: hovered ? Colors.grey[400] : null,
               child: Padding(
                 padding: EdgeInsets.all(heightSpacer),
                 child: Row(

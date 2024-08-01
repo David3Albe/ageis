@@ -54,6 +54,7 @@ class _ConsultaEstoqueDisponivelRotuladoPageState
     arsenalEstoqueBloc.loadAll();
     proprietarioBloc = ProprietarioCubit();
     proprietarioBloc.loadAll();
+    bloc.loadEstoqueDisponivelRotulado(filter);
     super.initState();
   }
 

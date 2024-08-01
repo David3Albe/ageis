@@ -65,6 +65,9 @@ mixin _$InsumoTesteModel {
   set insumo(InsumoModel? value) => throw _privateConstructorUsedError;
   UsuarioModel? get usuario => throw _privateConstructorUsedError;
   set usuario(UsuarioModel? value) => throw _privateConstructorUsedError;
+  UsuarioModel? get usuarioLiberacao => throw _privateConstructorUsedError;
+  set usuarioLiberacao(UsuarioModel? value) =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -98,12 +101,14 @@ abstract class $InsumoTesteModelCopyWith<$Res> {
       InsumoMovimentoModel? insumoMovimento,
       DepositoInsumoModel? depositoInsumo,
       InsumoModel? insumo,
-      UsuarioModel? usuario});
+      UsuarioModel? usuario,
+      UsuarioModel? usuarioLiberacao});
 
   $InsumoMovimentoModelCopyWith<$Res>? get insumoMovimento;
   $DepositoInsumoModelCopyWith<$Res>? get depositoInsumo;
   $InsumoModelCopyWith<$Res>? get insumo;
   $UsuarioModelCopyWith<$Res>? get usuario;
+  $UsuarioModelCopyWith<$Res>? get usuarioLiberacao;
 }
 
 /// @nodoc
@@ -139,6 +144,7 @@ class _$InsumoTesteModelCopyWithImpl<$Res, $Val extends InsumoTesteModel>
     Object? depositoInsumo = freezed,
     Object? insumo = freezed,
     Object? usuario = freezed,
+    Object? usuarioLiberacao = freezed,
   }) {
     return _then(_value.copyWith(
       cod: freezed == cod
@@ -221,6 +227,10 @@ class _$InsumoTesteModelCopyWithImpl<$Res, $Val extends InsumoTesteModel>
           ? _value.usuario
           : usuario // ignore: cast_nullable_to_non_nullable
               as UsuarioModel?,
+      usuarioLiberacao: freezed == usuarioLiberacao
+          ? _value.usuarioLiberacao
+          : usuarioLiberacao // ignore: cast_nullable_to_non_nullable
+              as UsuarioModel?,
     ) as $Val);
   }
 
@@ -272,6 +282,18 @@ class _$InsumoTesteModelCopyWithImpl<$Res, $Val extends InsumoTesteModel>
       return _then(_value.copyWith(usuario: value) as $Val);
     });
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $UsuarioModelCopyWith<$Res>? get usuarioLiberacao {
+    if (_value.usuarioLiberacao == null) {
+      return null;
+    }
+
+    return $UsuarioModelCopyWith<$Res>(_value.usuarioLiberacao!, (value) {
+      return _then(_value.copyWith(usuarioLiberacao: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -302,7 +324,8 @@ abstract class _$$InsumoTesteModelImplCopyWith<$Res>
       InsumoMovimentoModel? insumoMovimento,
       DepositoInsumoModel? depositoInsumo,
       InsumoModel? insumo,
-      UsuarioModel? usuario});
+      UsuarioModel? usuario,
+      UsuarioModel? usuarioLiberacao});
 
   @override
   $InsumoMovimentoModelCopyWith<$Res>? get insumoMovimento;
@@ -312,6 +335,8 @@ abstract class _$$InsumoTesteModelImplCopyWith<$Res>
   $InsumoModelCopyWith<$Res>? get insumo;
   @override
   $UsuarioModelCopyWith<$Res>? get usuario;
+  @override
+  $UsuarioModelCopyWith<$Res>? get usuarioLiberacao;
 }
 
 /// @nodoc
@@ -345,6 +370,7 @@ class __$$InsumoTesteModelImplCopyWithImpl<$Res>
     Object? depositoInsumo = freezed,
     Object? insumo = freezed,
     Object? usuario = freezed,
+    Object? usuarioLiberacao = freezed,
   }) {
     return _then(_$InsumoTesteModelImpl(
       cod: freezed == cod
@@ -427,6 +453,10 @@ class __$$InsumoTesteModelImplCopyWithImpl<$Res>
           ? _value.usuario
           : usuario // ignore: cast_nullable_to_non_nullable
               as UsuarioModel?,
+      usuarioLiberacao: freezed == usuarioLiberacao
+          ? _value.usuarioLiberacao
+          : usuarioLiberacao // ignore: cast_nullable_to_non_nullable
+              as UsuarioModel?,
     ));
   }
 }
@@ -454,7 +484,8 @@ class _$InsumoTesteModelImpl extends _InsumoTesteModel {
       required this.insumoMovimento,
       required this.depositoInsumo,
       required this.insumo,
-      required this.usuario})
+      required this.usuario,
+      required this.usuarioLiberacao})
       : super._();
 
   factory _$InsumoTesteModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -501,10 +532,12 @@ class _$InsumoTesteModelImpl extends _InsumoTesteModel {
   InsumoModel? insumo;
   @override
   UsuarioModel? usuario;
+  @override
+  UsuarioModel? usuarioLiberacao;
 
   @override
   String toString() {
-    return 'InsumoTesteModel(cod: $cod, codInstituicao: $codInstituicao, codMovimentoInsumo: $codMovimentoInsumo, codInsumo: $codInsumo, codDeposito: $codDeposito, codUsuario: $codUsuario, codUsuarioLiberacao: $codUsuarioLiberacao, comunicadoAnvisa: $comunicadoAnvisa, comunicadoFabricante: $comunicadoFabricante, data: $data, imagemDocAnexo: $imagemDocAnexo, indicador: $indicador, resultado: $resultado, lote: $lote, tstamp: $tstamp, ultimaAlteracao: $ultimaAlteracao, insumoMovimento: $insumoMovimento, depositoInsumo: $depositoInsumo, insumo: $insumo, usuario: $usuario)';
+    return 'InsumoTesteModel(cod: $cod, codInstituicao: $codInstituicao, codMovimentoInsumo: $codMovimentoInsumo, codInsumo: $codInsumo, codDeposito: $codDeposito, codUsuario: $codUsuario, codUsuarioLiberacao: $codUsuarioLiberacao, comunicadoAnvisa: $comunicadoAnvisa, comunicadoFabricante: $comunicadoFabricante, data: $data, imagemDocAnexo: $imagemDocAnexo, indicador: $indicador, resultado: $resultado, lote: $lote, tstamp: $tstamp, ultimaAlteracao: $ultimaAlteracao, insumoMovimento: $insumoMovimento, depositoInsumo: $depositoInsumo, insumo: $insumo, usuario: $usuario, usuarioLiberacao: $usuarioLiberacao)';
   }
 
   @JsonKey(ignore: true)
@@ -543,7 +576,8 @@ abstract class _InsumoTesteModel extends InsumoTesteModel {
       required InsumoMovimentoModel? insumoMovimento,
       required DepositoInsumoModel? depositoInsumo,
       required InsumoModel? insumo,
-      required UsuarioModel? usuario}) = _$InsumoTesteModelImpl;
+      required UsuarioModel? usuario,
+      required UsuarioModel? usuarioLiberacao}) = _$InsumoTesteModelImpl;
   _InsumoTesteModel._() : super._();
 
   factory _InsumoTesteModel.fromJson(Map<String, dynamic> json) =
@@ -611,6 +645,9 @@ abstract class _InsumoTesteModel extends InsumoTesteModel {
   @override
   UsuarioModel? get usuario;
   set usuario(UsuarioModel? value);
+  @override
+  UsuarioModel? get usuarioLiberacao;
+  set usuarioLiberacao(UsuarioModel? value);
   @override
   @JsonKey(ignore: true)
   _$$InsumoTesteModelImplCopyWith<_$InsumoTesteModelImpl> get copyWith =>

@@ -65,6 +65,7 @@ class _ConsultaProcessoRespostaEPCEPIPageState
     equipamentoBloc = EquipamentoCubit();
     equipamentoBloc.loadAll();
 
+    bloc.loadMotivoRemoverReporItem(filter);
     super.initState();
   }
 

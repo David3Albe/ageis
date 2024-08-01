@@ -361,7 +361,7 @@ class _AfastamentoPageFrmState extends State<AfastamentoPageFrm> {
                               child: LabelStringWidget(
                                 text: afastamento.catAnexa != null
                                     ? 'CAT anexada'
-                                    : 'CAT não anexada',
+                                    : '',
                               ),
                             ),
                             Padding(

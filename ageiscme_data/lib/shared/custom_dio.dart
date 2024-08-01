@@ -62,22 +62,22 @@ class CustomDio {
     }
   }
 
-  int calculateTraficRequest(String url, Object? body) {
-    int size = utf8.encode(url).length;
-    if (body != null) {
-      size += utf8.encode(body.toString()).length;
-    }
-    print('Response url: ' + url);
-    print('Request: ' + size.toString());
-    return size;
-  }
+  // int calculateTraficRequest(String url, Object? body) {
+  //   int size = utf8.encode(url).length;
+  //   if (body != null) {
+  //     size += utf8.encode(body.toString()).length;
+  //   }
+  //   print('Response url: ' + url);
+  //   print('Request: ' + size.toString());
+  //   return size;
+  // }
 
-  int calculateTraficResponse(String url, Response resp) {
-    int size = utf8.encode(resp.data.toString()).length;
-    print('Response url: ' + url);
-    print('Response : ' + size.toString());
-    return size;
-  }
+  // int calculateTraficResponse(String url, Response resp) {
+  //   int size = utf8.encode(resp.data.toString()).length;
+  //   print('Response url: ' + url);
+  //   print('Response : ' + size.toString());
+  //   return size;
+  // }
 
   Future<dynamic> getObject({required dynamic obj}) async {
     if (!_encryptPayload) return obj.toJson();
@@ -92,12 +92,12 @@ class CustomDio {
     String baseRoute = await _route;
     await setHeaders();
     String finalRoute = '$baseRoute$route';
-    calculateTraficRequest(finalRoute, null);
+    // calculateTraficRequest(finalRoute, null);
     Response resp = await _dio.get(
       finalRoute,
       options: options,
     );
-    calculateTraficResponse(finalRoute, resp);
+    // calculateTraficResponse(finalRoute, resp);
     if (!resp.statusCode.toString().startsWith('2')) {
       bool throwed = await throwResponseError(resp);
       if (!throwed) throw CustomBaseException(resp.data.toString());
@@ -109,12 +109,12 @@ class CustomDio {
     String baseRoute = await _route;
     await setHeaders();
     String finalRoute = '$baseRoute$route';
-    calculateTraficRequest(finalRoute, null);
+    // calculateTraficRequest(finalRoute, null);
     Response resp = await _dio.get(
       finalRoute,
       options: options,
     );
-    calculateTraficResponse(finalRoute, resp);
+    // calculateTraficResponse(finalRoute, resp);
     if (!resp.statusCode.toString().startsWith('2')) {
       bool throwed = await throwResponseError(resp);
       if (!throwed) throw CustomBaseException(resp.data.toString());
@@ -127,13 +127,13 @@ class CustomDio {
     await setHeaders();
     String finalRoute = '$baseRoute$route';
     dynamic obj = await getObject(obj: objeto);
-    calculateTraficRequest(finalRoute, obj);
+    // calculateTraficRequest(finalRoute, obj);
     Response resp = await _dio.post(
-      '$baseRoute$route',
+      finalRoute,
       data: obj,
       options: options,
     );
-    calculateTraficResponse(finalRoute, resp);
+    // calculateTraficResponse(finalRoute, resp);
     if (!resp.statusCode.toString().startsWith('2')) {
       bool throwed = await throwResponseError(resp);
       if (!throwed) throw CustomBaseException(resp.data.toString());
@@ -146,13 +146,13 @@ class CustomDio {
     await setHeaders();
     String finalRoute = '$baseRoute$route';
     dynamic obj = await getObject(obj: objeto);
-    calculateTraficRequest(finalRoute, obj);
+    // calculateTraficRequest(finalRoute, obj);
     Response resp = await _dio.post(
       finalRoute,
       data: obj,
       options: options,
     );
-    calculateTraficResponse(finalRoute, resp);
+    // calculateTraficResponse(finalRoute, resp);
     if (!resp.statusCode.toString().startsWith('2')) {
       bool throwed = await throwResponseError(resp);
       if (!throwed) throw CustomBaseException(resp.data);
@@ -165,13 +165,13 @@ class CustomDio {
     await setHeaders();
     String finalRoute = '$baseRoute$route';
     dynamic obj = await getObject(obj: objeto);
-    calculateTraficRequest(finalRoute, obj);
+    // calculateTraficRequest(finalRoute, obj);
     Response resp = await _dio.post(
       finalRoute,
       data: obj,
       options: options,
     );
-    calculateTraficResponse(finalRoute, resp);
+    // calculateTraficResponse(finalRoute, resp);
     if (!resp.statusCode.toString().startsWith('2')) {
       bool throwed = await throwResponseError(resp);
       if (!throwed) throw CustomBaseException(resp.data);
@@ -190,13 +190,13 @@ class CustomDio {
       await setHeaders();
       String finalRoute = '$baseRoute$route';
       dynamic obj = await getObject(obj: objeto);
-      calculateTraficRequest(finalRoute, obj);
+      // calculateTraficRequest(finalRoute, obj);
       Response resp = await _dio.post(
         finalRoute,
         data: obj,
         options: options,
       );
-      calculateTraficResponse(finalRoute, resp);
+      // calculateTraficResponse(finalRoute, resp);
       if (!resp.statusCode.toString().startsWith('2')) {
         bool throwed = await throwResponseError(resp);
         if (throwed) return null;
@@ -231,14 +231,14 @@ class CustomDio {
       await setHeaders();
       String finalRoute = '$baseRoute$route';
       dynamic obj = await getObject(obj: objeto);
-      calculateTraficRequest(finalRoute, obj);
+      // calculateTraficRequest(finalRoute, obj);
       Response resp = await _dio.post(
         finalRoute,
         data: obj,
         options: options,
       );
 
-      calculateTraficResponse(finalRoute, resp);
+      // calculateTraficResponse(finalRoute, resp);
       if (!resp.statusCode.toString().startsWith('2')) {
         bool throwed = await throwResponseError(resp);
         if (throwed) return null;
@@ -278,14 +278,14 @@ class CustomDio {
       await setHeaders();
       String finalRoute = '$baseRoute$route';
       dynamic obj = await getObject(obj: objeto);
-      calculateTraficRequest(finalRoute, obj);
+      // calculateTraficRequest(finalRoute, obj);
       Response resp = await _dio.post(
         finalRoute,
-        data: await getObject(obj: objeto),
+        data: obj,
         options: options,
       );
 
-      calculateTraficResponse(finalRoute, resp);
+      // calculateTraficResponse(finalRoute, resp);
       if (!resp.statusCode.toString().startsWith('2')) {
         bool throwed = await throwResponseError(resp);
         if (throwed) return null;
@@ -326,13 +326,13 @@ class CustomDio {
       await setHeaders();
       String finalRoute = '$baseRoute$route';
       dynamic obj = await getObject(obj: objeto);
-      calculateTraficRequest(finalRoute, obj);
+      // calculateTraficRequest(finalRoute, obj);
       Response resp = await _dio.delete(
         finalRoute,
         data: obj,
         options: options,
       );
-      calculateTraficResponse(finalRoute, resp);
+      // calculateTraficResponse(finalRoute, resp);
       if (!resp.statusCode.toString().startsWith('2')) {
         bool throwed = await throwResponseError(resp);
         if (throwed) return null;

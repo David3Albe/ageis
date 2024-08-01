@@ -178,6 +178,42 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
   late Function() validateServicoTipo;
   final ScrollController scroll = ScrollController();
 
+  Function(ProcessoTipoModel?)? setTipoProcesso;
+  Function(EquipamentoModel?)? setEquipamento;
+  Function(ArsenalEstoqueModel?)? setArsenal;
+  Function(ServicoTipoModel?)? setServicoTipo;
+  Function(bool)? setExigeLeituraEntrada;
+  Function(bool)? setExigeUsoEpcEntrada;
+  Function(bool)? setExigeLeituraSaida;
+  Function(bool)? setExigeUsoEpcSaida;
+  Function(bool)? setTesteIndicadorObrigatorio;
+  Function(bool)? setTesteBiologico;
+  Function(bool)? setTesteBiologicoEntrada;
+  Function(bool)? setTesteBiologicoSaida;
+  Function(bool)? setUsuarioColocaNaoRetira;
+  Function(bool)? setImprimeEtiquetaLote;
+  Function(bool)? setRelatorioRetiradaMateriais;
+  Function(bool)? setUsuarioLocalNaoCompativel;
+  Function(bool)? setSolicitaIntegrador;
+  Function(bool)? setConferenciaVisual;
+  Function(bool)? setLiberaKitIncompleto;
+  Function(bool)? setPermiteQuebraFluxoSobAutorizacao;
+  Function(bool)? setPreparo;
+  Function(bool)? setEtapaEmAreaEsteril;
+  Function(bool)? setTransfere;
+  Function(bool)? setRecebe;
+  Function(bool)? setSolicitaCirculante;
+  Function(bool)? setPacote;
+  Function(bool)? setStatusConferenciaSemLeitura;
+  Function(bool)? setAtivo;
+  Function(bool)? setTesteIndicadorEntrada;
+  Function(bool)? setTesteIndicadorSaida;
+  Function(bool)? setEtiquetaLoteEntrada;
+  Function(bool)? setEtiquetaLoteSaida;
+  Function(bool)? setExigeLoteEquipamento;
+  Function(ArsenalEstoqueModel?)? setArsenalLote;
+  Function(bool)? setPermiteLiberacaoCracha;
+
   @override
   Widget build(BuildContext context) {
     setFields();
@@ -236,6 +272,11 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                           .firstOrNull;
                                   return DropDownSearchWidget<
                                       ProcessoTipoModel>(
+                                    setSelectedItemBuilder: (
+                                      context,
+                                      setSelectedItemMethod,
+                                    ) =>
+                                        setTipoProcesso = setSelectedItemMethod,
                                     validator: (val) =>
                                         val == null ? 'Obrigatório' : null,
                                     validateBuilder:
@@ -300,6 +341,12 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
 
                                         return DropDownSearchWidget<
                                             EquipamentoModel>(
+                                          setSelectedItemBuilder: (
+                                            context,
+                                            setSelectedItemMethod,
+                                          ) =>
+                                              setEquipamento =
+                                                  setSelectedItemMethod,
                                           initialValue: equipamento,
                                           sourceList: equipamentosAtivos,
                                           onChanged: (value) => processoEtapa
@@ -348,6 +395,12 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
 
                                         return DropDownSearchWidget<
                                             ArsenalEstoqueModel>(
+                                          setSelectedItemBuilder: (
+                                            context,
+                                            setSelectedItemMethod,
+                                          ) =>
+                                              setArsenal =
+                                                  setSelectedItemMethod,
                                           initialValue: arsenalEstoque,
                                           sourceList: arsenaisEstoquesAtivos,
                                           onChanged: (value) => processoEtapa
@@ -387,28 +440,108 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                         padding: EdgeInsets.only(top: 2.0),
                                       ),
                                       CustomCheckboxWidget(
+                                        setValue: (
+                                          context,
+                                          setValueWidget,
+                                        ) =>
+                                            setExigeLeituraEntrada =
+                                                setValueWidget,
                                         checked:
                                             processoEtapa.exigeLeituraEntrada,
-                                        onClick: (value) => processoEtapa
-                                            .exigeLeituraEntrada = value,
+                                        onClick: (value) {
+                                          setState(() {
+                                            processoEtapa.exigeLeituraEntrada =
+                                                value;
+                                          });
+                                        },
                                         text: 'Exige Leitura Entrada',
                                         align: MainAxisAlignment.start,
                                       ),
+                                      Visibility(
+                                        visible:
+                                            processoEtapa.exigeLeituraEntrada ==
+                                                true,
+                                        maintainState: true,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                            top: 2.0,
+                                            left: 16,
+                                          ),
+                                          child: CustomCheckboxWidget(
+                                            setValue: (
+                                              context,
+                                              setValueWidget,
+                                            ) =>
+                                                setExigeUsoEpcEntrada =
+                                                    setValueWidget,
+                                            checked:
+                                                processoEtapa.exigeEpcEntrada,
+                                            onClick: (value) => processoEtapa
+                                                .exigeEpcEntrada = value,
+                                            text:
+                                                'Exige Uso de EPC na Leitura de Entrada',
+                                            align: MainAxisAlignment.start,
+                                          ),
+                                        ),
+                                      ),
                                       const Padding(
                                         padding: EdgeInsets.only(top: 2.0),
                                       ),
                                       CustomCheckboxWidget(
+                                        setValue: (
+                                          context,
+                                          setValueWidget,
+                                        ) =>
+                                            setExigeLeituraSaida =
+                                                setValueWidget,
                                         checked:
                                             processoEtapa.exigeLeituraSaida,
-                                        onClick: (value) => processoEtapa
-                                            .exigeLeituraSaida = value,
+                                        onClick: (value) {
+                                          setState(() {
+                                            processoEtapa.exigeLeituraSaida =
+                                                value;
+                                          });
+                                        },
                                         text: 'Exige Leitura Saída',
                                         align: MainAxisAlignment.start,
                                       ),
+                                      Visibility(
+                                        visible:
+                                            processoEtapa.exigeLeituraSaida ==
+                                                true,
+                                        maintainState: true,
+                                        child: Padding(
+                                          padding: const EdgeInsets.only(
+                                            top: 2.0,
+                                            left: 16,
+                                          ),
+                                          child: CustomCheckboxWidget(
+                                            setValue: (
+                                              context,
+                                              setValueWidget,
+                                            ) =>
+                                                setExigeUsoEpcSaida =
+                                                    setValueWidget,
+                                            checked:
+                                                processoEtapa.exigeEpcSaida,
+                                            onClick: (value) => processoEtapa
+                                                .exigeEpcSaida = value,
+                                            text:
+                                                'Exige Uso de EPC na Leitura de Saída',
+                                            align: MainAxisAlignment.start,
+                                          ),
+                                        ),
+                                      ),
                                       const Padding(
                                         padding: EdgeInsets.only(top: 2.0),
                                       ),
                                       CustomCheckboxWidget(
+                                        setValue: (
+                                          context,
+                                          setValueWidget,
+                                        ) =>
+                                            setTesteIndicadorObrigatorio =
+                                                setValueWidget,
                                         checked:
                                             processoEtapa.exigeTesteIndicador,
                                         onClick: (value) {
@@ -424,6 +557,11 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                         padding: EdgeInsets.only(top: 2.0),
                                       ),
                                       CustomCheckboxWidget(
+                                        setValue: (
+                                          context,
+                                          setValueWidget,
+                                        ) =>
+                                            setTesteBiologico = setValueWidget,
                                         checked:
                                             processoEtapa.exigeTesteBiologico,
                                         onClick: (value) {
@@ -440,6 +578,12 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                         padding: EdgeInsets.only(top: 2.0),
                                       ),
                                       CustomCheckboxWidget(
+                                        setValue: (
+                                          context,
+                                          setValueWidget,
+                                        ) =>
+                                            setUsuarioColocaNaoRetira =
+                                                setValueWidget,
                                         checked: processoEtapa
                                             .usuarioColocaNaoRetira,
                                         onClick: (value) => processoEtapa
@@ -451,6 +595,12 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                         padding: EdgeInsets.only(top: 2.0),
                                       ),
                                       CustomCheckboxWidget(
+                                        setValue: (
+                                          context,
+                                          setValueWidget,
+                                        ) =>
+                                            setImprimeEtiquetaLote =
+                                                setValueWidget,
                                         checked:
                                             processoEtapa.imprimirEtiquetaLote,
                                         onClick: (value) {
@@ -462,31 +612,45 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                         text: 'Imprime Etiqueta de Lote',
                                         align: MainAxisAlignment.start,
                                       ),
+                                      // const Padding(
+                                      //   padding: EdgeInsets.only(top: 2.0),
+                                      // ),
+                                      // CustomCheckboxWidget(
+                                      //   checked: processoEtapa.exigeEpcSaida,
+                                      //   onClick: (value) =>
+                                      //       processoEtapa.exigeEpcSaida = value,
+                                      //   text:
+                                      //       'Exige Uso de EPC na Leitura de Saída',
+                                      //   align: MainAxisAlignment.start,
+                                      // ),
+                                      // const Padding(
+                                      //   padding: EdgeInsets.only(top: 2.0),
+                                      // ),
+                                      Visibility(
+                                        visible: false,
+                                        child: CustomCheckboxWidget(
+                                          setValue: (
+                                            context,
+                                            setValueWidget,
+                                          ) =>
+                                              setRecebe = setValueWidget,
+                                          checked: processoEtapa.recebe,
+                                          onClick: (value) =>
+                                              processoEtapa.recebe = value,
+                                          text: 'Recebe',
+                                          align: MainAxisAlignment.start,
+                                        ),
+                                      ),
                                       const Padding(
                                         padding: EdgeInsets.only(top: 2.0),
                                       ),
                                       CustomCheckboxWidget(
-                                        checked: processoEtapa.exigeEpcSaida,
-                                        onClick: (value) =>
-                                            processoEtapa.exigeEpcSaida = value,
-                                        text:
-                                            'Exige Uso de EPC na Leitura de Saída',
-                                        align: MainAxisAlignment.start,
-                                      ),
-                                      const Padding(
-                                        padding: EdgeInsets.only(top: 2.0),
-                                      ),
-                                      CustomCheckboxWidget(
-                                        checked: processoEtapa.recebe,
-                                        onClick: (value) =>
-                                            processoEtapa.recebe = value,
-                                        text: 'Recebe',
-                                        align: MainAxisAlignment.start,
-                                      ),
-                                      const Padding(
-                                        padding: EdgeInsets.only(top: 2.0),
-                                      ),
-                                      CustomCheckboxWidget(
+                                        setValue: (
+                                          context,
+                                          setValueWidget,
+                                        ) =>
+                                            setRelatorioRetiradaMateriais =
+                                                setValueWidget,
                                         checked: processoEtapa
                                             .relatorioRetiradaMateriais,
                                         onClick: (value) => processoEtapa
@@ -498,6 +662,12 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                         padding: EdgeInsets.only(top: 2.0),
                                       ),
                                       CustomCheckboxWidget(
+                                        setValue: (
+                                          context,
+                                          setValueWidget,
+                                        ) =>
+                                            setUsuarioLocalNaoCompativel =
+                                                setValueWidget,
                                         checked: processoEtapa
                                             .responsavelLocalNaoCompativel,
                                         onClick: (value) => processoEtapa
@@ -511,6 +681,12 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                         padding: EdgeInsets.only(top: 2.0),
                                       ),
                                       CustomCheckboxWidget(
+                                        setValue: (
+                                          context,
+                                          setValueWidget,
+                                        ) =>
+                                            setSolicitaIntegrador =
+                                                setValueWidget,
                                         checked: processoEtapa.integradorKit,
                                         onClick: (value) =>
                                             processoEtapa.integradorKit = value,
@@ -527,6 +703,12 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                         padding: EdgeInsets.only(top: 2.0),
                                       ),
                                       CustomCheckboxWidget(
+                                        setValue: (
+                                          context,
+                                          setValueWidget,
+                                        ) =>
+                                            setConferenciaVisual =
+                                                setValueWidget,
                                         checked: processoEtapa
                                             .conferenciaVisualPermitida,
                                         onClick: (value) => processoEtapa
@@ -538,6 +720,12 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                         padding: EdgeInsets.only(top: 2.0),
                                       ),
                                       CustomCheckboxWidget(
+                                        setValue: (
+                                          context,
+                                          setValueWidget,
+                                        ) =>
+                                            setLiberaKitIncompleto =
+                                                setValueWidget,
                                         checked:
                                             processoEtapa.liberaKitIncompleto,
                                         onClick: (value) => processoEtapa
@@ -549,6 +737,12 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                         padding: EdgeInsets.only(top: 2.0),
                                       ),
                                       CustomCheckboxWidget(
+                                        setValue: (
+                                          context,
+                                          setValueWidget,
+                                        ) =>
+                                            setPermiteQuebraFluxoSobAutorizacao =
+                                                setValueWidget,
                                         checked:
                                             processoEtapa.autorizaQuebraFluxo,
                                         onClick: (value) => processoEtapa
@@ -561,6 +755,11 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                         padding: EdgeInsets.only(top: 2.0),
                                       ),
                                       CustomCheckboxWidget(
+                                        setValue: (
+                                          context,
+                                          setValueWidget,
+                                        ) =>
+                                            setPreparo = setValueWidget,
                                         checked: processoEtapa.preparo,
                                         onClick: (value) {
                                           setState(() {
@@ -574,6 +773,12 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                         padding: EdgeInsets.only(top: 2.0),
                                       ),
                                       CustomCheckboxWidget(
+                                        setValue: (
+                                          context,
+                                          setValueWidget,
+                                        ) =>
+                                            setEtapaEmAreaEsteril =
+                                                setValueWidget,
                                         checked: processoEtapa.areaEsteril,
                                         onClick: (value) =>
                                             processoEtapa.areaEsteril = value,
@@ -583,28 +788,43 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                       const Padding(
                                         padding: EdgeInsets.only(top: 2.0),
                                       ),
-                                      CustomCheckboxWidget(
-                                        checked: processoEtapa.exigeEpcEntrada,
-                                        onClick: (value) => processoEtapa
-                                            .exigeEpcEntrada = value,
-                                        text:
-                                            'Exige Uso de EPC na Leitura de Entrada',
-                                        align: MainAxisAlignment.start,
+                                      // CustomCheckboxWidget(
+                                      //   checked: processoEtapa.exigeEpcEntrada,
+                                      //   onClick: (value) => processoEtapa
+                                      //       .exigeEpcEntrada = value,
+                                      //   text:
+                                      //       'Exige Uso de EPC na Leitura de Entrada',
+                                      //   align: MainAxisAlignment.start,
+                                      // ),
+                                      // const Padding(
+                                      //   padding: EdgeInsets.only(top: 2.0),
+                                      // ),
+                                      Visibility(
+                                        visible: false,
+                                        maintainState: false,
+                                        child: CustomCheckboxWidget(
+                                          setValue: (
+                                            context,
+                                            setValueWidget,
+                                          ) =>
+                                              setTransfere = setValueWidget,
+                                          checked: processoEtapa.transfere,
+                                          onClick: (value) =>
+                                              processoEtapa.transfere = value,
+                                          text: 'Transfere',
+                                          align: MainAxisAlignment.start,
+                                        ),
                                       ),
                                       const Padding(
                                         padding: EdgeInsets.only(top: 2.0),
                                       ),
                                       CustomCheckboxWidget(
-                                        checked: processoEtapa.transfere,
-                                        onClick: (value) =>
-                                            processoEtapa.transfere = value,
-                                        text: 'Transfere',
-                                        align: MainAxisAlignment.start,
-                                      ),
-                                      const Padding(
-                                        padding: EdgeInsets.only(top: 2.0),
-                                      ),
-                                      CustomCheckboxWidget(
+                                        setValue: (
+                                          context,
+                                          setValueWidget,
+                                        ) =>
+                                            setSolicitaCirculante =
+                                                setValueWidget,
                                         checked:
                                             processoEtapa.solicitacaoCirculante,
                                         onClick: (value) => processoEtapa
@@ -615,19 +835,15 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                       const Padding(
                                         padding: EdgeInsets.only(top: 2.0),
                                       ),
-                                      CustomCheckboxWidget(
-                                        checked: processoEtapa.pacote,
-                                        onClick: (value) =>
-                                            processoEtapa.pacote = value,
-                                        text: 'Pacotes',
-                                        align: MainAxisAlignment.start,
-                                      ),
-                                      const Padding(
-                                        padding: EdgeInsets.only(top: 2.0),
-                                      ),
+
                                       Visibility(
                                         visible: false,
                                         child: CustomCheckboxWidget(
+                                          setValue: (
+                                            context,
+                                            setValueWidget,
+                                          ) =>
+                                              setPacote = setValueWidget,
                                           checked: processoEtapa.pacote,
                                           onClick: (value) =>
                                               processoEtapa.pacote = value,
@@ -639,6 +855,12 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                         padding: EdgeInsets.only(top: 2.0),
                                       ),
                                       CustomCheckboxWidget(
+                                        setValue: (
+                                          context,
+                                          setValueWidget,
+                                        ) =>
+                                            setStatusConferenciaSemLeitura =
+                                                setValueWidget,
                                         checked: processoEtapa
                                             .naoAlterarStatusItemPendente,
                                         onClick: (value) => processoEtapa
@@ -652,6 +874,11 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                         padding: EdgeInsets.only(top: 2.0),
                                       ),
                                       CustomCheckboxWidget(
+                                        setValue: (
+                                          context,
+                                          setValueWidget,
+                                        ) =>
+                                            setAtivo = setValueWidget,
                                         checked: processoEtapa.ativo,
                                         onClick: (value) =>
                                             processoEtapa.ativo = value,
@@ -680,6 +907,12 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                     children: [
                                       Expanded(
                                         child: CustomCheckboxWidget(
+                                          setValue: (
+                                            context,
+                                            setValueWidget,
+                                          ) =>
+                                              setTesteIndicadorEntrada =
+                                                  setValueWidget,
                                           checked: processoEtapa
                                               .testeIndicadorEntrada,
                                           onClick: (value) => processoEtapa
@@ -690,6 +923,12 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                       ),
                                       Expanded(
                                         child: CustomCheckboxWidget(
+                                          setValue: (
+                                            context,
+                                            setValueWidget,
+                                          ) =>
+                                              setTesteIndicadorSaida =
+                                                  setValueWidget,
                                           checked:
                                               processoEtapa.testeIndicadorSaida,
                                           onClick: (value) => processoEtapa
@@ -723,6 +962,12 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                         children: [
                                           Expanded(
                                             child: CustomCheckboxWidget(
+                                              setValue: (
+                                                context,
+                                                setValueWidget,
+                                              ) =>
+                                                  setTesteBiologicoEntrada =
+                                                      setValueWidget,
                                               checked: processoEtapa
                                                   .testeBiologicoEntrada,
                                               onClick: (value) => processoEtapa
@@ -734,6 +979,12 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                           ),
                                           Expanded(
                                             child: CustomCheckboxWidget(
+                                              setValue: (
+                                                context,
+                                                setValueWidget,
+                                              ) =>
+                                                  setTesteBiologicoSaida =
+                                                      setValueWidget,
                                               checked: processoEtapa
                                                   .testeBiologicoSaida,
                                               onClick: (value) => processoEtapa
@@ -763,7 +1014,6 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                           }
                                           List<ServicoTipoModel> servicosTipos =
                                               state.tiposServico;
-                                          print(processoEtapa.codServicosTipo);
 
                                           ServicoTipoModel? servicoTipo =
                                               servicosTipos
@@ -776,6 +1026,12 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                                   .firstOrNull;
                                           return DropDownSearchWidget<
                                               ServicoTipoModel>(
+                                            setSelectedItemBuilder: (
+                                              context,
+                                              setSelectedItemMethod,
+                                            ) =>
+                                                setServicoTipo =
+                                                    setSelectedItemMethod,
                                             validateBuilder: (
                                               context,
                                               validateMethodBuilder,
@@ -823,6 +1079,12 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                         children: [
                                           Expanded(
                                             child: CustomCheckboxWidget(
+                                              setValue: (
+                                                context,
+                                                setValueWidget,
+                                              ) =>
+                                                  setEtiquetaLoteEntrada =
+                                                      setValueWidget,
                                               checked:
                                                   processoEtapa.etiquetaEntrada,
                                               onClick: (value) => processoEtapa
@@ -833,6 +1095,12 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                           ),
                                           Expanded(
                                             child: CustomCheckboxWidget(
+                                              setValue: (
+                                                context,
+                                                setValueWidget,
+                                              ) =>
+                                                  setEtiquetaLoteSaida =
+                                                      setValueWidget,
                                               checked:
                                                   processoEtapa.etiquetaSaida,
                                               onClick: (value) => processoEtapa
@@ -843,6 +1111,12 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                           ),
                                           Expanded(
                                             child: CustomCheckboxWidget(
+                                              setValue: (
+                                                context,
+                                                setValueWidget,
+                                              ) =>
+                                                  setExigeLoteEquipamento =
+                                                      setValueWidget,
                                               checked: processoEtapa
                                                   .exigeLoteEquipamento,
                                               onClick: (value) => processoEtapa
@@ -890,6 +1164,12 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                                         .firstOrNull;
                                                 return DropDownSearchWidget<
                                                     ArsenalEstoqueModel>(
+                                                  setSelectedItemBuilder: (
+                                                    context,
+                                                    setSelectedItemMethod,
+                                                  ) =>
+                                                      setArsenalLote =
+                                                          setSelectedItemMethod,
                                                   initialValue: arsenalEstoque,
                                                   sourceList: arsenaisEstoques,
                                                   onChanged: (value) =>
@@ -925,6 +1205,12 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                                   child: Row(
                                     children: [
                                       CustomCheckboxWidget(
+                                        setValue: (
+                                          context,
+                                          setValueWidget,
+                                        ) =>
+                                            setPermiteLiberacaoCracha =
+                                                setValueWidget,
                                         checked: processoEtapa
                                             .permiteLiberacaoDataMatrixComCrachaPreparo,
                                         onClick: (value) => processoEtapa
@@ -963,11 +1249,7 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: CleanButtonWidget(
-                    onPressed: () => {
-                      setState(() {
-                        processoEtapa = ProcessoEtapaModel.empty();
-                      }),
-                    },
+                    onPressed: limpar,
                   ),
                 ),
                 Padding(
@@ -982,6 +1264,110 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
         );
       },
     );
+  }
+
+  void limpar() {
+    setState(() {
+      processoEtapa.cod = 0;
+      processoEtapa.codProcessoTipo = 0;
+      processoEtapa.codEquipamento = null;
+      processoEtapa.codEstoque = null;
+      processoEtapa.tempoCicloProcesso = 0;
+      processoEtapa.codServicosTipo = 0;
+      processoEtapa.codEstoqueAut = 0;
+      processoEtapa.nome = '';
+      processoEtapa.descricao = '';
+      processoEtapa.descricaoEtiquetaPreparo = null;
+      processoEtapa.localizacaoX = 0;
+      processoEtapa.localizacaoY = 0;
+      processoEtapa.liberaKitIncompleto = false;
+      processoEtapa.exigeLeituraEntrada = false;
+      processoEtapa.exigeLeituraSaida = false;
+      processoEtapa.usuarioColocaNaoRetira = false;
+      processoEtapa.conferenciaVisualPermitida = false;
+      processoEtapa.imprimirEtiquetaLote = false;
+      processoEtapa.ativo = true;
+      processoEtapa.autorizaQuebraFluxo = false;
+      processoEtapa.exigeTesteIndicador = false;
+      processoEtapa.preparo = false;
+      processoEtapa.areaEsteril = false;
+      processoEtapa.exigeEpcEntrada = false;
+      processoEtapa.exigeEpcSaida = false;
+      processoEtapa.flag1 = false;
+      processoEtapa.flag2 = false;
+      processoEtapa.transfere = false;
+      processoEtapa.recebe = false;
+      processoEtapa.testeIndicadorEntrada = false;
+      processoEtapa.etiquetaSaida = false;
+      processoEtapa.etiquetaEntrada = false;
+      processoEtapa.testeIndicadorSaida = false;
+      processoEtapa.exigeLoteEquipamento = false;
+      processoEtapa.responsavelLocalNaoCompativel = false;
+      processoEtapa.exigeTesteBiologico = false;
+      processoEtapa.biologicoEntrada = false;
+      processoEtapa.biologicoEntrada = false;
+      processoEtapa.biologicoSaida = false;
+      processoEtapa.testeBiologicoEntrada = false;
+      processoEtapa.testeBiologicoSaida = false;
+      processoEtapa.pacote = false;
+      processoEtapa.relatorioRetiradaMateriais = false;
+      processoEtapa.naoAlterarStatusItemPendente = false;
+      processoEtapa.integradorKit = false;
+      processoEtapa.solicitacaoCirculante = false;
+      processoEtapa.ultimaAlteracao = null;
+      processoEtapa.tstamp = null;
+      processoEtapa.tipoProcesso = null;
+      processoEtapa.equipamento = null;
+      processoEtapa.arsenal = null;
+      processoEtapa.servicoTipo = null;
+      processoEtapa.permiteLiberacaoDataMatrixComCrachaPreparo = false;
+      processoEtapa.sequencias = null;
+    });
+    if (setTipoProcesso != null) setTipoProcesso!(null);
+    if (setEquipamento != null) setEquipamento!(null);
+    if (setArsenal != null) setArsenal!(null);
+    if (setServicoTipo != null) setServicoTipo!(null);
+    if (setExigeLeituraEntrada != null) setExigeLeituraEntrada!(false);
+    if (setExigeUsoEpcEntrada != null) setExigeLeituraEntrada!(false);
+    if (setExigeLeituraSaida != null) setExigeLeituraSaida!(false);
+    if (setExigeUsoEpcSaida != null) setExigeUsoEpcSaida!(false);
+    if (setTesteIndicadorObrigatorio != null) {
+      setTesteIndicadorObrigatorio!(false);
+    }
+    if (setTesteBiologico != null) setTesteBiologico!(false);
+    if (setTesteBiologicoEntrada != null) setTesteBiologicoEntrada!(false);
+    if (setTesteBiologicoSaida != null) setTesteBiologicoSaida!(false);
+    if (setUsuarioColocaNaoRetira != null) setUsuarioColocaNaoRetira!(false);
+    if (setImprimeEtiquetaLote != null) setImprimeEtiquetaLote!(false);
+    if (setRelatorioRetiradaMateriais != null) {
+      setRelatorioRetiradaMateriais!(false);
+    }
+    if (setUsuarioLocalNaoCompativel != null) {
+      setUsuarioLocalNaoCompativel!(false);
+    }
+    if (setSolicitaIntegrador != null) setSolicitaIntegrador!(false);
+    if (setConferenciaVisual != null) setConferenciaVisual!(false);
+    if (setLiberaKitIncompleto != null) setLiberaKitIncompleto!(false);
+    if (setPermiteQuebraFluxoSobAutorizacao != null) {
+      setPermiteQuebraFluxoSobAutorizacao!(false);
+    }
+    if (setPreparo != null) setPreparo!(false);
+    if (setEtapaEmAreaEsteril != null) setEtapaEmAreaEsteril!(false);
+    if (setTransfere != null) setTransfere!(false);
+    if (setRecebe != null) setRecebe!(false);
+    if (setSolicitaCirculante != null) setSolicitaCirculante!(false);
+    if (setPacote != null) setPacote!(false);
+    if (setStatusConferenciaSemLeitura != null) {
+      setStatusConferenciaSemLeitura!(false);
+    }
+    if (setAtivo != null) setAtivo!(true);
+    if (setTesteIndicadorEntrada != null) setTesteIndicadorEntrada!(false);
+    if (setTesteIndicadorSaida != null) setTesteIndicadorSaida!(false);
+    if (setEtiquetaLoteEntrada != null) setEtiquetaLoteEntrada!(false);
+    if (setEtiquetaLoteSaida != null) setEtiquetaLoteSaida!(false);
+    if (setExigeLoteEquipamento != null) setExigeLoteEquipamento!(false);
+    if (setArsenalLote != null) setArsenalLote!(null);
+    if (setPermiteLiberacaoCracha != null) setPermiteLiberacaoCracha!(false);
   }
 
   List<CustomPopupItemModel> _getItems() {

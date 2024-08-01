@@ -20,6 +20,7 @@ import 'package:compartilhados/componentes/campos/label_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_float_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_string_area_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_time_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
@@ -32,7 +33,9 @@ import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/functions/file_helper/file_object_model.dart';
+import 'package:compartilhados/functions/format/number_format_parser.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:dependencias_comuns/main.dart';
 import 'package:dependencias_comuns/modular_export.dart';
 import 'package:flutter/material.dart';
 
@@ -61,6 +64,8 @@ class _EquipamentoManutencaoPageFrmState
     extends State<EquipamentoManutencaoPageFrm> {
   _EquipamentoManutencaoPageFrmState({required this.equipamentoManutencao});
 
+  bool pecasExpandidas = false;
+
   late String titulo;
   EquipamentoManutencaoModel equipamentoManutencao;
   late DateTime? dataHoraInicioSelecionada;
@@ -80,21 +85,22 @@ class _EquipamentoManutencaoPageFrmState
   late final TextFieldStringWidget txtProblema = TextFieldStringWidget(
     placeholder: 'Problema',
     onChanged: (String? str) {
-      equipamentoManutencao.problema = txtProblema.text;
+      equipamentoManutencao.problema = str;
     },
   );
 
-  late final TextFieldStringWidget txtDescricaoServico = TextFieldStringWidget(
+  late final TextFieldStringAreaWidget txtDescricaoServico =
+      TextFieldStringAreaWidget(
     placeholder: 'Descrição do Problema *',
     onChanged: (String? str) {
-      equipamentoManutencao.descricao = txtDescricaoServico.text;
+      equipamentoManutencao.descricao = str;
     },
   );
 
   late final TextFieldStringWidget txtNumNF = TextFieldStringWidget(
     placeholder: 'Num. NF',
     onChanged: (String? str) {
-      equipamentoManutencao.numNF = txtNumNF.text;
+      equipamentoManutencao.numNF = str;
     },
   );
 
@@ -106,70 +112,75 @@ class _EquipamentoManutencaoPageFrmState
   late final TextFieldNumberWidget txtQtde1 = TextFieldNumberWidget(
     placeholder: 'Qtde',
     onChanged: (String? str) {
-      equipamentoManutencao.qtde1 = double.parse(txtQtde1.text);
+      equipamentoManutencao.qtde1 = str == null ? null : double.parse(str);
     },
   );
 
   late final TextFieldNumberWidget txtQtde2 = TextFieldNumberWidget(
     placeholder: 'Qtde',
     onChanged: (String? str) {
-      equipamentoManutencao.qtde2 = double.parse(txtQtde2.text);
+      equipamentoManutencao.qtde2 = str == null ? null : double.parse(str);
     },
   );
 
   late final TextFieldNumberWidget txtQtde3 = TextFieldNumberWidget(
     placeholder: 'Qtde',
     onChanged: (String? str) {
-      equipamentoManutencao.qtde3 = double.parse(txtQtde3.text);
+      equipamentoManutencao.qtde3 = str == null ? null : double.parse(str);
     },
   );
 
   late final TextFieldNumberWidget txtQtde4 = TextFieldNumberWidget(
     placeholder: 'Qtde',
     onChanged: (String? str) {
-      equipamentoManutencao.qtde4 = double.parse(txtQtde4.text);
+      equipamentoManutencao.qtde4 = str == null ? null : double.parse(str);
     },
   );
 
   late final TextFieldNumberWidget txtQtde5 = TextFieldNumberWidget(
     placeholder: 'Qtde',
     onChanged: (String? str) {
-      equipamentoManutencao.qtde5 = double.parse(txtQtde5.text);
+      equipamentoManutencao.qtde5 = str == null ? null : double.parse(str);
     },
   );
 
   late final TextFieldNumberFloatWidget txtValor1 = TextFieldNumberFloatWidget(
     placeholder: 'Valor',
     onChanged: (String? str) {
-      equipamentoManutencao.valor1 = double.parse(txtValor1.text);
+      equipamentoManutencao.valor1 =
+          str == null || str == '' ? null : double.parse(str);
     },
   );
 
   late final TextFieldNumberFloatWidget txtValor2 = TextFieldNumberFloatWidget(
     placeholder: 'Valor',
     onChanged: (String? str) {
-      equipamentoManutencao.valor2 = double.parse(txtValor2.text);
+      equipamentoManutencao.valor2 =
+          str == null || str == '' ? null : double.parse(str);
     },
   );
 
   late final TextFieldNumberFloatWidget txtValor3 = TextFieldNumberFloatWidget(
     placeholder: 'Valor',
     onChanged: (String? str) {
-      equipamentoManutencao.valor3 = double.parse(txtValor3.text);
+      equipamentoManutencao.valor3 =
+          str == null || str == '' ? null : double.parse(str);
     },
   );
 
   late final TextFieldNumberFloatWidget txtValor4 = TextFieldNumberFloatWidget(
     placeholder: 'Valor',
     onChanged: (String? str) {
-      equipamentoManutencao.valor4 = double.parse(txtValor4.text);
+      equipamentoManutencao.valor4 =
+          str == null || str == '' ? null : double.parse(str);
     },
   );
 
   late final TextFieldNumberFloatWidget txtValor5 = TextFieldNumberFloatWidget(
     placeholder: 'Valor',
     onChanged: (String? str) {
-      equipamentoManutencao.valor5 = double.parse(txtValor5.text);
+      equipamentoManutencao.valor5 =
+          str == null || str == '' ? null : double.parse(str);
     },
   );
 
@@ -206,35 +217,35 @@ class _EquipamentoManutencaoPageFrmState
   late final TextFieldStringWidget txtNumSerie1 = TextFieldStringWidget(
     placeholder: 'N. Série',
     onChanged: (String? str) {
-      equipamentoManutencao.serie1 = txtNumSerie1.text;
+      equipamentoManutencao.serie1 = str;
     },
   );
 
   late final TextFieldStringWidget txtNumSerie2 = TextFieldStringWidget(
     placeholder: 'N. Série',
     onChanged: (String? str) {
-      equipamentoManutencao.serie2 = txtNumSerie2.text;
+      equipamentoManutencao.serie2 = str;
     },
   );
 
   late final TextFieldStringWidget txtNumSerie3 = TextFieldStringWidget(
     placeholder: 'N. Série',
     onChanged: (String? str) {
-      equipamentoManutencao.serie3 = txtNumSerie3.text;
+      equipamentoManutencao.serie3 = str;
     },
   );
 
   late final TextFieldStringWidget txtNumSerie4 = TextFieldStringWidget(
     placeholder: 'N. Série',
     onChanged: (String? str) {
-      equipamentoManutencao.serie4 = txtNumSerie4.text;
+      equipamentoManutencao.serie4 = str;
     },
   );
 
   late final TextFieldStringWidget txtNumSerie5 = TextFieldStringWidget(
     placeholder: 'N. Série',
     onChanged: (String? str) {
-      equipamentoManutencao.serie5 = txtNumSerie5.text;
+      equipamentoManutencao.serie5 = str;
     },
   );
 
@@ -355,14 +366,16 @@ class _EquipamentoManutencaoPageFrmState
         ? TimeOfDay.fromDateTime(equipamentoManutencao.dataParada!)
         : null,
     onTimeSelected: (value) {
-      dataHoraParadaSelecionada = DateTime(
-        dataHoraParadaSelecionada!.year,
-        dataHoraParadaSelecionada!.month,
-        dataHoraParadaSelecionada!.day,
+      if (equipamentoManutencao.dataParada == null) {
+        return;
+      }
+      equipamentoManutencao.dataParada = DateTime(
+        equipamentoManutencao.dataParada!.year,
+        equipamentoManutencao.dataParada!.month,
+        equipamentoManutencao.dataParada!.day,
         value?.hour ?? 0,
         value?.minute ?? 0,
       );
-      equipamentoManutencao.dataParada = dataHoraParadaSelecionada;
     },
   );
 
@@ -375,6 +388,18 @@ class _EquipamentoManutencaoPageFrmState
   late bool Function() validateResultado;
   late bool Function() validateTecnico;
   late void Function() refreshServicosTipoMethod;
+
+  late void Function(EquipamentoModel?) setEquipamento;
+  late void Function(ServicoTipoModel?) setServicoTipo;
+  late void Function(UsuarioDropDownSearchResponseDTO?) setDetectadoPor;
+  late void Function(UsuarioDropDownSearchResponseDTO?) setTecnico;
+  late void Function(RegistroServicoResultOption?) setResultado;
+  late void Function(PecaModel?) setPeca1;
+  late void Function(PecaModel?) setPeca2;
+  late void Function(PecaModel?) setPeca3;
+  late void Function(PecaModel?) setPeca4;
+  late void Function(PecaModel?) setPeca5;
+  late void Function(bool) setControlarValidade;
 
   void initState() {
     _controller = EquipamentoManutencaoPageFrmController();
@@ -483,44 +508,44 @@ class _EquipamentoManutencaoPageFrmState
     txtQtde1.text =
         equipamentoManutencao.qtde1 == null || equipamentoManutencao.qtde1 == 0
             ? ''
-            : equipamentoManutencao.qtde1.toString();
+            : equipamentoManutencao.qtde1!.round().toString();
     txtQtde2.text =
         equipamentoManutencao.qtde2 == null || equipamentoManutencao.qtde2 == 0
             ? ''
-            : equipamentoManutencao.qtde2.toString();
+            : equipamentoManutencao.qtde2!.round().toString();
     txtQtde3.text =
         equipamentoManutencao.qtde3 == null || equipamentoManutencao.qtde3 == 0
             ? ''
-            : equipamentoManutencao.qtde3.toString();
+            : equipamentoManutencao.qtde3!.round().toString();
     txtQtde4.text =
         equipamentoManutencao.qtde4 == null || equipamentoManutencao.qtde4 == 0
             ? ''
-            : equipamentoManutencao.qtde4.toString();
+            : equipamentoManutencao.qtde4!.round().toString();
     txtQtde5.text =
         equipamentoManutencao.qtde5 == null || equipamentoManutencao.qtde5 == 0
             ? ''
-            : equipamentoManutencao.qtde5.toString();
+            : equipamentoManutencao.qtde5!.round().toString();
 
-    txtValor1.text = equipamentoManutencao.valor1 == null ||
-            equipamentoManutencao.valor1 == 0
-        ? ''
-        : equipamentoManutencao.valor1.toString();
-    txtValor2.text = equipamentoManutencao.valor2 == null ||
-            equipamentoManutencao.valor2 == 0
-        ? ''
-        : equipamentoManutencao.valor2.toString();
-    txtValor3.text = equipamentoManutencao.valor3 == null ||
-            equipamentoManutencao.valor3 == 0
-        ? ''
-        : equipamentoManutencao.valor3.toString();
-    txtValor4.text = equipamentoManutencao.valor4 == null ||
-            equipamentoManutencao.valor4 == 0
-        ? ''
-        : equipamentoManutencao.valor4.toString();
-    txtValor5.text = equipamentoManutencao.valor5 == null ||
-            equipamentoManutencao.valor5 == 0
-        ? ''
-        : equipamentoManutencao.valor5.toString();
+    txtValor1.text = NumberFormatParser.toFixed(
+      equipamentoManutencao.valor1,
+      2,
+    );
+    txtValor2.text = NumberFormatParser.toFixed(
+      equipamentoManutencao.valor2,
+      2,
+    );
+    txtValor3.text = NumberFormatParser.toFixed(
+      equipamentoManutencao.valor3,
+      2,
+    );
+    txtValor4.text = NumberFormatParser.toFixed(
+      equipamentoManutencao.valor4,
+      2,
+    );
+    txtValor5.text = NumberFormatParser.toFixed(
+      equipamentoManutencao.valor5,
+      2,
+    );
 
     titulo = 'Manutenções';
 
@@ -594,6 +619,12 @@ class _EquipamentoManutencaoPageFrmState
                                                 )
                                                 .firstOrNull;
                                         return DropDownSearchWidget(
+                                          setSelectedItemBuilder: (
+                                            context,
+                                            setSelectedItemMethod,
+                                          ) =>
+                                              setEquipamento =
+                                                  setSelectedItemMethod,
                                           readOnly: equipamentoManutencao.cod !=
                                                   null &&
                                               equipamentoManutencao.cod != 0,
@@ -667,6 +698,12 @@ class _EquipamentoManutencaoPageFrmState
                                           }
                                         }
                                         return DropDownSearchWidget(
+                                          setSelectedItemBuilder: (
+                                            context,
+                                            setSelectedItemMethod,
+                                          ) =>
+                                              setServicoTipo =
+                                                  setSelectedItemMethod,
                                           validateBuilder: (
                                             context,
                                             validateMethodBuilder,
@@ -758,6 +795,11 @@ class _EquipamentoManutencaoPageFrmState
                               padding: const EdgeInsets.only(top: 5.0),
                               child: DropDownSearchApiWidget<
                                   UsuarioDropDownSearchResponseDTO>(
+                                setSelectedItemBuilder: (
+                                  context,
+                                  setSelectedItemMethod,
+                                ) =>
+                                    setDetectadoPor = setSelectedItemMethod,
                                 search: (str) async =>
                                     (await UsuarioService().getDropDownSearch(
                                       UsuarioDropDownSearchDTO(
@@ -790,6 +832,11 @@ class _EquipamentoManutencaoPageFrmState
                                   Expanded(
                                     child: DropDownSearchApiWidget<
                                         UsuarioDropDownSearchResponseDTO>(
+                                      setSelectedItemBuilder: (
+                                        context,
+                                        setSelectedItemMethod,
+                                      ) =>
+                                          setTecnico = setSelectedItemMethod,
                                       validateBuilder:
                                           (context, validateMethodBuilder) =>
                                               validateTecnico =
@@ -823,6 +870,11 @@ class _EquipamentoManutencaoPageFrmState
                                   Expanded(
                                     child: DropDownSearchWidget<
                                         RegistroServicoResultOption>(
+                                      setSelectedItemBuilder: (
+                                        context,
+                                        setSelectedItemMethod,
+                                      ) =>
+                                          setResultado = setSelectedItemMethod,
                                       validateBuilder:
                                           (context, validateMethodBuilder) =>
                                               validateResultado =
@@ -851,313 +903,388 @@ class _EquipamentoManutencaoPageFrmState
                               ),
                             ),
                             Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: BlocBuilder<PecaCubit, PecaState>(
-                                      bloc: pecaCubit,
-                                      builder: (context, state) {
-                                        if (state.loading == true) {
-                                          return const Center(
-                                            child: LoadingWidget(),
-                                          );
-                                        }
-                                        List<PecaModel> pecas = state.pecas;
-                                        pecas.sort(
-                                          (a, b) => a.peca!.compareTo(b.peca!),
-                                        );
-                                        PecaModel? peca = pecas
-                                            .where(
-                                              (element) =>
-                                                  element.cod ==
-                                                  equipamentoManutencao
-                                                      .codPeca1,
-                                            )
-                                            .firstOrNull;
-                                        return DropDownSearchWidget(
-                                          initialValue: peca,
-                                          sourceList: pecas,
-                                          onChanged: (value) =>
-                                              equipamentoManutencao.codPeca1 =
-                                                  value?.cod!,
-                                          placeholder: 'Peça Trocada',
-                                          textFunction: (p0) =>
-                                              p0.PecaNomeText(),
-                                        );
-                                      },
+                              padding: const EdgeInsets.only(top: 12.0),
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    pecasExpandidas = !pecasExpandidas;
+                                  });
+                                },
+                                child: Row(
+                                  children: [
+                                    Icon(
+                                      pecasExpandidas
+                                          ? Icons.minimize_outlined
+                                          : Symbols.add,
                                     ),
-                                  ),
-                                  const SizedBox(width: 50.0),
-                                  Container(
-                                    width: 100,
-                                    child: txtQtde1,
-                                  ),
-                                  const SizedBox(width: 50.0),
-                                  Container(
-                                    width: 100,
-                                    child: txtValor1,
-                                  ),
-                                  const SizedBox(width: 50.0),
-                                  Container(
-                                    width: 120,
-                                    child: dtpGarantia1,
-                                  ),
-                                  const SizedBox(width: 50.0),
-                                  Container(
-                                    width: 200,
-                                    child: txtNumSerie1,
-                                  ),
-                                ],
+                                    const Text('Peças'),
+                                  ],
+                                ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: BlocBuilder<PecaCubit, PecaState>(
-                                      bloc: pecaCubit,
-                                      builder: (context, state) {
-                                        if (state.loading == true) {
-                                          return const Center(
-                                            child: LoadingWidget(),
+                            Visibility(
+                              maintainState: true,
+                              visible: pecasExpandidas,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: BlocBuilder<PecaCubit, PecaState>(
+                                        bloc: pecaCubit,
+                                        builder: (context, state) {
+                                          if (state.loading == true) {
+                                            return const Center(
+                                              child: LoadingWidget(),
+                                            );
+                                          }
+                                          List<PecaModel> pecas = state.pecas;
+                                          pecas.sort(
+                                            (a, b) =>
+                                                a.peca!.compareTo(b.peca!),
                                           );
-                                        }
-                                        List<PecaModel> pecas = state.pecas;
-                                        pecas.sort(
-                                          (a, b) => a.peca!.compareTo(b.peca!),
-                                        );
-                                        PecaModel? peca = pecas
-                                            .where(
-                                              (element) =>
-                                                  element.cod ==
-                                                  equipamentoManutencao
-                                                      .codPeca2,
-                                            )
-                                            .firstOrNull;
-                                        return DropDownSearchWidget(
-                                          textFunction: (peca) =>
-                                              peca.PecaNomeText(),
-                                          initialValue: peca,
-                                          sourceList: pecas,
-                                          onChanged: (value) =>
-                                              equipamentoManutencao.codPeca2 =
-                                                  value?.cod,
-                                          placeholder: 'Peça Trocada',
-                                        );
-                                      },
+                                          PecaModel? peca = pecas
+                                              .where(
+                                                (element) =>
+                                                    element.cod ==
+                                                    equipamentoManutencao
+                                                        .codPeca1,
+                                              )
+                                              .firstOrNull;
+                                          return DropDownSearchWidget(
+                                            setSelectedItemBuilder: (
+                                              context,
+                                              setSelectedItemMethod,
+                                            ) =>
+                                                setPeca1 =
+                                                    setSelectedItemMethod,
+                                            initialValue: peca,
+                                            sourceList: pecas,
+                                            onChanged: (value) =>
+                                                equipamentoManutencao.codPeca1 =
+                                                    value?.cod!,
+                                            placeholder: 'Peça Trocada',
+                                            textFunction: (p0) =>
+                                                p0.PecaNomeText(),
+                                          );
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(width: 50.0),
-                                  Container(
-                                    width: 100,
-                                    child: txtQtde2,
-                                  ),
-                                  const SizedBox(width: 50.0),
-                                  Container(
-                                    width: 100,
-                                    child: txtValor2,
-                                  ),
-                                  const SizedBox(width: 50.0),
-                                  Container(
-                                    width: 120,
-                                    child: dtpGarantia2,
-                                  ),
-                                  const SizedBox(width: 50.0),
-                                  Container(
-                                    width: 200,
-                                    child: txtNumSerie2,
-                                  ),
-                                ],
+                                    const SizedBox(width: 50.0),
+                                    Container(
+                                      width: 100,
+                                      child: txtQtde1,
+                                    ),
+                                    const SizedBox(width: 50.0),
+                                    Container(
+                                      width: 100,
+                                      child: txtValor1,
+                                    ),
+                                    const SizedBox(width: 50.0),
+                                    Container(
+                                      width: 120,
+                                      child: dtpGarantia1,
+                                    ),
+                                    const SizedBox(width: 50.0),
+                                    Container(
+                                      width: 200,
+                                      child: txtNumSerie1,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: BlocBuilder<PecaCubit, PecaState>(
-                                      bloc: pecaCubit,
-                                      builder: (context, state) {
-                                        if (state.loading == true) {
-                                          return const Center(
-                                            child: LoadingWidget(),
+                            Visibility(
+                              maintainState: true,
+                              visible: pecasExpandidas,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: BlocBuilder<PecaCubit, PecaState>(
+                                        bloc: pecaCubit,
+                                        builder: (context, state) {
+                                          if (state.loading == true) {
+                                            return const Center(
+                                              child: LoadingWidget(),
+                                            );
+                                          }
+                                          List<PecaModel> pecas = state.pecas;
+                                          pecas.sort(
+                                            (a, b) =>
+                                                a.peca!.compareTo(b.peca!),
                                           );
-                                        }
-                                        List<PecaModel> pecas = state.pecas;
-                                        pecas.sort(
-                                          (a, b) => a.peca!.compareTo(b.peca!),
-                                        );
-                                        PecaModel? peca = pecas
-                                            .where(
-                                              (element) =>
-                                                  element.cod ==
-                                                  equipamentoManutencao
-                                                      .codPeca3,
-                                            )
-                                            .firstOrNull;
-                                        return DropDownSearchWidget(
-                                          textFunction: (peca) =>
-                                              peca.PecaNomeText(),
-                                          initialValue: peca,
-                                          sourceList: pecas,
-                                          onChanged: (value) =>
-                                              equipamentoManutencao.codPeca3 =
-                                                  value?.cod,
-                                          placeholder: 'Peça Trocada',
-                                        );
-                                      },
+                                          PecaModel? peca = pecas
+                                              .where(
+                                                (element) =>
+                                                    element.cod ==
+                                                    equipamentoManutencao
+                                                        .codPeca2,
+                                              )
+                                              .firstOrNull;
+                                          return DropDownSearchWidget(
+                                            setSelectedItemBuilder: (
+                                              context,
+                                              setSelectedItemMethod,
+                                            ) =>
+                                                setPeca2 =
+                                                    setSelectedItemMethod,
+                                            textFunction: (peca) =>
+                                                peca.PecaNomeText(),
+                                            initialValue: peca,
+                                            sourceList: pecas,
+                                            onChanged: (value) =>
+                                                equipamentoManutencao.codPeca2 =
+                                                    value?.cod,
+                                            placeholder: 'Peça Trocada',
+                                          );
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(width: 50.0),
-                                  Container(
-                                    width: 100,
-                                    child: txtQtde3,
-                                  ),
-                                  const SizedBox(width: 50.0),
-                                  Container(
-                                    width: 100,
-                                    child: txtValor3,
-                                  ),
-                                  const SizedBox(width: 50.0),
-                                  Container(
-                                    width: 120,
-                                    child: dtpGarantia3,
-                                  ),
-                                  const SizedBox(width: 50.0),
-                                  Container(
-                                    width: 200,
-                                    child: txtNumSerie3,
-                                  ),
-                                ],
+                                    const SizedBox(width: 50.0),
+                                    Container(
+                                      width: 100,
+                                      child: txtQtde2,
+                                    ),
+                                    const SizedBox(width: 50.0),
+                                    Container(
+                                      width: 100,
+                                      child: txtValor2,
+                                    ),
+                                    const SizedBox(width: 50.0),
+                                    Container(
+                                      width: 120,
+                                      child: dtpGarantia2,
+                                    ),
+                                    const SizedBox(width: 50.0),
+                                    Container(
+                                      width: 200,
+                                      child: txtNumSerie2,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: BlocBuilder<PecaCubit, PecaState>(
-                                      bloc: pecaCubit,
-                                      builder: (context, state) {
-                                        if (state.loading == true) {
-                                          return const Center(
-                                            child: LoadingWidget(),
+                            Visibility(
+                              maintainState: true,
+                              visible: pecasExpandidas,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: BlocBuilder<PecaCubit, PecaState>(
+                                        bloc: pecaCubit,
+                                        builder: (context, state) {
+                                          if (state.loading == true) {
+                                            return const Center(
+                                              child: LoadingWidget(),
+                                            );
+                                          }
+                                          List<PecaModel> pecas = state.pecas;
+                                          pecas.sort(
+                                            (a, b) =>
+                                                a.peca!.compareTo(b.peca!),
                                           );
-                                        }
-                                        List<PecaModel> pecas = state.pecas;
-                                        pecas.sort(
-                                          (a, b) => a.peca!.compareTo(b.peca!),
-                                        );
-                                        PecaModel? peca = pecas
-                                            .where(
-                                              (element) =>
-                                                  element.cod ==
-                                                  equipamentoManutencao
-                                                      .codPeca4,
-                                            )
-                                            .firstOrNull;
-                                        return DropDownSearchWidget(
-                                          textFunction: (peca) =>
-                                              peca.PecaNomeText(),
-                                          initialValue: peca,
-                                          sourceList: pecas,
-                                          onChanged: (value) =>
-                                              equipamentoManutencao.codPeca4 =
-                                                  value?.cod,
-                                          placeholder: 'Peça Trocada',
-                                        );
-                                      },
+                                          PecaModel? peca = pecas
+                                              .where(
+                                                (element) =>
+                                                    element.cod ==
+                                                    equipamentoManutencao
+                                                        .codPeca3,
+                                              )
+                                              .firstOrNull;
+                                          return DropDownSearchWidget(
+                                            setSelectedItemBuilder: (
+                                              context,
+                                              setSelectedItemMethod,
+                                            ) =>
+                                                setPeca3 =
+                                                    setSelectedItemMethod,
+                                            textFunction: (peca) =>
+                                                peca.PecaNomeText(),
+                                            initialValue: peca,
+                                            sourceList: pecas,
+                                            onChanged: (value) =>
+                                                equipamentoManutencao.codPeca3 =
+                                                    value?.cod,
+                                            placeholder: 'Peça Trocada',
+                                          );
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(width: 50.0),
-                                  Container(
-                                    width: 100,
-                                    child: txtQtde4,
-                                  ),
-                                  const SizedBox(width: 50.0),
-                                  Container(
-                                    width: 100,
-                                    child: txtValor4,
-                                  ),
-                                  const SizedBox(width: 50.0),
-                                  Container(
-                                    width: 120,
-                                    child: dtpGarantia4,
-                                  ),
-                                  const SizedBox(width: 50.0),
-                                  Container(
-                                    width: 200,
-                                    child: txtNumSerie4,
-                                  ),
-                                ],
+                                    const SizedBox(width: 50.0),
+                                    Container(
+                                      width: 100,
+                                      child: txtQtde3,
+                                    ),
+                                    const SizedBox(width: 50.0),
+                                    Container(
+                                      width: 100,
+                                      child: txtValor3,
+                                    ),
+                                    const SizedBox(width: 50.0),
+                                    Container(
+                                      width: 120,
+                                      child: dtpGarantia3,
+                                    ),
+                                    const SizedBox(width: 50.0),
+                                    Container(
+                                      width: 200,
+                                      child: txtNumSerie3,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    flex: 2,
-                                    child: BlocBuilder<PecaCubit, PecaState>(
-                                      bloc: pecaCubit,
-                                      builder: (context, state) {
-                                        if (state.loading == true) {
-                                          return const Center(
-                                            child: LoadingWidget(),
+                            Visibility(
+                              maintainState: true,
+                              visible: pecasExpandidas,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: BlocBuilder<PecaCubit, PecaState>(
+                                        bloc: pecaCubit,
+                                        builder: (context, state) {
+                                          if (state.loading == true) {
+                                            return const Center(
+                                              child: LoadingWidget(),
+                                            );
+                                          }
+                                          List<PecaModel> pecas = state.pecas;
+                                          pecas.sort(
+                                            (a, b) =>
+                                                a.peca!.compareTo(b.peca!),
                                           );
-                                        }
-                                        List<PecaModel> pecas = state.pecas;
-                                        pecas.sort(
-                                          (a, b) => a.peca!.compareTo(b.peca!),
-                                        );
-                                        PecaModel? peca = pecas
-                                            .where(
-                                              (element) =>
-                                                  element.cod ==
-                                                  equipamentoManutencao
-                                                      .codPeca5,
-                                            )
-                                            .firstOrNull;
-                                        return DropDownSearchWidget(
-                                          textFunction: (peca) =>
-                                              peca.PecaNomeText(),
-                                          initialValue: peca,
-                                          sourceList: pecas,
-                                          onChanged: (value) =>
-                                              equipamentoManutencao.codPeca5 =
-                                                  value?.cod,
-                                          placeholder: 'Peça Trocada',
-                                        );
-                                      },
+                                          PecaModel? peca = pecas
+                                              .where(
+                                                (element) =>
+                                                    element.cod ==
+                                                    equipamentoManutencao
+                                                        .codPeca4,
+                                              )
+                                              .firstOrNull;
+                                          return DropDownSearchWidget(
+                                            setSelectedItemBuilder: (
+                                              context,
+                                              setSelectedItemMethod,
+                                            ) =>
+                                                setPeca4 =
+                                                    setSelectedItemMethod,
+                                            textFunction: (peca) =>
+                                                peca.PecaNomeText(),
+                                            initialValue: peca,
+                                            sourceList: pecas,
+                                            onChanged: (value) =>
+                                                equipamentoManutencao.codPeca4 =
+                                                    value?.cod,
+                                            placeholder: 'Peça Trocada',
+                                          );
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                  const SizedBox(width: 50.0),
-                                  Container(
-                                    width: 100,
-                                    child: txtQtde5,
-                                  ),
-                                  const SizedBox(width: 50.0),
-                                  Container(
-                                    width: 100,
-                                    child: txtValor5,
-                                  ),
-                                  const SizedBox(width: 50.0),
-                                  Container(
-                                    width: 120,
-                                    child: dtpGarantia5,
-                                  ),
-                                  const SizedBox(width: 50.0),
-                                  Container(
-                                    width: 200,
-                                    child: txtNumSerie5,
-                                  ),
-                                ],
+                                    const SizedBox(width: 50.0),
+                                    Container(
+                                      width: 100,
+                                      child: txtQtde4,
+                                    ),
+                                    const SizedBox(width: 50.0),
+                                    Container(
+                                      width: 100,
+                                      child: txtValor4,
+                                    ),
+                                    const SizedBox(width: 50.0),
+                                    Container(
+                                      width: 120,
+                                      child: dtpGarantia4,
+                                    ),
+                                    const SizedBox(width: 50.0),
+                                    Container(
+                                      width: 200,
+                                      child: txtNumSerie4,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            Visibility(
+                              maintainState: true,
+                              visible: pecasExpandidas,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 5.0),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: BlocBuilder<PecaCubit, PecaState>(
+                                        bloc: pecaCubit,
+                                        builder: (context, state) {
+                                          if (state.loading == true) {
+                                            return const Center(
+                                              child: LoadingWidget(),
+                                            );
+                                          }
+                                          List<PecaModel> pecas = state.pecas;
+                                          pecas.sort(
+                                            (a, b) =>
+                                                a.peca!.compareTo(b.peca!),
+                                          );
+                                          PecaModel? peca = pecas
+                                              .where(
+                                                (element) =>
+                                                    element.cod ==
+                                                    equipamentoManutencao
+                                                        .codPeca5,
+                                              )
+                                              .firstOrNull;
+                                          return DropDownSearchWidget(
+                                            setSelectedItemBuilder: (
+                                              context,
+                                              setSelectedItemMethod,
+                                            ) =>
+                                                setPeca5 =
+                                                    setSelectedItemMethod,
+                                            textFunction: (peca) =>
+                                                peca.PecaNomeText(),
+                                            initialValue: peca,
+                                            sourceList: pecas,
+                                            onChanged: (value) =>
+                                                equipamentoManutencao.codPeca5 =
+                                                    value?.cod,
+                                            placeholder: 'Peça Trocada',
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                    const SizedBox(width: 50.0),
+                                    Container(
+                                      width: 100,
+                                      child: txtQtde5,
+                                    ),
+                                    const SizedBox(width: 50.0),
+                                    Container(
+                                      width: 100,
+                                      child: txtValor5,
+                                    ),
+                                    const SizedBox(width: 50.0),
+                                    Container(
+                                      width: 120,
+                                      child: dtpGarantia5,
+                                    ),
+                                    const SizedBox(width: 50.0),
+                                    Container(
+                                      width: 200,
+                                      child: txtNumSerie5,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                             Padding(
@@ -1190,6 +1317,9 @@ class _EquipamentoManutencaoPageFrmState
                                     child: Row(
                                       children: [
                                         CustomCheckboxWidget(
+                                          setValue: (context, setValueWidget) =>
+                                              setControlarValidade =
+                                                  setValueWidget,
                                           checked: equipamentoManutencao
                                               .controlarValidade,
                                           onClick: (value) =>
@@ -1201,13 +1331,6 @@ class _EquipamentoManutencaoPageFrmState
                                     ),
                                   ),
                                 ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
-                              child: LabelStringWidget(
-                                text:
-                                    'Documento Anexado: ${equipamentoManutencao.nfAnexa == null ? 'Nenhum Documento Encontrado' : equipamentoManutencao.nfAnexaNome}',
                               ),
                             ),
                             const Padding(
@@ -1232,17 +1355,19 @@ class _EquipamentoManutencaoPageFrmState
                       'Anexar NF',
                       salvarArquivo,
                     ),
-                    CustomPopupItemModel(
-                      text: 'Excluir NF',
-                      onTap: excluirArquivo,
-                    ),
-                    CustomPopupItemOpenDocModel.getOpenDocItem(
-                      'Abrir NF',
-                      context,
-                      equipamentoManutencao.nfAnexa,
-                      equipamentoManutencao.nfAnexaNome ??
-                          'arquivo sem nome.WebP',
-                    ),
+                    if (equipamentoManutencao.nfAnexa != null)
+                      CustomPopupItemModel(
+                        text: 'Excluir NF',
+                        onTap: excluirArquivo,
+                      ),
+                    if (equipamentoManutencao.nfAnexa != null)
+                      CustomPopupItemOpenDocModel.getOpenDocItem(
+                        'Abrir NF',
+                        context,
+                        equipamentoManutencao.nfAnexa,
+                        equipamentoManutencao.nfAnexaNome ??
+                            'arquivo sem nome.WebP',
+                      ),
                     CustomPopupItemModel(
                       text: 'Imprimir Etiqueta',
                       onTap: () => _controller.printTag(
@@ -1262,6 +1387,10 @@ class _EquipamentoManutencaoPageFrmState
                       ),
                   ],
                 ),
+                LabelStringWidget(
+                  text:
+                      '${equipamentoManutencao.nfAnexaNome == null ? '' : 'NF Anexada: ' + equipamentoManutencao.nfAnexaNome.toString()}',
+                ),
                 const Spacer(),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
@@ -1272,12 +1401,7 @@ class _EquipamentoManutencaoPageFrmState
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: CleanButtonWidget(
-                    onPressed: () => {
-                      setState(() {
-                        equipamentoManutencao =
-                            EquipamentoManutencaoModel.empty();
-                      }),
-                    },
+                    onPressed: limpar,
                   ),
                 ),
                 Padding(
@@ -1291,6 +1415,104 @@ class _EquipamentoManutencaoPageFrmState
           ],
         );
       },
+    );
+  }
+
+  void limpar() async {
+    AuthenticationResultDTO? auth =
+        await Modular.get<AuthenticationStore>().GetAuthenticated();
+    setState(() {
+      equipamentoManutencao.cod = 0;
+      equipamentoManutencao.codEquipamento = 0;
+      equipamentoManutencao.codServicosTipo = 0;
+      equipamentoManutencao.resultado = '';
+      equipamentoManutencao.descricao = '';
+      equipamentoManutencao.dataInicio = DateTime.now();
+      equipamentoManutencao.dataParada = null;
+      equipamentoManutencao.imagemDoAnexo = null;
+      equipamentoManutencao.codUsuario = auth?.usuario?.cod;
+      equipamentoManutencao.codInstituicao = auth?.instituicao?.cod;
+      equipamentoManutencao.tecnico = null;
+      equipamentoManutencao.usuarioRegistro = auth?.usuario?.nome;
+      equipamentoManutencao.dataRegistro = DateTime.now();
+      equipamentoManutencao.numNF = '';
+      equipamentoManutencao.problema = null;
+      equipamentoManutencao.detectadoPor = null;
+      equipamentoManutencao.codPeca1 = null;
+      equipamentoManutencao.codPeca2 = null;
+      equipamentoManutencao.codPeca3 = null;
+      equipamentoManutencao.codPeca3 = null;
+      equipamentoManutencao.codPeca5 = null;
+      equipamentoManutencao.qtde1 = null;
+      equipamentoManutencao.qtde2 = null;
+      equipamentoManutencao.qtde3 = null;
+      equipamentoManutencao.qtde4 = null;
+      equipamentoManutencao.qtde5 = null;
+      equipamentoManutencao.valor1 = null;
+      equipamentoManutencao.valor2 = null;
+      equipamentoManutencao.valor3 = null;
+      equipamentoManutencao.valor4 = null;
+      equipamentoManutencao.valor5 = null;
+      equipamentoManutencao.garantia1 = null;
+      equipamentoManutencao.garantia2 = null;
+      equipamentoManutencao.garantia3 = null;
+      equipamentoManutencao.garantia4 = null;
+      equipamentoManutencao.garantia5 = null;
+      equipamentoManutencao.serie1 = null;
+      equipamentoManutencao.serie2 = null;
+      equipamentoManutencao.serie3 = null;
+      equipamentoManutencao.serie4 = null;
+      equipamentoManutencao.serie5 = null;
+      equipamentoManutencao.nfAnexa = null;
+      equipamentoManutencao.nfAnexaNome = null;
+      equipamentoManutencao.validade = null;
+      equipamentoManutencao.controlarValidade = false;
+      equipamentoManutencao.ultimaAlteracao = null;
+      equipamentoManutencao.tstamp = null;
+      equipamentoManutencao.equipamento = null;
+      equipamentoManutencao.servicoTipo = null;
+      equipamentoManutencao.usuario = auth?.usuario;
+      equipamentoManutencao.peca = null;
+      equipamentoManutencao.peca1 = null;
+      equipamentoManutencao.peca2 = null;
+      equipamentoManutencao.peca3 = null;
+      equipamentoManutencao.peca4 = null;
+      equipamentoManutencao.peca5 = null;
+    });
+    setEquipamento(null);
+    setServicoTipo(null);
+    dtpDataParada.setValue(null);
+    tmpHoraParada.setValue(null);
+    dtpDataInicio.setValue(equipamentoManutencao.dataInicio);
+    tmpHoraInicio.setValue(
+      TimeOfDay.fromDateTime(
+        equipamentoManutencao.dataInicio!,
+      ),
+    );
+    dtpDataTermino.setValue(null);
+    tmpHoraTermino.setValue(null);
+    setDetectadoPor(null);
+    setTecnico(null);
+    setResultado(null);
+    setPeca1(null);
+    setPeca2(null);
+    setPeca3(null);
+    setPeca4(null);
+    setPeca5(null);
+    dtpGarantia1.setValue(null);
+    dtpGarantia2.setValue(null);
+    dtpGarantia3.setValue(null);
+    dtpGarantia4.setValue(null);
+    dtpGarantia5.setValue(null);
+    txtUsuarioRegistro.text =
+        auth?.usuario?.nome ?? 'Usuário logado não encontrado';
+    dtpDataRegistro.setValue(equipamentoManutencao.dataRegistro);
+    dtpDataValidade.setValue(null);
+    setControlarValidade(false);
+    tmpHoraRegistro.setValue(
+      TimeOfDay.fromDateTime(
+        equipamentoManutencao.dataRegistro!,
+      ),
     );
   }
 

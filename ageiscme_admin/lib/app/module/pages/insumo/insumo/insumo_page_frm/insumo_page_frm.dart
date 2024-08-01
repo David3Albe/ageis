@@ -7,8 +7,11 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuar
 import 'package:ageiscme_admin/app/module/pages/equipamento/equipamento_insumos/equipamento_insumo_page.dart';
 import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/insumo/insumo_page_frm/insumo_page_frm_state.dart';
+import 'package:ageiscme_admin/app/module/pages/insumo/insumo_movimento/insumo_movimento_page.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/insumo_teste/insumo_teste_page_frm/insumo_teste_page_frm.dart';
 import 'package:ageiscme_data/services/insumo/insumo_service.dart';
+import 'package:ageiscme_data/stores/authentication/authentication_store.dart';
+import 'package:ageiscme_models/dto/authentication_result/authentication_result_dto.dart';
 import 'package:ageiscme_models/dto/usuario/usuario_drop_down_search_dto.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/models/insumo_teste/insumo_teste_model.dart';
@@ -29,6 +32,7 @@ import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:dependencias_comuns/modular_export.dart';
 import 'package:flutter/material.dart';
 
 class InsumoPageFrm extends StatefulWidget {
@@ -49,6 +53,15 @@ class InsumoPageFrm extends StatefulWidget {
 
 class _InsumoPageFrmState extends State<InsumoPageFrm> {
   _InsumoPageFrmState({required this.insumo});
+  late void Function(DestinoResiduoModel?) setResiduo;
+  late void Function(FabricanteModel?) setFabricante;
+  late void Function(FornecedorModel?) setFornecedor;
+  late void Function(UnidadeMedidaModel?) setUnidadeMedida;
+
+  late void Function(bool) setAtivo;
+  late void Function(bool) setTesteObrigatorio;
+  late void Function(bool) setControlarEstoque;
+
   late final FabricanteCubit fabricanteCubit;
   late final FornecedorCubit fornecedorCubit;
   late final UnidadeMedidaCubit unidadeMedidaCubit;
@@ -442,12 +455,18 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                                                 .firstOrNull;
                                         return DropDownSearchWidget<
                                             UnidadeMedidaModel>(
+                                          setSelectedItemBuilder: (
+                                            context,
+                                            setSelectedItemMethod,
+                                          ) =>
+                                              setUnidadeMedida =
+                                                  setSelectedItemMethod,
                                           initialValue: unidadeMedida,
                                           sourceList: unidadeMedidas,
                                           textFunction: (p0) =>
                                               p0.GetDropDownText(),
-                                          onChanged: (value) =>
-                                              insumo.codUnidadeMedida = value?.cod,
+                                          onChanged: (value) => insumo
+                                              .codUnidadeMedida = value?.cod,
                                           placeholder: 'Unidade Medida',
                                         );
                                       },
@@ -480,6 +499,11 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                                       .firstOrNull;
                                   return DropDownSearchWidget<
                                       DestinoResiduoModel>(
+                                    setSelectedItemBuilder: (
+                                      context,
+                                      setSelectedItemMethod,
+                                    ) =>
+                                        setResiduo = setSelectedItemMethod,
                                     validator: (val) =>
                                         val == null ? 'Obrigatório' : null,
                                     validateBuilder:
@@ -544,6 +568,12 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                                                 .firstOrNull;
                                         return DropDownSearchWidget<
                                             FabricanteModel>(
+                                          setSelectedItemBuilder: (
+                                            context,
+                                            setSelectedItemMethod,
+                                          ) =>
+                                              setFabricante =
+                                                  setSelectedItemMethod,
                                           textFunction: (p0) =>
                                               p0.GetDropDownText(),
                                           initialValue: fabricante,
@@ -584,6 +614,12 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                                         insumo.fornecedorItem = fornecedor;
                                         return DropDownSearchWidget<
                                             FornecedorModel>(
+                                          setSelectedItemBuilder: (
+                                            context,
+                                            setSelectedItemMethod,
+                                          ) =>
+                                              setFornecedor =
+                                                  setSelectedItemMethod,
                                           textFunction: (p0) =>
                                               p0.GetDropDownText(),
                                           initialValue: fornecedor,
@@ -600,7 +636,8 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                                               );
                                               txtNomeitem.text =
                                                   insumo.nome ?? '';
-                                              insumo.codFornecedores = value?.cod;
+                                              insumo.codFornecedores =
+                                                  value?.cod;
                                               if (insumo.nome == null ||
                                                   value?.nome == null) return;
                                               insumo.nome = insumo.nome! +
@@ -623,6 +660,8 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                                   child: Row(
                                     children: [
                                       CustomCheckboxWidget(
+                                        setValue: (context, setValueWidget) =>
+                                            setAtivo = setValueWidget,
                                         checked: insumo.ativo,
                                         onClick: (value) =>
                                             insumo.ativo = value,
@@ -639,6 +678,9 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                                   child: Row(
                                     children: [
                                       CustomCheckboxWidget(
+                                        setValue: (context, setValueWidget) =>
+                                            setTesteObrigatorio =
+                                                setValueWidget,
                                         checked: insumo.testeInsumoObrigatorio,
                                         onClick: (value) => insumo
                                             .testeInsumoObrigatorio = value,
@@ -655,6 +697,9 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                                   child: Row(
                                     children: [
                                       CustomCheckboxWidget(
+                                        setValue: (context, setValueWidget) =>
+                                            setControlarEstoque =
+                                                setValueWidget,
                                         checked: insumo.controleEstoque,
                                         onClick: (value) {
                                           setState(() {
@@ -728,6 +773,11 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                         onTap: _abrirEquipamentos,
                       ),
                     if (insumo.cod != null && insumo.cod != 0)
+                      CustomPopupItemModel(
+                        text: 'Movimentações Estoque',
+                        onTap: _abrirMovimentacaoEstoque,
+                      ),
+                    if (insumo.cod != null && insumo.cod != 0)
                       CustomPopupItemHistoryModel.getHistoryItem(
                         title: 'Insumo ${insumo.cod}',
                         child: HistoricoPage(
@@ -748,11 +798,7 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: CleanButtonWidget(
-                    onPressed: () => {
-                      setState(() {
-                        insumo = InsumoModel.empty();
-                      }),
-                    },
+                    onPressed: limpar,
                   ),
                 ),
                 Padding(
@@ -767,6 +813,19 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
         );
       },
     );
+  }
+
+  void limpar() {
+    setState(() {
+      insumo = InsumoModel.empty();
+    });
+    setFabricante(null);
+    setFornecedor(null);
+    setUnidadeMedida(null);
+    setResiduo(null);
+    setAtivo(true);
+    setControlarEstoque(false);
+    setTesteObrigatorio(false);
   }
 
   void loadDepositoInsumo() {
@@ -797,6 +856,10 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
     InsumoTesteModel insumoTesteModel = InsumoTesteModel.empty();
     insumoTesteModel.codInsumo = insumo.cod;
     insumoTesteModel.insumo = insumo;
+    AuthenticationResultDTO? auth =
+        await Modular.get<AuthenticationStore>().GetAuthenticated();
+    insumoTesteModel.codUsuario = auth?.usuario?.cod;
+    insumoTesteModel.usuario = auth?.usuario;
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
       title: 'Cadastro/Edição Teste de Insumo',
@@ -863,6 +926,23 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
           ),
         );
       },
+    );
+  }
+
+  Future _abrirMovimentacaoEstoque() async {
+    if (insumo.cod == null || insumo.cod == 0) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'É necessário ter o insumo cadastrado para acessar a tela de Movimentações de Estoque',
+      );
+      return;
+    }
+
+    WindowsHelper.OpenDefaultWindows(
+      title: 'Movimentações de Insumo - ${insumo.nome ?? 'Sem nome'}',
+      widget: InsumoMovimentoPage(
+        codInsumo: insumo.cod,
+      ),
     );
   }
 

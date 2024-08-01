@@ -52,14 +52,14 @@ class _ConsultaEstoqueVencidoPageState
     CustomDataColumn(
       text: 'Cod. Kit',
       field: 'codKit',
-      type: CustomDataColumnType.Number,
+      type: CustomDataColumnType.Text,
     ),
     CustomDataColumn(text: 'Cod. Barra', field: 'codBarra'),
     CustomDataColumn(text: 'Item', field: 'nomeItem'),
     CustomDataColumn(
       text: 'Cod. Item',
       field: 'codItem',
-      type: CustomDataColumnType.Number,
+      type: CustomDataColumnType.Text,
     ),
     CustomDataColumn(text: 'ID Etiqueta', field: 'idEtiqueta'),
     CustomDataColumn(
@@ -85,6 +85,7 @@ class _ConsultaEstoqueVencidoPageState
     localizacaoArsenalBloc = LocalizacaoArsenalCubit();
     localizacaoArsenalBloc.loadAll();
 
+    bloc.loadEstoqueVencido(filter);
     super.initState();
   }
 

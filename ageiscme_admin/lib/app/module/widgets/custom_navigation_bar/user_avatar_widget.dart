@@ -1,7 +1,11 @@
 import 'package:ageiscme_admin/app/module/services/admin_navigator_service.dart';
+import 'package:ageiscme_admin/app/module/widgets/custom_navigation_bar/cubit/custom_navigation_bar_cubit.dart';
 import 'package:ageiscme_data/stores/authentication/authentication_store.dart';
 import 'package:ageiscme_models/dto/authentication_result/authentication_result_dto.dart';
 import 'package:compartilhados/main.dart';
+import 'package:compartilhados/navigator/navigator_service.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
+import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/modular_export.dart';
 import 'package:flutter/material.dart';
 
@@ -20,14 +24,14 @@ class UserAvatarWidget extends StatelessWidget {
           userName = authentication.usuario!.nome!;
           company = authentication.instituicao!.nome!;
         }
-        return InkWell(
-          onTap: () =>
-              AdminNavigatorService.navigateToHomeValidaTrocaSenha(context),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
-            child: Tooltip(
-              message: userName,
-              waitDuration: const Duration(milliseconds: 500),
+        return Material(
+          elevation: 1,
+          color: const Color.fromRGBO(216, 218, 230, 1),
+          child: InkWell(
+            onTap: () =>
+                AdminNavigatorService.navigateToHomeValidaTrocaSenha(context),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(8.0, 8.0, 8.0, 8.0),
               child: Column(
                 children: [
                   Row(
@@ -36,7 +40,8 @@ class UserAvatarWidget extends StatelessWidget {
                         backgroundColor: Cores.corAvatarFundo,
                         foregroundColor: Cores.corAvatarTexto,
                         child: AutoSizeText(
-                          HelperFunctions.GetTwoFirstLetersOfNameAndSecondName(
+                          HelperFunctions
+                              .GetTwoFirstLetersOfNameAndSecondName(
                             userName,
                           ),
                           minFontSize: 8,
@@ -53,7 +58,8 @@ class UserAvatarWidget extends StatelessWidget {
                                     userName,
                                     overflow: TextOverflow.ellipsis,
                                     style: Fontes.getRoboto(
-                                      fontSize: HelperFunctions.calculaFontSize(
+                                      fontSize:
+                                          HelperFunctions.calculaFontSize(
                                         context,
                                         18,
                                       ),
@@ -64,6 +70,16 @@ class UserAvatarWidget extends StatelessWidget {
                               ),
                             )
                           : Container(),
+                      Center(
+                        child: IconButton(
+                          tooltip: 'Sair',
+                          onPressed: () {
+                            onLogout(context);
+                            NavigatorService.navigateToModuleSelection();
+                          },
+                          icon: const Icon(Icons.logout, size: 26),
+                        ),
+                      ),
                     ],
                   ),
                   expanded
@@ -95,5 +111,14 @@ class UserAvatarWidget extends StatelessWidget {
         );
       },
     );
+  }
+
+  void onLogout(BuildContext context) async {
+    WindowsHelper.CloseAll();
+    CustomNavigationBarCubit cubit =
+        BlocProvider.of<CustomNavigationBarCubit>(context);
+    cubit.expand();
+    AuthenticationStore store = Modular.get<AuthenticationStore>();
+    await store.ClearAuthentication();
   }
 }

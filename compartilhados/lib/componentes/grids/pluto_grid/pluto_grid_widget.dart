@@ -136,6 +136,7 @@ class PlutoGridWidget<T> extends StatelessWidget {
           column,
           objJson,
         );
+
         final entry = MapEntry<CustomDataColumn, dynamic>(
           column,
           columnContent,

@@ -56,6 +56,7 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
   EquipamentoModel equipamento;
   late final FabricanteCubit fabricanteCubit;
   late final ServicoTipoCubit servicoTipoCubit;
+  late void Function(FabricanteModel?) setFabricante;
 
   late final EquipamentoPageFrmCubit cubit = EquipamentoPageFrmCubit(
     equipamentoModel: equipamento,
@@ -295,6 +296,12 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
                                                 )
                                                 .firstOrNull;
                                         return DropDownSearchWidget(
+                                          setSelectedItemBuilder: (
+                                            context,
+                                            setSelectedItemMethod,
+                                          ) =>
+                                              setFabricante =
+                                                  setSelectedItemMethod,
                                           textFunction: (p0) =>
                                               p0.GetDropDownText(),
                                           initialValue: fabricante,
@@ -409,6 +416,7 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
                                     }
                                   }
                                   return CheckboxListWidget(
+                                    twoItemsPerRow: true,
                                     items: items,
                                     checkedList: checkedList,
                                     onChecked: (values) {
@@ -483,6 +491,9 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
                       setState(() {
                         equipamento = EquipamentoModel.empty();
                       }),
+                      setFabricante(
+                        null,
+                      ),
                     },
                   ),
                 ),
@@ -600,7 +611,8 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
     registroServicoModel.dataInicio = DateTime.now();
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
-      title: 'Cadastro/Edição Monitoramento - ${equipamento.nome ?? 'Sem Descrição'}',
+      title:
+          'Cadastro/Edição Monitoramento - ${equipamento.nome ?? 'Sem Descrição'}',
       widget: RegistroServicoPageFrm(
         equipamentoReadOnly: true,
         itemReadOnly: true,

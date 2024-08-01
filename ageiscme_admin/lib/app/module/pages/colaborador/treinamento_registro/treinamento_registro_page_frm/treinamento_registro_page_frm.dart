@@ -266,13 +266,6 @@ class _TreinamentoRegistroPageFrmState
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 5.0),
-                              child: LabelStringWidget(
-                                text:
-                                    'Documento Anexado: ${treinamentoRegistro.docNome == null ? 'Nenhum Documento foi Encontrado' : treinamentoRegistro.docNome}',
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(top: 5.0),
                               child: Row(
                                 children: [
                                   Expanded(
@@ -463,10 +456,12 @@ class _TreinamentoRegistroPageFrmState
               children: [
                 CustomPopupMenuWidget(
                   items: [
-                    CustomPopupItemModel(
-                      text: 'Imprimir',
-                      onTap: print,
-                    ),
+                    if (treinamentoRegistro.cod != null &&
+                        treinamentoRegistro.cod != 0)
+                      CustomPopupItemModel(
+                        text: 'Imprimir',
+                        onTap: print,
+                      ),
                     CustomPopupItemFileModel.getFileItem(
                       'Anexar DOC',
                       salvarDoc,
@@ -498,6 +493,10 @@ class _TreinamentoRegistroPageFrmState
                       ),
                   ],
                 ),
+                LabelStringWidget(
+                  text:
+                      '${treinamentoRegistro.docNome == null ? '' : 'Documento: ' + treinamentoRegistro.docNome.toString()}',
+                ),
                 const Spacer(),
                 Wrap(
                   spacing: 16 * paddingHorizontalScale,
@@ -512,6 +511,7 @@ class _TreinamentoRegistroPageFrmState
                         setState(() {
                           treinamentoRegistro =
                               TreinamentoRegistroModel.empty();
+                          dtpData.setValue(null);
                         }),
                       },
                     ),

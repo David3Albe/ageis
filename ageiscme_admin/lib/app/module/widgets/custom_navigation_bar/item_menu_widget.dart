@@ -104,7 +104,7 @@ class _ItemMenuWidgetState extends State<ItemMenuWidget>
               child: BlocBuilder<_ItemMenuHoverCubit, bool>(
                 bloc: hoverCubit,
                 builder: (context, state) => Container(
-                  color: state ? Colors.grey[350] : null,
+                  color: state ? Colors.grey[400] : null,
                   child: Padding(
                     padding: EdgeInsets.all(spacer),
                     child: Row(
@@ -174,17 +174,10 @@ class _ItemMenuWidgetState extends State<ItemMenuWidget>
   }
 
   double _getChildenHeight(int length, Size size) {
-    if (length < 15) return getHeightChildrenByRes(30, size);
-    if (length < 20) return getHeightChildrenByRes(35, size);
-    if (length < 25) return getHeightChildrenByRes(40, size);
-    if (length < 30) return getHeightChildrenByRes(45, size);
-    if (length < 35) return getHeightChildrenByRes(50, size);
-    if (length < 40) return getHeightChildrenByRes(60, size);
-    if (length < 45) return getHeightChildrenByRes(65, size);
-    if (length < 50) return getHeightChildrenByRes(70, size);
-    if (length < 55) return getHeightChildrenByRes(75, size);
-    if (length < 60) return getHeightChildrenByRes(80, size);
-    if (length < 65) return getHeightChildrenByRes(85, size);
+    if (length < 27) return getHeightChildrenByRes(45, size);
+    if (length < 30) return getHeightChildrenByRes(50, size);
+    if (length <= 45) return getHeightChildrenByRes(60, size);
+    if (length <= 65) return getHeightChildrenByRes(65, size);
     return length * 1;
   }
 

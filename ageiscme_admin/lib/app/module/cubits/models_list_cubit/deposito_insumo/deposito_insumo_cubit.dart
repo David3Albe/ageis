@@ -13,6 +13,12 @@ class DepositoInsumoCubit extends Cubit<DepositoInsumoState> {
   }
 
   void clear() => emit(DepositoInsumoState(objs: []));
+
+  void refresh() async {
+    emit(DepositoInsumoState(objs: state.objs, loading: true));
+    await Future.delayed(const Duration(milliseconds: 50));
+    emit(DepositoInsumoState(objs: state.objs));
+  }
 }
 
 class DepositoInsumoState {

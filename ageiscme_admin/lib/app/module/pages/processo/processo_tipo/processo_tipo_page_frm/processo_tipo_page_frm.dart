@@ -132,6 +132,9 @@ class _ProcessoTipoPageFrmState extends State<ProcessoTipoPageFrm> {
 
   final ScrollController scroll = ScrollController();
 
+  late void Function(ProcessoEtapaModel?) setEtapa;
+  late void Function(ProcessoTipoPrioriodadeOption?) setPrioridade;
+
   @override
   Widget build(BuildContext context) {
     setFields();
@@ -190,6 +193,9 @@ class _ProcessoTipoPageFrmState extends State<ProcessoTipoPageFrm> {
 
                                   return DropDownSearchWidget<
                                       ProcessoEtapaModel>(
+                                    setSelectedItemBuilder:
+                                        (context, setSelectedItemMethod) =>
+                                            setEtapa = setSelectedItemMethod,
                                     initialValue: processoTipo.etapaInicial,
                                     textFunction: (processoEtapa) =>
                                         processoEtapa.GetNomeEtapaTipoText(),
@@ -212,6 +218,9 @@ class _ProcessoTipoPageFrmState extends State<ProcessoTipoPageFrm> {
                               padding: const EdgeInsets.only(top: 5.0),
                               child: DropDownSearchWidget<
                                   ProcessoTipoPrioriodadeOption>(
+                                setSelectedItemBuilder:
+                                    (context, setSelectedItemMethod) =>
+                                        setPrioridade = setSelectedItemMethod,
                                 textFunction: (p0) => p0.GetDropDownText(),
                                 validator: (obj) =>
                                     obj == null ? 'Obrigatório' : null,
@@ -301,10 +310,13 @@ class _ProcessoTipoPageFrmState extends State<ProcessoTipoPageFrm> {
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
                   child: CleanButtonWidget(
-                    onPressed: () => {
+                    onPressed: () {
                       setState(() {
                         processoTipo = ProcessoTipoModel.empty();
-                      }),
+                      });
+                      setEtapa(null);
+                      setPrioridade(null);
+                      dtpLimiteVigencia.setValue(null);
                     },
                   ),
                 ),

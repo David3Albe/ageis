@@ -20,7 +20,7 @@ class RouterOutletPage extends StatelessWidget {
 
     return CustomAppBarWidget(
       drawer: resumeView == true ? const CustomNavigationBarWidget() : null,
-      onLogout: () => onLogout(context),
+      // onLogout: () => onLogout(context),
       body: BlocProvider(
         create: (context) => NavigationBarCubit(),
         child: Stack(

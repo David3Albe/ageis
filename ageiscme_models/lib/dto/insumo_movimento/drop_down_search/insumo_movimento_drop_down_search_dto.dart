@@ -7,6 +7,7 @@ part 'insumo_movimento_drop_down_search_dto.freezed.dart';
 sealed class InsumoMovimentoDropDownSearchDTO with _$InsumoMovimentoDropDownSearchDTO {
   factory InsumoMovimentoDropDownSearchDTO({
     required int numeroRegistros,
+    int? codInsumo,
     String? search,
   }) = _InsumoMovimentoDropDownSearchDTO;
 

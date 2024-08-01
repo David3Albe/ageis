@@ -375,44 +375,76 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                                 padding: const EdgeInsets.only(top: 5.0),
                                 child: controller.txtDescricaoServico,
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 5.0),
+                              const Padding(
+                                padding: const EdgeInsets.only(top: 20.0),
                                 child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
                                   children: [
-                                    Expanded(
-                                      child: controller.txtTemperatura,
-                                    ),
-                                    const SizedBox(width: 50.0),
-                                    Expanded(
-                                      child: controller.txtTemperaturaMax,
-                                    ),
-                                    const SizedBox(width: 50.0),
-                                    Expanded(
-                                      child: controller.txtTemperaturaMin,
+                                    Text(
+                                      'Condições',
                                     ),
                                   ],
                                 ),
                               ),
                               Padding(
                                 padding: const EdgeInsets.only(top: 5.0),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                      child: controller.txtUmidade,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Colors.grey,
+                                      width: 1.0,
                                     ),
-                                    const SizedBox(width: 50.0),
-                                    Expanded(
-                                      child: controller.txtUmidadeMax,
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.circular(5.0),
                                     ),
-                                    const SizedBox(width: 50.0),
-                                    Expanded(
-                                      child: controller.txtUmidadeMin,
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: controller.txtTemperatura,
+                                            ),
+                                            const SizedBox(width: 50.0),
+                                            Expanded(
+                                              child:
+                                                  controller.txtTemperaturaMax,
+                                            ),
+                                            const SizedBox(width: 50.0),
+                                            Expanded(
+                                              child:
+                                                  controller.txtTemperaturaMin,
+                                            ),
+                                          ],
+                                        ),
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 5.0),
+                                          child: Row(
+                                            children: [
+                                              Expanded(
+                                                child: controller.txtUmidade,
+                                              ),
+                                              const SizedBox(width: 50.0),
+                                              Expanded(
+                                                child: controller.txtUmidadeMax,
+                                              ),
+                                              const SizedBox(width: 50.0),
+                                              Expanded(
+                                                child: controller.txtUmidadeMin,
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
+                                  ),
                                 ),
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(top: 5.0),
+                                padding: const EdgeInsets.only(top: 15.0),
                                 child: Row(
                                   children: [
                                     Expanded(
@@ -524,13 +556,6 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                                   ],
                                 ),
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 5.0),
-                                child: LabelStringWidget(
-                                  text:
-                                      'Documento Anexado: ${registroServico.docAnexaNome == null ? 'Nenhum Documento Encontrado' : registroServico.docAnexaNome}',
-                                ),
-                              ),
                             ],
                           ),
                         ),
@@ -576,6 +601,10 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                         onTap: printTag,
                       ),
                     ],
+                  ),
+                  LabelStringWidget(
+                    text:
+                        '${registroServico.docAnexaNome == null ? '' : 'Documento: ' + registroServico.docAnexaNome.toString()}',
                   ),
                   const Spacer(),
                   Wrap(

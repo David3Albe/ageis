@@ -30,6 +30,7 @@ sealed class InsumoTesteModel with _$InsumoTesteModel {
     required DepositoInsumoModel? depositoInsumo,
     required InsumoModel? insumo,
     required UsuarioModel? usuario,
+    required UsuarioModel? usuarioLiberacao,
   }) = _InsumoTesteModel;
 
   factory InsumoTesteModel.fromJson(Map<String, Object?> json) =>
@@ -60,6 +61,7 @@ sealed class InsumoTesteModel with _$InsumoTesteModel {
         depositoInsumo: null,
         insumo: null,
         usuario: null,
+        usuarioLiberacao: null,
       );
   String get getSituacaoText =>
       resultado == null ? '' : SituacaoOption.getOpcaoFromId(resultado!);

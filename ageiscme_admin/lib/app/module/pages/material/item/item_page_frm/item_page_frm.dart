@@ -39,6 +39,7 @@ import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_float_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_string_area_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/columns/custom_data_column.dart';
@@ -101,7 +102,7 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
   late final DatePickerWidget dtpRmsValidade;
   late final TextFieldStringWidget txtRefFornecedor;
   late final DatePickerWidget dtpDataAquisicao;
-  late final TextFieldStringWidget txtRestricao;
+  late final TextFieldStringAreaWidget txtRestricao;
   late final DatePickerWidget dtpDataDescarte;
   late final TextFieldNumberWidget txtNumeroPatrimonio;
   late final TextFieldNumberFloatWidget txtValorItem;
@@ -118,6 +119,12 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
   late bool Function() validateProprietario;
   late bool Function() validateStatus;
   final ScrollController scroll = ScrollController();
+
+  late void Function(ItemDescritorModel?) setDescritor;
+  late void Function(EtiquetaModel?) setEtiqueta;
+  late void Function(ItemSituacaoOption?) setSituacao;
+  late void Function(bool) setArmazenarOutrosItens;
+  late void Function(bool) setImplantavel;
 
   Future<AuthenticationResultDTO?> recuperaUsuario() async {
     return await Modular.get<AuthenticationStore>().GetAuthenticated();
@@ -170,7 +177,7 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
       onDateSelected: (value) => item.dataAquisicao = value,
       initialValue: item.dataAquisicao,
     );
-    txtRestricao = TextFieldStringWidget(
+    txtRestricao = TextFieldStringAreaWidget(
       placeholder: 'Observação',
       onChanged: (String? str) => item.restricao = str,
     );
@@ -295,7 +302,6 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
   }
 
   void setFields() {
-    print(item.kit);
     String? usuario = item.usuario?.nome;
     if (usuario == null && txtUsuarioCadastro.text.isNotEmpty) {
       usuario = txtUsuarioCadastro.text;
@@ -465,6 +471,9 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
                               padding: const EdgeInsets.only(top: 5.0),
                               child:
                                   DropDownSearchApiWidget<ItemDescritorModel>(
+                                setSelectedItemBuilder:
+                                    (context, setSelectedItemMethod) =>
+                                        setDescritor = setSelectedItemMethod,
                                 validator: (val) =>
                                     val == null ? 'Obrigatório' : null,
                                 validateBuilder: (
@@ -585,6 +594,12 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
                                         );
                                         return DropDownSearchWidget<
                                             EtiquetaModel>(
+                                          setSelectedItemBuilder: (
+                                            context,
+                                            setSelectedItemMethod,
+                                          ) =>
+                                              setEtiqueta =
+                                                  setSelectedItemMethod,
                                           initialValue: etiqueta,
                                           textFunction: (p0) =>
                                               p0.GetDropDownText(),
@@ -665,6 +680,11 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
                                   Expanded(
                                     child: DropDownSearchWidget<
                                         ItemSituacaoOption>(
+                                      setSelectedItemBuilder: (
+                                        context,
+                                        setSelectedItemMethod,
+                                      ) =>
+                                          setSituacao = setSelectedItemMethod,
                                       validator: (val) =>
                                           val == null ? 'Obrigatório' : null,
                                       validateBuilder:
@@ -729,6 +749,9 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
                                   child: Row(
                                     children: [
                                       CustomCheckboxWidget(
+                                        setValue: (context, setValueWidget) =>
+                                            setArmazenarOutrosItens =
+                                                setValueWidget,
                                         checked: item.repositorio,
                                         onClick: (value) =>
                                             item.repositorio = value,
@@ -746,6 +769,8 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
                                   child: Row(
                                     children: [
                                       CustomCheckboxWidget(
+                                        setValue: (context, setValueWidget) =>
+                                            setImplantavel = setValueWidget,
                                         checked: item.implantavel,
                                         onClick: (value) =>
                                             item.implantavel = value,
@@ -894,23 +919,7 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
-                  child: CleanButtonWidget(
-                    onPressed: () => {
-                      setState(() {
-                        item = ItemModel.empty();
-                        if (widget.frmType != ItemPageFrmtype.Consigned) {
-                          readonlyIdEtiquetaMethod?.call(false);
-                        }
-                        setFields();
-                        setSelectedItemDescritorMethod?.call(null);
-                        setSelectedProprietarioMethod?.call(null);
-                        setDateCadastro?.call(DateTime.now());
-                        setDateDescarte?.call(null);
-                        setDateRmsValidade?.call(null);
-                        setDateAquisicao?.call(null);
-                      }),
-                    },
-                  ),
+                  child: CleanButtonWidget(onPressed: limpar),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 16.0),
@@ -924,6 +933,35 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
         );
       },
     );
+  }
+
+  void limpar() async {
+    AuthenticationResultDTO? auth =
+        await Modular.get<AuthenticationStore>().GetAuthenticated();
+    setState(() {
+      item = ItemModel.empty();
+      item.codUsuarioCadastro = auth?.usuario?.cod;
+      item.usuario = auth?.usuario;
+      item.codInstituicao = auth?.instituicao?.cod ?? 0;
+      item.dataCadastro = DateTime.now();
+      if (widget.frmType != ItemPageFrmtype.Consigned) {
+        readonlyIdEtiquetaMethod?.call(false);
+      }
+      setFields();
+      setSelectedItemDescritorMethod?.call(null);
+      setSelectedProprietarioMethod?.call(null);
+      txtUsuarioCadastro.text =
+          auth?.usuario?.nome ?? 'Sem usuário identificado';
+      setDateCadastro?.call(item.dataCadastro);
+      setDateDescarte?.call(null);
+      setDateRmsValidade?.call(null);
+      setDateAquisicao?.call(null);
+      setSituacao(ItemSituacaoOption.getSituacaoLiberado());
+      setArmazenarOutrosItens(false);
+      setImplantavel(false);
+      setEtiqueta(null);
+      setDescritor(null);
+    });
   }
 
   void onChanged(
@@ -959,8 +997,9 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
   }
 
   Future setarImagemDescritor() async {
-    if (item.codDescritor == null) {
+    if (item.codDescritor == null || item.codDescritor == 0) {
       item.descritor = null;
+      return;
     }
 
     ItemDescritorModel? descritor = await ItemDescritorService().FilterOne(

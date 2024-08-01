@@ -58,6 +58,7 @@ class _ConsultaProcessosLeituraDevolvidoPageState
     localInstituicaoBloc = LocalInstituicaoCubit();
     localInstituicaoBloc.loadAll();
 
+    bloc.loadProcessosLeituraDevolvido(filter);
     super.initState();
   }
 

@@ -13,6 +13,7 @@ class ListFieldWidget<T> extends StatefulWidget {
   final Function(T)? onDoubleTap;
   final String Function(T) itemText;
   final bool removeButton;
+  final bool removeListAfterPress;
   final bool? disableUnselect;
   final bool? permitReselect;
   final double fontSize;
@@ -32,6 +33,7 @@ class ListFieldWidget<T> extends StatefulWidget {
     this.setSelected,
     this.onRemove,
     this.ignorarExibicaoItens,
+    this.removeListAfterPress = true,
   });
 
   @override
@@ -130,22 +132,28 @@ class _ListFieldWidgetState<T> extends State<ListFieldWidget<T>> {
                                   ),
                                 ),
                                 if (widget.removeButton) ...{
-                                  const Spacer(),
-                                  IconButton(
-                                    icon: const Icon(Icons.delete),
-                                    onPressed: () {
-                                      setState(() {
-                                        if (widget.onRemove != null) {
-                                          widget.onRemove!(item);
-                                        }
-                                        widget.sourceList.remove(item);
-                                        filteredItems?.remove(item);
-                                        if (isSelected) {
-                                          selectedItem = null;
-                                          widget.onItemSelected(null);
-                                        }
-                                      });
-                                    },
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 15),
+                                    child: IconButton(
+                                      tooltip: 'Remover',
+                                      icon: const Icon(Icons.delete),
+                                      onPressed: () {
+                                        setState(() {
+                                          if (widget.onRemove != null) {
+                                            widget.onRemove!(item);
+                                          }
+                                          if (widget.removeListAfterPress ==
+                                              true) {
+                                            widget.sourceList.remove(item);
+                                            filteredItems?.remove(item);
+                                            if (isSelected) {
+                                              selectedItem = null;
+                                              widget.onItemSelected(null);
+                                            }
+                                          }
+                                        });
+                                      },
+                                    ),
                                   ),
                                 },
                               ],

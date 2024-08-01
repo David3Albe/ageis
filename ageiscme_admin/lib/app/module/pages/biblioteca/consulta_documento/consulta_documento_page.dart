@@ -102,6 +102,7 @@ class _ConsultaDocumentoPageState extends State<ConsultaDocumentoPage> {
     tipoDocumentoBloc.loadAll();
     service = DocumentoService();
 
+    bloc.loadDocumento(filter);
     super.initState();
   }
 

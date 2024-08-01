@@ -57,6 +57,7 @@ class _ImagemPageFrmState extends State<ImagemPageFrm> {
   }
 
   late bool Function() validateIdentificador;
+  late void Function(String?) setIdentificador;
 
   @override
   Widget build(BuildContext context) {
@@ -100,6 +101,11 @@ class _ImagemPageFrmState extends State<ImagemPageFrm> {
                             Padding(
                               padding: const EdgeInsets.only(top: 5.0),
                               child: DropDownSearchWidget<String>(
+                                setSelectedItemBuilder: (
+                                  context,
+                                  setSelectedItemMethod,
+                                ) =>
+                                    setIdentificador = setSelectedItemMethod,
                                 placeholder: 'Identificador',
                                 initialValue: imagem.identificadorImagem,
                                 validateBuilder: (
@@ -186,6 +192,7 @@ class _ImagemPageFrmState extends State<ImagemPageFrm> {
                       onPressed: () => {
                         setState(() {
                           imagem = ImagemModel.empty();
+                          setIdentificador(null);
                         }),
                       },
                     ),
