@@ -42,6 +42,10 @@ mixin _$ConsultaProcessosLeituraTamanhoSubModel {
   set qtde(int? value) => throw _privateConstructorUsedError;
   int? get codLocal => throw _privateConstructorUsedError;
   set codLocal(int? value) => throw _privateConstructorUsedError;
+  int? get codDescritorKit => throw _privateConstructorUsedError;
+  set codDescritorKit(int? value) => throw _privateConstructorUsedError;
+  int? get codDescritorItem => throw _privateConstructorUsedError;
+  set codDescritorItem(int? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -68,7 +72,9 @@ abstract class $ConsultaProcessosLeituraTamanhoSubModelCopyWith<$Res> {
       String? nomeKit,
       String? tamanho,
       int? qtde,
-      int? codLocal});
+      int? codLocal,
+      int? codDescritorKit,
+      int? codDescritorItem});
 }
 
 /// @nodoc
@@ -96,6 +102,8 @@ class _$ConsultaProcessosLeituraTamanhoSubModelCopyWithImpl<$Res,
     Object? tamanho = freezed,
     Object? qtde = freezed,
     Object? codLocal = freezed,
+    Object? codDescritorKit = freezed,
+    Object? codDescritorItem = freezed,
   }) {
     return _then(_value.copyWith(
       nomeCentroCusto: freezed == nomeCentroCusto
@@ -138,6 +146,14 @@ class _$ConsultaProcessosLeituraTamanhoSubModelCopyWithImpl<$Res,
           ? _value.codLocal
           : codLocal // ignore: cast_nullable_to_non_nullable
               as int?,
+      codDescritorKit: freezed == codDescritorKit
+          ? _value.codDescritorKit
+          : codDescritorKit // ignore: cast_nullable_to_non_nullable
+              as int?,
+      codDescritorItem: freezed == codDescritorItem
+          ? _value.codDescritorItem
+          : codDescritorItem // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -161,7 +177,9 @@ abstract class _$$ConsultaProcessosLeituraTamanhoSubModelImplCopyWith<$Res>
       String? nomeKit,
       String? tamanho,
       int? qtde,
-      int? codLocal});
+      int? codLocal,
+      int? codDescritorKit,
+      int? codDescritorItem});
 }
 
 /// @nodoc
@@ -187,6 +205,8 @@ class __$$ConsultaProcessosLeituraTamanhoSubModelImplCopyWithImpl<$Res>
     Object? tamanho = freezed,
     Object? qtde = freezed,
     Object? codLocal = freezed,
+    Object? codDescritorKit = freezed,
+    Object? codDescritorItem = freezed,
   }) {
     return _then(_$ConsultaProcessosLeituraTamanhoSubModelImpl(
       nomeCentroCusto: freezed == nomeCentroCusto
@@ -229,6 +249,14 @@ class __$$ConsultaProcessosLeituraTamanhoSubModelImplCopyWithImpl<$Res>
           ? _value.codLocal
           : codLocal // ignore: cast_nullable_to_non_nullable
               as int?,
+      codDescritorKit: freezed == codDescritorKit
+          ? _value.codDescritorKit
+          : codDescritorKit // ignore: cast_nullable_to_non_nullable
+              as int?,
+      codDescritorItem: freezed == codDescritorItem
+          ? _value.codDescritorItem
+          : codDescritorItem // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -247,7 +275,9 @@ class _$ConsultaProcessosLeituraTamanhoSubModelImpl
       required this.nomeKit,
       required this.tamanho,
       required this.qtde,
-      required this.codLocal})
+      required this.codLocal,
+      required this.codDescritorKit,
+      required this.codDescritorItem})
       : super._();
 
   factory _$ConsultaProcessosLeituraTamanhoSubModelImpl.fromJson(
@@ -274,10 +304,14 @@ class _$ConsultaProcessosLeituraTamanhoSubModelImpl
   int? qtde;
   @override
   int? codLocal;
+  @override
+  int? codDescritorKit;
+  @override
+  int? codDescritorItem;
 
   @override
   String toString() {
-    return 'ConsultaProcessosLeituraTamanhoSubModel(nomeCentroCusto: $nomeCentroCusto, dataHora: $dataHora, nomeLocal: $nomeLocal, nomeItem: $nomeItem, idEtiqueta: $idEtiqueta, codBarra: $codBarra, nomeKit: $nomeKit, tamanho: $tamanho, qtde: $qtde, codLocal: $codLocal)';
+    return 'ConsultaProcessosLeituraTamanhoSubModel(nomeCentroCusto: $nomeCentroCusto, dataHora: $dataHora, nomeLocal: $nomeLocal, nomeItem: $nomeItem, idEtiqueta: $idEtiqueta, codBarra: $codBarra, nomeKit: $nomeKit, tamanho: $tamanho, qtde: $qtde, codLocal: $codLocal, codDescritorKit: $codDescritorKit, codDescritorItem: $codDescritorItem)';
   }
 
   @JsonKey(ignore: true)
@@ -300,16 +334,19 @@ class _$ConsultaProcessosLeituraTamanhoSubModelImpl
 abstract class _ConsultaProcessosLeituraTamanhoSubModel
     extends ConsultaProcessosLeituraTamanhoSubModel {
   factory _ConsultaProcessosLeituraTamanhoSubModel(
-      {required String? nomeCentroCusto,
-      required DateTime? dataHora,
-      required String? nomeLocal,
-      required String? nomeItem,
-      required String? idEtiqueta,
-      required String? codBarra,
-      required String? nomeKit,
-      required String? tamanho,
-      required int? qtde,
-      required int? codLocal}) = _$ConsultaProcessosLeituraTamanhoSubModelImpl;
+          {required String? nomeCentroCusto,
+          required DateTime? dataHora,
+          required String? nomeLocal,
+          required String? nomeItem,
+          required String? idEtiqueta,
+          required String? codBarra,
+          required String? nomeKit,
+          required String? tamanho,
+          required int? qtde,
+          required int? codLocal,
+          required int? codDescritorKit,
+          required int? codDescritorItem}) =
+      _$ConsultaProcessosLeituraTamanhoSubModelImpl;
   _ConsultaProcessosLeituraTamanhoSubModel._() : super._();
 
   factory _ConsultaProcessosLeituraTamanhoSubModel.fromJson(
@@ -346,6 +383,12 @@ abstract class _ConsultaProcessosLeituraTamanhoSubModel
   @override
   int? get codLocal;
   set codLocal(int? value);
+  @override
+  int? get codDescritorKit;
+  set codDescritorKit(int? value);
+  @override
+  int? get codDescritorItem;
+  set codDescritorItem(int? value);
   @override
   @JsonKey(ignore: true)
   _$$ConsultaProcessosLeituraTamanhoSubModelImplCopyWith<

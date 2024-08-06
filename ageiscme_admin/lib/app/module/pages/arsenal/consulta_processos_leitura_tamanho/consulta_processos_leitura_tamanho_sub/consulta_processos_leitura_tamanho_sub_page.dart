@@ -1,9 +1,13 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/local_instituicao/local_instituicao_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/tamanho/tamanho_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/arsenal/consulta_processos_leitura_tamanho/consulta_processos_leitura_tamanho_sub/consulta_processos_leitura_tamanho_sub_page_state.dart';
+import 'package:ageiscme_admin/app/module/pages/processo/consulta_processos_leitura/consulta_processos_leitura_page.dart';
 import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
 import 'package:ageiscme_data/query_services/processos_leitura_tamanho_sub/processos_leitura_tamanho_sub_service.dart';
+import 'package:ageiscme_data/services/access_user/access_user_service.dart';
+import 'package:ageiscme_models/enums/direito_enum.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/query_filters/processos_leitura/consulta_processos_leitura_filter.dart';
 import 'package:ageiscme_models/query_filters/processos_leitura_tamanho_sub/consulta_processos_leitura_tamanho_sub_filter.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
@@ -12,8 +16,10 @@ import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_footer_type.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
 
@@ -36,18 +42,16 @@ class _ConsultaProcessosLeituraTamanhoSubPageState
       text: 'Data Hora',
       field: 'dataHora',
       type: CustomDataColumnType.DateTime,
-      width:130,
+      width: 130,
     ),
-    CustomDataColumn(text: 'Cod Barra', field: 'codBarra'),
     CustomDataColumn(text: 'Kit', field: 'nomeKit'),
-    CustomDataColumn(text: 'ID Etiqueta', field: 'idEtiqueta'),
     CustomDataColumn(text: 'Item', field: 'nomeItem'),
     CustomDataColumn(
       text: 'Qtde',
       field: 'qtde',
       type: CustomDataColumnType.Integer,
       footerType: CustomDataColumnFooterType.Number,
-      width:95,
+      width: 95,
     ),
   ];
 
@@ -106,6 +110,27 @@ class _ConsultaProcessosLeituraTamanhoSubPageState
                   smallRows: true,
                   columns: colunas,
                   items: state.processosLeiturasTamanhos,
+                  onDetail: (event, obj) async {
+                    var isUserValid =
+                        await AccessUserService.validateUserHasRight(
+                      DireitoEnum.ProcessoLeituraConsulta,
+                    );
+
+                    if (isUserValid == false) {
+                      ToastUtils.showCustomToastWarning(
+                        context,
+                        'O Seu usuário não tem permissão para esta tela!',
+                      );
+                      return;
+                    }
+
+                    await openModalRedirect(
+                      context,
+                      obj.dataHora,
+                      obj.codDescritorKit,
+                      obj.codDescritorItem,
+                    );
+                  },
                 ),
               ),
             );
@@ -200,5 +225,36 @@ class _ConsultaProcessosLeituraTamanhoSubPageState
     );
     if (confirm != true) return;
     bloc.loadProcessosLeituraTamanho(filter);
+  }
+
+  Future openModalRedirect(
+    BuildContext context,
+    DateTime? date,
+    int? codDescritorKit,
+    int? codDescritorItem,
+  ) async {
+    WindowsHelper.OpenDefaultWindows(
+      title: 'Consulta Processo Leitura - Retirados Sub Consulta',
+      widget: ConsultaProcessosLeituraPage(
+        filter: ConsultaProcessosLeituraFilter(
+          startDate: date,
+          finalDate: date,
+          codKit: null,
+          codItem: null,
+          finalTime: date,
+          startTime: date,
+          biologico: null,
+          codEtapaProcesso: null,
+          implantavel: null,
+          indicador: null,
+          lote: null,
+          prontuario: null,
+          idEtiquetaContem: null,
+          codBarraKitContem: null,
+          codDescritorItem: codDescritorItem,
+          codDescritorKit: codDescritorKit,
+        ),
+      ),
+    );
   }
 }

@@ -21,6 +21,8 @@ _$ConsultaProcessosLeituraTamanhoSubModelImpl
           tamanho: json['tamanho'] as String?,
           qtde: (json['qtde'] as num?)?.toInt(),
           codLocal: (json['codLocal'] as num?)?.toInt(),
+          codDescritorKit: (json['codDescritorKit'] as num?)?.toInt(),
+          codDescritorItem: (json['codDescritorItem'] as num?)?.toInt(),
         );
 
 Map<String, dynamic> _$$ConsultaProcessosLeituraTamanhoSubModelImplToJson(
@@ -36,4 +38,6 @@ Map<String, dynamic> _$$ConsultaProcessosLeituraTamanhoSubModelImplToJson(
       'tamanho': instance.tamanho,
       'qtde': instance.qtde,
       'codLocal': instance.codLocal,
+      'codDescritorKit': instance.codDescritorKit,
+      'codDescritorItem': instance.codDescritorItem,
     };

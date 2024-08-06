@@ -4,21 +4,24 @@ import 'package:flutter/services.dart';
 class AppConfig {
   final String apiUrl;
   final String appUrl;
+  final bool isDev;
   static AppConfigEnviroment? enviroment;
 
-  static AppConfig Config = AppConfig(
+  static AppConfig _Config = AppConfig(
     apiUrl: '',
     appUrl: '',
+    isDev: false,
   );
 
   AppConfig({
     required this.apiUrl,
     required this.appUrl,
+    required this.isDev,
   });
 
   static Future<AppConfig> forEnvironment(bool clearCache) async {
     if (enviroment == null) throw Exception('Set the enviroment');
-    if (!clearCache && Config.apiUrl.isNotEmpty) return Config;
+    if (!clearCache && _Config.apiUrl.isNotEmpty) return _Config;
     String env = getEnviromentString(enviroment!);
     final contents = await rootBundle.loadString(
       'assets/config/$env.json',
@@ -26,11 +29,12 @@ class AppConfig {
 
     final json = jsonDecode(contents);
 
-    Config = AppConfig(
+    _Config = AppConfig(
       apiUrl: json['apiUrl'],
       appUrl: json['appUrl'],
+      isDev: enviroment == AppConfigEnviroment.Development,
     );
-    return Config;
+    return _Config;
   }
 
   static String getEnviromentString(AppConfigEnviroment enviroment) {
@@ -51,4 +55,10 @@ class AppConfig {
   }
 }
 
-enum AppConfigEnviroment { Development, Movtech, ServidorA, Homologation,ServidorB }
+enum AppConfigEnviroment {
+  Development,
+  Movtech,
+  ServidorA,
+  Homologation,
+  ServidorB
+}

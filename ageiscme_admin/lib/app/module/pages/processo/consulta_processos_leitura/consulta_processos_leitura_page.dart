@@ -634,6 +634,8 @@ class _ConsultaProcessosLeituraPageState
     );
     if (confirm != true) return;
     codRegistroProcessoColor.clear();
+    filter.codDescritorItem = null;
+    filter.codDescritorKit = null;
     consultar();
   }
 

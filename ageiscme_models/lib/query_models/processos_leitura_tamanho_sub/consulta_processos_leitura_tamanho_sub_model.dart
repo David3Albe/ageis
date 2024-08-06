@@ -19,6 +19,8 @@ sealed class ConsultaProcessosLeituraTamanhoSubModel
     required String? tamanho,
     required int? qtde,
     required int? codLocal,
+    required int? codDescritorKit,
+    required int? codDescritorItem,
   }) = _ConsultaProcessosLeituraTamanhoSubModel;
 
   factory ConsultaProcessosLeituraTamanhoSubModel.fromJson(

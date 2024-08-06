@@ -25,6 +25,8 @@ sealed class ConsultaProcessosLeituraFilter
     required bool? implantavel,
     required String? prontuario,
     required String? codBarraKitContem,
+    int? codDescritorKit,
+    int? codDescritorItem,
     ItemModel? item,
     PlutoGridApiModel? gridModel,
   }) = _ConsultaProcessosLeituraFilter;

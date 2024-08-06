@@ -8,10 +8,11 @@ class AutoUpdaterService {
   Future update() async {
     if (kIsWeb) return;
     if (!Platform.isWindows) return;
-    String feedURL =
-        (await AppConfig.forEnvironment(false)).appUrl + '/appcast.xml';
+    AppConfig appConfig = await AppConfig.forEnvironment(false);
+    if (appConfig.isDev) return;
+    String feedURL = appConfig.appUrl + '/appcast.xml';
     await autoUpdater.setFeedURL(feedURL);
-    await autoUpdater.checkForUpdates(inBackground: false);
-    await autoUpdater.setScheduledCheckInterval(3600);
+    await autoUpdater.checkForUpdates();
+    // await autoUpdater.setScheduledCheckInterval(3600);
   }
 }

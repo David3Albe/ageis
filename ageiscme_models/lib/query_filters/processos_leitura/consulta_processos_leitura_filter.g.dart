@@ -31,6 +31,8 @@ _$ConsultaProcessosLeituraFilterImpl
           implantavel: json['implantavel'] as bool?,
           prontuario: json['prontuario'] as String?,
           codBarraKitContem: json['codBarraKitContem'] as String?,
+          codDescritorKit: (json['codDescritorKit'] as num?)?.toInt(),
+          codDescritorItem: (json['codDescritorItem'] as num?)?.toInt(),
           item: json['item'] == null
               ? null
               : ItemModel.fromJson(
@@ -58,6 +60,8 @@ Map<String, dynamic> _$$ConsultaProcessosLeituraFilterImplToJson(
       'implantavel': instance.implantavel,
       'prontuario': instance.prontuario,
       'codBarraKitContem': instance.codBarraKitContem,
+      'codDescritorKit': instance.codDescritorKit,
+      'codDescritorItem': instance.codDescritorItem,
       'item': instance.item?.toJson(),
       'gridModel': instance.gridModel?.toJson(),
     };
