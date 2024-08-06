@@ -227,6 +227,8 @@ class EscalaGridPageHeaderWidgetState
     }
   }
 
+  static const double fontHeight = 12;
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -239,31 +241,66 @@ class EscalaGridPageHeaderWidgetState
           children: [
             ElevatedButton(
               onPressed: handleAddRows,
-              child: const Text('Adicionar Turno'),
+              child: const Text(
+                'Adicionar Turno',
+                style: TextStyle(
+                  fontSize: fontHeight,
+                ),
+              ),
             ),
             ElevatedButton(
               onPressed: handleAddUser,
-              child: const Text('Adicionar Usuário'),
+              child: const Text(
+                'Adicionar Usuário',
+                style: TextStyle(
+                  fontSize: fontHeight,
+                ),
+              ),
             ),
             ElevatedButton(
               onPressed: handleRemoveSelectedRowsButton,
-              child: const Text('Remover Linha Selecionada'),
+              child: const Text(
+                'Remover Linha Selecionada',
+                style: TextStyle(
+                  fontSize: fontHeight,
+                ),
+              ),
             ),
             ElevatedButton(
               onPressed: handleExpandAll,
-              child: const Text('Expandir Todas As Linhas'),
+              child: const Text(
+                'Expandir Todas As Linhas',
+                style: TextStyle(
+                  fontSize: fontHeight,
+                ),
+              ),
             ),
             ElevatedButton(
               onPressed: handleCollapseAll,
-              child: const Text('Colapsar Todas As Linhas'),
+              child: const Text(
+                'Colapsar Todas As Linhas',
+                style: TextStyle(
+                  fontSize: fontHeight,
+                ),
+              ),
             ),
             ElevatedButton(
               onPressed: handleSetAll,
-              child: const Text('Preencher Siglas Vazias'),
+              child: const Text(
+                'Preencher Siglas Vazias',
+                style: TextStyle(
+                  fontSize: fontHeight,
+                ),
+              ),
             ),
             ElevatedButton(
               onPressed: handleClear,
-              child: const Text('Limpar Siglas'),
+              child: const Text(
+                'Limpar Siglas',
+                style: TextStyle(
+                  fontSize: fontHeight,
+                ),
+              ),
             ),
           ],
         ),

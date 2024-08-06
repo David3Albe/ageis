@@ -27,13 +27,16 @@ class GenericPdfController extends PdfController {
     this.logoDireita,
     this.colorByData,
     this.fontsFallback = const [],
+    this.columnsToIgnore,
+    this.customRow,
+    this.getWidthByColumn,
   });
 
   final String title;
   final String creator;
   final PdfPageFormat format;
   final Map<PlutoColumn, String> columns;
-  final List<Map<dynamic, String?>> rows;
+  final List<Map<PlutoCell?, String?>> rows;
   final List<PlutoColumnGroup>? groups;
   final ThemeData? themeData;
   final Widget? logoEsquerda;
@@ -43,6 +46,9 @@ class GenericPdfController extends PdfController {
   final List<Font> fontsFallback;
   final EdgeInsets? margin;
   final Widget? Function(PlutoColumn, TextStyle?)? getHeaderWidgetByColumn;
+  final List<String>? columnsToIgnore;
+  final List<Widget>? Function(Map<PlutoCell?, dynamic>)? customRow;
+  final double? Function(PlutoColumn)? getWidthByColumn;
 
   @override
   PageOrientation getPageOrientation() {
@@ -98,8 +104,9 @@ class GenericPdfController extends PdfController {
   }
 
   Widget _table(Map<PlutoColumn, String> columns,
-      List<Map<dynamic, String?>> rows, List<PlutoColumnGroup>? groups) {
+      List<Map<PlutoCell?, String?>> rows, List<PlutoColumnGroup>? groups) {
     return CustomTableHelper.fromTextArray(
+      customRow: customRow,
       getHeaderWidgetByColumn: getHeaderWidgetByColumn,
       getColorByColumn: colorByColumn,
       border: null,
@@ -142,6 +149,8 @@ class GenericPdfController extends PdfController {
       ),
       headers: columns,
       data: rows,
+      columnsToIgnore: columnsToIgnore,
+      getWidthByColumn: getWidthByColumn,
     );
   }
 

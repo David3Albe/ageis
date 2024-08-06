@@ -15,8 +15,12 @@ class PlutoGridPdfExport {
   final pw.PdfColor? Function(dynamic data)? colorByData;
   final pw.PdfColor? Function(PlutoColumn data)? colorByColumn;
   final String title;
-  final pw.Widget? Function(PlutoColumn, pw.TextStyle?)? getHeaderWidgetByColumn;
+  final pw.Widget? Function(PlutoColumn, pw.TextStyle?)?
+      getHeaderWidgetByColumn;
   final pw.EdgeInsets? margin;
+  final List<String>? columnsToIgnore;
+  final List<pw.Widget>? Function(Map<PlutoCell?, dynamic>)? customRow;
+  final double? Function(PlutoColumn)? getWidthByColumn;
 
   PlutoGridPdfExport({
     required this.stateManager,
@@ -26,6 +30,9 @@ class PlutoGridPdfExport {
     this.colorByColumn,
     this.getHeaderWidgetByColumn,
     this.margin,
+    this.columnsToIgnore,
+    this.customRow,
+    this.getWidthByColumn,
   });
 
   Future export({
@@ -46,6 +53,9 @@ class PlutoGridPdfExport {
     final font = await rootBundle.load('fonts/Arial/Arial.ttf');
     final ttf = pw.Font.ttf(font);
     var plutoGridPdfExport = CustomPlutoGridDefaultPdfExport(
+      getWidthByColumn: getWidthByColumn,
+      customRow: customRow,
+      columnsToIgnore: columnsToIgnore,
       margin: margin,
       colorByColumn: colorByColumn,
       fontsFallback: [ttf],

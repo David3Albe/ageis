@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:compartilhados/version/version.dart';
+import 'package:dependencias_comuns/package_info_export.dart';
 import 'package:dependencias_comuns/window_manager_export.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +15,8 @@ class WindowManagerHelper {
     if (title != null) {
       secondTitle = ' - $title';
     }
-    String version = ' - Versão: ${Version.ACTUAL}';
+    PackageInfo info = await PackageInfo.fromPlatform();
+    String version = ' - Versão: ${info.version}';
     await windowManager.setTitle(BASE_TITLE + secondTitle + version);
   }
 

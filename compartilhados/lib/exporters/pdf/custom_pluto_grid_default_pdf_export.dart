@@ -21,6 +21,9 @@ class CustomPlutoGridDefaultPdfExport
     this.getHeaderWidgetByColumn,
     this.margin,
     final String Function(PlutoColumn)? customTitleByColumn,
+    this.columnsToIgnore,
+    this.customRow,
+    this.getWidthByColumn,
   }) : super();
 
   final String title;
@@ -35,6 +38,9 @@ class CustomPlutoGridDefaultPdfExport
   final pluto.EdgeInsets? margin;
   final pluto.Widget? Function(PlutoColumn, pluto.TextStyle?)?
       getHeaderWidgetByColumn;
+  final List<String>? columnsToIgnore;
+  final List<pluto.Widget>? Function(Map<PlutoCell?, dynamic>)? customRow;
+  final double? Function(PlutoColumn)? getWidthByColumn;
 
   @override
   Future<Uint8List> export(PlutoGridStateManager state) async {
@@ -52,6 +58,9 @@ class CustomPlutoGridDefaultPdfExport
       columns: getColumnTitles(state),
       rows: mapStateToListOfRows(state).take(500).toList(),
       themeData: themeData,
+      customRow: customRow,
+      columnsToIgnore: columnsToIgnore,
+      getWidthByColumn: getWidthByColumn,
     ).generatePdf();
   }
 

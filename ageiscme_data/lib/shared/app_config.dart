@@ -3,14 +3,17 @@ import 'package:flutter/services.dart';
 
 class AppConfig {
   final String apiUrl;
+  final String appUrl;
   static AppConfigEnviroment? enviroment;
 
   static AppConfig Config = AppConfig(
     apiUrl: '',
+    appUrl: '',
   );
 
   AppConfig({
     required this.apiUrl,
+    required this.appUrl,
   });
 
   static Future<AppConfig> forEnvironment(bool clearCache) async {
@@ -25,6 +28,7 @@ class AppConfig {
 
     Config = AppConfig(
       apiUrl: json['apiUrl'],
+      appUrl: json['appUrl'],
     );
     return Config;
   }

@@ -1,4 +1,5 @@
 import 'package:ageiscme_admin/app/module/widgets/custom_navigation_bar/cubit/custom_navigation_bar_cubit.dart';
+import 'package:ageiscme_data/services/auto_updater/auto_updater_service.dart';
 import 'package:ageiscme_data/shared/app_config.dart';
 import 'package:compartilhados/cores/cores.dart';
 import 'package:compartilhados/cubits/route/current_route/current_route_cubit.dart';
@@ -23,6 +24,7 @@ class AppWidget extends StatelessWidget {
     Modular.to.addListener(() {
       currentRouteCubit.changeRoute(Modular.to.path);
     });
+    AutoUpdaterService().update();
     return MultiBlocProvider(
       providers: [
         BlocProvider<CurrentRouteCubit>(

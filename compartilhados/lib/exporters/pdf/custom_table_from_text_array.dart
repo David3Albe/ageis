@@ -31,7 +31,7 @@ mixin CustomTableHelper {
 
   static Table fromTextArray({
     Context? context,
-    required List<Map<dynamic, dynamic>> data,
+    required List<Map<pluto.PlutoCell?, dynamic>> data,
     EdgeInsetsGeometry cellPadding = const EdgeInsets.all(5),
     double cellHeight = 0,
     AlignmentGeometry cellAlignment = Alignment.topLeft,
@@ -68,6 +68,9 @@ mixin CustomTableHelper {
     TextDirection? headerDirection,
     TextDirection? tableDirection,
     final PdfColor? Function(pluto.PlutoColumn)? getColorByColumn,
+    final double? Function(pluto.PlutoColumn)? getWidthByColumn,
+    final List<String>? columnsToIgnore,
+    final List<Widget>? Function(Map<pluto.PlutoCell?, dynamic>)? customRow,
   }) {
     assert(headerCount >= 0);
 
@@ -90,6 +93,14 @@ mixin CustomTableHelper {
     if (headers != null) {
       final tableRow = <Widget>[];
       for (final MapEntry<pluto.PlutoColumn, dynamic> cell in headers.entries) {
+        double? width;
+        if (getWidthByColumn != null) {
+          width = getWidthByColumn(cell.key);
+        }
+        if (columnsToIgnore != null &&
+            columnsToIgnore.contains(cell.key.field)) {
+          continue;
+        }
         PdfColor? colorByColumn;
         if (getColorByColumn != null) {
           colorByColumn = getColorByColumn(cell.key);
@@ -100,6 +111,7 @@ mixin CustomTableHelper {
         }
         tableRow.add(
           Container(
+            width: width,
             alignment: headerAlignments[tableRow.length] ?? headerAlignment,
             padding: headerPadding,
             decoration: colorByColumn != null
@@ -137,54 +149,81 @@ mixin CustomTableHelper {
     final textDirection =
         context == null ? TextDirection.ltr : Directionality.of(context);
     for (final row in data) {
-      final tableRow = <Widget>[];
-      final isOdd = (rowNum - headerCount) % 2 != 0;
-      if (rowNum < headerCount) {
-        for (final MapEntry<dynamic, dynamic> cell in row.entries) {
-          final align = headerAlignments[tableRow.length] ?? headerAlignment;
-          final textAlign = _textAlign(align.resolve(textDirection));
-
-          tableRow.add(
-            Container(
-              alignment: align,
-              padding: headerPadding,
-              constraints: BoxConstraints(minHeight: headerHeight),
-              child: cell.value is Widget
-                  ? cell.value
-                  : Text(
-                      headerFormat == null
-                          ? cell.value.toString()
-                          : headerFormat(tableRow.length, cell.value),
-                      style: headerStyle,
-                      textAlign: textAlign,
-                      textDirection: headerDirection,
-                    ),
-            ),
-          );
+      List<Widget> tableRow = <Widget>[];
+      List<Widget>? customs;
+      if (customRow != null) {
+        customs = customRow(row);
+        if (customs != null) {
+          tableRow = customs;
         }
-      } else {
-        for (final MapEntry<dynamic, dynamic> cell in row.entries) {
-          final align = cellAlignments[tableRow.length] ?? cellAlignment;
-          tableRow.add(
-            Container(
-              alignment: align,
-              padding: cellPadding,
-              constraints: BoxConstraints(minHeight: cellHeight),
-              decoration: cellDecoration == null
-                  ? null
-                  : cellDecoration(tableRow.length, cell, rowNum),
-              child: cell.value is Widget
-                  ? cell.value
-                  : Text(
-                      cellFormat == null
-                          ? cell.value.toString()
-                          : cellFormat(tableRow.length, cell.value),
-                      style: isOdd ? oddCellStyle : cellStyle,
-                      textAlign: _textAlign(align.resolve(textDirection)),
-                      textDirection: tableDirection,
-                    ),
-            ),
-          );
+      }
+      final isOdd = (rowNum - headerCount) % 2 != 0;
+      if (customs == null) {
+        if (rowNum < headerCount) {
+          for (final MapEntry<pluto.PlutoCell?, dynamic> cell in row.entries) {
+            double? width;
+            if (getWidthByColumn != null && cell.key != null) {
+              width = getWidthByColumn(cell.key!.column);
+            }
+            if (columnsToIgnore != null &&
+                columnsToIgnore.contains(cell.key?.column.field)) {
+              continue;
+            }
+            final align = headerAlignments[tableRow.length] ?? headerAlignment;
+            final textAlign = _textAlign(align.resolve(textDirection));
+
+            tableRow.add(
+              Container(
+                width: width,
+                alignment: align,
+                padding: headerPadding,
+                constraints: BoxConstraints(minHeight: headerHeight),
+                child: cell.value is Widget
+                    ? cell.value
+                    : Text(
+                        headerFormat == null
+                            ? cell.value.toString()
+                            : headerFormat(tableRow.length, cell.value),
+                        style: headerStyle,
+                        textAlign: textAlign,
+                        textDirection: headerDirection,
+                      ),
+              ),
+            );
+          }
+        } else {
+          for (final MapEntry<pluto.PlutoCell?, dynamic> cell in row.entries) {
+            if (columnsToIgnore != null &&
+                columnsToIgnore.contains(cell.key?.column.field)) {
+              continue;
+            }
+            double? width;
+            if (getWidthByColumn != null && cell.key != null) {
+              width = getWidthByColumn(cell.key!.column);
+            }
+            final align = cellAlignments[tableRow.length] ?? cellAlignment;
+            tableRow.add(
+              Container(
+                width: width,
+                alignment: align,
+                padding: cellPadding,
+                constraints: BoxConstraints(minHeight: cellHeight),
+                decoration: cellDecoration == null
+                    ? null
+                    : cellDecoration(tableRow.length, cell, rowNum),
+                child: cell.value is Widget
+                    ? cell.value
+                    : Text(
+                        cellFormat == null
+                            ? cell.value.toString()
+                            : cellFormat(tableRow.length, cell.value),
+                        style: isOdd ? oddCellStyle : cellStyle,
+                        textAlign: _textAlign(align.resolve(textDirection)),
+                        textDirection: tableDirection,
+                      ),
+              ),
+            );
+          }
         }
       }
 

@@ -142,7 +142,6 @@ class _ConsultaItemEtiquetaPageState extends State<ConsultaItemEtiquetaPage> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
-                    orderDescendingFieldColumn: 'codItem',
                     smallRows: true,
                     columns: colunas,
                     items: state.itensEtiquetas,

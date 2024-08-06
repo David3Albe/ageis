@@ -108,7 +108,7 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
   late final TextFieldNumberFloatWidget txtValorItem;
   late final TextFieldNumberWidget txtNumeroNota;
   late final TextFieldStringWidget txtKitAtual;
-  late final TextFieldStringWidget txtConjuntoAtual;
+  // late final TextFieldStringWidget txtConjuntoAtual;
   late final TextFieldNumberWidget txtQtdeProcessos;
   late final TextFieldNumberWidget txtEmbalagem;
   late final TextFieldNumberWidget txtLeitura;
@@ -209,13 +209,13 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
       placeholder: 'Kit Atual',
       readOnly: true,
     );
-    txtConjuntoAtual = TextFieldStringWidget(
-      placeholder: 'Conjunto Atual',
-      readOnly: true,
-      onChanged: (String? str) {
-        item.codConjunto = str == null ? null : int.parse(str);
-      },
-    );
+    // txtConjuntoAtual = TextFieldStringWidget(
+    //   placeholder: 'Conjunto Atual',
+    //   readOnly: true,
+    //   onChanged: (String? str) {
+    //     item.codConjunto = str == null ? null : int.parse(str);
+    //   },
+    // );
     txtQtdeProcessos = TextFieldNumberWidget(
       placeholder: 'Qtde. Processos',
       readOnly: true,
@@ -311,7 +311,7 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
     txtIdEtiqueta.text = item.idEtiqueta ?? '';
     txtUsuarioCadastro.text = usuario ?? '';
     txtKitAtual.text = item.kit?.descritor?.nome ?? '';
-    txtConjuntoAtual.text = item.codConjunto?.toString() ?? '';
+    // txtConjuntoAtual.text = item.codConjunto?.toString() ?? '';
     txtRegistroAnvisa.text = item.registroAnvisa ?? '';
     txtFornecedor.text = item.fornecedor ?? '';
     txtFabricante.text = item.fabricante ?? '';
@@ -788,10 +788,10 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
                                   Expanded(
                                     child: txtKitAtual,
                                   ),
-                                  const SizedBox(width: 16.0),
-                                  Expanded(
-                                    child: txtConjuntoAtual,
-                                  ),
+                                  // const SizedBox(width: 16.0),
+                                  // Expanded(
+                                  //   child: txtConjuntoAtual,
+                                  // ),
                                 ],
                               ),
                             ),

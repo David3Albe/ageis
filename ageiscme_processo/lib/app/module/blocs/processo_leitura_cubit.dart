@@ -19,9 +19,9 @@ import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/warning_dialog.dart';
 import 'package:compartilhados/functions/window_manager/window_manager_helper.dart';
-import 'package:compartilhados/version/version.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
+import 'package:dependencias_comuns/package_info_export.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -144,6 +144,7 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
         String? maquina = await getComputerNameIfWindows();
         state.processo.maquina = maquina;
       }
+      PackageInfo info = await PackageInfo.fromPlatform();
       sendMessage(
         ProcessoLeituraMontagemModel(
           cancelado: null,
@@ -151,7 +152,7 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
           cod: state.processo.cod,
           dataHora: state.processo.dataHora,
           tstamp: state.processo.tstamp,
-          versao: Version.ACTUAL,
+          versao: info.version,
           leituraCodigo: ProcessoLeituraCodigoModel(
             codigoLido: codigoLido,
             avisosSonoro: [],

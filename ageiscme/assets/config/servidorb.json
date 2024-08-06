@@ -1,3 +1,4 @@
 {
-    "apiUrl": "http://servidorb/api"
+    "apiUrl": "http://servidorb/api",
+    "appUrl": "http://servidorb"
 }

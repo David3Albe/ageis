@@ -25,8 +25,36 @@ class EscalaPageGridWidget extends StatefulWidget {
 }
 
 class _EscalaPageGridWidgetState extends State<EscalaPageGridWidget> {
+  static double _getFontSize(Size size) {
+    double height = size.height;
+    if (height > 900) {
+      return 12;
+    }
+    if (height > 750) {
+      return 11;
+    }
+    return 10;
+  }
+
+  static double getRowsSize(Size size) {
+    double height = size.height;
+    if (height > 900) {
+      return 45;
+    }
+    if (height > 750) {
+      return 41;
+    }
+    if (height > 600) {
+      return 36;
+    }
+    return 31;
+  }
+
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+    double fontSize = _getFontSize(size);
+    double rowsSize = getRowsSize(size);
     return BlocBuilder<EscalaPageGridCubit, EscalaPageGridState>(
       builder: (context, state) {
         PlutoGridStateManager? stateManager = state.stateManager;
@@ -83,12 +111,15 @@ class _EscalaPageGridWidgetState extends State<EscalaPageGridWidget> {
             child: PlutoGrid(
               key: BlocProvider.of<EscalaPageCubit>(context).state.gridKey,
               columnGroups: state.groups,
-              configuration: const PlutoGridConfiguration(
-                localeText: PlutoGridLocaleText.brazilianPortuguese(),
+              configuration: PlutoGridConfiguration(
+                localeText: const PlutoGridLocaleText.brazilianPortuguese(),
                 style: PlutoGridStyleConfig(
                   cellTextStyle: TextStyle(
                     color: Colors.black,
+                    fontSize: fontSize,
                   ),
+                  columnTextStyle: TextStyle(fontSize: fontSize),
+                  rowHeight: rowsSize,
                   rowColor: const Color(0xffF4F4F4),
                 ),
               ),
@@ -105,7 +136,6 @@ class _EscalaPageGridWidgetState extends State<EscalaPageGridWidget> {
                 context: context,
               ),
               onLoaded: (e) {
-                print('loaded');
                 List<PlutoColumn> columns = [];
                 if (e.stateManager.columns.isNotEmpty) {
                   columns = [e.stateManager.columns[0]];
@@ -172,6 +202,8 @@ class _EscalaPageGridWidgetState extends State<EscalaPageGridWidget> {
     DateFormat format = DateFormat('MM/yyyy');
     String anoMes = format.format(data);
     PlutoGridPdfExport pdfExport = PlutoGridPdfExport(
+      customRow: getCustomRow,
+      columnsToIgnore: ['turno'],
       margin: const pluto.EdgeInsets.only(
         top: 30,
         left: 10,
@@ -187,6 +219,7 @@ class _EscalaPageGridWidgetState extends State<EscalaPageGridWidget> {
           .getColorByColumn(column, stateManager, data),
       context: context,
       stateManager: stateManager,
+      getWidthByColumn: (column) => getWitdthByColumn(column, stateManager),
     );
     pdfExport.export();
   }
@@ -220,6 +253,99 @@ class _EscalaPageGridWidgetState extends State<EscalaPageGridWidget> {
         ],
       ),
     );
+  }
+
+  double? getWitdthByColumn(
+    PlutoColumn column,
+    PlutoGridStateManager state,
+  ) {
+    int? field = int.tryParse(column.field);
+    if (field == null) return null;
+    PlutoColumnGroup? group = state.columnGroups
+        .where((element) => element.fields!.contains(column.field))
+        .firstOrNull;
+    if (group == null) return null;
+    return 7;
+  }
+
+  List<pluto.Widget>? getCustomRow(Map<PlutoCell?, dynamic> data) {
+    List<pluto.Widget> widgets = [];
+    String? usuario = data.entries
+        .where((element) => element.key?.column.field == 'usuario')
+        .firstOrNull
+        ?.value;
+    if (usuario != null && usuario != '') {
+      return null;
+    }
+
+    widgets.add(
+      pluto.Container(
+        alignment: pluto.Alignment.center,
+        decoration: const pluto.BoxDecoration(
+          border: pluto.Border(
+            left: pluto.BorderSide(
+              color: pluto.PdfColors.black,
+              width: 0.5,
+            ),
+            top: pluto.BorderSide(
+              color: pluto.PdfColors.black,
+              width: 0.5,
+            ),
+            bottom: pluto.BorderSide(
+              color: pluto.PdfColors.black,
+              width: 0.5,
+            ),
+          ),
+        ),
+        constraints: const pluto.BoxConstraints(minHeight: 20),
+        child: pluto.Text(
+          data.entries
+                  .where((element) => element.key?.column.field == 'turno')
+                  .firstOrNull
+                  ?.value
+                  .toString() ??
+              'Sem Turno Definido',
+          style: pluto.TextStyle(
+            fontWeight: pluto.FontWeight.bold,
+            fontSize: 8,
+          ),
+        ),
+      ),
+    );
+    for (int i = 0; i <= data.length - 2; i++) {
+      widgets.add(
+        pluto.Container(
+          decoration: pluto.BoxDecoration(
+            border: pluto.Border(
+              bottom: const pluto.BorderSide(
+                color: pluto.PdfColors.black,
+                width: 0.5,
+              ),
+              top: const pluto.BorderSide(
+                color: pluto.PdfColors.black,
+                width: 0.5,
+              ),
+              right: i == (data.length - 3)
+                  ? const pluto.BorderSide(
+                      color: pluto.PdfColors.black,
+                      width: 0.5,
+                    )
+                  : pluto.BorderSide.none,
+            ),
+          ),
+          alignment: pluto.Alignment.center,
+          constraints: const pluto.BoxConstraints(minHeight: 20),
+          child: pluto.Text(
+            '',
+            style: pluto.TextStyle(
+              fontWeight: pluto.FontWeight.bold,
+              fontSize: 8,
+            ),
+          ),
+        ),
+      );
+    }
+    return widgets;
   }
 
   void onChanged({

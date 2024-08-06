@@ -5,6 +5,7 @@ import 'package:dependencias_comuns/modular_export.dart';
 import 'package:flutter/material.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   await WindowManagerHelper.Initialize();
   runApp(
     ModularApp(

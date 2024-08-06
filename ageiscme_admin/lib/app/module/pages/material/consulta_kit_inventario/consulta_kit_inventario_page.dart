@@ -58,12 +58,12 @@ class _ConsultaKitInventarioPageState extends State<ConsultaKitInventarioPage> {
       type: CustomDataColumnType.Number,
       footerType: CustomDataColumnFooterType.Number,
     ),
-    CustomDataColumn(
-      text: 'Qtde. Itens Padrão',
-      field: 'qtdeItensPadrao',
-      valueConverter: (value) => value == 0 ? '' : value,
-      type: CustomDataColumnType.Number,
-    ),
+    // CustomDataColumn(
+    //   text: 'Qtde. Itens Padrão',
+    //   field: 'qtdeItensPadrao',
+    //   valueConverter: (value) => value == 0 ? '' : value,
+    //   type: CustomDataColumnType.Number,
+    // ),
     CustomDataColumn(
       text: 'Qtde. Itens Físico',
       field: 'qtdeItensFisico',

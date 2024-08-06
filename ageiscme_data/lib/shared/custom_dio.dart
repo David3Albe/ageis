@@ -11,9 +11,9 @@ import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/exceptions/custom_base_exception.dart';
 import 'package:compartilhados/functions/cryptography/cryptography_helper.dart';
-import 'package:compartilhados/version/version.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:dependencias_comuns/modular_export.dart';
+import 'package:dependencias_comuns/package_info_export.dart';
 
 class CustomDio {
   CustomDio({this.loading});
@@ -56,7 +56,8 @@ class CustomDio {
     AuthenticationResultDTO? auth =
         await Modular.get<AuthenticationStore>().GetAuthenticated();
     options.headers = {};
-    options.headers!.addAll({'version': Version.ACTUAL});
+    PackageInfo info = await PackageInfo.fromPlatform();
+    options.headers!.addAll({'version': info.version});
     if (auth?.token != null && _includeAuthorization) {
       options.headers!.addAll({'authorization': 'bearer ${auth!.token}'});
     }

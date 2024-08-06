@@ -5,9 +5,7 @@ abstract class CustomAbstractTextExport<T> {
 
   T export(PlutoGridStateManager state);
 
-  Map<PlutoColumn, String> getColumnTitles(
-    PlutoGridStateManager state,
-  ) {
+  Map<PlutoColumn, String> getColumnTitles(PlutoGridStateManager state) {
     Iterable<PlutoColumn> columns = visibleColumns(state);
     Map<PlutoColumn, String> map = {};
     for (PlutoColumn column in columns) {
@@ -17,9 +15,10 @@ abstract class CustomAbstractTextExport<T> {
     return map;
   }
 
-  List<Map<dynamic, String?>> mapStateToListOfRows(
-      PlutoGridStateManager state) {
-    List<Map<dynamic, String?>> outputRows = [];
+  List<Map<PlutoCell?, String?>> mapStateToListOfRows(
+    PlutoGridStateManager state,
+  ) {
+    List<Map<PlutoCell?, String?>> outputRows = [];
 
     List<PlutoRow> rowsToExport;
 
@@ -28,17 +27,23 @@ abstract class CustomAbstractTextExport<T> {
         : state.iterateRowAndGroup.toList();
 
     for (var plutoRow in rowsToExport) {
-      outputRows.add(mapPlutoRowToList(state, plutoRow));
+      outputRows.add(
+        mapPlutoRowToList(
+          state,
+          plutoRow
+        ),
+      );
     }
 
     return outputRows;
   }
 
-  Map<dynamic, String?> mapPlutoRowToList(
+  Map<PlutoCell?, String?> mapPlutoRowToList(
     PlutoGridStateManager state,
-    PlutoRow plutoRow,
-  ) {
-    Map<dynamic, String?> serializedRow = {};
+    PlutoRow plutoRow, {
+    List<String>? columnsToIgnore,
+  }) {
+    Map<PlutoCell?, String?> serializedRow = {};
 
     for (PlutoColumn column in visibleColumns(state)) {
       dynamic value = plutoRow.cells[column.field]?.value;
