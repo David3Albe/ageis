@@ -5,6 +5,7 @@ import 'package:ageiscme_models/mixins/local_mixin.dart';
 import 'package:ageiscme_models/models/instituicao/instituicao_model.dart';
 import 'package:ageiscme_models/models/processo_leitura_acao/processo_leitura_acao_model.dart';
 import 'package:ageiscme_models/models/processo_leitura_andamento/processo_leitura_andamento_model.dart';
+import 'package:ageiscme_processo/app/module/enums/tipo_alerta.dart';
 import 'package:ageiscme_processo/app/module/enums/tipo_selecao.dart';
 import 'package:ageiscme_processo/app/module/models/item_processo/item_processo_model.dart';
 import 'package:ageiscme_processo/app/module/models/kit_processo/kit_processo_model.dart';
@@ -286,8 +287,10 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
       closeLoading();
       fecharTelaExtra(processo, context);
       List<int> avisosSonoro = processo.leituraCodigo.avisosSonoro;
+      TipoAlerta? tipoAlerta = processo.leituraCodigo.tipoAlerta;
       processo = ProcessoLeituraMontagemModel.empty();
       processo.leituraCodigo.avisosSonoro = avisosSonoro;
+      processo.leituraCodigo.tipoAlerta = tipoAlerta;
       emit(
         ProcessoLeituraState(
           processo: processo,
@@ -310,8 +313,10 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
       closeLoading();
       fecharTelaExtra(processo, context);
       List<int> avisosSonoro = processo.leituraCodigo.avisosSonoro;
+      TipoAlerta? tipoAlerta = processo.leituraCodigo.tipoAlerta;
       processo = ProcessoLeituraMontagemModel.empty();
       processo.leituraCodigo.avisosSonoro = avisosSonoro;
+      processo.leituraCodigo.tipoAlerta = tipoAlerta;
       emit(
         ProcessoLeituraState(
           processo: processo,

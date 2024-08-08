@@ -14,6 +14,7 @@ import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/query_filters/estoque_disponivel/consulta_estoque_disponivel_filter.dart';
 import 'package:ageiscme_models/query_filters/processos_leitura/consulta_processos_leitura_filter.dart';
+import 'package:ageiscme_models/query_models/estoque_disponivel/consulta_estoque_disponivel_model.dart';
 import 'package:ageiscme_models/response_dto/kit/drop_down_search/kit_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
@@ -24,9 +25,11 @@ import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.da
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
+import 'package:compartilhados/cores/cores.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
 import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
 class ConsultaEstoqueDisponivelPage extends StatefulWidget {
@@ -39,11 +42,12 @@ class ConsultaEstoqueDisponivelPage extends StatefulWidget {
 
 class _ConsultaEstoqueDisponivelPageState
     extends State<ConsultaEstoqueDisponivelPage> {
-  final List<CustomDataColumn> colunas = [
+  ConsultaEstoqueDisponivelModel? Function(PlutoRow)? getObjByRow;
+  late final List<CustomDataColumn> colunas = [
     CustomDataColumn(
       text: 'Data Validade',
       field: 'dataValidade',
-      type: CustomDataColumnType.DateTime,
+      customRenderer: getCustomRenderValidade,
     ),
     CustomDataColumn(text: 'Arsenal', field: 'nomeArsenal'),
     CustomDataColumn(text: 'Local', field: 'local'),
@@ -78,6 +82,7 @@ class _ConsultaEstoqueDisponivelPageState
     );
     filter = ConsultaEstoqueDisponivelFilter.empty();
     filter.ignorarRemovidos = true;
+    filter.tipoEstoque = '0';
     arsenalEstoqueBloc = ArsenalEstoqueCubit();
     arsenalEstoqueBloc.loadAll();
     localizacaoArsenalBloc = LocalizacaoArsenalCubit();
@@ -87,6 +92,36 @@ class _ConsultaEstoqueDisponivelPageState
 
     bloc.loadEstoqueDisponivel(filter);
     super.initState();
+  }
+
+  Color rowColorCallback(PlutoRowColorContext row) {
+    ConsultaEstoqueDisponivelModel? leitura = getObjByRow!(row.row);
+    if (leitura?.reposicao == true) {
+      return const Color.fromARGB(47, 250, 248, 121);
+    }
+    return Colors.white;
+  }
+
+  Widget getCustomRenderValidade(
+    PlutoColumnRendererContext renderContext, {
+    TextAlign? textAlign = TextAlign.start,
+  }) {
+    ConsultaEstoqueDisponivelModel leitura = getObjByRow!(renderContext.row)!;
+    String? value =
+        DateFormat('dd/MM/yyyy HH:mm').format(leitura.dataValidade!);
+    if (leitura.reposicao == true) {
+      value = '';
+    }
+
+    return Text(
+      value,
+      textAlign: textAlign,
+      style: TextStyle(
+        overflow: TextOverflow.ellipsis,
+        color: Cores.corTexto,
+        fontSize: renderContext.stateManager.style.cellTextStyle.fontSize,
+      ),
+    );
   }
 
   @override
@@ -127,6 +162,9 @@ class _ConsultaEstoqueDisponivelPageState
                 child: Padding(
                   padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                   child: PlutoGridWidget(
+                    rowColorCallback: rowColorCallback,
+                    getObjectByRowMethod: (context, getObjectByRowMethod) =>
+                        getObjByRow = getObjectByRowMethod,
                     orderAscendingFieldColumn: 'dataValidade',
                     smallRows: true,
                     columns: colunas,
@@ -283,6 +321,24 @@ class _ConsultaEstoqueDisponivelPageState
                         .toList(),
                     onChanged: (value) => filter.codProprietario = value?.cod,
                     placeholder: 'Proprietário',
+                  );
+                },
+              ),
+              const Padding(padding: EdgeInsets.only(top: 2)),
+              Builder(
+                builder: (context) {
+                  return DropDownSearchWidget<
+                      ConsultaEstoqueDisponivelTipoEstoque>(
+                    sourceList:
+                        ConsultaEstoqueDisponivelTipoEstoque.situacaoOptions,
+                    initialValue:
+                        ConsultaEstoqueDisponivelTipoEstoque.situacaoOptions
+                            .where(
+                              (element) => element.cod == filter.tipoEstoque,
+                            )
+                            .firstOrNull,
+                    placeholder: 'Tipo Estoque',
+                    onChanged: (value) => filter.tipoEstoque = value?.cod,
                   );
                 },
               ),

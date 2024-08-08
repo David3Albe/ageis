@@ -42,13 +42,13 @@ class _ConsultaProcessosLeituraDevolvidoSubPageState
     CustomDataColumn(
       text: 'Cód. Descritor Kit',
       field: 'codDescritorKit',
-      type: CustomDataColumnType.Number,
+      type: CustomDataColumnType.Text,
     ),
     CustomDataColumn(text: 'Kit', field: 'nomeKit'),
     CustomDataColumn(
       text: 'Cód. Descritor Item',
       field: 'codDescritorItem',
-      type: CustomDataColumnType.Number,
+      type: CustomDataColumnType.Text,
     ),
     CustomDataColumn(text: 'Item', field: 'descricaoCurtaItem'),
     CustomDataColumn(

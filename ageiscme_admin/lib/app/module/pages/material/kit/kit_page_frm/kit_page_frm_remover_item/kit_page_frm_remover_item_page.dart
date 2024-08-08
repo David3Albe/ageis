@@ -1,3 +1,4 @@
+import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/arsenal/arsenal_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/motivo_remover_repor_item/motivo_remover_repor_item.dart';
 import 'package:ageiscme_admin/app/module/pages/material/kit/kit_page_frm/kit_page_frm_remover_item/kit_page_frm_remover_item_controller.dart';
 import 'package:ageiscme_models/main.dart';
@@ -26,10 +27,22 @@ class KitPageFrmRemoverItemPage extends StatefulWidget {
 class _KitPageFrmRemoverItemPageState extends State<KitPageFrmRemoverItemPage> {
   late final KitPageFrmRemoverItemController _controller;
   late final MotivoRemoverReporItemCubit processoMotivoCubit;
+  late final ArsenalEstoqueCubit arsenalEstoqueCubit;
+  late bool Function() validateMotivo;
+  late bool Function() validateArsenal;
+
   @override
   void initState() {
     processoMotivoCubit = MotivoRemoverReporItemCubit();
+    arsenalEstoqueCubit = ArsenalEstoqueCubit();
+
     processoMotivoCubit.loadAll();
+    arsenalEstoqueCubit.loadFilter(
+      ArsenalEstoqueFilter(
+        apenasAtivos: true,
+        ordenarPorNomeCrescente: true,
+      ),
+    );
     _controller = KitPageFrmRemoverItemController(
       kit: widget.kit,
       context: context,
@@ -79,6 +92,9 @@ class _KitPageFrmRemoverItemPageState extends State<KitPageFrmRemoverItemPage> {
                     (a, b) => a.descricao!.compareTo(b.descricao!),
                   );
                   return DropDownSearchWidget(
+                    validateBuilder: (context, validateMethodBuilder) =>
+                        validateMotivo = validateMethodBuilder,
+                    validator: (item) => item == null ? 'Obrigatório' : '',
                     expandOnStart: true,
                     textFunction: (motivo) => motivo?.descricao ?? '',
                     initialValue: null,
@@ -91,6 +107,28 @@ class _KitPageFrmRemoverItemPageState extends State<KitPageFrmRemoverItemPage> {
                     onChanged: (value) =>
                         _controller.dto.codMotivo = value?.cod,
                     placeholder: 'Motivo Remoção',
+                  );
+                },
+              ),
+              const Padding(padding: EdgeInsets.only(top: 8)),
+              BlocBuilder<ArsenalEstoqueCubit, ArsenalEstoqueState>(
+                bloc: arsenalEstoqueCubit,
+                builder: (context, state) {
+                  if (state.loading) {
+                    return const LoadingWidget();
+                  }
+                  List<ArsenalEstoqueModel> arsenais = state.arsenaisEstoques;
+                  return DropDownSearchWidget(
+                    validateBuilder: (context, validateMethodBuilder) =>
+                        validateArsenal = validateMethodBuilder,
+                    validator: (item) => item == null ? 'Obrigatório' : '',
+                    textFunction: (arsenal) =>
+                        arsenal?.nome ?? 'Arsenal sem nome',
+                    initialValue: null,
+                    sourceList: arsenais,
+                    onChanged: (value) =>
+                        _controller.dto.codEstoque = value?.cod,
+                    placeholder: 'Arsenal Reposição',
                   );
                 },
               ),

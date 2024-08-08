@@ -119,6 +119,7 @@ class AnormalidadeFrmPageWidget extends StatelessWidget {
                                   anormalidadeState.dto?.codProcessoEtapa;
                               bool itemSelecionado =
                                   anormalidadeState.dto?.codItem != null;
+
                               return DropDownSearchWidget<ProcessoEtapaModel>(
                                 setSelectedItemBuilder:
                                     (context, setSelectedItemMethod) =>

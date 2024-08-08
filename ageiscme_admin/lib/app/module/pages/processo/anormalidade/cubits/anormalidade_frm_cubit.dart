@@ -1,3 +1,4 @@
+import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/processo_etapa/processo_etapa_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/anormalidade/frm/page/liberacao/anormalidade_frm_liberacao_page.dart';
 import 'package:ageiscme_admin/app/module/pages/processo/anormalidade/states/anormalidade_frm_state.dart';
 import 'package:ageiscme_data/services/anormalidade/anormalidade_service.dart';
@@ -141,6 +142,7 @@ class AnormalidadeFrmCubit extends Cubit<AnormalidadeFrmState> {
     state.dto?.codProcessoEtapa = etapa?.cod;
     await _changeProcessoRegistro(context: context);
     _change(dto: state.dto!);
+    BlocProvider.of<ProcessoEtapaCubit>(context).refresh();
   }
 
   Future _changeProcessoRegistro({
@@ -185,6 +187,7 @@ class AnormalidadeFrmCubit extends Cubit<AnormalidadeFrmState> {
     state.dto?.item = null;
     state.dto?.codProcessoEtapa = null;
     state.dto?.etapa = null;
+    _change(dto: state.dto!);
   }
 
   Future changeItem({

@@ -43,6 +43,8 @@ mixin _$ConsultaEstoqueDisponivelModel {
   set idEtiqueta(String? value) => throw _privateConstructorUsedError;
   DateTime? get dataEntrada => throw _privateConstructorUsedError;
   set dataEntrada(DateTime? value) => throw _privateConstructorUsedError;
+  bool? get reposicao => throw _privateConstructorUsedError;
+  set reposicao(bool? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -69,7 +71,8 @@ abstract class $ConsultaEstoqueDisponivelModelCopyWith<$Res> {
       String? nomeItem,
       int? codItem,
       String? idEtiqueta,
-      DateTime? dataEntrada});
+      DateTime? dataEntrada,
+      bool? reposicao});
 }
 
 /// @nodoc
@@ -97,6 +100,7 @@ class _$ConsultaEstoqueDisponivelModelCopyWithImpl<$Res,
     Object? codItem = freezed,
     Object? idEtiqueta = freezed,
     Object? dataEntrada = freezed,
+    Object? reposicao = freezed,
   }) {
     return _then(_value.copyWith(
       dataValidade: freezed == dataValidade
@@ -143,6 +147,10 @@ class _$ConsultaEstoqueDisponivelModelCopyWithImpl<$Res,
           ? _value.dataEntrada
           : dataEntrada // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      reposicao: freezed == reposicao
+          ? _value.reposicao
+          : reposicao // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 }
@@ -167,7 +175,8 @@ abstract class _$$ConsultaEstoqueDisponivelModelImplCopyWith<$Res>
       String? nomeItem,
       int? codItem,
       String? idEtiqueta,
-      DateTime? dataEntrada});
+      DateTime? dataEntrada,
+      bool? reposicao});
 }
 
 /// @nodoc
@@ -194,6 +203,7 @@ class __$$ConsultaEstoqueDisponivelModelImplCopyWithImpl<$Res>
     Object? codItem = freezed,
     Object? idEtiqueta = freezed,
     Object? dataEntrada = freezed,
+    Object? reposicao = freezed,
   }) {
     return _then(_$ConsultaEstoqueDisponivelModelImpl(
       dataValidade: freezed == dataValidade
@@ -240,6 +250,10 @@ class __$$ConsultaEstoqueDisponivelModelImplCopyWithImpl<$Res>
           ? _value.dataEntrada
           : dataEntrada // ignore: cast_nullable_to_non_nullable
               as DateTime?,
+      reposicao: freezed == reposicao
+          ? _value.reposicao
+          : reposicao // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -259,7 +273,8 @@ class _$ConsultaEstoqueDisponivelModelImpl
       required this.nomeItem,
       required this.codItem,
       required this.idEtiqueta,
-      required this.dataEntrada})
+      required this.dataEntrada,
+      required this.reposicao})
       : super._();
 
   factory _$ConsultaEstoqueDisponivelModelImpl.fromJson(
@@ -288,10 +303,12 @@ class _$ConsultaEstoqueDisponivelModelImpl
   String? idEtiqueta;
   @override
   DateTime? dataEntrada;
+  @override
+  bool? reposicao;
 
   @override
   String toString() {
-    return 'ConsultaEstoqueDisponivelModel(dataValidade: $dataValidade, nomeArsenal: $nomeArsenal, local: $local, nomeProprietario: $nomeProprietario, nomeKit: $nomeKit, codKit: $codKit, codBarraKit: $codBarraKit, nomeItem: $nomeItem, codItem: $codItem, idEtiqueta: $idEtiqueta, dataEntrada: $dataEntrada)';
+    return 'ConsultaEstoqueDisponivelModel(dataValidade: $dataValidade, nomeArsenal: $nomeArsenal, local: $local, nomeProprietario: $nomeProprietario, nomeKit: $nomeKit, codKit: $codKit, codBarraKit: $codBarraKit, nomeItem: $nomeItem, codItem: $codItem, idEtiqueta: $idEtiqueta, dataEntrada: $dataEntrada, reposicao: $reposicao)';
   }
 
   @JsonKey(ignore: true)
@@ -323,7 +340,8 @@ abstract class _ConsultaEstoqueDisponivelModel
       required String? nomeItem,
       required int? codItem,
       required String? idEtiqueta,
-      required DateTime? dataEntrada}) = _$ConsultaEstoqueDisponivelModelImpl;
+      required DateTime? dataEntrada,
+      required bool? reposicao}) = _$ConsultaEstoqueDisponivelModelImpl;
   _ConsultaEstoqueDisponivelModel._() : super._();
 
   factory _ConsultaEstoqueDisponivelModel.fromJson(Map<String, dynamic> json) =
@@ -362,6 +380,9 @@ abstract class _ConsultaEstoqueDisponivelModel
   @override
   DateTime? get dataEntrada;
   set dataEntrada(DateTime? value);
+  @override
+  bool? get reposicao;
+  set reposicao(bool? value);
   @override
   @JsonKey(ignore: true)
   _$$ConsultaEstoqueDisponivelModelImplCopyWith<

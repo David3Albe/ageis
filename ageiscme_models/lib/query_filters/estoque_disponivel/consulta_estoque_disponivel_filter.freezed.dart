@@ -35,6 +35,8 @@ mixin _$ConsultaEstoqueDisponivelFilter {
   set idEtiquetaContem(String? value) => throw _privateConstructorUsedError;
   int? get codProprietario => throw _privateConstructorUsedError;
   set codProprietario(int? value) => throw _privateConstructorUsedError;
+  String? get tipoEstoque => throw _privateConstructorUsedError;
+  set tipoEstoque(String? value) => throw _privateConstructorUsedError;
   bool? get ignorarRemovidos => throw _privateConstructorUsedError;
   set ignorarRemovidos(bool? value) => throw _privateConstructorUsedError;
   ItemModel? get item => throw _privateConstructorUsedError;
@@ -62,6 +64,7 @@ abstract class $ConsultaEstoqueDisponivelFilterCopyWith<$Res> {
       int? codItem,
       String? idEtiquetaContem,
       int? codProprietario,
+      String? tipoEstoque,
       bool? ignorarRemovidos,
       ItemModel? item});
 
@@ -89,6 +92,7 @@ class _$ConsultaEstoqueDisponivelFilterCopyWithImpl<$Res,
     Object? codItem = freezed,
     Object? idEtiquetaContem = freezed,
     Object? codProprietario = freezed,
+    Object? tipoEstoque = freezed,
     Object? ignorarRemovidos = freezed,
     Object? item = freezed,
   }) {
@@ -121,6 +125,10 @@ class _$ConsultaEstoqueDisponivelFilterCopyWithImpl<$Res,
           ? _value.codProprietario
           : codProprietario // ignore: cast_nullable_to_non_nullable
               as int?,
+      tipoEstoque: freezed == tipoEstoque
+          ? _value.tipoEstoque
+          : tipoEstoque // ignore: cast_nullable_to_non_nullable
+              as String?,
       ignorarRemovidos: freezed == ignorarRemovidos
           ? _value.ignorarRemovidos
           : ignorarRemovidos // ignore: cast_nullable_to_non_nullable
@@ -162,6 +170,7 @@ abstract class _$$ConsultaEstoqueDisponivelFilterImplCopyWith<$Res>
       int? codItem,
       String? idEtiquetaContem,
       int? codProprietario,
+      String? tipoEstoque,
       bool? ignorarRemovidos,
       ItemModel? item});
 
@@ -189,6 +198,7 @@ class __$$ConsultaEstoqueDisponivelFilterImplCopyWithImpl<$Res>
     Object? codItem = freezed,
     Object? idEtiquetaContem = freezed,
     Object? codProprietario = freezed,
+    Object? tipoEstoque = freezed,
     Object? ignorarRemovidos = freezed,
     Object? item = freezed,
   }) {
@@ -221,6 +231,10 @@ class __$$ConsultaEstoqueDisponivelFilterImplCopyWithImpl<$Res>
           ? _value.codProprietario
           : codProprietario // ignore: cast_nullable_to_non_nullable
               as int?,
+      tipoEstoque: freezed == tipoEstoque
+          ? _value.tipoEstoque
+          : tipoEstoque // ignore: cast_nullable_to_non_nullable
+              as String?,
       ignorarRemovidos: freezed == ignorarRemovidos
           ? _value.ignorarRemovidos
           : ignorarRemovidos // ignore: cast_nullable_to_non_nullable
@@ -245,6 +259,7 @@ class _$ConsultaEstoqueDisponivelFilterImpl
       required this.codItem,
       required this.idEtiquetaContem,
       required this.codProprietario,
+      this.tipoEstoque,
       this.ignorarRemovidos,
       this.item})
       : super._();
@@ -268,13 +283,15 @@ class _$ConsultaEstoqueDisponivelFilterImpl
   @override
   int? codProprietario;
   @override
+  String? tipoEstoque;
+  @override
   bool? ignorarRemovidos;
   @override
   ItemModel? item;
 
   @override
   String toString() {
-    return 'ConsultaEstoqueDisponivelFilter(codEstoque: $codEstoque, codEstoqueLocal: $codEstoqueLocal, codKit: $codKit, codBarraKitContem: $codBarraKitContem, codItem: $codItem, idEtiquetaContem: $idEtiquetaContem, codProprietario: $codProprietario, ignorarRemovidos: $ignorarRemovidos, item: $item)';
+    return 'ConsultaEstoqueDisponivelFilter(codEstoque: $codEstoque, codEstoqueLocal: $codEstoqueLocal, codKit: $codKit, codBarraKitContem: $codBarraKitContem, codItem: $codItem, idEtiquetaContem: $idEtiquetaContem, codProprietario: $codProprietario, tipoEstoque: $tipoEstoque, ignorarRemovidos: $ignorarRemovidos, item: $item)';
   }
 
   @JsonKey(ignore: true)
@@ -303,6 +320,7 @@ abstract class _ConsultaEstoqueDisponivelFilter
       required int? codItem,
       required String? idEtiquetaContem,
       required int? codProprietario,
+      String? tipoEstoque,
       bool? ignorarRemovidos,
       ItemModel? item}) = _$ConsultaEstoqueDisponivelFilterImpl;
   _ConsultaEstoqueDisponivelFilter._() : super._();
@@ -331,6 +349,9 @@ abstract class _ConsultaEstoqueDisponivelFilter
   @override
   int? get codProprietario;
   set codProprietario(int? value);
+  @override
+  String? get tipoEstoque;
+  set tipoEstoque(String? value);
   @override
   bool? get ignorarRemovidos;
   set ignorarRemovidos(bool? value);

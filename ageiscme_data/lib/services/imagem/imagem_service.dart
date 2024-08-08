@@ -11,7 +11,12 @@ class ImagemService with ImageServiceMixin {
   ImagemService();
 
   Future<String> getUrlImage({required String identificador}) async {
-    String urlBase = (await AppConfig.forEnvironment(false)).apiUrl;
+    await _client.test();
+    AppConfig app = await AppConfig.forEnvironment(false);
+    String urlBase = app.apiUrl;
+    if (app.useFailoverFirst) {
+      urlBase = app.apiUrlFailover;
+    }
     urlBase += BASE_URL;
     urlBase += 'get-one-by-identificador/$identificador/image';
     return urlBase;

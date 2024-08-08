@@ -20,6 +20,7 @@ sealed class ConsultaEstoqueDisponivelModel
     required int? codItem,
     required String? idEtiqueta,
     required DateTime? dataEntrada,
+    required bool? reposicao,
   }) = _ConsultaEstoqueDisponivelModel;
 
   factory ConsultaEstoqueDisponivelModel.fromJson(Map<String, Object?> json) =>

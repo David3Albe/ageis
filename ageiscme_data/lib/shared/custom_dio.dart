@@ -14,6 +14,14 @@ import 'package:compartilhados/functions/cryptography/cryptography_helper.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:dependencias_comuns/modular_export.dart';
 import 'package:dependencias_comuns/package_info_export.dart';
+import 'package:flutter/foundation.dart';
+
+class CustomRoute {
+  String url;
+  bool failover;
+
+  CustomRoute({required this.url, required this.failover});
+}
 
 class CustomDio {
   CustomDio({this.loading});
@@ -49,8 +57,31 @@ class CustomDio {
 
   static const int retrys = 10;
 
-  Future<String> get _route async =>
-      (await AppConfig.forEnvironment(false)).apiUrl;
+  Future<List<CustomRoute>> get _routes async {
+    AppConfig app = await AppConfig.forEnvironment(false);
+    List<CustomRoute> urls = [];
+    if (app.useFailoverFirst) {
+      urls.add(
+        CustomRoute(
+          url: app.apiUrlFailover,
+          failover: true,
+        ),
+      );
+    }
+    urls.add(CustomRoute(url: app.apiUrl, failover: false));
+    if (app.apiUrlFailover.isNotEmpty && app.useFailoverFirst != true) {
+      urls.add(
+        CustomRoute(
+          url: app.apiUrlFailover,
+          failover: true,
+        ),
+      );
+    }
+    if(urls.where((element) => element.url.isNotEmpty).isEmpty){
+      throw CustomBaseException('É necessário configurar o Registry do sistema');
+    }
+    return urls;
+  }
 
   Future setHeaders() async {
     AuthenticationResultDTO? auth =
@@ -63,23 +94,6 @@ class CustomDio {
     }
   }
 
-  // int calculateTraficRequest(String url, Object? body) {
-  //   int size = utf8.encode(url).length;
-  //   if (body != null) {
-  //     size += utf8.encode(body.toString()).length;
-  //   }
-  //   print('Response url: ' + url);
-  //   print('Request: ' + size.toString());
-  //   return size;
-  // }
-
-  // int calculateTraficResponse(String url, Response resp) {
-  //   int size = utf8.encode(resp.data.toString()).length;
-  //   print('Response url: ' + url);
-  //   print('Response : ' + size.toString());
-  //   return size;
-  // }
-
   Future<dynamic> getObject({required dynamic obj}) async {
     if (!_encryptPayload) return obj.toJson();
     options.headers!.addAll({'encrypt-payload': true});
@@ -89,16 +103,53 @@ class CustomDio {
     return encryptedPayload.$1;
   }
 
-  Future<List<dynamic>> getList(String route) async {
-    String baseRoute = await _route;
+  Future<bool> test() async {
     await setHeaders();
-    String finalRoute = '$baseRoute$route';
-    // calculateTraficRequest(finalRoute, null);
-    Response resp = await _dio.get(
-      finalRoute,
-      options: options,
-    );
-    // calculateTraficResponse(finalRoute, resp);
+    Response? resp;
+    for (CustomRoute rota in await _routes) {
+      String finalRoute = '${rota.url}/test';
+      try {
+        resp = await _dio.get(
+          finalRoute,
+          options: options,
+        );
+        await AppConfig.setUseFailover(rota.failover);
+        break;
+      } catch (ex) {
+        debugPrint(rota.url + ' não acessível');
+      }
+    }
+    if (resp == null) {
+      throw CustomBaseException('Nenhum servidor está acessível');
+    }
+
+    if (!resp.statusCode.toString().startsWith('2')) {
+      bool throwed = await throwResponseError(resp);
+      if (!throwed) throw CustomBaseException(resp.data.toString());
+    }
+    return true;
+  }
+
+  Future<List<dynamic>> getList(String route) async {
+    await setHeaders();
+    Response? resp;
+    for (CustomRoute rota in await _routes) {
+      String finalRoute = '${rota.url}$route';
+      try {
+        resp = await _dio.get(
+          finalRoute,
+          options: options,
+        );
+        await AppConfig.setUseFailover(rota.failover);
+        break;
+      } catch (ex) {
+        debugPrint(rota.url + ' não acessível');
+      }
+    }
+    if (resp == null) {
+      throw CustomBaseException('Nenhum servidor está acessível');
+    }
+
     if (!resp.statusCode.toString().startsWith('2')) {
       bool throwed = await throwResponseError(resp);
       if (!throwed) throw CustomBaseException(resp.data.toString());
@@ -107,15 +158,25 @@ class CustomDio {
   }
 
   Future<dynamic> getOne(String route) async {
-    String baseRoute = await _route;
     await setHeaders();
-    String finalRoute = '$baseRoute$route';
-    // calculateTraficRequest(finalRoute, null);
-    Response resp = await _dio.get(
-      finalRoute,
-      options: options,
-    );
-    // calculateTraficResponse(finalRoute, resp);
+    Response? resp;
+    for (CustomRoute rota in await _routes) {
+      String finalRoute = '${rota.url}$route';
+      try {
+        resp = await _dio.get(
+          finalRoute,
+          options: options,
+        );
+        await AppConfig.setUseFailover(rota.failover);
+        break;
+      } catch (ex) {
+        debugPrint(rota.url + ' não acessível');
+      }
+    }
+    if (resp == null) {
+      throw CustomBaseException('Nenhum servidor está acessível');
+    }
+
     if (!resp.statusCode.toString().startsWith('2')) {
       bool throwed = await throwResponseError(resp);
       if (!throwed) throw CustomBaseException(resp.data.toString());
@@ -124,17 +185,27 @@ class CustomDio {
   }
 
   Future<dynamic> postOne(String route, dynamic objeto) async {
-    String baseRoute = await _route;
     await setHeaders();
-    String finalRoute = '$baseRoute$route';
     dynamic obj = await getObject(obj: objeto);
-    // calculateTraficRequest(finalRoute, obj);
-    Response resp = await _dio.post(
-      finalRoute,
-      data: obj,
-      options: options,
-    );
-    // calculateTraficResponse(finalRoute, resp);
+    Response? resp;
+    for (CustomRoute rota in await _routes) {
+      String finalRoute = '${rota.url}$route';
+      try {
+        resp = await _dio.post(
+          finalRoute,
+          data: obj,
+          options: options,
+        );
+        await AppConfig.setUseFailover(rota.failover);
+        break;
+      } catch (ex) {
+        debugPrint(rota.url + ' não acessível');
+      }
+    }
+    if (resp == null) {
+      throw CustomBaseException('Nenhum servidor está acessível');
+    }
+
     if (!resp.statusCode.toString().startsWith('2')) {
       bool throwed = await throwResponseError(resp);
       if (!throwed) throw CustomBaseException(resp.data.toString());
@@ -143,17 +214,27 @@ class CustomDio {
   }
 
   Future<List<dynamic>> postList(String route, dynamic objeto) async {
-    String baseRoute = await _route;
     await setHeaders();
-    String finalRoute = '$baseRoute$route';
     dynamic obj = await getObject(obj: objeto);
-    // calculateTraficRequest(finalRoute, obj);
-    Response resp = await _dio.post(
-      finalRoute,
-      data: obj,
-      options: options,
-    );
-    // calculateTraficResponse(finalRoute, resp);
+    Response? resp;
+    for (CustomRoute rota in await _routes) {
+      String finalRoute = '${rota.url}$route';
+      try {
+        resp = await _dio.post(
+          finalRoute,
+          data: obj,
+          options: options,
+        );
+        await AppConfig.setUseFailover(rota.failover);
+        break;
+      } catch (ex) {
+        debugPrint(rota.url + ' não acessível');
+      }
+    }
+    if (resp == null) {
+      throw CustomBaseException('Nenhum servidor está acessível');
+    }
+
     if (!resp.statusCode.toString().startsWith('2')) {
       bool throwed = await throwResponseError(resp);
       if (!throwed) throw CustomBaseException(resp.data);
@@ -162,17 +243,26 @@ class CustomDio {
   }
 
   Future<dynamic> countFilter(String route, dynamic objeto) async {
-    String baseRoute = await _route;
     await setHeaders();
-    String finalRoute = '$baseRoute$route';
-    dynamic obj = await getObject(obj: objeto);
-    // calculateTraficRequest(finalRoute, obj);
-    Response resp = await _dio.post(
-      finalRoute,
-      data: obj,
-      options: options,
-    );
-    // calculateTraficResponse(finalRoute, resp);
+    Response? resp;
+    for (CustomRoute rota in await _routes) {
+      String finalRoute = '${rota.url}$route';
+      try {
+        dynamic obj = await getObject(obj: objeto);
+        resp = await _dio.post(
+          finalRoute,
+          data: obj,
+          options: options,
+        );
+        await AppConfig.setUseFailover(rota.failover);
+        break;
+      } catch (ex) {
+        debugPrint(rota.url + ' não acessível');
+      }
+    }
+    if (resp == null) {
+      throw CustomBaseException('Nenhum servidor está acessível');
+    }
     if (!resp.statusCode.toString().startsWith('2')) {
       bool throwed = await throwResponseError(resp);
       if (!throwed) throw CustomBaseException(resp.data);
@@ -186,18 +276,28 @@ class CustomDio {
     T? Function(dynamic json) deserializerFunction, {
     int retrys = retrys,
   }) async {
-    String baseRoute = await _route;
     try {
-      await setHeaders();
-      String finalRoute = '$baseRoute$route';
       dynamic obj = await getObject(obj: objeto);
-      // calculateTraficRequest(finalRoute, obj);
-      Response resp = await _dio.post(
-        finalRoute,
-        data: obj,
-        options: options,
-      );
-      // calculateTraficResponse(finalRoute, resp);
+      await setHeaders();
+      Response? resp;
+      for (CustomRoute rota in await _routes) {
+        String finalRoute = '${rota.url}$route';
+        try {
+          resp = await _dio.post(
+            finalRoute,
+            data: obj,
+            options: options,
+          );
+          await AppConfig.setUseFailover(rota.failover);
+          break;
+        } catch (ex) {
+          debugPrint(rota.url + ' não acessível');
+        }
+      }
+      if (resp == null) {
+        throw CustomBaseException('Nenhum servidor está acessível');
+      }
+
       if (!resp.statusCode.toString().startsWith('2')) {
         bool throwed = await throwResponseError(resp);
         if (throwed) return null;
@@ -227,19 +327,29 @@ class CustomDio {
     dynamic objeto, {
     int retrys = retrys,
   }) async {
-    String baseRoute = await _route;
     try {
       await setHeaders();
-      String finalRoute = '$baseRoute$route';
-      dynamic obj = await getObject(obj: objeto);
-      // calculateTraficRequest(finalRoute, obj);
-      Response resp = await _dio.post(
-        finalRoute,
-        data: obj,
-        options: options,
-      );
 
-      // calculateTraficResponse(finalRoute, resp);
+      dynamic obj = await getObject(obj: objeto);
+      Response? resp;
+      for (CustomRoute rota in await _routes) {
+        String finalRoute = '${rota.url}$route';
+        try {
+          resp = await _dio.post(
+            finalRoute,
+            data: obj,
+            options: options,
+          );
+          await AppConfig.setUseFailover(rota.failover);
+          break;
+        } catch (ex) {
+          debugPrint(rota.url + ' não acessível');
+        }
+      }
+      if (resp == null) {
+        throw CustomBaseException('Nenhum servidor está acessível');
+      }
+
       if (!resp.statusCode.toString().startsWith('2')) {
         bool throwed = await throwResponseError(resp);
         if (throwed) return null;
@@ -274,19 +384,28 @@ class CustomDio {
     T Function(dynamic json) deserializerFunction, {
     int retrys = retrys,
   }) async {
-    String baseRoute = await _route;
     try {
       await setHeaders();
-      String finalRoute = '$baseRoute$route';
       dynamic obj = await getObject(obj: objeto);
-      // calculateTraficRequest(finalRoute, obj);
-      Response resp = await _dio.post(
-        finalRoute,
-        data: obj,
-        options: options,
-      );
+      Response? resp;
+      for (CustomRoute rota in await _routes) {
+        String finalRoute = '${rota.url}$route';
+        try {
+          resp = await _dio.post(
+            finalRoute,
+            data: obj,
+            options: options,
+          );
+          await AppConfig.setUseFailover(rota.failover);
+          break;
+        } catch (ex) {
+          debugPrint(rota.url + ' não acessível');
+        }
+      }
+      if (resp == null) {
+        throw CustomBaseException('Nenhum servidor está acessível');
+      }
 
-      // calculateTraficResponse(finalRoute, resp);
       if (!resp.statusCode.toString().startsWith('2')) {
         bool throwed = await throwResponseError(resp);
         if (throwed) return null;
@@ -322,18 +441,27 @@ class CustomDio {
     T Function(dynamic json) deserializerFunction, {
     int retrys = retrys,
   }) async {
-    String baseRoute = await _route;
     try {
       await setHeaders();
-      String finalRoute = '$baseRoute$route';
       dynamic obj = await getObject(obj: objeto);
-      // calculateTraficRequest(finalRoute, obj);
-      Response resp = await _dio.delete(
-        finalRoute,
-        data: obj,
-        options: options,
-      );
-      // calculateTraficResponse(finalRoute, resp);
+      Response? resp;
+      for (CustomRoute rota in await _routes) {
+        String finalRoute = '${rota.url}$route';
+        try {
+          resp = await _dio.delete(
+            finalRoute,
+            data: obj,
+            options: options,
+          );
+          await AppConfig.setUseFailover(rota.failover);
+          break;
+        } catch (ex) {
+          debugPrint(rota.url + ' não acessível');
+        }
+      }
+      if (resp == null) {
+        throw CustomBaseException('Nenhum servidor está acessível');
+      }
       if (!resp.statusCode.toString().startsWith('2')) {
         bool throwed = await throwResponseError(resp);
         if (throwed) return null;

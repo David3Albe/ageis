@@ -1,4 +1,5 @@
 import 'package:ageiscme_data/services/item/item_service.dart';
+import 'package:ageiscme_data/services/parametro_sistema/parametro_sistema_service.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/coletores/coletores_helper.dart';
@@ -39,6 +40,24 @@ class KitPageFrmAdicionarItemController extends ChangeNotifier {
       confirmarLeituras(context);
       return;
     }
+    ParametroSistemaModel? sistema =
+        await ParametroSistemaService().findFirst();
+    if (sistema == null) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'É necessário ter uma configuração de sistema para adicionar item a kit!',
+      );
+      return;
+    }
+
+    if (sistema.letraConsignado?.toUpperCase() == barCode.substring(0, 1).toUpperCase()) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'A Etiqueta lida referência um item consignado e não pode ser adicionada a um kit!',
+      );
+      return;
+    }
+
     ItemModel? item =
         await ItemService().FilterOne(ItemFilter(iDEtiqueta: barCode));
 

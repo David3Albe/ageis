@@ -27,7 +27,6 @@ class ConsultaEstoqueDisponivelPageCubit
         filter,
       );
       if (itens == null) return;
-      print(itens.$2.map((e) => e.codKit));
 
       List<ConsultaEstoqueDisponivelModel> estoquesDisponiveis = itens.$2;
       emit(

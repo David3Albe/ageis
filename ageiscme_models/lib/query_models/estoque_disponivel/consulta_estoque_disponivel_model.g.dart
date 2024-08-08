@@ -24,6 +24,7 @@ _$ConsultaEstoqueDisponivelModelImpl
           dataEntrada: json['dataEntrada'] == null
               ? null
               : DateTime.parse(json['dataEntrada'] as String),
+          reposicao: json['reposicao'] as bool?,
         );
 
 Map<String, dynamic> _$$ConsultaEstoqueDisponivelModelImplToJson(
@@ -40,4 +41,5 @@ Map<String, dynamic> _$$ConsultaEstoqueDisponivelModelImplToJson(
       'codItem': instance.codItem,
       'idEtiqueta': instance.idEtiqueta,
       'dataEntrada': instance.dataEntrada?.toIso8601String(),
+      'reposicao': instance.reposicao,
     };

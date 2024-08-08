@@ -10,6 +10,7 @@ sealed class RemoverItemKitDTO with _$RemoverItemKitDTO {
     String? codBarraItem,
     int? codMotivo,
     int? codUsuario,
+    int? codEstoque,
   }) = _RemoverItemKitDTO;
 
   factory RemoverItemKitDTO.fromJson(Map<String, Object?> json) =>

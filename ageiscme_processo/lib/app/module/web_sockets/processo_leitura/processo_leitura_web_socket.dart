@@ -2,14 +2,20 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:ageiscme_data/shared/app_config.dart';
+import 'package:ageiscme_data/shared/custom_dio.dart';
 import 'package:ageiscme_models/enums/command_result_alert_type.dart';
 import 'package:ageiscme_models/models/result/command_result_model.dart';
 import 'package:ageiscme_processo/app/module/models/processo_leitura/processo_leitura_montagem_model.dart';
 import 'package:dependencias_comuns/web_socket_export.dart';
+import 'package:flutter/foundation.dart';
 
 class ProcessoLeituraWebSocket {
-  Future<String> get _route async =>
-      (await AppConfig.forEnvironment(false)).apiUrl;
+  Future<CustomRoute> get _route async {
+    AppConfig app = await AppConfig.forEnvironment(false);
+    return app.useFailoverFirst
+        ? CustomRoute(failover: true, url: app.apiUrlFailover)
+        : CustomRoute(failover: false, url: app.apiUrl);
+  }
 
   static const String _webSocketRoute = '/ws/processo-leitura-montagem';
 
@@ -30,17 +36,33 @@ class ProcessoLeituraWebSocket {
 
   Future connect() async {
     close();
-    await createWebSocket();
+    bool socketConnected = false;
+    while (socketConnected != true) {
+      try {
+        socketConnected = await _createWebSocket();
+      } catch (ex) {
+        debugPrint(ex.toString());
+      }
+    }
     preparatePing();
     listen();
   }
 
-  Future createWebSocket() async {
-    String routeBase = await _route;
-    routeBase = routeBase.replaceAll('http', 'ws');
-    _webSocket = WebSocketChannel.connect(
-      Uri.parse(routeBase + _webSocketRoute),
-    );
+  Future<bool> _createWebSocket() async {
+    CustomRoute rota = await _route;
+    print('criouWebSocket');
+    String routeBase = rota.url.replaceAll('http', 'ws');
+    try {
+      _webSocket = WebSocketChannel.connect(
+        Uri.parse(routeBase + _webSocketRoute),
+      );
+      await _webSocket?.ready;
+      return true;
+    } catch (ex) {
+      await Future.delayed(const Duration(seconds: 3));
+      await AppConfig.setUseFailover(!rota.failover);
+      return false;
+    }
   }
 
   void preparatePing() {
@@ -55,15 +77,15 @@ class ProcessoLeituraWebSocket {
       onDone: () async {
         int? closeCode = _webSocket?.closeCode;
         if (closeCode == 1006 || closeCode == 1005) {
-          onError(
-            'A conexão com o servidor foi perdida, tente novamente e se o problema continuar entre em contato com o suporte. $closeCode',
-            null,
-          );
+          await connect();
+          // onError(
+          //   'A conexão com o servidor foi perdida, tente novamente e se o problema continuar entre em contato com o suporte. $closeCode',
+          //   null,
+          // );
         }
       },
       (event) {
         if (event == 'pong') return;
-        // calculateTraficResponse(event);
         CommandResultModel result =
             CommandResultModel.fromJson(jsonDecode(event));
         if (!result.success) {
@@ -80,18 +102,6 @@ class ProcessoLeituraWebSocket {
     );
   }
 
-  // int calculateTraficRequest(String event) {
-  //   int size = utf8.encode(event).length;
-  //   print('Request Processo: ' + size.toString());
-  //   return size;
-  // }
-
-  // int calculateTraficResponse(String event) {
-  //   int size = utf8.encode(event).length;
-  //   print('Response Processo: ' + size.toString());
-  //   return size;
-  // }
-
   void close() {
     TIMER?.cancel();
     _subscription?.cancel();
@@ -104,6 +114,7 @@ class ProcessoLeituraWebSocket {
   }
 
   void sendMessage(ProcessoLeituraMontagemModel montagem) async {
+    await _webSocket?.ready;
     String json = jsonEncode(montagem.toJson());
     await sendJsonString(json: json);
   }
@@ -112,12 +123,13 @@ class ProcessoLeituraWebSocket {
     required String json,
     int? awaitTimeSeconds,
   }) async {
+    await _webSocket?.ready;
     await tryConnect();
-    // calculateTraficRequest(json);
     _webSocket?.sink.add(json);
   }
 
   Future sendPing() async {
+    await _webSocket?.ready;
     await tryConnect();
     _webSocket?.sink.add('ping');
   }

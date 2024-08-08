@@ -1519,6 +1519,15 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
       return;
     }
 
+    if ((processoEtapa.exigeLeituraEntrada ?? false) == false &&
+        (processoEtapa.exigeLeituraSaida ?? false) == false) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'A etapa precisa ter marcado Leitura de Entrada, Saída ou Ambos para salvar',
+      );
+      return;
+    }
+
     if (processoEtapa.codEquipamento != null &&
         processoEtapa.codEstoque != null) {
       ToastUtils.showCustomToastWarning(

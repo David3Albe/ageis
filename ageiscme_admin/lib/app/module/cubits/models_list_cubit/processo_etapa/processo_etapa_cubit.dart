@@ -23,6 +23,17 @@ class ProcessoEtapaCubit extends Cubit<ProcessoEtapaState> {
   }
 
   void clear() => emit(ProcessoEtapaState(processosEtapas: []));
+
+  void refresh() async {
+    emit(
+      ProcessoEtapaState(
+        processosEtapas: state.processosEtapas,
+        loading: true,
+      ),
+    );
+    await Future.delayed(const Duration(milliseconds: 50));
+    emit(ProcessoEtapaState(processosEtapas: state.processosEtapas));
+  }
 }
 
 class ProcessoEtapaState {

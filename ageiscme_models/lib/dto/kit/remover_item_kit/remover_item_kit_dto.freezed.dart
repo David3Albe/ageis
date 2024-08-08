@@ -28,6 +28,8 @@ mixin _$RemoverItemKitDTO {
   set codMotivo(int? value) => throw _privateConstructorUsedError;
   int? get codUsuario => throw _privateConstructorUsedError;
   set codUsuario(int? value) => throw _privateConstructorUsedError;
+  int? get codEstoque => throw _privateConstructorUsedError;
+  set codEstoque(int? value) => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -42,7 +44,11 @@ abstract class $RemoverItemKitDTOCopyWith<$Res> {
       _$RemoverItemKitDTOCopyWithImpl<$Res, RemoverItemKitDTO>;
   @useResult
   $Res call(
-      {int codKit, String? codBarraItem, int? codMotivo, int? codUsuario});
+      {int codKit,
+      String? codBarraItem,
+      int? codMotivo,
+      int? codUsuario,
+      int? codEstoque});
 }
 
 /// @nodoc
@@ -62,6 +68,7 @@ class _$RemoverItemKitDTOCopyWithImpl<$Res, $Val extends RemoverItemKitDTO>
     Object? codBarraItem = freezed,
     Object? codMotivo = freezed,
     Object? codUsuario = freezed,
+    Object? codEstoque = freezed,
   }) {
     return _then(_value.copyWith(
       codKit: null == codKit
@@ -80,6 +87,10 @@ class _$RemoverItemKitDTOCopyWithImpl<$Res, $Val extends RemoverItemKitDTO>
           ? _value.codUsuario
           : codUsuario // ignore: cast_nullable_to_non_nullable
               as int?,
+      codEstoque: freezed == codEstoque
+          ? _value.codEstoque
+          : codEstoque // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -93,7 +104,11 @@ abstract class _$$RemoverItemKitDTOImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int codKit, String? codBarraItem, int? codMotivo, int? codUsuario});
+      {int codKit,
+      String? codBarraItem,
+      int? codMotivo,
+      int? codUsuario,
+      int? codEstoque});
 }
 
 /// @nodoc
@@ -111,6 +126,7 @@ class __$$RemoverItemKitDTOImplCopyWithImpl<$Res>
     Object? codBarraItem = freezed,
     Object? codMotivo = freezed,
     Object? codUsuario = freezed,
+    Object? codEstoque = freezed,
   }) {
     return _then(_$RemoverItemKitDTOImpl(
       codKit: null == codKit
@@ -129,6 +145,10 @@ class __$$RemoverItemKitDTOImplCopyWithImpl<$Res>
           ? _value.codUsuario
           : codUsuario // ignore: cast_nullable_to_non_nullable
               as int?,
+      codEstoque: freezed == codEstoque
+          ? _value.codEstoque
+          : codEstoque // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -140,7 +160,8 @@ class _$RemoverItemKitDTOImpl implements _RemoverItemKitDTO {
       {required this.codKit,
       this.codBarraItem,
       this.codMotivo,
-      this.codUsuario});
+      this.codUsuario,
+      this.codEstoque});
 
   factory _$RemoverItemKitDTOImpl.fromJson(Map<String, dynamic> json) =>
       _$$RemoverItemKitDTOImplFromJson(json);
@@ -153,10 +174,12 @@ class _$RemoverItemKitDTOImpl implements _RemoverItemKitDTO {
   int? codMotivo;
   @override
   int? codUsuario;
+  @override
+  int? codEstoque;
 
   @override
   String toString() {
-    return 'RemoverItemKitDTO(codKit: $codKit, codBarraItem: $codBarraItem, codMotivo: $codMotivo, codUsuario: $codUsuario)';
+    return 'RemoverItemKitDTO(codKit: $codKit, codBarraItem: $codBarraItem, codMotivo: $codMotivo, codUsuario: $codUsuario, codEstoque: $codEstoque)';
   }
 
   @JsonKey(ignore: true)
@@ -179,7 +202,8 @@ abstract class _RemoverItemKitDTO implements RemoverItemKitDTO {
       {required int codKit,
       String? codBarraItem,
       int? codMotivo,
-      int? codUsuario}) = _$RemoverItemKitDTOImpl;
+      int? codUsuario,
+      int? codEstoque}) = _$RemoverItemKitDTOImpl;
 
   factory _RemoverItemKitDTO.fromJson(Map<String, dynamic> json) =
       _$RemoverItemKitDTOImpl.fromJson;
@@ -196,6 +220,9 @@ abstract class _RemoverItemKitDTO implements RemoverItemKitDTO {
   @override
   int? get codUsuario;
   set codUsuario(int? value);
+  @override
+  int? get codEstoque;
+  set codEstoque(int? value);
   @override
   @JsonKey(ignore: true)
   _$$RemoverItemKitDTOImplCopyWith<_$RemoverItemKitDTOImpl> get copyWith =>

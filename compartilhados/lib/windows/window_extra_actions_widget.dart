@@ -26,7 +26,7 @@ class WindowExtraActions extends StatelessWidget {
             onTap: () => WindowsHelper.Horizontal(context),
           ),
           CustomPopupItemModel(
-            text: 'Alinhar Abaixo e Cima',
+            text: 'Alinhar Abaixo e Acima',
             onTap: () => WindowsHelper.Vertical(context),
           ),
         ];

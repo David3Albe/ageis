@@ -1,4 +1,5 @@
 import 'package:ageiscme_models/models/item/item_model.dart';
+import 'package:compartilhados/mixins/drop_down_text.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'consulta_estoque_disponivel_filter.g.dart';
@@ -17,6 +18,7 @@ sealed class ConsultaEstoqueDisponivelFilter
     required int? codItem,
     required String? idEtiquetaContem,
     required int? codProprietario,
+    String? tipoEstoque,
     bool? ignorarRemovidos,
     ItemModel? item,
   }) = _ConsultaEstoqueDisponivelFilter;
@@ -40,4 +42,31 @@ sealed class ConsultaEstoqueDisponivelFilter
         codBarraKitContem: null,
         idEtiquetaContem: null,
       );
+}
+
+class ConsultaEstoqueDisponivelTipoEstoque with DropDownText {
+  final String text;
+  final String cod;
+
+  ConsultaEstoqueDisponivelTipoEstoque(this.text, this.cod);
+
+  static final List<ConsultaEstoqueDisponivelTipoEstoque> situacaoOptions = [
+    ConsultaEstoqueDisponivelTipoEstoque('Ambos', '0'),
+    ConsultaEstoqueDisponivelTipoEstoque('Estoque Disponível', '1'),
+    ConsultaEstoqueDisponivelTipoEstoque('Reposição', '2'),
+  ];
+
+  static String getOpcaoFromId(String opcao) {
+    Iterable<ConsultaEstoqueDisponivelTipoEstoque>? situacao =
+        situacaoOptions.where((element) => element.cod.toString() == opcao);
+
+    if (situacao.isEmpty) {
+      return '';
+    } else {
+      return situacao.first.text;
+    }
+  }
+
+  @override
+  String GetDropDownText() => text;
 }

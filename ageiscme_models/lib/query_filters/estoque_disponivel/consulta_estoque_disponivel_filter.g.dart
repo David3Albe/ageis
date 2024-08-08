@@ -16,6 +16,7 @@ _$ConsultaEstoqueDisponivelFilterImpl
           codItem: (json['codItem'] as num?)?.toInt(),
           idEtiquetaContem: json['idEtiquetaContem'] as String?,
           codProprietario: (json['codProprietario'] as num?)?.toInt(),
+          tipoEstoque: json['tipoEstoque'] as String?,
           ignorarRemovidos: json['ignorarRemovidos'] as bool?,
           item: json['item'] == null
               ? null
@@ -33,6 +34,7 @@ Map<String, dynamic> _$$ConsultaEstoqueDisponivelFilterImplToJson(
       'codItem': instance.codItem,
       'idEtiquetaContem': instance.idEtiquetaContem,
       'codProprietario': instance.codProprietario,
+      'tipoEstoque': instance.tipoEstoque,
       'ignorarRemovidos': instance.ignorarRemovidos,
       'item': instance.item?.toJson(),
     };
