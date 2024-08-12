@@ -87,6 +87,7 @@ _$KitProcessoModelImpl _$$KitProcessoModelImplFromJson(
       itensLidosCalculado: (json['itensLidosCalculado'] as num?)?.toInt(),
       itensTotalKitCalculado: (json['itensTotalKitCalculado'] as num?)?.toInt(),
       codLocalizacaoEstoque: (json['codLocalizacaoEstoque'] as num?)?.toInt(),
+      confirmouLocalNaoCompativel: json['confirmouLocalNaoCompativel'] as bool?,
     );
 
 Map<String, dynamic> _$$KitProcessoModelImplToJson(
@@ -142,4 +143,5 @@ Map<String, dynamic> _$$KitProcessoModelImplToJson(
       'itensLidosCalculado': instance.itensLidosCalculado,
       'itensTotalKitCalculado': instance.itensTotalKitCalculado,
       'codLocalizacaoEstoque': instance.codLocalizacaoEstoque,
+      'confirmouLocalNaoCompativel': instance.confirmouLocalNaoCompativel,
     };

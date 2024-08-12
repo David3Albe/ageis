@@ -1627,6 +1627,14 @@ class _EquipamentoManutencaoPageFrmState
         return;
       }
     }
+    if (equipamentoManutencao.resultado == '1' &&
+        equipamentoManutencao.dataTermino == null) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'O Campo Data Validade é obrigatório para Resultado = Liberado!',
+      );
+      return;
+    }
     cubit.save(
       equipamentoManutencao,
       widget.onSaved,

@@ -83,6 +83,7 @@ _$ItemProcessoModelImpl _$$ItemProcessoModelImplFromJson(
           (json['codUsuarioAcaoOcorrencia'] as num?)?.toInt(),
       codAcaoOcorrencia: (json['codAcaoOcorrencia'] as num?)?.toInt(),
       codLocalizacaoEstoque: (json['codLocalizacaoEstoque'] as num?)?.toInt(),
+      confirmouLocalNaoCompativel: json['confirmouLocalNaoCompativel'] as bool?,
     );
 
 Map<String, dynamic> _$$ItemProcessoModelImplToJson(
@@ -138,4 +139,5 @@ Map<String, dynamic> _$$ItemProcessoModelImplToJson(
       'codUsuarioAcaoOcorrencia': instance.codUsuarioAcaoOcorrencia,
       'codAcaoOcorrencia': instance.codAcaoOcorrencia,
       'codLocalizacaoEstoque': instance.codLocalizacaoEstoque,
+      'confirmouLocalNaoCompativel': instance.confirmouLocalNaoCompativel,
     };

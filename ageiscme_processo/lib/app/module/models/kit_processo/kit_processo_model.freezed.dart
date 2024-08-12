@@ -129,6 +129,9 @@ mixin _$KitProcessoModel {
   set itensTotalKitCalculado(int? value) => throw _privateConstructorUsedError;
   int? get codLocalizacaoEstoque => throw _privateConstructorUsedError;
   set codLocalizacaoEstoque(int? value) => throw _privateConstructorUsedError;
+  bool? get confirmouLocalNaoCompativel => throw _privateConstructorUsedError;
+  set confirmouLocalNaoCompativel(bool? value) =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -190,7 +193,8 @@ abstract class $KitProcessoModelCopyWith<$Res> {
       int? codAcaoOcorrencia,
       int? itensLidosCalculado,
       int? itensTotalKitCalculado,
-      int? codLocalizacaoEstoque});
+      int? codLocalizacaoEstoque,
+      bool? confirmouLocalNaoCompativel});
 
   $EmbalagemModelCopyWith<$Res>? get embalagem;
   $KitDescritorModelCopyWith<$Res>? get descritor;
@@ -262,6 +266,7 @@ class _$KitProcessoModelCopyWithImpl<$Res, $Val extends KitProcessoModel>
     Object? itensLidosCalculado = freezed,
     Object? itensTotalKitCalculado = freezed,
     Object? codLocalizacaoEstoque = freezed,
+    Object? confirmouLocalNaoCompativel = freezed,
   }) {
     return _then(_value.copyWith(
       cod: freezed == cod
@@ -457,6 +462,10 @@ class _$KitProcessoModelCopyWithImpl<$Res, $Val extends KitProcessoModel>
           ? _value.codLocalizacaoEstoque
           : codLocalizacaoEstoque // ignore: cast_nullable_to_non_nullable
               as int?,
+      confirmouLocalNaoCompativel: freezed == confirmouLocalNaoCompativel
+          ? _value.confirmouLocalNaoCompativel
+          : confirmouLocalNaoCompativel // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 
@@ -601,7 +610,8 @@ abstract class _$$KitProcessoModelImplCopyWith<$Res>
       int? codAcaoOcorrencia,
       int? itensLidosCalculado,
       int? itensTotalKitCalculado,
-      int? codLocalizacaoEstoque});
+      int? codLocalizacaoEstoque,
+      bool? confirmouLocalNaoCompativel});
 
   @override
   $EmbalagemModelCopyWith<$Res>? get embalagem;
@@ -678,6 +688,7 @@ class __$$KitProcessoModelImplCopyWithImpl<$Res>
     Object? itensLidosCalculado = freezed,
     Object? itensTotalKitCalculado = freezed,
     Object? codLocalizacaoEstoque = freezed,
+    Object? confirmouLocalNaoCompativel = freezed,
   }) {
     return _then(_$KitProcessoModelImpl(
       cod: freezed == cod
@@ -873,6 +884,10 @@ class __$$KitProcessoModelImplCopyWithImpl<$Res>
           ? _value.codLocalizacaoEstoque
           : codLocalizacaoEstoque // ignore: cast_nullable_to_non_nullable
               as int?,
+      confirmouLocalNaoCompativel: freezed == confirmouLocalNaoCompativel
+          ? _value.confirmouLocalNaoCompativel
+          : confirmouLocalNaoCompativel // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -928,7 +943,8 @@ class _$KitProcessoModelImpl extends _KitProcessoModel {
       required this.codAcaoOcorrencia,
       required this.itensLidosCalculado,
       required this.itensTotalKitCalculado,
-      this.codLocalizacaoEstoque})
+      this.codLocalizacaoEstoque,
+      this.confirmouLocalNaoCompativel})
       : super._();
 
   factory _$KitProcessoModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -1031,10 +1047,12 @@ class _$KitProcessoModelImpl extends _KitProcessoModel {
   int? itensTotalKitCalculado;
   @override
   int? codLocalizacaoEstoque;
+  @override
+  bool? confirmouLocalNaoCompativel;
 
   @override
   String toString() {
-    return 'KitProcessoModel(cod: $cod, codBarra: $codBarra, codCor1: $codCor1, codCor2: $codCor2, codCor3: $codCor3, codCor4: $codCor4, status: $status, restricao: $restricao, codDescritorKit: $codDescritorKit, codConjunto: $codConjunto, codInstituicao: $codInstituicao, preparo: $preparo, codProcessoLeitura: $codProcessoLeitura, codEmbalagem: $codEmbalagem, embalagem: $embalagem, imagem: $imagem, ultimaAlteracao: $ultimaAlteracao, tStamp: $tStamp, descritor: $descritor, itens: $itens, cor1: $cor1, cor2: $cor2, cor3: $cor3, cor4: $cor4, selecionado: $selecionado, statusExpandidos: $statusExpandidos, codMotivoNaoConforme: $codMotivoNaoConforme, codEtapa: $codEtapa, validacoesCompletas: $validacoesCompletas, codMotivoRetornoArsenal: $codMotivoRetornoArsenal, codUsuarioQuebraFluxo: $codUsuarioQuebraFluxo, usuarioQuebraFluxo: $usuarioQuebraFluxo, codMotivoQuebraFluxo: $codMotivoQuebraFluxo, prioridade: $prioridade, dataValidadeRetornoArsenal: $dataValidadeRetornoArsenal, preparoInicioLeitura: $preparoInicioLeitura, codUsuarioLiberacao: $codUsuarioLiberacao, conferidoVisualmente: $conferidoVisualmente, liberadoIncompleto: $liberadoIncompleto, impressaoPreparoRealizada: $impressaoPreparoRealizada, sequenciaValida: $sequenciaValida, impressaoEtiquetaLoteRealizada: $impressaoEtiquetaLoteRealizada, impressaoRelatorioRetiradaRealizada: $impressaoRelatorioRetiradaRealizada, codUsuarioAcaoOcorrencia: $codUsuarioAcaoOcorrencia, codAcaoOcorrencia: $codAcaoOcorrencia, itensLidosCalculado: $itensLidosCalculado, itensTotalKitCalculado: $itensTotalKitCalculado, codLocalizacaoEstoque: $codLocalizacaoEstoque)';
+    return 'KitProcessoModel(cod: $cod, codBarra: $codBarra, codCor1: $codCor1, codCor2: $codCor2, codCor3: $codCor3, codCor4: $codCor4, status: $status, restricao: $restricao, codDescritorKit: $codDescritorKit, codConjunto: $codConjunto, codInstituicao: $codInstituicao, preparo: $preparo, codProcessoLeitura: $codProcessoLeitura, codEmbalagem: $codEmbalagem, embalagem: $embalagem, imagem: $imagem, ultimaAlteracao: $ultimaAlteracao, tStamp: $tStamp, descritor: $descritor, itens: $itens, cor1: $cor1, cor2: $cor2, cor3: $cor3, cor4: $cor4, selecionado: $selecionado, statusExpandidos: $statusExpandidos, codMotivoNaoConforme: $codMotivoNaoConforme, codEtapa: $codEtapa, validacoesCompletas: $validacoesCompletas, codMotivoRetornoArsenal: $codMotivoRetornoArsenal, codUsuarioQuebraFluxo: $codUsuarioQuebraFluxo, usuarioQuebraFluxo: $usuarioQuebraFluxo, codMotivoQuebraFluxo: $codMotivoQuebraFluxo, prioridade: $prioridade, dataValidadeRetornoArsenal: $dataValidadeRetornoArsenal, preparoInicioLeitura: $preparoInicioLeitura, codUsuarioLiberacao: $codUsuarioLiberacao, conferidoVisualmente: $conferidoVisualmente, liberadoIncompleto: $liberadoIncompleto, impressaoPreparoRealizada: $impressaoPreparoRealizada, sequenciaValida: $sequenciaValida, impressaoEtiquetaLoteRealizada: $impressaoEtiquetaLoteRealizada, impressaoRelatorioRetiradaRealizada: $impressaoRelatorioRetiradaRealizada, codUsuarioAcaoOcorrencia: $codUsuarioAcaoOcorrencia, codAcaoOcorrencia: $codAcaoOcorrencia, itensLidosCalculado: $itensLidosCalculado, itensTotalKitCalculado: $itensTotalKitCalculado, codLocalizacaoEstoque: $codLocalizacaoEstoque, confirmouLocalNaoCompativel: $confirmouLocalNaoCompativel)';
   }
 
   @JsonKey(ignore: true)
@@ -1101,7 +1119,8 @@ abstract class _KitProcessoModel extends KitProcessoModel {
       required int? codAcaoOcorrencia,
       required int? itensLidosCalculado,
       required int? itensTotalKitCalculado,
-      int? codLocalizacaoEstoque}) = _$KitProcessoModelImpl;
+      int? codLocalizacaoEstoque,
+      bool? confirmouLocalNaoCompativel}) = _$KitProcessoModelImpl;
   _KitProcessoModel._() : super._();
 
   factory _KitProcessoModel.fromJson(Map<String, dynamic> json) =
@@ -1253,6 +1272,9 @@ abstract class _KitProcessoModel extends KitProcessoModel {
   @override
   int? get codLocalizacaoEstoque;
   set codLocalizacaoEstoque(int? value);
+  @override
+  bool? get confirmouLocalNaoCompativel;
+  set confirmouLocalNaoCompativel(bool? value);
   @override
   @JsonKey(ignore: true)
   _$$KitProcessoModelImplCopyWith<_$KitProcessoModelImpl> get copyWith =>

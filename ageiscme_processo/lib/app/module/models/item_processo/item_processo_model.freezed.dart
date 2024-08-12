@@ -136,6 +136,9 @@ mixin _$ItemProcessoModel {
   set codAcaoOcorrencia(int? value) => throw _privateConstructorUsedError;
   int? get codLocalizacaoEstoque => throw _privateConstructorUsedError;
   set codLocalizacaoEstoque(int? value) => throw _privateConstructorUsedError;
+  bool? get confirmouLocalNaoCompativel => throw _privateConstructorUsedError;
+  set confirmouLocalNaoCompativel(bool? value) =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -196,7 +199,8 @@ abstract class $ItemProcessoModelCopyWith<$Res> {
       bool? impressaoRelatorioRetiradaRealizada,
       int? codUsuarioAcaoOcorrencia,
       int? codAcaoOcorrencia,
-      int? codLocalizacaoEstoque});
+      int? codLocalizacaoEstoque,
+      bool? confirmouLocalNaoCompativel});
 
   $EtiquetaModelCopyWith<$Res>? get etiqueta;
   $CalculadoraItemModelCopyWith<$Res>? get calculadora;
@@ -263,6 +267,7 @@ class _$ItemProcessoModelCopyWithImpl<$Res, $Val extends ItemProcessoModel>
     Object? codUsuarioAcaoOcorrencia = freezed,
     Object? codAcaoOcorrencia = freezed,
     Object? codLocalizacaoEstoque = freezed,
+    Object? confirmouLocalNaoCompativel = freezed,
   }) {
     return _then(_value.copyWith(
       cod: freezed == cod
@@ -455,6 +460,10 @@ class _$ItemProcessoModelCopyWithImpl<$Res, $Val extends ItemProcessoModel>
           ? _value.codLocalizacaoEstoque
           : codLocalizacaoEstoque // ignore: cast_nullable_to_non_nullable
               as int?,
+      confirmouLocalNaoCompativel: freezed == confirmouLocalNaoCompativel
+          ? _value.confirmouLocalNaoCompativel
+          : confirmouLocalNaoCompativel // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 
@@ -551,7 +560,8 @@ abstract class _$$ItemProcessoModelImplCopyWith<$Res>
       bool? impressaoRelatorioRetiradaRealizada,
       int? codUsuarioAcaoOcorrencia,
       int? codAcaoOcorrencia,
-      int? codLocalizacaoEstoque});
+      int? codLocalizacaoEstoque,
+      bool? confirmouLocalNaoCompativel});
 
   @override
   $EtiquetaModelCopyWith<$Res>? get etiqueta;
@@ -619,6 +629,7 @@ class __$$ItemProcessoModelImplCopyWithImpl<$Res>
     Object? codUsuarioAcaoOcorrencia = freezed,
     Object? codAcaoOcorrencia = freezed,
     Object? codLocalizacaoEstoque = freezed,
+    Object? confirmouLocalNaoCompativel = freezed,
   }) {
     return _then(_$ItemProcessoModelImpl(
       cod: freezed == cod
@@ -811,6 +822,10 @@ class __$$ItemProcessoModelImplCopyWithImpl<$Res>
           ? _value.codLocalizacaoEstoque
           : codLocalizacaoEstoque // ignore: cast_nullable_to_non_nullable
               as int?,
+      confirmouLocalNaoCompativel: freezed == confirmouLocalNaoCompativel
+          ? _value.confirmouLocalNaoCompativel
+          : confirmouLocalNaoCompativel // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -866,7 +881,8 @@ class _$ItemProcessoModelImpl extends _ItemProcessoModel
       required this.impressaoRelatorioRetiradaRealizada,
       required this.codUsuarioAcaoOcorrencia,
       required this.codAcaoOcorrencia,
-      this.codLocalizacaoEstoque})
+      this.codLocalizacaoEstoque,
+      this.confirmouLocalNaoCompativel})
       : super._();
 
   factory _$ItemProcessoModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -967,10 +983,12 @@ class _$ItemProcessoModelImpl extends _ItemProcessoModel
   int? codAcaoOcorrencia;
   @override
   int? codLocalizacaoEstoque;
+  @override
+  bool? confirmouLocalNaoCompativel;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ItemProcessoModel(cod: $cod, idEtiqueta: $idEtiqueta, descricao: $descricao, status: $status, informacoesResponsavelPendenteKit: $informacoesResponsavelPendenteKit, restricao: $restricao, codDescritor: $codDescritor, codProprietario: $codProprietario, codKit: $codKit, codInstituicao: $codInstituicao, codProcessoLeitura: $codProcessoLeitura, codEmbalagem: $codEmbalagem, codEtiqueta: $codEtiqueta, pendenteRecepcao: $pendenteRecepcao, dataDescarte: $dataDescarte, rmsValidade: $rmsValidade, etiqueta: $etiqueta, tstamp: $tstamp, codMotivoNaoConforme: $codMotivoNaoConforme, dataValidadeRetornoArsenal: $dataValidadeRetornoArsenal, codEtapa: $codEtapa, validacoesCompletas: $validacoesCompletas, codMotivoRetornoArsenal: $codMotivoRetornoArsenal, codUsuarioQuebraFluxo: $codUsuarioQuebraFluxo, codMotivoQuebraFluxo: $codMotivoQuebraFluxo, codMotivoRemocaoItemKitArsenal: $codMotivoRemocaoItemKitArsenal, codMotivoRemocaoItemArsenal: $codMotivoRemocaoItemArsenal, calculadora: $calculadora, prioridade: $prioridade, itensConsignados: $itensConsignados, sequenciaValida: $sequenciaValida, consignadosJaConferidos: $consignadosJaConferidos, lido: $lido, selecionado: $selecionado, implantavel: $implantavel, refFornecedor: $refFornecedor, responsavelPendenteKit: $responsavelPendenteKit, dataHoraPendenteKit: $dataHoraPendenteKit, impressaoPreparoRealizada: $impressaoPreparoRealizada, qtdeProcessos: $qtdeProcessos, dataMatrixDanificado: $dataMatrixDanificado, ordemLeitura: $ordemLeitura, impressaoEtiquetaLoteRealizada: $impressaoEtiquetaLoteRealizada, impressaoRelatorioRetiradaRealizada: $impressaoRelatorioRetiradaRealizada, codUsuarioAcaoOcorrencia: $codUsuarioAcaoOcorrencia, codAcaoOcorrencia: $codAcaoOcorrencia, codLocalizacaoEstoque: $codLocalizacaoEstoque)';
+    return 'ItemProcessoModel(cod: $cod, idEtiqueta: $idEtiqueta, descricao: $descricao, status: $status, informacoesResponsavelPendenteKit: $informacoesResponsavelPendenteKit, restricao: $restricao, codDescritor: $codDescritor, codProprietario: $codProprietario, codKit: $codKit, codInstituicao: $codInstituicao, codProcessoLeitura: $codProcessoLeitura, codEmbalagem: $codEmbalagem, codEtiqueta: $codEtiqueta, pendenteRecepcao: $pendenteRecepcao, dataDescarte: $dataDescarte, rmsValidade: $rmsValidade, etiqueta: $etiqueta, tstamp: $tstamp, codMotivoNaoConforme: $codMotivoNaoConforme, dataValidadeRetornoArsenal: $dataValidadeRetornoArsenal, codEtapa: $codEtapa, validacoesCompletas: $validacoesCompletas, codMotivoRetornoArsenal: $codMotivoRetornoArsenal, codUsuarioQuebraFluxo: $codUsuarioQuebraFluxo, codMotivoQuebraFluxo: $codMotivoQuebraFluxo, codMotivoRemocaoItemKitArsenal: $codMotivoRemocaoItemKitArsenal, codMotivoRemocaoItemArsenal: $codMotivoRemocaoItemArsenal, calculadora: $calculadora, prioridade: $prioridade, itensConsignados: $itensConsignados, sequenciaValida: $sequenciaValida, consignadosJaConferidos: $consignadosJaConferidos, lido: $lido, selecionado: $selecionado, implantavel: $implantavel, refFornecedor: $refFornecedor, responsavelPendenteKit: $responsavelPendenteKit, dataHoraPendenteKit: $dataHoraPendenteKit, impressaoPreparoRealizada: $impressaoPreparoRealizada, qtdeProcessos: $qtdeProcessos, dataMatrixDanificado: $dataMatrixDanificado, ordemLeitura: $ordemLeitura, impressaoEtiquetaLoteRealizada: $impressaoEtiquetaLoteRealizada, impressaoRelatorioRetiradaRealizada: $impressaoRelatorioRetiradaRealizada, codUsuarioAcaoOcorrencia: $codUsuarioAcaoOcorrencia, codAcaoOcorrencia: $codAcaoOcorrencia, codLocalizacaoEstoque: $codLocalizacaoEstoque, confirmouLocalNaoCompativel: $confirmouLocalNaoCompativel)';
   }
 
   @override
@@ -1035,8 +1053,9 @@ class _$ItemProcessoModelImpl extends _ItemProcessoModel
       ..add(DiagnosticsProperty(
           'codUsuarioAcaoOcorrencia', codUsuarioAcaoOcorrencia))
       ..add(DiagnosticsProperty('codAcaoOcorrencia', codAcaoOcorrencia))
-      ..add(
-          DiagnosticsProperty('codLocalizacaoEstoque', codLocalizacaoEstoque));
+      ..add(DiagnosticsProperty('codLocalizacaoEstoque', codLocalizacaoEstoque))
+      ..add(DiagnosticsProperty(
+          'confirmouLocalNaoCompativel', confirmouLocalNaoCompativel));
   }
 
   @JsonKey(ignore: true)
@@ -1102,7 +1121,8 @@ abstract class _ItemProcessoModel extends ItemProcessoModel {
       required bool? impressaoRelatorioRetiradaRealizada,
       required int? codUsuarioAcaoOcorrencia,
       required int? codAcaoOcorrencia,
-      int? codLocalizacaoEstoque}) = _$ItemProcessoModelImpl;
+      int? codLocalizacaoEstoque,
+      bool? confirmouLocalNaoCompativel}) = _$ItemProcessoModelImpl;
   _ItemProcessoModel._() : super._();
 
   factory _ItemProcessoModel.fromJson(Map<String, dynamic> json) =
@@ -1251,6 +1271,9 @@ abstract class _ItemProcessoModel extends ItemProcessoModel {
   @override
   int? get codLocalizacaoEstoque;
   set codLocalizacaoEstoque(int? value);
+  @override
+  bool? get confirmouLocalNaoCompativel;
+  set confirmouLocalNaoCompativel(bool? value);
   @override
   @JsonKey(ignore: true)
   _$$ItemProcessoModelImplCopyWith<_$ItemProcessoModelImpl> get copyWith =>

@@ -786,6 +786,25 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
       );
       return;
     }
+
+    if (registroServico.resultado == '1' &&
+        registroServico.dataTermino == null) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'O Campo Data Término é obrigatório para Resultado = Liberado!',
+      );
+      return;
+    }
+
+    if (registroServico.resultado == '1' &&
+        registroServico.dataValidade == null) {
+      ToastUtils.showCustomToastWarning(
+        context,
+        'O Campo Data Validade é obrigatório para Resultado = Liberado!',
+      );
+      return;
+    }
+
     controller.cubit.save(registroServico, widget.onSaved);
   }
 }
