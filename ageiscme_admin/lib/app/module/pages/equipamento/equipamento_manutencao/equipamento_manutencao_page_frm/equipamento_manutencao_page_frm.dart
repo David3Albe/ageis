@@ -1631,7 +1631,7 @@ class _EquipamentoManutencaoPageFrmState
         equipamentoManutencao.dataTermino == null) {
       ToastUtils.showCustomToastWarning(
         context,
-        'O Campo Data Validade é obrigatório para Resultado = Liberado!',
+        'O Campo Data Término é obrigatório para Resultado = Liberado!',
       );
       return;
     }

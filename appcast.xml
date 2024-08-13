@@ -7,7 +7,7 @@
         <item>
             <title>Version 0.0.15</title>
             <pubDate>Sun, 16 Feb 2022 12:00:00 +0800</pubDate>
-            <enclosure url="https://qa-ageiscme.movtech.com.br/windows/AgeisCmeSetup.exe"
+            <enclosure url="https://url/windows/AgeisCmeSetup.exe"
                        sparkle:dsaSignature="MD0CHQDD6+Sr/JqAO7qqnzOs0RV0kZi497cE16qY/ecrAhw9z9ejFi8qACpdCQsH+NL2kjXPzeT61f/EldMq"
                        sparkle:version="0.0.15"
                        sparkle:os="windows"

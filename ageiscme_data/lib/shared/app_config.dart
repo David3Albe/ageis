@@ -84,8 +84,8 @@ class AppConfig {
     _Config = AppConfig(
       apiUrl: json['apiUrl'],
       appUrl: json['appUrl'],
-      apiUrlFailover: json['apiUrl'],
-      appUrlFailover: json['appUrl'],
+      apiUrlFailover: json['apiUrlFailover'],
+      appUrlFailover: json['appUrlFailover'],
       isDev: enviroment == AppConfigEnviroment.Development,
       useFailoverFirst: false,
     );
