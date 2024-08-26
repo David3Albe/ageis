@@ -86,6 +86,7 @@ class _HomePageState extends State<HomePage> {
     );
 
     WindowsHelper.AdicionarOverlayCustomizada(
+      identificador: '',
       key: key,
       chave: chave,
       overlay: window,
@@ -128,6 +129,7 @@ class _HomePageState extends State<HomePage> {
     );
 
     WindowsHelper.AdicionarOverlayCustomizada(
+      identificador: '',
       key: key,
       chave: chave,
       overlay: window,

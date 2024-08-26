@@ -31,31 +31,36 @@ class AppConfig {
   });
 
   static Future<AppConfig> _forEnviromentDesktop() async {
-    Process process = await Process.start('powershell', [
-      '-Command',
-      r"Get-ItemProperty 'HKLM:\SOFTWARE\WOW6432Node\Movtech\Ageis CME V2' -Name 'appUrl' | Select-Object -ExpandProperty appUrl",
-    ]);
-    final appUrl = await process.stdout.transform(utf8.decoder).join();
-    process = await Process.start('powershell', [
-      '-Command',
-      r"Get-ItemProperty 'HKLM:\SOFTWARE\WOW6432Node\Movtech\Ageis CME V2' -Name 'apiUrl' | Select-Object -ExpandProperty apiUrl",
-    ]);
-    final apiUrl = await process.stdout.transform(utf8.decoder).join();
-    process = await Process.start('powershell', [
-      '-Command',
-      r"Get-ItemProperty 'HKLM:\SOFTWARE\WOW6432Node\Movtech\Ageis CME V2' -Name 'apiUrlFailover' | Select-Object -ExpandProperty apiUrlFailover",
-    ]);
-    final apiUrlFailover = await process.stdout.transform(utf8.decoder).join();
-    process = await Process.start('powershell', [
-      '-Command',
-      r"Get-ItemProperty 'HKLM:\SOFTWARE\WOW6432Node\Movtech\Ageis CME V2' -Name 'appUrlFailover' | Select-Object -ExpandProperty appUrlFailover",
-    ]);
-    final appUrlFailover = await process.stdout.transform(utf8.decoder).join();
+    final futures = [
+      Process.start('powershell', [
+        '-Command',
+        r"Get-ItemProperty 'HKLM:\SOFTWARE\WOW6432Node\Movtech\Ageis CME V2' -Name 'appUrl' | Select-Object -ExpandProperty appUrl",
+      ]).then((process) => process.stdout.transform(utf8.decoder).join()),
+      Process.start('powershell', [
+        '-Command',
+        r"Get-ItemProperty 'HKLM:\SOFTWARE\WOW6432Node\Movtech\Ageis CME V2' -Name 'apiUrl' | Select-Object -ExpandProperty apiUrl",
+      ]).then((process) => process.stdout.transform(utf8.decoder).join()),
+      Process.start('powershell', [
+        '-Command',
+        r"Get-ItemProperty 'HKLM:\SOFTWARE\WOW6432Node\Movtech\Ageis CME V2' -Name 'apiUrlFailover' | Select-Object -ExpandProperty apiUrlFailover",
+      ]).then((process) => process.stdout.transform(utf8.decoder).join()),
+      Process.start('powershell', [
+        '-Command',
+        r"Get-ItemProperty 'HKLM:\SOFTWARE\WOW6432Node\Movtech\Ageis CME V2' -Name 'appUrlFailover' | Select-Object -ExpandProperty appUrlFailover",
+      ]).then((process) => process.stdout.transform(utf8.decoder).join()),
+    ];
+
+    final results = await Future.wait(futures);
+    final appUrl = results[0].trim();
+    final apiUrl = results[1].trim();
+    final apiUrlFailover = results[2].trim();
+    final appUrlFailover = results[3].trim();
+
     return AppConfig(
-      apiUrl: apiUrl.trim(),
-      appUrl: appUrl.trim(),
-      appUrlFailover: appUrlFailover.trim(),
-      apiUrlFailover: apiUrlFailover.trim(),
+      apiUrl: apiUrl,
+      appUrl: appUrl,
+      appUrlFailover: appUrlFailover,
+      apiUrlFailover: apiUrlFailover,
       isDev: enviroment == AppConfigEnviroment.Development,
       useFailoverFirst: false,
     );

@@ -130,7 +130,9 @@ class _DepositoInsumoPageState extends State<DepositoInsumoPage> {
     DepositoInsumoModel depositoInsumo,
   ) async {
     late int chave;
+    int codigo = depositoInsumo.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: codigo.toString(),
       title: 'Cadastro/Edição Depósito',
       widget: DepositoInsumoPageFrm(
         onCancel: () => onCancel(chave),

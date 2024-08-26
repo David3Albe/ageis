@@ -115,7 +115,9 @@ class _TipoAfastamentoPageState extends State<TipoAfastamentoPage> {
     TipoAfastamentoModel tipoAfastamento,
   ) async {
     late int chave;
+    int codigo = tipoAfastamento.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: codigo.toString(),
       title: 'Cadastro/Edição Tipo de Afastamento',
       widget: TipoAfastamentoPageFrm(
         onCancel: () => onCancel(chave),

@@ -3,10 +3,11 @@ import 'package:ageiscme_admin/app/module/pages/equipamento/registro_servico/reg
 import 'package:ageiscme_data/services/registro_servico/registro_servico_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
-import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
+import 'package:compartilhados/componentes/campos/text_field_number_float_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_area_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_time_widget.dart';
+import 'package:compartilhados/functions/format/number_format_parser.dart';
 import 'package:flutter/material.dart';
 
 class RegistroServicePageFrmController {
@@ -17,12 +18,12 @@ class RegistroServicePageFrmController {
   late final TextFieldStringWidget txtLote;
   late final TextFieldStringAreaWidget txtDescricaoServico;
   late final TextFieldStringWidget txtUsuarioRegistro;
-  late final TextFieldNumberWidget txtTemperatura;
-  late final TextFieldNumberWidget txtTemperaturaMax;
-  late final TextFieldNumberWidget txtTemperaturaMin;
-  late final TextFieldNumberWidget txtUmidade;
-  late final TextFieldNumberWidget txtUmidadeMax;
-  late final TextFieldNumberWidget txtUmidadeMin;
+  late final TextFieldNumberFloatWidget txtTemperatura;
+  late final TextFieldNumberFloatWidget txtTemperaturaMax;
+  late final TextFieldNumberFloatWidget txtTemperaturaMin;
+  late final TextFieldNumberFloatWidget txtUmidade;
+  late final TextFieldNumberFloatWidget txtUmidadeMax;
+  late final TextFieldNumberFloatWidget txtUmidadeMin;
   late final DatePickerWidget dtpDataValidade;
   late final DatePickerWidget dtpDataRegistro;
   late final DatePickerWidget dtpDataInicio;
@@ -37,12 +38,17 @@ class RegistroServicePageFrmController {
     txtDescricaoServico.text = registroServico.descricao?.toString() ?? '';
     txtUsuarioRegistro.text = registroServico.usuario?.nome?.toString() ?? '';
     txtLote.text = registroServico.lote?.toString() ?? '';
-    txtTemperatura.text = registroServico.temperatura?.toString() ?? '';
-    txtTemperaturaMax.text = registroServico.temperaturaMax?.toString() ?? '';
-    txtTemperaturaMin.text = registroServico.temperaturaMin?.toString() ?? '';
-    txtUmidade.text = registroServico.umidade?.toString() ?? '';
-    txtUmidadeMax.text = registroServico.umidadeMax?.toString() ?? '';
-    txtUmidadeMin.text = registroServico.umidadeMin?.toString() ?? '';
+    txtTemperatura.text =
+        NumberFormatParser.toFixed(registroServico.temperatura, 2);
+    txtTemperaturaMax.text =
+        NumberFormatParser.toFixed(registroServico.temperaturaMax, 2);
+    txtTemperaturaMin.text =
+        NumberFormatParser.toFixed(registroServico.temperaturaMin, 2);
+    txtUmidade.text = NumberFormatParser.toFixed(registroServico.umidade, 2);
+    txtUmidadeMax.text =
+        NumberFormatParser.toFixed(registroServico.umidadeMax, 2);
+    txtUmidadeMin.text =
+        NumberFormatParser.toFixed(registroServico.umidadeMin, 2);
     if (clear) {
       dtpDataInicio.setValue(registroServico.dataInicio);
       tmpHoraInicio.setValue(TimeOfDay.now());
@@ -52,6 +58,10 @@ class RegistroServicePageFrmController {
       dtpDataRegistro.setValue(registroServico.dataRegistro);
     }
 
+    setTitulo();
+  }
+
+  void setTitulo() {
     titulo = 'Monitoramento';
     if (registroServico.cod != 0) {
       titulo = 'Edição do Monitoramento: ${registroServico.cod}';
@@ -90,35 +100,35 @@ class RegistroServicePageFrmController {
       placeholder: 'Usuário Registro',
       readOnly: true,
     );
-    txtTemperatura = TextFieldNumberWidget(
+    txtTemperatura = TextFieldNumberFloatWidget(
       placeholder: 'Temperatura',
-      onChanged: (String? str) =>
-          registroServico.temperatura = double.parse(txtTemperatura.text),
+      onChanged: (String? str) => registroServico.temperatura =
+          str == null || str.isEmpty ? null : double.parse(str),
     );
-    txtTemperaturaMax = TextFieldNumberWidget(
+    txtTemperaturaMax = TextFieldNumberFloatWidget(
       placeholder: 'Temperatura Max.',
-      onChanged: (String? str) =>
-          registroServico.temperaturaMax = double.parse(txtTemperaturaMax.text),
+      onChanged: (String? str) => registroServico.temperaturaMax =
+          str == null || str.isEmpty ? null : double.parse(str),
     );
-    txtTemperaturaMin = TextFieldNumberWidget(
+    txtTemperaturaMin = TextFieldNumberFloatWidget(
       placeholder: 'Temperatura Min.',
-      onChanged: (String? str) =>
-          registroServico.temperaturaMin = double.parse(txtTemperaturaMin.text),
+      onChanged: (String? str) => registroServico.temperaturaMin =
+          str == null || str.isEmpty ? null : double.parse(str),
     );
-    txtUmidade = TextFieldNumberWidget(
+    txtUmidade = TextFieldNumberFloatWidget(
       placeholder: 'Umidade',
-      onChanged: (String? str) =>
-          registroServico.umidade = double.parse(txtUmidade.text),
+      onChanged: (String? str) => registroServico.umidade =
+          str == null || str.isEmpty ? null : double.parse(str),
     );
-    txtUmidadeMax = TextFieldNumberWidget(
+    txtUmidadeMax = TextFieldNumberFloatWidget(
       placeholder: 'Umidade Máx.',
-      onChanged: (String? str) =>
-          registroServico.umidadeMax = double.parse(txtUmidadeMax.text),
+      onChanged: (String? str) => registroServico.umidadeMax =
+          str == null || str.isEmpty ? null : double.parse(str),
     );
-    txtUmidadeMin = TextFieldNumberWidget(
+    txtUmidadeMin = TextFieldNumberFloatWidget(
       placeholder: 'Umidade Min.',
-      onChanged: (String? str) =>
-          registroServico.umidadeMin = double.parse(txtUmidadeMin.text),
+      onChanged: (String? str) => registroServico.umidadeMin =
+          str == null || str.isEmpty ? null : double.parse(str),
     );
     dtpDataValidade = DatePickerWidget(
       placeholder: 'Data Validade',

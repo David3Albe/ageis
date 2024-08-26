@@ -2,7 +2,6 @@ import 'package:ageiscme_models/models/processo_resposta_epcepi/processo_respost
 import 'package:ageiscme_processo/app/module/blocs/processo_leitura_cubit.dart';
 import 'package:ageiscme_processo/app/module/models/usuario_processo/usuario_processo_model.dart';
 import 'package:ageiscme_processo/app/module/pages/processo/processo_page_widgets/processo_page_device_information/processo_page_device_information_widget.dart';
-import 'package:ageiscme_processo/app/module/pages/processo/processo_page_widgets/processo_page_manual_reading/processo_page_manual_reading_widget_state.dart';
 import 'package:ageiscme_processo/app/module/shared/cores.dart';
 import 'package:compartilhados/fontes/fontes.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
@@ -13,8 +12,6 @@ class ProcessoPageUserWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ProcessoPageManualReadingWidgetCubit _manualReadingsCubit =
-        BlocProvider.of<ProcessoPageManualReadingWidgetCubit>(context);
     var scale = MediaQuery.of(context).size.width / 1920;
     return Material(
       elevation: 10,
@@ -46,15 +43,11 @@ class ProcessoPageUserWidget extends StatelessWidget {
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        InkWell(
-                          mouseCursor: SystemMouseCursors.basic,
-                          onTap: _manualReadingsCubit.toogleVisibility,
-                          child: Text(
-                            'USUÁRIO',
-                            style: Fontes.getSegoe(
-                              fontSize: (14 * scale) * escalaFonte,
-                              cor: Cores.CorTitleCards,
-                            ),
+                        Text(
+                          'USUÁRIO',
+                          style: Fontes.getSegoe(
+                            fontSize: (14 * scale) * escalaFonte,
+                            cor: Cores.CorTitleCards,
                           ),
                         ),
                         const Padding(

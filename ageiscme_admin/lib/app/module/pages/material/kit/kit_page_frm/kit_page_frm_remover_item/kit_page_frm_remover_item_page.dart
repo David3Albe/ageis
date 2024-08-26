@@ -44,6 +44,7 @@ class _KitPageFrmRemoverItemPageState extends State<KitPageFrmRemoverItemPage> {
       ),
     );
     _controller = KitPageFrmRemoverItemController(
+      validateSave: saveValid,
       kit: widget.kit,
       context: context,
     );
@@ -55,6 +56,15 @@ class _KitPageFrmRemoverItemPageState extends State<KitPageFrmRemoverItemPage> {
   void dispose() {
     processoMotivoCubit.close();
     super.dispose();
+  }
+
+  bool saveValid(){
+    bool motivoValido = validateMotivo();
+    bool arsenalValido = validateArsenal();
+    if(!motivoValido || !arsenalValido){
+      return false;
+    }
+    return true;
   }
 
   @override
@@ -106,7 +116,7 @@ class _KitPageFrmRemoverItemPageState extends State<KitPageFrmRemoverItemPage> {
                         .toList(),
                     onChanged: (value) =>
                         _controller.dto.codMotivo = value?.cod,
-                    placeholder: 'Motivo Remoção',
+                    placeholder: 'Motivo Remoção *',
                   );
                 },
               ),
@@ -128,7 +138,7 @@ class _KitPageFrmRemoverItemPageState extends State<KitPageFrmRemoverItemPage> {
                     sourceList: arsenais,
                     onChanged: (value) =>
                         _controller.dto.codEstoque = value?.cod,
-                    placeholder: 'Arsenal Reposição',
+                    placeholder: 'Arsenal Reposição *',
                   );
                 },
               ),

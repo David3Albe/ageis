@@ -110,7 +110,9 @@ class _PecaPageState extends State<PecaPage> {
     PecaModel peca,
   ) async {
     late int chave;
+    int codigo = peca.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: codigo.toString(),
       title: 'Cadastro/Edição Peça',
       widget: PecaPageFrm(
         onCancel: () => onCancel(chave),

@@ -324,6 +324,7 @@ class _ConsultaEstoqueDisponivelRotuladoPageState
   ) async {
     if (codBarraKit == null && idEtiqueta == null) return;
     WindowsHelper.OpenDefaultWindows(
+      identificador: '',
       title: 'Consulta Processo Leitura',
       widget: ConsultaProcessosLeituraPage(
         filter: ConsultaProcessosLeituraFilter(

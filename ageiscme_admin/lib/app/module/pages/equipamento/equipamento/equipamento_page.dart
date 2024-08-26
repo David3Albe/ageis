@@ -135,7 +135,9 @@ class _EquipamentoPageState extends State<EquipamentoPage> {
     EquipamentoModel equipamento,
   ) async {
     late int chave;
+    int codigo = equipamento.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: codigo.toString(),
       title: 'Cadastro/Edição Equipamento',
       widget: EquipamentoPageFrm(
         onCancel: () => onCancel(chave),

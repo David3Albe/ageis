@@ -127,6 +127,7 @@ class _ProcessoEtapaPageState extends State<ProcessoEtapaPage> {
   ) async {
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: (processoEtapa.cod ?? 0).toString(),
       title: 'Cadastro/Edição Etapa Processo',
       widget: ProcessoEtapaPageFrm(
         onCancel: () => onCancel(chave),

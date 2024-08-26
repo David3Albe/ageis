@@ -470,8 +470,10 @@ class _AtestadoSaudeOcupacionalFrmState
       );
       return;
     }
+    int cod = atestadoSaudeOcupacional.cod ?? 0;
     WindowsHelper.OpenDefaultWindows(
-      title: 'Exames da ASO ${atestadoSaudeOcupacional.cod}',
+      identificador: cod.toString(),
+      title: 'Exames da ASO',
       widget: AtestadoSaudeOcupacionalExamePage(
         aso: atestadoSaudeOcupacional,
       ),

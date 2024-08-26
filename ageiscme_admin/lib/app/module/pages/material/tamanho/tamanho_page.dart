@@ -112,6 +112,7 @@ class _TamanhoPageState extends State<TamanhoPage> {
   ) async {
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: (tamanho.cod ?? 0).toString(),
       title: 'Cadastro/Edição Tamanho',
       widget: TamanhoPageFrm(
         onCancel: () => onCancel(chave),

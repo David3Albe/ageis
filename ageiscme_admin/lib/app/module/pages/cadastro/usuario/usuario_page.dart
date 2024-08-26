@@ -107,7 +107,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
               Row(
                 children: [
                   RefreshButtonWidget(
-                    onPressed: ()=>loadData(context),
+                    onPressed: () => loadData(context),
                   ),
                   const Padding(padding: EdgeInsets.only(left: 8)),
                   const UsuarioButtonFilterWidget(),
@@ -224,7 +224,9 @@ class _UsuarioPageState extends State<UsuarioPage> {
     }
 
     late int chave;
+    int cod = usuario.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: cod.toString(),
       title: 'Cadastro/Edição de Usuários',
       widget: UsuarioPageFrm(
         usuarioAtualPossuiPerfilRestrito: possuiPerfilRestrito,

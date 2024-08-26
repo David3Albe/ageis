@@ -38,6 +38,7 @@ import 'package:compartilhados/enums/custom_data_column_type.dart';
 import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
+import 'package:dependencias_comuns/uuid_export.dart';
 import 'package:flutter/material.dart';
 
 class ConsultaProcessosLeituraPage extends StatefulWidget {
@@ -402,6 +403,7 @@ class _ConsultaProcessosLeituraPageState
     int? codLeitura,
   ) {
     WindowsHelper.OpenDefaultWindows(
+      identificador: (codLeitura ?? 0).toString(),
       title: 'Consulta Processo Leitura - Kit',
       widget: ConsultaProcessoLeituraDetalhePage(
         filter: ConsultaProcessosLeituraDetalheFilter(
@@ -419,6 +421,7 @@ class _ConsultaProcessosLeituraPageState
     DateTime? dataHora,
   ) async {
     WindowsHelper.OpenDefaultWindows(
+      identificador: const Uuid().v4(),
       title: 'Consulta Processo Leitura - Kit',
       widget: ConsultaProcessoLeituraDetalheKitPage(
         filter: ConsultaProcessosLeituraDetalheKitFilter(

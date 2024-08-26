@@ -128,6 +128,7 @@ class _ProcessoMotivoPageState extends State<ProcessoMotivoPage> {
   ) async {
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: (processoMotivo.cod ?? 0).toString(),
       title: 'Cadastro/Edição Motivo de Processo',
       widget: ProcessoMotivoPageFrm(
         onCancel: () => onCancel(chave),

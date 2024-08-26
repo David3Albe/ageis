@@ -290,6 +290,7 @@ class _ConsultaKitPageState extends State<ConsultaKitPage> {
     String? codBarraKit,
   ) async {
     WindowsHelper.OpenDefaultWindows(
+      identificador: '',
       title: 'Consulta Item',
       widget: ConsultaItemPage(
         filter: ConsultaItemFilter(

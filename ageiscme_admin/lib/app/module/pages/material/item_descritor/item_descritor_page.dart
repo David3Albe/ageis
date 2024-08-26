@@ -208,6 +208,7 @@ class _ItemDescritorPageState extends State<ItemDescritorPage> {
 
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: (item.cod ?? 0).toString(),
       title: 'Cadastro/Edição Descritor de Item',
       widget: ItemDescritorPageFrm(
         instituicao: instituicao,

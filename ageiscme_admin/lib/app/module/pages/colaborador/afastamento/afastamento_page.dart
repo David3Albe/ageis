@@ -221,7 +221,9 @@ class _AfastamentoPageState extends State<AfastamentoPage> {
     }
     loading.close(context, mounted);
     late int chave;
+    int cod = afastamento.cod;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: cod.toString(),
       title: 'Cadastro/Edição Afastamento',
       widget: AfastamentoPageFrm(
         onCancel: () => onCancel(chave),

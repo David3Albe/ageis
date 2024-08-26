@@ -42,13 +42,26 @@ class ProcessoPageReadingsWidget extends StatelessWidget {
                       alignment: Alignment.centerLeft,
                       child: FittedBox(
                         fit: BoxFit.scaleDown,
-                        child: Text(
-                          'Lista de Materiais/Kits',
-                          style: Fontes.getSegoe(
-                            fontSize: 20 * scale * escalaHeight.$1,
-                            cor: Cores.CorTitleCards,
-                            lineHeight: escalaHeight.$2,
-                          ),
+                        child: BlocBuilder<ProcessoLeituraCubit,
+                            ProcessoLeituraState>(
+                          buildWhen: (previous, current) =>
+                              current.rebuildType ==
+                                  ProcessoLeituraRebuildType.All ||
+                              current.rebuildType ==
+                                  ProcessoLeituraRebuildType.Kit,
+                          builder: (context, state) {
+                            int totalMateriais =
+                                state.processo.leituraAtual.kits.length +
+                                    state.processo.leituraAtual.itens.length;
+                            return Text(
+                              'Lista de Materiais/Kits  ($totalMateriais)',
+                              style: Fontes.getSegoe(
+                                fontSize: 20 * scale * escalaHeight.$1,
+                                cor: Cores.CorTitleCards,
+                                lineHeight: escalaHeight.$2,
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ),

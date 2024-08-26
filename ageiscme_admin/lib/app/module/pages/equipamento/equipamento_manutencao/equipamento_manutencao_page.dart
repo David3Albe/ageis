@@ -256,7 +256,9 @@ class _EquipamentoManutencaoPageState extends State<EquipamentoManutencaoPage> {
     }
     loading.close(context, mounted);
     late int chave;
+    int codigo = equipamentoMan.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: codigo.toString(),
       title: 'Cadastro/Edição Manutenção',
       widget: EquipamentoManutencaoPageFrm(
         equipamentoCubit: equipamentoCubit,

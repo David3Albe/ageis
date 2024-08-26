@@ -107,7 +107,9 @@ class _GestaoContratoPageState extends State<GestaoContratoPage> {
     GestaoContratoModel gestaoContrato,
   ) async {
     late int chave;
+    int cod = gestaoContrato.cod??0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: cod.toString(),
       title: 'Cadastro/Edição Gestão Contrato',
       widget: GestaoContratoPageFrm(
         onCancel: () => onCancel(chave),

@@ -359,7 +359,9 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
     if (result == null) return;
 
     late int chave;
+    int cod = epiDescritor.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: cod.toString(),
       title:
           'Cadastro/Edição Perfis do EPI - ${epiDescritor.descricao ?? 'Sem Descrição'}',
       widget: EpiDescritorPagePerfisFrm(

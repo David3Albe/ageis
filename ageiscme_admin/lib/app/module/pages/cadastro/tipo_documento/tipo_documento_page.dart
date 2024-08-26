@@ -104,7 +104,9 @@ class _TipoDocumentoPageState extends State<TipoDocumentoPage> {
     TipoDocumentoModel tipoDocumento,
   ) async {
     late int chave;
+    int cod = tipoDocumento.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: cod.toString(),
       theme: Theme.of(context),
       title: 'Cadastro/Edição Tipo de Documento',
       widget: TipoDocumentoPageFrm(

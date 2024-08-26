@@ -146,6 +146,7 @@ class _EmbalagemPageState extends State<EmbalagemPage> {
   ) async {
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: (embalagem.cod ?? 0).toString(),
       title: 'Cadastro/Edição Embalagem',
       widget: EmbalagemPageFrm(
         onCancel: () => onCancel(chave),

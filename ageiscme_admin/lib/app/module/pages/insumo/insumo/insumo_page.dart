@@ -121,6 +121,7 @@ class _InsumoPageState extends State<InsumoPage> {
   Future openModal(BuildContext context, InsumoModel insumo) async {
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: (insumo.cod ?? 0).toString(),
       title: 'Cadastro/Edição Insumos',
       widget: InsumoPageFrm(
         onCancel: () => onCancel(chave),

@@ -394,7 +394,13 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
             Row(
               children: [
                 Expanded(
-                  child: Text(
+                  child: SelectableText(
+                    maxLines: 1,
+                    onTap: () {
+                      if (!widget.readOnly) {
+                        showPicker(context);
+                      }
+                    },
                     item == null ? widget.placeholder ?? '' : text,
                     style: Fontes.getRoboto(
                       overflow: TextOverflow.ellipsis,
@@ -405,7 +411,6 @@ class DropDownSearchWidgetState<T> extends State<DropDownSearchWidget<T>> {
                               : null,
                       fontSize: HelperFunctions.calculaFontSize(context, 14),
                     ),
-                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 if (item != null) ...{

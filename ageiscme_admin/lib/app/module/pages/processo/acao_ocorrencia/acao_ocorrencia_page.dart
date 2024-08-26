@@ -123,6 +123,7 @@ class _AcaoOcorrenciaPageState extends State<AcaoOcorrenciaPage> {
   ) async {
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: (acaoOcorrencia.cod ?? 0).toString(),
       title: 'Cadastro/Edição Ação Ocorrência',
       widget: AcaoOcorrenciaPageFrm(
         onCancel: () => onCancel(chave),

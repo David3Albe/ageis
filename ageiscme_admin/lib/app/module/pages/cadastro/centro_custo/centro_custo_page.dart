@@ -113,7 +113,9 @@ class _CentroCustoPageState extends State<CentroCustoPage> {
     CentroCustoModel centroCusto,
   ) async {
     late int chave;
+    int cod = centroCusto.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: cod.toString(),
       title: 'Cadastro/Edição Centro de Custo',
       widget: CentroCustoPageFrm(
         onCancel: () => onCancel(chave),

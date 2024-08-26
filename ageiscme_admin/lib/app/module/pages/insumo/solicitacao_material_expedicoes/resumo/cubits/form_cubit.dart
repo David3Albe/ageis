@@ -2,12 +2,14 @@ import 'package:ageiscme_admin/app/module/pages/insumo/insumo_movimento/insumo_m
 import 'package:ageiscme_admin/app/module/pages/insumo/solicitacao_material_expedicoes/resumo/form/widgets/ler_usuario/ler_usuario_page.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/solicitacao_material_expedicoes/resumo/states/form_state.dart'
     as form;
+import 'package:ageiscme_data/services/access_user/access_user_service.dart';
 import 'package:ageiscme_data/services/solicitacao_material/solicitacao_material_service.dart';
 import 'package:ageiscme_data/stores/authentication/authentication_store.dart';
 import 'package:ageiscme_models/dto/authentication_result/authentication_result_dto.dart';
 import 'package:ageiscme_models/dto/solicitacao_material/authorize/solicitacao_material_authorize_dto.dart';
 import 'package:ageiscme_models/dto/solicitacao_material/find_one/solicitacao_material_find_one_dto.dart';
 import 'package:ageiscme_models/dto/solicitacao_material/receive/solicitacao_material_receive_dto.dart';
+import 'package:ageiscme_models/enums/direito_enum.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/models/solicitacao_material/solicitacao_material_model.dart';
 import 'package:ageiscme_models/models/solicitacao_material_item/solicitacao_material_item_model.dart';
@@ -125,10 +127,31 @@ class FormCubit extends Cubit<form.FormState> {
       codEquipamentoInsumo: item.codEquipamento,
       quantidade: item.quantidadeSolicitada,
     );
+    bool permiteAjuste =
+        (insumoMovimento.cod != null && insumoMovimento.cod != 0) ||
+            await AccessUserService.validateUserHasRight(
+              DireitoEnum.InsumosMovimentosAjustes,
+            );
+
+    bool permiteEntrada =
+        (insumoMovimento.cod != null && insumoMovimento.cod != 0) ||
+            await AccessUserService.validateUserHasRight(
+              DireitoEnum.InsumosMovimentosEntradas,
+            );
+
+    bool permiteSaida =
+        (insumoMovimento.cod != null && insumoMovimento.cod != 0) ||
+            await AccessUserService.validateUserHasRight(
+              DireitoEnum.InsumosMovimentosSaidas,
+            );
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: (insumoMovimento.cod ?? 0).toString(),
       title: 'Cadastro/Edição Movimentação de Insumo',
       widget: InsumoMovimentoPageFrm(
+        permiteAjuste: permiteAjuste,
+        permiteEntrada: permiteEntrada,
+        permiteSaida: permiteSaida,
         onCancel: () => onCancel(chave),
         onSaved: (p0) => onSaved(p0, context),
         insumoMovimento: insumoMovimento,

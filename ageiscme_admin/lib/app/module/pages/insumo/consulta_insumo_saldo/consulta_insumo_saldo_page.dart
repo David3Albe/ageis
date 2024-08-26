@@ -275,6 +275,7 @@ class _ConsultaInsumoSaldoPageState extends State<ConsultaInsumoSaldoPage> {
     String? lote,
   ) async {
     WindowsHelper.OpenDefaultWindows(
+      identificador: '',
       title: 'Consulta Movimentação Estoque',
       widget: ConsultaMovimentacaoEstoquePage(
         filter: ConsultaMovimentacaoEstoqueFilter(

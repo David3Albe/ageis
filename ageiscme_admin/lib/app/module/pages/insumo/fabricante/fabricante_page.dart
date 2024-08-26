@@ -104,7 +104,9 @@ class _FabricantePageState extends State<FabricantePage> {
     FabricanteModel fabricante,
   ) async {
     late int chave;
+    int codigo = fabricante.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: codigo.toString(),
       title: 'Cadastro/Edição Fabricante',
       widget: FabricantePageFrm(
         onCancel: () => onCancel(chave),

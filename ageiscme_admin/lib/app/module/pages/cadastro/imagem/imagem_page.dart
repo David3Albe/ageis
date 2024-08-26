@@ -139,7 +139,9 @@ class _ImagemPageState extends State<ImagemPage> {
     loading.close(context, mounted);
 
     late int chave;
+    int cod = imagem.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: cod.toString(),
       title: 'Cadastro/Edição Imagem',
       widget: ImagemPageFrm(
         onCancel: () => onCancel(chave),

@@ -479,6 +479,7 @@ class _ConsultaItemPageState extends State<ConsultaItemPage> {
     loading.close(context, mounted);
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: (item.cod ?? 0).toString(),
       title: 'Cadastro/Edição Item',
       widget: ItemPageFrm(
         onCancel: () => onCancel(chave),

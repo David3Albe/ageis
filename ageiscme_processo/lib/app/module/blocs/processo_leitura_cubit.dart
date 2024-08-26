@@ -81,6 +81,7 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
   Future fecharTela(BuildContext context) async {
     int? tempoMinTela = state.processo.leituraAtual.instituicao?.tempoMin;
     if (tempoMinTela == null) return;
+    if (tempoMinTela == 0) return;
     if (dataUltimaLeitura == null) return;
     int tempoUltimaLeitura =
         DateTime.now().difference(dataUltimaLeitura!).inMinutes;

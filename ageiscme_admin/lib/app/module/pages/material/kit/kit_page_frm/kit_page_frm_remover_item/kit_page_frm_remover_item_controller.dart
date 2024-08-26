@@ -13,6 +13,7 @@ class KitPageFrmRemoverItemController {
   final KitModel kit;
   final BuildContext context;
   late final RemoverItemKitDTO dto;
+  final bool Function() validateSave;
 
   FocusNode textNode = FocusNode();
   late final ColetoresHelper coletorHelper = ColetoresHelper(
@@ -22,6 +23,7 @@ class KitPageFrmRemoverItemController {
   KitPageFrmRemoverItemController({
     required this.kit,
     required this.context,
+    required this.validateSave,
   }) {
     dto = RemoverItemKitDTO(codKit: kit.cod!);
   }
@@ -35,6 +37,8 @@ class KitPageFrmRemoverItemController {
       cancelarRemocao(context);
       return;
     }
+    bool saveValido = validateSave();
+    if (!saveValido) return;
     if (dto.codMotivo == 0 || dto.codMotivo == null) {
       ToastUtils.showCustomToastWarning(
         context,

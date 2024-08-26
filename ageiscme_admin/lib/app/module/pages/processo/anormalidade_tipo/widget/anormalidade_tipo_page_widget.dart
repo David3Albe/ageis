@@ -167,6 +167,7 @@ class AnormalidadeTipoPageWidget extends StatelessWidget {
   ) async {
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: (cod ?? 0).toString(),
       title: 'Cadastro/Edição Tipo de Anormalidade',
       widget: AnormalidadeTipoFrmPage(
         onCancel: () => onCancel(chave),

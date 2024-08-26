@@ -55,6 +55,7 @@ import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 import 'package:ageiscme_processo/app/module/services/processo_navigator_service.dart';
+import 'package:flutter/services.dart';
 
 class ProcessoPage extends StatefulWidget {
   const ProcessoPage({required this.userCode, super.key});
@@ -70,7 +71,20 @@ class _ProcessoPageState extends State<ProcessoPage> {
   FocusNode _textNode = FocusNode();
   late final ColetoresHelper coletorHelper = ColetoresHelper(
     onEnter: handleKey,
+    keysIdToPress: [
+      LogicalKeyboardKey.controlLeft.keyId,
+      LogicalKeyboardKey.shiftLeft.keyId,
+      LogicalKeyboardKey.keyU.keyId,
+    ],
+    onShortcut: setVisibilityReadings,
   );
+
+  void setVisibilityReadings() {
+    final ProcessoPageManualReadingWidgetCubit _manualReadingsCubit =
+        BlocProvider.of<ProcessoPageManualReadingWidgetCubit>(context);
+    _manualReadingsCubit.toogleVisibility();
+  }
+
   late ProcessoLeituraCubit _disposeCubit;
   Timer? TIMER_REFRESH_LEITURAS;
   Timer? TIMER_FECHAR_TELA;

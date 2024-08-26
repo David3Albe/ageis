@@ -861,7 +861,9 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
     insumoTesteModel.codUsuario = auth?.usuario?.cod;
     insumoTesteModel.usuario = auth?.usuario;
     late int chave;
+    int codigo = insumoTesteModel.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: codigo.toString(),
       title: 'Cadastro/Edição Teste de Insumo',
       widget: InsumoTestePageFrm(
         onCancel: () => onCancel(chave),
@@ -939,6 +941,7 @@ class _InsumoPageFrmState extends State<InsumoPageFrm> {
     }
 
     WindowsHelper.OpenDefaultWindows(
+      identificador: (insumo.cod ?? 0).toString(),
       title: 'Movimentações de Insumo - ${insumo.nome ?? 'Sem nome'}',
       widget: InsumoMovimentoPage(
         codInsumo: insumo.cod,

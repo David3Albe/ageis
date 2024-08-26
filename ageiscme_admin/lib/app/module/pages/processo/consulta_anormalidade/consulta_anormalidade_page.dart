@@ -187,6 +187,7 @@ class _ConsultaAnormalidadePageState extends State<ConsultaAnormalidadePage> {
   ) async {
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: cod.toString(),
       title: 'Cadastro/Edição Anormalidade',
       widget: MultiBlocProvider(
         providers: [

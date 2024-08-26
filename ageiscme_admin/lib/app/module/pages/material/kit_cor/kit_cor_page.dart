@@ -126,6 +126,7 @@ class _KitCorPageState extends State<KitCorPage> {
   ) async {
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: (kitCor.cod ?? 0).toString(),
       title: 'Cadastro/Edição Cores do Kit',
       widget: KitCorPageFrm(
         onCancel: () => onCancel(chave),

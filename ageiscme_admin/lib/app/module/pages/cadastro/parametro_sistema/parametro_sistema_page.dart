@@ -112,6 +112,7 @@ class _ParametroSistemaPageState extends State<ParametroSistemaPage> {
   ) async {
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: '',
       theme: Theme.of(context),
       title: 'Cadastro/Edição Paramêtros',
       widget: ParametroSistemaPageFrm(

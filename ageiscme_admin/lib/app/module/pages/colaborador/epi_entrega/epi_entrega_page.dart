@@ -194,7 +194,9 @@ class _EpiEntregaPageState extends State<EpiEntregaPage> {
       ),
     );
     if (episNecessarios == null) return;
+    int cod = epiEntrega.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: cod.toString(),
       title: 'Cadastro/Edição Entrega de Epi',
       widget: EpiEntregaPageFrm(
         episNecessarios: episNecessarios.$2.epis,

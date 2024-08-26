@@ -54,6 +54,9 @@ class _ProcessoPageDeviceInformationWidgetState
 
   String _getMessage(ProcessoLeituraState state) {
     String value = '';
+    if (state.processo.cod != null) {
+      value = _addParameter(value, 'Código: ' + state.processo.cod.toString());
+    }
     value = _addParameter(value, 'Máquina: ' + (state.processo.maquina ?? ''));
     if (state.processo.leituraAtual.dataHoraInicioProcesso != null) {
       final f = DateFormat('dd/MM/yyyy HH:mm');
@@ -62,6 +65,7 @@ class _ProcessoPageDeviceInformationWidgetState
 
       value = _addParameter(value, 'Início Leitura: ' + dataHora);
     }
+
     return value;
   }
 

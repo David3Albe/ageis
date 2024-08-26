@@ -158,6 +158,7 @@ class _ProcessoTipoPageState extends State<ProcessoTipoPage> {
     loading.close(context, mounted);
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: (processoTipo.cod ?? 0).toString(),
       title: 'Cadastro/Edição Tipo de Processo',
       widget: ProcessoTipoPageFrm(
         processoEtapaCubit: processoEtapaCubit,

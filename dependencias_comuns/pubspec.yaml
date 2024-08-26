@@ -55,6 +55,7 @@ dependencies:
   screenshot: ^2.5.0
   auto_updater: ^0.2.1
   package_info_plus: ^5.0.1
+  uuid: ^4.4.2
   
 dev_dependencies:
   flutter_test:

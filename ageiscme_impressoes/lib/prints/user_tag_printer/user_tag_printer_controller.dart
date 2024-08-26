@@ -14,7 +14,7 @@ class UserTagPrinterController {
   });
 
   Future printTag() async {
-    final Font font = await PdfGoogleFonts.openSansRegular();
+    final Font font = await fontFromAssetBundle('assets/fonts/open-sans-regular.ttf');
     pw.ThemeData themeOpenSans = pw.ThemeData.withFont(
       base: font,
     );

@@ -296,7 +296,9 @@ class _InsumoTestePageState extends State<InsumoTestePage> {
       insumoTesteForm.usuario = auth?.usuario;
     }
     late int chave;
+    int codigo = insumoTesteForm.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: codigo.toString(),
       title: 'Cadastro/Edição Teste de Insumo',
       widget: InsumoTestePageFrm(
         onCancel: () => onCancel(chave),

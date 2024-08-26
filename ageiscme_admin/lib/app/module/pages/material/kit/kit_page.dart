@@ -213,6 +213,7 @@ class _KitPageState extends State<KitPage> {
     loading.close(context, mounted);
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: (kitModel.cod ?? 0).toString(),
       title: 'Cadastro/Edição Kit',
       widget: MultiBlocProvider(
         providers: [

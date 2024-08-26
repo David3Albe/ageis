@@ -388,9 +388,14 @@ class _ConsultaMovimentacaoEstoquePageState
     }
     loading.close(context, mounted);
     late int chave;
+    int codigo = movimento.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: codigo.toString(),
       title: 'Cadastro/Edição Movimento de Insumo',
       widget: InsumoMovimentoPageFrm(
+        permiteAjuste: true,
+        permiteEntrada: true,
+        permiteSaida: true,
         onSaved: (p0) => onSaved(),
         onCancel: () => onCancel(chave),
         insumoMovimento: movimento,

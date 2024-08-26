@@ -332,6 +332,7 @@ class _ConsultaItemInventarioPageState
     int? codItem,
   ) async {
     WindowsHelper.OpenDefaultWindows(
+      identificador: '',
       title: 'Consulta Item',
       widget: ConsultaItemPage(
         filter: ConsultaItemFilter(

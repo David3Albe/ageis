@@ -512,6 +512,7 @@ class AnormalidadeFrmPageWidget extends StatelessWidget {
     }
 
     WindowsHelper.OpenDefaultWindows(
+      identificador: '',
       title: 'Consulta Materiais - Anormalidade',
       widget: ConsultaAnormalidadeMateriaisPage(
         filter: ConsultaAnormalidadeMateriaisFilter(

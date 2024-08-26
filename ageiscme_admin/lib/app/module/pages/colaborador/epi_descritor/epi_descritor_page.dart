@@ -159,7 +159,9 @@ class _EpiDescritorPageState extends State<EpiDescritorPage> {
     }
     loading.close(context, mounted);
     late int chave;
+    int cod = epiDescritor.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: cod.toString(),
       title: 'Cadastro/Edição Descritor de Epi',
       widget: EpiDescritorPageFrm(
         onCancel: () => onCancel(chave),

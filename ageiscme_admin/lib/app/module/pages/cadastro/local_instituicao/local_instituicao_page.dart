@@ -130,7 +130,9 @@ class _LocalInstituicaoPageState extends State<LocalInstituicaoPage> {
 
   void openModal(BuildContext context, LocalInstituicaoModel localInstituicao) {
     late int chave;
+    int cod = localInstituicao.cod??0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: cod.toString(),
       theme: Theme.of(context),
       title: 'Cadastro/Edição Locais da Instituição',
       widget: LocalInstituicaoPageFrm(

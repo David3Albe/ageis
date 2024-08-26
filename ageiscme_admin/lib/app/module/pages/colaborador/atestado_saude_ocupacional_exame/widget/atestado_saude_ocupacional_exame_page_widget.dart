@@ -152,6 +152,7 @@ class AtestadoSaudeOcupacionalExamePageWidget extends StatelessWidget {
     AtestadoSaudeOcupacionalExamePageCubit asoExameCubit =
         BlocProvider.of<AtestadoSaudeOcupacionalExamePageCubit>(context);
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: cod.toString(),
       title: 'Cadastro/Edição Exame ASO ${asoExameCubit.aso.cod!}',
       widget: MultiBlocProvider(
         providers: [

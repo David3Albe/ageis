@@ -1,6 +1,8 @@
 import 'package:ageiscme_data/services/registro_servico/registro_servico_service.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:flutter/material.dart';
 
 class RegistroServicoPageFrmCubit extends Cubit<RegistroServicoPageFrmState> {
   final RegistroServicoService service;
@@ -12,22 +14,27 @@ class RegistroServicoPageFrmCubit extends Cubit<RegistroServicoPageFrmState> {
           RegistroServicoPageFrmState(registroServico: registroServicoModel),
         );
 
-  void save(
+  Future save(
     RegistroServicoModel registroServico,
     void Function(String) onSaved,
+    BuildContext context,
   ) async {
     try {
       (String message, RegistroServicoModel registroServico)? result =
           await service.save(registroServico);
       if (result == null) return;
+      registroServico.cod = result.$2.cod;
+      registroServico.tstamp = result.$2.tstamp;
+      ToastUtils.showCustomToastSucess(context, result.$1);
       onSaved(result.$1);
-      emit(
-        RegistroServicoPageFrmState(
-          message: result.$1,
-          saved: true,
-          registroServico: result.$2,
-        ),
-      );
+
+      // emit(
+      //   RegistroServicoPageFrmState(
+      //     message: result.$1,
+      //     saved: true,
+      //     registroServico: result.$2,
+      //   ),
+      // );
     } on Exception catch (ex) {
       emit(
         RegistroServicoPageFrmState(

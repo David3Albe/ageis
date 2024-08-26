@@ -376,17 +376,24 @@ class DropDownSearchApiWidgetState<T>
             },
             Row(
               children: [
-                Text(
-                  item == null ? widget.placeholder ?? '' : text,
-                  style: Fontes.getRoboto(
-                    cor: errorText != null && !errorText!.isEmpty
-                        ? Colors.red
-                        : readOnly
-                            ? Colors.grey
-                            : null,
-                    fontSize: HelperFunctions.calculaFontSize(context, 14),
+                Expanded(
+                  child: SelectableText(
+                    onTap: () {
+                      if (!readOnly) {
+                        showPicker(context);
+                      }
+                    },
+                    maxLines: 1,
+                    item == null ? widget.placeholder ?? '' : text,
+                    style: Fontes.getRoboto(
+                      cor: errorText != null && !errorText!.isEmpty
+                          ? Colors.red
+                          : readOnly
+                              ? Colors.grey
+                              : null,
+                      fontSize: HelperFunctions.calculaFontSize(context, 14),
+                    ),
                   ),
-                  overflow: TextOverflow.ellipsis,
                 ),
                 if (item != null) ...{
                   const Spacer(),

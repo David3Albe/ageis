@@ -1,4 +1,6 @@
 {
     "apiUrl": "https://localhost:5001/api",
-    "appUrl": "https://localhost:5001"
+    "appUrl": "https://localhost:5001",
+    "apiUrlFailover": "https://localhost:5002/api",
+    "appUrlFailover": "https://localhost:5002"
 }

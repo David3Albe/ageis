@@ -1,4 +1,5 @@
 import 'package:ageiscme_data/shared/custom_dio.dart';
+import 'package:ageiscme_models/dto/parametro_sistema/update_indicadores/parametro_sistema_update_indicadores_dto.dart';
 import 'package:ageiscme_models/main.dart';
 
 class ParametroSistemaService {
@@ -33,6 +34,16 @@ class ParametroSistemaService {
       '/parametro-sistema/${obj.cod}',
       obj,
       (dynamic json) => ParametroSistemaModel.fromJson(json),
+    );
+  }
+
+  Future<(String message, ParametroSistemaUpdateIndicadoresDTO parametroSistema)?> updateIndicadores(
+    ParametroSistemaUpdateIndicadoresDTO obj,
+  ) async {
+    return await _client.post(
+      '/parametro-sistema/update-indicadores',
+      obj,
+      (dynamic json) => ParametroSistemaUpdateIndicadoresDTO.fromJson(json),
     );
   }
 }

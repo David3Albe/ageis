@@ -105,6 +105,7 @@ class _UnidadeMedidaPageState extends State<UnidadeMedidaPage> {
   ) async {
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: (unidadeMedida.cod ?? 0).toString(),
       title: 'Cadastro/Edição Unidade Medida',
       widget: UnidadeMedidaPageFrm(
         onCancel: () => onCancel(chave),

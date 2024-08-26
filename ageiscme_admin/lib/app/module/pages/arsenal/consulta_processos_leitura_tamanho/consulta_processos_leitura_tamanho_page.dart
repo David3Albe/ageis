@@ -237,6 +237,7 @@ class _ConsultaProcessosLeituraTamanhoPageState
     String? tamanho,
   ) async {
     WindowsHelper.OpenDefaultWindows(
+      identificador: '',
       title: 'Consulta processo Leitura - Sub Tamanho',
       widget: ConsultaProcessosLeituraTamanhoSubPage(
         filter: ConsultaProcessosLeituraTamanhoSubFilter(

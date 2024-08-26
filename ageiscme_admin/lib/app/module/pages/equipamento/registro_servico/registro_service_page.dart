@@ -301,7 +301,9 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
     }
     loading.close(context, mounted);
     late int chave;
+    int codigo = registroServico.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: codigo.toString(),
       title: 'Cadastro/Edição Monitoramento',
       widget: RegistroServicoPageFrm(
         onCancel: () => onCancel(chave),
@@ -317,8 +319,6 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
   }
 
   void onSaved(String message, int chave) {
-    WindowsHelper.RemoverWidget(chave);
-    ToastUtils.showCustomToastSucess(context, message);
     bloc.loadRegistroServicoFilter(filter);
   }
 

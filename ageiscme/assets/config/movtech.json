@@ -1,4 +1,6 @@
 {
     "apiUrl": "https://qa-ageiscme.movtech.com.br/api",
-    "appUrl": "https://qa-ageiscme.movtech.com.br"
+    "appUrl": "https://qa-ageiscme.movtech.com.br",
+    "apiUrlFailover": "https://qa-ageiscme.movtech.com.br/api",
+    "appUrlFailover": "https://qa-ageiscme.movtech.com.br"
 }

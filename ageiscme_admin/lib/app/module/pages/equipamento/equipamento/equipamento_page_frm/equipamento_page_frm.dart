@@ -611,6 +611,7 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
     registroServicoModel.dataInicio = DateTime.now();
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: '0',
       title:
           'Cadastro/Edição Monitoramento - ${equipamento.nome ?? 'Sem Descrição'}',
       widget: RegistroServicoPageFrm(
@@ -629,7 +630,6 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
   }
 
   void onSaved(String message, int chave) {
-    WindowsHelper.RemoverWidget(chave);
     widget.onSaved(message);
   }
 

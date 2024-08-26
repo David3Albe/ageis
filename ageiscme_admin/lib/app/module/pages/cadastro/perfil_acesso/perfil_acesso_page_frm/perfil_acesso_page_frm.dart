@@ -515,7 +515,7 @@ class _PerfilAcessoPageFrmState extends State<PerfilAcessoPageFrm> {
 
     for (final direitoPerfil in perfilAcesso.perfilDireitos!) {
       final perfilDireito = PerfilDireitoModel(
-        cod: 0,
+        cod: direitoPerfil.cod??0,
         codInstituicao: 0,
         codPerfil: perfilAcesso.cod,
         codDireito: direitoPerfil.codDireito,

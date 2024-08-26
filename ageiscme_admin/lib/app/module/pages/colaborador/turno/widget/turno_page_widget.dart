@@ -148,7 +148,9 @@ class TurnoPageWidget extends StatelessWidget {
     int? cod,
   }) async {
     late int chave;
+    int codigo = cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: codigo.toString(),
       title: 'Cadastro/Edição Turno',
       widget: TurnoFrmPage(
         cod: cod,

@@ -110,7 +110,9 @@ class _DestinoResiduoPageState extends State<DestinoResiduoPage> {
     DestinoResiduoModel destinoResiduo,
   ) async {
     late int chave;
+    int codigo = destinoResiduo.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: codigo.toString(),
       title: 'Cadastro/Edição Destino de Resíduo',
       widget: DestinoResiduoPageFrm(
         onCancel: () => onCancel(chave),

@@ -20,6 +20,7 @@ import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:dependencias_comuns/uuid_export.dart';
 import 'package:flutter/material.dart';
 
 class InstituicaoPageFrm extends StatefulWidget {
@@ -717,6 +718,7 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
 
   void _selectLocal() {
     WindowsHelper.OpenDefaultWindows(
+      identificador: const Uuid().v4(),
       theme: Theme.of(context),
       title: 'Locais da Instituição',
       widget: const LocalInstituicaoPage(),

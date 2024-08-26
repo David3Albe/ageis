@@ -129,6 +129,7 @@ class _MotivoRemoverReporItemPageState
   ) async {
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: (motivoRemoverReporItem.cod ?? 0).toString(),
       title: 'Cadastro/Edição Motivo Remover/Repor Item',
       widget: MotivoRemoverReporItemPageFrm(
         onCancel: () => onCancel(chave),

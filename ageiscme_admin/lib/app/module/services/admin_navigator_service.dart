@@ -161,6 +161,7 @@ abstract class AdminNavigatorService {
     String text = father != null ? '${father.text} > ' : '';
     text += itemMenu.text;
     WindowsHelper.OpenDefaultWindows(
+      identificador: '',
       widget: widget,
       title: text,
       theme: Theme.of(context),
@@ -184,6 +185,7 @@ abstract class AdminNavigatorService {
     route = route.replaceAll('/admin', '');
     Widget widget = getWidgetParams(data: data, route: route);
     WindowsHelper.OpenDefaultWindows(
+      identificador: '',
       widget: widget,
       title: title,
       theme: Theme.of(context),

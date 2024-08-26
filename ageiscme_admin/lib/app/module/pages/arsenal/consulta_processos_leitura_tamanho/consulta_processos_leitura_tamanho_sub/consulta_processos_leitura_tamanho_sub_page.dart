@@ -234,6 +234,7 @@ class _ConsultaProcessosLeituraTamanhoSubPageState
     int? codDescritorItem,
   ) async {
     WindowsHelper.OpenDefaultWindows(
+      identificador: '',
       title: 'Consulta Processo Leitura - Retirados Sub Consulta',
       widget: ConsultaProcessosLeituraPage(
         filter: ConsultaProcessosLeituraFilter(

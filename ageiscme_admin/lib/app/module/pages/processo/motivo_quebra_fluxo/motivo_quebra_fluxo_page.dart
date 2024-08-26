@@ -115,6 +115,7 @@ class _MotivoQuebraFluxoPageState extends State<MotivoQuebraFluxoPage> {
   ) async {
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: (motivoQuebraFluxo.cod ?? 0).toString(),
       title: 'Cadastro/Edição Motivo Quebra de Fluxo',
       widget: MotivoQuebraFluxoPageFrm(
         onCancel: () => onCancel(chave),

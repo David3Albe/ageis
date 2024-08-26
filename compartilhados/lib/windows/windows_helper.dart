@@ -7,6 +7,7 @@ class CustomOverlayWindow {
   DateTime ultimaEntrada;
   final int chave;
   final String title;
+  final String identificador;
   final GlobalKey<CustomDefaultWindowComponentState> key;
   CustomOverlayWindow({
     required this.widget,
@@ -14,6 +15,7 @@ class CustomOverlayWindow {
     required this.chave,
     required this.title,
     required this.key,
+    required this.identificador,
   });
 }
 
@@ -58,7 +60,7 @@ class WindowsHelper {
   static final List<CustomOverlayWindow> overlays = [];
   static BuildContext? windowContext;
   static bool get isOverlayVisible => overlays.isNotEmpty;
-  static const int MAXIMO_JANELAS = 12;
+  static const int MAXIMO_JANELAS = 16;
   static CustomOverlayCubit cubitOverlay = CustomOverlayCubit();
 
   static void CloseAll() {
@@ -267,12 +269,18 @@ class WindowsHelper {
     required int chave,
     required final CustomDefaultWindowComponent overlay,
     required final String title,
+    required final String identificador,
     required final GlobalKey<CustomDefaultWindowComponentState> key,
   }) {
-    CustomOverlayWindow? existWindow = setFirstIfTitleExist(title: title);
+    CustomOverlayWindow? existWindow = setFirstIfTitleAndIdentificadorExists(
+      title: title,
+      identificador: identificador,
+      setFirst: true,
+    );
     if (existWindow != null) return existWindow.chave;
     overlays.add(
       CustomOverlayWindow(
+        identificador: identificador,
         key: key,
         chave: chave,
         widget: overlay,
@@ -293,30 +301,41 @@ class WindowsHelper {
     return _actual_key;
   }
 
-  static CustomOverlayWindow? setFirstIfTitleExist({
+  static CustomOverlayWindow? setFirstIfTitleAndIdentificadorExists({
     required final String title,
+    required final String identificador,
+    required final bool setFirst,
   }) {
-    CustomOverlayWindow? window =
-        overlays.where((element) => element.title == title).firstOrNull;
-    if (window == null) {
-      return window;
+    CustomOverlayWindow? window = overlays
+        .where((element) =>
+            element.title == title && element.identificador == identificador)
+        .firstOrNull;
+    if (window == null) return window;
+    if (setFirst != false) {
+      window.key.currentState?.maximizarMetade();
+      SetToLast(window.chave);
     }
-    SetToLast(window.chave);
     return window;
   }
 
   static int OpenDefaultWindows({
     required final Widget widget,
     required final String title,
+    required final String identificador,
     final ThemeData? theme,
+    bool setFirst = true,
   }) {
-    CustomOverlayWindow? existWindow = setFirstIfTitleExist(title: title);
+    CustomOverlayWindow? existWindow = setFirstIfTitleAndIdentificadorExists(
+      title: title,
+      identificador: identificador,
+      setFirst: setFirst,
+    );
     if (existWindow != null) return existWindow.chave;
     Size size = MediaQuery.of(windowContext!).size;
     if (windows > 8) windows = 0;
     double right = 300 + (windows * 50);
     double width = size.width / 2.5;
-    if(width<630) width = 630;
+    if (width < 630) width = 630;
     double height = size.height * 0.8;
 
     int chave = GetNextChave();
@@ -330,20 +349,32 @@ class WindowsHelper {
       setToLast: SetToLast,
       setToFirst: SetToFirst,
       title: title,
-      maximizarOnOpen: true,
+      maximizarOnOpen: setFirst != false,
       width: width,
       height: height,
       ofssetBase: Offset(right, 60),
       child: widget,
     );
-
-    overlays.add(CustomOverlayWindow(
+    DateTime ultimaEntrada = DateTime.now();
+    if (setFirst != true) {
+      List<DateTime> datas = overlays.map((e) => e.ultimaEntrada).toList();
+      if (datas.isEmpty) {
+        ultimaEntrada = DateTime.now().add(const Duration(days: -3));
+      } else {
+        datas.sort((a, b) => a.compareTo(b));
+        ultimaEntrada = datas.first.add(const Duration(minutes: -1));
+      }
+    }
+    CustomOverlayWindow customWindow = CustomOverlayWindow(
       key: key,
+      identificador: identificador,
       chave: chave,
       widget: window,
-      ultimaEntrada: DateTime.now(),
+      ultimaEntrada: ultimaEntrada,
       title: title,
-    ));
+    );
+
+    overlays.add(customWindow);
     RemoverJanelsExcessivas();
     cubitOverlay.refresh();
     windows++;

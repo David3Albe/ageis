@@ -115,6 +115,7 @@ class _EtiquetaPageState extends State<EtiquetaPage> {
   ) async {
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: (etiqueta.cod ?? 0).toString(),
       title: 'Cadastro/Edição Etiqueta',
       widget: EtiquetaPageFrm(
         onCancel: () => onCancel(chave),

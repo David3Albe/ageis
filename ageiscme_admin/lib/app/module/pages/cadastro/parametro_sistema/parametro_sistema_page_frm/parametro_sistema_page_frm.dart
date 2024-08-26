@@ -280,6 +280,7 @@ class _ParametroSistemaPageFrmState extends State<ParametroSistemaPageFrm> {
   void gerarLicenca() {
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: '',
       title: 'Geração licença',
       widget: GerarLicencaPage(
         onSaved: (str) => onSaved(str, chave),

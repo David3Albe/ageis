@@ -165,10 +165,11 @@ class _TreinamentoRegistroPageState extends State<TreinamentoRegistroPage> {
     );
   }
 
-  Future refresh(BuildContext context) async{
-      TreinamentoRegistroPageCubit treinamentoCubit =
+  Future refresh(BuildContext context) async {
+    TreinamentoRegistroPageCubit treinamentoCubit =
         context.read<TreinamentoRegistroPageCubit>();
-    TreinamentoRegistroCubitFilter filterCubit = context.read<TreinamentoRegistroCubitFilter>();
+    TreinamentoRegistroCubitFilter filterCubit =
+        context.read<TreinamentoRegistroCubitFilter>();
     TreinamentoRegistroFilter dto = filterCubit.state;
     await treinamentoCubit.filterScreen(dto);
   }
@@ -218,7 +219,9 @@ class _TreinamentoRegistroPageState extends State<TreinamentoRegistroPage> {
     loading.close(context, mounted);
 
     late int chave;
+    int codigo = treinamento.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: codigo.toString(),
       title: 'Cadastro/Edição Registro de Treinamento',
       widget: TreinamentoRegistroPageFrm(
         onCancel: () => onCancel(chave),

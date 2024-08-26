@@ -504,7 +504,9 @@ class _ConsultaManutencaoPageState extends State<ConsultaManutencaoPage> {
     }
     loading.close(context, mounted);
     late int chave;
+    int codigo = cod;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: codigo.toString(),
       title: 'Cadastro/Edição Manutenção',
       widget: EquipamentoManutencaoPageFrm(
         onCancel: () => onCancel(chave),

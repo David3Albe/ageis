@@ -223,6 +223,7 @@ class _ConsultaKitInventarioPageState extends State<ConsultaKitInventarioPage> {
     int? codKit,
   ) async {
     WindowsHelper.OpenDefaultWindows(
+      identificador: (codKit ?? 0).toString(),
       title: 'Consulta Kit',
       widget: ConsultaKitPage(
         filter: ConsultaKitFilter(

@@ -474,7 +474,7 @@ class _KitPageFrmState extends State<KitPageFrm> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 5.0),
                                 child: Text(
-                                  'Itens deste Kit',
+                                  'Itens deste Kit  (${kit.itens!.length})',
                                   style: Fontes.getRoboto(),
                                 ),
                               ),
@@ -654,6 +654,7 @@ class _KitPageFrmState extends State<KitPageFrm> {
   ) async {
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: (codItem ?? 0).toString(),
       title: 'Cadastro/Edição Item - Kit ${kit.descritor?.descricao} ',
       widget: ItemPage(
         detailModalName:

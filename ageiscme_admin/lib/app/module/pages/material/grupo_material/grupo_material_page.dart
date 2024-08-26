@@ -54,6 +54,7 @@ class _GrupoMaterialPageState extends State<GrupoMaterialPage> {
   ) async {
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: (grupoMaterial.cod ?? 0).toString(),
       title: 'Cadastro/Edição Grupo Material',
       widget: GrupoMaterialPageFrm(
         onCancel: () => onCancel(chave),

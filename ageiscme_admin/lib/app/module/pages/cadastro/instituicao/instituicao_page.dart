@@ -112,7 +112,9 @@ class _InstituicaoPageState extends State<InstituicaoPage> {
 
   Future openModal(BuildContext context, InstituicaoModel instituicao) async {
     late int chave;
+    int cod = instituicao.cod??0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: cod.toString(),
       theme: Theme.of(context),
       title: 'Cadastro/Edição Instituição',
       widget: InstituicaoPageFrm(

@@ -42,7 +42,11 @@ class TextFieldStringWidget extends StatefulWidget {
   final bool autoFocus;
   final Widget? suffixWidget;
 
-  set text(String value) => _controller.text = value;
+  set text(String value) {
+    _controller.text = value;
+    _TextFieldStringWidgetState? state = key.currentState;
+    if (state != null) state.validate();
+  }
 
   void addValidator(String Function(String str) validator) =>
       validators.add(validator);
@@ -104,7 +108,7 @@ class _TextFieldStringWidgetState extends State<TextFieldStringWidget> {
   }
 
   void change(String? str) {
-    if (!widget.readOnly) {
+    if (!readonly) {
       validate();
       if (onChanged != null) onChanged!(str == null ? '' : str);
     }

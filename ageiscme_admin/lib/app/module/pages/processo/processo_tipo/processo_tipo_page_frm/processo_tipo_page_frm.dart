@@ -377,6 +377,7 @@ class _ProcessoTipoPageFrmState extends State<ProcessoTipoPageFrm> {
 
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: (processoTipo.cod ?? 0).toString(),
       title: 'Cadastro/Edição Fluxo Tipo de Processo',
       widget: ProcessoTipoFluxoPagePresenter(
         onCancel: () => onCancel(chave),

@@ -122,7 +122,9 @@ class _LocalizacaoArsenalPageState extends State<LocalizacaoArsenalPage> {
     LocalizacaoArsenalModel localizacaoArsenal,
   ) async {
     late int chave;
+    int codigo = localizacaoArsenal.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: codigo.toString(),
       title: 'Cadastro/Edição Localização Arsenal',
       widget: LocalizacaoArsenalPageFrm(
         onCancel: () => onCancel(chave),

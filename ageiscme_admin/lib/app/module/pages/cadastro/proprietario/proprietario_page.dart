@@ -146,7 +146,9 @@ class _ProprietarioPageState extends State<ProprietarioPage> {
     loadLocaisInstituicoesCubit();
     loadArsenalEstoqueCubit();
     late int chave;
+    int cod = proprietario.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: cod.toString(),
       theme: Theme.of(context),
       title: 'Cadastro/Edição Proprietário',
       widget: ProprietarioPageFrm(

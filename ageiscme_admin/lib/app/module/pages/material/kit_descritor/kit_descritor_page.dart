@@ -219,6 +219,7 @@ class _KitDescritorPageState extends State<KitDescritorPage> {
     loading.close(context, mounted);
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: (kitDescritor.cod ?? 0).toString(),
       title: 'Cadastro/Edição Descritor de Kit',
       widget: KitDescritorPageFrm(
         instituicao: instituicao,

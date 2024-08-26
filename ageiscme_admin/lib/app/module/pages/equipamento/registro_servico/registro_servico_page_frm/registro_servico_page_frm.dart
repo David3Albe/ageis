@@ -737,7 +737,7 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
     });
   }
 
-  void salvar() {
+  Future salvar() async {
     bool descricaoValid = controller.txtDescricaoServico.valid;
     bool loteValid = controller.txtLote.valid;
     bool usuarioRegistroValid = controller.txtUsuarioRegistro.valid;
@@ -805,6 +805,9 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
       return;
     }
 
-    controller.cubit.save(registroServico, widget.onSaved);
+    await controller.cubit.save(registroServico, widget.onSaved, context);
+    setState(() {
+      controller.setTitulo();
+    });
   }
 }

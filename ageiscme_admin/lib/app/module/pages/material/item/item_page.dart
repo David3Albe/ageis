@@ -308,8 +308,9 @@ class _ItemPageState extends State<ItemPage> {
 
   Future openModal(
     BuildContext context,
-    ItemModel item,
-  ) async {
+    ItemModel item, {
+    bool setFirst = true,
+  }) async {
     LoadingController loading = LoadingController(context: context);
     loadProprietarioCubit();
 
@@ -335,11 +336,19 @@ class _ItemPageState extends State<ItemPage> {
     }
     loading.close(context, mounted);
     late int chave;
+    print(setFirst);
     chave = WindowsHelper.OpenDefaultWindows(
+      setFirst: setFirst,
+      identificador: (itemModel.cod ?? 0).toString(),
       title: widget.detailModalName,
       widget: ItemPageFrm(
         onCancel: () => onCancel(chave),
-        onSaved: (codItem) => onSaved(chave, codItem, itemModel!),
+        onSaved: (codItem, setToFirst) => onSaved(
+          chave,
+          codItem,
+          itemModel!,
+          setToFirst,
+        ),
         proprietarioCubit: proprietarioCubit,
         item: itemModel,
         frmType: widget.frmType,
@@ -352,12 +361,13 @@ class _ItemPageState extends State<ItemPage> {
     int chave,
     int? codItem,
     ItemModel item,
+    bool setToFirst,
   ) async {
     WindowsHelper.RemoverWidget(chave);
     if (codItem != null) {
       item.tstamp = null;
       await bloc.loadItemFilter(filter);
-      await openModal(context, item);
+      await openModal(context, item, setFirst: setToFirst);
       return;
     }
     await bloc.loadItemFilter(filter);

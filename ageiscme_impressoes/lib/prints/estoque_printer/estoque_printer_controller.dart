@@ -23,8 +23,8 @@ class EstoquePrinterController {
   });
 
   Future print() async {
-    final Font font = await PdfGoogleFonts.openSansRegular();
-    final Font fontBold = await PdfGoogleFonts.openSansBold();
+    final Font font = await fontFromAssetBundle('assets/fonts/open-sans-regular.ttf');
+    final Font fontBold = await fontFromAssetBundle('assets/fonts/open-sans-bold.ttf');
     pw.ThemeData themeOpenSans = pw.ThemeData.withFont(
       base: font,
       bold: fontBold,

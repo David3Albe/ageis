@@ -136,6 +136,7 @@ class _ConsultaProcessosLeituraDevolvidoPageState
     int? codLocal,
   ) async {
     WindowsHelper.OpenDefaultWindows(
+      identificador: '',
       title: 'Consulta Processo Leitura - Devolvidos - Sub',
       widget: ConsultaProcessosLeituraDevolvidoSubPage(
         filter: ConsultaProcessosLeituraDevolvidoSubFilter(

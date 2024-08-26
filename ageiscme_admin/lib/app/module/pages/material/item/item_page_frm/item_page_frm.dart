@@ -73,7 +73,7 @@ class ItemPageFrm extends StatefulWidget {
   final ItemModel item;
   final ProprietarioCubit proprietarioCubit;
   final ItemPageFrmtype frmType;
-  final void Function(int?)? onSaved;
+  final void Function(int?, bool setToFirst)? onSaved;
   final void Function() onCancel;
 
   @override
@@ -1087,6 +1087,7 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
     registroServicoModel.dataInicio = DateTime.now();
     late int chave;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: (registroServicoModel.cod ?? 0).toString(),
       title: 'Cadastro/Edição Monitoramento Item',
       widget: RegistroServicoPageFrm(
         equipamentoReadOnly: true,
@@ -1098,14 +1099,13 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
         ),
         registroServico: registroServicoModel,
         onCancel: () => onCancel(chave),
-        onSaved: (str) => onSaved(str, chave),
+        onSaved: (str) => onSavedRegistroServico(str, chave),
       ),
     );
   }
 
-  void onSaved(String message, int chave) {
-    WindowsHelper.RemoverWidget(chave);
-    if (widget.onSaved != null) widget.onSaved!(item.cod);
+  void onSavedRegistroServico(String message, int chave) {
+    if (widget.onSaved != null) widget.onSaved!(item.cod, false);
   }
 
   void onCancel(int chave) {
@@ -1137,7 +1137,7 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
       },
     );
     if (trocou?.$1 != true) return;
-    if (widget.onSaved != null) widget.onSaved!(item.cod);
+    if (widget.onSaved != null) widget.onSaved!(item.cod, true);
   }
 
   Future _telaEtiquetas() async {

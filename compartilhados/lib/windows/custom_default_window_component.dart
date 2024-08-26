@@ -411,6 +411,9 @@ class CustomDefaultWindowComponentState
       minimizado = false;
       alinhadoHorizontal = false;
       alinhadoVertical = false;
+      if(width<=630){
+        width = 630;
+      }
     });
     WindowsHelper.SetToLast(widget.chave);
   }

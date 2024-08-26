@@ -104,7 +104,9 @@ class _FornecedorPageState extends State<FornecedorPage> {
     FornecedorModel fornecedor,
   ) async {
     late int chave;
+    int codigo = fornecedor.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: codigo.toString(),
       title: 'Cadastro/Edição Fornecedor',
       widget: FornecedorPageFrm(
         onCancel: () => onCancel(chave),

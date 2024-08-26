@@ -213,7 +213,9 @@ class _AtestadoSaudeOcupacionalPageState
     }
     loading.close(context, mounted);
     late int chave;
+    int cod = atestadoSaudeOcupacional.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: cod.toString(),
       title: 'Cadastro/Edição Atestado Saúde Ocupacional',
       widget: AtestadoSaudeOcupacionalPageFrm(
         onCancel: () => onCancel(chave),

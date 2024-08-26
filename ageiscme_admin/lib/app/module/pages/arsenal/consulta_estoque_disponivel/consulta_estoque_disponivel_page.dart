@@ -358,6 +358,7 @@ class _ConsultaEstoqueDisponivelPageState
     String? idEtiqueta,
   ) async {
     WindowsHelper.OpenDefaultWindows(
+      identificador: '',
       title: 'Consulta Processo Leitura - Estoque',
       widget: ConsultaProcessosLeituraPage(
         filter: ConsultaProcessosLeituraFilter(

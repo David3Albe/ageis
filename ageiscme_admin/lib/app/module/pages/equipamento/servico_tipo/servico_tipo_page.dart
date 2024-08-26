@@ -120,7 +120,9 @@ class _ServicoTipoPageState extends State<ServicoTipoPage> {
     ServicoTipoModel servicoTipo,
   ) async {
     late int chave;
+    int codigo = servicoTipo.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: codigo.toString(),
       title: 'Cadastro/Edição Tipo de Serviço',
       widget: ServicoTipoPageFrm(
         onCancel: () => onCancel(chave),

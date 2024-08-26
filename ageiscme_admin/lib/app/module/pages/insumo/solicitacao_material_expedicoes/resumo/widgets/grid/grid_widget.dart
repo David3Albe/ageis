@@ -36,10 +36,10 @@ class GridWidget extends StatelessWidget {
           rowColorCallback: (rowContext) {
             SolicitacaoMaterialSearchItemResponseDTO? solicitacao =
                 getObjByRow(rowContext.row);
-                if(solicitacao?.dataEntrega==null){
-                  return Colors.red.shade200;
-                }
-                return const Color(0xffF4F4F4);
+            if (solicitacao?.dataEntrega == null) {
+              return Colors.red.shade200;
+            }
+            return const Color(0xffF4F4F4);
           },
           orderDescendingFieldColumn: 'dataSolicitacao',
           columns: colunas,
@@ -57,6 +57,7 @@ class GridWidget extends StatelessWidget {
     late int chave;
     FormCubit formCubit = context.read<FormCubit>();
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: obj.cod.toString(),
       title: 'Cadastro/Edição Solicitação Material Expedição',
       widget: BlocProvider<FormCubit>.value(
         value: formCubit,

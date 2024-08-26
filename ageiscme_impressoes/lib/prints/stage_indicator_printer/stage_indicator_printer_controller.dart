@@ -1,5 +1,6 @@
 import 'package:ageiscme_data/services/parametro_sistema/parametro_sistema_service.dart';
 import 'package:ageiscme_impressoes/dto/stage_indicator_print/stage_indicator_print_dto.dart';
+import 'package:ageiscme_models/dto/parametro_sistema/update_indicadores/parametro_sistema_update_indicadores_dto.dart';
 import 'package:ageiscme_models/enums/modulos_enum.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
@@ -18,7 +19,8 @@ class StageIndicatorPrinterController {
   });
 
   Future print() async {
-    final Font font = await PdfGoogleFonts.openSansRegular();
+    final Font font =
+        await fontFromAssetBundle('assets/fonts/open-sans-regular.ttf');
     pw.ThemeData themeOpenSans = pw.ThemeData.withFont(
       base: font,
     );
@@ -28,7 +30,7 @@ class StageIndicatorPrinterController {
     pw.TextStyle style = const pw.TextStyle(fontSize: 8);
     ParametroSistemaService service = ParametroSistemaService();
     ParametroSistemaModel? sistema = await service.findFirst();
-    if (sistema == null) {
+    if (sistema?.cod == null) {
       ToastUtils.showCustomToastWarning(
         context,
         'Não foi possível carregar os parâmtros do sistema, tente novamente ou entre em contato com o suporte',
@@ -37,16 +39,20 @@ class StageIndicatorPrinterController {
     }
 
     int qtdeImpressao = 0;
+    ParametroSistemaUpdateIndicadoresDTO dto =
+        ParametroSistemaUpdateIndicadoresDTO(
+      cod: sistema!.cod!,
+      qtdeIndicadores: sistema.indicador ?? 0,
+    );
     while (qtdeImpressao < stageIndicatorPrint.quantity) {
-      sistema.indicador =
-          sistema.indicador == null ? 1 : sistema.indicador! + 1;
+      dto.qtdeIndicadores =
+          dto.qtdeIndicadores + 1;
       pdf.addPage(
         _addPage(style, sistema),
       );
       qtdeImpressao++;
     }
-
-    var result = await service.save(sistema);
+    var result = await service.updateIndicadores(dto);
     if (result == null) return;
     await PrinterHelper.PrintDocumentDefaultPrinter(
       context,

@@ -339,7 +339,9 @@ class _ConsultaRegistroServicoPageState
     }
     loading.close(context, mounted);
     late int chave;
+    int codigo = cod;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: codigo.toString(),
       title: 'Cadastro/Edição Equipamento',
       widget: RegistroServicoPageFrm(
         onCancel: () => onCancel(chave),
@@ -352,7 +354,6 @@ class _ConsultaRegistroServicoPageState
   }
 
   void onSaved(String message, int chave) {
-    WindowsHelper.RemoverWidget(chave);
     ToastUtils.showCustomToastSucess(context, message);
   }
 

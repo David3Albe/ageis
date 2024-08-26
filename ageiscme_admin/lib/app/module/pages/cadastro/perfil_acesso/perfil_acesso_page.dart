@@ -140,7 +140,9 @@ class _PerfilAcessoPageState extends State<PerfilAcessoPage> {
   Future openModal(BuildContext context, PerfilAcessoModel obj) async {
     loadDireitoCubit();
     late int chave;
+    int cod = obj.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: cod.toString(),
       theme: Theme.of(context),
       title: 'Cadastro/Edição Perfil de Acesso',
       widget: PerfilAcessoPageFrm(

@@ -158,7 +158,9 @@ class _DocumentoPageState extends State<DocumentoPage> {
     loading.close(context, mounted);
 
     late int chave;
+    int cod = documento.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: cod.toString(),
       title: 'Cadastro/Edição Documento',
       widget: DocumentoPageFrm(
         onCancel: () => onCancel(chave),

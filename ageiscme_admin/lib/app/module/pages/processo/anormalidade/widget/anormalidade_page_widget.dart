@@ -189,6 +189,7 @@ class AnormalidadePageWidget extends StatelessWidget {
     late int chave;
     ProcessoEtapaCubit cubit = BlocProvider.of<ProcessoEtapaCubit>(context);
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: cod.toString(),
       title: 'Cadastro/Edição Anormalidade',
       widget: MultiBlocProvider(
         providers: [

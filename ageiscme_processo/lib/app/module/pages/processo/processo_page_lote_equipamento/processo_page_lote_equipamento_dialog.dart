@@ -84,7 +84,7 @@ class _ProcessoPageLoteEquipamentoDialogState
   bool _validaCampos() {
     String? codLote =
         widget.processoLeitura.leituraAtual.loteEquipamento.codLote;
-    if (codLote == null || codLote.isEmpty) {
+    if (codLote == null || codLote.trim().isEmpty) {
       ToastUtils.showCustomToastWarning(context, 'O Loté é obrigátorio');
       return false;
     } else if (codLote.length > 20) {

@@ -2,7 +2,9 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/insumo/insumo
 import 'package:ageiscme_admin/app/module/pages/insumo/insumo_movimento/insumo_movimento_page_frm/insumo_movimento_frm_page.dart';
 import 'package:ageiscme_admin/app/module/pages/insumo/insumo_movimento/insumo_movimento_page_state.dart';
 import 'package:ageiscme_admin/app/module/widgets/filter_dialog/filter_dialog_widget.dart';
+import 'package:ageiscme_data/services/access_user/access_user_service.dart';
 import 'package:ageiscme_data/services/insumo_movimento/insumo_movimento_service.dart';
+import 'package:ageiscme_models/enums/direito_enum.dart';
 import 'package:ageiscme_models/filters/insumo_movimento/insumo_movimento_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
@@ -257,10 +259,32 @@ class _InsumoMovimentoPageState extends State<InsumoMovimentoPage> {
     BuildContext context,
     InsumoMovimentoModel insumoMovimento,
   ) async {
+    bool permiteAjuste =
+        (insumoMovimento.cod != null && insumoMovimento.cod != 0) ||
+            await AccessUserService.validateUserHasRight(
+              DireitoEnum.InsumosMovimentosAjustes,
+            );
+
+    bool permiteEntrada =
+        (insumoMovimento.cod != null && insumoMovimento.cod != 0) ||
+            await AccessUserService.validateUserHasRight(
+              DireitoEnum.InsumosMovimentosEntradas,
+            );
+
+    bool permiteSaida =
+        (insumoMovimento.cod != null && insumoMovimento.cod != 0) ||
+            await AccessUserService.validateUserHasRight(
+              DireitoEnum.InsumosMovimentosSaidas,
+            );
     late int chave;
+    int codigo = insumoMovimento.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: codigo.toString(),
       title: 'Cadastro/Edição Movimento de Insumo',
       widget: InsumoMovimentoPageFrm(
+        permiteAjuste: permiteAjuste,
+        permiteEntrada: permiteEntrada,
+        permiteSaida: permiteSaida,
         onSaved: (p0) => onSave(),
         onCancel: () => onCancel(chave),
         insumoMovimento: insumoMovimento,

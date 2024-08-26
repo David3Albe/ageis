@@ -141,7 +141,9 @@ class _ArsenalEstoquePageState extends State<ArsenalEstoquePage> {
     ArsenalEstoqueModel arsenalEstoque,
   ) async {
     late int chave;
+    int codigo = arsenalEstoque.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
+      identificador: codigo.toString(),
       title: 'Cadastro/Edição Arsenal',
       widget: ArsenalEstoquePageFrm(
         onCancel: () => onCancel(chave),

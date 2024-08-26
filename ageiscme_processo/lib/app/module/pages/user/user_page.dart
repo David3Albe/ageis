@@ -5,6 +5,7 @@ import 'package:ageiscme_processo/app/module/services/processo_navigator_service
 import 'package:compartilhados/coletores/coletores_helper.dart';
 import 'package:compartilhados/cores/cores.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class UserPage extends StatelessWidget {
   const UserPage({super.key});
@@ -12,8 +13,22 @@ class UserPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FocusNode _textNode = FocusNode();
-    late final ColetoresHelper coletorHelper = ColetoresHelper(
-      onEnter: ProcessoNavigatorService.ToProcessoScreenWithUser,
+    void _enterProcessoScreen(String barCode) {
+      if (barCode.startsWith('101')) {
+        ProcessoNavigatorService.ToProcessoScreenWithUser(barCode);
+      }
+    }
+
+    late ColetoresHelper coletorHelper = ColetoresHelper(
+      onEnter: (str) => _enterProcessoScreen(str),
+      onShortcut: () {
+        ProcessoNavigatorService.ToProcessoScreenWithUser('');
+      },
+      keysIdToPress: [
+        LogicalKeyboardKey.controlLeft.keyId,
+        LogicalKeyboardKey.shiftLeft.keyId,
+        LogicalKeyboardKey.keyP.keyId,
+      ],
     );
 
     return Scaffold(
