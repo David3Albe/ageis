@@ -1,4 +1,5 @@
 import 'package:ageiscme_admin/app/module/pages/processo/liberacao_leituras/cubit/liberacao_leituras_page_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/processo/liberacao_leituras/detalhamento/presenter/liberacao_leituras_detalhamento_presenter_page.dart';
 import 'package:ageiscme_data/services/processo_leitura_andamento/processo_leitura_andamento_service.dart';
 import 'package:ageiscme_models/models/processo_leitura_andamento/processo_leitura_andamento_model.dart';
 import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
@@ -9,7 +10,9 @@ import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
+import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:dependencias_comuns/uuid_export.dart';
 import 'package:flutter/material.dart';
 
 class LiberacaoLeiturasPresenterPage extends StatefulWidget {
@@ -91,6 +94,13 @@ class _LiberacaoLeiturasPresenterPageState
                         {delete(context, objeto)},
                     columns: colunas,
                     items: state.leiturasEmAndamento,
+                    onDetail: (event, obj) async {
+                      await detail(
+                        context,
+                        obj.cod!,
+                        obj.codUsuario!,
+                      );
+                    },
                   ),
                 ),
               );
@@ -98,6 +108,21 @@ class _LiberacaoLeiturasPresenterPageState
           ),
         ),
       ],
+    );
+  }
+
+  Future detail(
+    BuildContext context,
+    int cod,
+    int codUsuario,
+  ) async {
+    WindowsHelper.OpenDefaultWindows(
+      identificador: const Uuid().v4(),
+      title: 'Consulta Liberação Leitura - Detalhamento',
+      widget: LiberacaoLeiturasDetalhamentoPresenterPage(
+        cod: cod,
+        codUsuario: codUsuario,
+      ),
     );
   }
 

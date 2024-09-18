@@ -493,7 +493,7 @@ class _EquipamentoPageFrmState extends State<EquipamentoPageFrm> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(left: 6.0),
                   child: CleanButtonWidget(
                     onPressed: () => {
                       setState(() {
