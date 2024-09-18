@@ -1,36 +1,33 @@
 import 'package:compartilhados/componentes/botoes/button_constraints.dart';
 import 'package:compartilhados/cores/cores.dart';
+import 'package:compartilhados/forms/form_controller.dart';
 import 'package:compartilhados/functions/helper_functions.dart';
+import 'package:dependencias_comuns/easy_debounce_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
-class CleanButtonWidget extends StatefulWidget {
-  const CleanButtonWidget({
+class UpdateButtonWidget extends StatefulWidget {
+  const UpdateButtonWidget({
     required this.onPressed,
-    this.isVisible = true,
-    this.elevation,
-    this.paddingHeight = 6,
-    this.paddingWidth = 12,
+    this.readonly = false,
+    this.form,
     Key? key,
   });
 
   final void Function()? onPressed;
-  final bool isVisible;
-  final double? elevation;
-  final double paddingHeight;
-  final double paddingWidth;
+  final bool readonly;
+  final FormController? form;
 
   @override
-  State<CleanButtonWidget> createState() => _CleanButtonWidgetState();
+  State<UpdateButtonWidget> createState() => _UpdateButtonWidgetState();
 }
 
-class _CleanButtonWidgetState extends State<CleanButtonWidget> {
+class _UpdateButtonWidgetState extends State<UpdateButtonWidget> {
   bool hovered = false;
+  bool valid = true;
+
   @override
   Widget build(BuildContext context) {
-    if (!widget.isVisible) {
-      return const SizedBox.shrink();
-    }
     return SizedBox(
       width: ButtonConstraints.SMALL_BUTTON_WIDTH,
       height: ButtonConstraints.SMALL_BUTTON_HEIGHT,
@@ -44,8 +41,7 @@ class _CleanButtonWidgetState extends State<CleanButtonWidget> {
                     Radius.circular(5),
                   ),
                 ),
-                elevation: widget.elevation,
-                backgroundColor: const Color(0xff0AA6BD),
+                backgroundColor: Cores.corBotaoSalvar,
               )
             : ElevatedButton.styleFrom(
                 shape: const RoundedRectangleBorder(
@@ -54,10 +50,9 @@ class _CleanButtonWidgetState extends State<CleanButtonWidget> {
                     Radius.circular(5),
                   ),
                 ),
-                elevation: widget.elevation,
-                backgroundColor: const Color.fromARGB(255, 3, 117, 134),
+                backgroundColor: Cores.corBotaoSalvarHovered,
               ),
-        onPressed: widget.onPressed,
+        onPressed: !valid || widget.readonly ? null : handleClick,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -67,9 +62,9 @@ class _CleanButtonWidgetState extends State<CleanButtonWidget> {
               child: FittedBox(
                 fit: BoxFit.fitWidth,
                 child: Icon(
-                  Symbols.undo,
-                  color: Cores.corIconeBranco,
+                  Symbols.save,
                   size: 20,
+                  color: Cores.corIconeBranco,
                 ),
               ),
             ),
@@ -77,13 +72,10 @@ class _CleanButtonWidgetState extends State<CleanButtonWidget> {
               child: FittedBox(
                 fit: BoxFit.fitWidth,
                 child: Text(
-                  'Limpar',
+                  'Alterar',
                   style: TextStyle(
                     color: Cores.corTextoBranco,
-                    fontSize: HelperFunctions.calculaFontSize(
-                      context,
-                      14,
-                    ),
+                    fontSize: HelperFunctions.calculaFontSize(context, 14),
                   ),
                 ),
               ),
@@ -91,6 +83,15 @@ class _CleanButtonWidgetState extends State<CleanButtonWidget> {
           ],
         ),
       ),
+    );
+  }
+
+  void handleClick() {
+    if (widget.onPressed == null) return;
+    EasyThrottle.throttle(
+      'save-button',
+      const Duration(seconds: 4),
+      widget.onPressed!,
     );
   }
 }

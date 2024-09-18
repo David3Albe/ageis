@@ -76,7 +76,22 @@ class SiglaFrmCubit extends Cubit<SiglaFrmState> {
     );
   }
 
-  Future salvar({
+  Future inserir({
+    required BuildContext context,
+    required void Function() onSaved,
+  }) {
+    return _salvar(novo: true, context: context, onSaved: onSaved);
+  }
+
+  Future atualizar({
+    required BuildContext context,
+    required void Function() onSaved,
+  }) {
+    return _salvar(novo: false, context: context, onSaved: onSaved);
+  }
+
+  Future _salvar({
+    required bool novo,
     required BuildContext context,
     required void Function() onSaved,
   }) async {
@@ -89,7 +104,9 @@ class SiglaFrmCubit extends Cubit<SiglaFrmState> {
     if (state.dto == null) return;
     LoadingController loading = LoadingController(context: context);
     (String, SiglaSaveResponseDTO)? result =
-        await Modular.get<SiglaService>().save(state.dto!);
+        await Modular.get<SiglaService>().save(
+      novo ? state.dto!.copyWith(cod: -1, tstamp: null) : state.dto!,
+    );
     loading.closeDefault();
     if (result == null) return;
     ToastUtils.showCustomToastSucess(context, result.$1);

@@ -69,7 +69,22 @@ class TurnoFrmCubit extends Cubit<TurnoFrmState> {
     );
   }
 
-  Future salvar({
+  Future inserir({
+    required BuildContext context,
+    required void Function() onSaved,
+  }) {
+    return _salvar(novo: true, context: context, onSaved: onSaved);
+  }
+
+  Future atualizar({
+    required BuildContext context,
+    required void Function() onSaved,
+  }) {
+    return _salvar(novo: false, context: context, onSaved: onSaved);
+  }
+
+  Future _salvar({
+    required bool novo,
     required BuildContext context,
     required void Function() onSaved,
   }) async {
@@ -81,8 +96,8 @@ class TurnoFrmCubit extends Cubit<TurnoFrmState> {
     _setDTO();
     if (state.dto == null) return;
     LoadingController loading = LoadingController(context: context);
-    (String, TurnoSaveResponseDTO)? result =
-        await Modular.get<TurnoService>().save(state.dto!);
+    (String, TurnoSaveResponseDTO)? result = await Modular.get<TurnoService>()
+        .save(novo ? state.dto!.copyWith(cod: -1, tstamp: null) : state.dto!);
     loading.closeDefault();
     if (result == null) return;
     onSaved();

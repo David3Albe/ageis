@@ -112,14 +112,13 @@ class _TipoDocumentoPageState extends State<TipoDocumentoPage> {
       widget: TipoDocumentoPageFrm(
         tipoDocumento: tipoDocumento,
         onCancel: () => onCancel(chave),
-        onSaved: (str) => onSaved(str, chave),
+        onSaved: () => onSaved(chave),
       ),
     );
   }
 
-  void onSaved(String message, int chave) {
+  void onSaved(int chave) {
     WindowsHelper.RemoverWidget(chave);
-    ToastUtils.showCustomToastSucess(context, message);
     bloc.loadTipoDocumento();
   }
 

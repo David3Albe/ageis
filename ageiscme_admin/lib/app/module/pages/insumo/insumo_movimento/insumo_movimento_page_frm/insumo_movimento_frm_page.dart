@@ -23,7 +23,8 @@ import 'package:ageiscme_models/models/insumo_saldo/insumo_saldo_model.dart';
 import 'package:ageiscme_models/models/insumo_teste/insumo_teste_model.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_float_widget.dart';
@@ -395,7 +396,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
       setReadonlyInsumo(
         insumoMovimento.cod != 0 || baseSolicitacao == true,
       );
-      setReadonlyLote(insumoMovimento.cod != 0 && insumoMovimento.cod!=null);
+      setReadonlyLote(insumoMovimento.cod != 0 && insumoMovimento.cod != null);
       setReadonlyValidade(
         insumoMovimento.flagEntradaSaida != '1' ? true : false,
         false,
@@ -1194,16 +1195,13 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
                 ),
                 const Spacer(),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: SaveButtonWidget(
-                    // readonly: isUserValidSaida == true ||
-                    //         isUserValidEntrada == true ||
-                    //         isUserValidAjuste == true &&
-                    //             insumoMovimento.cod != 0
-                    //     ? false
-                    //     : true,
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: UpdateButtonWidget(
+                    readonly:
+                        insumoMovimento.cod == 0 || insumoMovimento.cod == null,
                     onPressed: () => {
                       salvarConfirmacao(
+                        novo: false,
                         context: context,
                         insumoMovimento: insumoMovimento,
                         insumoSaldo: null,
@@ -1212,13 +1210,29 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: InsertButtonWidget(
+                     readonly:
+                        insumoMovimento.cod != 0 && insumoMovimento.cod != null,
+                    onPressed: () => {
+                      salvarConfirmacao(
+                        novo: true,
+                        context: context,
+                        insumoMovimento: insumoMovimento,
+                        insumoSaldo: null,
+                      ),
+                    },
+                  ),
+                ),
+             
+                Padding(
+                  padding: const EdgeInsets.only(left: 6.0),
                   child: CleanButtonWidget(
                     onPressed: limpar,
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(left: 6.0),
                   child: CancelButtonUnfilledWidget(
                     onPressed: widget.onCancel,
                   ),
@@ -1423,6 +1437,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
     required BuildContext context,
     required InsumoMovimentoModel insumoMovimento,
     required InsumoSaldoModel? insumoSaldo,
+    required bool novo,
     bool confirmouCriacaoLote = false,
     bool confirmaDados = false,
   }) async {
@@ -1481,6 +1496,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
             message:
                 'INSUMO NÃO ENCONTRADO: O INSUMO/LOTE informado não foi\nencontrado no DEPÓSITO indicado. Deseja criar?',
             onConfirm: () => salvarConfirmacao(
+              novo: novo,
               context: context,
               insumoMovimento: insumoMovimento,
               insumoSaldo: insumoSaldo,
@@ -1504,6 +1520,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
               'Confira atentamente a movimentação preenchida.\nVocê confirma os dados informados?',
           onConfirm: () => salvarConfirmacao(
             context: context,
+            novo: novo,
             insumoMovimento: insumoMovimento,
             insumoSaldo: insumoSaldo,
             confirmouCriacaoLote: confirmouCriacaoLote,
@@ -1542,7 +1559,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
       insumoMovimento.codEquipamentoInsumo = null;
       insumoMovimento.codDestinoResiduos = null;
       insumoMovimento.insumo!.validadeAposAtivacaoDias = null;
-      await salvar();
+      await salvar(novo);
     }
     if (insumoMovimento.flagEntradaSaida == '2') {
       insumoMovimento.nroTotalFiscal = null;
@@ -1552,7 +1569,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
       insumoMovimento.precoNotaFiscal = null;
       txtPrecoNotaFiscal.text = '';
       insumoMovimento.dataNotaFiscal = null;
-      await salvar();
+      await salvar(novo);
     }
     if (insumoMovimento.flagEntradaSaida == '0') {
       insumoMovimento.codEquipamentoInsumo = null;
@@ -1564,14 +1581,14 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
       insumoMovimento.precoNotaFiscal = null;
       txtPrecoNotaFiscal.text = '';
       insumoMovimento.dataNotaFiscal = null;
-      await salvar();
+      await salvar(novo);
     }
   }
 
-  Future salvar() async {
+  Future salvar(bool novo) async {
     InsumoModel? insumo = insumoMovimento.insumo;
     InsumoMovimentoModel? movInsumo = await cubit.save(
-      insumoMovimento,
+      novo ? insumoMovimento.copyWith(cod: 0, tstamp: null) : insumoMovimento,
       numeroSolicitacaoItem,
       widget.onSaved,
     );

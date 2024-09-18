@@ -11,7 +11,8 @@ import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/response_dto/epi_perfil/find_by_user/epis/epi_perfil_find_by_user_epi_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/list_field/list_field_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
@@ -668,19 +669,26 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
                 ),
                 const Spacer(),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: SaveButtonWidget(
-                    onPressed: () => {salvar()},
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: UpdateButtonWidget(
+                    readonly: epiEntrega.cod == 0 || epiEntrega.cod == null,
+                    onPressed: () => {alterarExistente()},
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: InsertButtonWidget(
+                    onPressed: () => {inserirNovo()},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 6.0),
                   child: CleanButtonWidget(
                     onPressed: limpar,
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(left: 6.0),
                   child: CancelButtonUnfilledWidget(
                     onPressed: widget.onCancel,
                   ),
@@ -777,7 +785,15 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
     epiEntregaCubit.loadAll();
   }
 
-  void salvar() {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  void salvar(bool novo) {
     bool epiValid = validateEPI();
     bool limiteValidadeValid = limiteValidadeValidate();
     if (!epiValid) {
@@ -788,6 +804,9 @@ class _EpiEntregaPageFrmState extends State<EpiEntregaPageFrm> {
     if (!epiValid || !limiteValidadeValid) {
       return;
     }
-    cubit.save(epiEntrega, widget.onSaved);
+    cubit.save(
+      novo ? epiEntrega.copyWith(cod: 0, tstamp: null) : epiEntrega,
+      widget.onSaved,
+    );
   }
 }

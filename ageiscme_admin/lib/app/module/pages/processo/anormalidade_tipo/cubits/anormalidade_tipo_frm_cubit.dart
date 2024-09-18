@@ -75,7 +75,22 @@ class AnormalidadeTipoFrmCubit extends Cubit<AnormalidadeTipoFrmState> {
     );
   }
 
+  void inserirNovo({
+    required BuildContext context,
+    required void Function() onSaved,
+  }) {
+    salvar(context: context, novo: true, onSaved: onSaved);
+  }
+
+  void alterarExistente({
+    required BuildContext context,
+    required void Function() onSaved,
+  }) {
+    salvar(context: context, novo: false, onSaved: onSaved);
+  }
+
   Future salvar({
+    required bool novo,
     required BuildContext context,
     required void Function() onSaved,
   }) async {
@@ -88,7 +103,10 @@ class AnormalidadeTipoFrmCubit extends Cubit<AnormalidadeTipoFrmState> {
     if (state.dto == null) return;
     LoadingController loading = LoadingController(context: context);
     (String, AnormalidadeTipoSaveResponseDTO)? result =
-        await Modular.get<AnormalidadeTipoService>().save(state.dto!);
+        await Modular.get<AnormalidadeTipoService>().save(
+      novo ? state.dto!.copyWith(cod: -1, tstamp: null) : state.dto!,
+    );
+    onSaved();
     loading.closeDefault();
     if (result == null) return;
     ToastUtils.showCustomToastSucess(context, result.$1);

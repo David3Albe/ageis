@@ -5,7 +5,8 @@ import 'package:ageiscme_data/services/localizacao_arsenal/localizacao_arsenal_s
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
@@ -206,13 +207,21 @@ class _LocalizacaoArsenalPageFrmState extends State<LocalizacaoArsenalPageFrm> {
                       ),
                       const Spacer(),
                       Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
-                        child: SaveButtonWidget(
-                          onPressed: () => {salvar()},
+                        padding: const EdgeInsets.only(left: 6.0),
+                        child: UpdateButtonWidget(
+                          readonly: localizacaoArsenal.cod == 0 ||
+                              localizacaoArsenal.cod == null,
+                          onPressed: () => {alterarExistente()},
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
+                        padding: const EdgeInsets.only(left: 6.0),
+                        child: InsertButtonWidget(
+                          onPressed: () => {inserirNovo()},
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 6.0),
                         child: CleanButtonWidget(
                           onPressed: () => {
                             setState(() {
@@ -224,7 +233,7 @@ class _LocalizacaoArsenalPageFrmState extends State<LocalizacaoArsenalPageFrm> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
+                        padding: const EdgeInsets.only(left: 6.0),
                         child: CancelButtonUnfilledWidget(
                           onPressed: widget.onCancel,
                         ),
@@ -240,11 +249,24 @@ class _LocalizacaoArsenalPageFrmState extends State<LocalizacaoArsenalPageFrm> {
     );
   }
 
-  void salvar() {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  void salvar(bool novo) {
     bool localizacaoValid = txtLocalizacao.valid;
     bool codigoBarraValid = txtCodigoBarra.valid;
     bool estoqueValid = validateEstoque();
     if (!localizacaoValid || !codigoBarraValid || !estoqueValid) return;
-    cubit.save(localizacaoArsenal, widget.onSaved);
+    cubit.save(
+      novo
+          ? localizacaoArsenal.copyWith(cod: 0, tstamp: null)
+          : localizacaoArsenal,
+      widget.onSaved,
+    );
   }
 }

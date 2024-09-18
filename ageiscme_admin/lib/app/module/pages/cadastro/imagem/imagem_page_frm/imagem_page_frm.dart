@@ -4,7 +4,8 @@ import 'package:ageiscme_data/services/imagem/imagem_service.dart';
 import 'package:ageiscme_models/models/imagem/imagem_model.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
@@ -27,7 +28,7 @@ class ImagemPageFrm extends StatefulWidget {
   }) : super(key: key);
 
   final ImagemModel imagem;
-  final void Function(String) onSaved;
+  final void Function() onSaved;
   final void Function() onCancel;
 
   @override
@@ -181,12 +182,16 @@ class _ImagemPageFrmState extends State<ImagemPageFrm> {
                 ),
                 const Spacer(),
                 Wrap(
-                  spacing: 16 * paddingHorizontalScale,
-                  runSpacing: 16 * paddingHorizontalScale,
+                  spacing: 6 * paddingHorizontalScale,
+                  runSpacing: 6 * paddingHorizontalScale,
                   alignment: WrapAlignment.end,
                   children: [
-                    SaveButtonWidget(
-                      onPressed: () => {salvar()},
+                    UpdateButtonWidget(
+                      readonly: imagem.cod == 0 || imagem.cod == null,
+                      onPressed: () => {alterarExistente()},
+                    ),
+                    InsertButtonWidget(
+                      onPressed: () => {inserirNovo()},
                     ),
                     CleanButtonWidget(
                       onPressed: () => {
@@ -238,7 +243,15 @@ class _ImagemPageFrmState extends State<ImagemPageFrm> {
         'inicio_processo',
       ];
 
-  void salvar() {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  void salvar(bool novo) {
     bool identificadorValido = validateIdentificador();
     if (!identificadorValido) return;
     if (imagem.foto == null || imagem.foto!.isEmpty) {
@@ -248,6 +261,10 @@ class _ImagemPageFrmState extends State<ImagemPageFrm> {
       );
       return;
     }
-    cubit.save(imagem, widget.onSaved);
+    cubit.save(
+      novo ? imagem.copyWith(cod: 0, tstamp: null) : imagem,
+      widget.onSaved,
+      context,
+    );
   }
 }

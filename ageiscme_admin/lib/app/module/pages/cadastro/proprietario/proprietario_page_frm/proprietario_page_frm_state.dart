@@ -1,6 +1,8 @@
 import 'package:ageiscme_data/services/proprietario/proprietario_service.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:flutter/material.dart';
 
 class ProprietarioPageFrmCubit extends Cubit<ProprietarioPageFrmState> {
   final ProprietarioService service;
@@ -14,13 +16,15 @@ class ProprietarioPageFrmCubit extends Cubit<ProprietarioPageFrmState> {
 
   void save(
     ProprietarioModel proprietario,
-    void Function(String) onSaved,
+    void Function() onSaved,
+    BuildContext context,
   ) async {
     try {
       (String message, ProprietarioModel proprietario)? result =
           await service.save(proprietario);
       if (result == null) return;
-      onSaved(result.$1);
+      ToastUtils.showCustomToastSucess(context, result.$1);
+      onSaved();
       emit(
         ProprietarioPageFrmState(
           message: result.$1,

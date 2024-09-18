@@ -4,7 +4,8 @@ import 'package:ageiscme_data/services/centro_custo/centro_custo_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
@@ -21,7 +22,7 @@ class CentroCustoPageFrm extends StatefulWidget {
   }) : super(key: key);
 
   final CentroCustoModel centroCusto;
-  final void Function(String) onSaved;
+  final void Function() onSaved;
   final void Function() onCancel;
 
   @override
@@ -146,8 +147,19 @@ class _CentroCustoPageFrmState extends State<CentroCustoPageFrm> {
                           spacing: 16 * scalePadding,
                           alignment: WrapAlignment.end,
                           children: [
-                            SaveButtonWidget(
-                              onPressed: () => {salvar()},
+                            Padding(
+                              padding: const EdgeInsets.only(left: 6.0),
+                              child: UpdateButtonWidget(
+                                readonly: centroCusto.cod == 0 ||
+                                    centroCusto.cod == null,
+                                onPressed: () => {alterarExistente()},
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(left: 6.0),
+                              child: InsertButtonWidget(
+                                onPressed: () => {inserirNovo()},
+                              ),
                             ),
                             CleanButtonWidget(
                               onPressed: () => {
@@ -173,11 +185,23 @@ class _CentroCustoPageFrmState extends State<CentroCustoPageFrm> {
     );
   }
 
-  void salvar() {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  void salvar(bool novo) {
     bool centroCustoValid = txtCentroCusto.valid;
     bool descricaoValid = txtDescricao.valid;
     if (!centroCustoValid || !descricaoValid) return;
 
-    cubit.save(centroCusto, widget.onSaved);
+    cubit.save(
+      novo ? centroCusto.copyWith(cod: 0, tstamp: '') : centroCusto,
+      widget.onSaved,
+      context,
+    );
   }
 }

@@ -3,6 +3,7 @@ import 'package:ageiscme_models/models/imagem/imagem_model.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:flutter/material.dart';
 
 class ImagemPageFrmCubit extends Cubit<ImagemPageFrmState> {
   final ImagemService service;
@@ -16,13 +17,19 @@ class ImagemPageFrmCubit extends Cubit<ImagemPageFrmState> {
           ),
         );
 
-  void save(ImagemModel imagem, void Function(String) onSaved) async {
+  void save(
+    ImagemModel imagem,
+    void Function() onSaved,
+    BuildContext context,
+  ) async {
     try {
-      LoadingController loading = LoadingController(context: ToastUtils.routerOutletContext!);
+      LoadingController loading =
+          LoadingController(context: ToastUtils.routerOutletContext!);
       (String message, ImagemModel imagem)? result = await service.save(imagem);
       loading.closeDefault();
       if (result == null) return;
-      onSaved(result.$1);
+      ToastUtils.showCustomToastSucess(context, result.$1);
+      onSaved();
       emit(
         ImagemPageFrmState(
           message: result.$1,

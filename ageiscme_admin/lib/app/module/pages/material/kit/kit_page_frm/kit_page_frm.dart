@@ -26,7 +26,8 @@ import 'package:ageiscme_models/response_dto/kit_etiqueta_preparo_response/kit_e
 import 'package:ageiscme_models/response_dto/kit_etiqueta_preparo_response/kit_etiqueta_preparo_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/list_field/list_field_widget.dart';
@@ -560,13 +561,21 @@ class _KitPageFrmState extends State<KitPageFrm> {
                 ),
                 const Spacer(),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: SaveButtonWidget(
-                    onPressed: salvar,
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: UpdateButtonWidget(
+                    readonly: kit.cod == 0 || kit.cod == null,
+                    onPressed: () => {alterarExistente()},
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: InsertButtonWidget(
+                    readonly: kit.cod != 0 && kit.cod == null,
+                    onPressed: () => {inserirNovo()},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 6.0),
                   child: CleanButtonWidget(
                     onPressed: () => {
                       setState(() {
@@ -583,7 +592,7 @@ class _KitPageFrmState extends State<KitPageFrm> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(left: 6.0),
                   child: CancelButtonUnfilledWidget(
                     onPressed: widget.onCancel,
                   ),
@@ -691,7 +700,15 @@ class _KitPageFrmState extends State<KitPageFrm> {
     });
   }
 
-  void salvar() async {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  void salvar(bool novo) async {
     bool restricaoValid = txtRestricao.valid;
     bool descritorKitValid = validateDescritor();
     bool situacaoValid = validateSituacao();
@@ -715,7 +732,11 @@ class _KitPageFrmState extends State<KitPageFrm> {
     if (kit.cod == 0 || kit.cod == null) {
       afterSave = (kitImprimir) => _imprimirTagKit(kitImprimir: kitImprimir);
     }
-    await cubit.save(kit, afterSave, widget.onSaved);
+    await cubit.save(
+      novo ? kit.copyWith(cod: 0, tStamp: null) : kit,
+      afterSave,
+      widget.onSaved,
+    );
   }
 
   Future<bool?> _validaKitsMesmaCor() async {

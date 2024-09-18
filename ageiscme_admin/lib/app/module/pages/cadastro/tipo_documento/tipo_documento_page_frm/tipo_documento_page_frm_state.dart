@@ -1,6 +1,8 @@
 import 'package:ageiscme_data/services/tipo_documento/tipo_documento_service.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:flutter/material.dart';
 
 class TipoDocumentoPageFrmCubit extends Cubit<TipoDocumentoPageFrmState> {
   final TipoDocumentoService service;
@@ -14,13 +16,15 @@ class TipoDocumentoPageFrmCubit extends Cubit<TipoDocumentoPageFrmState> {
 
   void save(
     TipoDocumentoModel tipoDocumento,
-    void Function(String) onSaved,
+    void Function() onSaved,
+    BuildContext context,
   ) async {
     try {
       (String message, TipoDocumentoModel tipoDocumento)? result =
           await service.save(tipoDocumento);
       if (result == null) return;
-      onSaved(result.$1);
+      onSaved();
+      ToastUtils.showCustomToastSucess(context, result.$1);
       emit(
         TipoDocumentoPageFrmState(
           message: result.$1,

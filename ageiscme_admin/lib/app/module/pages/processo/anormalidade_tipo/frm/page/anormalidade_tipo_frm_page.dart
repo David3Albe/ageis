@@ -3,7 +3,8 @@ import 'package:ageiscme_admin/app/module/pages/processo/anormalidade_tipo/cubit
 import 'package:ageiscme_models/dto/anormalidade_tipo/save/anormalidade_tipo_save_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -169,21 +170,40 @@ class AnormalidadeTipoFrmPageWidget extends StatelessWidget {
                       ),
                       Expanded(
                         child: Wrap(
-                          runSpacing: 16 * scalePadding,
-                          spacing: 16 * scalePadding,
+                          runSpacing: 6 * scalePadding,
+                          spacing: 6 * scalePadding,
                           alignment: WrapAlignment.end,
                           children: [
                             ReactiveFormConsumer(
                               builder: (context, form, child) {
-                                return SaveButtonWidget(
-                                  onPressed: form.valid || !form.dirty
-                                      ? () => context
-                                          .read<AnormalidadeTipoFrmCubit>()
-                                          .salvar(
-                                            context: context,
-                                            onSaved: onSaved,
-                                          )
-                                      : null,
+                                AnormalidadeTipoSaveDTO? dto = context.select(
+                                  (AnormalidadeTipoFrmCubit cubit) =>
+                                      cubit.state.dtoOriginal,
+                                );
+                                return UpdateButtonWidget(
+                                  readonly: dto?.cod == -1 ||
+                                      dto?.cod == null ||
+                                      !form.valid ||
+                                      !form.dirty,
+                                  onPressed: () => context
+                                      .read<AnormalidadeTipoFrmCubit>()
+                                      .alterarExistente(
+                                        context: context,
+                                        onSaved: onSaved,
+                                      ),
+                                );
+                              },
+                            ),
+                            ReactiveFormConsumer(
+                              builder: (context, form, child) {
+                                return InsertButtonWidget(
+                                  readonly: !form.valid || !form.dirty,
+                                  onPressed: () => context
+                                      .read<AnormalidadeTipoFrmCubit>()
+                                      .inserirNovo(
+                                        context: context,
+                                        onSaved: onSaved,
+                                      ),
                                 );
                               },
                             ),

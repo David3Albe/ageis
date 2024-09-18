@@ -13,7 +13,8 @@ import 'package:ageiscme_models/filters/equipamento/equipamento_filter.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
@@ -1241,9 +1242,16 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
                 ),
                 const Spacer(),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: SaveButtonWidget(
-                    onPressed: () => {salvar()},
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: UpdateButtonWidget(
+                    readonly: processoEtapa.cod == 0 || processoEtapa.cod == null,
+                    onPressed: () => {alterarExistente()},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: InsertButtonWidget(
+                    onPressed: () => {inserirNovo()},
                   ),
                 ),
                 Padding(
@@ -1482,7 +1490,15 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
     await controller.print();
   }
 
-  void salvar() {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  void salvar(bool novo) {
     bool nomeValid = txtNome.valid;
     bool descricaoValid = txtDescricao.valid;
     bool etiquetaPreparoValid = txtEtiquetaPreparo.valid;
@@ -1537,6 +1553,9 @@ class _ProcessoEtapaPageFrmState extends State<ProcessoEtapaPageFrm> {
       return;
     }
 
-    cubit.save(processoEtapa, widget.onSaved);
+    cubit.save(
+      novo ? processoEtapa.copyWith(cod: 0, tstamp: null) : processoEtapa,
+      widget.onSaved,
+    );
   }
 }

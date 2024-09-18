@@ -9,7 +9,8 @@ import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/models/treinamento_usuario/treinamento_usuario_model.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/label_string_widget.dart';
 import 'package:compartilhados/componentes/campos/list_field/list_field_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
@@ -499,12 +500,16 @@ class _TreinamentoRegistroPageFrmState
                 ),
                 const Spacer(),
                 Wrap(
-                  spacing: 16 * paddingHorizontalScale,
-                  runSpacing: 16 * paddingHorizontalScale,
+                  spacing: 6 * paddingHorizontalScale,
+                  runSpacing: 6 * paddingHorizontalScale,
                   alignment: WrapAlignment.end,
                   children: [
-                    SaveButtonWidget(
-                      onPressed: salvar,
+                    UpdateButtonWidget(
+                      readonly: treinamentoRegistro.cod == 0 || treinamentoRegistro.cod == null,
+                      onPressed: () => {alterarExistente()},
+                    ),
+                    InsertButtonWidget(
+                      onPressed: () => {inserirNovo()},
                     ),
                     CleanButtonWidget(
                       onPressed: () => {
@@ -618,7 +623,15 @@ class _TreinamentoRegistroPageFrmState
     });
   }
 
-  void salvar() {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  void salvar(bool novo) {
     bool nomeValid = txtNome.valid;
     bool descricaoValid = txtDescricaoConteudo.valid;
     bool entidadeValid = txtEntidade.valid;
@@ -643,9 +656,9 @@ class _TreinamentoRegistroPageFrmState
     final registrarUsuariosTreinamento = <TreinamentoUsuarioModel>[];
     for (final usuario in treinamentoRegistro.usuariosTreinamentos!) {
       final treinamentoUsuario = TreinamentoUsuarioModel(
-        cod: usuario.cod,
+        cod: novo ? 0 : usuario.cod,
         codInstituicao: usuario.codInstituicao,
-        codRegistroTreinamento: treinamentoRegistro.cod,
+        codRegistroTreinamento: novo ? 0 : treinamentoRegistro.cod,
         codUsuario: usuario.codUsuario,
         tstamp: '',
         ultimaAlteracao: null,
@@ -653,6 +666,14 @@ class _TreinamentoRegistroPageFrmState
       registrarUsuariosTreinamento.add(treinamentoUsuario);
     }
     treinamentoRegistro.usuariosTreinamentos = registrarUsuariosTreinamento;
-    cubit.save(treinamentoRegistro, widget.onSaved);
+    cubit.save(
+      novo
+          ? treinamentoRegistro.copyWith(
+              cod: 0,
+              tstamp: null,
+            )
+          : treinamentoRegistro,
+      widget.onSaved,
+    );
   }
 }

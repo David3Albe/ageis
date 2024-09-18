@@ -15,7 +15,8 @@ import 'package:ageiscme_models/response_dto/item/drop_down_search/item_drop_dow
 import 'package:ageiscme_models/response_dto/processo_registro/ultimo/processo_registro_ultimo_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/custom_autocomplete/custom_autocomplete_selectable_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
@@ -451,12 +452,30 @@ class AnormalidadeFrmPageWidget extends StatelessWidget {
               ),
               Expanded(
                 child: Wrap(
-                  runSpacing: 16 * scalePadding,
-                  spacing: 16 * scalePadding,
+                  runSpacing: 6 * scalePadding,
+                  spacing: 6 * scalePadding,
                   alignment: WrapAlignment.end,
                   children: [
-                    SaveButtonWidget(
+                    Builder(
+                      builder: (context) {
+                        AnormalidadeSaveDTO? dto = context.select(
+                          (AnormalidadeFrmCubit cubit) =>
+                              cubit.state.dtoOriginal,
+                        );
+                        return UpdateButtonWidget(
+                          readonly: dto?.cod == 0 || dto?.cod == null,
+                          onPressed: () => save(
+                            novo: false,
+                            context: context,
+                            scroll: scroll,
+                            tipoAnormalidadeForm: tipoAnormalidadeForm,
+                          ),
+                        );
+                      },
+                    ),
+                    InsertButtonWidget(
                       onPressed: () => save(
+                        novo: true,
                         context: context,
                         scroll: scroll,
                         tipoAnormalidadeForm: tipoAnormalidadeForm,
@@ -482,6 +501,7 @@ class AnormalidadeFrmPageWidget extends StatelessWidget {
   }
 
   void save({
+    required bool novo,
     required BuildContext context,
     required ScrollController scroll,
     required GlobalKey<FormState> tipoAnormalidadeForm,
@@ -492,7 +512,7 @@ class AnormalidadeFrmPageWidget extends StatelessWidget {
       return;
     }
     BlocProvider.of<AnormalidadeFrmCubit>(context)
-        .salvar(context: context, onSaved: onSaved);
+        .salvar(context: context, onSaved: onSaved, novo: novo);
   }
 
   Future openModalMateriaisAnormalidade(

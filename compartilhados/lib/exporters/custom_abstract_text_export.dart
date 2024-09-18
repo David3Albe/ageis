@@ -17,6 +17,7 @@ abstract class CustomAbstractTextExport<T> {
 
   List<Map<PlutoCell?, String?>> mapStateToListOfRows(
     PlutoGridStateManager state,
+    bool isCsv,
   ) {
     List<Map<PlutoCell?, String?>> outputRows = [];
 
@@ -29,8 +30,9 @@ abstract class CustomAbstractTextExport<T> {
     for (var plutoRow in rowsToExport) {
       outputRows.add(
         mapPlutoRowToList(
+          isCsv: isCsv,
           state,
-          plutoRow
+          plutoRow,
         ),
       );
     }
@@ -42,6 +44,7 @@ abstract class CustomAbstractTextExport<T> {
     PlutoGridStateManager state,
     PlutoRow plutoRow, {
     List<String>? columnsToIgnore,
+    bool isCsv = false,
   }) {
     Map<PlutoCell?, String?> serializedRow = {};
 
@@ -49,15 +52,34 @@ abstract class CustomAbstractTextExport<T> {
       dynamic value = plutoRow.cells[column.field]?.value;
       if (value is bool) {
         serializedRow.addAll(
-            {plutoRow.cells[column.field]: value == true ? 'Sim' : 'Não'});
+          {
+            plutoRow.cells[column.field]: value == true ? 'Sim' : 'Não',
+          },
+        );
+        continue;
+      }
+      if (value is String && isCsv && value != '') {
+        serializedRow.addAll(
+          {
+            plutoRow.cells[column.field]: "'$value'",
+          },
+        );
         continue;
       }
       String str = column.formattedValueForDisplay(value);
       if (str == 'null') {
-        serializedRow.addAll({plutoRow.cells[column.field]: ''});
+        serializedRow.addAll(
+          {
+            plutoRow.cells[column.field]: '',
+          },
+        );
         continue;
       }
-      serializedRow.addAll({plutoRow.cells[column.field]: str});
+      serializedRow.addAll(
+        {
+          plutoRow.cells[column.field]: str,
+        },
+      );
     }
 
     return serializedRow;

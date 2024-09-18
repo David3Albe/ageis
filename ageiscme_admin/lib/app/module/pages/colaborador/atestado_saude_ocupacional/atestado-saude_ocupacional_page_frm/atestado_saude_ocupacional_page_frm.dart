@@ -7,7 +7,8 @@ import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/models/atestado_saude_ocupacional/atestado_saude_ocupacional_model.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/label_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
@@ -42,7 +43,7 @@ class AtestadoSaudeOcupacionalPageFrm extends StatefulWidget {
 
   final AtestadoSaudeOcupacionalModel atestadoSaudeOcupacional;
   final UsuarioCubit usuarioCubit;
-  final void Function(String) onSaved;
+  final void Function() onSaved;
   final void Function() onCancel;
 
   @override
@@ -427,12 +428,17 @@ class _AtestadoSaudeOcupacionalFrmState
                   ),
                 ),
                 Wrap(
-                  spacing: 16 * paddingHorizontalScale,
-                  runSpacing: 16 * paddingHorizontalScale,
+                  spacing: 6 * paddingHorizontalScale,
+                  runSpacing: 6 * paddingHorizontalScale,
                   alignment: WrapAlignment.end,
                   children: [
-                    SaveButtonWidget(
-                      onPressed: () => {salvar()},
+                    UpdateButtonWidget(
+                      readonly: atestadoSaudeOcupacional.cod == 0 ||
+                          atestadoSaudeOcupacional.cod == null,
+                      onPressed: () => {alterarExistente()},
+                    ),
+                    InsertButtonWidget(
+                      onPressed: () => {inserirNovo()},
                     ),
                     CleanButtonWidget(
                       onPressed: limpar,
@@ -510,7 +516,15 @@ class _AtestadoSaudeOcupacionalFrmState
     });
   }
 
-  void salvar() {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  void salvar(bool novo) {
     bool medicoValid = txtNomeMedico.valid;
     bool crmValid = txtCrmMedico.valid;
     bool usuarioValid = usuarioValidate();
@@ -539,6 +553,12 @@ class _AtestadoSaudeOcupacionalFrmState
         !conclusaoValid ||
         !dataValidadeValid) return;
 
-    cubit.save(atestadoSaudeOcupacional, widget.onSaved);
+    cubit.save(
+      novo
+          ? atestadoSaudeOcupacional.copyWith(cod: 0, tstamp: null)
+          : atestadoSaudeOcupacional,
+      widget.onSaved,
+      context,
+    );
   }
 }

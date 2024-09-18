@@ -1,9 +1,10 @@
-import 'package:ageiscme_admin/app/module/pages/colaborador/turno/cubits/sigla_frm_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/colaborador/turno/cubits/turno_frm_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_models/dto/turno/save/turno_save_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/defaults/custom_popup_item_history_model.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
@@ -122,14 +123,32 @@ class TurnoFrmPageWidget extends StatelessWidget {
                       ),
                       Expanded(
                         child: Wrap(
-                          runSpacing: 16 * scalePadding,
-                          spacing: 16 * scalePadding,
+                          runSpacing: 6 * scalePadding,
+                          spacing: 6 * scalePadding,
                           alignment: WrapAlignment.end,
                           children: [
-                            SaveButtonWidget(
-                              onPressed: () => context
-                                  .read<TurnoFrmCubit>()
-                                  .salvar(context: context, onSaved: onSaved),
+                            Builder(
+                              builder: (context) {
+                                TurnoSaveDTO? dto = context.select(
+                                  (TurnoFrmCubit cubit) =>
+                                      cubit.state.dtoOriginal,
+                                );
+                                return UpdateButtonWidget(
+                                  readonly: dto?.cod == -1 || dto?.cod == null,
+                                  onPressed: () =>
+                                      context.read<TurnoFrmCubit>().atualizar(
+                                            context: context,
+                                            onSaved: onSaved,
+                                          ),
+                                );
+                              },
+                            ),
+                            InsertButtonWidget(
+                              onPressed: () =>
+                                  context.read<TurnoFrmCubit>().inserir(
+                                        context: context,
+                                        onSaved: onSaved,
+                                      ),
                             ),
                             CleanButtonWidget(
                               onPressed: context.read<TurnoFrmCubit>().clear,

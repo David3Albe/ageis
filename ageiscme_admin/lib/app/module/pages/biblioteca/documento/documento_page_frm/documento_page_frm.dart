@@ -5,7 +5,8 @@ import 'package:ageiscme_data/services/documento/documento_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/label_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
@@ -260,12 +261,22 @@ class _DocumentoPageFrmState extends State<DocumentoPageFrm> {
                   ),
                 ),
                 Wrap(
-                  spacing: 16 * paddingHorizontalScale,
-                  runSpacing: 16 * paddingHorizontalScale,
+                  spacing: 6 * paddingHorizontalScale,
+                  runSpacing: 6 * paddingHorizontalScale,
                   alignment: WrapAlignment.end,
                   children: [
-                    SaveButtonWidget(
-                      onPressed: () => {salvar()},
+                    Padding(
+                      padding: const EdgeInsets.only(left: 6.0),
+                      child: UpdateButtonWidget(
+                        readonly: documento.cod == 0 || documento.cod == null,
+                        onPressed: () => {alterarExistente()},
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 6.0),
+                      child: InsertButtonWidget(
+                        onPressed: () => {inserirNovo()},
+                      ),
                     ),
                     CleanButtonWidget(
                       onPressed: () => {
@@ -306,11 +317,19 @@ class _DocumentoPageFrmState extends State<DocumentoPageFrm> {
     });
   }
 
-  void salvar() {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  void salvar(bool novo) {
     bool nomeDocumentoValid = txtNomeDocumento.valid;
     bool observacaoValid = txtObservacao.valid;
     bool tipoDocumentoValid = validateTipoDocumento();
     if (!nomeDocumentoValid || !observacaoValid || !tipoDocumentoValid) return;
-    cubit.save(documento, widget.onSaved);
+    cubit.save(novo ? documento.copyWith(cod: 0) : documento, widget.onSaved);
   }
 }

@@ -11,7 +11,8 @@ import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/models/item_descritor_consignado/item_descritor_consignado_model.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/label_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_float_widget.dart';
@@ -42,7 +43,7 @@ class ItemDescritorPageFrm extends StatefulWidget {
 
   final ItemDescritorModel itemDescritor;
   final InstituicaoModel instituicao;
-  final void Function(String) onSaved;
+  final void Function(String, int) onSaved;
   final void Function() onCancel;
 
   @override
@@ -887,19 +888,27 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
                 ),
                 const Spacer(),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: SaveButtonWidget(
-                    onPressed: () => {salvar()},
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: UpdateButtonWidget(
+                    readonly:
+                        itemDescritor.cod == 0 || itemDescritor.cod == null,
+                    onPressed: () => {alterarExistente()},
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: InsertButtonWidget(
+                    onPressed: () => {inserirNovo()},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 6.0),
                   child: CleanButtonWidget(
                     onPressed: limpar,
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(left: 6.0),
                   child: CancelButtonUnfilledWidget(
                     onPressed: widget.onCancel,
                   ),
@@ -941,7 +950,15 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
     });
   }
 
-  void salvar() async {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  void salvar(bool novo) async {
     if (itemDescritor.consignado == true) await commitEditGridMethod.call();
     bool descricaoCurtaValid = txtDescricaoCurta.valid;
     bool descricaoCompletaValid = txtDescricaoCompleta.valid;
@@ -975,7 +992,26 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
         !cmValid) return;
     bool valido = await validaItensConsignados();
     if (!valido) return;
-    cubit.save(itemDescritor, widget.onSaved);
+    cubit.save(
+      novo
+          ? itemDescritor.copyWith(
+              cod: 0,
+              tstamp: null,
+              itensDescritoresConsignados:
+                  itemDescritor.itensDescritoresConsignados
+                          ?.map(
+                            (e) => e.copyWith(
+                              cod: 0,
+                              tstamp: null,
+                              codItemDescritor: 0,
+                            ),
+                          )
+                          .toList() ??
+                      [],
+            )
+          : itemDescritor,
+      widget.onSaved,
+    );
   }
 
   Future<bool> validaItensConsignados() async {

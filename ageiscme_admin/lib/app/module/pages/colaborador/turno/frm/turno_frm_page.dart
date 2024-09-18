@@ -1,4 +1,4 @@
-import 'package:ageiscme_admin/app/module/pages/colaborador/turno/cubits/sigla_frm_cubit.dart';
+import 'package:ageiscme_admin/app/module/pages/colaborador/turno/cubits/turno_frm_cubit.dart';
 import 'package:ageiscme_admin/app/module/pages/colaborador/turno/frm/page/turno_frm_page_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';

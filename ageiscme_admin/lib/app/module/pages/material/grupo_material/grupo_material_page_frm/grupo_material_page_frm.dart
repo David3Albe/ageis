@@ -4,7 +4,8 @@ import 'package:ageiscme_data/services/grupo_material/grupo_material_service.dar
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_area_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
@@ -45,7 +46,8 @@ class _GrupoMaterialPageFrmState extends State<GrupoMaterialPageFrm> {
       grupoMaterial.nome = txtNomeGrupo.text;
     },
   );
-  late final TextFieldStringAreaWidget txtDescricaoGrupo = TextFieldStringAreaWidget(
+  late final TextFieldStringAreaWidget txtDescricaoGrupo =
+      TextFieldStringAreaWidget(
     placeholder: 'Descrição',
     onChanged: (String? str) {
       grupoMaterial.descricao = txtDescricaoGrupo.text;
@@ -146,9 +148,17 @@ class _GrupoMaterialPageFrmState extends State<GrupoMaterialPageFrm> {
                         ),
                       const Spacer(),
                       Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
-                        child: SaveButtonWidget(
-                          onPressed: () => {salvar()},
+                        padding: const EdgeInsets.only(left: 6.0),
+                        child: UpdateButtonWidget(
+                          readonly: grupoMaterial.cod == 0 ||
+                              grupoMaterial.cod == null,
+                          onPressed: () => {alterarExistente()},
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 6.0),
+                        child: InsertButtonWidget(
+                          onPressed: () => {inserirNovo()},
                         ),
                       ),
                       Padding(
@@ -178,10 +188,21 @@ class _GrupoMaterialPageFrmState extends State<GrupoMaterialPageFrm> {
     );
   }
 
-  void salvar() {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  void salvar(bool novo) {
     bool nomeValid = txtNomeGrupo.valid;
     bool descricaoValid = txtDescricaoGrupo.valid;
     if (!nomeValid || !descricaoValid) return;
-    cubit.save(grupoMaterial, widget.onSaved);
+    cubit.save(
+      novo ? grupoMaterial.copyWith(cod: 0, tstamp: null) : grupoMaterial,
+      widget.onSaved,
+    );
   }
 }

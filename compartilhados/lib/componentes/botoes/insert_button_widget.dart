@@ -1,6 +1,7 @@
 import 'package:compartilhados/componentes/botoes/button_constraints.dart';
 import 'package:compartilhados/cores/cores.dart';
 import 'package:compartilhados/functions/helper_functions.dart';
+import 'package:dependencias_comuns/easy_debounce_export.dart';
 import 'package:dependencias_comuns/main.dart';
 import 'package:flutter/material.dart';
 
@@ -9,11 +10,13 @@ class InsertButtonWidget extends StatefulWidget {
     required this.onPressed,
     this.paddingHeight = 6,
     this.paddingWidth = 12,
+    this.readonly = false,
     Key? key,
   });
 
   final double paddingHeight;
   final double paddingWidth;
+  final bool readonly;
   final void Function()? onPressed;
 
   @override
@@ -48,7 +51,7 @@ class _InsertButtonWidgetState extends State<InsertButtonWidget> {
                 ),
                 backgroundColor: Cores.corBotaoLimparHovered,
               ),
-        onPressed: widget.onPressed,
+        onPressed: widget.readonly ? null : handleClick,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -80,6 +83,15 @@ class _InsertButtonWidgetState extends State<InsertButtonWidget> {
           ],
         ),
       ),
+    );
+  }
+
+    void handleClick() {
+    if (widget.onPressed == null) return;
+    EasyThrottle.throttle(
+      'insert-button',
+      const Duration(seconds: 4),
+      widget.onPressed!,
     );
   }
 }

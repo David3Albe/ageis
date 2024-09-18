@@ -119,15 +119,14 @@ class _CentroCustoPageState extends State<CentroCustoPage> {
       title: 'Cadastro/Edição Centro de Custo',
       widget: CentroCustoPageFrm(
         onCancel: () => onCancel(chave),
-        onSaved: (str) => onSaved(str, chave),
+        onSaved: () => onSaved(chave),
         centroCusto: centroCusto,
       ),
     );
   }
 
-  void onSaved(String message, int chave) {
+  void onSaved(int chave) {
     WindowsHelper.RemoverWidget(chave);
-    ToastUtils.showCustomToastSucess(context, message);
     bloc.loadCentroCusto();
   }
 

@@ -3,7 +3,8 @@ import 'package:ageiscme_data/services/fornecedor/fornecedor_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
@@ -97,13 +98,21 @@ class _FornecedorPageFrmState extends State<FornecedorPageFrm> {
                     children: [
                       const Spacer(),
                       Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
-                        child: SaveButtonWidget(
-                          onPressed: () => {salvar()},
+                        padding: const EdgeInsets.only(left: 6.0),
+                        child: UpdateButtonWidget(
+                          readonly:
+                              fornecedor.cod == 0 || fornecedor.cod == null,
+                          onPressed: () => {alterarExistente()},
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
+                        padding: const EdgeInsets.only(left: 6.0),
+                        child: InsertButtonWidget(
+                          onPressed: () => {inserirNovo()},
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 6.0),
                         child: CleanButtonWidget(
                           onPressed: () => {
                             setState(() {
@@ -113,7 +122,7 @@ class _FornecedorPageFrmState extends State<FornecedorPageFrm> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
+                        padding: const EdgeInsets.only(left: 6.0),
                         child: CancelButtonUnfilledWidget(
                           onPressed: widget.onCancel,
                         ),
@@ -129,8 +138,19 @@ class _FornecedorPageFrmState extends State<FornecedorPageFrm> {
     );
   }
 
-  void salvar() {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  void salvar(bool novo) {
     if (!txtFornecedor.valid) return;
-    cubit.save(fornecedor, widget.onSaved);
+    cubit.save(
+      novo ? fornecedor.copyWith(cod: 0, tstamp: null) : fornecedor,
+      widget.onSaved,
+    );
   }
 }

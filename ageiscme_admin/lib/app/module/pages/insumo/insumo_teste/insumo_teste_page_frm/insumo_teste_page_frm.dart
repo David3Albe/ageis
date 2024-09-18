@@ -2,6 +2,8 @@ import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/usuario/usuar
 import 'package:ageiscme_admin/app/module/pages/historico/historico_page.dart';
 import 'package:ageiscme_data/services/usuario/usuario_service.dart';
 import 'package:ageiscme_models/filters/usuario_filter/usuario_filter.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_area_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -20,7 +22,6 @@ import 'package:ageiscme_models/models/insumo_teste/insumo_teste_model.dart';
 import 'package:ageiscme_models/response_dto/insumo_movimento/drop_down_search/insumo_movimento_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
@@ -496,19 +497,26 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
                 ),
                 const Spacer(),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: SaveButtonWidget(
-                    onPressed: () => {salvar()},
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: UpdateButtonWidget(
+                    readonly: insumoTeste.cod == 0 || insumoTeste.cod == null,
+                    onPressed: () => {alterarExistente()},
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: InsertButtonWidget(
+                    onPressed: () => {inserirNovo()},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 6.0),
                   child: CleanButtonWidget(
                     onPressed: limpar,
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(left: 6.0),
                   child: CancelButtonUnfilledWidget(
                     onPressed: widget.onCancel,
                   ),
@@ -555,7 +563,15 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
     txtUsuario.text = auth?.usuario?.nome ?? 'Usuário logado não identificado';
   }
 
-  void salvar() async {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  void salvar(bool novo) async {
     // bool loteValid = txtLote.valid;
     bool usuarioValid = txtUsuario.valid;
     bool insumoValid = insumoValidate();
@@ -588,6 +604,9 @@ class _InsumoTestePageFrmState extends State<InsumoTestePageFrm> {
       );
     }
 
-    cubit.save(insumoTeste, widget.onSaved);
+    cubit.save(
+      novo ? insumoTeste.copyWith(cod: 0, tstamp: null) : insumoTeste,
+      widget.onSaved,
+    );
   }
 }

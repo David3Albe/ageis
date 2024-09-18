@@ -17,7 +17,7 @@ class PlutoGridXmlExport {
     required this.columnsToIgnore,
   });
 
-  Future export() async{
+  Future export() async {
     LoadingController? loading = LoadingController(context: context);
     await Future.delayed(const Duration(milliseconds: 200)).then((value) {
       _export().then((value) => loading.closeDefault());
@@ -46,20 +46,33 @@ class PlutoGridXmlExport {
               .replaceAll('.', '');
     }
 
-    builder.processing('xml', 'version="1.0"');
+    builder.processing('xml', 'version="1.0" encoding="UTF-8"');
     builder.element(
       'DocumentElement',
+      attributes: {
+        'xmlns:xsi': 'http://www.w3.org/2001/XMLSchema-instance',
+      },
       nest: () {
         for (PlutoRow row in rows) {
           builder.element(
             'CONSULTA',
             nest: () {
               for (PlutoColumn column in columns) {
+                String tag = columnTitleToReplace[column.field]!;
+                dynamic value = row.cells[column.field]?.value;
+                Map<String, String> attributes = {};
+                if (value is String) {
+                  value = value == '' ? '' : "'$value'";
+                  attributes = {
+                    'xsi:type': 'xsd:string',
+                  };
+                }
                 builder.element(
-                  columnTitleToReplace[column.field]!,
+                  attributes: attributes,
+                  tag,
                   nest: () {
                     builder.text(
-                      row.cells[column.field]?.value?.toString() ?? '',
+                      value?.toString() ?? '',
                     );
                   },
                 );

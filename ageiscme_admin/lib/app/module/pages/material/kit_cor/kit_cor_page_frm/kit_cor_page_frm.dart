@@ -4,7 +4,8 @@ import 'package:ageiscme_data/services/kit_cor/kit_cor_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
@@ -204,9 +205,16 @@ class _KitCorPageFrmState extends State<KitCorPageFrm> {
                         ),
                       const Spacer(),
                       Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
-                        child: SaveButtonWidget(
-                          onPressed: () => {salvar()},
+                        padding: const EdgeInsets.only(left: 6.0),
+                        child: UpdateButtonWidget(
+                          readonly: kitCor.cod == 0 || kitCor.cod == null,
+                          onPressed: () => {alterarExistente()},
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 6.0),
+                        child: InsertButtonWidget(
+                          onPressed: () => {inserirNovo()},
                         ),
                       ),
                       Padding(
@@ -236,7 +244,15 @@ class _KitCorPageFrmState extends State<KitCorPageFrm> {
     );
   }
 
-  void salvar() {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  void salvar(bool novo) {
     bool nomeCorValid = txtNomeCor.valid;
     bool corGreenValid = txtCorGreen.valid;
     bool corRedValid = txtCorRed.valid;
@@ -244,6 +260,9 @@ class _KitCorPageFrmState extends State<KitCorPageFrm> {
     if (!nomeCorValid || !corGreenValid || !corRedValid || !corBlueValid) {
       return;
     }
-    cubit.save(kitCor, widget.onSaved);
+    cubit.save(
+      novo ? kitCor.copyWith(cod: 0, tstamp: null) : kitCor,
+      widget.onSaved,
+    );
   }
 }

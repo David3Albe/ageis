@@ -213,15 +213,24 @@ class _ItemDescritorPageState extends State<ItemDescritorPage> {
       widget: ItemDescritorPageFrm(
         instituicao: instituicao,
         onCancel: () => onCancel(chave),
-        onSaved: (str) => onSaved(str, chave, context),
+        onSaved: (str, cod) => onSaved(str, cod, chave, context),
         itemDescritor: item,
       ),
     );
   }
 
-  Future onSaved(String message, int chave, BuildContext context) async {
+  Future onSaved(
+    String message,
+    int cod,
+    int chave,
+    BuildContext context,
+  ) async {
     WindowsHelper.RemoverWidget(chave);
     ToastUtils.showCustomToastSucess(context, message);
+    await openModal(
+      context,
+      ItemDescritorModel.empty().copyWith(cod: cod),
+    );
     ItemDescritorFilter filter = context.read<ItemDescritorCubitFilter>().state;
     await bloc.getScreenData(filter);
   }

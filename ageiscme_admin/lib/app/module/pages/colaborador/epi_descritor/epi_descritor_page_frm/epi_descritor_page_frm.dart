@@ -10,7 +10,8 @@ import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/response_dto/epi_perfil/find_by_epi/epi_perfil_find_by_epi_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/label_string_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
@@ -315,12 +316,16 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
                 ),
                 const Spacer(),
                 Wrap(
-                  spacing: 16 * paddingHorizontalScale,
-                  runSpacing: 16 * paddingHorizontalScale,
+                  spacing: 6 * paddingHorizontalScale,
+                  runSpacing: 6 * paddingHorizontalScale,
                   alignment: WrapAlignment.end,
                   children: [
-                    SaveButtonWidget(
-                      onPressed: () => {salvar()},
+                    UpdateButtonWidget(
+                      readonly: epiDescritor.cod == 0 || epiDescritor.cod == null,
+                      onPressed: () => {alterarExistente()},
+                    ),
+                    InsertButtonWidget(
+                      onPressed: () => {inserirNovo()},
                     ),
                     CleanButtonWidget(
                       onPressed: () {
@@ -389,7 +394,15 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
     });
   }
 
-  void salvar() {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  void salvar(bool novo) {
     bool descricaoValid = txtDescricao.valid;
     bool numeroCAValid = txtNumeroCA.valid;
     bool tipoEpiValid = tipoEpiValidation();
@@ -407,6 +420,9 @@ class _EpiDescritorPageFrmState extends State<EpiDescritorPageFrm> {
     // }
     if (!descricaoValid || !numeroCAValid || !tipoEpiValid) return;
 
-    cubit.save(epiDescritor, widget.onSaved);
+    cubit.save(
+      novo ? epiDescritor.copyWith(cod: 0, tstamp: null) : epiDescritor,
+      widget.onSaved,
+    );
   }
 }

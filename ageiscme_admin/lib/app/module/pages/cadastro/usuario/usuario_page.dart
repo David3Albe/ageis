@@ -16,7 +16,6 @@ import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
-import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/enums/custom_data_column_type.dart';
 import 'package:compartilhados/windows/windows_helper.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
@@ -231,7 +230,7 @@ class _UsuarioPageState extends State<UsuarioPage> {
       widget: UsuarioPageFrm(
         usuarioAtualPossuiPerfilRestrito: possuiPerfilRestrito,
         onCancel: () => onCancel(chave),
-        onSaved: (str) => onSaved(str, chave, context),
+        onSaved: () => onSaved(chave, context),
         usuario: usuario,
       ),
     );
@@ -241,11 +240,10 @@ class _UsuarioPageState extends State<UsuarioPage> {
     WindowsHelper.RemoverWidget(chave);
   }
 
-  Future onSaved(String message, int chave, BuildContext context) async {
+  Future onSaved( int chave, BuildContext context) async {
     WindowsHelper.RemoverWidget(chave);
     UsuarioCubitFilter filterCubit =
         BlocProvider.of<UsuarioCubitFilter>(context);
-    ToastUtils.showCustomToastSucess(context, message);
     UsuarioPageCubit userCubit = BlocProvider.of<UsuarioPageCubit>(context);
     UsuarioFilter dto = filterCubit.state!;
     await userCubit.loadFilter(dto);

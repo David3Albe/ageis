@@ -130,22 +130,21 @@ class _LocalInstituicaoPageState extends State<LocalInstituicaoPage> {
 
   void openModal(BuildContext context, LocalInstituicaoModel localInstituicao) {
     late int chave;
-    int cod = localInstituicao.cod??0;
+    int cod = localInstituicao.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
       identificador: cod.toString(),
       theme: Theme.of(context),
       title: 'Cadastro/Edição Locais da Instituição',
       widget: LocalInstituicaoPageFrm(
         onCancel: () => onCancel(chave),
-        onSaved: (str) => onSaved(str, chave),
+        onSaved: () => onSaved(chave),
         localInstituicao: localInstituicao,
       ),
     );
   }
 
-  void onSaved(String message, int chave) {
+  void onSaved(int chave) {
     WindowsHelper.RemoverWidget(chave);
-    ToastUtils.showCustomToastSucess(context, message);
     bloc.loadLocalInstituicao();
   }
 

@@ -411,8 +411,8 @@ class CustomDefaultWindowComponentState
       minimizado = false;
       alinhadoHorizontal = false;
       alinhadoVertical = false;
-      if(width<=630){
-        width = 630;
+      if(width<=700){
+        width = 700;
       }
     });
     WindowsHelper.SetToLast(widget.chave);
@@ -439,7 +439,7 @@ class CustomDefaultWindowComponentState
       newWidth = width + details.delta.dx;
     }
     setState(() {
-      if (newWidth >= 630 || newWidth > width) {
+      if (newWidth >= 700 || newWidth > width) {
         width = newWidth;
       }
       if (newHeight >= 400 || newHeight > height) {

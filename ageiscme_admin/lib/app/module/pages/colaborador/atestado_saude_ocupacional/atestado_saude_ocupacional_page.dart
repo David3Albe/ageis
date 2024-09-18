@@ -219,16 +219,15 @@ class _AtestadoSaudeOcupacionalPageState
       title: 'Cadastro/Edição Atestado Saúde Ocupacional',
       widget: AtestadoSaudeOcupacionalPageFrm(
         onCancel: () => onCancel(chave),
-        onSaved: (str) => onSaved(str, chave),
+        onSaved: () => onSaved(chave),
         usuarioCubit: usuarioCubit,
         atestadoSaudeOcupacional: atestado,
       ),
     );
   }
 
-  Future onSaved(String message, int chave) async {
+  Future onSaved( int chave) async {
     WindowsHelper.RemoverWidget(chave);
-    ToastUtils.showCustomToastSucess(context, message);
     await bloc.loadAtestadoSaudeOcupacional();
   }
 

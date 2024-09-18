@@ -155,15 +155,14 @@ class _ProprietarioPageState extends State<ProprietarioPage> {
         localInstituicaoCubit: localInstituicaoCubit,
         arsenalEstoqueCubit: arsenalEstoqueCubit,
         proprietario: proprietario,
-        onSaved: (str) => onSaved(str, chave),
+        onSaved: () => onSaved( chave),
         onCancel: () => onCancel(chave),
       ),
     );
   }
 
-  void onSaved(String message, int chave) {
+  void onSaved( int chave) {
     WindowsHelper.RemoverWidget(chave);
-    ToastUtils.showCustomToastSucess(context, message);
     bloc.loadProprietario();
   }
 

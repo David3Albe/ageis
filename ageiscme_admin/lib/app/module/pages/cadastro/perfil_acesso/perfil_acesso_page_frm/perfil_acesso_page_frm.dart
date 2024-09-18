@@ -9,8 +9,9 @@ import 'package:ageiscme_models/models/direito/direito_model.dart';
 import 'package:ageiscme_models/models/perfil_direito/perfil_direito_model.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/list_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/list_field/list_field_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
@@ -35,7 +36,7 @@ class PerfilAcessoPageFrm extends StatefulWidget {
 
   final PerfilAcessoModel perfilAcesso;
   final DireitoCubit direitoCubit;
-  final void Function(String) onSaved;
+  final void Function() onSaved;
   final void Function() onCancel;
 
   @override
@@ -82,6 +83,10 @@ class _PerfilAcessoPageFrmState extends State<PerfilAcessoPageFrm> {
 
   void setFields() {
     txtDescricao.text = perfilAcesso.descricao.toString();
+    setTitle();
+  }
+
+  void setTitle() {
     titulo = 'Cadastro de Perfis';
     if (perfilAcesso.cod != 0) {
       titulo =
@@ -455,13 +460,20 @@ class _PerfilAcessoPageFrmState extends State<PerfilAcessoPageFrm> {
                 ),
                 const Spacer(),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: SaveButtonWidget(
-                    onPressed: () => {salvar()},
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: UpdateButtonWidget(
+                    readonly: perfilAcesso.cod==0 || perfilAcesso.cod==null,
+                    onPressed: () => {alterarExistente()},
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: InsertButtonWidget(
+                    onPressed: () => {inserirNovo()},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 6.0),
                   child: CleanButtonWidget(
                     onPressed: () => {
                       setState(() {
@@ -471,7 +483,7 @@ class _PerfilAcessoPageFrmState extends State<PerfilAcessoPageFrm> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(left: 6.0),
                   child: CancelButtonUnfilledWidget(
                     onPressed: widget.onCancel,
                   ),
@@ -505,7 +517,15 @@ class _PerfilAcessoPageFrmState extends State<PerfilAcessoPageFrm> {
     });
   }
 
-  void salvar() {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  void salvar(bool novo) async {
     if (!txtDescricao.valid) {
       scroll.jumpTo(0);
     }
@@ -514,10 +534,11 @@ class _PerfilAcessoPageFrmState extends State<PerfilAcessoPageFrm> {
     final registrarDireitos = <PerfilDireitoModel>[];
 
     for (final direitoPerfil in perfilAcesso.perfilDireitos!) {
+      int cod = novo ? 0 : (direitoPerfil.cod ?? 0);
       final perfilDireito = PerfilDireitoModel(
-        cod: direitoPerfil.cod??0,
+        cod: cod,
         codInstituicao: 0,
-        codPerfil: perfilAcesso.cod,
+        codPerfil: 0,
         codDireito: direitoPerfil.codDireito,
         perfilAcesso: null,
         usuarioPerfil: null,
@@ -527,6 +548,10 @@ class _PerfilAcessoPageFrmState extends State<PerfilAcessoPageFrm> {
       registrarDireitos.add(perfilDireito);
     }
     perfilAcesso.perfilDireitos = registrarDireitos;
-    cubit.save(perfilAcesso, widget.onSaved);
+    await cubit.save(
+      novo ? perfilAcesso.copyWith(cod: 0, tstamp: '') : perfilAcesso,
+      widget.onSaved,
+      context,
+    );
   }
 }

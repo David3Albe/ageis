@@ -148,16 +148,15 @@ class _PerfilAcessoPageState extends State<PerfilAcessoPage> {
       widget: PerfilAcessoPageFrm(
         direitoCubit: direitoCubit,
         onCancel: () => onCancel(chave),
-        onSaved: (str) => onSaved(str, chave),
+        onSaved: () => onSaved(chave),
         perfilAcesso: obj,
       ),
     );
   }
 
-  void onSaved(String message, int chave) {
-    WindowsHelper.RemoverWidget(chave);
-    ToastUtils.showCustomToastSucess(context, message);
+  void onSaved(int chave) {
     bloc.loadPerfilAcesso();
+    WindowsHelper.RemoverWidget(chave);
   }
 
   void onCancel(int chave) {

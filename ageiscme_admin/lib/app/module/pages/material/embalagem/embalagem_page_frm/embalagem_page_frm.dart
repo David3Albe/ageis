@@ -4,7 +4,8 @@ import 'package:ageiscme_data/services/embalagem/embalagem_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
@@ -156,9 +157,16 @@ class _EmbalagemPageFrmState extends State<EmbalagemPageFrm> {
                         ),
                       const Spacer(),
                       Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
-                        child: SaveButtonWidget(
-                          onPressed: () => {salvar()},
+                        padding: const EdgeInsets.only(left: 6.0),
+                        child: UpdateButtonWidget(
+                          readonly: embalagem.cod == 0 || embalagem.cod == null,
+                          onPressed: () => {alterarExistente()},
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 6.0),
+                        child: InsertButtonWidget(
+                          onPressed: () => {inserirNovo()},
                         ),
                       ),
                       Padding(
@@ -188,10 +196,21 @@ class _EmbalagemPageFrmState extends State<EmbalagemPageFrm> {
     );
   }
 
-  void salvar() {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  void salvar(bool novo) {
     bool nomeValid = txtNome.valid;
     bool validadeProcessoValid = txtValidadeProcesso.valid;
     if (!nomeValid || !validadeProcessoValid) return;
-    cubit.save(embalagem, widget.onSaved);
+    cubit.save(
+      novo ? embalagem.copyWith(cod: 0, tstamp: null) : embalagem,
+      widget.onSaved,
+    );
   }
 }

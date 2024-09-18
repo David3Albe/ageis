@@ -14,13 +14,13 @@ class KitDescritorPageFrmCubit extends Cubit<KitDescritorPageFrmState> {
 
   void save(
     KitDescritorModel kitDescritor,
-    void Function(String) onSaved,
+    void Function(String, int) onSaved,
   ) async {
     try {
       (String message, KitDescritorModel kitDescritor)? result =
           await service.save(kitDescritor);
       if (result == null) return;
-      onSaved(result.$1);
+      onSaved(result.$1, result.$2.cod!);
       emit(
         KitDescritorPageFrmState(
           message: result.$1,

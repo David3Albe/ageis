@@ -11,7 +11,8 @@ import 'package:ageiscme_models/models/afastamento/afastamento_model.dart';
 import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/label_string_widget.dart';
@@ -421,12 +422,16 @@ class _AfastamentoPageFrmState extends State<AfastamentoPageFrm> {
                 ),
                 const Spacer(),
                 Wrap(
-                  spacing: 16 * paddingHorizontalScale,
-                  runSpacing: 16 * paddingHorizontalScale,
+                  spacing: 6 * paddingHorizontalScale,
+                  runSpacing: 6 * paddingHorizontalScale,
                   alignment: WrapAlignment.end,
                   children: [
-                    SaveButtonWidget(
-                      onPressed: () => {salvar()},
+                    UpdateButtonWidget(
+                      readonly: afastamento.cod == 0,
+                      onPressed: () => {alterarExistente()},
+                    ),
+                    InsertButtonWidget(
+                      onPressed: () => {inserirNovo()},
                     ),
                     CleanButtonWidget(
                       onPressed: limpar,
@@ -476,7 +481,15 @@ class _AfastamentoPageFrmState extends State<AfastamentoPageFrm> {
     });
   }
 
-  void salvar() {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  void salvar(bool novo) {
     bool usuarioValid = usuarioValidate();
     bool dataInicioValid = dataInicioValidate();
     bool tipoAfastamentoValid = tipoAfastamentoValidate();
@@ -515,6 +528,14 @@ class _AfastamentoPageFrmState extends State<AfastamentoPageFrm> {
       }
     }
 
-    cubit.save(afastamento, widget.onSaved);
+    cubit.save(
+      novo
+          ? afastamento.copyWith(
+              cod: 0,
+              tstamp: null,
+            )
+          : afastamento,
+      widget.onSaved,
+    );
   }
 }

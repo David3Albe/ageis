@@ -4,7 +4,8 @@ import 'package:ageiscme_data/services/tipo_afastamento/tipo_afastamento_service
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
@@ -145,7 +146,7 @@ class _TipoAfastamentoPageFrmState extends State<TipoAfastamentoPageFrm> {
                           if (tipoAfastamento.cod != null &&
                               tipoAfastamento.cod != 0)
                             CustomPopupItemHistoryModel.getHistoryItem(
-                                  title: 'Tipo Afastamento ${tipoAfastamento.cod}',
+                              title: 'Tipo Afastamento ${tipoAfastamento.cod}',
                               child: HistoricoPage(
                                 pk: tipoAfastamento.cod!,
                                 termo: 'TIPO_AFASTAMENTO',
@@ -156,13 +157,21 @@ class _TipoAfastamentoPageFrmState extends State<TipoAfastamentoPageFrm> {
                       ),
                       const Spacer(),
                       Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
-                        child: SaveButtonWidget(
-                          onPressed: () => {salvar()},
+                        padding: const EdgeInsets.only(left: 6.0),
+                        child: UpdateButtonWidget(
+                          readonly: tipoAfastamento.cod == 0 ||
+                              tipoAfastamento.cod == null,
+                          onPressed: () => {alterarExistente()},
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
+                        padding: const EdgeInsets.only(left: 6.0),
+                        child: InsertButtonWidget(
+                          onPressed: () => {inserirNovo()},
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 6.0),
                         child: CleanButtonWidget(
                           onPressed: () => {
                             setState(() {
@@ -172,7 +181,7 @@ class _TipoAfastamentoPageFrmState extends State<TipoAfastamentoPageFrm> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
+                        padding: const EdgeInsets.only(left: 6.0),
                         child: CancelButtonUnfilledWidget(
                           onPressed: widget.onCancel,
                         ),
@@ -188,10 +197,21 @@ class _TipoAfastamentoPageFrmState extends State<TipoAfastamentoPageFrm> {
     );
   }
 
-  void salvar() {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  void salvar(bool novo) {
     bool motivoValid = txtMotivo.valid;
     bool diasConcedidoValid = txtDiasConcedido.valid;
     if (!motivoValid || !diasConcedidoValid) return;
-    cubit.save(tipoAfastamento, widget.onSaved);
+    cubit.save(
+      novo ? tipoAfastamento.copyWith(cod: 0, tstamp: null) : tipoAfastamento,
+      widget.onSaved,
+    );
   }
 }

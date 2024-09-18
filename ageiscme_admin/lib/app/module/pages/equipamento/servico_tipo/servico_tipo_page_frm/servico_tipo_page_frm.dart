@@ -4,7 +4,8 @@ import 'package:ageiscme_data/services/servico_tipo/servico_tipo_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
 import 'package:compartilhados/componentes/custom_popup_menu/custom_popup_menu_widget.dart';
@@ -152,13 +153,21 @@ class _ServicoTipoPageFrmState extends State<ServicoTipoPageFrm> {
                         ),
                       const Spacer(),
                       Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
-                        child: SaveButtonWidget(
-                          onPressed: () => {salvar()},
+                        padding: const EdgeInsets.only(left: 6.0),
+                        child: UpdateButtonWidget(
+                          readonly:
+                              servicoTipo.cod == 0 || servicoTipo.cod == null,
+                          onPressed: () => {alterarExistente()},
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
+                        padding: const EdgeInsets.only(left: 6.0),
+                        child: InsertButtonWidget(
+                          onPressed: () => {inserirNovo()},
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 6.0),
                         child: CleanButtonWidget(
                           onPressed: () => {
                             setState(() {
@@ -168,7 +177,7 @@ class _ServicoTipoPageFrmState extends State<ServicoTipoPageFrm> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
+                        padding: const EdgeInsets.only(left: 6.0),
                         child: CancelButtonUnfilledWidget(
                           onPressed: widget.onCancel,
                         ),
@@ -184,8 +193,19 @@ class _ServicoTipoPageFrmState extends State<ServicoTipoPageFrm> {
     );
   }
 
-  void salvar() {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  void salvar(bool novo) {
     if (!txtNome.valid) return;
-    cubit.save(servicoTipo, widget.onSaved);
+    cubit.save(
+      novo ? servicoTipo.copyWith(cod: 0, tstamp: null) : servicoTipo,
+      widget.onSaved,
+    );
   }
 }

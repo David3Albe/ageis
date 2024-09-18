@@ -145,15 +145,14 @@ class _ImagemPageState extends State<ImagemPage> {
       title: 'Cadastro/Edição Imagem',
       widget: ImagemPageFrm(
         onCancel: () => onCancel(chave),
-        onSaved: (str) => onSaved(str, chave),
+        onSaved: () => onSaved(chave),
         imagem: imagemModel,
       ),
     );
   }
 
-  void onSaved(String message, int chave) {
+  void onSaved(int chave) {
     WindowsHelper.RemoverWidget(chave);
-    ToastUtils.showCustomToastSucess(context, message);
     bloc.loadImagem();
   }
 

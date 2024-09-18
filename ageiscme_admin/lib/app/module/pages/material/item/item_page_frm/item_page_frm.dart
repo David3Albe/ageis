@@ -33,7 +33,8 @@ import 'package:ageiscme_models/response_dto/item_etiqueta_preparo_response/item
 import 'package:ageiscme_models/response_dto/item_etiqueta_preparo_response/item_etiqueta_preparo_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_date_widget.dart';
@@ -912,17 +913,25 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
                 ),
                 const Spacer(),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: SaveButtonWidget(
-                    onPressed: () => {salvar()},
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: UpdateButtonWidget(
+                    readonly: item.cod == 0 || item.cod == null,
+                    onPressed: () => {alterarExistente()},
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: InsertButtonWidget(
+                    readonly: item.cod != 0 && item.cod != null,
+                    onPressed: () => {inserirNovo()},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 6.0),
                   child: CleanButtonWidget(onPressed: limpar),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(left: 6.0),
                   child: CancelButtonUnfilledWidget(
                     onPressed: widget.onCancel,
                   ),
@@ -1013,7 +1022,15 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
     });
   }
 
-  Future salvar() async {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  Future salvar(bool novo) async {
     if (widget.frmType == ItemPageFrmtype.Consigned) {
       await submitMethod.call();
     }
@@ -1047,7 +1064,9 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
         !statusValid) {
       return;
     }
-    (String, ItemSaveResultDTO)? itemSave = await cubit.save(item);
+    (String, ItemSaveResultDTO)? itemSave = await cubit.save(
+      novo ? item.copyWith(cod: 0, tstamp: null) : item,
+    );
     if (itemSave == null) return;
     ToastUtils.showCustomToastSucess(context, itemSave.$1);
     await _printConsignado(itemSave.$2.item);

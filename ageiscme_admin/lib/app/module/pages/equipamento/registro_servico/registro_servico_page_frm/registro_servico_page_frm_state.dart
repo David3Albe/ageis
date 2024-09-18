@@ -28,13 +28,6 @@ class RegistroServicoPageFrmCubit extends Cubit<RegistroServicoPageFrmState> {
       ToastUtils.showCustomToastSucess(context, result.$1);
       onSaved(result.$1);
 
-      // emit(
-      //   RegistroServicoPageFrmState(
-      //     message: result.$1,
-      //     saved: true,
-      //     registroServico: result.$2,
-      //   ),
-      // );
     } on Exception catch (ex) {
       emit(
         RegistroServicoPageFrmState(
@@ -46,11 +39,6 @@ class RegistroServicoPageFrmCubit extends Cubit<RegistroServicoPageFrmState> {
   }
 
   void clear() {
-    // emit(
-    //   RegistroServicoPageFrmState(
-    //     registroServico: RegistroServicoModel.empty(),
-    //   ),
-    // );
   }
 }
 

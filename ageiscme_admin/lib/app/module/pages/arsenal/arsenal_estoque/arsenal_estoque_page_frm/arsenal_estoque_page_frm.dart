@@ -7,7 +7,8 @@ import 'package:ageiscme_data/services/arsenal/arsenal_estoque_service.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_area_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
@@ -261,9 +262,17 @@ class _ArsenalEstoquePageFrmState extends State<ArsenalEstoquePageFrm> {
                         ),
                       const Spacer(),
                       Padding(
-                        padding: const EdgeInsets.only(left: 16.0),
-                        child: SaveButtonWidget(
-                          onPressed: () => {salvar()},
+                        padding: const EdgeInsets.only(left: 6.0),
+                        child: UpdateButtonWidget(
+                          readonly: arsenalEstoque.cod == 0 ||
+                              arsenalEstoque.cod == null,
+                          onPressed: () => {alterarExistente()},
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 6.0),
+                        child: InsertButtonWidget(
+                          onPressed: () => {inserirNovo()},
                         ),
                       ),
                       Padding(
@@ -328,7 +337,15 @@ class _ArsenalEstoquePageFrmState extends State<ArsenalEstoquePageFrm> {
     WindowsHelper.RemoverWidget(chave);
   }
 
-  void salvar() {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  void salvar(bool novo) {
     bool nomeValid = txtNome.valid;
     bool codBarraValid = txtCodBarra.valid;
     bool localValid = validateLocal();
@@ -336,6 +353,11 @@ class _ArsenalEstoquePageFrmState extends State<ArsenalEstoquePageFrm> {
       return;
     }
 
-    cubit.save(arsenalEstoque, localIsEmpty, context, widget.onSaved);
+    cubit.save(
+      novo ? arsenalEstoque.copyWith(cod: 0, tstamp: null) : arsenalEstoque,
+      localIsEmpty,
+      context,
+      widget.onSaved,
+    );
   }
 }

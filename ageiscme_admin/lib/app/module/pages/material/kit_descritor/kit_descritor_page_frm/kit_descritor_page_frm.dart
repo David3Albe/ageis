@@ -1,5 +1,4 @@
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/centro_custo/centro_custo_cubit.dart';
-// import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/embalagem/embalagem_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/item_descritor/item_descritor_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/processo_tipo/processo_tipo_cubit.dart';
 import 'package:ageiscme_admin/app/module/cubits/models_list_cubit/tamanho/tamanho_cubit.dart';
@@ -10,10 +9,10 @@ import 'package:ageiscme_data/services/kit_descritor/kit_descritor_service.dart'
 import 'package:ageiscme_models/main.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/label_string_widget.dart';
-// import 'package:compartilhados/componentes/campos/list_field/list_field_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_area_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/componentes/checkbox/custom_checkbox_widget.dart';
@@ -26,7 +25,6 @@ import 'package:compartilhados/componentes/images/image_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
-// import 'package:compartilhados/fontes/fontes.dart';
 import 'package:compartilhados/functions/image_helper/image_object_model.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +43,7 @@ class KitDescritorPageFrm extends StatefulWidget {
   final KitDescritorModel kitDescritor;
   final ProcessoTipoCubit processoTipoCubit;
   final ItemDescritorCubit itemDescritorCubit;
-  final void Function(String) onSaved;
+  final void Function(String, int) onSaved;
   final void Function() onCancel;
   final InstituicaoModel instituicao;
 
@@ -600,13 +598,20 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
                 ),
                 const Spacer(),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: SaveButtonWidget(
-                    onPressed: () => {salvar()},
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: UpdateButtonWidget(
+                    readonly: kitDescritor.cod == 0 || kitDescritor.cod == null,
+                    onPressed: () => {alterarExistente()},
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: InsertButtonWidget(
+                    onPressed: () => {inserirNovo()},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 6.0),
                   child: CleanButtonWidget(
                     onPressed: () => {
                       setState(() {
@@ -621,7 +626,7 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(left: 6.0),
                   child: CancelButtonUnfilledWidget(
                     onPressed: widget.onCancel,
                   ),
@@ -683,7 +688,15 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
     });
   }
 
-  void salvar() {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  void salvar(bool novo) {
     bool nomeValid = txtNome.valid;
     bool descricaoValid = txtDescricao.valid;
     bool tipoProcessoNormalValid = validaTipoProcessoNormal();
@@ -704,22 +717,14 @@ class _KitDescritorPageFrmState extends State<KitDescritorPageFrm> {
       return;
     }
 
-    // final registrarItemDescritorKit = <ItemDescritorKitModel>[];
-
-    // for (final itemDescritorKit in listaDeItens) {
-    //   final descritorSave = ItemDescritorKitModel(
-    //     cod: 0,
-    //     codInstituicao: 0,
-    //     codDescritorItem: itemDescritorKit.codDescritorItem,
-    //     codDescritorKit: kitDescritor.cod,
-    //     quantidade: itemDescritorKit.quantidade,
-    //     tstamp: '',
-    //     ultimaAlteracao: null,
-    //   );
-    //   registrarItemDescritorKit.add(descritorSave);
-    // }
-
-    // kitDescritor.itensDescritorKits = registrarItemDescritorKit;
-    cubit.save(kitDescritor, widget.onSaved);
+    cubit.save(
+      novo
+          ? kitDescritor.copyWith(
+              cod: 0,
+              tstamp: null,
+            )
+          : kitDescritor,
+      widget.onSaved,
+    );
   }
 }

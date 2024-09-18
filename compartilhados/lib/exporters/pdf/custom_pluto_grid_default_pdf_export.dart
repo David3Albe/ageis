@@ -56,7 +56,7 @@ class CustomPlutoGridDefaultPdfExport
       creator: creator ?? 'https://pub.dev/packages/pluto_grid',
       format: format ?? pluto.PdfPageFormat.a4.landscape,
       columns: getColumnTitles(state),
-      rows: mapStateToListOfRows(state).take(500).toList(),
+      rows: mapStateToListOfRows(state, false).take(500).toList(),
       themeData: themeData,
       customRow: customRow,
       columnsToIgnore: columnsToIgnore,

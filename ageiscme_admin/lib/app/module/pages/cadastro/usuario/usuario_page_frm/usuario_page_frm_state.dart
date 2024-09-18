@@ -1,6 +1,8 @@
 import 'package:ageiscme_data/services/usuario/usuario_service.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:flutter/material.dart';
 
 class UsuarioPageFrmCubit extends Cubit<UsuarioPageFrmState> {
   final UsuarioService service;
@@ -12,12 +14,17 @@ class UsuarioPageFrmCubit extends Cubit<UsuarioPageFrmState> {
           UsuarioPageFrmState(usuario: usuarioModel),
         );
 
-  void save(UsuarioModel usuario, void Function(String) onSaved) async {
+  void save(
+    UsuarioModel usuario,
+    void Function() onSaved,
+    BuildContext context,
+  ) async {
     try {
       (String message, UsuarioModel usuario)? result =
           await service.save(usuario);
       if (result == null) return;
-      onSaved(result.$1);
+      ToastUtils.showCustomToastSucess(context, result.$1);
+      onSaved();
       emit(
         UsuarioPageFrmState(
           message: result.$1,

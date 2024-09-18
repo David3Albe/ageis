@@ -224,7 +224,7 @@ class _KitDescritorPageState extends State<KitDescritorPage> {
       widget: KitDescritorPageFrm(
         instituicao: instituicao,
         onCancel: () => onCancel(chave),
-        onSaved: (str) => onSaved(str, chave),
+        onSaved: (str, cod) => onSaved(str, cod, chave, context),
         processoTipoCubit: processoTipoCubit,
         itemDescritorCubit: itemDescritorCubit,
         kitDescritor: kit,
@@ -232,8 +232,14 @@ class _KitDescritorPageState extends State<KitDescritorPage> {
     );
   }
 
-  Future onSaved(String message, int chave) async {
+  Future onSaved(
+    String message,
+    int cod,
+    int chave,
+    BuildContext context,
+  ) async {
     WindowsHelper.RemoverWidget(chave);
+    await openModal(context, KitDescritorModel.empty().copyWith(cod: cod));
     ToastUtils.showCustomToastSucess(context, message);
     await carregar();
   }

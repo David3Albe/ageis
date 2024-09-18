@@ -1,6 +1,8 @@
 import 'package:ageiscme_data/services/centro_custo/centro_custo_service.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:flutter/material.dart';
 
 class CentroCustoPageFrmCubit extends Cubit<CentroCustoPageFrmState> {
   final CentroCustoService service;
@@ -14,13 +16,15 @@ class CentroCustoPageFrmCubit extends Cubit<CentroCustoPageFrmState> {
 
   Future save(
     CentroCustoModel centroCusto,
-    void Function(String) onSaved,
+    void Function() onSaved,
+    BuildContext context,
   ) async {
     try {
       (String message, CentroCustoModel centroCusto)? result =
           await service.save(centroCusto);
       if (result == null) return;
-      onSaved(result.$1);
+      ToastUtils.showCustomToastSucess(context, result.$1);
+      onSaved();
       emit(
         CentroCustoPageFrmState(
           message: result.$1,

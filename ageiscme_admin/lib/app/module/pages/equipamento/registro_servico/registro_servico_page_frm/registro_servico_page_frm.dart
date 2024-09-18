@@ -16,7 +16,8 @@ import 'package:ageiscme_models/main.dart';
 import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_api_widget.dart';
 import 'package:compartilhados/componentes/campos/drop_down_search_widget.dart';
 import 'package:compartilhados/componentes/campos/label_string_widget.dart';
@@ -608,18 +609,25 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
                   ),
                   const Spacer(),
                   Wrap(
-                    spacing: 16 * paddingHorizontalScale,
-                    runSpacing: 16 * paddingHorizontalScale,
+                    spacing: 6 * paddingHorizontalScale,
+                    runSpacing: 6 * paddingHorizontalScale,
                     alignment: WrapAlignment.end,
                     children: [
-                      SaveButtonWidget(
+                      UpdateButtonWidget(
+                        readonly: registroServico.cod == 0 ||
+                            registroServico.cod == null ||
+                            context.select(
+                              (ReadonlyCubit readonlyCubit) =>
+                                  readonlyCubit.state.botaoSalvarReadonly,
+                            ),
+                        onPressed: () => {alterarExistente()},
+                      ),
+                      InsertButtonWidget(
                         readonly: context.select(
                           (ReadonlyCubit readonlyCubit) =>
                               readonlyCubit.state.botaoSalvarReadonly,
                         ),
-                        onPressed: () {
-                          salvar();
-                        },
+                        onPressed: () => {inserirNovo()},
                       ),
                       CleanButtonWidget(
                         onPressed: limparCampos,
@@ -737,7 +745,15 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
     });
   }
 
-  Future salvar() async {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  Future salvar(bool novo) async {
     bool descricaoValid = controller.txtDescricaoServico.valid;
     bool loteValid = controller.txtLote.valid;
     bool usuarioRegistroValid = controller.txtUsuarioRegistro.valid;
@@ -805,7 +821,11 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
       return;
     }
 
-    await controller.cubit.save(registroServico, widget.onSaved, context);
+    await controller.cubit.save(
+      novo ? registroServico.copyWith(cod: 0, tstamp: null) : registroServico,
+      widget.onSaved,
+      context,
+    );
     setState(() {
       controller.setTitulo();
     });

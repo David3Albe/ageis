@@ -8,8 +8,9 @@ import 'package:ageiscme_models/models/proprietario_arsenal/proprietario_arsenal
 import 'package:ageiscme_models/models/proprietario_local/proprietario_local_model.dart';
 import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
 import 'package:compartilhados/componentes/botoes/clean_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/insert_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/list_button_widget.dart';
-import 'package:compartilhados/componentes/botoes/save_button_widget.dart';
+import 'package:compartilhados/componentes/botoes/update_button_widget.dart';
 import 'package:compartilhados/componentes/campos/list_field/list_field_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_number_widget.dart';
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
@@ -37,7 +38,7 @@ class ProprietarioPageFrm extends StatefulWidget {
   final ProprietarioModel proprietario;
   final LocalInstituicaoCubit localInstituicaoCubit;
   final ArsenalEstoqueCubit arsenalEstoqueCubit;
-  final void Function(String) onSaved;
+  final void Function() onSaved;
   final void Function() onCancel;
 
   @override
@@ -699,13 +700,20 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
                 ),
                 const Spacer(),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
-                  child: SaveButtonWidget(
-                    onPressed: salvar,
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: UpdateButtonWidget(
+                    readonly: proprietario.cod == 0 || proprietario.cod == null,
+                    onPressed: () => {alterarExistente()},
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: InsertButtonWidget(
+                    onPressed: () => {inserirNovo()},
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 6.0),
                   child: CleanButtonWidget(
                     onPressed: () => {
                       setState(() {
@@ -715,7 +723,7 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.only(left: 16.0),
+                  padding: const EdgeInsets.only(left: 6.0),
                   child: CancelButtonUnfilledWidget(
                     onPressed: widget.onCancel,
                   ),
@@ -728,7 +736,15 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
     );
   }
 
-  void salvar() {
+  void inserirNovo() {
+    salvar(true);
+  }
+
+  void alterarExistente() {
+    salvar(false);
+  }
+
+  void salvar(bool novo) {
     bool nomeValid = txtNome.valid;
     bool contatoValid = txtContato.valid;
     bool codBarraValid = txtCodBarra.valid;
@@ -746,10 +762,10 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
 
     for (final proprietarioLocal in proprietario.proprietariosLocais!) {
       final localProprietario = ProprietarioLocalModel(
-        cod: proprietarioLocal.cod,
+        cod: novo ? 0 : proprietarioLocal.cod,
         codInstituicao: proprietarioLocal.codInstituicao,
         codLocal: proprietarioLocal.codLocal,
-        codProprietario: proprietario.cod,
+        codProprietario: novo ? 0 : proprietario.cod,
         proprietario: null,
         tstamp: '',
         ultimaAlteracao: null,
@@ -759,10 +775,10 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
 
     for (final proprietarioArsenal in proprietario.proprietariosArsenais!) {
       final arsenalProprietario = ProprietarioArsenalModel(
-        cod: proprietarioArsenal.cod,
+        cod: novo ? 0 : proprietarioArsenal.cod,
         codInstituicao: proprietarioArsenal.codInstituicao,
         codEstoque: proprietarioArsenal.codEstoque,
-        codProprietario: proprietario.cod,
+        codProprietario: novo ? 0 : proprietario.cod,
         proprietario: null,
         tstamp: '',
         ultimaAlteracao: null,
@@ -772,6 +788,10 @@ class _ProprietarioPageFrmState extends State<ProprietarioPageFrm> {
 
     proprietario.proprietariosArsenais = registrarProprietarioArsenal;
     proprietario.proprietariosLocais = registrarProprietarioLocal;
-    cubit.save(proprietario, widget.onSaved);
+    cubit.save(
+      novo ? proprietario.copyWith(cod: 0, tstamp: null) : proprietario,
+      widget.onSaved,
+      context,
+    );
   }
 }

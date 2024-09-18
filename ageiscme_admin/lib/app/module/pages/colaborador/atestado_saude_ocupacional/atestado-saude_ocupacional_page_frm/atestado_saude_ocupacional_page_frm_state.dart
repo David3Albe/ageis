@@ -1,6 +1,8 @@
 import 'package:ageiscme_data/services/atestado_saude_ocupacional/atestado_saude_ocupacional_service.dart';
 import 'package:ageiscme_models/models/atestado_saude_ocupacional/atestado_saude_ocupacional_model.dart';
+import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
+import 'package:flutter/material.dart';
 
 class AtestadoSaudeOcupacionalPageFrmCubit
     extends Cubit<AtestadoSaudeOcupacionalPageFrmState> {
@@ -17,7 +19,8 @@ class AtestadoSaudeOcupacionalPageFrmCubit
 
   void save(
     AtestadoSaudeOcupacionalModel atestadoSaudeOcupacional,
-    final void Function(String) onSaved,
+    final void Function() onSaved,
+    BuildContext context,
   ) async {
     try {
       (
@@ -25,7 +28,8 @@ class AtestadoSaudeOcupacionalPageFrmCubit
         AtestadoSaudeOcupacionalModel atestadoSaudeOcupacional
       )? result = await service.save(atestadoSaudeOcupacional);
       if (result == null) return;
-      onSaved(result.$1);
+      ToastUtils.showCustomToastSucess(context, result.$1);
+      onSaved();
       emit(
         AtestadoSaudeOcupacionalPageFrmState(
           message: result.$1,
