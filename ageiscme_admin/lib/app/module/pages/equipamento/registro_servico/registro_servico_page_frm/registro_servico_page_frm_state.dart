@@ -15,20 +15,32 @@ class RegistroServicoPageFrmCubit extends Cubit<RegistroServicoPageFrmState> {
         );
 
   Future save(
+    bool novo,
     RegistroServicoModel registroServico,
     void Function(String) onSaved,
     BuildContext context,
   ) async {
+    int? cod = registroServico.cod;
+    String? tstamp = registroServico.tstamp;
     try {
+      if (novo) {
+        registroServico.cod = 0;
+        registroServico.tstamp = null;
+      }
       (String message, RegistroServicoModel registroServico)? result =
           await service.save(registroServico);
-      if (result == null) return;
+      if (result == null) {
+        registroServico.cod = cod;
+        registroServico.tstamp = tstamp;
+        return;
+      }
       registroServico.cod = result.$2.cod;
       registroServico.tstamp = result.$2.tstamp;
       ToastUtils.showCustomToastSucess(context, result.$1);
       onSaved(result.$1);
-
     } on Exception catch (ex) {
+      registroServico.cod = cod;
+      registroServico.tstamp = tstamp;
       emit(
         RegistroServicoPageFrmState(
           error: ex.toString(),
@@ -38,8 +50,7 @@ class RegistroServicoPageFrmCubit extends Cubit<RegistroServicoPageFrmState> {
     }
   }
 
-  void clear() {
-  }
+  void clear() {}
 }
 
 class RegistroServicoPageFrmState {

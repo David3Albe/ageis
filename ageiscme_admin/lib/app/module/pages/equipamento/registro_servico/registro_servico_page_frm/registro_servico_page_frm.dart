@@ -822,7 +822,8 @@ class _RegistroServicoPageFrmState extends State<RegistroServicoPageFrm> {
     }
 
     await controller.cubit.save(
-      novo ? registroServico.copyWith(cod: 0, tstamp: null) : registroServico,
+      novo,
+      registroServico,
       widget.onSaved,
       context,
     );
