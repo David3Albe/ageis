@@ -591,6 +591,7 @@ class _PlutoGridApiWidgetState<T> extends State<PlutoGridApiWidget<T>> {
         .toList();
     columnsToIgnore.add('');
     PlutoGridXmlExport xmlExport = PlutoGridXmlExport(
+      dataColumns: widget.columns,
       context: context,
       stateManager: gridState.stateManager!,
       columnsToIgnore: columnsToIgnore,
@@ -603,6 +604,7 @@ class _PlutoGridApiWidgetState<T> extends State<PlutoGridApiWidget<T>> {
     required PlutoGridApiState gridState,
   }) {
     PlutoGridCsvExport csvExport = PlutoGridCsvExport(
+      columns: widget.columns,
       context: context,
       stateManager: gridState.stateManager!,
     );
@@ -614,6 +616,7 @@ class _PlutoGridApiWidgetState<T> extends State<PlutoGridApiWidget<T>> {
     required PlutoGridApiState gridState,
   }) async {
     PlutoGridPdfExport pdfExport = PlutoGridPdfExport(
+      columns: widget.columns,
       context: context,
       stateManager: gridState.stateManager!,
     );

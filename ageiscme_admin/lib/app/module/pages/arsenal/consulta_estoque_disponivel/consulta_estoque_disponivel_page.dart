@@ -58,7 +58,11 @@ class _ConsultaEstoqueDisponivelPageState
       field: 'codKit',
       type: CustomDataColumnType.Text,
     ),
-    CustomDataColumn(text: 'Cod. Barras', field: 'codBarraKit'),
+    CustomDataColumn(
+      text: 'Cod. Barras',
+      field: 'codBarraKit',
+      incluirApostrofo: true,
+    ),
     CustomDataColumn(text: 'Item', field: 'nomeItem'),
     CustomDataColumn(text: 'Cod Item', field: 'codItem'),
     CustomDataColumn(text: 'ID Etiqueta', field: 'idEtiqueta'),

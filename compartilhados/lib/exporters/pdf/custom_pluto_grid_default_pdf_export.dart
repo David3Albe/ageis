@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/exporters/pdf/generic_pdf_controller.dart';
 import 'package:compartilhados/exporters/custom_abstract_text_export.dart'
     as custom_abstract;
@@ -10,6 +11,7 @@ class CustomPlutoGridDefaultPdfExport
     extends custom_abstract.CustomAbstractTextExport {
   CustomPlutoGridDefaultPdfExport({
     required this.title,
+    required this.columns,
     this.creator,
     this.format,
     this.themeData,
@@ -41,6 +43,7 @@ class CustomPlutoGridDefaultPdfExport
   final List<String>? columnsToIgnore;
   final List<pluto.Widget>? Function(Map<PlutoCell?, dynamic>)? customRow;
   final double? Function(PlutoColumn)? getWidthByColumn;
+  final List<CustomDataColumn> columns;
 
   @override
   Future<Uint8List> export(PlutoGridStateManager state) async {
@@ -56,7 +59,7 @@ class CustomPlutoGridDefaultPdfExport
       creator: creator ?? 'https://pub.dev/packages/pluto_grid',
       format: format ?? pluto.PdfPageFormat.a4.landscape,
       columns: getColumnTitles(state),
-      rows: mapStateToListOfRows(state, false).take(500).toList(),
+      rows: mapStateToListOfRows(state, columns, false).take(500).toList(),
       themeData: themeData,
       customRow: customRow,
       columnsToIgnore: columnsToIgnore,

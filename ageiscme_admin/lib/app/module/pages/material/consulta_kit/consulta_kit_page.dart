@@ -52,7 +52,11 @@ class _ConsultaKitPageState extends State<ConsultaKitPage> {
       type: CustomDataColumnType.Number,
       width: 100,
     ),
-    CustomDataColumn(text: 'Cod. Barra', field: 'codBarra'),
+    CustomDataColumn(
+      text: 'Cod. Barra',
+      field: 'codBarra',
+      incluirApostrofo: true,
+    ),
     CustomDataColumn(text: 'Descritor', field: 'nomeKitDescritor'),
     CustomDataColumn(text: 'Proprietário', field: 'nomeProprietario'),
     CustomDataColumn(text: 'Tamanho Kit', field: 'tamanhoKit'),

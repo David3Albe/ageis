@@ -54,7 +54,11 @@ class _ConsultaEstoqueVencidoPageState
       field: 'codKit',
       type: CustomDataColumnType.Text,
     ),
-    CustomDataColumn(text: 'Cod. Barra', field: 'codBarra'),
+    CustomDataColumn(
+      text: 'Cod. Barra',
+      field: 'codBarra',
+      incluirApostrofo: true,
+    ),
     CustomDataColumn(text: 'Item', field: 'nomeItem'),
     CustomDataColumn(
       text: 'Cod. Item',

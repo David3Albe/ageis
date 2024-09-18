@@ -1,3 +1,4 @@
+import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class CustomAbstractTextExport<T> {
@@ -17,6 +18,7 @@ abstract class CustomAbstractTextExport<T> {
 
   List<Map<PlutoCell?, String?>> mapStateToListOfRows(
     PlutoGridStateManager state,
+    List<CustomDataColumn> columns,
     bool isCsv,
   ) {
     List<Map<PlutoCell?, String?>> outputRows = [];
@@ -33,6 +35,7 @@ abstract class CustomAbstractTextExport<T> {
           isCsv: isCsv,
           state,
           plutoRow,
+          columns: columns,
         ),
       );
     }
@@ -43,6 +46,7 @@ abstract class CustomAbstractTextExport<T> {
   Map<PlutoCell?, String?> mapPlutoRowToList(
     PlutoGridStateManager state,
     PlutoRow plutoRow, {
+    required List<CustomDataColumn> columns,
     List<String>? columnsToIgnore,
     bool isCsv = false,
   }) {
@@ -58,7 +62,13 @@ abstract class CustomAbstractTextExport<T> {
         );
         continue;
       }
-      if (value is String && isCsv && value != '') {
+
+      CustomDataColumn? dataColumn =
+          columns.where((element) => element.field == column.field).firstOrNull;
+      if (value is String &&
+          isCsv &&
+          value != '' &&
+          dataColumn?.incluirApostrofo == true) {
         serializedRow.addAll(
           {
             plutoRow.cells[column.field]: "'$value'",

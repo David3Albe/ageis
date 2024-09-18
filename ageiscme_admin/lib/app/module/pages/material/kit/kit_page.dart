@@ -41,7 +41,11 @@ class _KitPageState extends State<KitPage> {
       type: CustomDataColumnType.Number,
       width: 100,
     ),
-    CustomDataColumn(text: 'Código Barras', field: 'codBarra'),
+    CustomDataColumn(
+      text: 'Código Barras',
+      field: 'codBarra',
+      incluirApostrofo: true,
+    ),
     CustomDataColumn(
       text: 'Descrição',
       field: 'codDescritor',

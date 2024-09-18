@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/toasts/confirm_dialog_utils.dart';
 import 'package:compartilhados/exporters/imagem_printing_service_helper.dart';
 import 'package:compartilhados/exporters/pdf/custom_pluto_grid_default_pdf_export.dart';
@@ -12,6 +13,7 @@ import 'package:flutter/services.dart';
 class PlutoGridPdfExport {
   PlutoGridStateManager stateManager;
   BuildContext context;
+  final List<CustomDataColumn> columns;
   final pw.PdfColor? Function(dynamic data)? colorByData;
   final pw.PdfColor? Function(PlutoColumn data)? colorByColumn;
   final String title;
@@ -25,6 +27,7 @@ class PlutoGridPdfExport {
   PlutoGridPdfExport({
     required this.stateManager,
     required this.context,
+    required this.columns,
     this.title = 'Consulta',
     this.colorByData,
     this.colorByColumn,
@@ -53,6 +56,7 @@ class PlutoGridPdfExport {
     final font = await rootBundle.load('fonts/Arial/Arial.ttf');
     final ttf = pw.Font.ttf(font);
     var plutoGridPdfExport = CustomPlutoGridDefaultPdfExport(
+      columns: columns,
       getWidthByColumn: getWidthByColumn,
       customRow: customRow,
       columnsToIgnore: columnsToIgnore,

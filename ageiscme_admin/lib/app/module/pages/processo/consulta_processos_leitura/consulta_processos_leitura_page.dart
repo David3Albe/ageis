@@ -104,6 +104,7 @@ class _ConsultaProcessosLeituraPageState
       CustomDataColumn(
         text: 'Etiqueta Kit',
         field: 'codBarraKit',
+        incluirApostrofo: true,
         customRenderer: getCustomRenderer,
         width: 160,
         type: CustomDataColumnType.Text,

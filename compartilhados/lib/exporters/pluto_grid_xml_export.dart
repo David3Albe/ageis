@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/functions/save_file/save_file_interface.dart';
 import 'package:dependencias_comuns/main.dart';
@@ -10,11 +11,13 @@ class PlutoGridXmlExport {
   PlutoGridStateManager stateManager;
   BuildContext context;
   List<String> columnsToIgnore;
+  List<CustomDataColumn> dataColumns;
 
   PlutoGridXmlExport({
     required this.stateManager,
     required this.context,
     required this.columnsToIgnore,
+    required this.dataColumns,
   });
 
   Future export() async {
@@ -61,7 +64,11 @@ class PlutoGridXmlExport {
                 String tag = columnTitleToReplace[column.field]!;
                 dynamic value = row.cells[column.field]?.value;
                 Map<String, String> attributes = {};
-                if (value is String) {
+                CustomDataColumn? columnData = dataColumns
+                    .where((element) => element.field == column.field)
+                    .firstOrNull;
+
+                if (value is String && columnData?.incluirApostrofo == true) {
                   value = value == '' ? '' : "'$value'";
                   attributes = {
                     'xsi:type': 'xsd:string',

@@ -4,6 +4,7 @@ import 'package:ageiscme_admin/app/module/pages/colaborador/escala/states/escala
 import 'package:ageiscme_admin/app/module/pages/colaborador/escala/widget/grid/escala_grid_page_header_widget.dart';
 import 'package:ageiscme_models/response_dto/turno/short/turno_short_response_dto.dart';
 import 'package:ageiscme_models/response_dto/usuario/drop_down_search/usuario_drop_down_search_response_dto.dart';
+import 'package:compartilhados/componentes/columns/custom_data_column.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/exporters/pluto_grid_csv_export.dart';
 import 'package:compartilhados/exporters/pluto_grid_pdf_export.dart';
@@ -89,6 +90,7 @@ class _EscalaPageGridWidgetState extends State<EscalaPageGridWidget> {
                   'XML',
                   icon: const FaIcon(FontAwesomeIcons.file),
                   onPressed: () => exportXml(
+                    columns: [],
                     context: context,
                   ),
                 ),
@@ -96,6 +98,7 @@ class _EscalaPageGridWidgetState extends State<EscalaPageGridWidget> {
                   'CSV',
                   icon: const FaIcon(FontAwesomeIcons.fileCsv),
                   onPressed: () => exportCSV(
+                    columns: [],
                     context: context,
                   ),
                 ),
@@ -103,6 +106,7 @@ class _EscalaPageGridWidgetState extends State<EscalaPageGridWidget> {
                   'PDF',
                   icon: const FaIcon(FontAwesomeIcons.filePdf),
                   onPressed: () => exportPDF(
+                    columns: [],
                     context: context,
                   ),
                 ),
@@ -159,11 +163,13 @@ class _EscalaPageGridWidgetState extends State<EscalaPageGridWidget> {
 
   void exportXml({
     required BuildContext context,
+    required List<CustomDataColumn> columns,
   }) {
     PlutoGridStateManager? stateManager =
         BlocProvider.of<EscalaPageGridCubit>(context).state.stateManager;
     if (stateManager == null) return;
     PlutoGridXmlExport xmlExport = PlutoGridXmlExport(
+      dataColumns: columns,
       context: context,
       stateManager: stateManager,
       columnsToIgnore: [],
@@ -173,11 +179,13 @@ class _EscalaPageGridWidgetState extends State<EscalaPageGridWidget> {
 
   void exportCSV({
     required BuildContext context,
+    required List<CustomDataColumn> columns,
   }) {
     PlutoGridStateManager? stateManager =
         BlocProvider.of<EscalaPageGridCubit>(context).state.stateManager;
     if (stateManager == null) return;
     PlutoGridCsvExport csvExport = PlutoGridCsvExport(
+      columns: columns,
       context: context,
       stateManager: stateManager,
     );
@@ -186,6 +194,7 @@ class _EscalaPageGridWidgetState extends State<EscalaPageGridWidget> {
 
   void exportPDF({
     required BuildContext context,
+    required List<CustomDataColumn> columns,
   }) {
     PlutoGridStateManager? stateManager =
         BlocProvider.of<EscalaPageGridCubit>(context).state.stateManager;
@@ -202,6 +211,7 @@ class _EscalaPageGridWidgetState extends State<EscalaPageGridWidget> {
     DateFormat format = DateFormat('MM/yyyy');
     String anoMes = format.format(data);
     PlutoGridPdfExport pdfExport = PlutoGridPdfExport(
+      columns: columns,
       customRow: getCustomRow,
       columnsToIgnore: ['turno'],
       margin: const pluto.EdgeInsets.only(

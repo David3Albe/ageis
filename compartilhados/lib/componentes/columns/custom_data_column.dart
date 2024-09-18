@@ -24,6 +24,7 @@ class CustomDataColumn {
   final Widget Function(PlutoColumnRendererContext context)? customRenderer;
   final void Function(dynamic value, bool checked)? onClick;
   final void Function(bool value)? onHeaderCheck;
+  final bool incluirApostrofo;
 
   CustomDataColumn({
     required this.text,
@@ -41,6 +42,7 @@ class CustomDataColumn {
     this.enableAutoEditing = false,
     this.onHeaderCheck,
     this.width,
+    this.incluirApostrofo = false,
   });
 
   void setSort() {

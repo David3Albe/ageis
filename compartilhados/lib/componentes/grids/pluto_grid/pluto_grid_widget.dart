@@ -384,6 +384,7 @@ class PlutoGridWidget<T> extends StatelessWidget {
         .toList();
     columnsToIgnore.add('');
     PlutoGridXmlExport xmlExport = PlutoGridXmlExport(
+      dataColumns: columns,
       context: context,
       stateManager: gridState.stateManager!,
       columnsToIgnore: columnsToIgnore,
@@ -396,6 +397,7 @@ class PlutoGridWidget<T> extends StatelessWidget {
     required PlutoGridState gridState,
   }) {
     PlutoGridCsvExport csvExport = PlutoGridCsvExport(
+      columns: columns,
       context: context,
       stateManager: gridState.stateManager!,
     );
@@ -407,6 +409,7 @@ class PlutoGridWidget<T> extends StatelessWidget {
     required PlutoGridState gridState,
   }) {
     PlutoGridPdfExport pdfExport = PlutoGridPdfExport(
+      columns: columns,
       context: context,
       stateManager: gridState.stateManager!,
     );

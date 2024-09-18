@@ -56,6 +56,7 @@ class _ConsultaProcessosLeituraRetiradoPageState
       text: 'Cod. Barra. Kit',
       field: 'codBarraKit',
       type: CustomDataColumnType.Text,
+      incluirApostrofo: true,
     ),
     CustomDataColumn(
       text: 'Kit',
