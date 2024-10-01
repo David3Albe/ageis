@@ -354,7 +354,14 @@ class _ArsenalEstoquePageFrmState extends State<ArsenalEstoquePageFrm> {
     }
 
     cubit.save(
-      novo ? arsenalEstoque.copyWith(cod: 0, tstamp: null) : arsenalEstoque,
+      novo
+          ? arsenalEstoque.copyWith(
+              cod: 0,
+              codBarra: '',
+              locaisArs: [],
+              tstamp: null,
+            )
+          : arsenalEstoque,
       localIsEmpty,
       context,
       widget.onSaved,
