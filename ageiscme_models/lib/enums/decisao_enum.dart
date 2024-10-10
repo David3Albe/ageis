@@ -86,4 +86,6 @@ class DecisaoEnum {
   static const int DefinirLocalizacaoConfirmaItem = 156;
   static const int DefinirLocalizacaoConfirmaKit = 157;
   static const int DefinirLocalizacaoCancela = 158;
+  static const int CancelaLockLeitura = 159;
+  static const int CanceladoLockLeitura = 160;
 }

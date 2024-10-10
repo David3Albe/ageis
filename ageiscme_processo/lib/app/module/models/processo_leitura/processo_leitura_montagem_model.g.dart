@@ -9,6 +9,7 @@ part of 'processo_leitura_montagem_model.dart';
 _$ProcessoLeituraMontagemModelImpl _$$ProcessoLeituraMontagemModelImplFromJson(
         Map<String, dynamic> json) =>
     _$ProcessoLeituraMontagemModelImpl(
+      fechado: json['fechado'] as bool?,
       cancelado: json['cancelado'] as bool?,
       maquina: json['maquina'] as String?,
       tstamp: json['tstamp'] as String?,
@@ -34,6 +35,7 @@ _$ProcessoLeituraMontagemModelImpl _$$ProcessoLeituraMontagemModelImplFromJson(
 Map<String, dynamic> _$$ProcessoLeituraMontagemModelImplToJson(
         _$ProcessoLeituraMontagemModelImpl instance) =>
     <String, dynamic>{
+      'fechado': instance.fechado,
       'cancelado': instance.cancelado,
       'maquina': instance.maquina,
       'tstamp': instance.tstamp,

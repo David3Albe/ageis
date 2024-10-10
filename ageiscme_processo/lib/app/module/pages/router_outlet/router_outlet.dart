@@ -32,31 +32,39 @@ class RouterOutletPage extends StatelessWidget {
           ),
         ),
       ],
-      child: CustomAppBarWidget(
-        title: const TitleWidget(),
-        onLogout: onLogout,
-        body: Container(
-          color: const Color.fromARGB(255, 238, 238, 243),
-          child: Row(
-            children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: ProcessoPage(userCode: userCode),
-                      ),
+      child: Builder(
+        builder: (context) {
+          return CustomAppBarWidget(
+            title: const TitleWidget(),
+            onLogout: () => onLogout(context),
+            body: Container(
+              color: const Color.fromARGB(255, 238, 238, 243),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ProcessoPage(userCode: userCode),
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }
 
-  void onLogout() async {}
+  Future onLogout(BuildContext context) async {
+    await BlocProvider.of<ProcessoLeituraCubit>(context).sendCloseMessage(
+      emitLoad: false,
+    );
+  }
 }

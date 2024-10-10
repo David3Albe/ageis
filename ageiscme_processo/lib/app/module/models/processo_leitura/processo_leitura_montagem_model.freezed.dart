@@ -21,6 +21,8 @@ ProcessoLeituraMontagemModel _$ProcessoLeituraMontagemModelFromJson(
 
 /// @nodoc
 mixin _$ProcessoLeituraMontagemModel {
+  bool? get fechado => throw _privateConstructorUsedError;
+  set fechado(bool? value) => throw _privateConstructorUsedError;
   bool? get cancelado => throw _privateConstructorUsedError;
   set cancelado(bool? value) => throw _privateConstructorUsedError;
   String? get maquina => throw _privateConstructorUsedError;
@@ -65,7 +67,8 @@ abstract class $ProcessoLeituraMontagemModelCopyWith<$Res> {
           ProcessoLeituraMontagemModel>;
   @useResult
   $Res call(
-      {bool? cancelado,
+      {bool? fechado,
+      bool? cancelado,
       String? maquina,
       String? tstamp,
       int? cod,
@@ -95,6 +98,7 @@ class _$ProcessoLeituraMontagemModelCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? fechado = freezed,
     Object? cancelado = freezed,
     Object? maquina = freezed,
     Object? tstamp = freezed,
@@ -108,6 +112,10 @@ class _$ProcessoLeituraMontagemModelCopyWithImpl<$Res,
     Object? versao = null,
   }) {
     return _then(_value.copyWith(
+      fechado: freezed == fechado
+          ? _value.fechado
+          : fechado // ignore: cast_nullable_to_non_nullable
+              as bool?,
       cancelado: freezed == cancelado
           ? _value.cancelado
           : cancelado // ignore: cast_nullable_to_non_nullable
@@ -184,7 +192,8 @@ abstract class _$$ProcessoLeituraMontagemModelImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {bool? cancelado,
+      {bool? fechado,
+      bool? cancelado,
       String? maquina,
       String? tstamp,
       int? cod,
@@ -215,6 +224,7 @@ class __$$ProcessoLeituraMontagemModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? fechado = freezed,
     Object? cancelado = freezed,
     Object? maquina = freezed,
     Object? tstamp = freezed,
@@ -228,6 +238,10 @@ class __$$ProcessoLeituraMontagemModelImplCopyWithImpl<$Res>
     Object? versao = null,
   }) {
     return _then(_$ProcessoLeituraMontagemModelImpl(
+      fechado: freezed == fechado
+          ? _value.fechado
+          : fechado // ignore: cast_nullable_to_non_nullable
+              as bool?,
       cancelado: freezed == cancelado
           ? _value.cancelado
           : cancelado // ignore: cast_nullable_to_non_nullable
@@ -281,7 +295,8 @@ class __$$ProcessoLeituraMontagemModelImplCopyWithImpl<$Res>
 class _$ProcessoLeituraMontagemModelImpl extends _ProcessoLeituraMontagemModel
     with DiagnosticableTreeMixin {
   _$ProcessoLeituraMontagemModelImpl(
-      {required this.cancelado,
+      {required this.fechado,
+      required this.cancelado,
       required this.maquina,
       required this.tstamp,
       required this.cod,
@@ -298,6 +313,8 @@ class _$ProcessoLeituraMontagemModelImpl extends _ProcessoLeituraMontagemModel
           Map<String, dynamic> json) =>
       _$$ProcessoLeituraMontagemModelImplFromJson(json);
 
+  @override
+  bool? fechado;
   @override
   bool? cancelado;
   @override
@@ -323,7 +340,7 @@ class _$ProcessoLeituraMontagemModelImpl extends _ProcessoLeituraMontagemModel
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ProcessoLeituraMontagemModel(cancelado: $cancelado, maquina: $maquina, tstamp: $tstamp, cod: $cod, dataHora: $dataHora, leituraCodigo: $leituraCodigo, leituraAtual: $leituraAtual, filaLeituras: $filaLeituras, automaticReadings: $automaticReadings, passos: $passos, versao: $versao)';
+    return 'ProcessoLeituraMontagemModel(fechado: $fechado, cancelado: $cancelado, maquina: $maquina, tstamp: $tstamp, cod: $cod, dataHora: $dataHora, leituraCodigo: $leituraCodigo, leituraAtual: $leituraAtual, filaLeituras: $filaLeituras, automaticReadings: $automaticReadings, passos: $passos, versao: $versao)';
   }
 
   @override
@@ -331,6 +348,7 @@ class _$ProcessoLeituraMontagemModelImpl extends _ProcessoLeituraMontagemModel
     super.debugFillProperties(properties);
     properties
       ..add(DiagnosticsProperty('type', 'ProcessoLeituraMontagemModel'))
+      ..add(DiagnosticsProperty('fechado', fechado))
       ..add(DiagnosticsProperty('cancelado', cancelado))
       ..add(DiagnosticsProperty('maquina', maquina))
       ..add(DiagnosticsProperty('tstamp', tstamp))
@@ -363,7 +381,8 @@ class _$ProcessoLeituraMontagemModelImpl extends _ProcessoLeituraMontagemModel
 abstract class _ProcessoLeituraMontagemModel
     extends ProcessoLeituraMontagemModel {
   factory _ProcessoLeituraMontagemModel(
-      {required bool? cancelado,
+      {required bool? fechado,
+      required bool? cancelado,
       required String? maquina,
       required String? tstamp,
       required int? cod,
@@ -379,6 +398,9 @@ abstract class _ProcessoLeituraMontagemModel
   factory _ProcessoLeituraMontagemModel.fromJson(Map<String, dynamic> json) =
       _$ProcessoLeituraMontagemModelImpl.fromJson;
 
+  @override
+  bool? get fechado;
+  set fechado(bool? value);
   @override
   bool? get cancelado;
   set cancelado(bool? value);

@@ -52,7 +52,7 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
     loadingController.setHandleKeyFunction(onEnter);
   }
 
-  void setFocus(FocusNode focus){
+  void setFocus(FocusNode focus) {
     this.focus = focus;
   }
 
@@ -127,9 +127,19 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
     );
   }
 
+  Future sendCloseMessage({bool emitLoad = true}) async {
+    if (state.processo.leituraAtual.usuario == null ||
+        state.processo.cod == null ||
+        state.processo.dataHora == null) return;
+    String codigo = DecisaoEnum.CancelaLockLeitura.toString() + '000000000';
+    state.processo.leituraAtual.decisao = DecisaoEnum.CancelaLockLeitura;
+    await readCode(codigo, emitLoad: emitLoad);
+  }
+
   Future readCode(
     String? codigoLido, {
     bool pularAdicaoFilaLeituras = false,
+    bool emitLoad = true,
   }) async {
     if (codigoLido == null || codigoLido.isEmpty || codigoLido.length <= 2) {
       return;
@@ -141,7 +151,7 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
         return;
       }
       if (validateZoom(codigoLido)) return;
-      emitLoading();
+      if (emitLoad) emitLoading();
       if (state.processo.maquina == null) {
         String? maquina = await getComputerNameIfWindows();
         state.processo.maquina = maquina;
@@ -149,6 +159,7 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
       PackageInfo info = await PackageInfo.fromPlatform();
       sendMessage(
         ProcessoLeituraMontagemModel(
+          fechado: null,
           cancelado: null,
           maquina: state.processo.maquina,
           cod: state.processo.cod,
@@ -156,7 +167,7 @@ class ProcessoLeituraCubit extends Cubit<ProcessoLeituraState> {
           tstamp: state.processo.tstamp,
           versao: info.version,
           leituraCodigo: ProcessoLeituraCodigoModel(
-            codigoLido: codigoLido,
+            codigoLido: codigoLido.trim(),
             avisosSonoro: [],
             alertaVermelho: null,
             cancelarLeituras: null,

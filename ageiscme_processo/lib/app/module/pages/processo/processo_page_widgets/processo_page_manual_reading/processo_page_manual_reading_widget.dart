@@ -8,7 +8,6 @@ import 'package:compartilhados/componentes/campos/text_field_string_area_widget.
 import 'package:compartilhados/componentes/campos/text_field_string_widget.dart';
 import 'package:compartilhados/fontes/fontes.dart';
 import 'package:flutter/material.dart';
-// import 'dart:html' as html;
 
 class ProcessoPageManualReadingWidget extends StatefulWidget {
   const ProcessoPageManualReadingWidget({
@@ -45,6 +44,7 @@ class _ProcessoPageManualReadingWidgetState
       placeholder: 'Usuário',
       initialValue: '10100200000001',
     );
+    
     txtFilaLeituras = TextFieldStringAreaWidget(
       placeholder: 'Fila leituras',
     );
@@ -193,25 +193,6 @@ class _ProcessoPageManualReadingWidgetState
                   ),
                 ],
               ),
-              // Row(
-              //   children: [
-              //     Expanded(
-              //       child: txtFilaLeituras,
-              //     ),
-              //   ],
-              // ),
-              // Padding(
-              //   padding: EdgeInsets.only(top: 4.0 * scaleHeight),
-              // ),
-              // Row(
-              //   children: [
-              //     Expanded(
-              //       child: ReadButtonWidget(
-              //         onPressed: () => _lerFila(txtFilaLeituras.text, context),
-              //       ),
-              //     ),
-              //   ],
-              // ),
             ],
           ),
         ),
@@ -230,12 +211,4 @@ class _ProcessoPageManualReadingWidgetState
 
   void _reset() => widget.cubit.reset();
 
-  // void _lerFila(String leitura, BuildContext context) {
-  //   List<String> leituras = [];
-  //   for (String codigo in leitura.split(',')) {
-  //     String codigoTratado = codigo.trim().replaceAll('\n', '');
-  //     leituras.add(codigoTratado);
-  //   }
-  //   widget.cubit.readReadings(leituras);
-  // }
 }

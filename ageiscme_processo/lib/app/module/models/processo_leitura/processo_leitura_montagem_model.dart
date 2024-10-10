@@ -17,6 +17,7 @@ sealed class ProcessoLeituraMontagemModel with _$ProcessoLeituraMontagemModel {
   const ProcessoLeituraMontagemModel._();
 
   factory ProcessoLeituraMontagemModel({
+    required bool? fechado,
     required bool? cancelado,
     required String? maquina,
     required String? tstamp,
@@ -39,6 +40,7 @@ sealed class ProcessoLeituraMontagemModel with _$ProcessoLeituraMontagemModel {
       ProcessoLeituraMontagemModel.fromJson(processoLeitura.toJson());
 
   factory ProcessoLeituraMontagemModel.empty() => ProcessoLeituraMontagemModel(
+        fechado: null,
         cancelado: null,
         maquina: null,
         cod: null,

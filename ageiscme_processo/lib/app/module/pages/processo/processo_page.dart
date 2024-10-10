@@ -35,6 +35,7 @@ import 'package:ageiscme_processo/app/module/pages/processo/processo_page_widget
 import 'package:ageiscme_processo/app/module/pages/processo/processo_page_widgets/processo_page_local/processo_page_local_widget.dart';
 import 'package:ageiscme_processo/app/module/pages/processo/processo_page_widgets/processo_page_manual_reading/processo_page_manual_reading_widget.dart';
 import 'package:ageiscme_processo/app/module/pages/processo/processo_page_zoom/processo_page_zoom_dialog.dart';
+import 'package:ageiscme_processo/app/module/services/processo_leitura/processo_leitura_service.dart';
 import 'package:ageiscme_processo/app/module/web_sockets/processo_leitura/processo_leitura_web_socket.dart';
 import 'package:compartilhados/coletores/coletores_helper.dart';
 import 'package:compartilhados/componentes/dialogs/movable_dialog.dart';
@@ -53,6 +54,7 @@ import 'package:compartilhados/componentes/toasts/warning_dialog.dart';
 import 'package:compartilhados/functions/custom_audio_player.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 import 'package:dependencias_comuns/main.dart';
+import 'package:dependencias_comuns/window_manager_export.dart';
 import 'package:flutter/material.dart';
 import 'package:ageiscme_processo/app/module/services/processo_navigator_service.dart';
 import 'package:flutter/services.dart';
@@ -65,7 +67,39 @@ class ProcessoPage extends StatefulWidget {
   State<ProcessoPage> createState() => _ProcessoPageState();
 }
 
-class _ProcessoPageState extends State<ProcessoPage> {
+class MyWindowListener extends WindowListener {
+  final Future Function() onClose;
+
+  MyWindowListener({required this.onClose});
+
+  @override
+  void onWindowClose() async {
+    bool? shouldClose = await showDialog(
+      context: ToastUtils.routerOutletContext!,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirmar saída'),
+        content: const Text('Você tem certeza que deseja fechar a janela?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Sim'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Não'),
+          ),
+        ],
+      ),
+    );
+
+    if (shouldClose == true) {
+      await onClose();
+      await windowManager.destroy();
+    }
+  }
+}
+
+class _ProcessoPageState extends State<ProcessoPage> with WindowListener {
   static const Duration TIMER_REFRESH_DURATION = Duration(seconds: 60);
   static const Duration TIMER_FECHAR_TELA_DURATION = Duration(seconds: 30);
   FocusNode _textNode = FocusNode();
@@ -89,8 +123,23 @@ class _ProcessoPageState extends State<ProcessoPage> {
   Timer? TIMER_REFRESH_LEITURAS;
   Timer? TIMER_FECHAR_TELA;
 
+  late MyWindowListener windowListener;
+
+  Future cancelLock() async {
+    TIMER_REFRESH_LEITURAS?.cancel();
+    TIMER_FECHAR_TELA?.cancel();
+    final ProcessoLeituraCubit _cubit =
+        BlocProvider.of<ProcessoLeituraCubit>(context);
+    _cubit.state.processo.fechado = true;
+    await ProcessoLeituraService()
+        .removerLeituraEmAndamento(_cubit.state.processo);
+  }
+
   @override
   void initState() {
+    windowListener = MyWindowListener(onClose: cancelLock);
+    windowManager.setPreventClose(true);
+    windowManager.addListener(windowListener);
     final ProcessoLeituraCubit _cubit =
         BlocProvider.of<ProcessoLeituraCubit>(context);
     _cubit.setFocus(_textNode);
@@ -130,6 +179,8 @@ class _ProcessoPageState extends State<ProcessoPage> {
 
   @override
   void dispose() {
+    windowManager.removeListener(windowListener);
+    windowManager.setPreventClose(false);
     _disposeCubit.webSocket?.close();
     TIMER_REFRESH_LEITURAS?.cancel();
     TIMER_FECHAR_TELA?.cancel();
