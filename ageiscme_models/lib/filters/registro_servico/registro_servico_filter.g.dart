@@ -19,6 +19,7 @@ _$RegistroServicoFilterImpl _$$RegistroServicoFilterImplFromJson(Map json) =>
       carregarImagens: json['carregarImagens'] as bool?,
       carregarUsuario: json['carregarUsuario'] as bool?,
       carregarItem: json['carregarItem'] as bool?,
+      carregarEquipamento: json['carregarEquipamento'] as bool?,
       numeroRegistros: (json['numeroRegistros'] as num?)?.toInt(),
       tStamp: json['tStamp'] as String?,
     );
@@ -33,6 +34,7 @@ Map<String, dynamic> _$$RegistroServicoFilterImplToJson(
       'carregarImagens': instance.carregarImagens,
       'carregarUsuario': instance.carregarUsuario,
       'carregarItem': instance.carregarItem,
+      'carregarEquipamento': instance.carregarEquipamento,
       'numeroRegistros': instance.numeroRegistros,
       'tStamp': instance.tStamp,
     };

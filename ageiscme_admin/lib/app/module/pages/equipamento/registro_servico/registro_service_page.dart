@@ -10,6 +10,7 @@ import 'package:ageiscme_models/filters/equipamento/equipamento_filter.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
 import 'package:ageiscme_models/filters/registro_servico/registro_servico_filter.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/response_dto/registro_servico/search_dto/registro_servico_search_dto_response_dto.dart';
 import 'package:compartilhados/componentes/botoes/add_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/filter_button_widget.dart';
 import 'package:compartilhados/componentes/botoes/refresh_button_widget.dart';
@@ -44,7 +45,34 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
       type: CustomDataColumnType.Number,
       width: 100,
     ),
-    CustomDataColumn(text: 'Técnico', field: 'tecnico'),
+    CustomDataColumn(
+      text: 'Item Etiqueta',
+      field: 'item',
+      calculatedField: 'itemIdEtiqueta',
+      valueConverter: (value) => value?['idEtiqueta'] ?? '',
+    ),
+    CustomDataColumn(
+      text: 'Item Descrição',
+      field: 'item',
+      calculatedField: 'itemDescricao',
+      valueConverter: (value) => value?['descricao'] ?? '',
+    ),
+    CustomDataColumn(
+      text: 'Equipamento Descrição',
+      field: 'equipamento',
+      calculatedField: 'equipamentoNome',
+      valueConverter: (value) {
+        return value?['nome'] ?? '';
+      },
+    ),
+    CustomDataColumn(
+      text: 'Técnico',
+      field: 'usuarioTecnico',
+      calculatedField: 'usuarioTecnicoNome',
+      valueConverter: (value) {
+        return value?['nome'] ?? '';
+      },
+    ),
     CustomDataColumn(text: 'Lote', field: 'lote'),
     CustomDataColumn(
       text: 'Data Início',
@@ -103,7 +131,8 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => openModal(
         context,
-        RegistroServicoModel(cod: widget.cod!),
+        RegistroServicoSearchResponseDTO(cod: widget.cod!),
+        null,
       ),
     );
   }
@@ -132,6 +161,7 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
                 onPressed: () => {
                   openModal(
                     context,
+                    null,
                     RegistroServicoModel.empty(),
                   ),
                 },
@@ -158,8 +188,8 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
                     padding: const EdgeInsets.only(top: 16.0, bottom: 16),
                     child: PlutoGridWidget(
                       orderDescendingFieldColumn: 'dataInicio',
-                      onEdit: (RegistroServicoModel objeto) => {
-                        openModal(context, RegistroServicoModel.copy(objeto)),
+                      onEdit: (RegistroServicoSearchResponseDTO objeto) => {
+                        openModal(context, objeto, null),
                       },
                       onDelete: context.select(
                                 (ReadonlyCubit readonlyCubit) =>
@@ -167,7 +197,7 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
                               ) ==
                               true
                           ? null
-                          : (RegistroServicoModel objeto) =>
+                          : (RegistroServicoSearchResponseDTO objeto) =>
                               {delete(context, objeto)},
                       columns: colunas,
                       items: state.registrosServicos,
@@ -254,7 +284,7 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
   }
 
   Future<RegistroServicoModel?> getFilter(
-    RegistroServicoModel registroServico,
+    RegistroServicoSearchResponseDTO registroServico,
   ) async {
     return service.FilterOne(
       RegistroServicoFilter(
@@ -282,13 +312,14 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
 
   Future openModal(
     BuildContext context,
-    RegistroServicoModel registroServico,
+    RegistroServicoSearchResponseDTO? registroServico,
+    RegistroServicoModel? model,
   ) async {
     LoadingController loading = LoadingController(context: context);
     loadEquipamentoCubit();
 
-    RegistroServicoModel? registroServicoModel = registroServico;
-    if (registroServico.cod != 0) {
+    RegistroServicoModel? registroServicoModel = model;
+    if (registroServico != null && registroServico.cod != 0) {
       registroServicoModel = await getFilter(
         registroServico,
       );
@@ -300,8 +331,9 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
       await setTecnico(registroServicoModel);
     }
     loading.close(context, mounted);
+    if (registroServicoModel == null) return;
     late int chave;
-    int codigo = registroServico.cod ?? 0;
+    int codigo = registroServico?.cod ?? 0;
     chave = WindowsHelper.OpenDefaultWindows(
       identificador: codigo.toString(),
       title: 'Cadastro/Edição Monitoramento',
@@ -328,7 +360,7 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
 
   void delete(
     BuildContext context,
-    RegistroServicoModel registroServico,
+    RegistroServicoSearchResponseDTO registroServico,
   ) {
     ConfirmDialogUtils.showConfirmAlertDialog(
       context: context,
@@ -339,7 +371,7 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
   }
 
   void confirmDelete(
-    RegistroServicoModel registroServico,
+    RegistroServicoSearchResponseDTO registroServico,
   ) async {
     bloc.delete(registroServico);
   }

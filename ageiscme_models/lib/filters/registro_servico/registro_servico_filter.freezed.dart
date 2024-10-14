@@ -35,6 +35,8 @@ mixin _$RegistroServicoFilter {
   set carregarUsuario(bool? value) => throw _privateConstructorUsedError;
   bool? get carregarItem => throw _privateConstructorUsedError;
   set carregarItem(bool? value) => throw _privateConstructorUsedError;
+  bool? get carregarEquipamento => throw _privateConstructorUsedError;
+  set carregarEquipamento(bool? value) => throw _privateConstructorUsedError;
   int? get numeroRegistros => throw _privateConstructorUsedError;
   set numeroRegistros(int? value) => throw _privateConstructorUsedError;
   @JsonKey(name: 'tStamp')
@@ -62,6 +64,7 @@ abstract class $RegistroServicoFilterCopyWith<$Res> {
       bool? carregarImagens,
       bool? carregarUsuario,
       bool? carregarItem,
+      bool? carregarEquipamento,
       int? numeroRegistros,
       @JsonKey(name: 'tStamp') String? tStamp});
 }
@@ -87,6 +90,7 @@ class _$RegistroServicoFilterCopyWithImpl<$Res,
     Object? carregarImagens = freezed,
     Object? carregarUsuario = freezed,
     Object? carregarItem = freezed,
+    Object? carregarEquipamento = freezed,
     Object? numeroRegistros = freezed,
     Object? tStamp = freezed,
   }) {
@@ -119,6 +123,10 @@ class _$RegistroServicoFilterCopyWithImpl<$Res,
           ? _value.carregarItem
           : carregarItem // ignore: cast_nullable_to_non_nullable
               as bool?,
+      carregarEquipamento: freezed == carregarEquipamento
+          ? _value.carregarEquipamento
+          : carregarEquipamento // ignore: cast_nullable_to_non_nullable
+              as bool?,
       numeroRegistros: freezed == numeroRegistros
           ? _value.numeroRegistros
           : numeroRegistros // ignore: cast_nullable_to_non_nullable
@@ -148,6 +156,7 @@ abstract class _$$RegistroServicoFilterImplCopyWith<$Res>
       bool? carregarImagens,
       bool? carregarUsuario,
       bool? carregarItem,
+      bool? carregarEquipamento,
       int? numeroRegistros,
       @JsonKey(name: 'tStamp') String? tStamp});
 }
@@ -171,6 +180,7 @@ class __$$RegistroServicoFilterImplCopyWithImpl<$Res>
     Object? carregarImagens = freezed,
     Object? carregarUsuario = freezed,
     Object? carregarItem = freezed,
+    Object? carregarEquipamento = freezed,
     Object? numeroRegistros = freezed,
     Object? tStamp = freezed,
   }) {
@@ -203,6 +213,10 @@ class __$$RegistroServicoFilterImplCopyWithImpl<$Res>
           ? _value.carregarItem
           : carregarItem // ignore: cast_nullable_to_non_nullable
               as bool?,
+      carregarEquipamento: freezed == carregarEquipamento
+          ? _value.carregarEquipamento
+          : carregarEquipamento // ignore: cast_nullable_to_non_nullable
+              as bool?,
       numeroRegistros: freezed == numeroRegistros
           ? _value.numeroRegistros
           : numeroRegistros // ignore: cast_nullable_to_non_nullable
@@ -226,6 +240,7 @@ class _$RegistroServicoFilterImpl implements _RegistroServicoFilter {
       this.carregarImagens,
       this.carregarUsuario,
       this.carregarItem,
+      this.carregarEquipamento,
       this.numeroRegistros,
       @JsonKey(name: 'tStamp') this.tStamp});
 
@@ -247,6 +262,8 @@ class _$RegistroServicoFilterImpl implements _RegistroServicoFilter {
   @override
   bool? carregarItem;
   @override
+  bool? carregarEquipamento;
+  @override
   int? numeroRegistros;
   @override
   @JsonKey(name: 'tStamp')
@@ -254,7 +271,7 @@ class _$RegistroServicoFilterImpl implements _RegistroServicoFilter {
 
   @override
   String toString() {
-    return 'RegistroServicoFilter(cod: $cod, startDate: $startDate, finalDate: $finalDate, codEquipamento: $codEquipamento, carregarImagens: $carregarImagens, carregarUsuario: $carregarUsuario, carregarItem: $carregarItem, numeroRegistros: $numeroRegistros, tStamp: $tStamp)';
+    return 'RegistroServicoFilter(cod: $cod, startDate: $startDate, finalDate: $finalDate, codEquipamento: $codEquipamento, carregarImagens: $carregarImagens, carregarUsuario: $carregarUsuario, carregarItem: $carregarItem, carregarEquipamento: $carregarEquipamento, numeroRegistros: $numeroRegistros, tStamp: $tStamp)';
   }
 
   @JsonKey(ignore: true)
@@ -281,6 +298,7 @@ abstract class _RegistroServicoFilter implements RegistroServicoFilter {
       bool? carregarImagens,
       bool? carregarUsuario,
       bool? carregarItem,
+      bool? carregarEquipamento,
       int? numeroRegistros,
       @JsonKey(name: 'tStamp') String? tStamp}) = _$RegistroServicoFilterImpl;
 
@@ -308,6 +326,9 @@ abstract class _RegistroServicoFilter implements RegistroServicoFilter {
   @override
   bool? get carregarItem;
   set carregarItem(bool? value);
+  @override
+  bool? get carregarEquipamento;
+  set carregarEquipamento(bool? value);
   @override
   int? get numeroRegistros;
   set numeroRegistros(int? value);

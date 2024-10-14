@@ -1,6 +1,7 @@
 import 'package:ageiscme_data/services/registro_servico/registro_servico_service.dart';
 import 'package:ageiscme_models/filters/registro_servico/registro_servico_filter.dart';
 import 'package:ageiscme_models/main.dart';
+import 'package:ageiscme_models/response_dto/registro_servico/search_dto/registro_servico_search_dto_response_dto.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
 
 class RegistroServicoPageCubit extends Cubit<RegistroServicoPageState> {
@@ -21,12 +22,11 @@ class RegistroServicoPageCubit extends Cubit<RegistroServicoPageState> {
       ),
     );
     try {
-      List<RegistroServicoModel>? itens = await service.Filter(filter);
-      List<RegistroServicoModel> registrosServicos = itens;
+      List<RegistroServicoSearchResponseDTO>? itens = await service.Search(filter);
       emit(
         RegistroServicoPageState(
           loading: false,
-          registrosServicos: registrosServicos,
+          registrosServicos: itens,
         ),
       );
     } on Exception catch (ex) {
@@ -40,7 +40,7 @@ class RegistroServicoPageCubit extends Cubit<RegistroServicoPageState> {
     }
   }
 
-  void delete(RegistroServicoModel registroServico) async {
+  void delete(RegistroServicoSearchResponseDTO registroServico) async {
     try {
       (String, RegistroServicoModel)? result =
           await service.delete(registroServico);
@@ -68,7 +68,7 @@ class RegistroServicoPageCubit extends Cubit<RegistroServicoPageState> {
 class RegistroServicoPageState {
   final bool loading;
   final bool deleted;
-  final List<RegistroServicoModel> registrosServicos;
+  final List<RegistroServicoSearchResponseDTO> registrosServicos;
   final String error;
   final String message;
 

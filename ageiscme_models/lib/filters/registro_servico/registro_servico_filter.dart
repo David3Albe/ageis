@@ -13,6 +13,7 @@ sealed class RegistroServicoFilter with _$RegistroServicoFilter {
     bool? carregarImagens,
     bool? carregarUsuario,
     bool? carregarItem,
+    bool? carregarEquipamento,
     int? numeroRegistros,
     @JsonKey(name: 'tStamp') String? tStamp,
   }) = _RegistroServicoFilter;
@@ -29,6 +30,7 @@ sealed class RegistroServicoFilter with _$RegistroServicoFilter {
         finalDate: null,
         codEquipamento: null,
         carregarImagens: false,
+        carregarEquipamento: false,
         cod: null,
         tStamp: null,
         carregarUsuario: null,
