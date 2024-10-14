@@ -38,6 +38,8 @@ import 'package:ageiscme_processo/app/module/pages/processo/processo_page_zoom/p
 import 'package:ageiscme_processo/app/module/services/processo_leitura/processo_leitura_service.dart';
 import 'package:ageiscme_processo/app/module/web_sockets/processo_leitura/processo_leitura_web_socket.dart';
 import 'package:compartilhados/coletores/coletores_helper.dart';
+import 'package:compartilhados/componentes/botoes/cancel_button_unfilled_widget.dart';
+import 'package:compartilhados/componentes/botoes/confirm_button_widget.dart';
 import 'package:compartilhados/componentes/dialogs/movable_dialog.dart';
 import 'package:ageiscme_processo/app/module/pages/processo/processo_page_widgets/processo_page_manual_reading/processo_page_manual_reading_widget_state.dart';
 import 'package:ageiscme_processo/app/module/pages/processo/processo_page_widgets/processo_page_object_preview/processo_page_object_preview_widget.dart';
@@ -80,13 +82,11 @@ class MyWindowListener extends WindowListener {
         title: const Text('Confirmar saída'),
         content: const Text('Você tem certeza que deseja fechar a janela?'),
         actions: [
-          TextButton(
+          ConfirmButtonWidget(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Sim'),
           ),
-          TextButton(
+          CancelButtonUnfilledWidget(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Não'),
           ),
         ],
       ),
