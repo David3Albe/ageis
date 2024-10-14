@@ -338,6 +338,10 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
     });
 
     recuperaUsuario().then((value) {
+      if (insumoMovimento.codUsuario != null) {
+        txtUsuario.text = insumoMovimento.usuario!.nome ?? '';
+        return;
+      }
       if (value == null ||
           value.usuario == null ||
           value.usuario!.cod == null) {
@@ -1212,7 +1216,7 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
                 Padding(
                   padding: const EdgeInsets.only(left: 6.0),
                   child: InsertButtonWidget(
-                     readonly:
+                    readonly:
                         insumoMovimento.cod != 0 && insumoMovimento.cod != null,
                     onPressed: () => {
                       salvarConfirmacao(
@@ -1224,7 +1228,6 @@ class _InsumoMovimentoPageFrmState extends State<InsumoMovimentoPageFrm> {
                     },
                   ),
                 ),
-             
                 Padding(
                   padding: const EdgeInsets.only(left: 6.0),
                   child: CleanButtonWidget(
