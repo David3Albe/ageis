@@ -48,7 +48,7 @@ class StageIndicatorPrinterController {
       dto.qtdeIndicadores =
           dto.qtdeIndicadores + 1;
       pdf.addPage(
-        _addPage(style, sistema),
+        _addPage(style, dto),
       );
       qtdeImpressao++;
     }
@@ -62,9 +62,9 @@ class StageIndicatorPrinterController {
 
   pw.Page _addPage(
     pw.TextStyle style,
-    ParametroSistemaModel sistema,
+    ParametroSistemaUpdateIndicadoresDTO sistema,
   ) {
-    String tagIndicator = _getTagIndicator(sistema.indicador!);
+    String tagIndicator = _getTagIndicator(sistema.qtdeIndicadores);
     return pw.Page(
       margin: const pw.EdgeInsets.only(top: 20, left: 40),
       build: (pw.Context context) {
