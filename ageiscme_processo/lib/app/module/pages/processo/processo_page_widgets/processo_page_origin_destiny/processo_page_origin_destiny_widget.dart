@@ -38,7 +38,7 @@ class ProcessoPageOriginDestinyWidget extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        'ORGEM/DESTINO',
+                        'ORIGEM/DESTINO',
                         style: Fontes.getSegoe(
                           fontSize: 14 * scale * escalaFonte,
                           cor: Cores.CorTitleCards,
