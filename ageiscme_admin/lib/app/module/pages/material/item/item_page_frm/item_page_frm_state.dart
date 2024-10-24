@@ -1,4 +1,5 @@
 import 'package:ageiscme_data/services/item/item_service.dart';
+import 'package:ageiscme_models/dto/item/save/item_save_dto.dart';
 import 'package:ageiscme_models/dto/item_save_result/item_save_result_dto.dart';
 import 'package:ageiscme_models/main.dart';
 import 'package:dependencias_comuns/bloc_export.dart';
@@ -13,9 +14,9 @@ class ItemPageFrmCubit extends Cubit<ItemPageFrmState> {
           ItemPageFrmState(item: itemModel),
         );
 
-  Future<(String,ItemSaveResultDTO)?> save(ItemModel item) async {
+  Future<(String,ItemSaveResultDTO)?> save(ItemSaveDTO item) async {
     try {
-      bool novo = item.cod == null || item.cod == 0;
+      bool novo = item.item.cod == null || item.item.cod == 0;
       (String message, ItemSaveResultDTO item)? result =
           await service.save(item);
       if (result == null) return null;
@@ -34,7 +35,7 @@ class ItemPageFrmCubit extends Cubit<ItemPageFrmState> {
       emit(
         ItemPageFrmState(
           error: ex.toString(),
-          item: item,
+          item: item.item,
         ),
       );
     }

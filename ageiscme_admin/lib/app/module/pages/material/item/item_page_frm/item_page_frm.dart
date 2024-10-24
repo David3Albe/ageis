@@ -21,6 +21,7 @@ import 'package:ageiscme_impressoes/prints/item_tag_printer/item_tag_printer_con
 import 'package:ageiscme_impressoes/prints/processo_preparation_printer/processo_preparation_printer_controller.dart';
 import 'package:ageiscme_models/dto/authentication_result/authentication_result_dto.dart';
 import 'package:ageiscme_models/dto/item/item_etiqueta_preparo/item_etiqueta_preparo_dto.dart';
+import 'package:ageiscme_models/dto/item/save/item_save_dto.dart';
 import 'package:ageiscme_models/dto/item_save_result/item_save_result_dto.dart';
 import 'package:ageiscme_models/filters/equipamento/equipamento_filter.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
@@ -51,6 +52,7 @@ import 'package:compartilhados/componentes/grids/pluto_grid/pluto_grid_widget.da
 import 'package:compartilhados/componentes/images/image_widget.dart';
 import 'package:compartilhados/componentes/loading/loading_controller.dart';
 import 'package:compartilhados/componentes/loading/loading_widget.dart';
+import 'package:compartilhados/componentes/toasts/confirm_dialog_utils_single.dart';
 import 'package:compartilhados/componentes/toasts/error_dialog.dart';
 import 'package:compartilhados/componentes/toasts/toast_utils.dart';
 import 'package:compartilhados/custom_text/title_widget.dart';
@@ -1064,15 +1066,30 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
         !statusValid) {
       return;
     }
-    (String, ItemSaveResultDTO)? itemSave = await cubit.save(
-      novo ? item.copyWith(cod: 0, tstamp: null) : item,
+    bool atualizarTodosItensZ = false;
+    if (!novo &&
+        item.idEtiqueta != null &&
+        item.idEtiqueta!.toUpperCase().startsWith('Z') &&
+        atualizarTodosItensZ != true) {
+      atualizarTodosItensZ =
+          await ConfirmDialogUtilsSingle.showConfirmAlertDialog(
+        context,
+        'Deseja atualizar todas etiquetas deste item Z?',
+      );
+    }
+    ItemSaveDTO itemSave = ItemSaveDTO(
+      atualizarTodosItensZ: atualizarTodosItensZ,
+      item: novo ? item.copyWith(cod: 0, tstamp: null) : item,
     );
-    if (itemSave == null) return;
-    ToastUtils.showCustomToastSucess(context, itemSave.$1);
-    await _printConsignado(itemSave.$2.item);
+    (String, ItemSaveResultDTO)? result = await cubit.save(
+      itemSave,
+    );
+    if (result == null) return;
+    ToastUtils.showCustomToastSucess(context, result.$1);
+    await _printConsignado(result.$2.item);
     setState(() {
       KitModel? kit = item.kit;
-      item = itemSave.$2.item;
+      item = result.$2.item;
       item.kit = kit;
       setFields();
     });
