@@ -885,6 +885,13 @@ class _ProcessoPageState extends State<ProcessoPage> with WindowListener {
   ) {
     List<ProcessoPreparationItemPrintDTO> itens = [];
     for (ItemProcessoModel item in processoLeitura.leituraAtual.itens) {
+      String etiqueta = item.idEtiqueta!;
+      if (item.idEtiqueta != null &&
+          item.idEtiqueta!.toUpperCase().startsWith('Z') &&
+          processoLeitura.leituraAtual.configuracao?.zeraEtiquetaRotulado ==
+              true) {
+        etiqueta = item.idEtiqueta!.substring(0, 4) + '0000';
+      }
       ItemDescritorModel itemDescritor = item.getDescritor(processoLeitura)!;
       int prioridade =
           item.prioridade ?? processoLeitura.leituraAtual.prioridade!;
@@ -902,7 +909,7 @@ class _ProcessoPageState extends State<ProcessoPage> with WindowListener {
           nomeProprietario: item.getProprietario(processoLeitura)!.nome!,
           nomeProcesso: processoTipo.nome,
           validadeEmbalagem: embalagem.validadeProcessosDias ?? 0,
-          tagId: item.idEtiqueta!,
+          tagId: etiqueta,
           urgency: prioridade == 2,
           ordemLeitura: item.ordemLeitura ?? 0,
         ),
