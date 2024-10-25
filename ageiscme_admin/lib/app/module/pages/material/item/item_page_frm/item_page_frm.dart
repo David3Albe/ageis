@@ -275,7 +275,7 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
         String modulo = str.substring(0, 3);
         if (modulo.toUpperCase() == 'KEY' ||
             str == '000' ||
-            !RegExp(r'^[a-zA-Z]').hasMatch(modulo[0])) return '';
+            RegExp(r'^[a-zA-Z]').hasMatch(modulo[0])) return '';
         return 'Módulo inválido';
       }
       if (str.length > 100) return 'Pode ter no máximo 100 caracteres';
