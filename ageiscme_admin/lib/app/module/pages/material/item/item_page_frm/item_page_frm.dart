@@ -265,8 +265,18 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
     });
 
     txtIdEtiqueta.addValidator((String str) {
-      if (widget.frmType == ItemPageFrmtype.Items && str.isEmpty) {
+      if (widget.frmType == ItemPageFrmtype.Items && str.trim().isEmpty) {
         return 'Campo obrigatório';
+      }
+      if (widget.frmType == ItemPageFrmtype.Items && str.trim().length <= 2) {
+        return 'Precisa ter no mínimo 2 caracteres';
+      }
+      if (widget.frmType == ItemPageFrmtype.Items) {
+        String modulo = str.substring(0, 3);
+        if (modulo.toUpperCase() == 'KEY' ||
+            str == '000' ||
+            !RegExp(r'^[a-zA-Z]').hasMatch(modulo[0])) return '';
+        return 'Módulo inválido';
       }
       if (str.length > 100) return 'Pode ter no máximo 100 caracteres';
       return '';
@@ -289,7 +299,7 @@ class _ItemPageFrmState extends State<ItemPageFrm> {
 
     txtRefFornecedor.addValidator((String str) {
       if (str.length > 15) return 'Pode ter no máximo 15 caracteres';
-      if (str.isEmpty && widget.frmType == ItemPageFrmtype.Consigned) {
+      if (str.trim().isEmpty && widget.frmType == ItemPageFrmtype.Consigned) {
         return 'Obrigatório';
       }
       return '';
