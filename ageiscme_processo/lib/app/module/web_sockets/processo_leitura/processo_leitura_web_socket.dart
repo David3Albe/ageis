@@ -20,6 +20,7 @@ class ProcessoLeituraWebSocket {
   static const String _webSocketRoute = '/ws/processo-leitura-montagem';
 
   Function((String, ProcessoLeituraMontagemModel)) onMessageReceived;
+  Function onRefresh;
   Function(String, CommandResultAlertType?) onError;
   Function() handleKey;
   Function(String) onConnectionLost;
@@ -32,6 +33,7 @@ class ProcessoLeituraWebSocket {
     required this.onError,
     required this.handleKey,
     required this.onConnectionLost,
+    required this.onRefresh,
   });
 
   Future connect() async {
@@ -86,6 +88,10 @@ class ProcessoLeituraWebSocket {
       },
       (event) {
         if (event == 'pong') return;
+        if (event == 'refresh') {
+          onRefresh();
+          return;
+        }
         CommandResultModel result =
             CommandResultModel.fromJson(jsonDecode(event));
         if (!result.success) {

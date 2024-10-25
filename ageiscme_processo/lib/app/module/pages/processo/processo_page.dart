@@ -157,6 +157,7 @@ class _ProcessoPageState extends State<ProcessoPage> with WindowListener {
       handleKey: () => _cubit.setHandleKey(handleKey),
       onMessageReceived: (p0) => _cubit.onMessage(p0, context),
       onError: _cubit.setException,
+      onRefresh: () => _cubit.readCode('refresh'),
     );
 
     _cubit.webSocket!.connect().then((value) {
