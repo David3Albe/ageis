@@ -4,6 +4,7 @@ import 'package:ageiscme_models/dto/item/inserir_rapido/gerar_inserir/item_inser
 import 'package:ageiscme_models/dto/item/inserir_rapido/search/item_inserir_rapido_search_dto.dart';
 import 'package:ageiscme_models/dto/item/item_etiqueta/item_etiqueta_dto.dart';
 import 'package:ageiscme_models/dto/item/item_etiqueta_preparo/item_etiqueta_preparo_dto.dart';
+import 'package:ageiscme_models/dto/item/save/item_save_dto.dart';
 import 'package:ageiscme_models/dto/item/trocar_etiqueta/item_trocar_etiqueta_dto.dart';
 import 'package:ageiscme_models/dto/item_save_result/item_save_result_dto.dart';
 import 'package:ageiscme_models/filters/item/item_filter.dart';
@@ -70,7 +71,7 @@ class ItemService {
       );
 
   Future<(String message, ItemSaveResultDTO item)?> save(
-    ItemModel obj,
+    ItemSaveDTO obj,
   ) async {
     return await _client.post(
       _baseRoute,
@@ -111,8 +112,7 @@ class ItemService {
     );
   }
 
-  Future<(String message, ItemTrocarEtiquetaResponseDTO item)?>
-      trocarEtiqueta(
+  Future<(String message, ItemTrocarEtiquetaResponseDTO item)?> trocarEtiqueta(
     ItemTrocarEtiquetaDTO obj,
   ) async {
     return await _client.post(
@@ -122,7 +122,7 @@ class ItemService {
     );
   }
 
-    Future<(String, List<ItemDropDownSearchResponseDTO>)?> dropDownSearch(
+  Future<(String, List<ItemDropDownSearchResponseDTO>)?> dropDownSearch(
     ItemDropDownSearchDTO dto,
   ) async =>
       await _client.post(
