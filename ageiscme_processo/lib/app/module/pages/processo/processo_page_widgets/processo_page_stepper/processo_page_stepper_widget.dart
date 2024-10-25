@@ -29,7 +29,6 @@ class ProcessoPageStepperWidget extends StatelessWidget {
 
   double getStepperEscala(Size size, double escala) {
     double width = size.width;
-    print(width);
     if (width > 1700 && escala > 1) {
       return 0.3;
     } else if (width > 1500) {
@@ -59,7 +58,17 @@ class ProcessoPageStepperWidget extends StatelessWidget {
             var novaEscala = scale;
             double escala = state.processo.getEscala();
             if (escala != 1) {
-              novaEscala = scale + getStepperEscala(size, escala);
+              double stepperScale = getStepperEscala(size, escala);
+              if (state.processo.passos.length >= 7) {
+                if (escala >= 1) {
+                  if (size.width > 1700) {
+                    stepperScale = 0.05;
+                  } else {
+                    stepperScale = 0.15;
+                  }
+                }
+              }
+              novaEscala = scale + stepperScale;
             }
             return Column(
               mainAxisSize: MainAxisSize.min,
