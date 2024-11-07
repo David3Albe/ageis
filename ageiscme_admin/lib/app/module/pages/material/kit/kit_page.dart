@@ -95,11 +95,10 @@ class _KitPageState extends State<KitPage> {
     super.initState();
   }
 
-  Future refresh() async {
-    KitPageCubit kitCubit = context.read<KitPageCubit>();
+  Future refresh(BuildContext context) async {
     KitCubitFilter filterCubit = context.read<KitCubitFilter>();
     KitSearchDTO dto = filterCubit.state;
-    await kitCubit.searchKits(dto);
+    await bloc.searchKits(dto);
   }
 
   @override
@@ -118,7 +117,7 @@ class _KitPageState extends State<KitPage> {
               Row(
                 children: [
                   RefreshButtonWidget(
-                    onPressed: () => refresh(),
+                    onPressed: () => refresh(context),
                   ),
                   const Padding(
                     padding: EdgeInsets.only(left: 8),

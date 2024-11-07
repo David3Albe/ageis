@@ -18,7 +18,7 @@ class ProcessoTipoCubit extends Cubit<ProcessoTipoState> {
     emit(
       ProcessoTipoState(processosTipos: [], loading: true),
     );
-    await Future.delayed(const Duration(milliseconds: 10));
+    await Future.delayed(const Duration(milliseconds: 100));
     emit(
       ProcessoTipoState(processosTipos: processos),
     );

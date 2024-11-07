@@ -381,6 +381,7 @@ class _ConsultaProcessosLeituraPageState
                           obj.codRegistroProcesso,
                           obj.nroItensFaltante,
                           obj.dataHora,
+                          event.cell.column.field,
                         );
                       } else {
                         openModalRedirectDetalhe(
@@ -420,7 +421,12 @@ class _ConsultaProcessosLeituraPageState
     int? codRegistroProcesso,
     int? faltantes,
     DateTime? dataHora,
+    String field,
   ) async {
+    // int? newFaltantes = 0;
+    // if (field == 'nroItensFaltante') {
+    //   newFaltantes = faltantes;
+    // }
     WindowsHelper.OpenDefaultWindows(
       identificador: const Uuid().v4(),
       title: 'Consulta Processo Leitura - Kit',
