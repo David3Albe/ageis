@@ -423,10 +423,10 @@ class _ConsultaProcessosLeituraPageState
     DateTime? dataHora,
     String field,
   ) async {
-    // int? newFaltantes = 0;
-    // if (field == 'nroItensFaltante') {
-    //   newFaltantes = faltantes;
-    // }
+    int? newFaltantes = 0;
+    if (field == 'nroItensFaltante') {
+      newFaltantes = faltantes;
+    }
     WindowsHelper.OpenDefaultWindows(
       identificador: const Uuid().v4(),
       title: 'Consulta Processo Leitura - Kit',
@@ -434,7 +434,7 @@ class _ConsultaProcessosLeituraPageState
         filter: ConsultaProcessosLeituraDetalheKitFilter(
           codKit: codKit,
           codRegistroProcesso: codRegistroProcesso,
-          faltantes: faltantes,
+          faltantes: newFaltantes,
           dataHora: dataHora,
         ),
       ),
