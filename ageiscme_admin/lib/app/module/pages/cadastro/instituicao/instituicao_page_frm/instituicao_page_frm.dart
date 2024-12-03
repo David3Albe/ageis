@@ -452,6 +452,19 @@ class _InstituicaoPageFrmState extends State<InstituicaoPageFrm> {
                                         text: 'Permite Fluxo Alternado',
                                         align: MainAxisAlignment.start,
                                       ),
+                                      const Padding(
+                                        padding: EdgeInsets.only(top: 5.0),
+                                      ),
+                                      CustomCheckboxWidget(
+                                        checked: instituicao
+                                            .permiteDescritorItemEmBranco,
+                                        onClick: (value) => instituicao
+                                                .permiteDescritorItemEmBranco =
+                                            value,
+                                        text:
+                                            'Permite Descritor Item em Branco',
+                                        align: MainAxisAlignment.start,
+                                      ),
                                     ],
                                   ),
                                 ),

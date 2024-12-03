@@ -318,9 +318,7 @@ class _ConsultaRegistroServicoPageState
 
   Future<RegistroServicoModel?> getFilter(int cod) async {
     return service.FilterOne(
-      RegistroServicoFilter(
-        cod: cod,
-      ),
+      RegistroServicoFilter(cod: cod, carregarUsuario: true),
     );
   }
 

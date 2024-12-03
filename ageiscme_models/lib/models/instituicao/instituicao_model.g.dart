@@ -46,6 +46,8 @@ _$InstituicaoModelImpl _$$InstituicaoModelImplFromJson(Map json) =>
           (json['tempoDescartarKitForaEstoque'] as num?)?.toInt(),
       mensagemDescartarKitForaEstoque:
           json['mensagemDescartarKitForaEstoque'] as String?,
+      permiteDescritorItemEmBranco:
+          json['permiteDescritorItemEmBranco'] as bool?,
     );
 
 Map<String, dynamic> _$$InstituicaoModelImplToJson(
@@ -83,4 +85,5 @@ Map<String, dynamic> _$$InstituicaoModelImplToJson(
       'tempoDescartarKitForaEstoque': instance.tempoDescartarKitForaEstoque,
       'mensagemDescartarKitForaEstoque':
           instance.mensagemDescartarKitForaEstoque,
+      'permiteDescritorItemEmBranco': instance.permiteDescritorItemEmBranco,
     };

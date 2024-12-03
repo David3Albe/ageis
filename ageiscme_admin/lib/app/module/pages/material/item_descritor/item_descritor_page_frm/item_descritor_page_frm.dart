@@ -979,9 +979,11 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
     } else if (!tipoProcessoUrgenciaValid) {
       scroll.jumpTo(350);
     }
-    // else if (!embalagemValid) {
-    //   scroll.jumpTo(350);
-    // }
+
+    if (itemDescritor.codInstituicao == 0) {
+      itemDescritor.codInstituicao = widget.instituicao.cod;
+    }
+
     if (!descricaoCurtaValid ||
         !descricaoCompletaValid ||
         !limiteProcessoValid ||
@@ -1016,30 +1018,25 @@ class _ItemDescritorPageFrmState extends State<ItemDescritorPageFrm> {
 
   Future<bool> validaItensConsignados() async {
     if (itemDescritor.consignado != true) return true;
-    if (itemDescritor.itensDescritoresConsignados == null ||
-        itemDescritor.itensDescritoresConsignados!.isEmpty) {
-      ToastUtils.showCustomToastWarning(
-        context,
-        'O Descritor está marcado como consignado, informe os itens que o compoem',
-      );
-      return false;
-    }
-    for (ItemDescritorConsignadoModel item
-        in itemDescritor.itensDescritoresConsignados!) {
-      if (item.descricao == null || item.descricao!.isEmpty) {
-        ToastUtils.showCustomToastWarning(
-          context,
-          'Existem itens que compoem o descritor cosignado sem descrição e é obrigatória, informe e tente novamente',
-        );
-        return false;
-      } else if (item.quantidade == null) {
-        ToastUtils.showCustomToastWarning(
-          context,
-          'Existem itens que compoem o descritor cosignado sem quantidade e é obrigatória, informe e tente novamente',
-        );
-        return false;
+    if (itemDescritor.itensDescritoresConsignados != null) {
+      for (ItemDescritorConsignadoModel item
+          in itemDescritor.itensDescritoresConsignados!) {
+        if (item.descricao == null || item.descricao!.isEmpty) {
+          ToastUtils.showCustomToastWarning(
+            context,
+            'Existem itens que compoem o descritor cosignado sem descrição e é obrigatória, informe e tente novamente',
+          );
+          return false;
+        } else if (item.quantidade == null) {
+          ToastUtils.showCustomToastWarning(
+            context,
+            'Existem itens que compoem o descritor cosignado sem quantidade e é obrigatória, informe e tente novamente',
+          );
+          return false;
+        }
       }
     }
+
     return true;
   }
 }

@@ -21,6 +21,7 @@ abstract class InstituicaoModel with _$InstituicaoModel {
     required int? debugLevel,
     required bool? calculadoraRotulados,
     required bool? fluxoAlternado,
+    required bool? permiteDescritorItemEmBranco,
     required bool? embalagemKit,
     required bool? embalagemItem,
     required bool? naoAlertarKitIncompleto,

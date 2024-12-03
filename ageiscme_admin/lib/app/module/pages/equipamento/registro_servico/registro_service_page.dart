@@ -66,6 +66,11 @@ class _RegistroServicoPageState extends State<RegistroServicoPage> {
       },
     ),
     CustomDataColumn(
+      text: 'Tipo Serviço',
+      field: 'servicoTipo',
+      valueConverter: (value) => value == null ? '' : value['nome'],
+    ),
+    CustomDataColumn(
       text: 'Técnico',
       field: 'usuarioTecnico',
       calculatedField: 'usuarioTecnicoNome',

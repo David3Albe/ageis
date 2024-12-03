@@ -14,6 +14,7 @@ class AutoUpdaterService {
     autoUpdater.addListener(AutoUpdaterServiceListener());
     await autoUpdater.setFeedURL(feedURL);
     await autoUpdater.checkForUpdates(inBackground: true);
+    await autoUpdater.setScheduledCheckInterval(3600);
   }
 }
 

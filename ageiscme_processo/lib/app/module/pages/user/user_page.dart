@@ -14,6 +14,7 @@ class UserPage extends StatelessWidget {
   Widget build(BuildContext context) {
     FocusNode _textNode = FocusNode();
     void _enterProcessoScreen(String barCode) {
+      print('UserPage - _enterProcessoScreen: $barCode');
       if (barCode.trim().startsWith('101')) {
         ProcessoNavigatorService.ToProcessoScreenWithUser(barCode);
       }

@@ -94,6 +94,9 @@ mixin _$InstituicaoModel {
       throw _privateConstructorUsedError;
   set mensagemDescartarKitForaEstoque(String? value) =>
       throw _privateConstructorUsedError;
+  bool? get permiteDescritorItemEmBranco => throw _privateConstructorUsedError;
+  set permiteDescritorItemEmBranco(bool? value) =>
+      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -135,7 +138,8 @@ abstract class $InstituicaoModelCopyWith<$Res> {
       String? mensagemDescartarItemForaEstoque,
       String? mensagemDescartarItemKitForaEstoque,
       int? tempoDescartarKitForaEstoque,
-      String? mensagemDescartarKitForaEstoque});
+      String? mensagemDescartarKitForaEstoque,
+      bool? permiteDescritorItemEmBranco});
 }
 
 /// @nodoc
@@ -179,6 +183,7 @@ class _$InstituicaoModelCopyWithImpl<$Res, $Val extends InstituicaoModel>
     Object? mensagemDescartarItemKitForaEstoque = freezed,
     Object? tempoDescartarKitForaEstoque = freezed,
     Object? mensagemDescartarKitForaEstoque = freezed,
+    Object? permiteDescritorItemEmBranco = freezed,
   }) {
     return _then(_value.copyWith(
       cod: freezed == cod
@@ -297,6 +302,10 @@ class _$InstituicaoModelCopyWithImpl<$Res, $Val extends InstituicaoModel>
           ? _value.mensagemDescartarKitForaEstoque
           : mensagemDescartarKitForaEstoque // ignore: cast_nullable_to_non_nullable
               as String?,
+      permiteDescritorItemEmBranco: freezed == permiteDescritorItemEmBranco
+          ? _value.permiteDescritorItemEmBranco
+          : permiteDescritorItemEmBranco // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ) as $Val);
   }
 }
@@ -337,7 +346,8 @@ abstract class _$$InstituicaoModelImplCopyWith<$Res>
       String? mensagemDescartarItemForaEstoque,
       String? mensagemDescartarItemKitForaEstoque,
       int? tempoDescartarKitForaEstoque,
-      String? mensagemDescartarKitForaEstoque});
+      String? mensagemDescartarKitForaEstoque,
+      bool? permiteDescritorItemEmBranco});
 }
 
 /// @nodoc
@@ -379,6 +389,7 @@ class __$$InstituicaoModelImplCopyWithImpl<$Res>
     Object? mensagemDescartarItemKitForaEstoque = freezed,
     Object? tempoDescartarKitForaEstoque = freezed,
     Object? mensagemDescartarKitForaEstoque = freezed,
+    Object? permiteDescritorItemEmBranco = freezed,
   }) {
     return _then(_$InstituicaoModelImpl(
       cod: freezed == cod
@@ -497,6 +508,10 @@ class __$$InstituicaoModelImplCopyWithImpl<$Res>
           ? _value.mensagemDescartarKitForaEstoque
           : mensagemDescartarKitForaEstoque // ignore: cast_nullable_to_non_nullable
               as String?,
+      permiteDescritorItemEmBranco: freezed == permiteDescritorItemEmBranco
+          ? _value.permiteDescritorItemEmBranco
+          : permiteDescritorItemEmBranco // ignore: cast_nullable_to_non_nullable
+              as bool?,
     ));
   }
 }
@@ -533,7 +548,8 @@ class _$InstituicaoModelImpl extends _InstituicaoModel
       this.mensagemDescartarItemForaEstoque,
       this.mensagemDescartarItemKitForaEstoque,
       this.tempoDescartarKitForaEstoque,
-      this.mensagemDescartarKitForaEstoque})
+      this.mensagemDescartarKitForaEstoque,
+      this.permiteDescritorItemEmBranco})
       : super._();
 
   factory _$InstituicaoModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -596,10 +612,12 @@ class _$InstituicaoModelImpl extends _InstituicaoModel
   int? tempoDescartarKitForaEstoque;
   @override
   String? mensagemDescartarKitForaEstoque;
+  @override
+  bool? permiteDescritorItemEmBranco;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'InstituicaoModel(cod: $cod, nome: $nome, endereco: $endereco, cnpj: $cnpj, responsavel: $responsavel, foneResponsavel: $foneResponsavel, foneCme: $foneCme, ativo: $ativo, imprimeQrCode: $imprimeQrCode, debugLevel: $debugLevel, calculadoraRotulados: $calculadoraRotulados, fluxoAlternado: $fluxoAlternado, embalagemKit: $embalagemKit, embalagemItem: $embalagemItem, naoAlertarKitIncompleto: $naoAlertarKitIncompleto, tempoMin: $tempoMin, tstamp: $tstamp, escalaFonte: $escalaFonte, tempoDescartarItemEstoque: $tempoDescartarItemEstoque, mensagemDescartarItemEstoque: $mensagemDescartarItemEstoque, mensagemDescartarItemKitEstoque: $mensagemDescartarItemKitEstoque, tempoDescartarKitEstoque: $tempoDescartarKitEstoque, mensagemDescartarKitEstoque: $mensagemDescartarKitEstoque, tempoDescartarItemForaEstoque: $tempoDescartarItemForaEstoque, mensagemDescartarItemForaEstoque: $mensagemDescartarItemForaEstoque, mensagemDescartarItemKitForaEstoque: $mensagemDescartarItemKitForaEstoque, tempoDescartarKitForaEstoque: $tempoDescartarKitForaEstoque, mensagemDescartarKitForaEstoque: $mensagemDescartarKitForaEstoque)';
+    return 'InstituicaoModel(cod: $cod, nome: $nome, endereco: $endereco, cnpj: $cnpj, responsavel: $responsavel, foneResponsavel: $foneResponsavel, foneCme: $foneCme, ativo: $ativo, imprimeQrCode: $imprimeQrCode, debugLevel: $debugLevel, calculadoraRotulados: $calculadoraRotulados, fluxoAlternado: $fluxoAlternado, embalagemKit: $embalagemKit, embalagemItem: $embalagemItem, naoAlertarKitIncompleto: $naoAlertarKitIncompleto, tempoMin: $tempoMin, tstamp: $tstamp, escalaFonte: $escalaFonte, tempoDescartarItemEstoque: $tempoDescartarItemEstoque, mensagemDescartarItemEstoque: $mensagemDescartarItemEstoque, mensagemDescartarItemKitEstoque: $mensagemDescartarItemKitEstoque, tempoDescartarKitEstoque: $tempoDescartarKitEstoque, mensagemDescartarKitEstoque: $mensagemDescartarKitEstoque, tempoDescartarItemForaEstoque: $tempoDescartarItemForaEstoque, mensagemDescartarItemForaEstoque: $mensagemDescartarItemForaEstoque, mensagemDescartarItemKitForaEstoque: $mensagemDescartarItemKitForaEstoque, tempoDescartarKitForaEstoque: $tempoDescartarKitForaEstoque, mensagemDescartarKitForaEstoque: $mensagemDescartarKitForaEstoque, permiteDescritorItemEmBranco: $permiteDescritorItemEmBranco)';
   }
 
   @override
@@ -645,7 +663,9 @@ class _$InstituicaoModelImpl extends _InstituicaoModel
       ..add(DiagnosticsProperty(
           'tempoDescartarKitForaEstoque', tempoDescartarKitForaEstoque))
       ..add(DiagnosticsProperty(
-          'mensagemDescartarKitForaEstoque', mensagemDescartarKitForaEstoque));
+          'mensagemDescartarKitForaEstoque', mensagemDescartarKitForaEstoque))
+      ..add(DiagnosticsProperty(
+          'permiteDescritorItemEmBranco', permiteDescritorItemEmBranco));
   }
 
   @JsonKey(ignore: true)
@@ -692,7 +712,8 @@ abstract class _InstituicaoModel extends InstituicaoModel {
       String? mensagemDescartarItemForaEstoque,
       String? mensagemDescartarItemKitForaEstoque,
       int? tempoDescartarKitForaEstoque,
-      String? mensagemDescartarKitForaEstoque}) = _$InstituicaoModelImpl;
+      String? mensagemDescartarKitForaEstoque,
+      bool? permiteDescritorItemEmBranco}) = _$InstituicaoModelImpl;
   _InstituicaoModel._() : super._();
 
   factory _InstituicaoModel.fromJson(Map<String, dynamic> json) =
@@ -784,6 +805,9 @@ abstract class _InstituicaoModel extends InstituicaoModel {
   @override
   String? get mensagemDescartarKitForaEstoque;
   set mensagemDescartarKitForaEstoque(String? value);
+  @override
+  bool? get permiteDescritorItemEmBranco;
+  set permiteDescritorItemEmBranco(bool? value);
   @override
   @JsonKey(ignore: true)
   _$$InstituicaoModelImplCopyWith<_$InstituicaoModelImpl> get copyWith =>
