@@ -3,11 +3,17 @@ import 'dart:io';
 import 'package:ageiscme_data/shared/app_config.dart';
 import 'package:dependencias_comuns/auto_updater_export.dart';
 import 'package:flutter/foundation.dart';
+import 'package:ageiscme_data/services/registry_service/registry_service.dart';
 
 class AutoUpdaterService {
   Future update() async {
     if (kIsWeb) return;
     if (!Platform.isWindows) return;
+
+    // Caso o usuário tenha marcado para ignorar está versão, a gente valida no regedit do pc e limpa, isso para que obrigue ele a atualizar.
+    final registryService = RegistryService();
+    registryService.checkAndClearSkipThisVersion();
+
     AppConfig appConfig = await AppConfig.forEnvironment(false);
     if (appConfig.isDev) return;
     String feedURL = appConfig.appUrl + '/appcast.xml';
